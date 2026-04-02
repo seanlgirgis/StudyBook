@@ -35,3 +35,4 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260402-11 | Ingest real GCP SA key securely and wire StudyBook local env to protected key path | done | 2026-04-02 | Key stored under user-protected folder; .env.local updated with path/project metadata |
 | TB-20260402-12 | Create connection proofs POC folder with MongoDB and GCP sample scripts | done | 2026-04-02 | Added read-only proof scripts under poc/connection_proofs/python and updated proof README |
 | TB-20260402-13 | Improve MongoDB connection proof diagnostics for Atlas TLS handshake troubleshooting | done | 2026-04-02 | Added SSL/OpenSSL/PyMongo diagnostics and TLS options to mongo proof script |
+| TB-20260402-14 | Resolve GitHub push protection block by removing leaked token from local commit history and repushing | done | 2026-04-02 | Rebuilt two local commits without 	emp/TalksWithClaude.md, kept backup branch, push succeeded |

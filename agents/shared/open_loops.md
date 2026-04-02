@@ -26,3 +26,4 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 
 | LOOP-009 | TB-20260402-12 | Add connection proofs POC scripts for MongoDB and GCP | closed | none | 2026-04-02 |
 | LOOP-010 | TB-20260402-13 | Improve Mongo proof diagnostics to troubleshoot Atlas TLS failures | closed | none | 2026-04-02 |
+| LOOP-011 | TB-20260402-14 | Clear push-protection secret violation from outgoing commit range | closed | none | 2026-04-02 |
