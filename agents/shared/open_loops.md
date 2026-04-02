@@ -29,8 +29,6 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-014 | TB-20260402-17 | Enable machine-local seed-backed secret passphrase resolution for noninteractive agent runs | closed | Seed file registered and env bootstrap validated with passphrase env var unset | 2026-04-02 |
 | LOOP-015 | TB-20260402-18 | Finish Azure proof documentation and registry status alignment | closed | README/env template/registry updated and validated | 2026-04-02 |
 | LOOP-016 | TB-20260402-19 | Complete Databricks proof by generating PAT and storing DATABRICKS_TOKEN in local secret/env flow | closed | none | 2026-04-02 |
-
-
-
+| LOOP-017 | TB-20260402-25 | Complete Snowflake proof after backend-connect blocker (`250001`) by validating network/account policy and rerunning read-only proof | closed | none | 2026-04-02 |
 
 

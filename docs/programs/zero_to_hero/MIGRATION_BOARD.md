@@ -31,7 +31,7 @@
 | I-005 | P0 | security | Remove plaintext credentials from migrated docs/prompts/notebooks | workspace-derived assets | migrated StudyBook artifacts | credential scan and manual review | todo | enforced as migration gate before broad prompt/notebook lift |
 | C-001 | P0 | documentation | Cloud account registry baseline (non-secret) | n/a | `D:\StudyBook\docs\programs\zero_to_hero\CLOUD_ACCOUNT_REGISTRY.md` | registry file exists with required fields | done | provider table + env-key mapping added |
 | C-002 | P0 | security | Map cloud secrets to encrypted env flow | `config/secrets/*.enc.json` + local `.env.local` overlays | runtime env contract | key presence checks recorded | in_progress | MongoDB Atlas captured locally; GCP real key captured in protected local path and wired in `.env.local`; AWS local profiles discovered; encrypted AWS bundle created (`config/secrets/aws.profiles.secrets.enc.json`) and AWS encrypt/restore scripts added; remaining providers pending |
-| C-003 | P1 | validation | Snowflake read-only connectivity check | cloud account metadata + encrypted secrets | `poc/connection_proofs/python/snowflake_connection_proof.py` | command succeeds or records blocker | blocked | 2026-04-02 proof resolves encrypted SNOWFLAKE_* values but returns connector error `250001 Could not connect to Snowflake backend after 2 attempt(s)`; network/account validation needed |
+| C-003 | P1 | validation | Snowflake read-only connectivity check | cloud account metadata + encrypted secrets | `poc/connection_proofs/python/snowflake_connection_proof.py` | command succeeds or records blocker | done | 2026-04-02 owner-shell proof returned `ok: true`; encrypted SNOWFLAKE_* resolved and query returned account/user/role/warehouse/region (`QU00939`, `SEANLGIRGIS`, `ACCOUNTADMIN`, `COMPUTE_WH`, `AWS_US_EAST_2`) |
 | C-004 | P1 | validation | Redshift read-only connectivity check | cloud account metadata + encrypted secrets | `_infra/scripts` check script | command succeeds or records blocker | todo | gated by C-002 |
 | C-005 | P2 | validation | Databricks workspace readiness check | cloud account metadata + encrypted secrets | `poc/connection_proofs/python/databricks_connection_proof.py` | command succeeds or records blocker | done | 2026-04-02 proof run returned `ok: true`; `/api/2.0/current-user/me` returned 404 on this workspace while fallback `/api/2.0/clusters/list` succeeded (200) with encrypted secret-backed host/token |
 | M-001 | P0 | migration | Inventory and classify legacy assets | `D:\Workspace` + transcript | StudyBook migration docs | each asset tagged by class | done | extraction + class model documented in placement plan |
@@ -78,6 +78,7 @@
 - Record command outputs used for validation.
 - Update item status + evidence in this board.
 - Overwrite `agents/shared/agent_status.md` before ending run.
+
 
 
 

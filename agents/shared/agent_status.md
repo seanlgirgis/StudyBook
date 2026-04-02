@@ -1,20 +1,11 @@
 ## Task ID
-- TB-20260402-24
+- TB-20260402-26
 
 ## Topic
-- Finalize Databricks proof success and close tracking loop
+- Close Snowflake validation blocker and synchronize tracking artifacts
 
 ## Task Type
 - SYNC
-
-## Reasoning Depth
-- standard
-
-## Risk Level
-- low
-
-## Allowed Scope
-- bounded
 
 ## Files Modified
 - docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md
@@ -24,17 +15,11 @@
 - agents/shared/agent_status.md
 
 ## What Was Done
-- Confirmed user-provided Databricks proof output is successful (`ok: true`).
-- Updated cloud registry Databricks status to `proof_verified_local`.
-- Updated migration board item `C-005` to `done` with concrete 2026-04-02 evidence.
-- Closed open loop `LOOP-016`.
-- Logged completion in task register.
+- Consumed owner-shell Snowflake proof output showing `ok: true`.
+- Updated Snowflake registry status to `proof_verified_local` and region to `AWS_US_EAST_2`.
+- Updated migration board `C-003` from `blocked` to `done` with concrete query output evidence.
+- Closed `LOOP-017` and added task-register completion entry (`TB-20260402-26`).
 
-## Validation
-- Validation evidence source: user shell output from `python .\databricks_connection_proof.py` showing:
-  - `ok: true`
-  - `encrypted_secret_keys_loaded: [DATABRICKS_HOST, DATABRICKS_TOKEN]`
-  - `clusters_probe.ok: true` with HTTP 200
-
-## Notes
-- `current_user/me` endpoint returned 404 on this workspace; fallback clusters endpoint is accepted and proved connectivity.
+## Validation Evidence
+- Owner output: `python D:\StudyBook\poc\connection_proofs\python\snowflake_connection_proof.py`
+- Result: success (`ok: true`) with returned account/user/role/warehouse/region fields.

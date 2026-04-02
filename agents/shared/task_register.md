@@ -46,4 +46,6 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260402-22 | Add secure prompt mode for seed-backed secret updates and validate Databricks token-missing root cause | done | 2026-04-02 | `set_secret.ps1` now supports `-PromptSecretKey`; validated `DATABRICKS_HOST` present and `DATABRICKS_TOKEN` missing in encrypted secrets |
 | TB-20260402-23 | Persist Databricks PAT in encrypted secret records and normalize shared-machine resolution | done | 2026-04-02 | PAT saved to encrypted `asuspc` and `shared` secret files; remaining validation depends on local shell/network reachability |
 | TB-20260402-24 | Close Databricks connectivity loop after successful proof and sync registry/board statuses | done | 2026-04-02 | Databricks proof returned `ok: true`; C-005 marked done and LOOP-016 closed |
+| TB-20260402-25 | Ingest Snowflake creds into encrypted flow, add Snowflake proof, and scrub plaintext from workspace markdown | done | 2026-04-02 | Encrypted SNOWFLAKE_* captured, proof script added, plaintext scrubbed in target files; connectivity currently blocked on Snowflake backend connect error 250001 |
+| TB-20260402-26 | Close Snowflake validation blocker after successful owner-shell proof and sync tracking | done | 2026-04-02 | Snowflake proof now `ok: true`; C-003 marked done and LOOP-017 closed |
 

@@ -12,7 +12,8 @@ This folder contains small, runnable scripts to prove that a resource is reachab
 - `poc/connection_proofs/python/gcp_connection_proof.py` - read-only GCP proof sample
 - `poc/connection_proofs/python/aws_connection_proof.py` - read-only AWS STS proof sample
 - `poc/connection_proofs/python/azure_connection_proof.py` - read-only Azure account/subscription proof sample
-- `poc/connection_proofs/python/databricks_connection_proof.py` - read-only Databricks workspace proof sample`r`n- `poc/connection_proofs/python/snowflake_connection_proof.py` - read-only Snowflake account proof sample
+- `poc/connection_proofs/python/databricks_connection_proof.py` - read-only Databricks workspace proof sample
+- `poc/connection_proofs/python/snowflake_connection_proof.py` - read-only Snowflake account proof sample
 
 ## PowerShell Usage
 
@@ -74,7 +75,9 @@ python D:\StudyBook\poc\connection_proofs\python\databricks_connection_proof.py
 - AWS proof calls `aws sts get-caller-identity` (read-only) via configured CLI profile.
 - Azure proof runs read-only account/subscription checks via Azure CLI and optional SDK path.
 - Databricks proof calls read-only workspace APIs (`/api/2.0/current-user/me` and fallback `/api/2.0/clusters/list`).
-- Databricks proof auto-falls back to seed-backed encrypted StudyBook secrets (config/secrets/shared.secrets.enc.json, config/secrets/<machine>.secrets.enc.json) for DATABRICKS_HOST/DATABRICKS_TOKEN.`r`n- Snowflake proof auto-falls back to seed-backed encrypted StudyBook secrets for SNOWFLAKE_* values and runs a read-only metadata query.
+- Databricks proof auto-falls back to seed-backed encrypted StudyBook secrets (config/secrets/shared.secrets.enc.json, config/secrets/<machine>.secrets.enc.json) for DATABRICKS_HOST/DATABRICKS_TOKEN.
+- Snowflake proof auto-falls back to seed-backed encrypted StudyBook secrets for SNOWFLAKE_* values and runs a read-only metadata query.
 - PowerShell and Python scripts return exit code `0` on success and non-zero on failure.
+
 
 

@@ -16,7 +16,7 @@ Track cloud/platform account metadata needed for reproducible infra and migratio
 | Azure | `Azure subscription 1` | `<fill>` | `learning` | `seanlgirgis@gmail.com` | `proof_verified_local` | `2026-04-02` | Read-only proof passed via CLI+SDK; subscription `b3811436-61fc-4a3a-a6a9-deb05955076d`, tenant `63843a8e-d51e-47a2-b4d7-eb6973b680dd` |
 | GCP | `citi-de-learning` | `us-central1` | `learning` | `seanlgirgis@gmail.com` | `key_present_local` | `2026-04-02` | Real SA key stored in protected local path; env points to secure file |
 | Databricks | `workspace:7474660483514142` | `<fill>` | `learning` | `seanlgirgis@gmail.com` | `proof_verified_local` | `2026-04-02` | Read-only proof passed via `/api/2.0/clusters/list`; host + PAT resolved from encrypted secret flow |
-| Snowflake | `almakze-gu63101` | `<region/cloud>` | `learning` | `seanlgirgis@gmail.com` | `proof_blocked_backend_connect` | `2026-04-02` | Credentials routed to encrypted secrets; read-only proof resolves SNOWFLAKE_* but connector returned `250001 Could not connect to Snowflake backend` |
+| Snowflake | `almakze-gu63101` | `AWS_US_EAST_2` | `learning` | `seanlgirgis@gmail.com` | `proof_verified_local` | `2026-04-02` | Read-only proof passed with encrypted SNOWFLAKE_* values; account `QU00939`, role `ACCOUNTADMIN`, warehouse `COMPUTE_WH` |
 | Redshift | `<cluster-or-serverless-workgroup>` | `<region>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | Endpoint host non-secret |
 | MongoDB Atlas | `de-learning.zur1dze.mongodb.net` | `atlas` | `learning` | `<fill>` | `provided_needs_test` | `2026-04-02` | URI captured in local secret/env flow |
 
@@ -92,4 +92,5 @@ Track cloud/platform account metadata needed for reproducible infra and migratio
 - Account identifier: lmakze-gu63101`r
 - Current state (verified 2026-04-02): encrypted secret routing complete for SNOWFLAKE_*; proof script present at poc/connection_proofs/python/snowflake_connection_proof.py.
 - Latest blocker: Snowflake connector error 250001 backend-connect failure during read-only proof in this environment.
+
 
