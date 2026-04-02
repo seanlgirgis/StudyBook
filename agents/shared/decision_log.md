@@ -140,3 +140,11 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: reduces accidental git exposure and keeps credential handling aligned with local-secret overlay model
 - Alternatives considered: store key directly under workspace setup path as canonical source; embed key content in encrypted project JSON now
 - Impacted files: _infra/env/.env.local (ignored), docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md, agents/shared/open_loops.md, agents/shared/task_register.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-017
+- Task ID: TB-20260402-20
+- Decision: adopt encrypted-secrets-as-system-of-record handling for sensitive values with seed-backed direct update command
+- Rationale: preserve sensitive data hygiene while removing repeated confirmation friction; enables fast local secret updates without plaintext drift
+- Alternatives considered: continue manual plaintext secret files then encrypt; keep passing secrets only via transient shell env variables
+- Impacted files: scripts/env/env_core.ps1, scripts/env/set_secret.ps1, docs/operations/secrets_workflow.md, docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md, agents/shared/context_index.md

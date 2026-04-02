@@ -107,23 +107,18 @@ function ConvertTo-PlainTextFromSecureString {
     }
 }
 
-function Protect-StudyBookSecretFile {
+function Protect-StudyBookSecretContent {
     param(
         [Parameter(Mandatory = $true)]
-        [string]$InputJsonPath,
+        [string]$PlainText,
         [Parameter(Mandatory = $true)]
         [string]$OutputEncryptedPath,
         [Parameter(Mandatory = $true)]
         [Security.SecureString]$Passphrase
     )
 
-    if (-not (Test-Path -LiteralPath $InputJsonPath)) {
-        throw "Secrets input file not found: $InputJsonPath"
-    }
-
-    $plainText = Get-Content -LiteralPath $InputJsonPath -Raw -Encoding UTF8
-    if ([string]::IsNullOrWhiteSpace($plainText)) {
-        throw "Secrets input file is empty: $InputJsonPath"
+    if ([string]::IsNullOrWhiteSpace($PlainText)) {
+        throw "Secret content cannot be empty."
     }
 
     $passphraseText = ConvertTo-PlainTextFromSecureString -SecureString $Passphrase
@@ -144,7 +139,7 @@ function Protect-StudyBookSecretFile {
         $aes.IV = $ivBytes
 
         $encryptor = $aes.CreateEncryptor()
-        $plainBytes = [System.Text.Encoding]::UTF8.GetBytes($plainText)
+        $plainBytes = [System.Text.Encoding]::UTF8.GetBytes($PlainText)
         $cipherBytes = $encryptor.TransformFinalBlock($plainBytes, 0, $plainBytes.Length)
 
         $payload = @{
@@ -169,6 +164,28 @@ function Protect-StudyBookSecretFile {
             $aes.Dispose()
         }
     }
+}
+
+function Protect-StudyBookSecretFile {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$InputJsonPath,
+        [Parameter(Mandatory = $true)]
+        [string]$OutputEncryptedPath,
+        [Parameter(Mandatory = $true)]
+        [Security.SecureString]$Passphrase
+    )
+
+    if (-not (Test-Path -LiteralPath $InputJsonPath)) {
+        throw "Secrets input file not found: $InputJsonPath"
+    }
+
+    $plainText = Get-Content -LiteralPath $InputJsonPath -Raw -Encoding UTF8
+    if ([string]::IsNullOrWhiteSpace($plainText)) {
+        throw "Secrets input file is empty: $InputJsonPath"
+    }
+
+    Protect-StudyBookSecretContent -PlainText $plainText -OutputEncryptedPath $OutputEncryptedPath -Passphrase $Passphrase
 }
 
 function Unprotect-StudyBookSecretFile {
@@ -500,6 +517,7 @@ function Invoke-StudyBookEnvBootstrap {
         SecretsLoaded = [bool]($passphrase)
     }
 }
+
 
 
 

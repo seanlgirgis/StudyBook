@@ -7,3 +7,5 @@
 | [ADR-0003](ADR-0003-adopt-portable-config-driven-environment-bootstrap.md) | Adopt portable config-driven environment bootstrap | Accepted | 2026-04-01 | TB-20260401-04 | DEC-003 |
 | [ADR-0004](ADR-0004-adopt-guided-bootstrap-entrypoint.md) | Adopt guided bootstrap entrypoint | Accepted | 2026-04-01 | TB-20260401-05 | DEC-004 |
 | [ADR-0005](ADR-0005-adopt-architecture-decision-record-governance.md) | Adopt architecture decision record governance | Accepted | 2026-04-01 | TB-20260401-06 | DEC-005 |
+| [ADR-0006](ADR-0006-adopt-seed-backed-encrypted-secret-system-of-record.md) | Adopt seed-backed encrypted secret system of record | Accepted | 2026-04-02 | TB-20260402-20 | DEC-017 |
+

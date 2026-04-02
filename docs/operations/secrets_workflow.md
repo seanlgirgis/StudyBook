@@ -1,6 +1,12 @@
 # Secrets Workflow
 
-## One-Time Setup on a New Machine
+## System Of Record Policy
+
+- StudyBook encrypted secrets are the system of record for sensitive values.
+- Do not store secrets in tracked docs, notebooks, prompts, or chat transcripts.
+- For sensitive updates, write directly to `config/secrets/*.enc.json` via seed-backed scripts.
+
+## One-Time Setup On A New Machine
 
 ```powershell
 cd D:\StudyBook
@@ -20,7 +26,22 @@ $env:STUDYBOOK_SECRET_PASSPHRASE = "<your-passphrase>"
 - Use the same Windows user context for decrypt/use (avoid elevated/sudo context changes).
 - Seed file is gitignored and must remain local.
 
-## Encrypt Secret Files and Remove Plaintext
+## Update Secrets Without Plaintext Files
+
+Use `set_secret.ps1` to update encrypted machine secrets directly.
+
+```powershell
+cd D:\StudyBook
+.\scripts\env\set_secret.ps1 -Machine asuspc -NonInteractive -Entry "DATABRICKS_HOST=https://dbc-9f35a83d-b4e7.cloud.databricks.com"
+.\scripts\env\set_secret.ps1 -Machine asuspc -PromptSecretKey "DATABRICKS_TOKEN"
+```
+
+- Supports multiple entries in one call (array syntax): `-Entry "KEY1=VALUE1","KEY2=VALUE2"`.
+- For sensitive values, prefer secure prompt mode: `-PromptSecretKey "DATABRICKS_TOKEN"`.
+- Supports `-JsonFile` for bulk updates from a local JSON file.
+- Script prints only key names, never values.
+
+## Encrypt Secret Files And Remove Plaintext
 
 ```powershell
 cd D:\StudyBook

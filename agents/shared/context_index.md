@@ -28,6 +28,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Use `Reasoning Depth: deep` for migration and architecture decisions.
 - Stop only for high-risk ambiguity, not for routine implementation details.
 - Canonical runtime target is `D:\StudyBook` (deprecated path deleted).
+- Standing owner directive (2026-04-02): treat encrypted StudyBook secrets as system of record for sensitive values; use seed-backed secret updates by default and avoid storing sensitive values in tracked files/chat.
 
 ## Portable Environment Files
 
@@ -75,3 +76,4 @@ Purpose: compact durable memory map for fast session bootstrap.
 ## Last Updated
 
 - 2026-04-02
+
