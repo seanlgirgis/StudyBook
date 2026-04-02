@@ -34,6 +34,10 @@ Purpose: compact durable memory map for fast session bootstrap.
 - `env_setter.ps1`
 - `scripts/env/env_core.ps1`
 - `scripts/env/bootstrap_all.ps1`
+- `scripts/env/register_secret_seed.ps1`
+- `scripts/env/remove_secret_seed.ps1`
+- `scripts/env/package_aws_credentials.ps1`
+- `scripts/env/restore_aws_credentials.ps1`
 - `config/env/base.psd1`
 - `config/machines/asuspc.psd1`
 - `config/machines/dell-laptop.psd1`
@@ -42,6 +46,8 @@ Purpose: compact durable memory map for fast session bootstrap.
 - `config/secrets/asuspc.secrets.enc.json`
 - `config/secrets/dell-laptop.secrets.enc.json`
 - `config/secrets/workspace-import.sources.md`
+- `docs/operations/secrets_workflow.md`
+- `docs/operations/aws_credentials_workflow.md`
 
 ## Infra Reproducibility Files
 

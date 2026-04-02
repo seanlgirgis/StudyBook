@@ -7,9 +7,12 @@ This project supports machine-specific runtime settings with a shared bootstrap.
 - `env_setter.ps1`
 - `scripts/env/env_core.ps1`
 - `scripts/env/bootstrap_all.ps1`
+- `scripts/env/register_secret_seed.ps1`
+- `scripts/env/remove_secret_seed.ps1`
 - `config/env/base.psd1`
 - `config/machines/*.psd1`
 - `config/secrets/*.secrets.enc.json` (encrypted, optional)
+- `config/secrets/.local/studybook.secret.seed.dpapi.json` (local only, gitignored)
 
 ## One-Command Guided Setup
 
@@ -40,7 +43,11 @@ Useful flags:
 4. Merge optional local override `config/machines/<machine>.local.psd1`.
 5. Set process environment variables.
 6. Activate venv from merged config.
-7. Decrypt optional secret files and export them to process env vars.
+7. Resolve secret passphrase in this order:
+   - `STUDYBOOK_SECRET_PASSPHRASE` env var
+   - local DPAPI seed file (`config/secrets/.local/studybook.secret.seed.dpapi.json`)
+   - interactive prompt (if allowed)
+8. Decrypt encrypted secret files and export them to process env vars.
 
 ## Machine Setup
 
@@ -68,15 +75,22 @@ Copy-Item config\secrets\secrets.template.json config\secrets\shared.secrets.jso
 .\scripts\env\encrypt_secrets.ps1 -InputFile config\secrets\shared.secrets.json -OutputFile config\secrets\shared.secrets.enc.json -DeleteInput
 ```
 
-4. Set passphrase at runtime:
+4. Register local seed once (recommended):
 
 ```powershell
 $env:STUDYBOOK_SECRET_PASSPHRASE = "<your-passphrase>"
+.\scripts\env\register_secret_seed.ps1 -NonInteractive -Force
+```
+
+5. Run startup without repeatedly retyping passphrase:
+
+```powershell
 .\env_setter.ps1
 ```
 
 ## Notes
 
 - Only encrypted secret files should be committed.
-- Plaintext secret files are gitignored.
+- Plaintext secret files and `.local` seed files are gitignored.
+- Seed files are machine/user-bound and not portable by design.
 - All project paths should be consumed via environment variables or relative paths.

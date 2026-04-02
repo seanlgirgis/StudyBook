@@ -10,6 +10,7 @@ This folder contains small, runnable scripts to prove that a resource is reachab
 - `poc/connection_proofs/lib/ProofUtils.ps1` - shared probe functions
 - `poc/connection_proofs/python/mongo_connection_proof.py` - read-only MongoDB proof sample
 - `poc/connection_proofs/python/gcp_connection_proof.py` - read-only GCP proof sample
+- `poc/connection_proofs/python/aws_connection_proof.py` - read-only AWS STS proof sample
 
 ## PowerShell Usage
 
@@ -45,9 +46,17 @@ GCP read-only proof:
 python D:\StudyBook\poc\connection_proofs\python\gcp_connection_proof.py
 ```
 
+AWS read-only proof (STS GetCallerIdentity):
+
+```powershell
+python D:\StudyBook\poc\connection_proofs\python\aws_connection_proof.py --profile study
+```
+
 ## Notes
 
 - Python scripts read `_infra/env/.env.local` by default and accept CLI overrides.
 - Mongo proof does `ping` and a database name sample only (no writes).
 - GCP proof refreshes service-account auth token and does read-only project/storage API checks.
+- AWS proof calls `aws sts get-caller-identity` (read-only) via configured CLI profile.
 - PowerShell and Python scripts return exit code `0` on success and non-zero on failure.
+

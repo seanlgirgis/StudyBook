@@ -1,11 +1,11 @@
 ## Task ID
-- TB-20260402-14
+- TB-20260402-17
 
 ## Topic
-- Resolve GitHub push protection rejection caused by leaked Databricks token in local commit history
+- Add machine-local seed-based passphrase workflow for seamless noninteractive secret decryption
 
 ## Task Type
-- FIX
+- ENHANCEMENT
 
 ## Reasoning Depth
 - standard
@@ -17,58 +17,96 @@
 - bounded
 
 ## Files Read
-- git history (`main`, `origin/main`, commits `2b9db87`, `3ccbc1d`)
-- temp/TalksWithClaude.md (for secret location verification)
-- agents/shared/task_register.md
+- AGENTS.md
+- CONTROL_PROTOCOL.md
+- agents/shared/context_index.md
 - agents/shared/open_loops.md
+- agents/shared/approval_matrix.md
+- agents/shared/command_allowlist.md
+- docs/adr/ADR-INDEX.md
+- agents/shared/pending_task.md
+- agents/shared/agent_status.md
+- agents/shared/decision_log.md
+- scripts/env/env_core.ps1
+- scripts/env/package_aws_credentials.ps1
+- scripts/env/restore_aws_credentials.ps1
+- env_setter.ps1
+- docs/PORTABLE_ENV.md
+- docs/operations/secrets_workflow.md
+- docs/operations/aws_credentials_workflow.md
+- .gitignore
+- agents/shared/task_register.md
 
 ## Files Modified
-- agents/shared/task_register.md
+- scripts/env/env_core.ps1
+- scripts/env/register_secret_seed.ps1
+- scripts/env/remove_secret_seed.ps1
+- scripts/env/package_aws_credentials.ps1
+- scripts/env/restore_aws_credentials.ps1
+- .gitignore
+- docs/PORTABLE_ENV.md
+- docs/operations/secrets_workflow.md
+- docs/operations/aws_credentials_workflow.md
+- agents/shared/context_index.md
 - agents/shared/open_loops.md
+- agents/shared/task_register.md
 - agents/shared/agent_status.md
 
 ## Plan
-1. Identify exact commit range ahead of origin and confirm the flagged secret location.
-2. Rewrite only local ahead-of-origin commits to remove secret-bearing file.
-3. Validate no token patterns remain in outgoing range.
-4. Push sanitized branch to remote.
+1. Extend `env_core.ps1` passphrase resolution to support local seed files in addition to env var + prompt.
+2. Add seed register/remove helper scripts for one-time setup and rotation.
+3. Update docs and gitignore to keep seed local-only.
+4. Validate noninteractive secret loading with passphrase env var unset.
 
 ## What Was Done
-- Confirmed `main` was ahead by two commits: `2b9db87`, `3ccbc1d`.
-- Verified push-protection flagged `temp/TalksWithClaude.md` in `2b9db87`.
-- Created safety backup branch: `backup/pre-push-protection-fix`.
-- Rebuilt sanitized history on `clean-main` from `origin/main`:
-  - cherry-picked `2b9db87` and `3ccbc1d` with `--no-commit`
-  - removed `temp/TalksWithClaude.md` from each replay before committing
-- Reset `main` to sanitized `clean-main` history.
-- Verified no matching secret patterns remained in `origin/main..main`.
-- Pushed `main` successfully to GitHub.
+- Added seed functions in `env_core.ps1`:
+  - `Get-StudyBookSecretSeedPath`
+  - `Protect-StudyBookSecretSeed`
+  - `Unprotect-StudyBookSecretSeed`
+  - Updated `Get-SecretPassphrase` to resolve in order: env var -> seed file -> prompt.
+- Added `scripts/env/register_secret_seed.ps1` to create DPAPI-encrypted local seed from provided passphrase.
+- Added `scripts/env/remove_secret_seed.ps1` to remove/rotate local seed.
+- Updated AWS package/restore scripts to pass project root into `Get-SecretPassphrase` for deterministic seed path resolution.
+- Added `config/secrets/.local/` to `.gitignore` (seed local-only, never synced).
+- Updated operational docs (`docs/PORTABLE_ENV.md`, `docs/operations/secrets_workflow.md`, `docs/operations/aws_credentials_workflow.md`).
+- Registered seed file locally using the provided passphrase.
 
 ## Validation
-- command: `git rev-list origin/main..main`
-- result: outgoing range contained only sanitized commits (`3575711`, `a3b0360`).
+- command: `. .\scripts\env\env_core.ps1`
+- result: success; script loads without parser errors.
 
-- command: secret-pattern grep over outgoing commit range
-- result: no matching secret patterns found.
+- command: `.\scripts\env\register_secret_seed.ps1 -NonInteractive -Force` (with passphrase in env var)
+- result: success; seed file created at `config/secrets/.local/studybook.secret.seed.dpapi.json`.
 
-- command: `git push origin main`
-- result: success (`98ca330..a3b0360  main -> main`).
+- command: `Remove-Item Env:STUDYBOOK_SECRET_PASSPHRASE; . .\scripts\env\env_core.ps1; Get-SecretPassphrase -NonInteractive -ProjectRoot D:\StudyBook`
+- result: success; passphrase resolved from local seed (`SEED_PASSphrase_RESOLVED`).
+
+- command: `.\env_setter.ps1 -NonInteractive -SkipVenvActivation` (with passphrase env var unset)
+- result: success; `Secrets Loaded: True`.
+
+- command: `.\scripts\env\package_aws_credentials.ps1 ... -NonInteractive` with escalation
+- result: expected failure for seed decrypt in escalated context (`Key not valid for use in specified state`) because DPAPI seed is user-context bound.
+
+- command: `.\scripts\env\package_aws_credentials.ps1` against local mock credentials in repo temp path with passphrase env var unset
+- result: success; confirms seed-based noninteractive decrypt works in normal user context.
 
 ## Decisions
-- Kept `backup/pre-push-protection-fix` as recovery pointer in case audit/rollback is needed.
+- Use Windows DPAPI CurrentUser seed as the local passphrase cache mechanism.
+- Keep seed under `config/secrets/.local/` and gitignore the folder.
+- Treat elevated context mismatch as expected behavior for DPAPI-protected local seed files.
 
 ## Assumptions
-- Removing `temp/TalksWithClaude.md` from local outgoing commit history is acceptable and preferred to bypassing push protection.
+- Primary execution context for agents and tests is the normal user shell/session (non-elevated), matching seed creation context.
 
 ## Issues / Risks
-- Local warning `unable to access C:\Users\shareuser/.config/git/ignore` still appears in git output; non-blocking but indicates user-level git config path permission issue.
-- CRLF/LF warnings are informational and not blocking push, but can be normalized later with `.gitattributes` if desired.
+- Seed decrypt will fail if commands are run as a different user/elevation token than the seed creator.
+- Seed is machine/user-bound; each machine must register its own local seed once.
 
 ## Parking Lot Added
 - none
 
 ## Open Loops Updated
-- Added and closed `LOOP-011`.
+- Added and closed `LOOP-014`.
 
 ## Next Step
-- Rotate/revoke the leaked Databricks token in Databricks immediately if not already revoked.
+- Optional: run `python D:\StudyBook\poc\connection_proofs\python\aws_connection_proof.py` from your shell to confirm end-to-end AWS proof still works with seed mode enabled.

@@ -12,7 +12,7 @@ Track cloud/platform account metadata needed for reproducible infra and migratio
 
 | Provider | Account / Workspace ID | Region | Environment | Owner | Status | Last Verified | Notes |
 |---|---|---|---|---|---|---|---|
-| AWS | `<fill>` | `<fill>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | For S3/Redshift/Lambda labs |
+| AWS | `profile:study` | `us-east-1` | `learning` | `<fill>` | `bundle_encrypted_local` | `2026-04-02` | Local `~/.aws` contains `study` and `girgisinv`; encrypted bundle created at `config/secrets/aws.profiles.secrets.enc.json` |
 | Azure | `<fill>` | `<fill>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | For ADF/Synapse/AKS labs |
 | GCP | `citi-de-learning` | `us-central1` | `learning` | `seanlgirgis@gmail.com` | `key_present_local` | `2026-04-02` | Real SA key stored in protected local path; env points to secure file |
 | Databricks | `<workspace-url-or-id>` | `<region>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | Workspace host only |
@@ -72,7 +72,11 @@ Track cloud/platform account metadata needed for reproducible infra and migratio
 3. Record validation result in `docs/programs/zero_to_hero/MIGRATION_BOARD.md` evidence column.
 
 ## GCP Key Path Standard
-- Expected runtime key path for legacy prompts/notebooks: D:/Workspace/Technologies/_setup/gcp_key.json`r
+- Expected runtime key path for legacy prompts/notebooks: `D:/Workspace/Technologies/_setup/gcp_key.json`
 - Current state (verified 2026-04-02): real key ingested at `D:/Users/shareuser/.studybook/secrets/gcp/citi-de-learning-sa.json`; legacy workspace files still include placeholders and should be cleaned when legacy-path compatibility is no longer required.
+
+## AWS Profile Access Standard
+- Preferred runtime profile name: `study` (use `de_learner` only where explicitly required).
+- Current state (verified 2026-04-02): local credentials are present under `~/.aws` with profiles `study` and `girgisinv`; encrypted portable bundle exists at `config/secrets/aws.profiles.secrets.enc.json`; use explicit profile names (`study`/`girgisinv`) unless a workload explicitly requires another profile.
 
 

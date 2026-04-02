@@ -210,8 +210,12 @@ __marimo__/
 config/machines/*.local.psd1
 config/secrets/*.secrets.json
 config/secrets/*.plaintext.json
+config/secrets/.local/
 _infra/env/.env.local
 _infra/env/.env.*.local
 docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.local.md
 temp/
 *.transcript.md
+!scripts/env/
+!scripts/env/package_aws_credentials.ps1
+!scripts/env/restore_aws_credentials.ps1

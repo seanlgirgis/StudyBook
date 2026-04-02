@@ -20,6 +20,11 @@ def main() -> int:
     parser.add_argument("--credentials-path", help="Service account JSON path override.")
     parser.add_argument("--project-id", help="GCP project ID override.")
     parser.add_argument(
+        "--require-project-lookup",
+        action="store_true",
+        help="Strict mode: require Cloud Resource Manager project lookup to succeed.",
+    )
+    parser.add_argument(
         "--env-file",
         default=r"D:\StudyBook\_infra\env\.env.local",
         help="Path to local env file with GOOGLE_APPLICATION_CREDENTIALS_PATH and GCP_PROJECT_ID.",
@@ -79,9 +84,14 @@ def main() -> int:
 
         project_payload: dict[str, object]
         if project_resp.ok:
-            project_payload = project_resp.json()
+            project_payload = {
+                "ok": True,
+                "status_code": project_resp.status_code,
+                "project": project_resp.json(),
+            }
         else:
             project_payload = {
+                "ok": False,
                 "status_code": project_resp.status_code,
                 "body": project_resp.text,
             }
@@ -92,26 +102,43 @@ def main() -> int:
         if buckets_resp.ok:
             bucket_names = [item.get("name") for item in buckets_resp.json().get("items", [])]
             buckets_payload: dict[str, object] = {
+                "ok": True,
                 "status_code": buckets_resp.status_code,
                 "bucket_sample": bucket_names,
             }
         else:
             buckets_payload = {
+                "ok": False,
                 "status_code": buckets_resp.status_code,
                 "body": buckets_resp.text,
             }
 
+        overall_ok = project_resp.ok if args.require_project_lookup else (project_resp.ok or buckets_resp.ok)
+        warnings: list[str] = []
+        if not project_resp.ok and buckets_resp.ok:
+            warnings.append(
+                "Cloud Resource Manager lookup failed, but Storage probe succeeded. "
+                "Enable cloudresourcemanager.googleapis.com for project metadata checks."
+            )
+        if project_resp.ok and not buckets_resp.ok:
+            warnings.append(
+                "Project lookup succeeded, but Storage probe failed. "
+                "Storage API may be disabled or IAM may not allow bucket listing."
+            )
+
         result.update(
             {
-                "ok": project_resp.ok,
+                "ok": overall_ok,
+                "strict_mode": args.require_project_lookup,
                 "token_expiry": str(creds.expiry),
                 "project_lookup": project_payload,
                 "storage_bucket_probe": buckets_payload,
+                "warnings": warnings,
             }
         )
 
         print(json.dumps(result, indent=2, default=str))
-        return 0 if project_resp.ok else 1
+        return 0 if overall_ok else 1
     except Exception as exc:  # noqa: BLE001
         result["error"] = str(exc)
         print(json.dumps(result, indent=2))
