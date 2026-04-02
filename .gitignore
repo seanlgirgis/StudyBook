@@ -230,3 +230,4 @@ tracks/08_databases/practice/**/_artifacts/
 
 # Ignore local Claude worktrees (can contain nested git repos)
 .claude/worktrees/
+.claude/worktrees/*
