@@ -1,0 +1,52 @@
+# Database volumes — never commit DB data
+Basics/Databases/_setup/volumes/
+
+# Docker env file — has passwords
+Basics/Databases/_setup/.env
+
+# Elasticsearch data is massive
+**/elasticsearch/data/
+
+# Neo4j logs
+**/neo4j/logs/
+
+# Cassandra commitlog and data
+**/cassandra/data/
+**/cassandra/commitlog/
+
+# InfluxDB engine data
+**/influxdb/engine/
+**/influxdb/data/
+
+# Kibana data
+**/kibana/data/
+
+# Redis append-only file
+**/redis/appendonly.aof
+**/redis/dump.rdb
+
+# Postgres data
+**/postgres/data/
+**/postgres/PG_VERSION
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Environment files anywhere in project
+env
+.env
+.env.local
+.env.*
+!.env.example
+
+# Large data files
+*.csv.gz
+*.parquet
+*.arrow
+
+# Jupyter
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/

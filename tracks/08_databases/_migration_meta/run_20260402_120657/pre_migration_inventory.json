@@ -1,0 +1,446 @@
+[
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\columnar_intro.ipynb",
+    "size": 35655,
+    "sha256": "E91464BEC0EC30D67FE84CB887FFE84BD4C0D89C45F0D950511EDB15BC074180",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\db_decision_framework.ipynb",
+    "size": 1206,
+    "sha256": "4B92DE8322AF0A19BAF2481A06E3D650F8FE04FC3BEC84AD4110191D28B379B2",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\document_intro.ipynb",
+    "size": 13385,
+    "sha256": "5B35A74DE940B8440EF6F71F589A9F70543D3EDD18C51032D8A8CBBE322F7306",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\graph_intro.ipynb",
+    "size": 14492,
+    "sha256": "A1BDB456918ABF0DC6748C3E85231741680F68E53301077359528646AB354CDF",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\keyvalue_intro.ipynb",
+    "size": 12373,
+    "sha256": "F3CF7DB3BC196AB94EC0F1C2C62C235A849B756D68E51190DC5C69D3B1E44E07",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\search_intro.ipynb",
+    "size": 12042,
+    "sha256": "739BA3DFCA6DBED480F03D293C8741D02EC108BD4DF0F1637D70DE8116EE467E",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\sql_advanced_postgres.ipynb",
+    "size": 18004,
+    "sha256": "C08CFF7A0DC571D573CD2F0CF805CF7EDECB3136200A8EC966BD26A00197DBF2",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\sql_indexing_deep_dive.ipynb",
+    "size": 19820,
+    "sha256": "63A05610C87E6518CB9875D054C42DC31407BBD522A98A853B270751548D07C6",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\sql_relational_intro.ipynb",
+    "size": 34455,
+    "sha256": "389B53A792D10E10A9A3A1BFBCF8B137EB1ACB1249B87947DA1D48CE9FE03488",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\sql_transactions_isolation.ipynb",
+    "size": 18160,
+    "sha256": "5D169AAB292480FD37B097D6A5C07477D101E65EA0F6598F856BA7FDB457A099",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\timeseries_intro.ipynb",
+    "size": 396782,
+    "sha256": "62CBB8CD3E2CBA0C68894E5DCC4FBE4D95AD9EABDD7A7D6C96304AA552660034",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\vector_intro.ipynb",
+    "size": 12787,
+    "sha256": "9C9F7BED4CDFE014332533966D1913926F30970D0A049A0A08E1441E32920D87",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\widecolumn_intro.ipynb",
+    "size": 13970,
+    "sha256": "18D0B470C6887389098AEF8FF301619AC96E1E723CA3CBF8A2F4A76FE69BF845",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\SQL\\TelemetryMastery\\exercises\\01-windows-basic_sql.ipynb",
+    "size": 24163,
+    "sha256": "7629D4B391028919767A31B7E14BFE76A489B87666D2B967D13C7C45A4E7C2D2",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\SQL\\TelemetryMastery\\exercises\\02-ctes.ipynb",
+    "size": 17160,
+    "sha256": "E4CBA1E04688C446016B8DA2022400DD6F83354BA17AEF605F2029E4329F684E",
+    "type": "ipynb"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R0_complete.md",
+    "size": 2349,
+    "sha256": "891D011D483C3D121B985401A3BD6B115084A94C354B510A6BD8BBC3F02F322C",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R1_complete.md",
+    "size": 2790,
+    "sha256": "67B7F4250A5747E715FCB58D46C8025C768954112BAF46BB5FC2AF61EA944034",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2_complete.md",
+    "size": 4540,
+    "sha256": "3757EC7F75CE899283D40935D0D3CA0DB893F3FA191C4193EFD15419C0DC60AD",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3_complete.md",
+    "size": 3858,
+    "sha256": "6265CD8922373992BA696A02AE95B89ADEAA1A1A8EE01389A6EE622D0D2E800A",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-A3_sql_transactions_isolation.md",
+    "size": 3346,
+    "sha256": "1C4A15D4DD632E082100BA6782B2A6DFD5F743C2CB8FABE7BCCF2B71ADFE3907",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-A4_sql_query_optimization_live.md",
+    "size": 4008,
+    "sha256": "3C28CC209D79DF3E57C0ACEA72EDC39B8D4BCFD31EDCF9B179DF885CAACBA485",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-A5_relational_qa.md",
+    "size": 2008,
+    "sha256": "E9430DDF8A483DB6C620F18F747BC2C7D8EFE879E43D785A58EED54FA11B827B",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-A6_relational_nuggets.md",
+    "size": 1968,
+    "sha256": "4C4DB4BB87C979DFA9E55657F3DF2B26CAB31622040D28BA8836F1C798D9E618",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-A7_rds_aurora_setup.md",
+    "size": 2739,
+    "sha256": "86E84C0D4A38DFED0C36A9DEE98BC0CB54B5318764DAF430A78340176C81D35C",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-B1_duckdb_guide.md",
+    "size": 2947,
+    "sha256": "FA15C42A4F5123FCF3312A0270F49C95502CC48CE8DAE7D55EA46A1F0219A138",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-B2_snowflake_architecture.md",
+    "size": 3890,
+    "sha256": "463D3178003CD22D4810485C4E37FC2E8B758BA28107241774775330EA1166D1",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-B3_bigquery_guide.md",
+    "size": 3422,
+    "sha256": "ACA933B1771CD89910B939FCFBB4F3A63D9D3120643F9A3B04DE07169F6811AB",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-B4_redshift_guide.md",
+    "size": 3554,
+    "sha256": "7A5DEED35D63A417EB30F58F6C3D971F26CEEC3B3B6EA602BC7FBF439631B05F",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-B5_olap_comparison.md",
+    "size": 3157,
+    "sha256": "98CC71B3CAB85534C5C1353F1BDCD563E16E6395BF0C43A1BA51F3B725D82DC5",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-B6_columnar_qa.md",
+    "size": 1639,
+    "sha256": "F099E9D5962DF1B9EC128F4D4A27F4A85009468B17B8D2F3AB2B6FC7908C6635",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-B7_columnar_nuggets.md",
+    "size": 1652,
+    "sha256": "AEA93726F596E596B0B293503BB70243558CB9BD9645F6171D98F40B7335564E",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-C1_mongodb_guide.md",
+    "size": 3316,
+    "sha256": "4891E5D459D4509D92A02E133AEE206D7E391D884E5B836A301515F4379FB913",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-C2_dynamodb_guide.md",
+    "size": 3081,
+    "sha256": "0BE9E5FFF4B7071AD386F478E33671CCFA62306162F35EC81AD02C23A8005007",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-C3_document_qa.md",
+    "size": 1620,
+    "sha256": "359E2A7BF5DEF38413F5EF220E741758522CCBD8FD0C7338813875F6747FFBED",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-C4_document_nuggets.md",
+    "size": 1628,
+    "sha256": "F3EFBB958AC55BE495BB467450A806751315B92E7292981395437405A5A953E9",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-D1_redis_patterns.md",
+    "size": 3314,
+    "sha256": "DCCB63674C053DE439190F924B11D2DD099FAA02BED9E731DE893F3D88D68C2A",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-D2_keyvalue_qa.md",
+    "size": 1667,
+    "sha256": "40F2E72F27E6E94B32514053E149CCBE8BEF6CEE13A813CE8518885AA673F2B3",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-D3_keyvalue_nuggets.md",
+    "size": 1513,
+    "sha256": "27CA525860B17A98356BBFD2E739A76CE94A3377D8AE1ADC201D128F9012A690",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-E1_cassandra_guide.md",
+    "size": 3635,
+    "sha256": "A8143705A5D2A8439B38DB9CB581FA711A801C98146E7C35C8C9A0DDFFDCC1AD",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-E2_widecolumn_qa.md",
+    "size": 1678,
+    "sha256": "8A49CFC3C7E7D8B7971B76924647EBEC3FFC09AA644E30A356B2C95975C89A4A",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-E3_widecolumn_nuggets.md",
+    "size": 1641,
+    "sha256": "727CB2031C739AC64D454B10BEE6CFA1FD2D265147891FA59B099B2717A13340",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-F1_neo4j_cypher.md",
+    "size": 3320,
+    "sha256": "F6D1492C0577596D6508865C7C8EC7BA646B1EA76DB7A0FF855338F413F7535E",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-F2_graph_qa.md",
+    "size": 1676,
+    "sha256": "E6598F178199AF837657317CD71DDE906988B0C081461F0033F5CDD4C9E531B3",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-F3_graph_nuggets.md",
+    "size": 1608,
+    "sha256": "9226160A900995A57DF047C52B23C1A3C7E33ADBD0EC5F99D7826B0688173D7E",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-G1_influxdb_guide.md",
+    "size": 3374,
+    "sha256": "D4CBD2DE098415E2014FC444E8EED8666346AC18043CC5F274A86BD9E0EB31F0",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-G2_timescaledb_guide.md",
+    "size": 3669,
+    "sha256": "367CD51466BEA5FDF52609B90012B43FB186772F27E30B52F8051D2764079E9B",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-G3_timeseries_qa.md",
+    "size": 1663,
+    "sha256": "1A1AC2C3A3142E6EE576637CCB79EFD27777DD96A0743F5BB1F12076E1E313AE",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-G4_timeseries_nuggets.md",
+    "size": 1720,
+    "sha256": "6E349B27EF5B7E2594361CB0C92F56E6402C42675F10BF1AC810639B15D14714",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-H1_vector_db_guide.md",
+    "size": 3567,
+    "sha256": "7D6C7EC0259DF17F08D25A517881B0596810FBBEB6BB28F9DFA9BF23130003E1",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-H2_vector_qa.md",
+    "size": 1803,
+    "sha256": "BF73D69C2DB157BC76D2AF9209C6312BAB7DA89E4FCF80B1D083E74BEB0AD19D",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-H3_vector_nuggets.md",
+    "size": 1891,
+    "sha256": "1CD9D65DDA6DDB47FAED4DACAC55AA592F2F484C03EBED75F467F27E2409A62D",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-I1_elasticsearch_guide.md",
+    "size": 3421,
+    "sha256": "5ADD4EAAA6967BA27063D113FAA749861F3AE33A77241C9FAB39989DA2AEBFC8",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-I2_search_qa.md",
+    "size": 1758,
+    "sha256": "7E2B725F68E31E7DF3A141111C14C6FA4F6832C39376FDF521C4AC03AF3EFB6E",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R2\\R2-I3_search_nuggets.md",
+    "size": 1683,
+    "sha256": "D62D126AD300F02AB5BC6F25596D032A04877418447CB0F4051971560CDE73B9",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-A1_polyglot_persistence.md",
+    "size": 4437,
+    "sha256": "9AC6C0E4ED570ED576AFAAE8580AC46A70B704FF32568CCCBE302548BCC9C337",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-A2_database_selection.md",
+    "size": 4355,
+    "sha256": "C4929009C472C508467BC156CC02BCFDD230FF8ECF9D1A1B1971A174012BFEAB",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-A3_architecture_qa.md",
+    "size": 1984,
+    "sha256": "0AF728B74317ECEC6AB5D3C8EA66FBA9E3C4A0242A5476AA9ECFAFED9DA1038D",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-A4_architecture_nuggets.md",
+    "size": 2119,
+    "sha256": "0E6DFA61239DD702DF054535E7DE3FF132E295FF360029C595076266E6DC4558",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-B1_cdc_pipeline.md",
+    "size": 4359,
+    "sha256": "927F19769A6DE7A5292CBBD70A0A9B4EF5D3A5FCE4868D5DD4AC18EE0899B775",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-B2_etl_s3_pipeline.md",
+    "size": 4645,
+    "sha256": "D97159EAC2E14A56293AAA6BC3DDC809FA14E08692CA6C81E8A7E012A877BF43",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-B3_pipeline_qa.md",
+    "size": 2227,
+    "sha256": "57A24406762FCF53C4937A5DD79284AE302D70CDD379A2701D72F0ED73241BD6",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-B4_pipeline_nuggets.md",
+    "size": 2172,
+    "sha256": "9BAAC7F2AECAF41C8607D8033FAC00031F2FFED41018F5B2CF0B577702225053",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-C1_indexing_master.md",
+    "size": 5316,
+    "sha256": "FC5814D776EA44C7555081FD215C04EABDA1B01E6360F70B25597948933C8C9B",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-C2_query_execution.md",
+    "size": 4695,
+    "sha256": "5A4CFD5001627A748EB117B6F2D3A0225A7A97D0DDF5E5F5039175F0B92058FD",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-C3_performance_qa.md",
+    "size": 2324,
+    "sha256": "DFF5BE9796F31FF943174EEF4316F4151462D324BECA589A369F6281EFD4600F",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-C4_performance_nuggets.md",
+    "size": 2233,
+    "sha256": "F2FF6195AA5A5DC26DFF5543EBE0C797A55434A29B9E209E6971F93B91F31F04",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-D1_consistency_models.md",
+    "size": 4766,
+    "sha256": "506254A06254E212F3C3B10D7315E773E32F8A38B9E665897476AF3E4992038D",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-D2_replication_patterns.md",
+    "size": 4773,
+    "sha256": "74A22A4FAE5CE5B5C044C4ADE4319319AE148A915F63DC86784B2842FEE3BD83",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-D3_ha_qa.md",
+    "size": 2417,
+    "sha256": "C21491CC550A3189DC8F7254C74CB807D7302DE1E98D3B44963FF5BB0BDB066D",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-D4_ha_nuggets.md",
+    "size": 2338,
+    "sha256": "6CECC1BF8FA268FFFD9C311412ABDDC633357E404B5166370711F39C62CDC459",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-E1_system_design_citi.md",
+    "size": 5591,
+    "sha256": "7E373539974A0DD5464D10A70A726978D4C21345CF7C85AFBCC86717F93764A6",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-E2_system_design_qa.md",
+    "size": 2677,
+    "sha256": "15564B8F2B646F053CEEE5613376DACD34DD8410B573BA8BE0D2D7C8E67835DC",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-F1_master_qa.md",
+    "size": 4116,
+    "sha256": "01164ABE4A0B416E3045B0873AC87F9BE96FD14D060F194811FF2227B1882E34",
+    "type": "prompt"
+  },
+  {
+    "path": "D:\\Workspace\\Basics\\Databases\\prompts\\R3\\R3-F2_master_nuggets.md",
+    "size": 6537,
+    "sha256": "E883B2A58371886ADEF4DBF0D9F7F706F362A0BF7AC3B146333EEC394D23A80F",
+    "type": "prompt"
+  }
+]

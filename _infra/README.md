@@ -48,6 +48,12 @@ Start-Process http://localhost:8888/lab
 docker compose -f D:\StudyBook\_infra\docker\docker-compose.yml --env-file D:\StudyBook\_infra\env\.env.local config
 ```
 
+## Path-Agnostic Notes
+- StudyBook compose files are path-agnostic for core services (named volumes, no `D:\Workspace` bind paths).
+- Jupyter bind mount uses a repo-relative source (`../../`) so it follows wherever the StudyBook folder lives.
+- `infra_up.ps1` now auto-removes stale containers created from legacy `D:\Workspace\...` compose projects that collide by container name (for example `de_postgres`).
+- To skip this safety cleanup in exceptional cases, pass `-SkipLegacyCleanup`.
+
 ## Service Port Contract
 - Postgres `5432`
 - Redis `6380`

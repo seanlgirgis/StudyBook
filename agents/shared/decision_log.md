@@ -164,3 +164,35 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: ensures future agents regenerate plans from deterministic migration artifacts instead of ad-hoc assumptions
 - Alternatives considered: generate roadmaps directly from chat-only context; defer manual/roadmap drafting
 - Impacted files: coding_challenges/INDEX.md, coding_challenges/ROADMAP_INPUT_MANIFEST.md, coding_challenges/leetcode/TOPIC_COVERAGE.md, coding_challenges/STUDY_MANUAL_V1.md, coding_challenges/ROADMAP_DRAFT_V1.md, agents/shared/context_index.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-020
+- Task ID: TB-20260402-34
+- Decision: execute M-012 as copy-and-sanitize migration (no source deletion) with deterministic run artifacts under tracks/08_databases/_migration_meta
+- Rationale: preserves reversible migration while enforcing secret-safe legacy prompt ingestion into StudyBook
+- Alternatives considered: direct source move/delete in same run; ad-hoc manual copy without evidence artifacts
+- Impacted files: scripts/migration/run_m012_databases_assets.ps1, docs/programs/zero_to_hero/MIGRATION_BOARD.md, tracks/08_databases/*, _prompts/legacy/databases/*, tracks/08_databases/_migration_meta/run_20260402_120828/*
+
+- Date: 2026-04-02
+- Decision ID: DEC-021
+- Task ID: TB-20260402-36
+- Decision: execute a combined migration wave for Technologies notebooks/prompts and DE interview assets with deterministic conflict-safe naming, and decommission `D:\Workspace\ML_AI` immediately after validated move
+- Rationale: reduces migration latency by batching tightly-coupled sources while preserving auditability and safe cutover through run artifacts, backup snapshot, and secret-scan gate
+- Alternatives considered: run each item as separate waves; overwrite conflicts in-place; defer ML_AI source deletion to a later cleanup run
+- Impacted files: scripts/migration/run_m011_m013_m008_mlai.ps1, docs/programs/zero_to_hero/MIGRATION_BOARD.md, agents/shared/open_loops.md, agents/shared/task_register.md, temp/migration_meta/run_20260402_121903/*
+
+- Date: 2026-04-02
+- Decision ID: DEC-022
+- Task ID: TB-20260402-37
+- Decision: use migration move-map as the only delete authority for source decommission of Technologies and DE interview assets, including `conflict_renamed` records
+- Rationale: guarantees deletions remain restricted to explicitly migrated items and avoids accidental removal of non-migrated workspace content
+- Alternatives considered: delete entire source folders; delete only `copied` rows and leave conflict-renamed prompt sources
+- Impacted files: temp/migration_meta/run_20260402_121903/delete_tech_deinterview_report.json, docs/programs/zero_to_hero/MIGRATION_BOARD.md, agents/shared/task_register.md, agents/shared/open_loops.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-023
+- Task ID: TB-20260402-40
+- Decision: `infra_up.ps1` must auto-clean conflicting legacy containers created from `D:\Workspace` compose projects before starting StudyBook services
+- Rationale: prevents cross-project container-name collisions and stale host bind paths from breaking portable startup on machines without legacy drive/path layouts
+- Alternatives considered: manual docker rm cleanup each time; keep legacy and StudyBook service names divergent only
+- Impacted files: _infra/scripts/infra_up.ps1, _infra/README.md, agents/shared/task_register.md, agents/shared/agent_status.md

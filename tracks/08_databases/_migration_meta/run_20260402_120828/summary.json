@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "execute": true,
+  "source_ipynb_count": 15,
+  "source_prompt_count": 59,
+  "move_map_entries": 74,
+  "secret_hits": 0,
+  "run_meta": "D:\\StudyBook\\tracks\\08_databases\\_migration_meta\\run_20260402_120828",
+  "target_tracks": "D:\\StudyBook\\tracks\\08_databases",
+  "target_legacy_prompts": "D:\\StudyBook\\_prompts\\legacy\\databases"
+}

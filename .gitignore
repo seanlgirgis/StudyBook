@@ -223,3 +223,7 @@ temp/
 !scripts/env/package_aws_credentials.ps1
 !scripts/env/restore_aws_credentials.ps1
 
+
+# Large local runtime artifacts (do not commit)
+tracks/08_databases/_setup/volumes/
+tracks/08_databases/practice/**/_artifacts/

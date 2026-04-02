@@ -88,8 +88,36 @@ Purpose: compact durable memory map for fast session bootstrap.
 - First planning outputs for study execution:
   - `coding_challenges/STUDY_MANUAL_V1.md`
   - `coding_challenges/ROADMAP_DRAFT_V1.md`
+
+## Technologies + Interview + ML_AI Migration Memory
+
+- Combined wave completed on 2026-04-02 via:
+  - `scripts/migration/run_m011_m013_m008_mlai.ps1 -Execute -DeleteMlAiSource`
+- Evidence run:
+  - `D:\StudyBook\temp\migration_meta\run_20260402_121903`
+- Coverage:
+  - `M-011` Technologies notebooks (`54`)
+  - `M-013` Technologies prompts R1/R2/R3 (`88`)
+  - `M-008` DE interview notebooks (`21`)
+  - `M-015` ML_AI pack files (`26`), source deleted
+- Safety gates:
+  - `secret_hits=0`
+  - conflict-safe duplicates captured in `conflicts_report.md` (`__dupNNN` suffixing)
+- Backup snapshot for ML_AI cutover:
+  - `C:\Users\shareuser\migration_backups\ml_ai_backup_20260402_121903`
+- Source decommission evidence for Technologies + DE interview migrated items:
+  - `D:\StudyBook\temp\migration_meta\run_20260402_121903\delete_tech_deinterview_report.json`
+
+## Snowflake Micro-Nuggets Memory
+
+- Canonical lane created under:
+  - `D:\StudyBook\tracks\08_databases\micro_nuggets\snowflake`
+- Current scaffold status (2026-04-02):
+  - dirs: `00_setup`, `02_ddl_basics`, `03_dml_basics`
+  - files: `_sf_connect.py`, `summary.md` + 9 nugget scripts
+- Intent: short 5-10 minute runnable learning nuggets with documentation-first style.
+
 ## Last Updated
 
 - 2026-04-02
-
 

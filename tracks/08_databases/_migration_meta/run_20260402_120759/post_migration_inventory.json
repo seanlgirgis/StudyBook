@@ -1,0 +1,372 @@
+[
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R0_complete.md",
+    "size": 2351,
+    "sha256": "92F95884E89D59BAFEA031F2E7E715580F38E532DABA0522383D82339C95B1D0"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R1_complete.md",
+    "size": 2792,
+    "sha256": "56CE84C80B9B4732DC9CA4DFCA5A1935799C10BCAE097A4886BC47212FE10AB7"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2_complete.md",
+    "size": 4542,
+    "sha256": "72568E57607FFD8A70B9FD097BA52E48DB2EFBB5CCA06373FF83CF072D6334CC"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-A3_sql_transactions_isolation.md",
+    "size": 3348,
+    "sha256": "83288D58DA0E54E1BA99634C9188E70E481C3B361C4AA5D868779CE84428B414"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-A4_sql_query_optimization_live.md",
+    "size": 4010,
+    "sha256": "4DD8F990D58A349FA971C687AC66F326BC03053F79FCE763582C78181B90E593"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-A5_relational_qa.md",
+    "size": 2010,
+    "sha256": "A882572A6E3E270D801C7B781EA89E7BABCBD6D5B3DEFAFB0BC17D2A94EEE6FC"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-A6_relational_nuggets.md",
+    "size": 1970,
+    "sha256": "BAED5FF14BBB2B486C2BE687CFDB9A6A76257D1E6C97244014F6019D513FC1F3"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-A7_rds_aurora_setup.md",
+    "size": 2741,
+    "sha256": "7FE8207AA359ED65D7D8D97424C912122460513ABFDC807E1DAA4F69A024AEA6"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-B1_duckdb_guide.md",
+    "size": 2949,
+    "sha256": "F849AB3B76A8F0656B1EE14826CA4B21E4EE215FA6C4DA1232FE8D1F6E44D583"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-B2_snowflake_architecture.md",
+    "size": 3892,
+    "sha256": "25A114A252E12373B28067DAAF20688DC93FD03EE02E01628C7D1E22EA30ACA9"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-B3_bigquery_guide.md",
+    "size": 3424,
+    "sha256": "C02FB5611A21DB8F019F1E87AB671D401C56B6346BFB35FBDEAD2F49723547D3"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-B4_redshift_guide.md",
+    "size": 3556,
+    "sha256": "9232F76AF8047AD05B4E2ED69B25BB59D7FE1346459510435717BB11CF8B69B9"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-B5_olap_comparison.md",
+    "size": 3159,
+    "sha256": "5EC6C7AE883AC0937DD5E2D76D6A2D18871DE5399CF4081F48A3EE8ECA8F7152"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-B6_columnar_qa.md",
+    "size": 1641,
+    "sha256": "C9F26E674166860D90E07EDCBEE4325FBBE17F02E8F3493B6B838AB1C6EC3124"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-B7_columnar_nuggets.md",
+    "size": 1654,
+    "sha256": "D4CF1730201175C91C77850E6E1521C44CB4503AD81313702E89D2BB17B09FD2"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-C1_mongodb_guide.md",
+    "size": 3314,
+    "sha256": "BA0060B4CD5C7485F36054EA5020149D3DC878AACB44E41D9AC55DAF7F090DF4"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-C2_dynamodb_guide.md",
+    "size": 3083,
+    "sha256": "63A76F213ECFB4D809A2810298B4F38B65183C2ABBF779882628EDC6EE023BA1"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-C3_document_qa.md",
+    "size": 1622,
+    "sha256": "26438674EDEF0CB95FC0407B49A7292957CA3992B37853B2E7901F49ABBA7E7C"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-C4_document_nuggets.md",
+    "size": 1630,
+    "sha256": "66652B653F272C8957DC74ED1FA184DA73ABC3991BB5287347014325B5E4562C"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-D1_redis_patterns.md",
+    "size": 3316,
+    "sha256": "39DD506677E543E8D60C06B4E80F01AF7AAA7BCEB2D526850BC26B60BEF754FF"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-D2_keyvalue_qa.md",
+    "size": 1669,
+    "sha256": "8074EC1B0BA6FCC16C91BB50572E74B8026F1443B45F742652BE6B71E8FCC654"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-D3_keyvalue_nuggets.md",
+    "size": 1515,
+    "sha256": "DCB8EAB8590E1E4726916E08005B868BEDF5BDA4E5493D9321542B31C9FB35FB"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-E1_cassandra_guide.md",
+    "size": 3637,
+    "sha256": "2DDDA4EDB331FE98237A58D28B42AC252CC6DFB32902E67D4B66530D08840F87"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-E2_widecolumn_qa.md",
+    "size": 1680,
+    "sha256": "28A7D44B615B95F370E5836D7DD39F13230015D17BE4706637B0B35CC21F1A2E"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-E3_widecolumn_nuggets.md",
+    "size": 1643,
+    "sha256": "64531D3B000277C5FFED48177D87C0DDBEEEFBE21C31DE5A5411C5E584C04B3C"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-F1_neo4j_cypher.md",
+    "size": 3322,
+    "sha256": "EEA0755F52B2C849DFBF58BA916B9C65D42B1549C241DB687C49CA483036577E"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-F2_graph_qa.md",
+    "size": 1678,
+    "sha256": "E5D356F644C9EDD6E808B64C703FB61BF6F7C8635B422C0813471923679F4D09"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-F3_graph_nuggets.md",
+    "size": 1610,
+    "sha256": "EB8F0A867459976E67CAF94B14EA2B5E8A46EB1865EDA8D5C12A5C15A02AECA0"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-G1_influxdb_guide.md",
+    "size": 3376,
+    "sha256": "381953612FA169AEBDA087EE1A5B87E9FDA5D48B1787776FEB7BAD48E94A8298"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-G2_timescaledb_guide.md",
+    "size": 3671,
+    "sha256": "540D009A9372F23ECE5D0A428E7CCEB16D8E262F5F6C1842410EF45D04D7005C"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-G3_timeseries_qa.md",
+    "size": 1665,
+    "sha256": "B6EA9F224ECF7755FA8CEEBD444D8EFA7F7CDCBBE790E190B60077CB27C7CCD8"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-G4_timeseries_nuggets.md",
+    "size": 1722,
+    "sha256": "375715762E0D84679F502B41CEC3A2E1592BECF68FBE092C81FEDA3B413A391A"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-H1_vector_db_guide.md",
+    "size": 3569,
+    "sha256": "A2951E4F3106295850C0D0D55E739912FE7C5A0AD1E2DA9315D05A1E3B436B0C"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-H2_vector_qa.md",
+    "size": 1805,
+    "sha256": "838C3C7B4ADE39CF9FAC95E9E470A749D3D390FFC8075371620E2009DA26CC7D"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-H3_vector_nuggets.md",
+    "size": 1893,
+    "sha256": "2F0F7F379A9375BBE848B08AA8B94B1F941B3628A69DA31996BA599C880A636C"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-I1_elasticsearch_guide.md",
+    "size": 3423,
+    "sha256": "713CDEBD23144853479D096C116E71186461C9E6CB5EDDABDD6EEF56E6441427"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-I2_search_qa.md",
+    "size": 1760,
+    "sha256": "5EFBB7C847C8913AA7939DF848FCCCEAA0F011D92DCF562906746C9DF29E2219"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R2\\\\R2-I3_search_nuggets.md",
+    "size": 1685,
+    "sha256": "0D96AD4AA715836A79BA93274A5FFC04159E4BF782BA7AA9917239707C0197A4"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3_complete.md",
+    "size": 3860,
+    "sha256": "76474A5034E70ADC3F1C8F1AA50AFAFF0A9CAEFEC8FBFA81528F4E79959A980A"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-A1_polyglot_persistence.md",
+    "size": 4439,
+    "sha256": "A83AB322DA85ED14DEE4D601EBC98B9F96F5C57FC74D7EDFF5B8688A7F873CC2"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-A2_database_selection.md",
+    "size": 4357,
+    "sha256": "B1E1D29FB5A2C78545ED3FF514639E76AEC8E0100E470F71C7135DB4BF1AD15A"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-A3_architecture_qa.md",
+    "size": 1986,
+    "sha256": "68CB2FC73B0FB9B90E70817E00F3B71D688C53ED4A337FF7FFE552712B627467"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-A4_architecture_nuggets.md",
+    "size": 2121,
+    "sha256": "11AE0C1629FF4B53F9EF185BA9D17EA1DFA013A27B27C5DB5F40D799F7D73F1A"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-B1_cdc_pipeline.md",
+    "size": 4361,
+    "sha256": "5E67A6C90621653D599CCA4168F3DB66E3FCEFB87D9528BAC18FDBDEA4421065"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-B2_etl_s3_pipeline.md",
+    "size": 4647,
+    "sha256": "943AC9A4A122B3027606C3F8BFFC9110B72DAA7D9B51F232013BEB4C6814A678"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-B3_pipeline_qa.md",
+    "size": 2229,
+    "sha256": "E50344319243A393E2DDD77B43E4F5AEFCF555ED615A19D7BD36AA604E720A97"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-B4_pipeline_nuggets.md",
+    "size": 2174,
+    "sha256": "BCBC2750E864F33A27BE5FE6931B9E02B0F09B22DB34802E71BC494726ABA4FB"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-C1_indexing_master.md",
+    "size": 5318,
+    "sha256": "3C5D688D4D971EE1878EC1E007C43BDBC080D4FB1AE0C4B027DCDD9F0B05040D"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-C2_query_execution.md",
+    "size": 4697,
+    "sha256": "1F2778ED8A85C8D5438CF4F8D5A37A75643DF0CB47688A507985C1E7A363C587"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-C3_performance_qa.md",
+    "size": 2326,
+    "sha256": "95E7ACBCF746EFADE64B82F4074E5BBA114D81C764D3797F7309A0E3D4F97C8B"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-C4_performance_nuggets.md",
+    "size": 2235,
+    "sha256": "457ECFA0F69B33A716A3732864551B1EB4F9C4D1ED370A618138181E5883F7F3"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-D1_consistency_models.md",
+    "size": 4768,
+    "sha256": "282F5A87D6B862964D3F74339E20504BD2710AC797791E1A2128A4AFE72CBB73"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-D2_replication_patterns.md",
+    "size": 4775,
+    "sha256": "C324FC977852570B2A80CD6BDEF613A542B16DC7C352411BB09A59F5D3E6A77B"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-D3_ha_qa.md",
+    "size": 2419,
+    "sha256": "066A6F60E9D12B26841585C832BF92FF3256FF95F061F5BEF4BAFF4283DD2D17"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-D4_ha_nuggets.md",
+    "size": 2340,
+    "sha256": "C6175C5ABDE77CCBC2785BE3D49B9398ACD818D0CF830DFA888E6E80578B22C2"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-E1_system_design_citi.md",
+    "size": 5593,
+    "sha256": "DBA4DC6F5588CFB453B8DB5943E4F939490392ACE5C75EFF2488A1552359EDAF"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-E2_system_design_qa.md",
+    "size": 2679,
+    "sha256": "E0795E5BE8D3BF1DA49B8A23719AF9C2375EB48143739A5B01A5CA2FBC26776C"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-F1_master_qa.md",
+    "size": 4118,
+    "sha256": "FA1C16358575517ABCD1051A23B22C08042BA4B48D592944877498AB8FDEE273"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\legacy\\databases\\R3\\\\R3-F2_master_nuggets.md",
+    "size": 6539,
+    "sha256": "2AD2E2A69EE1E3488F81538A73BE4DB83E38BDCC91945B02774E84515AC0DB0F"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\columnar_intro.ipynb",
+    "size": 35655,
+    "sha256": "E91464BEC0EC30D67FE84CB887FFE84BD4C0D89C45F0D950511EDB15BC074180"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\db_decision_framework.ipynb",
+    "size": 1206,
+    "sha256": "4B92DE8322AF0A19BAF2481A06E3D650F8FE04FC3BEC84AD4110191D28B379B2"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\document_intro.ipynb",
+    "size": 13385,
+    "sha256": "5B35A74DE940B8440EF6F71F589A9F70543D3EDD18C51032D8A8CBBE322F7306"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\graph_intro.ipynb",
+    "size": 14492,
+    "sha256": "A1BDB456918ABF0DC6748C3E85231741680F68E53301077359528646AB354CDF"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\keyvalue_intro.ipynb",
+    "size": 12373,
+    "sha256": "F3CF7DB3BC196AB94EC0F1C2C62C235A849B756D68E51190DC5C69D3B1E44E07"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\search_intro.ipynb",
+    "size": 12042,
+    "sha256": "739BA3DFCA6DBED480F03D293C8741D02EC108BD4DF0F1637D70DE8116EE467E"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\sql_advanced_postgres.ipynb",
+    "size": 18004,
+    "sha256": "C08CFF7A0DC571D573CD2F0CF805CF7EDECB3136200A8EC966BD26A00197DBF2"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\sql_indexing_deep_dive.ipynb",
+    "size": 19820,
+    "sha256": "63A05610C87E6518CB9875D054C42DC31407BBD522A98A853B270751548D07C6"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\sql_relational_intro.ipynb",
+    "size": 34455,
+    "sha256": "389B53A792D10E10A9A3A1BFBCF8B137EB1ACB1249B87947DA1D48CE9FE03488"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\sql_transactions_isolation.ipynb",
+    "size": 18160,
+    "sha256": "5D169AAB292480FD37B097D6A5C07477D101E65EA0F6598F856BA7FDB457A099"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\timeseries_intro.ipynb",
+    "size": 396782,
+    "sha256": "62CBB8CD3E2CBA0C68894E5DCC4FBE4D95AD9EABDD7A7D6C96304AA552660034"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\vector_intro.ipynb",
+    "size": 12787,
+    "sha256": "9C9F7BED4CDFE014332533966D1913926F30970D0A049A0A08E1441E32920D87"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r1\\\\widecolumn_intro.ipynb",
+    "size": 13970,
+    "sha256": "18D0B470C6887389098AEF8FF301619AC96E1E723CA3CBF8A2F4A76FE69BF845"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r2\\\\sql_telemetry_mastery\\\\exercises\\\\01-windows-basic_sql.ipynb",
+    "size": 24163,
+    "sha256": "7629D4B391028919767A31B7E14BFE76A489B87666D2B967D13C7C45A4E7C2D2"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\08_databases\\r2\\\\sql_telemetry_mastery\\\\exercises\\\\02-ctes.ipynb",
+    "size": 17160,
+    "sha256": "E4CBA1E04688C446016B8DA2022400DD6F83354BA17AEF605F2029E4329F684E"
+  }
+]
