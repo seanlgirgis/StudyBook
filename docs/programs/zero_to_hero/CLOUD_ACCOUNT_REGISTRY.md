@@ -14,10 +14,11 @@ Track cloud/platform account metadata needed for reproducible infra and migratio
 |---|---|---|---|---|---|---|---|
 | AWS | `<fill>` | `<fill>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | For S3/Redshift/Lambda labs |
 | Azure | `<fill>` | `<fill>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | For ADF/Synapse/AKS labs |
-| GCP | `<fill>` | `<fill>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | For BigQuery/Dataflow/GCS labs |
+| GCP | `citi-de-learning` | `us-central1` | `learning` | `seanlgirgis@gmail.com` | `key_present_local` | `2026-04-02` | Real SA key stored in protected local path; env points to secure file |
 | Databricks | `<workspace-url-or-id>` | `<region>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | Workspace host only |
 | Snowflake | `<account-identifier>` | `<region/cloud>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | Account locator only |
 | Redshift | `<cluster-or-serverless-workgroup>` | `<region>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | Endpoint host non-secret |
+| MongoDB Atlas | `de-learning.zur1dze.mongodb.net` | `atlas` | `learning` | `<fill>` | `provided_needs_test` | `2026-04-02` | URI captured in local secret/env flow |
 
 ## Secret Key Mapping (Do Not Put Values Here)
 
@@ -58,7 +59,20 @@ Track cloud/platform account metadata needed for reproducible infra and migratio
 - `REDSHIFT_USER`
 - `REDSHIFT_PASSWORD`
 
+### MongoDB Atlas
+- `MONGODB_URI`
+- `MONGODB_HOST`
+- `MONGODB_USER`
+- `MONGODB_PASSWORD`
+- `MONGODB_DATABASE`
+
 ## Update Checklist
 1. Update non-secret identifiers and ownership in this file.
 2. Verify matching secret keys exist in encrypted secret files.
 3. Record validation result in `docs/programs/zero_to_hero/MIGRATION_BOARD.md` evidence column.
+
+## GCP Key Path Standard
+- Expected runtime key path for legacy prompts/notebooks: D:/Workspace/Technologies/_setup/gcp_key.json`r
+- Current state (verified 2026-04-02): real key ingested at `D:/Users/shareuser/.studybook/secrets/gcp/citi-de-learning-sa.json`; legacy workspace files still include placeholders and should be cleaned when legacy-path compatibility is no longer required.
+
+

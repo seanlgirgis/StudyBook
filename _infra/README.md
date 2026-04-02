@@ -65,8 +65,12 @@ docker compose -f D:\StudyBook\_infra\docker\docker-compose.yml --env-file D:\St
   - `docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md`
 - Keep secrets only in encrypted secret flow (`config/secrets/*.enc.json`) and local env overlays.
 
+## Service Dictionary
+- docs/operations/docker_service_dictionary.md - quick function reference for each Docker service
+
 ## Reproducibility Rules
 - Keep real credentials in `.env.local`; never commit secret values.
 - Keep seed scripts idempotent and deterministic.
 - Keep service names and exposed ports stable unless change is documented.
 - Use `docker compose ... config` before runtime changes.
+

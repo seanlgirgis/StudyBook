@@ -108,3 +108,35 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: make infra rebuildable from repository files, remove path ambiguity after target correction, and ensure cloud metadata is trackable without exposing secrets
 - Alternatives considered: rely on manual docker commands only; keep cloud metadata scattered in prompts/docs
 - Impacted files: _infra/scripts/infra_up.ps1, _infra/scripts/infra_down.ps1, _infra/scripts/infra_seed.ps1, _infra/scripts/infra_health.ps1, _infra/README.md, docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md, docs/programs/zero_to_hero/TALKS_WITH_CLAUDE_EXTRACT_AND_SHIFT_LIFT_PLAN.md, docs/programs/zero_to_hero/EXECUTION_SYSTEM.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-013
+- Task ID: TB-20260402-08
+- Decision: store Docker service purpose documentation under `docs/operations` as a stable agent-friendly dictionary
+- Rationale: keep infrastructure semantics discoverable in a single durable location without requiring compose-file deep reads
+- Alternatives considered: keep only comments in compose; keep service notes only in `_infra/README.md`
+- Impacted files: docs/operations/docker_service_dictionary.md, docs/operations/README.md, _infra/README.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-014
+- Task ID: TB-20260402-09
+- Decision: store provided MongoDB Atlas credential in local ignored env overlay and keep only non-secret metadata in tracked docs
+- Rationale: enable immediate runtime access while preserving repository secret hygiene and push-protection compliance
+- Alternatives considered: commit credential to docs (rejected); defer capture until encrypted secret passphrase flow is run
+- Impacted files: _infra/env/.env.local (ignored), docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-015
+- Task ID: TB-20260402-10
+- Decision: treat GCP `citi-de-learning` as project-defined but key-not-ready until a real service-account JSON replaces workspace placeholders
+- Rationale: avoid false readiness assumptions that would break notebook execution while keeping migration tracking factual and reproducible
+- Alternatives considered: assume project unavailable; postpone status update until notebook migration step
+- Impacted files: docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md, agents/shared/open_loops.md, agents/shared/task_register.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-016
+- Task ID: TB-20260402-11
+- Decision: store real GCP service-account key in a protected user-local folder and reference it by path in local env, instead of placing key JSON in tracked project paths
+- Rationale: reduces accidental git exposure and keeps credential handling aligned with local-secret overlay model
+- Alternatives considered: store key directly under workspace setup path as canonical source; embed key content in encrypted project JSON now
+- Impacted files: _infra/env/.env.local (ignored), docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md, agents/shared/open_loops.md, agents/shared/task_register.md
