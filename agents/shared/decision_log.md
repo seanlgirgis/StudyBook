@@ -85,3 +85,26 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: avoid missed renewals and keep billing reminders in durable project docs
 - Alternatives considered: keep reminders in chat only; external personal notes
 - Impacted files: docs/operations/subscription_tracker.md, docs/operations/README.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-010
+- Task ID: TB-20260402-02
+- Decision: adopt an infra-first, batch-tracked migration system for ZeroToHero with explicit no-scaffold and create-only-when-missing rules
+- Rationale: reduce rebuild risk, keep work traceable, and allow any incoming code agent to continue with minimal ambiguity
+- Alternatives considered: big-bang regeneration; ad-hoc migration without a durable board
+- Impacted files: docs/programs/zero_to_hero/EXECUTION_SYSTEM.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md, agents/shared/context_index.md, agents/shared/open_loops.md
+- Date: 2026-04-02
+- Decision ID: DEC-011
+- Task ID: TB-20260402-04
+- Decision: adopt a transcript-derived shift/lift placement map as mandatory pre-migration input before moving workspace assets into ZeroToHero
+- Rationale: reduce migration ambiguity, preserve proven assets, and prevent accidental secret or duplicate artifact carryover
+- Alternatives considered: migrate ad-hoc from memory; defer extraction and discover paths during implementation
+- Impacted files: docs/programs/zero_to_hero/TALKS_WITH_CLAUDE_EXTRACT_AND_SHIFT_LIFT_PLAN.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md, agents/shared/context_index.md, agents/shared/open_loops.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-012
+- Task ID: TB-20260402-06
+- Decision: standardize StudyBook infra reproducibility on a script-driven contract (`infra_up/down/seed/health`) plus a non-secret cloud account registry
+- Rationale: make infra rebuildable from repository files, remove path ambiguity after target correction, and ensure cloud metadata is trackable without exposing secrets
+- Alternatives considered: rely on manual docker commands only; keep cloud metadata scattered in prompts/docs
+- Impacted files: _infra/scripts/infra_up.ps1, _infra/scripts/infra_down.ps1, _infra/scripts/infra_seed.ps1, _infra/scripts/infra_health.ps1, _infra/README.md, docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md, docs/programs/zero_to_hero/TALKS_WITH_CLAUDE_EXTRACT_AND_SHIFT_LIFT_PLAN.md, docs/programs/zero_to_hero/EXECUTION_SYSTEM.md

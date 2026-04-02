@@ -210,3 +210,6 @@ __marimo__/
 config/machines/*.local.psd1
 config/secrets/*.secrets.json
 config/secrets/*.plaintext.json
+_infra/env/.env.local
+_infra/env/.env.*.local
+docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.local.md

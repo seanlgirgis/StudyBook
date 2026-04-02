@@ -4,8 +4,9 @@ Purpose: compact durable memory map for fast session bootstrap.
 
 ## Project North Star
 
-- Shift/lift from legacy project with stronger agent control and fewer stalls.
-- Balance autonomy with safety guardrails.
+- Build `D:\StudyBook` as the canonical, reproducible DE/AI runtime repo.
+- Execute migration as controlled shift/lift from `D:\Workspace`.
+- Keep autonomy high with explicit safety guardrails and durable run artifacts.
 
 ## Canonical Control Files
 
@@ -26,6 +27,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Use `Allowed Scope: bounded` by default for velocity.
 - Use `Reasoning Depth: deep` for migration and architecture decisions.
 - Stop only for high-risk ambiguity, not for routine implementation details.
+- Canonical runtime target is `D:\StudyBook` (deprecated path deleted).
 
 ## Portable Environment Files
 
@@ -41,20 +43,29 @@ Purpose: compact durable memory map for fast session bootstrap.
 - `config/secrets/dell-laptop.secrets.enc.json`
 - `config/secrets/workspace-import.sources.md`
 
-## Architecture Tracking Files
+## Infra Reproducibility Files
 
-- `docs/adr/README.md`
-- `docs/adr/ADR-INDEX.md`
-- `docs/adr/TEMPLATE.md`
-- `scripts/adr/new_adr.ps1`
+- `_infra/docker/docker-compose.yml`
+- `_infra/docker/core.yml`
+- `_infra/docker/streaming.yml`
+- `_infra/docker/pipeline.yml`
+- `_infra/docker/observability.yml`
+- `_infra/env/.env.example`
+- `_infra/scripts/infra_up.ps1`
+- `_infra/scripts/infra_down.ps1`
+- `_infra/scripts/infra_seed.ps1`
+- `_infra/scripts/infra_health.ps1`
+- `_infra/seeds/seed_core.py`
+- `_infra/seeds/seed_tech_telemetry.py`
+- `_infra/README.md`
 
-## Operational Runbooks
+## ZeroToHero Program Files
 
-- `docs/operations/README.md`
-- `docs/operations/env_startup.md`
-- `docs/operations/secrets_workflow.md`
-- `docs/operations/subscription_tracker.md`
+- `docs/programs/zero_to_hero/EXECUTION_SYSTEM.md`
+- `docs/programs/zero_to_hero/MIGRATION_BOARD.md`
+- `docs/programs/zero_to_hero/TALKS_WITH_CLAUDE_EXTRACT_AND_SHIFT_LIFT_PLAN.md`
+- `docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md`
 
 ## Last Updated
 
-- 2026-04-01
+- 2026-04-02

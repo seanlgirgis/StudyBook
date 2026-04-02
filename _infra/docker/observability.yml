@@ -1,0 +1,89 @@
+name: studybook_observability
+
+services:
+  elasticsearch:
+    image: elasticsearch:8.12.0
+    container_name: de_elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-change_me}
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx1g
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "${ELASTIC_PORT:-9200}:9200"
+    volumes:
+      - de_elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -u elastic:${ELASTIC_PASSWORD:-change_me} http://localhost:9200/_cluster/health | grep -v red"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    networks: [studybook_net]
+
+  kibana:
+    image: kibana:8.12.0
+    container_name: de_kibana
+    restart: unless-stopped
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: ${KIBANA_PASSWORD:-change_me}
+    ports:
+      - "${KIBANA_PORT:-5601}:5601"
+    volumes:
+      - de_kibana_data:/usr/share/kibana/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:5601/api/status | grep -v red"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+    networks: [studybook_net]
+
+  splunk:
+    image: splunk/splunk:9.2.0
+    container_name: citi_splunk
+    restart: unless-stopped
+    ports:
+      - "${SPLUNK_PORT_WEB:-8000}:8000"
+      - "${SPLUNK_PORT_HEC:-8088}:8088"
+      - "${SPLUNK_PORT_MGT:-8089}:8089"
+    environment:
+      SPLUNK_START_ARGS: --accept-license
+      SPLUNK_PASSWORD: ${SPLUNK_PASSWORD:-change_me}
+    volumes:
+      - splunk_var:/opt/splunk/var
+      - splunk_etc:/opt/splunk/etc
+    healthcheck:
+      test: ["CMD", "curl", "-sk", "https://localhost:8089/services/server/info", "-u", "admin:${SPLUNK_PASSWORD:-change_me}", "-o", "/dev/null", "-w", "%{http_code}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    networks: [studybook_net]
+
+networks:
+  studybook_net:
+    name: studybook_net
+    driver: bridge
+
+volumes:
+  de_elasticsearch_data:
+    name: de_elasticsearch_data
+  de_kibana_data:
+    name: de_kibana_data
+  splunk_var:
+    name: splunk_var
+  splunk_etc:
+    name: splunk_etc

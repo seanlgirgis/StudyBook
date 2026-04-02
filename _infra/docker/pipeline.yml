@@ -1,0 +1,109 @@
+name: studybook_pipeline
+
+services:
+  spark:
+    image: apache/spark:3.5.3
+    container_name: citi_spark
+    restart: unless-stopped
+    ports:
+      - "${SPARK_MASTER_UI_PORT:-8081}:8080"
+      - "${SPARK_MASTER_PORT:-7077}:7077"
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master"]
+    hostname: spark
+    environment:
+      SPARK_MASTER_HOST: spark
+    volumes:
+      - citi_spark_master_work:/opt/spark/work
+      - spark_extra_jars:/opt/spark/extra-jars:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks: [studybook_net]
+
+  spark_worker:
+    image: apache/spark:3.5.3
+    container_name: citi_spark_worker
+    user: root
+    restart: unless-stopped
+    depends_on:
+      - spark
+    command: >
+      bash -c "chown -R spark:spark /opt/spark/work &&
+      su spark -c '/opt/spark/bin/spark-class
+      org.apache.spark.deploy.worker.Worker
+      spark://spark:7077'"
+    environment:
+      SPARK_WORKER_CORES: "2"
+      SPARK_WORKER_MEMORY: "2g"
+      SPARK_WORKER_WEBUI_PORT: "8085"
+    ports:
+      - "${SPARK_WORKER_UI_PORT:-8085}:8085"
+    volumes:
+      - citi_spark_worker_work:/opt/spark/work
+      - spark_extra_jars:/opt/spark/extra-jars:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks: [studybook_net]
+
+  airflow:
+    image: apache/airflow:2.8.0
+    container_name: citi_airflow
+    restart: unless-stopped
+    ports:
+      - "${AIRFLOW_PORT:-8082}:8080"
+    command: standalone
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: "postgresql+psycopg2://${POSTGRES_USER:-de_admin}:${POSTGRES_PASSWORD:-change_me}@host.docker.internal:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-de_telemetry}"
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+      AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "true"
+      _AIRFLOW_WWW_USER_USERNAME: ${AIRFLOW_USER:-airflow}
+      _AIRFLOW_WWW_USER_PASSWORD: ${AIRFLOW_PASSWORD:-airflow}
+    volumes:
+      - citi_airflow_dags:/opt/airflow/dags
+      - citi_airflow_logs:/opt/airflow/logs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks: [studybook_net]
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: citi_mlflow
+    restart: unless-stopped
+    ports:
+      - "${MLFLOW_PORT:-5000}:5000"
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+    volumes:
+      - citi_mlflow_artifacts:/mlflow/artifacts
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks: [studybook_net]
+
+networks:
+  studybook_net:
+    name: studybook_net
+    driver: bridge
+
+volumes:
+  citi_spark_master_work:
+    name: citi_spark_master_work
+  citi_spark_worker_work:
+    name: citi_spark_worker_work
+  spark_extra_jars:
+    name: spark_extra_jars
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${SPARK_JARS_HOST_PATH:-C:/Users/shareuser/.ivy2/jars}"
+  citi_airflow_dags:
+    name: citi_airflow_dags
+  citi_airflow_logs:
+    name: citi_airflow_logs
+  citi_mlflow_artifacts:
+    name: citi_mlflow_artifacts
