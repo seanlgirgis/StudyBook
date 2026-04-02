@@ -7,13 +7,20 @@ This folder contains small, runnable scripts to prove that a resource is reachab
 - `poc/connection_proofs/Test-TcpAccess.ps1` - one TCP reachability check
 - `poc/connection_proofs/Test-HttpAccess.ps1` - one HTTP reachability check
 - `poc/connection_proofs/Run-LocalInfraProofs.ps1` - bundled checks for local StudyBook infra services
-- `poc/connection_proofs/lib/ProofUtils.ps1` - shared probe functions
+- `poc/connection_proofs/Run-CoreDockerProofs.ps1` - core stack Docker connect + simple operation checks
+- `poc/connection_proofs/Run-StreamingDockerProofs.ps1` - streaming stack Docker connect + simple operation checks
+- `poc/connection_proofs/Run-PipelineDockerProofs.ps1` - pipeline stack Docker connect + simple operation checks
+- `poc/connection_proofs/Run-ObservabilityDockerProofs.ps1` - observability stack Docker connect + simple operation checks
+- `poc/connection_proofs/Run-AllDockerProofs.ps1` - run all Docker group proofs in one command
+- `poc/connection_proofs/lib/ProofUtils.ps1` - shared TCP/HTTP probe functions
+- `poc/connection_proofs/DockerProofUtils.ps1` - shared Docker group proof helpers
 - `poc/connection_proofs/python/mongo_connection_proof.py` - read-only MongoDB proof sample
 - `poc/connection_proofs/python/gcp_connection_proof.py` - read-only GCP proof sample
 - `poc/connection_proofs/python/aws_connection_proof.py` - read-only AWS STS proof sample
 - `poc/connection_proofs/python/azure_connection_proof.py` - read-only Azure account/subscription proof sample
 - `poc/connection_proofs/python/databricks_connection_proof.py` - read-only Databricks workspace proof sample
 - `poc/connection_proofs/python/snowflake_connection_proof.py` - read-only Snowflake account proof sample
+- `poc/connection_proofs/python/_docker_service_common.py` - shared Python Docker proof logic for per-service wrappers
 
 ## PowerShell Usage
 
@@ -81,3 +88,80 @@ python D:\StudyBook\poc\connection_proofs\python\databricks_connection_proof.py
 
 
 
+
+
+## Docker Service Groups
+
+- Core: `postgres`, `redis`, `cassandra`, `neo4j`, `influxdb`
+- Streaming: `zookeeper`, `kafka`, `kafka_ui`
+- Pipeline: `spark`, `spark_worker`, `airflow`, `mlflow`, `jupyterlab`
+- Observability: `elasticsearch`, `kibana`, `splunk`
+
+## Docker Group Usage
+
+Core group:
+
+```powershell
+pwsh D:\StudyBook\poc\connection_proofs\Run-CoreDockerProofs.ps1
+```
+
+Streaming group:
+
+```powershell
+pwsh D:\StudyBook\poc\connection_proofs\Run-StreamingDockerProofs.ps1
+```
+
+Pipeline group:
+
+```powershell
+pwsh D:\StudyBook\poc\connection_proofs\Run-PipelineDockerProofs.ps1
+```
+
+Observability group:
+
+```powershell
+pwsh D:\StudyBook\poc\connection_proofs\Run-ObservabilityDockerProofs.ps1
+```
+
+All groups:
+
+```powershell
+pwsh D:\StudyBook\poc\connection_proofs\Run-AllDockerProofs.ps1
+```
+
+
+
+
+## Python Docker Service Scripts
+
+Core:
+- `python D:\StudyBook\poc\connection_proofs\python\postgres_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\redis_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\cassandra_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\neo4j_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\influxdb_docker_proof.py`
+
+Streaming:
+- `python D:\StudyBook\poc\connection_proofs\python\zookeeper_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\kafka_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\kafka_ui_docker_proof.py`
+
+Pipeline:
+- `python D:\StudyBook\poc\connection_proofs\python\spark_master_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\spark_worker_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\airflow_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\mlflow_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\jupyterlab_docker_proof.py`
+
+Observability:
+- `python D:\StudyBook\poc\connection_proofs\python\elasticsearch_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\kibana_docker_proof.py`
+- `python D:\StudyBook\poc\connection_proofs\python\splunk_docker_proof.py`
+
+
+
+Run all Python proofs with one-line status output:
+
+```powershell
+python D:\StudyBook\poc\connection_proofs\python\run_all_connection_proofs.py
+```

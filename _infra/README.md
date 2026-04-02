@@ -5,7 +5,7 @@ Reproducible local infrastructure for DE/AI learning in `D:\StudyBook`.
 ## Layout
 - `_infra/docker/core.yml` - Postgres, Redis, Cassandra, Neo4j, InfluxDB
 - `_infra/docker/streaming.yml` - Zookeeper, Kafka, Kafka UI
-- `_infra/docker/pipeline.yml` - Spark master/worker, Airflow, MLflow
+- `_infra/docker/pipeline.yml` - Spark master/worker, Airflow, MLflow, JupyterLab
 - `_infra/docker/observability.yml` - Elasticsearch, Kibana, Splunk
 - `_infra/docker/docker-compose.yml` - full stack (all services)
 - `_infra/env/.env.example` - placeholder environment template
@@ -38,7 +38,12 @@ pwsh D:\StudyBook\_infra\scripts\infra_health.ps1
 pwsh D:\StudyBook\_infra\scripts\infra_health.ps1 -AsJson
 ```
 
-5. Validate compose rendering:
+5. Open JupyterLab (pipeline/all groups):
+```powershell
+Start-Process http://localhost:8888/lab
+```
+
+6. Validate compose rendering:
 ```powershell
 docker compose -f D:\StudyBook\_infra\docker\docker-compose.yml --env-file D:\StudyBook\_infra\env\.env.local config
 ```
@@ -56,6 +61,7 @@ docker compose -f D:\StudyBook\_infra\docker\docker-compose.yml --env-file D:\St
 - Spark worker UI `8085`
 - Airflow `8082`
 - MLflow `5000`
+- JupyterLab `8888`
 - Elasticsearch `9200`
 - Kibana `5601`
 - Splunk `8000`, `8088`, `8089`
@@ -73,4 +79,3 @@ docker compose -f D:\StudyBook\_infra\docker\docker-compose.yml --env-file D:\St
 - Keep seed scripts idempotent and deterministic.
 - Keep service names and exposed ports stable unless change is documented.
 - Use `docker compose ... config` before runtime changes.
-

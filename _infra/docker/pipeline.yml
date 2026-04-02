@@ -84,6 +84,25 @@ services:
       - "host.docker.internal:host-gateway"
     networks: [studybook_net]
 
+  jupyterlab:
+    image: quay.io/jupyter/base-notebook:latest
+    container_name: citi_jupyterlab
+    restart: unless-stopped
+    user: root
+    ports:
+      - "${JUPYTER_PORT:-8888}:8888"
+    command: >
+      start-notebook.py
+      --ServerApp.token=${JUPYTER_TOKEN:-}
+      --ServerApp.password=
+      --ServerApp.root_dir=/workspaces/StudyBook
+      --ServerApp.allow_root=True
+    volumes:
+      - ../../:/workspaces/StudyBook
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks: [studybook_net]
+
 networks:
   studybook_net:
     name: studybook_net
@@ -107,3 +126,5 @@ volumes:
     name: citi_airflow_logs
   citi_mlflow_artifacts:
     name: citi_mlflow_artifacts
+
+

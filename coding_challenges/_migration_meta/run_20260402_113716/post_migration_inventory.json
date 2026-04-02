@@ -1,0 +1,65 @@
+[
+  {
+    "label": "target",
+    "root": "D:\\StudyBook\\coding_challenges",
+    "path": "D:\\StudyBook\\coding_challenges\\_migration_meta\\run_20260402_113701\\conflicts_report.md",
+    "rel": "_migration_meta\\\\run_20260402_113701\\\\conflicts_report.md",
+    "size": 44,
+    "sha256": "1ACF6E067660BC74E3FACE2FB154235A83AE311FCFFA506992031AC5B394D606",
+    "last_write_utc": "2026-04-02T16:37:02.4264859Z"
+  },
+  {
+    "label": "target",
+    "root": "D:\\StudyBook\\coding_challenges",
+    "path": "D:\\StudyBook\\coding_challenges\\_migration_meta\\run_20260402_113701\\move_map.csv",
+    "rel": "_migration_meta\\\\run_20260402_113701\\\\move_map.csv",
+    "size": 124138,
+    "sha256": "CD5D70F0CA89E88FFC23F9AEBBC3A4A50208E62526F62E144B09F5EE51BD4E5F",
+    "last_write_utc": "2026-04-02T16:37:02.4244875Z"
+  },
+  {
+    "label": "target",
+    "root": "D:\\StudyBook\\coding_challenges",
+    "path": "D:\\StudyBook\\coding_challenges\\_migration_meta\\run_20260402_113701\\post_migration_inventory.json",
+    "rel": "_migration_meta\\\\run_20260402_113701\\\\post_migration_inventory.json",
+    "size": 1286,
+    "sha256": "A94E5B1397F6E2FB47A7A921EE7E69726268BC4A88F326873833070E1792EED8",
+    "last_write_utc": "2026-04-02T16:37:02.4298130Z"
+  },
+  {
+    "label": "target",
+    "root": "D:\\StudyBook\\coding_challenges",
+    "path": "D:\\StudyBook\\coding_challenges\\_migration_meta\\run_20260402_113701\\pre_migration_inventory.json",
+    "rel": "_migration_meta\\\\run_20260402_113701\\\\pre_migration_inventory.json",
+    "size": 256710,
+    "sha256": "1E9F071F52638249C6B31173DF2CF046B394E2347151F95A74CC2F6B2BA5D4A7",
+    "last_write_utc": "2026-04-02T16:37:01.7229845Z"
+  },
+  {
+    "label": "target",
+    "root": "D:\\StudyBook\\coding_challenges",
+    "path": "D:\\StudyBook\\coding_challenges\\_migration_meta\\run_20260402_113716\\conflicts_report.md",
+    "rel": "_migration_meta\\\\run_20260402_113716\\\\conflicts_report.md",
+    "size": 44,
+    "sha256": "1ACF6E067660BC74E3FACE2FB154235A83AE311FCFFA506992031AC5B394D606",
+    "last_write_utc": "2026-04-02T16:37:17.2130202Z"
+  },
+  {
+    "label": "target",
+    "root": "D:\\StudyBook\\coding_challenges",
+    "path": "D:\\StudyBook\\coding_challenges\\_migration_meta\\run_20260402_113716\\move_map.csv",
+    "rel": "_migration_meta\\\\run_20260402_113716\\\\move_map.csv",
+    "size": 124138,
+    "sha256": "580A09D30FAC5911406E406110696C90598015588F74D0BEB995229D07D63DFE",
+    "last_write_utc": "2026-04-02T16:37:17.2110224Z"
+  },
+  {
+    "label": "target",
+    "root": "D:\\StudyBook\\coding_challenges",
+    "path": "D:\\StudyBook\\coding_challenges\\_migration_meta\\run_20260402_113716\\pre_migration_inventory.json",
+    "rel": "_migration_meta\\\\run_20260402_113716\\\\pre_migration_inventory.json",
+    "size": 256710,
+    "sha256": "1E9F071F52638249C6B31173DF2CF046B394E2347151F95A74CC2F6B2BA5D4A7",
+    "last_write_utc": "2026-04-02T16:37:16.6476306Z"
+  }
+]

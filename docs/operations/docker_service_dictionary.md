@@ -62,3 +62,4 @@ Observability and log analytics platform for indexed machine and event data. It 
 - Start/stop services with `_infra/scripts/infra_up.ps1` and `_infra/scripts/infra_down.ps1`.
 - Validate runtime state with `_infra/scripts/infra_health.ps1`.
 - Keep service purpose updates in sync when compose services are added/renamed/removed.
+

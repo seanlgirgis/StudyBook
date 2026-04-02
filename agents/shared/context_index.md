@@ -73,7 +73,23 @@ Purpose: compact durable memory map for fast session bootstrap.
 - `docs/programs/zero_to_hero/TALKS_WITH_CLAUDE_EXTRACT_AND_SHIFT_LIFT_PLAN.md`
 - `docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md`
 
+## Coding Challenges Migration Memory
+
+- M-002/M-002b completed on 2026-04-02 via:
+  - `scripts/migration/run_m002_coding_assets.ps1 -Execute -DeleteSource`
+- Canonical coding root:
+  - `D:\StudyBook\coding_challenges`
+- Migration evidence run:
+  - `D:\StudyBook\coding_challenges\_migration_meta\run_20260402_113935`
+- Emergency rollback snapshot:
+  - `C:\Users\shareuser\migration_backups\m002_backup_20260402_113935`
+- Authoritative runbook:
+  - `docs/programs/zero_to_hero/CODING_ASSETS_MIGRATION_SOLUTION.md`
+- First planning outputs for study execution:
+  - `coding_challenges/STUDY_MANUAL_V1.md`
+  - `coding_challenges/ROADMAP_DRAFT_V1.md`
 ## Last Updated
 
 - 2026-04-02
+
 

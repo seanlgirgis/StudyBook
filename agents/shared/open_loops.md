@@ -30,5 +30,8 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-015 | TB-20260402-18 | Finish Azure proof documentation and registry status alignment | closed | README/env template/registry updated and validated | 2026-04-02 |
 | LOOP-016 | TB-20260402-19 | Complete Databricks proof by generating PAT and storing DATABRICKS_TOKEN in local secret/env flow | closed | none | 2026-04-02 |
 | LOOP-017 | TB-20260402-25 | Complete Snowflake proof after backend-connect blocker (`250001`) by validating network/account policy and rerunning read-only proof | closed | none | 2026-04-02 |
+| LOOP-018 | TB-20260402-27 | Run Docker exec portions of new group POCs from owner shell (sandbox here has docker API permission limits) and capture any service-specific fixes | closed | none | 2026-04-02 |
+| LOOP-019 | TB-20260402-29 | Add portable JupyterLab Docker service and proof coverage | closed | none | 2026-04-02 |
 
-
+| LOOP-020 | TB-20260402-32 | Execute coding assets shift/lift and decommission migrated D:\Workspace sources | closed | none | 2026-04-02 |
+| LOOP-021 | TB-20260402-33 | Produce first manuals/roadmaps-ready docs from coding_challenges manifests | closed | none | 2026-04-02 |

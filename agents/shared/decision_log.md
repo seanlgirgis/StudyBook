@@ -148,3 +148,19 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: preserve sensitive data hygiene while removing repeated confirmation friction; enables fast local secret updates without plaintext drift
 - Alternatives considered: continue manual plaintext secret files then encrypt; keep passing secrets only via transient shell env variables
 - Impacted files: scripts/env/env_core.ps1, scripts/env/set_secret.ps1, docs/operations/secrets_workflow.md, docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md, agents/shared/context_index.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-018
+- Task ID: TB-20260402-32
+- Decision: execute M-002 coding migration as script-driven copy-validate-delete workflow with short-term backup snapshot
+- Rationale: enables deterministic large-scale migration with reproducible artifacts and immediate source decommission while preserving rollback safety
+- Alternatives considered: copy-only without deletion; ad-hoc manual move; direct move without backup
+- Impacted files: scripts/migration/run_m002_coding_assets.ps1, docs/programs/zero_to_hero/CODING_ASSETS_MIGRATION_SOLUTION.md, docs/programs/zero_to_hero/MIGRATION_BOARD.md, coding_challenges/_migration_meta/run_20260402_113935/*
+
+- Date: 2026-04-02
+- Decision ID: DEC-019
+- Task ID: TB-20260402-33
+- Decision: treat `coding_challenges` manifests and v1 docs as canonical planning inputs for next study-manual/roadmap generation cycles
+- Rationale: ensures future agents regenerate plans from deterministic migration artifacts instead of ad-hoc assumptions
+- Alternatives considered: generate roadmaps directly from chat-only context; defer manual/roadmap drafting
+- Impacted files: coding_challenges/INDEX.md, coding_challenges/ROADMAP_INPUT_MANIFEST.md, coding_challenges/leetcode/TOPIC_COVERAGE.md, coding_challenges/STUDY_MANUAL_V1.md, coding_challenges/ROADMAP_DRAFT_V1.md, agents/shared/context_index.md
