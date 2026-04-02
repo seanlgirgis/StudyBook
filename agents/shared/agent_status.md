@@ -1,42 +1,37 @@
 ## Task ID
-- TB-20260402-40
+- TB-20260402-41
 
 ## Topic
-- Fix de_postgres startup failure caused by legacy Workspace bind mounts and make startup path-agnostic
+- Resolve GitHub push rejection caused by oversized files in tracked runtime artifact paths
 
 ## Task Type
 - FIX
 
 ## Files Modified
-- _infra/scripts/infra_up.ps1
-- _infra/README.md
+- .gitignore
 - agents/shared/agent_status.md
 - agents/shared/task_register.md
-- agents/shared/decision_log.md
+- agents/shared/open_loops.md
 
 ## What Was Done
-- Confirmed failing container `de_postgres` was not owned by StudyBook compose.
-  - It was created from `D:\Workspace\Basics\Databases\_setup\docker-compose.yml` and had bind mounts to `D:\Workspace\Basics\Databases\_setup\volumes\...`.
-- Added preflight cleanup in `infra_up.ps1`:
-  - Detect containers for selected group by name.
-  - Inspect compose labels.
-  - If labels point to `\\Workspace\\`, remove those containers before `docker compose up`.
-  - Added escape hatch: `-SkipLegacyCleanup`.
-- Updated `_infra/README.md` with path-agnostic/legacy-cleanup notes.
+- Verified the failing large-file paths were no longer staged after index cleanup:
+  - `tracks/08_databases/_setup/volumes/...`
+  - `tracks/08_databases/practice/**/_artifacts/...`
+- Added/kept ignore guards in `.gitignore`:
+  - `tracks/08_databases/_setup/volumes/`
+  - `tracks/08_databases/practice/**/_artifacts/`
+- Removed unrelated staged `.claude/worktrees` artifact from commit scope.
+- Ran a staged size gate before commit (no staged file >= 50MB; top staged file ~0.38MB).
+- Created commit `d7fe08b` on `main` and pushed successfully to `origin/main`.
 
 ## Validation
-- Ran: `pwsh -NoProfile -File D:\StudyBook\_infra\scripts\infra_up.ps1 -Group core`
-- Observed automatic removal of legacy containers (`de_postgres`, `de_redis`, `de_cassandra`, `de_neo4j`, `de_influxdb`).
-- `core` group started successfully.
-- Verified `de_postgres` mounts now:
-  - `de_postgres_data:/var/lib/postgresql/data:rw`
-  - no `D:\Workspace` bind mounts.
-- Verified ownership labels now point to StudyBook:
-  - `com.docker.compose.project.config_files = D:\StudyBook\_infra\docker\core.yml`
+- Ran: `git diff --cached --name-only` + size scan in PowerShell.
+- Ran: `git push origin main`.
+- Outcome: push succeeded (`4686689..d7fe08b  main -> main`).
 
 ## Risks
-- Existing data from legacy bind-mounted containers is not auto-migrated into new named volumes.
-- If a user intentionally runs a separate non-StudyBook stack with same container names, startup will remove those containers unless `-SkipLegacyCleanup` is used.
+- Existing local untracked `.claude/worktrees/*` entries remain in working tree but are not part of the pushed commit.
+- If future runtime outputs are produced under non-ignored paths, push can fail again; current ignore rules cover known failing paths.
 
 ## Next Step
-- Optional: add a one-time migration helper to copy old postgres data directory into the new named volume if historical data continuity is required.
+- Optional: add a pre-commit guard script to fail fast on files >= 50MB before push.
