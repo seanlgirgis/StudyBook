@@ -29,6 +29,8 @@ attrs==25.4.0
 azure-core==1.39.0
 azure-eventhub==5.15.1
 azure-identity==1.25.3
+azure-mgmt-core==1.6.0
+azure-mgmt-resource==25.0.0
 azure-storage-blob==12.28.0
 azure-storage-file-datalake==12.23.0
 babel==2.17.0
