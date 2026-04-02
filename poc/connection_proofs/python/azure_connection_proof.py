@@ -78,7 +78,7 @@ def probe_via_sdk(subscription_id: str | None, timeout_sec: int) -> dict:
     """Read-only proof: DefaultAzureCredential + SubscriptionClient.list()."""
     try:
         from azure.identity import DefaultAzureCredential
-        from azure.mgmt.resource import SubscriptionClient
+        from azure.mgmt.subscription import SubscriptionClient
     except ImportError as exc:
         return {
             "ok": False,
