@@ -39,4 +39,6 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260402-15 | Improve GCP connection proof semantics for partial API availability and strict mode fallback | done | 2026-04-02 | Default success now accepts any successful read-only probe; added --require-project-lookup strict mode and clearer diagnostics |
 | TB-20260402-16 | Add AWS credential portability workflow and AWS STS connection proof | done | 2026-04-02 | AWS STS check succeeded with local `study`; encrypted bundle created; proof now auto-resolves profiles to avoid hardcoded defaults |
 | TB-20260402-17 | Add machine-local DPAPI seed flow for passphrase-free secret decrypt across agent runs | done | 2026-04-02 | Added local seed register/remove scripts, env_core auto-seed passphrase resolution, and validated noninteractive env load |
+| TB-20260402-18 | Polish Azure proof wiring across README/env template/registry status | done | 2026-04-02 | Added Azure proof docs, AZURE_* env placeholders, fixed gitignore so `_infra/env/.env.example` is tracked, and updated cloud registry to proof_verified_local |
+| TB-20260402-19 | Add Databricks connection proof and wire registry/env/readme metadata | done | 2026-04-02 | Databricks host/email captured, proof script added; blocked for live success until PAT is generated and stored as DATABRICKS_TOKEN |
 

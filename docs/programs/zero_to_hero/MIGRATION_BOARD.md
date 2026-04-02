@@ -33,7 +33,7 @@
 | C-002 | P0 | security | Map cloud secrets to encrypted env flow | `config/secrets/*.enc.json` + local `.env.local` overlays | runtime env contract | key presence checks recorded | in_progress | MongoDB Atlas captured locally; GCP real key captured in protected local path and wired in `.env.local`; AWS local profiles discovered; encrypted AWS bundle created (`config/secrets/aws.profiles.secrets.enc.json`) and AWS encrypt/restore scripts added; remaining providers pending |
 | C-003 | P1 | validation | Snowflake read-only connectivity check | cloud account metadata + encrypted secrets | `_infra/scripts` check script | command succeeds or records blocker | todo | gated by C-002 |
 | C-004 | P1 | validation | Redshift read-only connectivity check | cloud account metadata + encrypted secrets | `_infra/scripts` check script | command succeeds or records blocker | todo | gated by C-002 |
-| C-005 | P2 | validation | Databricks workspace readiness check | cloud account metadata + encrypted secrets | `_infra/scripts` check script | command succeeds or records blocker | todo | gated by C-002 |
+| C-005 | P2 | validation | Databricks workspace readiness check | cloud account metadata + encrypted secrets | `poc/connection_proofs/python/databricks_connection_proof.py` | command succeeds or records blocker | todo | host/email captured and proof script added; blocked on PAT (`DATABRICKS_TOKEN`) capture in secret flow |
 | M-001 | P0 | migration | Inventory and classify legacy assets | `D:\Workspace` + transcript | StudyBook migration docs | each asset tagged by class | done | extraction + class model documented in placement plan |
 | M-002 | P0 | migration | Shift/lift coding challenge roadmaps | workspace challenge assets | `D:\StudyBook\coding_challenges` | spot-check moved files | todo | move only non-duplicate canonical files |
 | M-003 | P0 | migration | Shift/lift proven notebooks (Technologies + Databases first) | `D:\Workspace\Technologies` + `D:\Workspace\Basics\Databases` | `D:\StudyBook\tracks` + `D:\StudyBook\interview` | notebook smoke runs | todo | prioritize explicitly validated notebooks |
@@ -78,6 +78,7 @@
 - Record command outputs used for validation.
 - Update item status + evidence in this board.
 - Overwrite `agents/shared/agent_status.md` before ending run.
+
 
 
 

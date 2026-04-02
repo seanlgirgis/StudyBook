@@ -210,6 +210,9 @@ __marimo__/
 config/machines/*.local.psd1
 config/secrets/*.secrets.json
 config/secrets/*.plaintext.json
+!_infra/env/
+!_infra/env/.env.example
+
 config/secrets/.local/
 _infra/env/.env.local
 _infra/env/.env.*.local
@@ -219,3 +222,4 @@ temp/
 !scripts/env/
 !scripts/env/package_aws_credentials.ps1
 !scripts/env/restore_aws_credentials.ps1
+

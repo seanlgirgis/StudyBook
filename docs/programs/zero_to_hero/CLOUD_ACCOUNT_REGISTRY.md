@@ -13,9 +13,9 @@ Track cloud/platform account metadata needed for reproducible infra and migratio
 | Provider | Account / Workspace ID | Region | Environment | Owner | Status | Last Verified | Notes |
 |---|---|---|---|---|---|---|---|
 | AWS | `profile:study` | `us-east-1` | `learning` | `<fill>` | `bundle_encrypted_local` | `2026-04-02` | Local `~/.aws` contains `study` and `girgisinv`; encrypted bundle created at `config/secrets/aws.profiles.secrets.enc.json` |
-| Azure | `<fill>` | `<fill>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | For ADF/Synapse/AKS labs |
+| Azure | `Azure subscription 1` | `<fill>` | `learning` | `seanlgirgis@gmail.com` | `proof_verified_local` | `2026-04-02` | Read-only proof passed via CLI+SDK; subscription `b3811436-61fc-4a3a-a6a9-deb05955076d`, tenant `63843a8e-d51e-47a2-b4d7-eb6973b680dd` |
 | GCP | `citi-de-learning` | `us-central1` | `learning` | `seanlgirgis@gmail.com` | `key_present_local` | `2026-04-02` | Real SA key stored in protected local path; env points to secure file |
-| Databricks | `<workspace-url-or-id>` | `<region>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | Workspace host only |
+| Databricks | `dbc-9f35a83d-b4e7.cloud.databricks.com` | `<fill>` | `learning` | `seanlgirgis@gmail.com` | `host_present_token_missing` | `2026-04-02` | Community Edition host confirmed; PAT still placeholder/missing; ready to validate with `databricks_connection_proof.py` once token is added |
 | Snowflake | `<account-identifier>` | `<region/cloud>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | Account locator only |
 | Redshift | `<cluster-or-serverless-workgroup>` | `<region>` | `<fill>` | `<fill>` | `unknown` | `<fill>` | Endpoint host non-secret |
 | MongoDB Atlas | `de-learning.zur1dze.mongodb.net` | `atlas` | `learning` | `<fill>` | `provided_needs_test` | `2026-04-02` | URI captured in local secret/env flow |
@@ -33,6 +33,7 @@ Track cloud/platform account metadata needed for reproducible infra and migratio
 - `AZURE_SUBSCRIPTION_ID`
 - `AZURE_CLIENT_ID`
 - `AZURE_CLIENT_SECRET`
+- `AZURE_RESOURCE_GROUP`
 
 ### GCP
 - `GCP_PROJECT_ID`
@@ -79,4 +80,7 @@ Track cloud/platform account metadata needed for reproducible infra and migratio
 - Preferred runtime profile name: `study` (use `de_learner` only where explicitly required).
 - Current state (verified 2026-04-02): local credentials are present under `~/.aws` with profiles `study` and `girgisinv`; encrypted portable bundle exists at `config/secrets/aws.profiles.secrets.enc.json`; use explicit profile names (`study`/`girgisinv`) unless a workload explicitly requires another profile.
 
-
+## Databricks Access Standard
+- Workspace host: `https://dbc-9f35a83d-b4e7.cloud.databricks.com`
+- Current state (verified 2026-04-02): account email `seanlgirgis@gmail.com`; PAT not yet captured in StudyBook secret flow.
+- Next action: generate PAT in Databricks UI (`User Settings -> Developer -> Access Tokens`) and store as `DATABRICKS_TOKEN` in local secret/env flow before running proof.

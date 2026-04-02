@@ -1,8 +1,8 @@
 ## Task ID
-- TB-20260402-17
+- TB-20260402-18
 
 ## Topic
-- Add machine-local seed-based passphrase workflow for seamless noninteractive secret decryption
+- Polish Azure proof wiring across docs/env template/registry after successful local proof
 
 ## Task Type
 - ENHANCEMENT
@@ -11,7 +11,7 @@
 - standard
 
 ## Risk Level
-- medium
+- low
 
 ## Allowed Scope
 - bounded
@@ -27,86 +27,79 @@
 - agents/shared/pending_task.md
 - agents/shared/agent_status.md
 - agents/shared/decision_log.md
-- scripts/env/env_core.ps1
-- scripts/env/package_aws_credentials.ps1
-- scripts/env/restore_aws_credentials.ps1
-- env_setter.ps1
-- docs/PORTABLE_ENV.md
-- docs/operations/secrets_workflow.md
-- docs/operations/aws_credentials_workflow.md
+- poc/connection_proofs/python/azure_connection_proof.py
+- poc/connection_proofs/README.md
+- _infra/env/.env.example
+- docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md
 - .gitignore
 - agents/shared/task_register.md
 
 ## Files Modified
-- scripts/env/env_core.ps1
-- scripts/env/register_secret_seed.ps1
-- scripts/env/remove_secret_seed.ps1
-- scripts/env/package_aws_credentials.ps1
-- scripts/env/restore_aws_credentials.ps1
+- poc/connection_proofs/README.md
+- _infra/env/.env.example
+- docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md
 - .gitignore
-- docs/PORTABLE_ENV.md
-- docs/operations/secrets_workflow.md
-- docs/operations/aws_credentials_workflow.md
-- agents/shared/context_index.md
 - agents/shared/open_loops.md
 - agents/shared/task_register.md
 - agents/shared/agent_status.md
 
 ## Plan
-1. Extend `env_core.ps1` passphrase resolution to support local seed files in addition to env var + prompt.
-2. Add seed register/remove helper scripts for one-time setup and rotation.
-3. Update docs and gitignore to keep seed local-only.
-4. Validate noninteractive secret loading with passphrase env var unset.
+1. Confirm Azure proof script quality and real runtime behavior.
+2. Add missing Azure proof documentation in connection proofs README.
+3. Add missing `AZURE_*` placeholders to env template.
+4. Update cloud registry Azure status and verified metadata.
+5. Ensure env template file is actually trackable in git.
 
 ## What Was Done
-- Added seed functions in `env_core.ps1`:
-  - `Get-StudyBookSecretSeedPath`
-  - `Protect-StudyBookSecretSeed`
-  - `Unprotect-StudyBookSecretSeed`
-  - Updated `Get-SecretPassphrase` to resolve in order: env var -> seed file -> prompt.
-- Added `scripts/env/register_secret_seed.ps1` to create DPAPI-encrypted local seed from provided passphrase.
-- Added `scripts/env/remove_secret_seed.ps1` to remove/rotate local seed.
-- Updated AWS package/restore scripts to pass project root into `Get-SecretPassphrase` for deterministic seed path resolution.
-- Added `config/secrets/.local/` to `.gitignore` (seed local-only, never synced).
-- Updated operational docs (`docs/PORTABLE_ENV.md`, `docs/operations/secrets_workflow.md`, `docs/operations/aws_credentials_workflow.md`).
-- Registered seed file locally using the provided passphrase.
+- Reviewed `poc/connection_proofs/python/azure_connection_proof.py`; script structure and read-only behavior are sound.
+- Updated `poc/connection_proofs/README.md`:
+  - Added Azure proof file to folder layout.
+  - Added Azure proof usage command (`--mode both`).
+  - Added Azure note in behavior section.
+- Updated `_infra/env/.env.example` with Azure placeholders:
+  - `AZURE_TENANT_ID`
+  - `AZURE_SUBSCRIPTION_ID`
+  - `AZURE_CLIENT_ID`
+  - `AZURE_CLIENT_SECRET`
+  - `AZURE_RESOURCE_GROUP`
+- Updated `docs/programs/zero_to_hero/CLOUD_ACCOUNT_REGISTRY.md` Azure row from `unknown` to `proof_verified_local` and recorded verified subscription/tenant metadata from successful proof run.
+- Added `AZURE_RESOURCE_GROUP` to Azure secret key mapping section.
+- Fixed `.gitignore` to unignore `_infra/env/.env.example` (`!_infra/env/` and `!_infra/env/.env.example`) so env-template updates are shareable and no longer silently ignored.
 
 ## Validation
-- command: `. .\scripts\env\env_core.ps1`
-- result: success; script loads without parser errors.
+- command: `C:\py_venv\proj_educate\Scripts\python.exe -m py_compile D:\StudyBook\poc\connection_proofs\python\azure_connection_proof.py`
+- result: success.
 
-- command: `.\scripts\env\register_secret_seed.ps1 -NonInteractive -Force` (with passphrase in env var)
-- result: success; seed file created at `config/secrets/.local/studybook.secret.seed.dpapi.json`.
+- command (sandbox): `... azure_connection_proof.py --mode cli`
+- result: expected sandbox permission failure for Azure profile file access.
 
-- command: `Remove-Item Env:STUDYBOOK_SECRET_PASSPHRASE; . .\scripts\env\env_core.ps1; Get-SecretPassphrase -NonInteractive -ProjectRoot D:\StudyBook`
-- result: success; passphrase resolved from local seed (`SEED_PASSphrase_RESOLVED`).
+- command (escalated): `... azure_connection_proof.py --mode cli`
+- result: success; `ok=true`, subscription/tenant resolved.
 
-- command: `.\env_setter.ps1 -NonInteractive -SkipVenvActivation` (with passphrase env var unset)
-- result: success; `Secrets Loaded: True`.
+- command (escalated): `... azure_connection_proof.py --mode both`
+- result: success; both `cli_probe` and `sdk_probe` returned `ok=true` with matching subscription ID.
 
-- command: `.\scripts\env\package_aws_credentials.ps1 ... -NonInteractive` with escalation
-- result: expected failure for seed decrypt in escalated context (`Key not valid for use in specified state`) because DPAPI seed is user-context bound.
+- command: `Select-String` checks on README/env/registry
+- result: success; Azure entries present and consistent.
 
-- command: `.\scripts\env\package_aws_credentials.ps1` against local mock credentials in repo temp path with passphrase env var unset
-- result: success; confirms seed-based noninteractive decrypt works in normal user context.
+- command: `git check-ignore -v _infra/env/.env.example`
+- result: now unignored by explicit exception rule and appears as trackable change.
 
 ## Decisions
-- Use Windows DPAPI CurrentUser seed as the local passphrase cache mechanism.
-- Keep seed under `config/secrets/.local/` and gitignore the folder.
-- Treat elevated context mismatch as expected behavior for DPAPI-protected local seed files.
+- Keep Azure proof default as read-only `cli+sdk` path for richer diagnostics while avoiding writes.
+- Treat sandbox Azure-profile access failure as environment artifact; rely on escalated/user-shell run for real credential validation.
 
 ## Assumptions
-- Primary execution context for agents and tests is the normal user shell/session (non-elevated), matching seed creation context.
+- Azure account metadata verified during this run remains valid for immediate follow-up tasks.
 
 ## Issues / Risks
-- Seed decrypt will fail if commands are run as a different user/elevation token than the seed creator.
-- Seed is machine/user-bound; each machine must register its own local seed once.
+- Proof script validation requires user-context Azure profile access; sandbox-only validation can produce false negatives.
 
 ## Parking Lot Added
 - none
 
 ## Open Loops Updated
-- Added and closed `LOOP-014`.
+- Added and closed `LOOP-015`.
 
 ## Next Step
-- Optional: run `python D:\StudyBook\poc\connection_proofs\python\aws_connection_proof.py` from your shell to confirm end-to-end AWS proof still works with seed mode enabled.
+- Optional: set `AZURE_SUBSCRIPTION_ID` in local `_infra/env/.env.local` to pin proofs to a single subscription context.
