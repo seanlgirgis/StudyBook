@@ -196,3 +196,11 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: prevents cross-project container-name collisions and stale host bind paths from breaking portable startup on machines without legacy drive/path layouts
 - Alternatives considered: manual docker rm cleanup each time; keep legacy and StudyBook service names divergent only
 - Impacted files: _infra/scripts/infra_up.ps1, _infra/README.md, agents/shared/task_register.md, agents/shared/agent_status.md
+
+- Date: 2026-04-02
+- Decision ID: DEC-024
+- Task ID: TB-20260402-41
+- Decision: Seed-backed passphrase entered ONCE per machine during seed registration - NEVER ask user for passphrase again
+- Rationale: DPAPI-encrypted seed file (`config/secrets/.local/studybook.secret.seed.dpapi.json`) auto-provides passphrase to env_setter.ps1 on every run; re-prompting violates the seed-backed security model and creates unnecessary friction
+- Alternatives considered: continue prompting for passphrase each session; store passphrase in plaintext env var
+- Impacted files: agents/QWEN_AGENT_HANDOFF.md, agents/AGENT_CHEATSHEET.md, agents/shared/context_index.md, scripts/env/env_core.ps1

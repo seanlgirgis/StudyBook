@@ -1,37 +1,58 @@
-## Task ID
-- TB-20260402-41
+# Agent Status
 
-## Topic
-- Resolve GitHub push rejection caused by oversized files in tracked runtime artifact paths
+## Current Run (2026-04-02)
 
-## Task Type
-- FIX
+**Task ID:** TB-20260402-42  
+**Task Type:** ENHANCEMENT  
+**Goal:** Record user profile and working style for future agent sessions
 
-## Files Modified
-- .gitignore
-- agents/shared/agent_status.md
-- agents/shared/task_register.md
-- agents/shared/open_loops.md
+### Summary
 
-## What Was Done
-- Verified the failing large-file paths were no longer staged after index cleanup:
-  - `tracks/08_databases/_setup/volumes/...`
-  - `tracks/08_databases/practice/**/_artifacts/...`
-- Added/kept ignore guards in `.gitignore`:
-  - `tracks/08_databases/_setup/volumes/`
-  - `tracks/08_databases/practice/**/_artifacts/`
-- Removed unrelated staged `.claude/worktrees` artifact from commit scope.
-- Ran a staged size gate before commit (no staged file >= 50MB; top staged file ~0.38MB).
-- Created commit `d7fe08b` on `main` and pushed successfully to `origin/main`.
+Saved complete user profile to durable project file for consistent cross-session context.
 
-## Validation
-- Ran: `git diff --cached --name-only` + size scan in PowerShell.
-- Ran: `git push origin main`.
-- Outcome: push succeeded (`4686689..d7fe08b  main -> main`).
+### What Was Done
 
-## Risks
-- Existing local untracked `.claude/worktrees/*` entries remain in working tree but are not part of the pushed commit.
-- If future runtime outputs are produced under non-ignored paths, push can fail again; current ignore rules cover known failing paths.
+1. **User Profile Documented**
+   - Created `agents/shared/user_profile.md`
+   - Includes: role, work history, AI workflow, LeetCode system, notebook rules, communication style
+   - Added to `context_index.md` as canonical control file
 
-## Next Step
-- Optional: add a pre-commit guard script to fail fast on files >= 50MB before push.
+2. **Key Working Agreements Recorded**
+   - Short, direct communication (one concept at a time)
+   - Visual/spatial analogies preferred
+   - No walls of text
+   - Delegate execution to Claude Code; Claude handles planning/architecture
+   - Bite-sized tasks: max 2-3 files per session
+
+3. **QAuth Setup Complete** (from earlier task)
+   - Alibaba Cloud Qwen API configured and tested
+   - API key stored in encrypted secrets
+   - Demo created: `poc/qauth_alibaba_demo.py`
+
+### Validations Run
+
+```powershell
+# Confirmed user profile file created
+Test-Path D:\StudyBook\agents\shared\user_profile.md
+# Result: True
+```
+
+### Assumptions
+
+- User profile will be read by future agents at session start
+- Working style preferences apply to all interactions
+
+### Risks
+
+- None - documentation only
+
+### Next Steps
+
+- Future agents read `user_profile.md` during bootstrap
+- Communication style: short, direct, visual analogies
+- No walls of text, no terse definitions
+
+---
+
+**Run completed:** 2026-04-02  
+**Status:** DONE

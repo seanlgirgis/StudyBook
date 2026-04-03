@@ -20,6 +20,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 - `agents/shared/parking_lot.md`
 - `agents/shared/approval_matrix.md`
 - `agents/shared/command_allowlist.md`
+- `agents/shared/user_profile.md` ← **User context & working style**
 - `docs/adr/ADR-INDEX.md`
 
 ## Current Working Agreements
@@ -29,6 +30,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Stop only for high-risk ambiguity, not for routine implementation details.
 - Canonical runtime target is `D:\StudyBook` (deprecated path deleted).
 - Standing owner directive (2026-04-02): treat encrypted StudyBook secrets as system of record for sensitive values; use seed-backed secret updates by default and avoid storing sensitive values in tracked files/chat.
+- **Seed-backed secrets (2026-04-02): Passphrase entered ONCE per machine during seed registration. NEVER ask user for passphrase again - env_setter.ps1 auto-loads from DPAPI-encrypted seed file.**
 
 ## Portable Environment Files
 
@@ -116,6 +118,28 @@ Purpose: compact durable memory map for fast session bootstrap.
   - dirs: `00_setup`, `02_ddl_basics`, `03_dml_basics`
   - files: `_sf_connect.py`, `summary.md` + 9 nugget scripts
 - Intent: short 5-10 minute runnable learning nuggets with documentation-first style.
+
+## Databricks Micro-Nuggets Memory
+
+- Canonical lane created under:
+  - `D:\StudyBook\tracks\08_databases\micro_nuggets\databricks`
+- Current scaffold status (2026-04-02):
+  - dirs: `00_setup`, `01_workspace_and_catalog`, `02_tables_and_delta`, `03_queries_and_optimization`, `04_mini_capstone`
+  - files: `_db_connect.py`, `summary.md`, `DATABRICKS_SPEEDY_STORY_AND_INTERVIEW.md` + 9 nugget scripts
+- Nuggets created:
+  - `00_setup/00_prereq_check.py` — environment validation
+  - `00_setup/01_connection.py` — minimal connection pattern
+  - `00_setup/02_session_context.py` — USE CATALOG, SHOW SCHEMAS
+  - `01_workspace_and_catalog/01_create_catalog_schema.py` — CREATE CATALOG/SCHEMA
+  - `02_tables_and_delta/01_create_table.py` — Delta Lake tables, types
+  - `02_tables_and_delta/02_insert_select.py` — INSERT, SELECT, JOINs, aggregations
+  - `02_tables_and_delta/03_merge.py` — MERGE upsert, CDC, SCD Type 2
+  - `03_queries_and_optimization/01_time_travel.py` — VERSION AS OF, RESTORE, VACUUM
+  - `03_queries_and_optimization/02_optimize.py` — OPTIMIZE, Z-ORDER, data skipping
+  - `04_mini_capstone/01_mini_capstone.py` — Bronze→Silver→Gold end-to-end pipeline
+- Connection proof: `D:\StudyBook\poc\connection_proofs\python\databricks_connection_proof.py`
+- Intent: short 5-10 minute runnable learning nuggets with inline teaching comments.
+- Depth: covers MERGE/CDC, Time Travel, OPTIMIZE/Z-ORDER, three-layer pipeline pattern.
 
 ## Last Updated
 
