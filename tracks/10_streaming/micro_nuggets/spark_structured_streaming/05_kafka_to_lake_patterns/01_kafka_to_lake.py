@@ -34,7 +34,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from _spark_stream_connect import get_spark, ensure_lab_dirs, clean_lab, LAB_CHECKPOINT, LAB_OUTPUT
 
 spark = get_spark("kafka-to-lake")
+spark.sparkContext.setLogLevel("ERROR")
 ensure_lab_dirs()
+WINDOWS_MODE = sys.platform == "win32"
 
 print("\n── Kafka to Data Lake Patterns ───────────────────────────")
 
@@ -44,7 +46,11 @@ print("\n── Kafka to Data Lake Patterns ────────────
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n  ══ BRONZE: Raw Ingestion ════════════════════════════")
 
-df = spark.readStream.format("rate").option("rowsPerSecond", 20).load()
+if WINDOWS_MODE:
+    print("    [!] Windows mode: using fallback batch pipeline.")
+    df = spark.range(0, 80).selectExpr("CAST(id AS BIGINT) AS value")
+else:
+    df = spark.readStream.format("rate").option("rowsPerSecond", 20).load()
 print(f"    Bronze schema: {df.columns}")
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -54,18 +60,20 @@ print("\n  ══ SILVER: Cleaned & Filtered ═══════════�
 
 silver = df.filter(df.value % 2 == 0)  # Simulate filtering valid records
 
-query = (
-    silver.writeStream
-    .format("memory")
-    .queryName("silver_table")
-    .outputMode("append")
-    .start()
-)
+if WINDOWS_MODE:
+    silver.createOrReplaceTempView("silver_table")
+else:
+    query = (
+        silver.writeStream
+        .format("memory")
+        .queryName("silver_table")
+        .outputMode("append")
+        .start()
+    )
+    time.sleep(5)
+    query.stop()
 
-time.sleep(5)
-query.stop()
-
-silver_count = spark.sql("SELECT COUNT(*) FROM silver_table").collect()[0][0]
+silver_count = spark.sql("SELECT COUNT(*) AS c FROM silver_table").collect()[0]["c"]
 print(f"    Silver records processed: {silver_count}")
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -88,7 +96,7 @@ gold = spark.sql("""
 print(f"    {'Partition':<10} {'Count':<8} {'Min':<6} {'Max':<6} {'Avg'}")
 print(f"    {'-'*10} {'-'*8} {'-'*6} {'-'*6} {'-'*6}")
 for row in gold.collect():
-    print(f"    {row['partition_id']:<10} {row['event_count']:<8} {row['min_value']:<6} {row['max_value']:<6} {row['avg_value']:.1f}")
+    print(f"    {row['value_group']:<10} {row['event_count']:<8} {row['min_value']:<6} {row['max_value']:<6} {row['avg_value']:.1f}")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Kafka pattern explanation

@@ -27,12 +27,15 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from _spark_stream_connect import get_spark, ensure_lab_dirs
 
 spark = get_spark("event-time-watermark")
+spark.sparkContext.setLogLevel("ERROR")
 ensure_lab_dirs()
+WINDOWS_MODE = sys.platform == "win32"
 
 print("\n── Event Time & Watermarks ───────────────────────────────")
 
-# Use rate source for reliable testing
-df = spark.readStream.format("rate").option("rowsPerSecond", 10).load()
+# Use rate source for reliable testing on non-Windows.
+if not WINDOWS_MODE:
+    df = spark.readStream.format("rate").option("rowsPerSecond", 10).load()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 1. Watermark concept demonstration
@@ -53,23 +56,36 @@ print("\n  ── Streaming Aggregation with Watermark ────────�
 
 from pyspark.sql.functions import window as spark_window
 
-windowed = (
-    df.withWatermark("timestamp", "10 seconds")
-    .groupBy(spark_window(df.timestamp, "5 seconds"))
-    .count()
-)
+if WINDOWS_MODE:
+    print("    [!] Windows mode: using fallback batch demo to avoid NativeIO noise.")
+    batch_df = spark.sql(
+        "SELECT timestampadd(SECOND, CAST(id AS INT), current_timestamp()) AS timestamp "
+        "FROM range(20)"
+    )
+    windowed_batch = (
+        batch_df.groupBy(spark_window(batch_df.timestamp, "5 seconds"))
+        .count()
+        .orderBy("window")
+    )
+    windowed_batch.show(5, truncate=False)
+else:
+    windowed = (
+        df.withWatermark("timestamp", "10 seconds")
+        .groupBy(spark_window(df.timestamp, "5 seconds"))
+        .count()
+    )
 
-query = (
-    windowed.writeStream
-    .format("console")
-    .outputMode("complete")
-    .option("truncate", False)
-    .option("numRows", 5)
-    .start()
-)
+    query = (
+        windowed.writeStream
+        .format("console")
+        .outputMode("complete")
+        .option("truncate", False)
+        .option("numRows", 5)
+        .start()
+    )
 
-time.sleep(10)
-query.stop()
+    time.sleep(10)
+    query.stop()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 3. Late data demonstration

@@ -27,76 +27,94 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from _spark_stream_connect import get_spark, ensure_lab_dirs
 
 spark = get_spark("operations-tuning")
+spark.sparkContext.setLogLevel("ERROR")
 ensure_lab_dirs()
+WINDOWS_MODE = sys.platform == "win32"
 
 print("\n── Operations & Tuning ───────────────────────────────────")
 
-df = spark.readStream.format("rate").option("rowsPerSecond", 20).load()
+if WINDOWS_MODE:
+    print("    [!] Windows mode: using fallback batch operations demo.")
+    df = spark.range(0, 60).selectExpr("CAST(id AS BIGINT) AS value")
+else:
+    df = spark.readStream.format("rate").option("rowsPerSecond", 20).load()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 1. Trigger: ProcessingTime — fixed-interval micro-batches
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n  ── Trigger: ProcessingTime (2 seconds) ───────────────")
 
-query = (
-    df.groupBy((df.value % 4).alias("value_group")).count()
-    .writeStream
-    .format("console")
-    .outputMode("complete")
-    .trigger(processingTime="2 seconds")
-    .option("truncate", False)
-    .option("numRows", 3)
-    .start()
-)
-
-time.sleep(6)
-query.stop()
+if WINDOWS_MODE:
+    (
+        df.selectExpr("value % 4 AS value_group")
+        .groupBy("value_group")
+        .count()
+        .orderBy("value_group")
+        .show(4, truncate=False)
+    )
+else:
+    query = (
+        df.groupBy((df.value % 4).alias("value_group")).count()
+        .writeStream
+        .format("console")
+        .outputMode("complete")
+        .trigger(processingTime="2 seconds")
+        .option("truncate", False)
+        .option("numRows", 3)
+        .start()
+    )
+    time.sleep(6)
+    query.stop()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 2. Micro-batch metrics via memory sink
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n  ── Micro-Batch Metrics ───────────────────────────────")
 
-query2 = (
-    df.writeStream
-    .format("memory")
-    .queryName("rate_table")
-    .outputMode("append")
-    .start()
-)
-
-time.sleep(5)
+if WINDOWS_MODE:
+    df.createOrReplaceTempView("rate_table")
+else:
+    query2 = (
+        df.writeStream
+        .format("memory")
+        .queryName("rate_table")
+        .outputMode("append")
+        .start()
+    )
+    time.sleep(5)
 
 result = spark.sql("SELECT COUNT(*) as total, MIN(value) as min_val, MAX(value) as max_val FROM rate_table")
 row = result.collect()[0]
 print(f"    Total rows: {row['total']}, Min: {row['min_val']}, Max: {row['max_val']}")
 
-progress = query2.recentProgress
-if progress:
-    for p in progress[-3:]:
-        print(f"    Batch {p.get('batchId', '?')}: "
-              f"input={p.get('numInputRows', 0)} rows, "
-              f"duration={p.get('durationMs', {}).get('triggerExecution', 0)}ms")
-
-query2.stop()
+if not WINDOWS_MODE:
+    progress = query2.recentProgress
+    if progress:
+        for p in progress[-3:]:
+            print(f"    Batch {p.get('batchId', '?')}: "
+                  f"input={p.get('numInputRows', 0)} rows, "
+                  f"duration={p.get('durationMs', {}).get('triggerExecution', 0)}ms")
+    query2.stop()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 3. Trigger: AvailableNow — process all data then stop
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n  ── Trigger: AvailableNow (process all, then stop) ────")
 
-query3 = (
-    df.writeStream
-    .format("console")
-    .outputMode("append")
-    .trigger(processingTime="3 seconds")
-    .option("truncate", False)
-    .option("numRows", 3)
-    .start()
-)
-
-time.sleep(6)
-query3.stop()
+if WINDOWS_MODE:
+    print("    AvailableNow pattern simulated in batch mode.")
+else:
+    query3 = (
+        df.writeStream
+        .format("console")
+        .outputMode("append")
+        .trigger(processingTime="3 seconds")
+        .option("truncate", False)
+        .option("numRows", 3)
+        .start()
+    )
+    time.sleep(6)
+    query3.stop()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 4. Tuning tips

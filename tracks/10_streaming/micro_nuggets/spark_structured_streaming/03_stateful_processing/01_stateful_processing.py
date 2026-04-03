@@ -27,31 +27,42 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from _spark_stream_connect import get_spark, ensure_lab_dirs
 
 spark = get_spark("stateful-processing")
+spark.sparkContext.setLogLevel("ERROR")
 ensure_lab_dirs()
+WINDOWS_MODE = sys.platform == "win32"
 
 print("\n── Stateful Processing ───────────────────────────────────")
-
-df = spark.readStream.format("rate").option("rowsPerSecond", 10).load()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 1. Stateful aggregation — running count per partition
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n  ── Running Count per Partition (stateful agg) ────────")
 
-count_per_partition = df.groupBy((df.value % 4).alias("value_group")).count()
-
-query = (
-    count_per_partition
-    .writeStream
-    .format("console")
-    .outputMode("update")
-    .option("truncate", False)
-    .option("numRows", 5)
-    .start()
-)
-
-time.sleep(8)
-query.stop()
+if WINDOWS_MODE:
+    print("    [!] Windows mode: using fallback batch aggregation.")
+    batch_df = spark.range(0, 40).selectExpr("CAST(id AS BIGINT) AS value")
+    count_per_partition = (
+        batch_df
+        .selectExpr("value % 4 AS value_group")
+        .groupBy("value_group")
+        .count()
+        .orderBy("value_group")
+    )
+    count_per_partition.show(truncate=False)
+else:
+    df = spark.readStream.format("rate").option("rowsPerSecond", 10).load()
+    count_per_partition = df.groupBy((df.value % 4).alias("value_group")).count()
+    query = (
+        count_per_partition
+        .writeStream
+        .format("console")
+        .outputMode("update")
+        .option("truncate", False)
+        .option("numRows", 5)
+        .start()
+    )
+    time.sleep(8)
+    query.stop()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 2. Out-of-order handling explanation

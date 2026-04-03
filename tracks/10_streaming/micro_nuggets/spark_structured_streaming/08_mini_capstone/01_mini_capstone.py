@@ -31,7 +31,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from _spark_stream_connect import get_spark, ensure_lab_dirs, clean_lab, LAB_CHECKPOINT, LAB_OUTPUT
 
 spark = get_spark("mini-capstone")
+spark.sparkContext.setLogLevel("ERROR")
 ensure_lab_dirs()
+WINDOWS_MODE = sys.platform == "win32"
 
 print("\n── Mini Capstone: End-to-End Streaming Pipeline ──────────")
 
@@ -41,23 +43,29 @@ print("\n── Mini Capstone: End-to-End Streaming Pipeline ──────�
 print("\n  ══ PHASE 1: Bronze → Silver → Gold ══════════════════")
 
 # Read stream (rate source simulating Kafka)
-df = spark.readStream.format("rate").option("rowsPerSecond", 30).load()
+if WINDOWS_MODE:
+    print("    [!] Windows mode: using fallback batch capstone path.")
+    df = spark.range(0, 120).selectExpr("CAST(id AS BIGINT) AS value")
+else:
+    df = spark.readStream.format("rate").option("rowsPerSecond", 30).load()
 
 # Bronze: raw count
 print("\n  ── Bronze: Raw Ingestion ─────────────────────────────")
 
 bronze_cp = str(LAB_CHECKPOINT / "capstone_bronze")
 
-bronze_q = (
-    df.writeStream
-    .format("memory")
-    .queryName("bronze_table")
-    .outputMode("append")
-    .start()
-)
-
-time.sleep(5)
-bronze_q.stop()
+if WINDOWS_MODE:
+    df.createOrReplaceTempView("bronze_table")
+else:
+    bronze_q = (
+        df.writeStream
+        .format("memory")
+        .queryName("bronze_table")
+        .outputMode("append")
+        .start()
+    )
+    time.sleep(5)
+    bronze_q.stop()
 
 bronze_count = spark.sql("SELECT COUNT(*) FROM bronze_table").collect()[0][0]
 print(f"    Bronze: {bronze_count} raw events")
@@ -67,17 +75,19 @@ print("\n  ── Silver: Filtered & Validated ───────────
 
 silver_cp = str(LAB_CHECKPOINT / "capstone_silver")
 
-silver_q = (
-    df.filter(df.value % 2 == 0)
-    .writeStream
-    .format("memory")
-    .queryName("silver_table")
-    .outputMode("append")
-    .start()
-)
-
-time.sleep(5)
-silver_q.stop()
+if WINDOWS_MODE:
+    df.filter(df.value % 2 == 0).createOrReplaceTempView("silver_table")
+else:
+    silver_q = (
+        df.filter(df.value % 2 == 0)
+        .writeStream
+        .format("memory")
+        .queryName("silver_table")
+        .outputMode("append")
+        .start()
+    )
+    time.sleep(5)
+    silver_q.stop()
 
 silver_count = spark.sql("SELECT COUNT(*) FROM silver_table").collect()[0][0]
 print(f"    Silver: {silver_count} validated events")
@@ -128,5 +138,5 @@ print("    Pattern: df.filter(col('event_id').isNotNull())")
 print("    Bad records are written to a 'dead letter' sink for investigation.")
 
 spark.stop()
-print("\n  Pipeline complete! 🎉")
+print("\n  Pipeline complete!")
 print()

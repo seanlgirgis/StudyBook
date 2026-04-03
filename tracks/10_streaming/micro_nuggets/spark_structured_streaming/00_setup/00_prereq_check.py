@@ -24,6 +24,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
+import _win_encoding  # noqa: F401
 from _spark_stream_connect import check_kafka_broker, KAFKA_BOOTSTRAP
 
 print("\n── Spark Structured Streaming Prerequisite Check ───")

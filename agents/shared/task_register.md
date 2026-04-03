@@ -70,3 +70,6 @@ Track active and completed tasks to avoid losing continuity.
 
 | TB-20260403-06 | Harden Airflow micro-nuggets lane for setup resiliency, API compatibility, and accurate runner status | done | 2026-04-03 | Fixed setup skip-vs-fail semantics, added retries, improved portability, and validated full run (14 pass, 2 skip, 0 fail) |
 | TB-20260403-07 | Review and harden Kafka micro-nuggets lane for poisoned/non-JSON payload resilience | done | 2026-04-03 | Added safe deserializer and updated failing scripts; full run passed (29/29) |
+| TB-20260403-08 | Harden Spark Structured Streaming micro-nuggets for Windows-safe execution and remove noisy NativeIO failure paths | done | 2026-04-03 | Added fallback batch paths and compatibility fixes; user-validated scripts 01-08 passed |
+| TB-20260403-09 | Disable Spark Structured Streaming run-all and replace with one-by-one guidance script | done | 2026-04-03 | Replaced runner with explicit non-run-all guard message and safe execution order |
+| TB-20260403-10 | Add possible micro-nuggets listing docs under track micro_nuggets roots plus master catalog | done | 2026-04-03 | Added 4 catalog docs covering databases/streaming/orchestration ideas and priority order |

@@ -48,3 +48,6 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 
 | LOOP-032 | TB-20260403-06 | Fix Airflow micro-nuggets lane regressions and setup runner behavior | closed | none | 2026-04-03 |
 | LOOP-033 | TB-20260403-07 | Fix Kafka micro-nuggets consumer crashes from invalid payload decoding | closed | none | 2026-04-03 |
+| LOOP-034 | TB-20260403-08 | Stabilize Spark Structured Streaming micro-nuggets on Windows (NativeIO + PySpark compatibility) | closed | none | 2026-04-03 |
+| LOOP-035 | TB-20260403-09 | Replace Spark lane run-all with explicit guard script | closed | none | 2026-04-03 |
+| LOOP-036 | TB-20260403-10 | Create micro-nuggets possible-list docs across active track roots | closed | none | 2026-04-03 |

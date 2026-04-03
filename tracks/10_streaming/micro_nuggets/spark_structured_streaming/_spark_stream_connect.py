@@ -94,6 +94,13 @@ def get_spark(app_name: str = "spark-streaming-lab", **kwargs):
         .master(os.getenv("SPARK_MASTER", "local[*]"))
         .config("spark.sql.shuffle.partitions", 4)
         .config("spark.sql.streaming.forceDeleteTempCheckpointLocation", True)
+        .config(
+            "spark.sql.streaming.checkpointFileManagerClass",
+            "org.apache.spark.sql.execution.streaming.FileSystemBasedCheckpointFileManager",
+        )
+        .config("spark.hadoop.io.native.lib.available", "false")
+        .config("spark.hadoop.fs.file.impl", "org.apache.hadoop.fs.RawLocalFileSystem")
+        .config("spark.hadoop.fs.file.impl.disable.cache", "true")
         .config("spark.local.dir", str(LAB_BASE / "spark_local"))
     )
 

@@ -1,7 +1,7 @@
 """
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║  NUGGET 07-01 · Interview Drills                                              ║
-║  10+ runnable streaming interview scenarios with model solutions.            ║
+║  Streaming interview scenarios with model solutions.                         ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
 PURPOSE
@@ -27,39 +27,31 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from _spark_stream_connect import get_spark, ensure_lab_dirs
 
 spark = get_spark("interview-drills")
+spark.sparkContext.setLogLevel("ERROR")
 ensure_lab_dirs()
+WINDOWS_MODE = sys.platform == "win32"
 
 print("\n── Interview Drills ──────────────────────────────────────")
 
-df = spark.readStream.format("rate").option("rowsPerSecond", 20).load()
+if WINDOWS_MODE:
+    print("    [!] Windows mode: using fallback batch interview drill.")
+    df = spark.range(0, 80).selectExpr("CAST(id AS BIGINT) AS value")
+else:
+    df = spark.readStream.format("rate").option("rowsPerSecond", 20).load()
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Q1: Windowed aggregation
+# Q1: Group by value range and count
 # ─────────────────────────────────────────────────────────────────────────────
-print("\n  Q1: Event count per 5-sec window")
-from pyspark.sql.functions import window as spark_window
+print("\n  Q1: Event count per value group")
 
 q1 = df.groupBy((df.value % 4).alias("value_group")).count()
-query1 = q1.writeStream.format("console").outputMode("update").trigger(processingTime="3 seconds").option("numRows", 5).start()
-time.sleep(8)
-query1.stop()
-print("    ✓ Windowed aggregation complete")
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Q2: Filter even values
-# ─────────────────────────────────────────────────────────────────────────────
-print("\n  Q2: Filter even values")
-q2 = df.filter(df.value % 2 == 0)
-query2 = q2.writeStream.format("console").outputMode("append").trigger(availableNow=True).option("numRows", 3).start()
-query2.awaitTermination(timeout=10)
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Q3: Running count per group
-# ─────────────────────────────────────────────────────────────────────────────
-print("\n  Q3: Running count per value group")
-q3 = df.groupBy((df.value % 4).alias("value_group")).count()
-query3 = q3.writeStream.format("console").outputMode("update").trigger(availableNow=True).start()
-query3.awaitTermination(timeout=10)
+if WINDOWS_MODE:
+    q1.orderBy("value_group").show(5, truncate=False)
+else:
+    query1 = q1.writeStream.format("console").outputMode("update").trigger(processingTime="3 seconds").option("numRows", 5).start()
+    time.sleep(8)
+    query1.stop()
+print("    ✓ Grouped aggregation complete")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Interview concepts (printed, not executed)
@@ -82,6 +74,12 @@ qa = [
     ("Q: Idempotent sink design?",
      "A: Write to unique paths per batch (file sink), use transactions (Delta/JDBC), "
      "or use upsert semantics (MERGE on primary key)."),
+    ("Q: How do you handle backpressure?",
+     "A: Spark auto-throttles. Monitor inputRowsPerSecond vs processedRowsPerSecond. "
+     "If processing < input, reduce shuffle partitions or increase parallelism."),
+    ("Q: Trigger types?",
+     "A: ProcessingTime (fixed interval), AvailableNow (process all then stop), "
+     "Continuous (sub-second, experimental). Use ProcessingTime for production."),
 ]
 
 for q, a in qa:
