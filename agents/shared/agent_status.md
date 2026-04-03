@@ -2,64 +2,47 @@
 
 ## Current Run (2026-04-03)
 
-**Task ID:** TB-20260403-05  
+**Task ID:** TB-20260403-07  
 **Task Type:** FIX  
-**Goal:** Fix PostgreSQL micro-nugget review findings in one pass and validate end-to-end.
+**Goal:** Review and fix issues in `tracks/10_streaming/micro_nuggets/kafka`.
 
 ### Summary
 
-Implemented the requested hardening in one pass: idempotent seeding, safer Windows runner output handling, capstone rerun safety, and path/credential portability improvements. Full lane validation passed (16/16).
+Kafka lane was failing due to brittle JSON deserialization against intentionally poisoned/non-JSON records left by reliability/capstone scenarios. Implemented a shared safe deserializer and wired failing scripts to use it. Full runner now passes end-to-end: `29/29 PASS`.
 
 ### Changes Made
 
-1. Portability and secret hygiene
-   - Updated `tracks/08_databases/micro_nuggets/postgresql/_pg_connect.py`:
-     - removed hardcoded `_infra/env/.env.local` absolute path
-     - resolved env file path from detected project root
-     - removed default hardcoded `POSTGRES_PASSWORD`
-     - added `get_creds_source()` for reliable source reporting
-   - Updated `tracks/08_databases/micro_nuggets/postgresql/00_setup/00_prereq_check.py`:
-     - removed hardcoded env file probing
-     - now reports source via `get_creds_source()`
+1. Added non-throwing deserializer utility
+   - `tracks/10_streaming/micro_nuggets/kafka/_kafka_connect.py`
+   - New `safe_json_deserializer(payload)` handles UTF-8 and JSON decode errors safely.
 
-2. Truly idempotent seed behavior
-   - Updated `tracks/08_databases/micro_nuggets/postgresql/00_setup/01_seed_lab.py`:
-     - added deterministic reseed strategy using `TRUNCATE ... RESTART IDENTITY CASCADE`
-     - fixed rerun drift in `orders/order_items/events/transactions/employees*` datasets
-     - corrected minor indentation issue introduced during patching
-
-3. Capstone rerun safety
-   - Updated `tracks/08_databases/micro_nuggets/postgresql/09_mini_capstone/01_mini_capstone.py`:
-     - truncates bronze and silver staging tables before load
-     - fixed drop order (`MATERIALIZED VIEW` before `TABLE`) to avoid relation-type errors on reruns
-     - removed non-ASCII success emoji in final print
-
-4. Runner reliability on Windows consoles
-   - Updated `tracks/08_databases/micro_nuggets/postgresql/run_all_postgresql_nuggets.py`:
-     - added `safe_print()` for cp1252-safe console output
-     - switched subprocess capture to bytes + utf-8 decode with replacement
-     - normalized symbols to ASCII-safe output (`->`, `[OK]`)
+2. Updated affected scripts to use safe deserialization
+   - `01_core_kafka/03_consumer_basics.py`
+   - `02_reliability/01_at_least_once_demo.py`
+   - `02_reliability/04_dead_letter_topic.py`
+   - `03_schema_and_contracts/01_json_envelope.py`
+   - `03_schema_and_contracts/02_versioned_schema.py`
+   - `03_schema_and_contracts/03_contract_validation.py`
+   - `04_stream_processing_patterns/03_watermark_late_events.py`
+   - `04_stream_processing_patterns/04_dedup_by_event_id.py`
+   - `04_stream_processing_patterns/05_out_of_order_events.py`
+   - `07_mini_capstone/02_clean_to_silver.py`
 
 ### Validation Commands Run
 
 ```powershell
-& 'C:\py_venv\proj_educate\Scripts\python.exe' -m py_compile D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\_pg_connect.py D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\00_setup\00_prereq_check.py D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\00_setup\01_seed_lab.py D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\09_mini_capstone\01_mini_capstone.py D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\run_all_postgresql_nuggets.py
-& 'C:\py_venv\proj_educate\Scripts\python.exe' D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\run_all_postgresql_nuggets.py
+& 'C:\py_venv\proj_educate\Scripts\python.exe' -m py_compile D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\_kafka_connect.py D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\01_core_kafka\03_consumer_basics.py D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\02_reliability\01_at_least_once_demo.py D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\02_reliability\04_dead_letter_topic.py D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\03_schema_and_contracts\01_json_envelope.py D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\03_schema_and_contracts\02_versioned_schema.py D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\03_schema_and_contracts\03_contract_validation.py D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\04_stream_processing_patterns\03_watermark_late_events.py D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\04_stream_processing_patterns\04_dedup_by_event_id.py D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\04_stream_processing_patterns\05_out_of_order_events.py D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\07_mini_capstone\02_clean_to_silver.py
+& 'C:\py_venv\proj_educate\Scripts\python.exe' D:\StudyBook\tracks\10_streaming\micro_nuggets\kafka\run_all_kafka_nuggets.py --timeout 120
 ```
 
 ### Outcomes
 
-- Syntax validation: PASS
-- Full runner: PASS (16 scripts passed, 0 failed)
-- Previously observed capstone failure resolved
+- Full lane validation: `29 passed, 0 failed`.
+- Root-cause class removed: consumer crashes on poisoned/non-JSON payloads.
 
 ### Risks
 
-- Low. Changes are scoped to robustness and idempotency; behavior is now more deterministic.
-
-### Next Step
-
-- Optional: add the same safe-print + bytes decode pattern to any remaining lane runners for consistency.
+- Low. Behavior is more robust for mixed payload streams while preserving script semantics.
 
 ---
 

@@ -46,3 +46,5 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-030 | TB-20260403-04 | Validate Mongo runner after cp1252 crash fix with real executions | closed | none | 2026-04-03 |
 | LOOP-031 | TB-20260403-05 | Harden PostgreSQL nugget lane after review findings | closed | none | 2026-04-03 |
 
+| LOOP-032 | TB-20260403-06 | Fix Airflow micro-nuggets lane regressions and setup runner behavior | closed | none | 2026-04-03 |
+| LOOP-033 | TB-20260403-07 | Fix Kafka micro-nuggets consumer crashes from invalid payload decoding | closed | none | 2026-04-03 |

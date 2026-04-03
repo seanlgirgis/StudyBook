@@ -68,3 +68,5 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260403-04 | Test Mongo lane runner end-to-end and fix Windows console encoding crash | done | 2026-04-03 | Reproduced UnicodeEncodeError on cp1252, patched safe console printing, reran stop-on-fail and full-loop timeout sweep successfully |
 | TB-20260403-05 | Harden PostgreSQL micro-nuggets for idempotency, portability, and runner reliability | done | 2026-04-03 | Fixed seed idempotency, runner encoding safety, capstone rerun safety, path/credential source portability; validated full run (16/16 PASS) |
 
+| TB-20260403-06 | Harden Airflow micro-nuggets lane for setup resiliency, API compatibility, and accurate runner status | done | 2026-04-03 | Fixed setup skip-vs-fail semantics, added retries, improved portability, and validated full run (14 pass, 2 skip, 0 fail) |
+| TB-20260403-07 | Review and harden Kafka micro-nuggets lane for poisoned/non-JSON payload resilience | done | 2026-04-03 | Added safe deserializer and updated failing scripts; full run passed (29/29) |
