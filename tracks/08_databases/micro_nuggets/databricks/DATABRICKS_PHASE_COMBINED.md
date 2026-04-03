@@ -8,6 +8,28 @@ This file consolidates the four source phase documents into one reference.
 - PHASE2_PLAN.md
 - DATABRICKS_PHASE2_INTERVIEW_Q_PACK.md
 
+## Quick Definitions
+- [ACID](../../../../docs/concepts/foundations/acid.md)
+- [OLTP vs OLAP](../../../../docs/concepts/foundations/oltp_vs_olap.md)
+- [Delta Lake](../../../../docs/concepts/databases/delta_lake.md)
+- [MERGE](../../../../docs/concepts/databases/merge.md)
+- [Time Travel](../../../../docs/concepts/databases/time_travel.md)
+- [Medallion Architecture](../../../../docs/concepts/databases/medallion_architecture.md)
+- [Unity Catalog](../../../../docs/concepts/databases/unity_catalog.md)
+- [Idempotency](../../../../docs/concepts/foundations/idempotency.md)
+- [CDC](../../../../docs/concepts/foundations/cdc.md)
+- [Partitioning](../../../../docs/concepts/performance/partitioning.md)
+- [Z-ORDER](../../../../docs/concepts/performance/z_order.md)
+- [Small Files Problem](../../../../docs/concepts/performance/small_files_problem.md)
+- [OPTIMIZE and Compaction](../../../../docs/concepts/performance/optimize_and_compaction.md)
+- [RBAC](../../../../docs/concepts/governance/rbac.md)
+- [Least Privilege](../../../../docs/concepts/governance/least_privilege.md)
+- [Row-Level Security](../../../../docs/concepts/governance/row_level_security.md)
+- [Column Masking](../../../../docs/concepts/governance/column_masking.md)
+- [SQL Warehouse vs Compute Cluster](../../../../docs/concepts/platform/sql_warehouse_vs_compute_cluster.md)
+- [SLO and Freshness](../../../../docs/concepts/operations/slo_and_freshness.md)
+- [All Definitions Index](../../../../docs/concepts/README.md)
+
 ---
 
 
