@@ -9,6 +9,7 @@ This file consolidates the four source phase documents into one reference.
 - DATABRICKS_PHASE2_INTERVIEW_Q_PACK.md
 
 ## Quick Definitions
+- [Databricks Glossary Pack](../../../../docs/concepts/databricks/README.md)
 - [ACID](../../../../docs/concepts/foundations/acid.md)
 - [OLTP vs OLAP](../../../../docs/concepts/foundations/oltp_vs_olap.md)
 - [Delta Lake](../../../../docs/concepts/databases/delta_lake.md)
@@ -698,4 +699,5 @@ Small files, poor partition strategy, missing OPTIMIZE/ZORDER cadence, broad sca
 Explain standards: layered medallion data model, CI/CD for jobs/notebooks, policy-driven governance in Unity Catalog, observability with SLO dashboards, and cost guardrails by warehouse/job class.
 
 ---
+
 

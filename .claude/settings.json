@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell.exe -NoProfile -File env_setter.ps1 -NonInteractive)",
+      "Bash(C:\\\\py_venv\\\\proj_educate\\\\Scripts\\\\python.exe -c \"import pymongo; print\\(pymongo.version\\)\")",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\py_venv\\\\proj_educate\\\\Scripts\\\\python.exe' -c \\\\\"import pymongo; print\\(pymongo.version\\)\\\\\"\")",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\py_venv\\\\proj_educate\\\\Scripts\\\\python.exe' -c \\\\\"import certifi; print\\(certifi.where\\(\\)\\); import motor; print\\('motor ok'\\)\\\\\"\")",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\py_venv\\\\proj_educate\\\\Scripts\\\\python.exe' -c \\\\\"import sys; print\\(sys.version\\); import pymongo; import certifi; import bson; print\\('pymongo:', pymongo.version\\); print\\('bson ok'\\); print\\('certifi:', certifi.where\\(\\)\\)\\\\\"\")",
+      "Bash(powershell.exe -NoProfile -Command \"cat 'D:\\\\StudyBook\\\\_infra\\\\env\\\\.env.local'\")",
+      "Bash(powershell.exe -NoProfile -Command ':*)",
+      "Bash(powershell.exe -NoProfile -Command '& '\\\\''C:/py_venv/proj_educate/Scripts/python.exe'\\\\'' '\\\\''d:/StudyBook/tracks/08_databases/micro_nuggets/mongodb/00_setup/00_prereq_check.py'\\\\''')",
+      "Bash(powershell.exe -NoProfile -Command '[System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $env:PYTHONIOENCODING='\\\\''utf-8'\\\\''; & '\\\\''C:/py_venv/proj_educate/Scripts/python.exe'\\\\'' '\\\\''d:/StudyBook/tracks/08_databases/micro_nuggets/mongodb/00_setup/00_prereq_check.py'\\\\''')",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:/py_venv/proj_educate/Scripts/python.exe' -c \\\\\"from pymongo import MongoClient; import inspect; c = MongoClient.__new__\\(MongoClient\\); from pymongo.cursor import Cursor; print\\(inspect.signature\\(Cursor.explain\\)\\)\\\\\"\")"
+    ]
+  }
+}

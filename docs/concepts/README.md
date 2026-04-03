@@ -2,6 +2,10 @@
 
 Reusable cross-track definitions for StudyBook.
 
+## Domain Packs
+- [Databricks Glossary Index](./databricks/README.md)
+
+
 ## Foundations
 - [ACID](./foundations/acid.md)
 - [OLTP vs OLAP](./foundations/oltp_vs_olap.md)
@@ -33,3 +37,4 @@ Reusable cross-track definitions for StudyBook.
 
 ## Operations
 - [SLO and Freshness](./operations/slo_and_freshness.md)
+
