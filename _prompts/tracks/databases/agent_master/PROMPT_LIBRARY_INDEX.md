@@ -4,3 +4,5 @@
 
 1. `POSTGRESQL_MICRONUGGETS_PRODUCTION_EXECUTION_MASTER_PROMPT.md`
    - Purpose: End-to-end production-grade implementation prompt for PostgreSQL DE micro-nuggets (setup, CTE/windowing, DE patterns, testing, story, glossary, interview pack).
+2. `DATABRICKS_BRIDGE_MICRONUGGETS_PRODUCTION_EXECUTION_MASTER_PROMPT.md`
+   - Purpose: End-to-end production-grade implementation prompt for Databricks bridge nuggets (cross-engine mapping from PostgreSQL/Snowflake, setup, Delta patterns, testing, story, glossary).
