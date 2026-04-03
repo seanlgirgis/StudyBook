@@ -40,3 +40,9 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-024 | TB-20260402-37 | Decommission migrated Technologies + DE_Interview sources using move-map safe deletion | closed | none | 2026-04-02 |
 | LOOP-025 | TB-20260402-38 | Reconcile migration board statuses with completed source-deletion reality for M-003/M-012 and add residual-Technologies decommission plan | open | Decide whether to decommission remaining `D:\Workspace\Technologies` non-migrated assets or retain as legacy runtime island, then update board accordingly | 2026-04-02 |
 | LOOP-026 | TB-20260402-41 | Resolve GitHub large-file push rejection for StudyBook main branch | closed | none | 2026-04-02 |
+| LOOP-027 | TB-20260403-01 | Validate MongoDB micro-nuggets coverage and record latest fixes/limitations in system-of-record files | closed | none | 2026-04-03 |
+| LOOP-028 | TB-20260403-02 | Add MongoDB lane-level runner and verify one-line pass/fail execution output | closed | none | 2026-04-03 |
+| LOOP-029 | TB-20260403-03 | Fix Windows cp1252 decode crash in Mongo lane runner subprocess capture | closed | none | 2026-04-03 |
+| LOOP-030 | TB-20260403-04 | Validate Mongo runner after cp1252 crash fix with real executions | closed | none | 2026-04-03 |
+| LOOP-031 | TB-20260403-05 | Harden PostgreSQL nugget lane after review findings | closed | none | 2026-04-03 |
+

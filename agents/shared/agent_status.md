@@ -1,58 +1,67 @@
 # Agent Status
 
-## Current Run (2026-04-02)
+## Current Run (2026-04-03)
 
-**Task ID:** TB-20260402-42  
-**Task Type:** ENHANCEMENT  
-**Goal:** Record user profile and working style for future agent sessions
+**Task ID:** TB-20260403-05  
+**Task Type:** FIX  
+**Goal:** Fix PostgreSQL micro-nugget review findings in one pass and validate end-to-end.
 
 ### Summary
 
-Saved complete user profile to durable project file for consistent cross-session context.
+Implemented the requested hardening in one pass: idempotent seeding, safer Windows runner output handling, capstone rerun safety, and path/credential portability improvements. Full lane validation passed (16/16).
 
-### What Was Done
+### Changes Made
 
-1. **User Profile Documented**
-   - Created `agents/shared/user_profile.md`
-   - Includes: role, work history, AI workflow, LeetCode system, notebook rules, communication style
-   - Added to `context_index.md` as canonical control file
+1. Portability and secret hygiene
+   - Updated `tracks/08_databases/micro_nuggets/postgresql/_pg_connect.py`:
+     - removed hardcoded `_infra/env/.env.local` absolute path
+     - resolved env file path from detected project root
+     - removed default hardcoded `POSTGRES_PASSWORD`
+     - added `get_creds_source()` for reliable source reporting
+   - Updated `tracks/08_databases/micro_nuggets/postgresql/00_setup/00_prereq_check.py`:
+     - removed hardcoded env file probing
+     - now reports source via `get_creds_source()`
 
-2. **Key Working Agreements Recorded**
-   - Short, direct communication (one concept at a time)
-   - Visual/spatial analogies preferred
-   - No walls of text
-   - Delegate execution to Claude Code; Claude handles planning/architecture
-   - Bite-sized tasks: max 2-3 files per session
+2. Truly idempotent seed behavior
+   - Updated `tracks/08_databases/micro_nuggets/postgresql/00_setup/01_seed_lab.py`:
+     - added deterministic reseed strategy using `TRUNCATE ... RESTART IDENTITY CASCADE`
+     - fixed rerun drift in `orders/order_items/events/transactions/employees*` datasets
+     - corrected minor indentation issue introduced during patching
 
-3. **QAuth Setup Complete** (from earlier task)
-   - Alibaba Cloud Qwen API configured and tested
-   - API key stored in encrypted secrets
-   - Demo created: `poc/qauth_alibaba_demo.py`
+3. Capstone rerun safety
+   - Updated `tracks/08_databases/micro_nuggets/postgresql/09_mini_capstone/01_mini_capstone.py`:
+     - truncates bronze and silver staging tables before load
+     - fixed drop order (`MATERIALIZED VIEW` before `TABLE`) to avoid relation-type errors on reruns
+     - removed non-ASCII success emoji in final print
 
-### Validations Run
+4. Runner reliability on Windows consoles
+   - Updated `tracks/08_databases/micro_nuggets/postgresql/run_all_postgresql_nuggets.py`:
+     - added `safe_print()` for cp1252-safe console output
+     - switched subprocess capture to bytes + utf-8 decode with replacement
+     - normalized symbols to ASCII-safe output (`->`, `[OK]`)
+
+### Validation Commands Run
 
 ```powershell
-# Confirmed user profile file created
-Test-Path D:\StudyBook\agents\shared\user_profile.md
-# Result: True
+& 'C:\py_venv\proj_educate\Scripts\python.exe' -m py_compile D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\_pg_connect.py D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\00_setup\00_prereq_check.py D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\00_setup\01_seed_lab.py D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\09_mini_capstone\01_mini_capstone.py D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\run_all_postgresql_nuggets.py
+& 'C:\py_venv\proj_educate\Scripts\python.exe' D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql\run_all_postgresql_nuggets.py
 ```
 
-### Assumptions
+### Outcomes
 
-- User profile will be read by future agents at session start
-- Working style preferences apply to all interactions
+- Syntax validation: PASS
+- Full runner: PASS (16 scripts passed, 0 failed)
+- Previously observed capstone failure resolved
 
 ### Risks
 
-- None - documentation only
+- Low. Changes are scoped to robustness and idempotency; behavior is now more deterministic.
 
-### Next Steps
+### Next Step
 
-- Future agents read `user_profile.md` during bootstrap
-- Communication style: short, direct, visual analogies
-- No walls of text, no terse definitions
+- Optional: add the same safe-print + bytes decode pattern to any remaining lane runners for consistency.
 
 ---
 
-**Run completed:** 2026-04-02  
+**Run completed:** 2026-04-03  
 **Status:** DONE

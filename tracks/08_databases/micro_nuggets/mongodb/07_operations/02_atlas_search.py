@@ -118,12 +118,17 @@ def run_search(label: str, pipeline: list, project: dict | None = None) -> list:
     try:
         results = list(col.aggregate(pipeline))
         print(f"\n  [{label}] → {len(results)} result(s):")
-        for r in results[:5]:
-            score = r.get("score", "N/A")
-            name  = r.get("name", "?")[:50]
-            price = r.get("price", "?")
-            cat   = r.get("category", "?")
-            print(f"    score={score:<6}  ${price:<8}  [{cat}]  {name}")
+        if results:
+            for r in results[:5]:
+                score = r.get("score", "N/A")
+                name  = r.get("name", "?")[:50]
+                price = r.get("price", "?")
+                cat   = r.get("category", "?")
+                print(f"    score={score:<6}  ${price:<8}  [{cat}]  {name}")
+        else:
+            print(f"    NOTE: 0 results — Atlas Search index 'default' may not exist yet.")
+            print(f"    To enable: Atlas UI → Search → Create Index → Name='default'")
+            print(f"               Collection: nugget_lab.search_demo → Dynamic Mapping")
         return results
     except OperationFailure as e:
         if "Search index" in str(e) or "AtlasSearch" in str(e) or "no search" in str(e).lower():

@@ -61,3 +61,10 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260402-39 | Register Snowflake micro-nuggets lane in durable memory/system-of-record files | done | 2026-04-02 | Confirmed and recorded `D:\StudyBook\tracks\08_databases\micro_nuggets\snowflake` structure (00_setup, 02_ddl_basics, 03_dml_basics, helper + summary) |
 | TB-20260402-40 | Fix de_postgres legacy Workspace bind failure and enforce path-agnostic StudyBook infra startup cleanup | done | 2026-04-02 | Updated `_infra/scripts/infra_up.ps1` to auto-remove legacy Workspace compose containers; validated `de_postgres` now uses `de_postgres_data` volume from `D:\StudyBook\_infra\docker\core.yml` |
 | TB-20260402-41 | Resolve GitHub push rejection caused by oversized runtime artifacts in tracked paths | done | 2026-04-02 | Rebuilt local commit without `tracks/08_databases/_setup/volumes` and `_artifacts`, added ignore guards, and pushed `main` successfully (`d7fe08b`) |
+| TB-20260403-01 | Review MongoDB micro-nuggets coverage and record fixes in durable memory files | done | 2026-04-03 | Verified lane breadth/depth, added coverage review doc, and updated context/open-loop/status continuity artifacts |
+
+| TB-20260403-02 | Add MongoDB lane runner script with one-line pass/fail output and validate execution | done | 2026-04-03 | Added run_all_mongodb_nuggets.py; validated output format; sandbox run failed on Atlas DNS resolution (not script logic) |
+| TB-20260403-03 | Fix Mongo lane runner Windows decode crash on subprocess output | done | 2026-04-03 | Switched runner to byte capture and UTF-8 decode with replacement to prevent cp1252 decode thread crash |
+| TB-20260403-04 | Test Mongo lane runner end-to-end and fix Windows console encoding crash | done | 2026-04-03 | Reproduced UnicodeEncodeError on cp1252, patched safe console printing, reran stop-on-fail and full-loop timeout sweep successfully |
+| TB-20260403-05 | Harden PostgreSQL micro-nuggets for idempotency, portability, and runner reliability | done | 2026-04-03 | Fixed seed idempotency, runner encoding safety, capstone rerun safety, path/credential source portability; validated full run (16/16 PASS) |
+

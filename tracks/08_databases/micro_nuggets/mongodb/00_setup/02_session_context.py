@@ -99,7 +99,12 @@ print(f"\n  Server version:   {info.get('version', 'unknown')}")
 #    runs as a 3-node replica set behind the scenes.
 # ─────────────────────────────────────────────────────────────────────────────
 topology = client.topology_description
-topo_type = getattr(topology.topology_type, "name", str(topology.topology_type))
+# pymongo 4.x stores topology_type as a plain int, not an enum member.
+_TOPO_NAMES = {0: "Unknown", 1: "Single", 2: "ReplicaSetNoPrimary",
+               3: "ReplicaSetWithPrimary", 4: "Sharded", 5: "LoadBalanced"}
+topo_type = _TOPO_NAMES.get(topology.topology_type,
+                             getattr(topology.topology_type, "name",
+                                     str(topology.topology_type)))
 print(f"  Topology type:    {topo_type}")
 
 # Replica set name is embedded in the server hello response

@@ -141,7 +141,45 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Intent: short 5-10 minute runnable learning nuggets with inline teaching comments.
 - Depth: covers MERGE/CDC, Time Travel, OPTIMIZE/Z-ORDER, three-layer pipeline pattern.
 
+## PostgreSQL Micro-Nuggets Memory
+
+- Canonical lane created under:
+  - `D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql`
+- Full validation: **16/16 PASS** (2026-04-02)
+- Structure:
+  - `_pg_connect.py` — shared connection helper (reuses existing Docker PostgreSQL creds)
+  - `00_setup/` — prereq check + idempotent seed (10 tables, 500+ rows)
+  - `01_sql_core/` — joins, aggregation, subqueries
+  - `02_cte_and_windowing/` — CTEs, window functions, advanced analytics
+  - `03_data_modeling/` — keys/constraints, normalization vs denormalization
+  - `04_de_patterns/` — dedup, upsert (ON CONFLICT), SCD Type 2
+  - `05_performance_tuning/` — EXPLAIN ANALYZE, indexes, anti-patterns
+  - `06_transactions_and_concurrency/` — ACID, isolation levels, deadlocks
+  - `07_data_quality_and_testing/` — 10 data quality assertions
+  - `08_interview_drills/` — second-highest, top-N, MoM growth, duplicates
+  - `09_mini_capstone/` — Bronze→Silver→Gold with JSONB ingestion
+  - `run_all_postgresql_nuggets.py` — one-command validation runner
+  - `POSTGRESQL_SPEEDY_STORY_AND_INTERVIEW.md` — 8 deep interview Q&As
+  - `POSTGRESQL_GLOSSARY.md` — 40+ term definitions with cross-links
+  - `README.md` — beginner execution guide
+- Credential source: reuses existing `_infra/env/.env.local` (POSTGRES_USER/PASSWORD/DB/PORT)
+- Lab schema: `de_lab` (created idempotently by seed script)
+
+
+## MongoDB Micro-Nuggets Memory
+
+- Canonical lane validated under:
+  - `D:\StudyBook\tracks\08_databases\micro_nuggets\mongodb`
+- Coverage review recorded:
+  - `tracks/08_databases/micro_nuggets/mongodb/MONGODB_COVERAGE_REVIEW.md`
+- Verified on 2026-04-03:
+  - script inventory (excluding `__pycache__`): `28` (`26` runnable nuggets + helper + lane runner)
+  - topology display fix in `00_setup/02_session_context.py` (`_TOPO_NAMES` mapping)
+  - Atlas Search zero-result guidance fix in `07_operations/02_atlas_search.py`
+  - lane runner added: `run_all_mongodb_nuggets.py` (one-line PASS/FAIL per nugget + summary)
+- Known expected limitation:
+  - Atlas Search requires `default` search index on `nugget_lab.search_demo` in Atlas UI.
 ## Last Updated
 
-- 2026-04-02
+- 2026-04-03
 
