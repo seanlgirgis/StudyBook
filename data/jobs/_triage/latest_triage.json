@@ -1,0 +1,54 @@
+{
+  "triage_timestamp": "2026-04-03T22:20:38",
+  "input_path": "D:\\StudyBook\\.\\intake\\intake.md",
+  "company": "Company logo for, CornerStone Technology Talent Services.",
+  "role": "Data Engineer",
+  "location": "Dallas-Fort Worth Metroplex · 1 day ago · Over 100 applicants",
+  "fit_score": 81,
+  "decision": "APPLY",
+  "decision_reason": "Good fit and no duplicate blockers.",
+  "exact_applied_match": null,
+  "max_similarity_applied": 0.2247,
+  "top_similar_applied": [
+    {
+      "job_id": "00051_5ade9538",
+      "company": "Loopback Health",
+      "role": "Data Engineer",
+      "similarity": 0.2247
+    },
+    {
+      "job_id": "00027_179fdabd",
+      "company": "PETADATA",
+      "role": "AWS Data Engineer",
+      "similarity": 0.1873
+    },
+    {
+      "job_id": "00038_fe151a85",
+      "company": "McAfee",
+      "role": "Senior Data Engineer",
+      "similarity": 0.1834
+    },
+    {
+      "job_id": "00029_e1c101b7",
+      "company": "Robert Half",
+      "role": "Data Engineer",
+      "similarity": 0.1775
+    },
+    {
+      "job_id": "00003_e4648120",
+      "company": "FisherInvestments",
+      "role": "Senior Data Engineer",
+      "similarity": 0.1598
+    }
+  ],
+  "supporting_reasons": [
+    "AWS stack match",
+    "Python match",
+    "SQL match",
+    "Pipeline/ETL match",
+    "ETL keyword match",
+    "Location match Dallas",
+    "Hybrid match",
+    "Potential level mismatch (junior role)"
+  ]
+}

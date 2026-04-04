@@ -1,157 +1,64 @@
 # User Profile
 
-**Last Updated:** 2026-04-02  
-**Source:** Claude memory dump
+**Last Updated:** 2026-04-03  
+**Primary Sources:**  
+- `C:\jobsearch\data\source_of_truth.json`  
+- `C:\pyproj\seanlgirgis.github.io` (repo structure and generators)
 
----
+## Core Career Identity
 
-## Core Identity
+- Senior Data Engineer and Capacity/Data Engineering leader with 20+ years of enterprise experience.
+- Target directions: Senior/Staff Data Engineering, Cloud Data Architecture, AI-enabled Data Engineering.
+- Recent core focus: AWS + PySpark + forecasting + agentic AI workflows.
+- Domain depth across performance engineering, observability, capacity planning, and data pipeline modernization.
 
-**Role:** Senior Data Engineer & AI Architect, 20+ years enterprise IT  
-**Most Recent:** Citi — ML forecasting, ETL pipelines, large-scale telemetry infrastructure  
-**Target Roles:** Staff/Principal Data Engineer  
-**Location:** Murphy, TX (Dallas metro) | Egyptian heritage
+## Current Positioning Signals
 
-**Active Projects:**
-- JobSearch project with RAG-augmented automation
-- Grok for resume/cover letter customization
-- CloudSage (open-source AWS admin framework) — GitHub: seanlgirgis/CloudSage
-- AWS-CapacityForecaster (Cholesky decomposition for server metrics)
+- Most recent long tenure: Citi (2017-11 to 2025-12) in senior capacity/data engineering scope.
+- Strong legacy-to-modern bridge: C/C++/Oracle/J2EE history plus modern Python/PySpark/AWS/GenAI execution.
+- Preferred market: DFW (Plano/Murphy) and remote-friendly roles.
 
----
+## Demonstrated Project Themes
 
-## Multi-AI Workflow
+- AI-powered job search automation pipeline (agentic orchestration, vector similarity, LLM generation and gates).
+- HorizonScale-style forecasting and telemetry optimization work (forecast models + operational dashboards).
+- Serverless lakehouse patterns on AWS (S3/Glue/Athena/Bedrock + optimization practices).
 
-| AI | Purpose |
-|----|---------|
-| **Claude** | Strategic thinking, deep reasoning, planning, architecture, debugging |
-| **Gemini ("Antigravity")** | Mechanical generation |
-| **Grok** | Resume customization |
-| **Claude Code (VS Code)** | Agentic file generation |
+## Technical Strength Pattern
 
----
+- Modern strengths: Python, SQL, PySpark, AWS, ETL design, forecasting, automation.
+- Platform strengths: monitoring/APM/capacity ecosystems (CA APM, Dynatrace, BMC TrueSight).
+- Architecture strength: connecting infra telemetry, analytics, and decision workflows for business outcomes.
 
-## LeetCode Study System
+## Working Style Preferences
 
-**Current Position:** Heap (after Stack/Monotonic Stack ✅)  
-**Concept Ladder:** Arrays → Hash Map/Set → Queue/Deque → Stack → **Heap** → Graphs (next)
+- Prefers direct, practical, outcome-first communication.
+- Learns quickly with examples and runnable artifacts.
+- Prefers durable project memory in files, not chat-only state.
+- Strong emphasis on encryption/secret hygiene and machine-portable setup.
 
-**Active Problems:** LC 496, 503, 739, 84, 853, 901 (Stack/Monotonic Stack)
+## Operational Anchors
 
-**Tracker:** `leetcode_tracker_v2.xlsx` — color-coded, confidence ratings, COUNTIF/SUMPRODUCT formulas
+- StudyBook runtime venv: `C:\py_venv\proj_educate`
+- JobSearch runtime venv (project-owned): `C:\py_venv\JobSearch`
+- Website repo currently has its own env script pointing to: `C:\py_venv\resume_venv`
 
-**Notebook Structure (14-cell Jupyter):**
-1. Problem statement
-2. Hand-traced example
-3. Visual diagram
-4. Pattern guidance
-5. Shell code
-6. Complexity analysis
-7. Citi narrative
-8. Closing mantra: *"Simplicity and clarity is Gold"*
+## JobSearch Source of Truth Rule
 
-**Master Prompt:** `masterprompt.md` → batch-generates study folders (notebooks, SQL, flashcards, capstone projects)
+- Treat `C:\jobsearch\data\source_of_truth.json` as canonical career/resume data for JobSearch workflows.
+- Any generated resume, tailoring, or job-fit logic should reconcile against this file first.
 
-### Hard Constraints for Notebook Prompts
+## Website Repo Map (High-Level)
 
-Every Antigravity/Claude Code notebook prompt MUST start with:
+- `C:\pyproj\seanlgirgis.github.io\generate.py` is the central multi-format build orchestrator.
+- Data/layout inputs are YAML-driven under `...\data\` with a `store.yaml` content model plus target layouts.
+- Renderers live under `...\renderers\` (`docx`, `html`, `pdf`, `md`).
+- Build outputs include `resume/cv` docx/pdf/md/html assets and site components.
 
-> "Before doing anything else, read these files in order:
-> 1. prompts/agent_rules.md
-> 2. prompts/notebook_master_prompt.md
-> 3. prompts/antigravity_notebook_template.md
->
-> Follow all rules in those files. HARD CONSTRAINTS below override if there is a conflict."
+## Collaboration Reminder
 
-### Jupyter Notebook Rules
-
-- Jupyter format only
-- No `__main__` guards
-- Print-based output
-- Relative paths only (never absolute)
-- No markdown syntax inside code cells — all traces/tables as `#` comments
-- Markdown in separate markdown cells
-- Test harness: standalone function accepting callable, test cases as list of tuples
-- Never hardcode solution call inside harness
-
----
-
-## Claude Code Workflow Rules
-
-1. **Delegate execution** to Claude Code; Claude handles **planning, architecture, debugging**
-2. **Bite-sized tasks:** one file or one script per session, max 2-3 files
-3. Always end session with **plan update + gitq**
-4. **Long prompts cause drift** — keep it tight
-
----
-
-## Technical History
-
-**Solved Problems:**
-- Sliding Window: LC 3, 76, 239, 424, 567
-- Intervals: LC 56, 57, 253, 435, 986
-- Heap: LC 703, 215, 973, 295
-- Binary Search: LC 33, 153, 704
-
-**Key Patterns Built:**
-- `MinHeap`/`MaxHeap` wrapper classes (hiding negation mechanics)
-- Deque master notebook: BFS, monotonic deque, 6 practical patterns
-
-**Key Bugs Caught:**
-- Stale `max_freq` in LC 424
-- `pop()` vs `top()` in LC 295
-- Variable shadowing in LC 76
-
-**Architecture Preferences:**
-- Floating-point normalization: `Decimal(str(f))`
-- Local RAG/NLP knowledge base (considered: NeuroVault/Cerebro)
-
----
-
-## Communication Style
-
-**Preferences:**
-- Humor, directness, invented terminology
-- **Short, direct, one concept at a time** (likely dyslexic / possibly on spectrum)
-- Visual/spatial analogies preferred (circle for rotated arrays, left/right not top/bottom)
-- **No walls of text**
-- **No terse definitions without context**
-
----
-
-## StudyBook Environment
-
-**Canonical Venv:** `C:\py_venv\proj_educate`  
-**Machine:** ASUSPC  
-**Secrets System:** Seed-backed DPAPI encryption
-
-**CRITICAL:** Passphrase entered ONCE per machine during seed registration.  
-**NEVER ask for passphrase again** — `env_setter.ps1` auto-loads from seed file.
-
-**QAuth (Alibaba Cloud Qwen):**
-- API Key stored in: `config/secrets/asuspc.secrets.enc.json`
-- Endpoint: `https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
-- Models: qwen-turbo, qwen-plus, qwen-max, qwen3.5
-- Billing: Alibaba Cloud trial credits → paid
-
----
-
-## Files to Know
-
-| Purpose | Path |
-|---------|------|
-| Agent Rules | `prompts/agent_rules.md` |
-| Notebook Master Prompt | `prompts/notebook_master_prompt.md` |
-| Antigravity Template | `prompts/antigravity_notebook_template.md` |
-| LeetCode Tracker | `leetcode_tracker_v2.xlsx` |
-| Master Prompt | `masterprompt.md` |
-| QAuth Demo | `poc/qauth_alibaba_demo.py` |
-| QAuth Docs | `docs/QAUTH_SETUP.md` |
-
----
-
-**Working Agreements (2026-04-02):**
-- Use `Allowed Scope: bounded` by default
-- Use `Reasoning Depth: deep` for migration/architecture decisions
-- Stop only for high-risk ambiguity, not routine implementation
-- Seed-backed secrets: passphrase once per machine, never re-prompt
+- Keep responses concise and execution-oriented.
+- For job-search support, optimize for:
+  - role targeting clarity,
+  - quantifiable impact wording,
+  - fast iteration loops across resume/profile/site.

@@ -1,0 +1,11 @@
+product_id,name,category,price_cents,is_active
+P001,Laptop Pro 15,Electronics,149999,true
+P002,Wireless Mouse,Electronics,2999,true
+P003,USB-C Hub,Electronics,4999,true
+P004,Standing Desk,Furniture,59999,true
+P005,Ergonomic Chair,Furniture,89999,true
+P006,Notebook Pack,Stationery,999,true
+P007,Pen Set,Stationery,499,true
+P008,Monitor 27in,Electronics,39999,true
+P009,Keyboard Mech,Electronics,12999,false
+P010,Webcam HD,Electronics,7999,true

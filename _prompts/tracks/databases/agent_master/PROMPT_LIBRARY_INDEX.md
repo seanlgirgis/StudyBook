@@ -12,3 +12,6 @@
    - Purpose: End-to-end production-grade implementation prompt for Airflow orchestration micro-nuggets (Docker startup, DAG patterns, retries/SLA, operations, run-all validation, glossary, and interview story).
 5. `SPARK_STRUCTURED_STREAMING_MICRONUGGETS_PRODUCTION_EXECUTION_MASTER_PROMPT.md`
    - Purpose: End-to-end production-grade implementation prompt for Spark Structured Streaming micro-nuggets (Kafka bridge, event-time/windows, state/recovery, run-all validation, glossary, and interview story).
+
+6. `DBT_MICRONUGGETS_PRODUCTION_EXECUTION_MASTER_PROMPT.md`
+   - Purpose: End-to-end production-grade implementation prompt for dbt micro-nuggets (backend auto-detect, DuckDB fallback, models/tests/snapshots/macros, runner, glossary, story, interview pack).

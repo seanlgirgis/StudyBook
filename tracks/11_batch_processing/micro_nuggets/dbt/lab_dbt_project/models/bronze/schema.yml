@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: brz_raw_orders
+    description: "Bronze layer: raw orders, minimal transformation, all records preserved"
+    columns:
+      - name: order_id
+        tests: [not_null]

@@ -12,6 +12,6 @@ Use this folder for repeatable day-to-day runbooks.
 - `docs/operations/docker_service_dictionary.md` - concise function dictionary for each Docker service in StudyBook infra
 - `docs/operations/aws_credentials_workflow.md` - AWS profile login + encrypted credential portability workflow
 - `poc/connection_proofs/README.md` - POC connection proof scripts for fast resource reachability checks
-
-
+- `docs/operations/jobsearch_launchpad.md` - StudyBook launch wrappers for JobSearch with machine-configurable root path
+- `docs/operations/jobsearch_direct_mode_playbook.md` - direct-mode jobsearch SOP in StudyBook (applied-before checks, tailored generation, status tracking)
 

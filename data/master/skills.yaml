@@ -1,0 +1,386 @@
+- name: SQL / Oracle
+  years: 18
+  proficiency: Expert
+  last_used: '2025'
+  categories:
+  - Databases
+  notes: Schema design, partitioning, PL/SQL, Pro*C, querying
+- name: Python
+  years: 15
+  proficiency: Expert
+  last_used: '2025'
+  categories:
+  - Data Engineering
+  notes: Pandas, generators, ETL pipelines, scripting, multiprocessing
+- name: C++
+  years: 20
+  proficiency: Expert
+  last_used: '2010'
+  categories:
+  - Programming
+  notes: POSIX Threads, STL, OCCI/OCI, Multithreading, high-performance
+- name: Perl
+  years: 12
+  proficiency: Advanced
+  last_used: '2016'
+  categories:
+  - Scripting
+  notes: Automation, data extraction
+- name: Ksh / Korn Shell Scripting
+  years: 12
+  proficiency: Advanced
+  last_used: '2016'
+  categories:
+  - Scripting
+  notes: System admin/automation, shell, linux
+- name: Java
+  years: 10
+  proficiency: Advanced
+  last_used: '2016'
+  categories:
+  - Programming
+  notes: J2EE (EJB, JMS, Servlets), backend, performance testing/APM
+- name: PL/SQL
+  years: 18
+  proficiency: Expert
+  last_used: '2010'
+  categories:
+  - Databases
+  notes: DB performance, pair with Oracle
+- name: AWS
+  years: 7
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Cloud
+  notes: Glue, Athena, S3, Bedrock, serverless architectures, infrastructure
+- name: PySpark
+  years: 6
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Big Data
+  notes: Large-scale telemetry processing, parallel forecasting, spark, data-engineering
+- name: Prophet / Time-Series Forecasting
+  years: 5
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Machine Learning
+  notes: Capacity bottleneck prediction, with scikit-learn, forecasting, statistics
+- name: GenAI / LLM Agents
+  years: 2
+  proficiency: Intermediate-Advanced
+  last_used: '2025'
+  categories:
+  - AI
+  notes: Text-to-SQL agents, Claude 3 Sonnet integration, llm, agents
+- name: Pandas
+  years: 10
+  proficiency: Expert
+  last_used: '2025'
+  categories:
+  - Data Engineering
+  notes: Data pipelines, ETL processes
+- name: scikit-learn
+  years: 6
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Machine Learning
+  notes: ML forecasting, statistical analysis
+- name: Dynatrace (AppMon + Synthetics)
+  years: 8
+  proficiency: Expert
+  last_used: '2017'
+  categories:
+  - Monitoring
+  notes: APM, observability, Gomez Synthetic Monitoring
+- name: CA APM / Introscope
+  years: 10
+  proficiency: Expert
+  last_used: '2017'
+  categories:
+  - Monitoring
+  notes: APM, CA CEM, CA ADA, Team Center, Command Center
+- name: BMC TrueSight / TSCO
+  years: 7
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Monitoring
+  notes: Capacity optimization, Aperature Vista
+- name: Oracle RAC
+  years: 10
+  proficiency: Advanced
+  last_used: '2010'
+  categories:
+  - Databases
+  notes: High-availability, oracle
+- name: ETL Design & Optimization
+  years: 15
+  proficiency: Expert
+  last_used: '2025'
+  categories:
+  - Data Engineering
+  notes: Data pipelines, reporting
+- name: Data Warehousing
+  years: 10
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Data Engineering
+  notes: Snowflake/Redshift, Parquet/Snappy
+- name: Streamlit
+  years: 3
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Visualization
+  notes: Dashboards, python
+- name: Multiprocessing
+  years: 10
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Programming
+  notes: Performance
+- name: Docker
+  years: 5
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - DevOps
+  notes: Containerization
+- name: Git
+  years: 10
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Version Control
+  notes: ''
+- name: Airflow
+  years: 5
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Orchestration
+  notes: Data-engineering
+- name: Hive/Hadoop
+  years: 7
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Big Data
+  notes: ''
+- name: Linux/Unix
+  years: 20
+  proficiency: Expert
+  last_used: '2025'
+  categories:
+  - OS
+  notes: HPUX, SunOS, Red Hat, infrastructure
+- name: OCCI / OCI
+  years: 10
+  proficiency: Advanced
+  last_used: '2010'
+  categories:
+  - Databases
+  notes: Oracle
+- name: WebLogic / WebSphere
+  years: 10
+  proficiency: Advanced
+  last_used: '2011'
+  categories:
+  - Application Servers
+  notes: ''
+- name: VB6 / VC++
+  years: 5
+  proficiency: Intermediate
+  last_used: '2001'
+  categories:
+  - Programming
+  notes: Legacy
+- name: Capacity Planning / Forecasting
+  years: 15
+  proficiency: Expert
+  last_used: '2025'
+  categories:
+  - Infrastructure
+  notes: ML, infrastructure
+- name: Apache Parquet / Columnar Storage
+  years: 5
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Data Formats
+  notes: Snappy + Parquet compression for S3 lakehouse; columnar query optimization
+    in Athena; solved small-file problem at scale
+- name: Dimensional Modeling
+  years: 10
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Data Engineering
+  notes: Star schema, fact/dimension tables, SCD types; applied in data warehousing
+    and reporting layer design at Citi
+- name: Data Quality, Testing & Pipeline Monitoring
+  years: 10
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Data Engineering
+  notes: Data cleansing, QA with pandas, validation frameworks for telemetry pipelines;
+    monitoring, alerting, incident response for data pipelines at Citi
+- name: Apache Spark
+  years: 6
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Big Data
+  notes: Large-scale distributed data processing; 6 years PySpark on telemetry and
+    ETL pipelines at Citi; performance tuning, partitioning, optimization
+- name: Databricks
+  years: 0
+  proficiency: Beginner
+  last_used: '2026'
+  categories:
+  - Big Data
+  notes: Self-studied; Delta Lake, medallion architecture, Unity Catalog, DLT, Workflows;
+    transitioning from AWS Glue/PySpark background
+- name: Delta Lake
+  years: 0
+  proficiency: Beginner
+  last_used: '2026'
+  categories:
+  - Data Formats
+  notes: Self-studied; ACID transactions, time travel, schema enforcement, Z-ordering,
+    MERGE/upsert; extends Parquet with database-like reliability
+- name: Medallion Architecture
+  years: 0
+  proficiency: Intermediate
+  last_used: '2026'
+  categories:
+  - Data Engineering
+  notes: 'Bronze/Silver/Gold layered design; maps directly to multi-stage ETL pipeline
+    layers built at Citi: raw ingestion, cleaned/validated, executive reporting'
+- name: Unity Catalog
+  years: 0
+  proficiency: Beginner
+  last_used: '2026'
+  categories:
+  - Data Governance
+  notes: Self-studied Databricks governance layer; centralized catalog, column-level
+    security, row filters, data lineage; maps to compliance controls at Citi
+- name: Delta Live Tables
+  years: 0
+  proficiency: Beginner
+  last_used: '2026'
+  categories:
+  - Data Engineering
+  notes: Self-studied Databricks declarative pipeline framework; triggered and continuous
+    modes; managed version of orchestration built manually at Citi
+- name: Databricks Workflows
+  years: 0
+  proficiency: Beginner
+  last_used: '2026'
+  categories:
+  - Orchestration
+  notes: Self-studied Databricks job orchestration; cluster scheduling, dependency
+    chaining; equivalent to Airflow for Databricks-native workloads
+- name: dbt
+  years: 0
+  proficiency: Beginner
+  last_used: '2026'
+  categories:
+  - Data Engineering
+  notes: Self-studied; models, ref() dependency resolution, YAML tests, DAG lineage,
+    incremental materializations; formalizes SQL transformation layer I built manually
+    at Citi; practiced with dbt-duckdb locally
+- name: Data Governance
+  years: 10
+  proficiency: Advanced
+  last_used: '2025'
+  categories:
+  - Data Governance
+  notes: Data access controls, compliance, and audit requirements in regulated banking
+    environment at Citi; data classification, retention policies, access management
+    for sensitive financial data
+- name: Snowflake
+  years: 0
+  proficiency: Beginner
+  last_used: '2026'
+  categories:
+  - Data Warehousing
+  notes: Self-studied; virtual warehouses, separation of compute and storage, time
+    travel, zero-copy cloning, SnowSQL; bridges from Redshift and Athena experience;
+    familiar with star/snowflake schema design in warehouse context
+- name: Data Vault
+  years: 0
+  proficiency: Beginner
+  last_used: '2026'
+  categories:
+  - Data Engineering
+  notes: 'Familiar with Data Vault 2.0 concepts: hubs, links, satellites; complements
+    dimensional modeling background; awareness-level for interview discussions'
+- name: Claude Code
+  years: 1
+  proficiency: Advanced
+  last_used: '2026'
+  categories:
+  - AI
+  notes: "Daily production use \u2014 building AI-assisted job search pipeline, agentic\
+    \ workflows, MCP server integration"
+- name: Grok (xAI)
+  years: 1
+  proficiency: Intermediate
+  last_used: '2026'
+  categories:
+  - AI
+  notes: API integration for LLM-powered resume scoring, tailoring, and cover letter
+    generation in production pipeline
+- name: Agentic AI Workflows
+  years: 1
+  proficiency: Intermediate
+  last_used: '2026'
+  categories:
+  - AI
+  notes: "Designed and built multi-step agentic pipelines: scoring, tailoring, generation,\
+    \ quality gates, and tracking \u2014 orchestrated via Claude Code and xAI APIs"
+- name: MCP (Model Context Protocol)
+  years: 1
+  proficiency: Intermediate
+  last_used: '2026'
+  categories:
+  - AI
+  notes: Configured and used MCP servers with Claude Code for tool-augmented AI workflows
+- name: AI-Assisted Development
+  years: 2
+  proficiency: Advanced
+  last_used: '2026'
+  categories:
+  - AI
+  notes: Production use of Claude Code, Cursor, and Copilot to accelerate Python development,
+    code review, documentation, and pipeline automation
+- name: Google Gemini
+  years: 1
+  proficiency: Intermediate
+  last_used: '2026'
+  categories:
+  - AI
+  notes: Used for AI-assisted research, analysis, and development workflows
+- name: Antigravity (AI Coding Assistant)
+  years: 1
+  proficiency: Intermediate
+  last_used: '2026'
+  categories:
+  - AI
+  notes: Used for AI-assisted code generation, review, and development acceleration
+- name: Azure (Data Platform Foundations)
+  years: 0
+  proficiency: Beginner
+  last_used: '2026'
+  categories:
+  - Cloud
+  - Data Engineering
+  notes: Foundational upskilling in Azure data services and architecture patterns; experience transfer from AWS data engineering delivery.

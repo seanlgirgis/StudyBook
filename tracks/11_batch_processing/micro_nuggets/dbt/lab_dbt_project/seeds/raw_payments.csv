@@ -1,0 +1,26 @@
+payment_id,order_id,amount_cents,payment_method,paid_at,status
+PAY001,O001,149999,credit_card,2023-03-05 10:00:00,completed
+PAY002,O002,2999,paypal,2023-03-03 11:00:00,completed
+PAY003,O003,4999,credit_card,2023-03-11 09:00:00,completed
+PAY004,O004,59999,bank_transfer,2023-03-20 14:00:00,completed
+PAY005,O006,999,credit_card,2023-04-02 10:00:00,completed
+PAY006,O007,149999,credit_card,2023-04-10 11:00:00,completed
+PAY007,O008,499,paypal,2023-04-11 09:00:00,completed
+PAY008,O011,7999,credit_card,2023-05-03 10:00:00,completed
+PAY009,O012,149999,bank_transfer,2023-05-10 14:00:00,completed
+PAY010,O014,4999,credit_card,2023-05-16 09:00:00,completed
+PAY011,O015,59999,credit_card,2023-05-25 10:00:00,completed
+PAY012,O016,89999,bank_transfer,2023-06-06 14:00:00,completed
+PAY013,O018,499,paypal,2023-06-11 09:00:00,completed
+PAY014,O019,39999,credit_card,2023-06-17 11:00:00,completed
+PAY015,O020,12999,credit_card,2023-06-25 10:00:00,completed
+PAY016,O021,7999,paypal,2023-07-03 09:00:00,completed
+PAY017,O023,4999,credit_card,2023-07-11 10:00:00,completed
+PAY018,O025,499,bank_transfer,2022-12-02 09:00:00,completed
+PAY019,O026,149999,credit_card,2022-11-20 14:00:00,completed
+PAY020,O027,2999,paypal,2023-08-02 10:00:00,completed
+PAY021,O028,59999,bank_transfer,2023-08-10 14:00:00,completed
+PAY022,O030,999,credit_card,2023-08-16 09:00:00,completed
+PAY023,O001,0,refund,2023-03-10 10:00:00,refunded
+PAY024,O007,0,refund,2023-04-12 11:00:00,refunded
+PAY025,O012,149999,credit_card,2023-05-11 10:00:00,completed

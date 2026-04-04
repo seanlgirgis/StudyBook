@@ -1,0 +1,128 @@
+version: 2
+
+# ── Sources ───────────────────────────────────────────────────────────────────
+# Sources reference raw/external tables NOT owned by this dbt project.
+# Rule: call source() ONLY in the staging layer.
+sources:
+  - name: dbt_lab_raw
+    # Schema resolves at runtime: dbt_lab + _raw suffix (from seeds +schema: raw)
+    schema: "dbt_lab_raw"
+    description: "Raw seed tables loaded via dbt seed. These are the 'bronze ingestion' layer."
+    tables:
+      - name: raw_customers
+        description: "Raw customer records from source CRM system"
+        # Freshness check: warn if data hasn't loaded in 24h, error at 48h
+        freshness:
+          warn_after: {count: 24, period: hour}
+          error_after: {count: 48, period: hour}
+        loaded_at_field: created_at
+        columns:
+          - name: id
+            description: "Primary key for customer"
+            tests: [not_null, unique]
+          - name: email
+            description: "Customer email address (intentionally has duplicates for test demo)"
+            tests: [not_null]
+          - name: tier
+            description: "Customer loyalty tier"
+            tests:
+              - accepted_values:
+                  values: ['bronze', 'silver', 'gold', 'platinum']
+
+      - name: raw_orders
+        description: "Raw order records"
+        columns:
+          - name: order_id
+            tests: [not_null, unique]
+          - name: customer_id
+            tests: [not_null]
+          - name: status
+            tests:
+              - accepted_values:
+                  values: ['pending', 'completed', 'cancelled']
+
+      - name: raw_events
+        description: "Raw clickstream events"
+        columns:
+          - name: event_id
+            tests: [not_null, unique]
+          - name: event_type
+            tests:
+              - accepted_values:
+                  values: ['page_view', 'click', 'purchase', 'signup']
+
+      - name: raw_products
+        description: "Raw product catalog"
+        columns:
+          - name: product_id
+            tests: [not_null, unique]
+
+      - name: raw_payments
+        description: "Raw payment records (includes 0-amount refunds for test demo)"
+        columns:
+          - name: payment_id
+            tests: [not_null, unique]
+
+# ── Staging Models ────────────────────────────────────────────────────────────
+# These models clean and rename raw data. They are the only models that call source().
+models:
+  - name: stg_customers
+    description: "Staged customers — cleaned column names, lowercased email, typed dates"
+    columns:
+      - name: customer_id
+        description: "Renamed from raw 'id'"
+        tests: [not_null, unique]
+      - name: email
+        description: "Lowercased email (note: intentional duplicate in raw data for demo)"
+        tests: [not_null]
+      - name: tier
+        description: "Customer loyalty tier"
+        tests:
+          - accepted_values:
+              values: ['bronze', 'silver', 'gold', 'platinum']
+      - name: is_active
+        tests: [not_null]
+
+  - name: stg_orders
+    description: "Staged orders — renamed, typed, standardized"
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['pending', 'completed', 'cancelled']
+
+  - name: stg_events
+    description: "Staged clickstream events"
+    columns:
+      - name: event_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests: [not_null]
+
+  - name: stg_products
+    description: "Staged product catalog"
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+      - name: price_cents
+        tests: [not_null]
+
+  - name: stg_payments
+    description: "Staged payments (note: 0-amount refunds for singular test demo)"
+    columns:
+      - name: payment_id
+        tests: [not_null, unique]
+      - name: order_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id

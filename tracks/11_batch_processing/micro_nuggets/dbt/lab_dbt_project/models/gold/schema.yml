@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: gld_order_summary
+    description: "Gold layer: aggregated order metrics by country and tier — BI-ready"
+    columns:
+      - name: country
+        tests: [not_null]
+      - name: total_revenue_dollars
+        tests: [not_null]

@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Customer dimension table — one row per customer, current state"
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: customer_name
+        tests: [not_null]
+      - name: tier
+        tests:
+          - accepted_values:
+              values: ['bronze', 'silver', 'gold', 'platinum']
+
+  - name: fct_orders
+    description: "Order fact table — one row per order, joined with customer info"
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+
+  - name: fct_events_incremental
+    description: "Clickstream events fact — incrementally loaded, append-only"
+    columns:
+      - name: event_id
+        tests: [not_null, unique]

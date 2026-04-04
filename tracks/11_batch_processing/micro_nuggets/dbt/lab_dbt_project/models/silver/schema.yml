@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: slv_orders_cleaned
+    description: "Silver layer: orders filtered to completed, enriched with customer country"
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: amount_dollars
+        tests: [not_null]

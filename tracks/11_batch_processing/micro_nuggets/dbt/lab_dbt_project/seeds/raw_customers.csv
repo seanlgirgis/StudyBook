@@ -1,0 +1,21 @@
+id,name,email,country,created_at,is_active,tier
+1,Alice Johnson,alice@example.com,US,2023-01-15,true,gold
+2,Bob Smith,bob@example.com,UK,2023-02-01,true,silver
+3,Carol White,carol@example.com,CA,2023-02-14,true,bronze
+4,David Lee,david@example.com,US,2023-03-05,true,platinum
+5,Eva Martinez,eva@example.com,MX,2023-03-20,false,bronze
+6,Frank Brown,frank@example.com,US,2023-04-01,true,silver
+7,Grace Kim,grace@example.com,KR,2023-04-15,true,gold
+8,Henry Davis,henry@example.com,UK,2023-05-01,true,silver
+9,Iris Chen,iris@example.com,CN,2023-05-10,true,bronze
+10,Jack Wilson,jack@example.com,AU,2023-05-20,false,bronze
+11,Karen Moore,karen@example.com,US,2023-06-01,true,gold
+12,Leo Taylor,leo@example.com,US,2023-06-15,true,silver
+13,Mia Anderson,mia@example.com,DE,2023-07-01,true,platinum
+14,Noah Thomas,noah@example.com,FR,2023-07-10,true,bronze
+15,Olivia Jackson,olivia@example.com,US,2023-07-20,true,silver
+16,Paul Harris,paul@example.com,UK,2023-08-01,false,bronze
+17,Quinn Martin,quinn@example.com,CA,2023-08-10,true,gold
+18,Rachel Garcia,rachel@example.com,MX,2023-08-20,true,silver
+19,Sam Robinson,alice@example.com,US,2023-09-01,true,silver
+20,Tina Clark,tina@example.com,AU,2023-09-15,true,platinum

@@ -51,3 +51,11 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-034 | TB-20260403-08 | Stabilize Spark Structured Streaming micro-nuggets on Windows (NativeIO + PySpark compatibility) | closed | none | 2026-04-03 |
 | LOOP-035 | TB-20260403-09 | Replace Spark lane run-all with explicit guard script | closed | none | 2026-04-03 |
 | LOOP-036 | TB-20260403-10 | Create micro-nuggets possible-list docs across active track roots | closed | none | 2026-04-03 |
+| LOOP-037 | TB-20260403-11 | Evaluate JobSearch location strategy and write decision memo | closed | none | 2026-04-03 |
+| LOOP-038 | TB-20260403-12 | Make JobSearch path configurable per machine and add StudyBook launch wrappers | closed | none | 2026-04-03 |
+| LOOP-039 | TB-20260403-13 | Parse and internalize JobSearch resume source-of-truth plus website repo context | closed | none | 2026-04-03 |
+| LOOP-040 | TB-20260403-14 | Register daily DE job-search engine protocol and startup phrase | closed | none | 2026-04-03 |
+| LOOP-041 | TB-20260404-01 | Replace JobSearch springboard pattern with assistant-driven direct-mode contract using relative paths | closed | none | 2026-04-04 |
+| LOOP-042 | TB-20260404-02 | Simplify direct-mode artifact naming to fixed 4-file output plus non-versioned intermediates | closed | none | 2026-04-04 |
+| LOOP-043 | TB-20260404-03 | Enforce triage-first job processing gate for JobSearch direct mode | closed | none | 2026-04-04 |
+
