@@ -2,30 +2,36 @@
 
 ## Current Run (2026-04-05)
 
-**Task ID:** TB-20260405-02  
+**Task ID:** TB-20260405-05  
 **Task Type:** ENHANCEMENT  
-**Goal:** Create dedicated Two Sum training folder with formal prompt and reusable test harness.
+**Goal:** Create a durable cross-machine reminder document for seed-backed decryption behavior and context mismatch handling.
 
-### Changes Implemented
+### Factual Summary
 
-Created folder:
-- `coding_challenges/_assessment_training/two_sum/`
+- Added new operations runbook:
+  - `docs/operations/seed_context_and_decryption_reminder.md`
+- Updated operations index:
+  - `docs/operations/README.md` now includes the new reminder doc.
 
-Added files:
-- `coding_challenges/_assessment_training/two_sum/PROBLEM_STATEMENT.md`
-- `coding_challenges/_assessment_training/two_sum/solution.py`
-- `coding_challenges/_assessment_training/two_sum/test_harness.py`
-- `coding_challenges/_assessment_training/two_sum/run_tests.py`
+### What The New Doc Covers
+
+- Seed policy: passphrase entered once; do not re-ask after seed registration.
+- Why decrypt can fail despite valid seed (DPAPI `CurrentUser` context mismatch).
+- First diagnostics: `whoami` + seed file presence check.
+- Healthy flow in owner context (`.\env_setter.ps1 -NonInteractive`).
+- Recovery steps for wrong-user context, new machine, and missing/corrupt seed.
 
 ### Validation
 
-- Executed runner:
-  - `C:\Users\shareuser\AppData\Local\Python\bin\python.exe coding_challenges/_assessment_training/two_sum/run_tests.py`
-- Harness executed successfully and produced expected failures because `two_sum` is intentionally unimplemented.
+- Verified doc files exist and are linked in operations README.
+
+### Risks
+
+- Low. Documentation-only update.
 
 ### Next Step
 
-- User implements `two_sum` in `solution.py` and reruns tests.
+- Future sessions should use this runbook first whenever seed decrypt warning appears.
 
 ---
 

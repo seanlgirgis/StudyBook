@@ -10,6 +10,13 @@ cd D:\StudyBook
 .\env_setter.ps1   # Uses seed + passphrase automatically
 ```
 
+If `env_setter.ps1` shows `Key not valid for use in specified state`, check user context:
+```powershell
+whoami
+```
+Seed decryption only works under the same Windows user that registered the seed (DPAPI CurrentUser).  
+Do not ask for passphrase again; treat mismatch as a user-context issue.
+
 ## First Prompt to Qwen
 
 ```
@@ -81,6 +88,7 @@ If something fails:
 ---
 
 **Full protocol**: See `agents/QWEN_AGENT_HANDOFF.md`
+
 
 
 

@@ -65,6 +65,8 @@ When architecture behavior changes:
 - **After seed is registered, NEVER ask user for passphrase again.**
 - `env_setter.ps1` auto-decrypts seed → loads passphrase → decrypts secrets.
 - Must run under same Windows user context that registered the seed.
+- First diagnostic command when seed decrypt fails: `whoami` (DPAPI CurrentUser mismatch is the expected cause in sandbox/non-owner sessions).
+- Never request passphrase again if seed exists; resolve the Windows user-context mismatch instead.
 
 ### Standard commands
 
@@ -128,7 +130,9 @@ Always use canonical key pattern:
 - `JOBSITE_<SITEKEY>_USER`
 - `JOBSITE_<SITEKEY>_PASSWORD`
 
-Do not create new ad-hoc job-site keys like `SAPSF_*`.`r`n`r`n### Encrypted secret files to keep
+Do not create new ad-hoc job-site keys like `SAPSF_*`.
+
+### Encrypted secret files to keep
 
 - `D:\StudyBook\config\secrets\shared.secrets.enc.json`
 - `D:\StudyBook\config\secrets\asuspc.secrets.enc.json`
@@ -190,5 +194,6 @@ Do not commit/push unless explicitly asked.
 Use encrypted seed-backed secret workflow only.
 At end, overwrite agents/shared/agent_status.md and update task_register/open_loops.
 ```
+
 
 

@@ -81,3 +81,9 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-052 | TB-20260405-01 | Create assessment practice-question document for tomorrow prep | closed | none | 2026-04-05 |
 
 | LOOP-053 | TB-20260405-02 | Create Two Sum training folder and reusable harness with edge cases | closed | none | 2026-04-05 |
+
+| LOOP-054 | TB-20260405-03 | Create heap/min-heap assessment micro-nuggets lane with negation-based max-heap pattern | closed | none | 2026-04-05 |
+
+| LOOP-055 | TB-20260405-04 | Review and harden agent seed-decryption guidance for sandbox/user-context mismatch handling | closed | none | 2026-04-05 |
+
+| LOOP-056 | TB-20260405-05 | Add cross-machine seed-context reminder doc for DPAPI CurrentUser mismatch handling | closed | none | 2026-04-05 |

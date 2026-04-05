@@ -120,3 +120,9 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260405-01 | Create CodeSignal practice question document for assessment prep | done | 2026-04-05 | Added docs/operations/codesignal_practice_set_2026-04-05.md with 20-question checklist and progress log |
 
 | TB-20260405-02 | Create Two Sum training folder with formal prompt and reusable test harness | done | 2026-04-05 | Added problem statement, solution stub, test_harness, and run_tests in coding_challenges/_assessment_training/two_sum |
+
+| TB-20260405-03 | Create heap/min-heap micro-nuggets study lane with max-heap-by-negation patterns | done | 2026-04-05 | Added coding_challenges/_assessment_training/heaps_min_heap with 5 focused Python nuggets + README; validated via explicit interpreter path |
+
+| TB-20260405-04 | Review agent files and enforce seed-context diagnostics (no passphrase re-ask policy) | done | 2026-04-05 | Updated AGENT_CHEATSHEET + QWEN_AGENT_HANDOFF; documented DPAPI CurrentUser mismatch diagnosis via whoami |
+
+| TB-20260405-05 | Add durable seed context/decryption reminder runbook for cross-machine sessions | done | 2026-04-05 | Added docs/operations/seed_context_and_decryption_reminder.md and linked from operations README |
