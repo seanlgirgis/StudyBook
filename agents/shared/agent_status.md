@@ -2,23 +2,30 @@
 
 ## Current Run (2026-04-05)
 
-**Task ID:** TB-20260405-01  
+**Task ID:** TB-20260405-02  
 **Task Type:** ENHANCEMENT  
-**Goal:** Create a durable practice-question document for pre-assessment preparation.
+**Goal:** Create dedicated Two Sum training folder with formal prompt and reusable test harness.
 
 ### Changes Implemented
 
-- Added practice document:
-  - `docs/operations/codesignal_practice_set_2026-04-05.md`
-- Included 20 representative coding questions plus usage notes and progress log.
+Created folder:
+- `coding_challenges/_assessment_training/two_sum/`
+
+Added files:
+- `coding_challenges/_assessment_training/two_sum/PROBLEM_STATEMENT.md`
+- `coding_challenges/_assessment_training/two_sum/solution.py`
+- `coding_challenges/_assessment_training/two_sum/test_harness.py`
+- `coding_challenges/_assessment_training/two_sum/run_tests.py`
 
 ### Validation
 
-- File created successfully and saved in repo path above.
+- Executed runner:
+  - `C:\Users\shareuser\AppData\Local\Python\bin\python.exe coding_challenges/_assessment_training/two_sum/run_tests.py`
+- Harness executed successfully and produced expected failures because `two_sum` is intentionally unimplemented.
 
 ### Next Step
 
-- User completes the set; then run mock test and add new questions based on weak areas.
+- User implements `two_sum` in `solution.py` and reruns tests.
 
 ---
 

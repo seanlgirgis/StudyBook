@@ -79,3 +79,5 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-052 | TB-20260404-19 | Build and validate Google Doc secret-message decoder script and run it on provided URL | closed | none | 2026-04-04 |
 
 | LOOP-052 | TB-20260405-01 | Create assessment practice-question document for tomorrow prep | closed | none | 2026-04-05 |
+
+| LOOP-053 | TB-20260405-02 | Create Two Sum training folder and reusable harness with edge cases | closed | none | 2026-04-05 |

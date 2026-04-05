@@ -118,3 +118,5 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260404-19 | Generate CGI Senior Python Developer full tailored package | done | 2026-04-04 | Created job 00064_47a35392 and generated resume/cover intermediates plus final md/docx outputs |
 
 | TB-20260405-01 | Create CodeSignal practice question document for assessment prep | done | 2026-04-05 | Added docs/operations/codesignal_practice_set_2026-04-05.md with 20-question checklist and progress log |
+
+| TB-20260405-02 | Create Two Sum training folder with formal prompt and reusable test harness | done | 2026-04-05 | Added problem statement, solution stub, test_harness, and run_tests in coding_challenges/_assessment_training/two_sum |
