@@ -105,7 +105,30 @@ cd D:\StudyBook
 .\scripts\env\remove_secret_seed.ps1 -Force
 ```
 
-### Encrypted secret files to keep
+
+### Job-site login credentials (canonical)
+
+For job-board/company-site credentials, use the skill scripts under:
+- `D:\StudyBook\agents\skills\jobsite-login-secrets\scripts\`
+
+Save:
+```powershell
+cd D:\StudyBook
+.\agents\skills\jobsite-login-secrets\scripts\set_jobsite_login.ps1 -SiteKey dynatrace -Email "sean.lgirgis@gmail.com" -Url "https://career41.sapsf.com/" -Machine asuspc
+```
+
+Retrieve password (clipboard) + user/url info:
+```powershell
+cd D:\StudyBook
+.\agents\skills\jobsite-login-secrets\scripts\get_jobsite_login.ps1 -SiteKey dynatrace -Machine asuspc -ShowInfo
+```
+
+Always use canonical key pattern:
+- `JOBSITE_<SITEKEY>_URL`
+- `JOBSITE_<SITEKEY>_USER`
+- `JOBSITE_<SITEKEY>_PASSWORD`
+
+Do not create new ad-hoc job-site keys like `SAPSF_*`.`r`n`r`n### Encrypted secret files to keep
 
 - `D:\StudyBook\config\secrets\shared.secrets.enc.json`
 - `D:\StudyBook\config\secrets\asuspc.secrets.enc.json`
@@ -167,3 +190,5 @@ Do not commit/push unless explicitly asked.
 Use encrypted seed-backed secret workflow only.
 At end, overwrite agents/shared/agent_status.md and update task_register/open_loops.
 ```
+
+

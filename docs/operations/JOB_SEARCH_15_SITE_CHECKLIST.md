@@ -1,72 +1,69 @@
-# Data Engineer Job Search - 15-Site Daily Checklist
+# Data Engineer Job Search - Direct Result Links (No Generic Homepages)
 
 Last updated: 2026-04-04
 
-## Core Search String
-`("data engineer" OR "cloud data engineer" OR "analytics engineer") AND (AWS OR Glue OR Athena OR ETL OR SQL OR Python)`
+Use these links first. They open job-result pages, not just site home pages.
 
-## Daily Checklist
+## 1) LinkedIn - Dallas Data Engineer
+https://www.linkedin.com/jobs/search/?keywords=Data%20Engineer&location=Dallas-Fort%20Worth%20Metroplex
 
-1. LinkedIn Jobs  
-   URL: https://www.linkedin.com/jobs  
-   Try: `data engineer aws`, `cloud data engineer`, `etl engineer`, `analytics engineer`
+## 2) LinkedIn - US Remote Data Engineer
+https://www.linkedin.com/jobs/search/?keywords=Data%20Engineer&location=United%20States&f_WT=2
 
-2. Indeed  
-   URL: https://www.indeed.com  
-   Try: `data engineer aws glue athena`, `senior data engineer`, `remote data engineer`
+## 3) LinkedIn - AWS Data Engineer (US)
+https://www.linkedin.com/jobs/search/?keywords=AWS%20Data%20Engineer&location=United%20States
 
-3. Dice  
-   URL: https://www.dice.com  
-   Try: `AWS Data Engineer`, `Snowflake Data Engineer`, `Databricks Data Engineer`
+## 4) Indeed - Dallas Data Engineer
+https://www.indeed.com/jobs?q=data+engineer&l=Dallas%2C+TX
 
-4. Built In  
-   URL: https://builtin.com/jobs  
-   Try: `data platform engineer`, `analytics engineer`, `cloud data engineer`
+## 5) Indeed - Remote Data Engineer
+https://www.indeed.com/jobs?q=data+engineer&l=Remote
 
-5. Wellfound (Startups)  
-   URL: https://wellfound.com/jobs  
-   Try: `data engineer`, `founding data engineer`, `ml data engineer`
+## 6) Indeed - AWS Data Engineer (US)
+https://www.indeed.com/jobs?q=aws+data+engineer&l=United+States
 
-6. ZipRecruiter  
-   URL: https://www.ziprecruiter.com  
-   Try: `AWS ETL engineer`, `data engineer hybrid`, `python sql data engineer`
+## 7) Dice - Data Engineer (US)
+https://www.dice.com/jobs?q=Data%20Engineer&location=United%20States
 
-7. Glassdoor Jobs  
-   URL: https://www.glassdoor.com/Job  
-   Try: `data engineer`, `cloud data engineer aws`
+## 8) Dice - AWS Data Engineer (US)
+https://www.dice.com/jobs?q=AWS%20Data%20Engineer&location=United%20States
 
-8. SimplyHired  
-   URL: https://www.simplyhired.com  
-   Try: `data engineer`, `aws glue engineer`, `etl developer`
+## 9) Built In - Dallas Data Engineering
+https://builtin.com/jobs/dallas-fort-worth/data-analytics/data-engineering
 
-9. Monster  
-   URL: https://www.monster.com/jobs  
-   Try: `data engineer`, `big data engineer`, `cloud engineer data`
+## 10) Built In - US Data Engineering
+https://builtin.com/jobs/data-analytics/data-engineering
 
-10. CareerBuilder  
-    URL: https://www.careerbuilder.com/jobs  
-    Try: `data engineer aws`, `sql data engineer`
+## 11) Wellfound - Data Engineer (US)
+https://wellfound.com/role/l/data-engineer/united-states
 
-11. Hired  
-    URL: https://hired.com/jobs  
-    Try: `data engineer`, `platform data engineer`
+## 12) ZipRecruiter - Dallas Data Engineer
+https://www.ziprecruiter.com/Jobs/Data-Engineer/-in-Dallas,TX
 
-12. eFinancialCareers  
-    URL: https://www.efinancialcareers.com/jobs  
-    Try: `data engineer`, `aws data engineer`, `risk data engineer`
+## 13) ZipRecruiter - Remote Data Engineer
+https://www.ziprecruiter.com/Jobs/Remote-Data-Engineer
 
-13. USAJOBS  
-    URL: https://www.usajobs.gov  
-    Try: `data engineer`, `data management`, `cloud engineer`
+## 14) eFinancialCareers - Data Engineer
+https://www.efinancialcareers.com/jobs/data-engineer
 
-14. Remote OK  
-    URL: https://remoteok.com  
-    Try: `data engineer`, `python data`, `etl`
+## 15) USAJOBS - Data Engineer / Data Management
+https://www.usajobs.gov/Search/Results?k=data%20engineer
 
-15. We Work Remotely  
-    URL: https://weworkremotely.com  
-    Try: `data engineer`, `analytics engineer`, `data platform`
+---
 
-## Notes
-- Prioritize jobs with explicit AWS + SQL + Python + ETL/pipeline ownership.
-- If role is high fit, run triage first, then process through direct-mode artifact flow.
+## Search Terms To Rotate (copy/paste into any site)
+1. `data engineer aws glue athena`
+2. `cloud data engineer python sql`
+3. `etl engineer aws`
+4. `analytics engineer sql python`
+5. `data engineer snowflake databricks`
+6. `data engineer remote us`
+7. `data engineer dallas hybrid`
+8. `aws redshift glue dms engineer`
+
+## Quick Rule
+- If the link opens generic/noisy results, paste one of the above search terms and set filters:
+  - Location: `Dallas` or `Remote`
+  - Experience: `Mid-Senior`
+  - Work mode: `Hybrid` or `Remote`
+  - Date posted: `Past 24 hours` or `Past week`

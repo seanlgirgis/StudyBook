@@ -31,6 +31,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Canonical runtime target is `D:\StudyBook` (deprecated path deleted).
 - Standing owner directive (2026-04-02): treat encrypted StudyBook secrets as system of record for sensitive values; use seed-backed secret updates by default and avoid storing sensitive values in tracked files/chat.
 - **Seed-backed secrets (2026-04-02): Passphrase entered ONCE per machine during seed registration. NEVER ask user for passphrase again - env_setter.ps1 auto-loads from DPAPI-encrypted seed file.**
+- **Job-site credential canon (2026-04-04): use `JOBSITE_<SITEKEY>_{URL,USER,PASSWORD}` keys via `agents/skills/jobsite-login-secrets` scripts; avoid ad-hoc keys like `SAPSF_*` to prevent retrieval mismatches.**
 
 ## Portable Environment Files
 
@@ -181,5 +182,7 @@ Purpose: compact durable memory map for fast session bootstrap.
   - Atlas Search requires `default` search index on `nugget_lab.search_demo` in Atlas UI.
 ## Last Updated
 
-- 2026-04-03
+- 2026-04-04
+
+
 

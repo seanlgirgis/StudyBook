@@ -82,3 +82,39 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260404-02 | Simplify JobSearch artifacts to fixed names (resume.md, cover.md, resume.docx, cover.docx) and remove versioned render args | done | 2026-04-04 | Updated render scripts, wrapper, playbook; validated outputs for 00051_5ade9538 |
 | TB-20260404-03 | Add 2-stage JobSearch gate (triage before processing) with scripts and playbook commands | done | 2026-04-04 | Added scripts/jobsearch/job_triage.ps1 and process_job_if_apply.ps1; updated playbook |
 
+
+| TB-20260404-04 | Generate tailored resume/cover artifacts for Dynatrace Solutions Engineer intake and render final md/docx files | done | 2026-04-04 | Created intermediates + rendered resume.md/resume.docx/cover.md/cover.docx for 00054_5d3df4ad; installed python-docx dependency |
+
+| TB-20260404-05 | Create repo skill to standardize job-site credential save/retrieve and prevent key mismatches | done | 2026-04-04 | Added agents/skills/jobsite-login-secrets with SKILL.md, helper scripts, troubleshooting reference, and validated structure |
+
+| TB-20260404-06 | Persist canonical job-site credential workflow in agent files and create operations doc | done | 2026-04-04 | Updated AGENT_CHEATSHEET/QWEN_AGENT_HANDOFF/context_index and added docs/operations/jobsite_credentials_workflow.md with README index link |
+
+| TB-20260404-07 | Sync job tracker after confirmed Dynatrace application submission | done | 2026-04-04 | Updated data/jobs/00054_5d3df4ad/metadata.yaml to APPLIED with company-site method and history entry |
+
+| TB-20260404-08 | Generate KSA-targeted Dynatrace resume with Arabic fluency framing | done | 2026-04-04 | Created job 00055_ab1ea5aa via override and generated tailored resume_intermediate + resume.md/resume.docx |
+
+| TB-20260404-09 | Generate KSA-tailored Dynatrace cover letter artifacts for 00055_ab1ea5aa | done | 2026-04-04 | Created cover_intermediate.json and rendered cover.md/cover.docx with clean audit |
+
+| TB-20260404-10 | Generate Sigma observability-role tailored resume and cover artifacts | done | 2026-04-04 | Created job 00056_64c2ec47 and generated resume/cover intermediates plus final md/docx artifacts |
+
+| TB-20260404-11 | Generate Datadog logs-PSA tailored resume and cover artifacts | done | 2026-04-04 | Created job 00057_7ab6dd61 and generated resume/cover intermediates plus final md/docx outputs |
+
+| TB-20260404-12 | Generate Inspiren Senior Data Engineer tailored resume and cover artifacts | done | 2026-04-04 | Created job 00058_b0233987 and generated resume/cover intermediates plus final md/docx outputs |
+
+| TB-20260404-13 | Remove Garner Health job package 00059_98f8ee28 from system on user request | done | 2026-04-04 | Deleted data/jobs/00059_98f8ee28 and verified path no longer exists |
+
+| TB-20260404-14 | Generate K Anand Data Engineer full tailored package from intake | done | 2026-04-04 | Created job 00059_f3d14aeb with resume/cover intermediates and rendered md/docx outputs |
+
+| TB-20260404-15 | Generate Openmind Data Analyst/Data Engineer full tailored package | done | 2026-04-04 | Created job 00060_978574a5 and generated resume/cover intermediates plus final md/docx outputs |
+
+| TB-20260404-16 | Generate Acunor Databricks Data Engineer full package from intake | done | 2026-04-04 | Created job 00061_c96be38b and generated resume/cover intermediates plus final md/docx outputs |
+
+| TB-20260404-17 | Process HUMAC Dynatrace Administrator intake (override) and generate full package | done | 2026-04-04 | Created job 00062_8df84ee0 and generated resume/cover intermediates plus final md/docx outputs |
+
+| TB-20260404-18 | Process Inclusion Cloud Data Engineer intake and generate full package | done | 2026-04-04 | Created job 00063_6b2db598 and generated resume/cover intermediates plus final md/docx outputs |
+
+| TB-20260404-19 | Build and validate Google Doc secret-message decoder script and run against provided URL | done | 2026-04-04 | Added scripts/secret_message/decode_google_doc_secret.py; fixed column-mapping + UTF-8 console handling; executed successfully against target doc |
+
+| TB-20260404-19 | Generate CGI Senior Python Developer full tailored package | done | 2026-04-04 | Created job 00064_47a35392 and generated resume/cover intermediates plus final md/docx outputs |
+
+| TB-20260405-01 | Create CodeSignal practice question document for assessment prep | done | 2026-04-05 | Added docs/operations/codesignal_practice_set_2026-04-05.md with 20-question checklist and progress log |

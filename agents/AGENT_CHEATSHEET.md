@@ -31,6 +31,20 @@ Execute one scoped task. Bounded autonomy. No commit/push. Use seed-backed secre
 
 **Never**: plaintext secrets in tracked files, chat, or terminal output.
 
+## Job-Site Login Secrets (Canonical)
+
+Use the repo skill flow to avoid key mismatches:
+
+Save login:
+`.\agents\skills\jobsite-login-secrets\scripts\set_jobsite_login.ps1 -SiteKey dynatrace -Email "sean.lgirgis@gmail.com" -Url "https://career41.sapsf.com/" -Machine asuspc`
+
+Retrieve password (copies to clipboard):
+`.\agents\skills\jobsite-login-secrets\scripts\get_jobsite_login.ps1 -SiteKey dynatrace -Machine asuspc -ShowInfo`
+
+Rule:
+- Always use canonical keys `JOBSITE_<SITEKEY>_{URL,USER,PASSWORD}`.
+- Do not create new ad-hoc keys like `SAPSF_*` for job-site credentials.
+
 ## Command Safety
 
 | Safe (no approval) | Needs Approval |
@@ -67,3 +81,6 @@ If something fails:
 ---
 
 **Full protocol**: See `agents/QWEN_AGENT_HANDOFF.md`
+
+
+

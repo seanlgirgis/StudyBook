@@ -14,4 +14,5 @@ Use this folder for repeatable day-to-day runbooks.
 - `poc/connection_proofs/README.md` - POC connection proof scripts for fast resource reachability checks
 - `docs/operations/jobsearch_launchpad.md` - StudyBook launch wrappers for JobSearch with machine-configurable root path
 - `docs/operations/jobsearch_direct_mode_playbook.md` - direct-mode jobsearch SOP in StudyBook (applied-before checks, tailored generation, status tracking)
+- `docs/operations/jobsite_credentials_workflow.md` - canonical job-site credential save/retrieve workflow using JOBSITE_* keys and skill scripts
 

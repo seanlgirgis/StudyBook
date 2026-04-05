@@ -59,3 +59,23 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-042 | TB-20260404-02 | Simplify direct-mode artifact naming to fixed 4-file output plus non-versioned intermediates | closed | none | 2026-04-04 |
 | LOOP-043 | TB-20260404-03 | Enforce triage-first job processing gate for JobSearch direct mode | closed | none | 2026-04-04 |
 
+
+| LOOP-044 | TB-20260404-04 | Generate tailored artifacts for Dynatrace Solutions Engineer posting and render final files | closed | none | 2026-04-04 |
+
+| LOOP-045 | TB-20260404-05 | Build durable job-site login skill to prevent credential-key confusion | closed | none | 2026-04-04 |
+
+| LOOP-046 | TB-20260404-06 | Persist canonical job-site credential workflow in agent files and operations docs | closed | none | 2026-04-04 |
+
+| LOOP-047 | TB-20260404-07 | Record confirmed application submission for Dynatrace job in tracker metadata | closed | none | 2026-04-04 |
+
+| LOOP-048 | TB-20260404-08 | Generate KSA-targeted tailored resume for Dynatrace job with Arabic fluency | closed | none | 2026-04-04 |
+
+| LOOP-049 | TB-20260404-10 | Generate Sigma tailored resume and cover artifacts from intake job | closed | none | 2026-04-04 |
+
+| LOOP-050 | TB-20260404-13 | Remove current Garner Health intake package from tracking system | closed | none | 2026-04-04 |
+
+| LOOP-051 | TB-20260404-18 | Process Inclusion Cloud intake and produce full tailored artifacts | closed | none | 2026-04-04 |
+
+| LOOP-052 | TB-20260404-19 | Build and validate Google Doc secret-message decoder script and run it on provided URL | closed | none | 2026-04-04 |
+
+| LOOP-052 | TB-20260405-01 | Create assessment practice-question document for tomorrow prep | closed | none | 2026-04-05 |

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Jobsite Login Secrets"
+  short_description: "Store and retrieve job-site credentials with consistent JOBSITE_* keys"
+  default_prompt: "Save or retrieve a job-site login in StudyBook encrypted secrets using the canonical JOBSITE_<SITE>_{URL,USER,PASSWORD} keys."

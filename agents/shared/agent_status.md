@@ -1,51 +1,26 @@
 # Agent Status
 
-## Current Run (2026-04-04)
+## Current Run (2026-04-05)
 
-**Task ID:** TB-20260404-03  
+**Task ID:** TB-20260405-01  
 **Task Type:** ENHANCEMENT  
-**Goal:** Implement triage-first gate so job artifacts are generated only after an APPLY decision.
+**Goal:** Create a durable practice-question document for pre-assessment preparation.
 
 ### Changes Implemented
 
-1. Added triage script
-- scripts/jobsearch/job_triage.ps1
-- Inputs: posting text path + optional company/role/location overrides
-- Outputs: data/jobs/_triage/latest_triage.json
-- Performs:
-  - exact applied-before check against existing metadata
-  - lightweight similarity against previously applied raw intake files
-  - fit scoring + decision (APPLY|HOLD|SKIP)
-
-2. Added process-if-apply script
-- scripts/jobsearch/process_job_if_apply.ps1
-- Requires triage file + input text path
-- Blocks processing unless triage decision is APPLY (unless -OverrideDecision)
-- Creates new job scaffold and metadata from triage context
-
-3. Updated playbook
-- docs/operations/jobsearch_direct_mode_playbook.md
-- Added explicit Stage 1 (Triage) and Stage 2 (Process If Apply) commands
+- Added practice document:
+  - `docs/operations/codesignal_practice_set_2026-04-05.md`
+- Included 20 representative coding questions plus usage notes and progress log.
 
 ### Validation
 
-- Command parse/help checks passed:
-  - scripts/jobsearch/job_triage.ps1 -?
-  - scripts/jobsearch/process_job_if_apply.ps1 -?
-
-### Assumptions
-
-- User wants a repeatable gate that reduces wasted generation cycles on weak/duplicate jobs.
-
-### Risks
-
-- Similarity logic is lightweight keyword Jaccard (not FAISS); edge-case false positives/negatives may still occur and should be reviewed for borderline decisions.
+- File created successfully and saved in repo path above.
 
 ### Next Step
 
-- Use triage-first dialogue for every new posting, then process only APPLY decisions.
+- User completes the set; then run mock test and add new questions based on weak areas.
 
 ---
 
-**Run completed:** 2026-04-04  
+**Run completed:** 2026-04-05  
 **Status:** DONE
