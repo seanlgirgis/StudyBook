@@ -101,4 +101,5 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-068 | TB-20260406-02 | Harden MinStack training file with exception-safe API semantics and richer harness | closed | none | 2026-04-06 |
 | LOOP-069 | TB-20260406-03 | Harden LIS training harness to expose incorrect greedy implementations | closed | none | 2026-04-06 |
 | LOOP-070 | TB-20260406-04 | Harden round_03 harness quality end-to-end per user request | closed | none | 2026-04-06 |
+| LOOP-071 | TB-20260406-05 | Build beginner-friendly graph micro-lessons and practice scaffolds | closed | none | 2026-04-06 |
 

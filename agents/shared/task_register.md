@@ -140,4 +140,5 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260406-02 | Upgrade MinStack solution: raise exceptions on empty ops and replace with rich operation-sequence harness | done | 2026-04-06 | Updated min_stack_155_empty.py with dual-stack implementation, dynamic harness, and explicit exception tests |
 | TB-20260406-03 | Strengthen LIS (LC300) practice harness with edge/counterexample tests and oracle stress checks | done | 2026-04-06 | Updated longest_increasing_subsequence_300_empty.py with deterministic+stress harness |
 | TB-20260406-04 | Strengthen harnesses across round_03 remaining-15 practice pack with richer edge/tricky cases | done | 2026-04-06 | Expanded tests and scenario checks in string/interval/binary-search/graph/DP/cache/data-structure files while preserving user implementations |
+| TB-20260406-05 | Create bite-by-bite graph lesson folder with runnable drills and quick quiz | done | 2026-04-06 | Added coding_challenges/_assessment_training/graph_bites (README + 6 lesson files) |
 
