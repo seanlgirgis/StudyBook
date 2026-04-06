@@ -126,3 +126,18 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260405-04 | Review agent files and enforce seed-context diagnostics (no passphrase re-ask policy) | done | 2026-04-05 | Updated AGENT_CHEATSHEET + QWEN_AGENT_HANDOFF; documented DPAPI CurrentUser mismatch diagnosis via whoami |
 
 | TB-20260405-05 | Add durable seed context/decryption reminder runbook for cross-machine sessions | done | 2026-04-05 | Added docs/operations/seed_context_and_decryption_reminder.md and linked from operations README |
+| TB-20260405-06 | Create one-file-per-problem review drill pack for Two Sum, Valid Parentheses, and Top K Frequent (bucket + min-heap) | done | 2026-04-05 | Added `coding_challenges/_assessment_training/review_pack/*_review_drill.py` files with blank implementations and harnesses |
+| TB-20260405-07 | Normalize 347 review harness to 3-tuple tests with tie-safe validation and dual-run execution | done | 2026-04-05 | Updated review_pack/top_k_frequent_347_review_drill.py and removed sys.exit/debug artifacts |
+| TB-20260405-08 | Create next single-file LeetCode review drill (Group Anagrams) with harness and blank implementation | done | 2026-04-05 | Added review_pack/group_anagrams_review_drill.py |
+| TB-20260405-09 | Create LeetCode 128 single-file review drill harness with blank implementation | done | 2026-04-05 | Added review_pack/longest_consecutive_128_review_drill.py |
+| TB-20260405-10 | Create LeetCode 238 single-file review drill harness with blank implementation | done | 2026-04-05 | Added review_pack/product_except_self_238_review_drill.py |
+| TB-20260405-11 | Create Round 01 empty practice pack files for LC 1/20/49/128/238/347 | done | 2026-04-05 | Added review_pack/round_01_empty/*.py blank implementations with harnesses |
+| TB-20260405-12 | Create Round 02 empty pack with 4 new LeetCode drills to reach 10 total | done | 2026-04-05 | Added round_02_empty for 217/242/125/15 |
+| TB-20260405-13 | Fix incorrect expected indices in Two Sum II dual-empty harness test case | done | 2026-04-05 | Updated test case from [1,4] to [1,3] in two_sum_ii_167_dual_empty.py |
+| TB-20260405-14 | Add separate canonical reference solution file for LeetCode 15 (3Sum) | done | 2026-04-05 | Added round_02_empty/three_sum_15_canonical_reference.py with standard two-pointer dedup pattern |
+| TB-20260405-15 | Generate all 15 remaining CodeSignal-list LeetCode empty practice files in one folder | done | 2026-04-05 | Added review_pack/round_03_codesignal_remaining_15 with 15 single-file harnesses |
+| TB-20260406-01 | Upgrade round_03 remaining-15 practice files with strong problem statements and concrete examples | done | 2026-04-06 | Enhanced house_robber first, then all files in round_03_codesignal_remaining_15 |
+| TB-20260406-02 | Upgrade MinStack solution: raise exceptions on empty ops and replace with rich operation-sequence harness | done | 2026-04-06 | Updated min_stack_155_empty.py with dual-stack implementation, dynamic harness, and explicit exception tests |
+| TB-20260406-03 | Strengthen LIS (LC300) practice harness with edge/counterexample tests and oracle stress checks | done | 2026-04-06 | Updated longest_increasing_subsequence_300_empty.py with deterministic+stress harness |
+| TB-20260406-04 | Strengthen harnesses across round_03 remaining-15 practice pack with richer edge/tricky cases | done | 2026-04-06 | Expanded tests and scenario checks in string/interval/binary-search/graph/DP/cache/data-structure files while preserving user implementations |
+

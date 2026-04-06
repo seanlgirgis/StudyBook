@@ -82,7 +82,6 @@ def test_harness(func: Callable[[List[int], int], List[int]], test_cases: List[T
 
     print(f"\nSummary: {passed}/{len(test_cases)} tests passed.")
 
-
 # --- MIN-HEAP IMPLEMENTATION ---
 def topKFrequent_minheap(nums: List[int], k: int) -> List[int]:
     """Return k most frequent elements using a size-k min-heap.
@@ -93,19 +92,16 @@ def topKFrequent_minheap(nums: List[int], k: int) -> List[int]:
     3) If heap grows beyond k, pop smallest frequency.
     4) Return nums from heap.
     """
-    print('-' * 50)
-    print(nums, "====", k)
+    if k == 0: return []
     freq = Counter(nums)
-    print(freq)
+    if k > len(freq): return []
     heap = []
     for n, f in freq.items():
         heapq.heappush(heap, [f, n])
-        # if it expands more than k .. pop the smallest
+        #if it expands more than k .. pop the smallest
         if len(heap) > k:
             heapq.heappop(heap)
-
     return [x for _, x in heap]
-
 
 # Execute harness without __main__ block
 test_harness(topKFrequent_minheap, top_k_tests)

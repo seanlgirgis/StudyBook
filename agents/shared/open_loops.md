@@ -87,3 +87,18 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-055 | TB-20260405-04 | Review and harden agent seed-decryption guidance for sandbox/user-context mismatch handling | closed | none | 2026-04-05 |
 
 | LOOP-056 | TB-20260405-05 | Add cross-machine seed-context reminder doc for DPAPI CurrentUser mismatch handling | closed | none | 2026-04-05 |
+| LOOP-057 | TB-20260405-06 | Build single-file review drill pack (Two Sum, Valid Parentheses, 347 bucket+min-heap) for rapid mock testing | closed | none | 2026-04-05 |
+| LOOP-058 | TB-20260405-07 | Fix 347 review harness shape mismatch and tie-handling while preserving practice workflow | closed | none | 2026-04-05 |
+| LOOP-059 | TB-20260405-08 | Add next review drill file for ongoing interview training cadence | closed | none | 2026-04-05 |
+| LOOP-060 | TB-20260405-09 | Add next practice harness for LeetCode 128 training cadence | closed | none | 2026-04-05 |
+| LOOP-061 | TB-20260405-10 | Add next practice harness for LeetCode 238 before full-pack review | closed | none | 2026-04-05 |
+| LOOP-062 | TB-20260405-11 | Build first full empty practice round pack for core interview leetcode set | closed | none | 2026-04-05 |
+| LOOP-063 | TB-20260405-12 | Build next 4-problem empty training batch to expand interview set to 10 | closed | none | 2026-04-05 |
+| LOOP-064 | TB-20260405-13 | Correct mistaken expected output in new Two Sum II training harness | closed | none | 2026-04-05 |
+| LOOP-065 | TB-20260405-14 | Provide clean canonical 3Sum reference in separate training file | closed | none | 2026-04-05 |
+| LOOP-066 | TB-20260405-15 | Create complete remaining-15 practice pack in one shot per user request | closed | none | 2026-04-05 |
+| LOOP-067 | TB-20260406-01 | Improve readability/clarity of round_03 interview drills with richer statement+example headers | closed | none | 2026-04-06 |
+| LOOP-068 | TB-20260406-02 | Harden MinStack training file with exception-safe API semantics and richer harness | closed | none | 2026-04-06 |
+| LOOP-069 | TB-20260406-03 | Harden LIS training harness to expose incorrect greedy implementations | closed | none | 2026-04-06 |
+| LOOP-070 | TB-20260406-04 | Harden round_03 harness quality end-to-end per user request | closed | none | 2026-04-06 |
+
