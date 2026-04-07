@@ -91,15 +91,16 @@ def threeSum(nums: List[int]) -> List[List[int]]:
         if i > 0 and num == nums[i - 1]:
             continue
 
-        l, r, target = i+1, len(nums)-1 , -nums[i]
+        l, r, target = i + 1, len(nums) - 1, -num
         
         while l < r:
-            if nums[l] + nums[r] > target:
+            the_sum = nums[l] + nums[r]
+            if the_sum > target:
                 r -= 1
-            elif nums[l] + nums[r] < target:
+            elif the_sum < target:
                 l += 1
             else:
-                out.append([num , nums[l], nums[r] ])
+                out.append([num, nums[l], nums[r]])
                 l += 1
                 r -= 1
                 while l < r and nums[l] == nums[l-1]:
