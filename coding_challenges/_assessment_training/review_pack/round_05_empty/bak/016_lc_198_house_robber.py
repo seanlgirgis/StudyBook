@@ -59,14 +59,13 @@ def test_harness(func: Callable[[List[int]], int]) -> None:
 def rob(nums: List[int]) -> int:
     if len(nums) <= 2:
         return max(nums) if nums else 0
-
-    # we have more than two houses
+    
     prev_theft = nums[0]
-    max_theft = max(nums[1], prev_theft)
+    max_theft = max(prev_theft, nums[1])
     
-    for i in range(2, len(nums)):
-        prev_theft, max_theft = max_theft, max(prev_theft + nums[i], max_theft)
-    
+    for r in range(2, len(nums)):
+        prev_theft, max_theft = max_theft, max(prev_theft + nums[r], max_theft)
+        
     return max_theft
     
 
