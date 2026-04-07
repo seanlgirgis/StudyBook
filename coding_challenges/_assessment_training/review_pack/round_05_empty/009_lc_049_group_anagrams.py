@@ -17,7 +17,7 @@
 # - strs = ["a"] -> Expected: [["a"]]
 # ============================================================================
 
-from typing import List, Callable
+from typing import List, Callable, Tuple
 
 # --- TEST CASES ---
 # Format: {"kwargs": {...}, "expected": ...}
@@ -83,8 +83,17 @@ def test_harness(func: Callable, test_cases: List[dict]) -> None:
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 def groupAnagrams(strs: List[str]) -> List[List[str]]:
-    pass
-
-
+    #To find anagrams and to group them for strictly lowercase strings. 
+    #I would rely on a tuple of 26 integers as keys
+    def make_me_akey(s: str) -> Tuple[int, ...]:
+        lst = [0] * 26
+        for ch in s:
+            lst[ord(ch) - ord('a')] += 1
+        return tuple(lst)
+    hmap: dict[Tuple[int, ...], List[str]] = {}
+    for s in strs:
+        key = make_me_akey(s)
+        hmap.setdefault(key, []).append(s)
+    return list(hmap.values())
 # Execute harness without __main__ block
 test_harness(groupAnagrams, group_anagrams_tests)
