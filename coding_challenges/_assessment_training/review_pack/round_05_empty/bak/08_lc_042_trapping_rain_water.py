@@ -91,18 +91,16 @@ def trap(height: List[int]) -> int:
     
     while l < r:
         if left_barrier < right_barrier:
-            l += 1
-            if left_barrier > height[l]:          #retain water if min barrier is higher than ground
+            l += 1                                 #next cell
+            if  height[l] < left_barrier:          #retain water if min barrier is higher than ground
                 total += left_barrier - height[l]
             left_barrier = max(left_barrier, height[l])  # when current ground is higher update barrier height
         
         else:
-            r -= 1
-            if right_barrier > height[r]:         #retain water if min barrier is higher than ground
+            r -= 1                                 #prev cell
+            if  height[r] < right_barrier:         #retain water if min barrier is higher than ground
                 total += right_barrier - height[r]
-            
-            right_barrier = max(  right_barrier ,  height[r])  # when current ground is higher update barrier height
-        
+            right_barrier = max(right_barrier ,  height[r])  # when current ground is higher update barrier height
         
     return total
         
