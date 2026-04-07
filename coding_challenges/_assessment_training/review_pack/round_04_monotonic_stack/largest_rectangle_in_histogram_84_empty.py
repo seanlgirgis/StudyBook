@@ -34,8 +34,19 @@ def harness(func: Callable[[List[int]], int]) -> None:
 
 
 def largestRectangleArea(heights: List[int]) -> int:
-    pass
+    max_area = 0
+    stack = []
+    for i, h in enumerate(heights):
+        cached_idx = i
+        while stack and stack[-1][0] > h:
+            (ph, pi) = stack.pop()
+            max_area = max(max_area, ph *(i - pi))
+            cached_idx = pi
+        stack.append((h, cached_idx))
+    while stack:
+        (ph, pi) = stack.pop()
+        max_area = max(max_area, ph * (len(heights) - pi))
+    return max_area
 
 
 harness(largestRectangleArea)
-

@@ -35,8 +35,13 @@ def harness(func: Callable[[List[int]], List[int]]) -> None:
 
 
 def nextSmallerElement(nums: List[int]) -> List[int]:
-    pass
-
+    res = [-1] * len(nums)
+    stack = []                  # store indices of a monotonic increasing stack
+    for i, num in enumerate(nums):
+        while stack and nums[stack[-1]] > num:
+            popped_idx = stack.pop()
+            res[popped_idx] = num
+        stack.append(i)
+    return res
 
 harness(nextSmallerElement)
-

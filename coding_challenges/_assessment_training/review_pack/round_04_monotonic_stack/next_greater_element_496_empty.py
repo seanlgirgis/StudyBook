@@ -35,8 +35,17 @@ def harness(func: Callable[[List[int], List[int]], List[int]]) -> None:
 
 
 def nextGreaterElement(nums1: List[int], nums2: List[int]) -> List[int]:
-    pass
+    res = [-1] * len(nums1)
+    hmap = {n: i for i, n in enumerate(nums1)}
+    stack: List[int] = []      #monotonic decreasing stack 
+    for i, num in enumerate(nums2): 
+        while stack and nums2[stack[-1]] < num:
+            popped_idx = stack.pop()
+            if nums2[popped_idx] in hmap:
+                res[hmap[nums2[popped_idx]]] = num
+        stack.append(i)
+    return res
+
 
 
 harness(nextGreaterElement)
-

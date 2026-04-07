@@ -107,3 +107,4 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-074 | TB-20260406-08 | Build single-source index for all tracked LeetCode cases and mapped files | closed | none | 2026-04-06 |
 | LOOP-075 | TB-20260406-09 | Expand monotonic-stack practice coverage and index mapping docs | closed | none | 2026-04-06 |
 
+| LOOP-076 | TB-20260406-10 | Review LC496 next-greater implementation quality and edge-safety | closed | none | 2026-04-06 |
