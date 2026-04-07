@@ -36,17 +36,19 @@ def harness(func: Callable[[str], int]) -> None:
             print(f"Test {i}: ERROR | {type(e).__name__}: {e}")
     print(f"\nSummary: {passed}/{len(tests)} tests passed.")
 
+# --- USER TO IMPLEMENT SOLUTION BELOW ---
 def lengthOfLongestSubstring(s: str) -> int:
-    if len(s) <= 1: return len(s)
-    ret = 1
-    seen = {s[0]}
-    l = 0
-    for r in range(1, len(s)):
-        while s[r] in seen and l <= r:
+    if len(s) <= 1:
+        return len(s)
+
+    seen = set()
+    l, ret = 0, 0
+    for ch in s:
+        while ch in seen:
             seen.remove(s[l])
-            l+=1
-        seen.add(s[r])
-        ret = max(ret, r-l+1)
+            l += 1
+        seen.add(ch)
+        ret = max(ret, len(seen))
     return ret
     
 harness(lengthOfLongestSubstring)
