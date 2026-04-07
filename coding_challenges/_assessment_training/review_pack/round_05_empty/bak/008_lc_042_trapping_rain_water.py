@@ -90,7 +90,7 @@ def trap(height: List[int]) -> int:
     total = 0                                           # total stored water
     
     while l < r:
-        if left_barrier < right_barrier:
+        if left_barrier < right_barrier:           # work always at the lower side .. You are guranteed the other side is hight
             l += 1                                 #next cell
             if  height[l] < left_barrier:          #retain water if min barrier is higher than ground
                 total += left_barrier - height[l]
