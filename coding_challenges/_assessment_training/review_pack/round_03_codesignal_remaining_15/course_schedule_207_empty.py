@@ -34,7 +34,41 @@ def harness(func: Callable[[int, List[List[int]]], bool]) -> None:
     print(f"\nSummary: {passed}/{len(tests)} tests passed.")
 
 def canFinish(numCourses: int, prerequisites: List[List[int]]) -> bool:
-    pass
+    
+    if not prerequisites: return True
+    
+    graphMap = {i:[] for i in range(numCourses)}
+    
+    for course, preReq in prerequisites:
+        graphMap[course].append(preReq)
+    
+    # 0 = unvisited
+    # 1 = done
+    # 2 =  on current path .. If you hit 2 again you are on a cycle
+    
+    visitSet = [0 for _ in  range(numCourses)]
+    
+    def isCycle(course: int) -> bool:
+        #visiting
+        visitSet[course] = 2
+        
+        for pre in graphMap[course]:
+            if visitSet[pre] == 2:
+                return True
+            if visitSet[pre] == 0 and isCycle(pre):
+                return True
+        visitSet[course] = 1
+        return False
+        
+        
+        
+        
+    for course in range(numCourses):
+        if visitSet[course] == 0 and isCycle(course):
+            return False
+        
+    
+    return True
 
 harness(canFinish)
 

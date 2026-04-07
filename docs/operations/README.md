@@ -16,4 +16,5 @@ Use this folder for repeatable day-to-day runbooks.
 - `docs/operations/jobsearch_direct_mode_playbook.md` - direct-mode jobsearch SOP in StudyBook (applied-before checks, tailored generation, status tracking)
 - `docs/operations/jobsite_credentials_workflow.md` - canonical job-site credential save/retrieve workflow using JOBSITE_* keys and skill scripts
 - `docs/operations/seed_context_and_decryption_reminder.md` - cross-machine/sandbox DPAPI seed reminder (diagnose with `whoami`, do not re-ask passphrase once seed exists)
+- docs/operations/learning_resources.md - curated learning links for LeetCode/graphs and interview prep reminders
 

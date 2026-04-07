@@ -141,4 +141,8 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260406-03 | Strengthen LIS (LC300) practice harness with edge/counterexample tests and oracle stress checks | done | 2026-04-06 | Updated longest_increasing_subsequence_300_empty.py with deterministic+stress harness |
 | TB-20260406-04 | Strengthen harnesses across round_03 remaining-15 practice pack with richer edge/tricky cases | done | 2026-04-06 | Expanded tests and scenario checks in string/interval/binary-search/graph/DP/cache/data-structure files while preserving user implementations |
 | TB-20260406-05 | Create bite-by-bite graph lesson folder with runnable drills and quick quiz | done | 2026-04-06 | Added coding_challenges/_assessment_training/graph_bites (README + 6 lesson files) |
+| TB-20260406-06 | Add durable reminder for OffByOneCode YouTube channel in project memory/docs | done | 2026-04-06 | Added docs/operations/learning_resources.md, updated operations index, and pinned channel in user_profile |
+| TB-20260406-07 | Add top-down and BFS Coin Change alternatives in same file and run harness for all methods | done | 2026-04-06 | Updated coin_change_322_empty.py with coinChange_top_down, coinChange_bfs, and multi-run harness calls |
+| TB-20260406-08 | Create formatted markdown index for 26 LeetCode cases with purpose blurbs and file links | done | 2026-04-06 | Added coding_challenges/_assessment_training/LEETCODE_26_INDEX.md |
+| TB-20260406-09 | Add monotonic-stack case files (NGE, NSE pattern, Histogram, Rain Water) and update LeetCode index doc | done | 2026-04-06 | Added round_04_monotonic_stack and updated LEETCODE_26_INDEX.md entries |
 

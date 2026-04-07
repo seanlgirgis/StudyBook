@@ -102,4 +102,8 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-069 | TB-20260406-03 | Harden LIS training harness to expose incorrect greedy implementations | closed | none | 2026-04-06 |
 | LOOP-070 | TB-20260406-04 | Harden round_03 harness quality end-to-end per user request | closed | none | 2026-04-06 |
 | LOOP-071 | TB-20260406-05 | Build beginner-friendly graph micro-lessons and practice scaffolds | closed | none | 2026-04-06 |
+| LOOP-072 | TB-20260406-06 | Persist preferred YouTube learning channel reminder for future recommendations | closed | none | 2026-04-06 |
+| LOOP-073 | TB-20260406-07 | Expand Coin Change training file with multiple solution styles for comparison | closed | none | 2026-04-06 |
+| LOOP-074 | TB-20260406-08 | Build single-source index for all tracked LeetCode cases and mapped files | closed | none | 2026-04-06 |
+| LOOP-075 | TB-20260406-09 | Expand monotonic-stack practice coverage and index mapping docs | closed | none | 2026-04-06 |
 
