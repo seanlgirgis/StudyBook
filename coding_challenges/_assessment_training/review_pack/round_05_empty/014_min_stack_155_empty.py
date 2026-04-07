@@ -115,33 +115,33 @@ def test_harness(target_class: type, test_cases: List[dict]) -> None:
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 class MinStack:
     def __init__(self):
-        self.stack: List[int] = []      # Data stack
-        self.min_stack: List[int] = []  # Monotonic non-increasing stack for minimum tracking
+        self.stack = []
+        self.mstack = []
 
     def push(self, val: int) -> None:
         self.stack.append(val)
-        if not self.min_stack or val <= self.min_stack[-1]:
-            self.min_stack.append(val)
+        if not self.mstack or val <= self.mstack[-1]:
+            self.mstack.append(val)
         
 
     def pop(self) -> None:
         if not self.stack:
-            raise IndexError("pop error: Stack is Empty")
+            raise IndexError("MinStack::pop empty stack")
         val = self.stack.pop()
-        # If popped val is the current minimum, remove it from min_stack as well.
-        if val == self.min_stack[-1]:
-            self.min_stack.pop()
+        if self.mstack and self.mstack[-1] == val:
+            self.mstack.pop()
+            
             
 
     def top(self) -> int:
         if not self.stack:
-            raise IndexError("top error: Stack is Empty")
+            raise IndexError("MinStack::top empty stack")
         return self.stack[-1]
 
     def getMin(self) -> int:
-        if not self.min_stack:
-            raise IndexError("getMin error: Stack is Empty")
-        return self.min_stack[-1]
+        if not self.mstack:
+            raise IndexError("MinStack::getMin empty min stack")
+        return self.mstack[-1]
 
 
 # Execute harness without __main__ block
