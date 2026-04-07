@@ -66,3 +66,11 @@
 
 - Keep this YouTube channel in recommendations for LeetCode/graph prep when asked:
   - OffByOneCode: `https://www.youtube.com/@offbyonecode/videos`
+
+## Algorithm Learning Preference
+
+- For monotonic stack / next-greater style problems, prefer teaching via this frame:
+  - "For whom am I the answer?" (left-to-right scan),
+  - stack holds indices still waiting for their next greater,
+  - when current value is greater than stack-top value, pop and resolve those indices.
+- This frame is preferred over right-to-left "what is greater to my right?" explanations unless explicitly requested otherwise.
