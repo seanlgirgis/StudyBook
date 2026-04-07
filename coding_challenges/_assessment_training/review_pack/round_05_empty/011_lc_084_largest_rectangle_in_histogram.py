@@ -54,7 +54,7 @@ largest_rectangle_tests: List[dict] = [
     {
         # Edge case: Histogram split by a zero
         "kwargs": {"heights": [2, 1, 2, 0, 3, 2, 2, 3]},
-        "expected": 6
+        "expected": 8
     }
 ]
 
@@ -98,8 +98,25 @@ def test_harness(func: Callable, test_cases: List[dict]) -> None:
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 def largestRectangleArea(heights: List[int]) -> int:
-    pass
+    length = len(heights)
+    max_area = 0
+    stack: List[tuple[int, int]] = []      #Mono increasing stack .. stack of tuples (height, inherited_index)
+    
+    for i , h in enumerate(heights):
+        inherited_idx = i
+        while stack and  stack[-1][0] > h:
+            #pop the items
+            (popped_h, popped_idx) = stack.pop()
+            inherited_idx = popped_idx
+            max_area = max(max_area, (i - popped_idx) * popped_h)
+        stack.append((h, inherited_idx))
 
+    # Process left over stack
+    while stack:
+        (popped_h, popped_idx) = stack.pop()
+        max_area = max(max_area, (length - popped_idx) * popped_h)
+    return max_area
+        
 
 # Execute harness without __main__ block
 test_harness(largestRectangleArea, largest_rectangle_tests)
