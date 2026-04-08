@@ -68,9 +68,6 @@ def nextGreaterElements(nums: List[int]) -> List[int]:
         while stack and num > nums[stack[-1]]:
             index = stack.pop()
             out[index] = num
-            
-        
-        
         stack.append(idx)
      
     return out
