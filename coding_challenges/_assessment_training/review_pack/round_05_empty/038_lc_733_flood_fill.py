@@ -1,0 +1,58 @@
+# ============================================================================
+# File: 038_lc_733_flood_fill.py
+#
+# LeetCode 733: Flood Fill
+# ============================================================================
+
+from collections import deque
+from typing import Callable, List, Tuple
+
+Grid = List[List[int]]
+
+tests: List[Tuple[Grid, int, int, int, Grid]] = [
+    ([[1, 1, 1], [1, 1, 0], [1, 0, 1]], 1, 1, 2, [[2, 2, 2], [2, 2, 0], [2, 0, 1]]),
+    ([[0, 0, 0], [0, 0, 0]], 0, 0, 0, [[0, 0, 0], [0, 0, 0]]),
+    ([[1]], 0, 0, 2, [[2]]),
+    ([[0, 1, 1], [1, 1, 0]], 1, 1, 3, [[0, 3, 3], [3, 3, 0]]),
+]
+
+
+def harness(func: Callable[[Grid, int, int, int], Grid]) -> None:
+    print(f"--- Running Tests for: {func.__name__} ---")
+    passed = 0
+    for i, (image, sr, sc, color, expected) in enumerate(tests, 1):
+        try:
+            got = func([row[:] for row in image], sr, sc, color)
+            if got == expected:
+                print(f"Test {i}: PASSED")
+                passed += 1
+            else:
+                print(f"Test {i}: FAILED | expected={expected}, got={got}")
+        except Exception as e:
+            print(f"Test {i}: ERROR  | {type(e).__name__}: {e}")
+    print(f"\nSummary: {passed}/{len(tests)} tests passed.\n")
+
+
+def floodFill(image: Grid, sr: int, sc: int, color: int) -> Grid:
+    # Sean style:
+    # Start from seed pixel, spread to 4-neighbors that share original color.
+    rows, cols = len(image), len(image[0])
+    start_color = image[sr][sc]
+    if start_color == color:
+        return image
+
+    q = deque([(sr, sc)])
+    image[sr][sc] = color
+
+    while q:
+        r, c = q.popleft()
+        for nr, nc in ((r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)):
+            if 0 <= nr < rows and 0 <= nc < cols and image[nr][nc] == start_color:
+                image[nr][nc] = color
+                q.append((nr, nc))
+
+    return image
+
+
+harness(floodFill)
+
