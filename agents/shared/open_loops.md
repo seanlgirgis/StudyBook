@@ -108,3 +108,4 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-075 | TB-20260406-09 | Expand monotonic-stack practice coverage and index mapping docs | closed | none | 2026-04-06 |
 
 | LOOP-076 | TB-20260406-10 | Review LC496 next-greater implementation quality and edge-safety | closed | none | 2026-04-06 |
+| LOOP-077 | TB-20260408-01 | Build guided practice workspace and tracker for repetition coaching | closed | none | 2026-04-08 |

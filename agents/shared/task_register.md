@@ -147,3 +147,4 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260406-09 | Add monotonic-stack case files (NGE, NSE pattern, Histogram, Rain Water) and update LeetCode index doc | done | 2026-04-06 | Added round_04_monotonic_stack and updated LEETCODE_26_INDEX.md entries |
 
 | TB-20260406-10 | Review next_greater_element_496 solution implementation and confirm code quality | done | 2026-04-06 | Reviewed monotonic-stack logic in next_greater_element_496_empty.py; correctness and complexity are solid, no code changes required |
+| TB-20260408-01 | Build guided repetition practice workspace with blank implementations and confidence tracker | done | 2026-04-08 | Created/updated round_05_empty/practice with basics+weak-point files blanked and PRACTICE_TRACKER.md for coached loops |
