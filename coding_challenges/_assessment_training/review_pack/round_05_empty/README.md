@@ -167,6 +167,19 @@ Purpose: quick-reference map of exercises in this folder, grouped by concept/dat
   - Idea: hash map + doubly linked list recency timeline.
   - Concepts touched: O(1) get/put with eviction policy.
 
+## 11) Foundation Wrappers (Data Structure Drills)
+
+### Easy to Medium
+- `040_doubly_linked_list_foundation_exercise.py`
+  - Idea: practice pointer rewiring with sentinel head/tail and integrity checks.
+  - Concepts touched: node insertion/removal, front/back operations, structural invariants.
+- `041_min_heap_wrapper_foundation_exercise.py`
+  - Idea: wrap `heapq` as a clean min-heap API with behavior tests.
+  - Concepts touched: heap push/pop/peek, empty-state handling, state validation harness.
+- `042_max_heap_wrapper_foundation_exercise.py`
+  - Idea: build max-heap wrapper via negation over `heapq`.
+  - Concepts touched: min-heap adaptation to max-heap, API symmetry, exception coverage.
+
 ## Suggested Last-Day Focus (High Yield)
 
 1. `002`, `005`, `007`, `015`, `016`, `020` (fast confidence set)
