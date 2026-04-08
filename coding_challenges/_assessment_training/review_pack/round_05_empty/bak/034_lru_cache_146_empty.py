@@ -113,79 +113,92 @@ def test_harness(target_class: type, test_cases: List[Tuple[List[str], List[List
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 class Node:
     def __init__(self, key: int = 0, val: int = 0):
-        # Store both key and value so we can delete from hash-map on eviction.
+        # Real cache entry. Keep both key and value:
+        # - value for get()
+        # - key so eviction can delete from hash map in O(1)
         self.key = key
         self.val = val
         self.prev: Optional["Node"] = None
         self.next: Optional["Node"] = None
 
 
-class LRUCache:
-    def __init__(self, capacity: int):
-        self.capacity = capacity
-        # Sean style picture:
-        # 1) Hash map = "address book" (key -> exact node in O(1)).
-        # 2) Doubly linked list = "recency timeline":
-        #    head <-> most recent ... least recent <-> tail
-        # Together they guarantee O(1) get/put/evict.
-        self.cache: dict[int, Node] = {}
-
-        # Doubly linked list keeps usage order:
-        # head <-> ...most recent... <-> ...least recent... <-> tail
-        # Dummy nodes simplify insert/remove edge cases.
+class DoublyLinkedList:
+    def __init__(self):
+        # Dummy sentinels:
+        # head <-> ...real nodes... <-> tail
+        # Most recently used (MRU) lives near head.
+        # Least recently used (LRU) lives near tail.
         self.head = Node()
         self.tail = Node()
         self.head.next = self.tail
         self.tail.prev = self.head
 
-    def _remove(self, node: Node) -> None:
-        # List-only unlink; does NOT delete from map.
-        # This is reused for move-to-front and eviction paths.
-        p, n = node.prev, node.next
-        # p and n are always valid because data nodes are between dummy head/tail.
+    def remove(self, node: Node) -> None:
+        # Unlink one node from timeline:
+        # p <-> node <-> n   ==>   p <-> n
+        p = node.prev
+        n = node.next
+        # For real nodes, both prev and next must exist due to sentinels.
+        assert p is not None and n is not None
         p.next = n
         n.prev = p
 
-    def _add_to_front(self, node: Node) -> None:
-        # Insert right after head => mark as most recently used.
+    def add_to_front(self, node: Node) -> None:
+        # Insert node right after head (mark as MRU).
+        first_real = self.head.next
+        assert first_real is not None
+
         node.next = self.head.next
         node.prev = self.head
-        self.head.next.prev = node
+        first_real.prev = node
         self.head.next = node
 
-    def _move_to_front(self, node: Node) -> None:
-        # "I touched this key, so make it most recent."
-        self._remove(node)
-        self._add_to_front(node)
+    def move_to_front(self, node: Node) -> None:
+        # Access/update means this key is now most recently used.
+        self.remove(node)
+        self.add_to_front(node)
+
+    def pop_lru(self) -> Node:
+        # LRU real node is right before tail.
+        lru = self.tail.prev
+        assert lru is not None and lru is not self.head
+        self.remove(lru)
+        return lru
+
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        # Sean style architecture:
+        # 1) hash map: key -> node (fast lookup)
+        # 2) linked list: recency order (fast reorder/evict)
+        self.cache: dict[int, Node] = {}
+        self.dll = DoublyLinkedList()
 
     def get(self, key: int) -> int:
         if key not in self.cache:
             return -1
-        # Accessing key makes it most recently used.
+
         node = self.cache[key]
-        self._move_to_front(node)
+        self.dll.move_to_front(node)
         return node.val
 
     def put(self, key: int, value: int) -> None:
-        # put handles both UPDATE and INSERT in O(1).
+        # Case 1: update existing key, then refresh recency.
         if key in self.cache:
-            # Update existing value and refresh recency.
             node = self.cache[key]
             node.val = value
-            self._move_to_front(node)
+            self.dll.move_to_front(node)
             return
 
-        # Insert new key as most recently used.
+        # Case 2: insert new key as MRU.
         node = Node(key, value)
         self.cache[key] = node
-        self._add_to_front(node)
+        self.dll.add_to_front(node)
 
+        # If over capacity, evict LRU from both list and map.
         if len(self.cache) > self.capacity:
-            # Sean style eviction rule:
-            # tail.prev is the oldest untouched key => evict it first (LRU).
-            lru = self.tail.prev
-            self._remove(lru)
-            # Eviction must remove from map too.
+            lru = self.dll.pop_lru()
             del self.cache[lru.key]
 
 
