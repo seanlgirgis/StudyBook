@@ -14,6 +14,8 @@ tests: List[Tuple[Grid, int, int, int, Grid]] = [
     ([[0, 0, 0], [0, 0, 0]], 0, 0, 0, [[0, 0, 0], [0, 0, 0]]),
     ([[1]], 0, 0, 2, [[2]]),
     ([[0, 1, 1], [1, 1, 0]], 1, 1, 3, [[0, 3, 3], [3, 3, 0]]),
+    ([[0, 0, 0], [0, 1, 1]], 0, 0, 2, [[2, 2, 2], [2, 1, 1]]),  # Fails if logic hardcodes fill-color source as 1
+    ([[2, 2, 2], [2, 3, 3]], 0, 0, 9, [[9, 9, 9], [9, 3, 3]]),  # Fails if logic only spreads through value 1
 ]
 
 
@@ -36,23 +38,27 @@ def harness(func: Callable[[Grid, int, int, int], Grid]) -> None:
 def floodFill(image: Grid, sr: int, sc: int, color: int) -> Grid:
     # Sean style:
     # Start from seed pixel, spread to 4-neighbors that share original color.
+    # Retrieve start color from the seed cell.
+    # If start color already equals target color, no work is needed.
+    
     rows, cols = len(image), len(image[0])
+    
     start_color = image[sr][sc]
     if start_color == color:
         return image
-
-    q = deque([(sr, sc)])
+    
+    q = deque()  # frontier of cells that should spread fill color to neighbors
+    q.append((sr, sc))
     image[sr][sc] = color
-
+    
     while q:
         r, c = q.popleft()
-        for nr, nc in ((r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)):
+        for nr, nc in ((r - 1, c), (r + 1, c), (r, c - 1), (r, c + 1)):
             if 0 <= nr < rows and 0 <= nc < cols and image[nr][nc] == start_color:
                 image[nr][nc] = color
                 q.append((nr, nc))
-
+                
     return image
 
 
 harness(floodFill)
-
