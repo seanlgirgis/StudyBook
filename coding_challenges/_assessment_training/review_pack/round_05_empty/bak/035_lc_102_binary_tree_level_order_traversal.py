@@ -66,26 +66,34 @@ def levelOrder(root: Optional[TreeNode]) -> List[List[int]]:
     # Sean style:
     # Think "process tree floor by floor."
     # Queue holds nodes for the current frontier.
+    # Think unpacking binary tree level by level.
+    # root is None ; no levels to return
     if not root:
         return []
 
+    # Instantiate queue with root level.
     q = deque([root])
     out: List[List[int]] = []
 
     while q:
         level_size = len(q)
         row: List[int] = []
+     
         for _ in range(level_size):
+            # For each node in this level:
+            # 1) pop from queue  2) add value to row  3) enqueue children left->right if present
             node = q.popleft()
             row.append(node.val)
+            
             if node.left:
                 q.append(node.left)
             if node.right:
                 q.append(node.right)
+                
+        #append level to output        
         out.append(row)
 
     return out
 
 
 harness(levelOrder)
-
