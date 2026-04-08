@@ -26,7 +26,7 @@ tests: List[Tuple[List[int], List[int], List[int]]] = [
     ([4, 2, 6], [1, 2, 3, 4, 5, 6, 7], [5, 3, 7]),      # Boundary: Spread out targets
     ([10, 9, 8], [8, 9, 10, 11, 12], [11, 10, 9]),      # Mixed target ordering vs source ordering
     ([5], [6, 5, 4, 3, 2, 1], [-1]),                    # Edge Case: Element exists but has no right-side greater
-    ([13, 7, 5, 9], [5, 7, 13, 9, 12], [12, 13, 7, 12]) # Random unsorted array layout
+    ([13, 7, 5, 9], [5, 7, 13, 9, 12], [-1, 13, 7, 12]) # Random unsorted array layout
 ]
 
 # --- TEST HARNESS ---
@@ -52,15 +52,20 @@ def harness(func: Callable[[List[int], List[int]], List[int]]) -> None:
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 def nextGreaterElement(nums1: List[int], nums2: List[int]) -> List[int]:
-    # Next greater elemet but based on nums2
+    # Next greater element is determined by traversal in nums2.
     res = [-1] * len(nums1)
-    lookup = {n:i for i, n in enumerate(nums1) }
-    stack: List[int] = []      #monotonic decreasing stack 
+    lookup = {n: i for i, n in enumerate(nums1)}
+    stack: List[int] = []  # Monotonic decreasing stack of indices into nums2.
+
     for i, num in enumerate(nums2):
-        while stack and stack[-1] < num:
-            stack.pop()
-            if num in lookup:
-                res[lookup[num]] 
+        while stack and nums2[stack[-1]] < num:
+            idx = stack.pop()
+            if nums2[idx] in lookup:
+                nums1_idx = lookup[nums2[idx]]
+                res[nums1_idx] = num
+        stack.append(i)
+
+    return res
     
 
     
