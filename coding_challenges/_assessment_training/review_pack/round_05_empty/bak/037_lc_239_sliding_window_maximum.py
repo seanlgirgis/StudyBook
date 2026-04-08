@@ -38,29 +38,34 @@ def maxSlidingWindow(nums: List[int], k: int) -> List[int]:
     # Sean style:
     # Deque stores indices in decreasing value order.
     # Front always points to the max of current window.
+
+    # edge case no input or zero window size
+
     if not nums or k == 0:
         return []
-
-    dq: deque[int] = deque()
-    out: List[int] = []
-
+        
+    dq: deque[int] = deque()               # keep indices in monotonic decreasing order by value
+    out = []
+    
     for i, n in enumerate(nums):
-        # Remove indices out of this window's left boundary.
+        
+        #remove items from the left if they are out of current window boundary
         while dq and dq[0] <= i - k:
             dq.popleft()
-
-        # Remove weaker candidates from back.
+       
+        # remove weaker values from back to keep deque decreasing by value
         while dq and nums[dq[-1]] <= n:
             dq.pop()
-
+         
         dq.append(i)
-
-        # Start recording once first full window is formed.
+        
+        #Start recording once first window is formed
         if i >= k - 1:
             out.append(nums[dq[0]])
-
+ 
     return out
+    
+    
 
 
 harness(maxSlidingWindow)
-
