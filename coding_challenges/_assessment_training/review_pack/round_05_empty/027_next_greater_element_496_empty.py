@@ -68,9 +68,5 @@ def nextGreaterElement(nums1: List[int], nums2: List[int]) -> List[int]:
     return res
     
 
-    
-    
-
-
 # Execute harness without __main__ block
 harness(nextGreaterElement)
