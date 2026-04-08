@@ -35,11 +35,11 @@ Confidence scale:
 
 | Order | File | Status | Start Time | End Time | Result | Confidence (1-5) | Notes |
 |---|---|---|---|---|---|---|---|
-| M1 | `024_next_greater_single_list.py` | queued |  |  |  |  |  |
-| M2 | `025_next_smaller_single_list.py` | queued |  |  |  |  |  |
-| M3 | `027_next_greater_element_496_empty.py` | queued |  |  |  |  |  |
-| M4 | `028_lc_739_daily_temperatures.py` | queued |  |  |  |  |  |
-| M5 | `029_online_stock_span_901.py` | queued |  |  |  |  |  |
+| M1 | `024_next_greater_single_list.py` | completed |  | 2026-04-08 10:08 | 10/10 passed | 4 | Easier mental model; key insight: monotonic decreasing stack, pop smaller, store indices |
+| M2 | `025_next_smaller_single_list.py` | completed |  | 2026-04-08 10:14 | 10/10 passed | 4 | Good run; polished for interview readability (stack type/comment/spacing) |
+| M3 | `027_next_greater_element_496_empty.py` | completed |  | 2026-04-08 10:21 | 10/10 passed | 3 | Debug print removed; wants full monotonic block repetition |
+| M4 | `028_lc_739_daily_temperatures.py` | completed |  | 2026-04-08 10:27 | 10/10 passed | 3-4 | Trigger phrase: `mono decreasing stack .. pop what is smaller than new .. store indexes` |
+| M5 | `029_online_stock_span_901.py` | completed |  | 2026-04-08 10:39 | 5/5 passed | 4.5 | Smooth and confident; correctly used <= for equal-price span accumulation |
 
 
 
@@ -51,4 +51,20 @@ Confidence scale:
 
 
 
+
+
+
+
+
+
+
+
+
+| M6 | `011_lc_084_largest_rectangle_in_histogram.py` | completed |  | 2026-04-08 10:52 | 7/7 passed | 4.2 | No help needed; done many times, strong muscle memory |
+
+## Two-Pointer Focus Block
+
+| Order | File | Status | Start Time | End Time | Result | Confidence (1-5) | Notes |
+|---|---|---|---|---|---|---|---|
+| TP1 | 008_lc_042_trapping_rain_water.py | completed |  | 2026-04-08 10:58 | 5/5 passed | 4 | Solved with two-pointers + left/right max barriers; classify under two-pointer, not monotonic stack |
 

@@ -117,6 +117,9 @@ Purpose: quick-reference map of exercises in this folder, grouped by concept/dat
 - `018_lc_215_kth_largest_element.py`
   - Idea: keep size-k min-heap of largest seen values.
   - Concepts touched: heap pruning, kth-order statistic.
+- `043_lc_703_kth_largest_in_stream.py`
+  - Idea: maintain a size-k min-heap while numbers stream in.
+  - Concepts touched: streaming top-k maintenance, stable kth extraction from heap top.
 - `023_top_k_frequent_elements_347_empty.py`
   - Idea: count frequencies then keep top-k by min-heap.
   - Concepts touched: Counter + heap, top-k pattern.
