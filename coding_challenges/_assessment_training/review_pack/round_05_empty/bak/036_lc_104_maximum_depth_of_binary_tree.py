@@ -66,7 +66,7 @@ def maxDepth(root: Optional[TreeNode]) -> int:
     # Empty node contributes 0.
     if not root:
         return 0
-    return 1 + max(maxDepth(root.left), maxDepth(root.right))
+    return 1 + max(maxDepth(root.left), maxDepth(root.right) )
 
 
 harness(maxDepth)
