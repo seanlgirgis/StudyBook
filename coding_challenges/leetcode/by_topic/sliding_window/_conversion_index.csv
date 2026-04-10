@@ -1,0 +1,4 @@
+lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
+LC325,Maximum Size Subarray Sum Equals K,sliding_window,LC325_maximum-size-subarray-sum-equals-k.md,LC325_maximum-size-subarray-sum-equals-k.py,no,Day-07,todo,sliding_window,
+LC424,Longest Repeating Character Replacement,sliding_window,LC424_longest-repeating-character-replacement.md,LC424_longest-repeating-character-replacement.py,no,Day-02;Day-30;Day-81,todo,sliding_window,
+LC560,Subarray Sum Equals K,sliding_window,LC560_subarray-sum-equals-k.md,LC560_subarray-sum-equals-k.py,no,Day-29;Day-82,todo,sliding_window,

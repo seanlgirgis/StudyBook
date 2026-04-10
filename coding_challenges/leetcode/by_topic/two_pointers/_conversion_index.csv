@@ -1,0 +1,5 @@
+lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
+LC011,Container With Most Water,two_pointers,LC011_container-with-most-water.md,LC011_container-with-most-water.py,no,Day-09;Day-37;Day-52,todo,two_pointers,
+LC015,3Sum,two_pointers,LC015_3sum.md,LC015_3sum.py,no,Day-09;Day-37;Day-80,todo,two_pointers,
+LC042,Trapping Rain Water,two_pointers,LC042_trapping-rain-water.md,LC042_trapping-rain-water.py,no,Day-09;Day-24;Day-63;Day-68;Day-87,todo,two_pointers,
+LC167,Two Sum Ii Input Array Is Sorted,two_pointers,LC167_two-sum-ii-input-array-is-sorted.md,LC167_two-sum-ii-input-array-is-sorted.py,no,Day-09;Day-37;Day-52,todo,two_pointers,

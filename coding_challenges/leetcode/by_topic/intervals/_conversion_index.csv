@@ -1,0 +1,8 @@
+lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
+LC056,Merge Intervals,intervals,LC056_merge-intervals.md,LC056_merge-intervals.py,no,Day-06;Day-34;Day-51,todo,intervals,
+LC057,Insert Interval,intervals,LC057_insert-interval.md,LC057_insert-interval.py,no,Day-06;Day-51,todo,intervals,
+LC253,Meeting Rooms Ii,intervals,LC253_meeting-rooms-ii.md,LC253_meeting-rooms-ii.py,no,Day-06,todo,intervals,
+LC435,Non Overlapping Intervals,intervals,LC435_non-overlapping-intervals.md,LC435_non-overlapping-intervals.py,no,Day-06;Day-07;Day-34;Day-47;Day-77,todo,intervals,
+LC452,Minimum Number Of Arrows To Burst Balloons,intervals,LC452_minimum-number-of-arrows-to-burst-balloons.md,LC452_minimum-number-of-arrows-to-burst-balloons.py,no,Day-47;Day-77,todo,intervals,
+LC516,Longest Palindromic Subsequence,intervals,LC516_longest-palindromic-subsequence.md,LC516_longest-palindromic-subsequence.py,no,Day-23,todo,intervals,
+LC986,Interval List Intersections,intervals,LC986_interval-list-intersections.md,LC986_interval-list-intersections.py,no,Day-06,todo,intervals,

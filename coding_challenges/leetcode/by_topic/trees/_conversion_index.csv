@@ -1,0 +1,8 @@
+lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
+LC003,Longest Substring Without Repeating Characters,trees,LC003_longest-substring-without-repeating-characters.md,LC003_longest-substring-without-repeating-characters.py,no,Day-02;Day-30;Day-81,todo,trees,
+LC076,Minimum Window Substring,trees,LC076_minimum-window-substring.md,LC076_minimum-window-substring.py,no,Day-02;Day-30;Day-50;Day-87,todo,trees,
+LC208,Implement Trie Prefix Tree,trees,LC208_implement-trie-prefix-tree.md,LC208_implement-trie-prefix-tree.py,no,Day-17;Day-41;Day-53;Day-64,todo,trees,
+LC236,Lowest Common Ancestor Of A Binary Tree,trees,LC236_lowest-common-ancestor-of-a-binary-tree.md,LC236_lowest-common-ancestor-of-a-binary-tree.py,no,Day-36,todo,trees,
+LC543,Diameter Of Binary Tree,trees,LC543_diameter-of-binary-tree.md,LC543_diameter-of-binary-tree.py,no,Day-47,todo,trees,
+LC572,Subtree Of Another Tree,trees,LC572_subtree-of-another-tree.md,LC572_subtree-of-another-tree.py,no,Day-47,todo,trees,
+LC987,Vertical Order Traversal Of Binary Tree,trees,LC987_vertical-order-traversal-of-binary-tree.md,LC987_vertical-order-traversal-of-binary-tree.py,no,Day-50,todo,trees,

@@ -1,0 +1,6 @@
+lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
+LC136,Single Number,bit_manipulation,LC136_single-number.md,LC136_single-number.py,no,Day-18;Day-44,todo,bit_manipulation,
+LC191,Number Of 1 Bits,bit_manipulation,LC191_number-of-1-bits.md,LC191_number-of-1-bits.py,no,Day-18;Day-56,todo,bit_manipulation,
+LC268,Missing Number,bit_manipulation,LC268_missing-number.md,LC268_missing-number.py,no,Day-18;Day-56,todo,bit_manipulation,
+LC338,Counting Bits,bit_manipulation,LC338_counting-bits.md,LC338_counting-bits.py,no,Day-18;Day-44,todo,bit_manipulation,
+LC371,Sum Of Two Integers,bit_manipulation,LC371_sum-of-two-integers.md,LC371_sum-of-two-integers.py,no,Day-18,todo,bit_manipulation,

@@ -1,0 +1,9 @@
+lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
+LC001,Two Sum,hashing,LC001_two-sum.md,LC001_two-sum.py,no,Day-01;Day-29;Day-37;Day-54,todo,hashing,
+LC046,Permutations,hashing,LC046_permutations.md,LC046_permutations.py,no,Day-15,todo,hashing,
+LC049,Group Anagrams,hashing,LC049_group-anagrams.md,LC049_group-anagrams.py,no,Day-29;Day-82,todo,hashing,
+LC078,Subsets,hashing,LC078_subsets.md,LC078_subsets.py,no,Day-15;Day-39,todo,hashing,
+LC134,Gas Station,hashing,LC134_gas-station.md,LC134_gas-station.py,no,Day-12;Day-47;Day-49,todo,hashing,
+LC217,Contains Duplicate,hashing,LC217_contains-duplicate.md,LC217_contains-duplicate.py,no,Day-01,todo,hashing,
+LC242,Valid Anagram,hashing,LC242_valid-anagram.md,LC242_valid-anagram.py,no,Day-01;Day-07,todo,hashing,
+LC846,Hand Of Straights,hashing,LC846_hand-of-straights.md,LC846_hand-of-straights.py,no,Day-12,todo,hashing,

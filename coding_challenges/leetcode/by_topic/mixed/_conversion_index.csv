@@ -1,0 +1,6 @@
+lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
+LC023,Merge K Sorted Lists,mixed,LC023_merge-k-sorted-lists.md,LC023_merge-k-sorted-lists.py,no,Day-50;Day-63;Day-68,todo,mixed,
+LC039,Combination Sum,mixed,LC039_combination-sum.md,LC039_combination-sum.py,no,Day-15;Day-39;Day-53;Day-74,todo,mixed,
+LC112,Path Sum,mixed,LC112_path-sum.md,LC112_path-sum.py,no,Day-36,todo,mixed,
+LC312,Burst Balloons,mixed,LC312_burst-balloons.md,LC312_burst-balloons.py,no,Day-68,todo,mixed,
+LC373,Find K Pairs With Smallest Sums,mixed,LC373_find-k-pairs-with-smallest-sums.md,LC373_find-k-pairs-with-smallest-sums.py,no,Day-72,todo,mixed,

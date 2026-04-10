@@ -1,0 +1,7 @@
+lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
+LC033,Search In Rotated Sorted Array,binary_search,LC033_search-in-rotated-sorted-array.md,LC033_search-in-rotated-sorted-array.py,no,Day-04;Day-31;Day-78,todo,binary_search,
+LC074,Search A 2D Matrix,binary_search,LC074_search-a-2d-matrix.md,LC074_search-a-2d-matrix.py,no,Day-04,todo,binary_search,
+LC081,Search In Rotated Sorted Array Ii,binary_search,LC081_search-in-rotated-sorted-array-ii.md,LC081_search-in-rotated-sorted-array-ii.py,no,Day-78,todo,binary_search,
+LC153,Find Minimum In Rotated Sorted Array,binary_search,LC153_find-minimum-in-rotated-sorted-array.md,LC153_find-minimum-in-rotated-sorted-array.py,no,Day-04;Day-31,todo,binary_search,
+LC704,Binary Search,binary_search,LC704_binary-search.md,LC704_binary-search.py,no,Day-04;Day-31,todo,binary_search,
+LC981,Time Based Key Value Store,binary_search,LC981_time-based-key-value-store.md,LC981_time-based-key-value-store.py,no,Day-04,todo,binary_search,

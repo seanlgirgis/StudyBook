@@ -1,0 +1,6 @@
+lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
+LC019,Remove Nth Node From End Of List,linked_list,LC019_remove-nth-node-from-end-of-list.md,LC019_remove-nth-node-from-end-of-list.py,no,Day-13,todo,linked_list,
+LC021,Merge Two Sorted Lists,linked_list,LC021_merge-two-sorted-lists.md,LC021_merge-two-sorted-lists.py,no,Day-13;Day-43,todo,linked_list,
+LC141,Linked List Cycle,linked_list,LC141_linked-list-cycle.md,LC141_linked-list-cycle.py,no,Day-13;Day-43,todo,linked_list,
+LC143,Reorder List,linked_list,LC143_reorder-list.md,LC143_reorder-list.py,no,Day-76,todo,linked_list,
+LC206,Reverse Linked List,linked_list,LC206_reverse-linked-list.md,LC206_reverse-linked-list.py,no,Day-13;Day-43;Day-76,todo,linked_list,

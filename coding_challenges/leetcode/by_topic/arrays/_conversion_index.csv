@@ -1,0 +1,4 @@
+lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
+LC055,Jump Game,arrays,LC055_jump-game.md,LC055_jump-game.py,no,Day-12;Day-34;Day-49,todo,arrays,
+LC152,Maximum Product Subarray,arrays,LC152_maximum-product-subarray.md,LC152_maximum-product-subarray.py,no,Day-66,todo,arrays,
+LC238,Product Of Array Except Self,arrays,LC238_product-of-array-except-self.md,LC238_product-of-array-except-self.py,no,Day-01,todo,arrays,
