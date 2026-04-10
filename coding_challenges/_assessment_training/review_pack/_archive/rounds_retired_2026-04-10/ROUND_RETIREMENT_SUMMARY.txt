@@ -1,0 +1,8 @@
+Retired rounds date: 2026-04-10
+Active lane: D:\StudyBook\coding_challenges\_assessment_training\review_pack\active
+Archive lane: D:\StudyBook\coding_challenges\_assessment_training\review_pack\_archive\rounds_retired_2026-04-10
+
+Top-level folders now:
+- _archive
+- active
+- legacy_drills
