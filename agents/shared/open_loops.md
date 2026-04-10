@@ -109,3 +109,8 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 
 | LOOP-076 | TB-20260406-10 | Review LC496 next-greater implementation quality and edge-safety | closed | none | 2026-04-06 |
 | LOOP-077 | TB-20260408-01 | Build guided practice workspace and tracker for repetition coaching | closed | none | 2026-04-08 |
+| LOOP-078 | TB-20260410-01 | Stabilize website blog structure visibility and regenerate SEO artifacts | closed | none | 2026-04-10 |
+| LOOP-079 | TB-20260410-02 | Persist website search-engine owner-account memory for future submission runs | closed | none | 2026-04-10 |
+| LOOP-080 | TB-20260410-03 | Create daily reminder/todo system and seed tomorrow website submission inspection task | closed | none | 2026-04-10 |
+| LOOP-081 | TB-20260410-04 | Add day-based LinkedIn posting reminders to daily todo system | closed | none | 2026-04-10 |
+| LOOP-082 | TB-20260410-05 | Add multi-channel publishing reminders (X, YouTube, GitHub, Reddit, Medium/Dev.to) to daily todo system | closed | none | 2026-04-10 |

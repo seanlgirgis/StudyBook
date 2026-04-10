@@ -1,6 +1,6 @@
 # User Profile
 
-**Last Updated:** 2026-04-03  
+**Last Updated:** 2026-04-10  
 **Primary Sources:**  
 - `C:\jobsearch\data\source_of_truth.json`  
 - `C:\pyproj\seanlgirgis.github.io` (repo structure and generators)
@@ -54,6 +54,25 @@
 - Data/layout inputs are YAML-driven under `...\data\` with a `store.yaml` content model plus target layouts.
 - Renderers live under `...\renderers\` (`docx`, `html`, `pdf`, `md`).
 - Build outputs include `resume/cv` docx/pdf/md/html assets and site components.
+
+## Website Stewardship Directive
+
+- Standing owner directive (2026-04-10): treat Codex as the default steward for
+  `https://github.com/seanlgirgis/seanlgirgis.github.io`.
+- By default, proactively maintain and improve:
+  - blog/article quality and publishing flow,
+  - site navigation and discoverability (including sitemap/listing integrity),
+  - downloadable artifacts and technical content presentation.
+- Use safe, scoped changes and keep publish actions auditable via clear commit messages.
+
+## Search Engine Ownership (Website)
+
+- Canonical site: `https://seanlgirgis.github.io`
+- Google Search Console owner account for site submission:
+  - `sean.girgis@gmail.com`
+- Bing Webmaster owner account for site submission:
+  - `seanlgirgis@gmail.com`
+- Reminder: keep sitemap submission and verification workflows aligned to these account owners.
 
 ## Collaboration Reminder
 

@@ -17,4 +17,5 @@ Use this folder for repeatable day-to-day runbooks.
 - `docs/operations/jobsite_credentials_workflow.md` - canonical job-site credential save/retrieve workflow using JOBSITE_* keys and skill scripts
 - `docs/operations/seed_context_and_decryption_reminder.md` - cross-machine/sandbox DPAPI seed reminder (diagnose with `whoami`, do not re-ask passphrase once seed exists)
 - docs/operations/learning_resources.md - curated learning links for LeetCode/graphs and interview prep reminders
+- `docs/operations/daily_todo_system.md` - daily reminder/todo workflow (`due today`, `due tomorrow`, `leftover`) powered by `scripts/ops/daily_todo.ps1`
 

@@ -204,3 +204,11 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: DPAPI-encrypted seed file (`config/secrets/.local/studybook.secret.seed.dpapi.json`) auto-provides passphrase to env_setter.ps1 on every run; re-prompting violates the seed-backed security model and creates unnecessary friction
 - Alternatives considered: continue prompting for passphrase each session; store passphrase in plaintext env var
 - Impacted files: agents/QWEN_AGENT_HANDOFF.md, agents/AGENT_CHEATSHEET.md, agents/shared/context_index.md, scripts/env/env_core.ps1
+
+- Date: 2026-04-10
+- Decision ID: DEC-025
+- Task ID: TB-20260410-03
+- Decision: standardize daily reminders as a small repository-backed todo system (`agents/shared/daily_todo.json`) with an operational script (`scripts/ops/daily_todo.ps1`)
+- Rationale: keeps reminders durable across sessions and enables fast “due today / leftover” answers without relying on chat memory
+- Alternatives considered: ad-hoc reminders in chat only; plain markdown checklist without command tooling
+- Impacted files: agents/shared/daily_todo.json, scripts/ops/daily_todo.ps1, docs/operations/daily_todo_system.md, docs/operations/README.md

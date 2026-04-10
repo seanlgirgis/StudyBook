@@ -1,57 +1,54 @@
 # Agent Status
 
-## Current Run (2026-04-08)
+## Current Run (2026-04-10)
 
-**Task ID:** TB-20260408-01  
-**Task Type:** ENHANCEMENT  
-**Goal:** Prepare guided repetition workspace in `practice` with blank implementations and a trackable confidence sheet.
+**Task ID:** TB-20260410-05  
+**Task Type:** SYNC  
+**Goal:** Add cross-platform publishing reminders to the daily todo system.
 
 ### Factual Summary
 
-- Confirmed and used temp workspace:
-  - `D:\StudyBook\coding_challenges\_assessment_training\review_pack\round_05_empty\practice`
-- Copied and prepared basics practice files.
-- Copied weak-point files (`029`-`032`) into `practice`.
-- Blanked user-implementation sections (`pass`) across all copied practice files so drills start from scratch.
-- Added tracker file:
-  - `D:\StudyBook\coding_challenges\_assessment_training\review_pack\round_05_empty\practice\PRACTICE_TRACKER.md`
-- Corrected tracker row `029` to match actual file (`029_online_stock_span_901.py`).
+- Added channel reminders in `agents/shared/daily_todo.json` for:
+  - X weekly cadence (5 short posts target + 1 weekly thread),
+  - YouTube weekly video and community posts,
+  - GitHub weekly proof-of-work commits,
+  - Reddit weekly contribution,
+  - Medium/Dev.to monthly long-form article.
+- Preserved prior LinkedIn and website reminders.
+- Final open todo footprint now includes IDs `TODO-0001` through `TODO-0019`.
 
 ### Files Updated
 
-- `coding_challenges/_assessment_training/review_pack/round_05_empty/practice/002_lc_001_two_sum.py`
-- `coding_challenges/_assessment_training/review_pack/round_05_empty/practice/019_contains_duplicate_217.py`
-- `coding_challenges/_assessment_training/review_pack/round_05_empty/practice/020_product_except_self_238_empty.py`
-- `coding_challenges/_assessment_training/review_pack/round_05_empty/practice/021_valid_anagram_242_empty.py`
-- `coding_challenges/_assessment_training/review_pack/round_05_empty/practice/024_next_greater_single_list.py`
-- `coding_challenges/_assessment_training/review_pack/round_05_empty/practice/029_online_stock_span_901.py`
-- `coding_challenges/_assessment_training/review_pack/round_05_empty/practice/030_decode_ways_091_empty.py`
-- `coding_challenges/_assessment_training/review_pack/round_05_empty/practice/031_coin_change_322_empty.py`
-- `coding_challenges/_assessment_training/review_pack/round_05_empty/practice/032_course_schedule_207_empty.py`
-- `coding_challenges/_assessment_training/review_pack/round_05_empty/practice/PRACTICE_TRACKER.md`
+- `agents/shared/daily_todo.json`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
+- `agents/shared/agent_status.md`
 
 ### Validation
 
-- Verified all target practice files now contain blank implementation stubs (`pass`) for user-owned solving.
-- No runtime tests were executed in this setup run.
+- Ran:
+  - `.\scripts\ops\daily_todo.ps1 -Action list`
+- Result:
+  - Cross-platform reminders are present with date-based due items across 2026-04-11 through 2026-04-30.
 
 ### Assumptions
 
-- User wants a coached repetition loop with basics first, then weak-point batch.
-- `practice` is temporary and can be discarded anytime.
+- User wants reminders operationalized in the current repository todo system rather than external calendar tooling.
+- Date-based reminders for next cycle (week of 2026-04-13) are acceptable.
 
 ### Risks
 
-- Low risk. Changes are isolated to temp practice workflow and continuity logs.
+- Low risk. Local todo data updates only.
+- Note: parallel writes to the todo JSON can race; reminders were finalized with sequential writes.
 
 ### Next Step
 
-- Start drill on `practice/002_lc_001_two_sum.py`; user submits output after each run.
-- Coach loop records confidence and notes per case in `PRACTICE_TRACKER.md`.
+- Use:
+  - `.\scripts\ops\daily_todo.ps1 -Action summary`
+  daily, then close tasks with:
+  - `.\scripts\ops\daily_todo.ps1 -Action done -Id TODO-xxxx`
 
 ---
 
-**Run completed:** 2026-04-08  
+**Run completed:** 2026-04-10  
 **Status:** DONE

@@ -1,0 +1,195 @@
+{
+  "next_id": 20,
+  "tasks": [
+    {
+      "id": "TODO-0001",
+      "title": "Inspect website submissions and verify all new submissions are reflected correctly",
+      "due_date": "2026-04-11",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "Website repo: temp/seanlgirgis.github.io (resume_venv)",
+      "notes": "Focus on newly processed posts and submission quality checks."
+    },
+    {
+      "id": "TODO-0002",
+      "title": "LinkedIn post: Insight/tip post",
+      "due_date": "2026-04-13",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "LinkedIn content cadence (Mon)",
+      "notes": "Primary weekly cadence: Mon insight/tip."
+    },
+    {
+      "id": "TODO-0003",
+      "title": "LinkedIn post: Technical breakdown with blog link",
+      "due_date": "2026-04-15",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "LinkedIn content cadence (Wed)",
+      "notes": "Use website article link when available."
+    },
+    {
+      "id": "TODO-0004",
+      "title": "LinkedIn post: Results/lesson learned",
+      "due_date": "2026-04-17",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "LinkedIn content cadence (Fri)",
+      "notes": "Share a concrete outcome, learning, or metric."
+    },
+    {
+      "id": "TODO-0005",
+      "title": "LinkedIn bonus post: Extra value share",
+      "due_date": "2026-04-19",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "Optional extra cadence (Sun)",
+      "notes": "Optional bonus post when capacity allows (resource, mini-thread, or repost with takeaway)."
+    },
+    {
+      "id": "TODO-0006",
+      "title": "X thread: Technical breakdown thread",
+      "due_date": "2026-04-15",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "X cadence (Wed)",
+      "notes": "One thread per week from blog or project."
+    },
+    {
+      "id": "TODO-0007",
+      "title": "X post: Share a short data/engineering insight",
+      "due_date": "2026-04-13",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "X cadence (Mon)",
+      "notes": "Post 1 of weekly 5-7 short posts."
+    },
+    {
+      "id": "TODO-0008",
+      "title": "X post: Share practical tip + CTA",
+      "due_date": "2026-04-14",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "X cadence (Tue)",
+      "notes": "Post 2 of weekly 5-7 short posts."
+    },
+    {
+      "id": "TODO-0009",
+      "title": "X post: Share lesson learned/result",
+      "due_date": "2026-04-16",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "X cadence (Thu)",
+      "notes": "Post 3 of weekly 5-7 short posts."
+    },
+    {
+      "id": "TODO-0010",
+      "title": "X post: Weekly recap or resource share",
+      "due_date": "2026-04-17",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "X cadence (Fri)",
+      "notes": "Post 4 of weekly 5-7 short posts."
+    },
+    {
+      "id": "TODO-0011",
+      "title": "YouTube Community post: technical takeaway + link",
+      "due_date": "2026-04-16",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "YouTube community cadence (Thu)",
+      "notes": "Community post 2 of 2-3 weekly."
+    },
+    {
+      "id": "TODO-0012",
+      "title": "X post: Weekend bonus post",
+      "due_date": "2026-04-18",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "X cadence (Sat)",
+      "notes": "Optional Post 5 to reach 5+ short posts/week."
+    },
+    {
+      "id": "TODO-0013",
+      "title": "YouTube Community post: insight/poll",
+      "due_date": "2026-04-14",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "YouTube community cadence (Tue)",
+      "notes": "Community post 1 of 2-3 weekly."
+    },
+    {
+      "id": "TODO-0014",
+      "title": "YouTube Community post: week recap or mini-tip",
+      "due_date": "2026-04-18",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "YouTube community cadence (Sat)",
+      "notes": "Community post 3 of 2-3 weekly (optional)."
+    },
+    {
+      "id": "TODO-0015",
+      "title": "YouTube video: 1 weekly publish",
+      "due_date": "2026-04-19",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "YouTube cadence (Sun)",
+      "notes": "Target 1 video/week; if busy ensure at least 2 videos/month."
+    },
+    {
+      "id": "TODO-0016",
+      "title": "GitHub: meaningful public commit",
+      "due_date": "2026-04-14",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "GitHub proof-of-work cadence",
+      "notes": "Commit 1 of weekly 1-2 meaningful commits."
+    },
+    {
+      "id": "TODO-0017",
+      "title": "GitHub: second meaningful commit (optional)",
+      "due_date": "2026-04-17",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "GitHub proof-of-work cadence",
+      "notes": "Optional second commit to hit 2/week."
+    },
+    {
+      "id": "TODO-0018",
+      "title": "Medium/Dev.to: publish one monthly article",
+      "due_date": "2026-04-30",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "Long-form monthly cadence",
+      "notes": "Repurpose best-performing weekly topic into long-form article."
+    },
+    {
+      "id": "TODO-0019",
+      "title": "Reddit: quality contribution in target community",
+      "due_date": "2026-04-16",
+      "status": "open",
+      "created_on": "2026-04-10",
+      "completed_on": null,
+      "context": "Community contribution cadence",
+      "notes": "One valuable weekly contribution; avoid link spam."
+    }
+  ]
+}
