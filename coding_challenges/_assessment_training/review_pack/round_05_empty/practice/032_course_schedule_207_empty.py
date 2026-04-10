@@ -63,10 +63,36 @@ def harness(func: Callable[[int, List[List[int]]], bool]) -> None:
             
     print(f"\nSummary: {passed}/{len(tests)} tests passed.\n")
 
-
+from collections import deque
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 def canFinish(numCourses: int, prerequisites: List[List[int]]) -> bool:
-    pass
+    graph = {i: [] for i in range(numCourses)}
+    pre_count = [0] * numCourses
+
+    for course, prereq in prerequisites:
+        graph[prereq].append(course)
+        pre_count[course] += 1
+
+    # Start with courses that have no prerequisites
+    queue = deque()
+    for i in range(numCourses):
+        if pre_count[i] == 0:
+            queue.append(i)
+
+    taken = 0
+
+    while queue:
+        course = queue.popleft()
+        taken += 1
+
+        for next_course in graph[course]:
+            pre_count[next_course] -= 1        # One less prereq needed
+            if pre_count[next_course] == 0:    # All prereqs done!
+                queue.append(next_course)
+
+    return taken == numCourses
+    
+    
 
 
 # Execute harness without __main__ block

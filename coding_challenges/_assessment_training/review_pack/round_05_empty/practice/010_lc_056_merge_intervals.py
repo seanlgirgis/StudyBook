@@ -95,24 +95,23 @@ def test_harness(func: Callable, test_cases: List[dict]) -> None:
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 def merge(intervals: List[List[int]]) -> List[List[int]]:
-    if len(intervals) < 2:
-        return intervals[:]
-
     intervals.sort()
-    out = [intervals[0]]
+    out: List[List[int]] = [intervals[0]]
     
-    def merge_one(lst2: List[int]) -> None:
-        lst1 = out[-1]
-        if lst2[0] <= lst1[1]:     #lst2 overlaps with lst1 (top interval in output)
-            #merging
-            lst1[1] = max(lst2[1], lst1[1])
+    def addInterval(int2):
+        if out[-1][1] >= int2[0]:       # we are merging
+            out[-1][1] = max(out[-1][1] , int2[1])
         else:
-            out.append(lst2)
-            
-    for i in range(1, len(intervals)):
-        merge_one(intervals[i])
+            out.append(int2)
+        
     
+    for i in range(1, len(intervals)):
+        addInterval(intervals[i])
+        
     return out
+        
+    
+    
         
 
 
