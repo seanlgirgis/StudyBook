@@ -108,9 +108,20 @@ def solution_zip(recording: List[str]) -> int:
     )
 
 
+
+def sean(recording: List[str]) -> int:
+    s = recording 
+    out = 0
+    for i in range(1, len(s)):
+        if s[i].lower() != s[i-1].lower():
+            out += 1
+    return out
+        
+
 solutions: List[Callable] = [
     solution,
     solution_zip,
+    sean
 ]
 
 for sol in solutions:
