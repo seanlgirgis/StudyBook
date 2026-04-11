@@ -189,9 +189,40 @@ def harness(func: Callable) -> None:
     print(f"\n--- Result: {passed} Passed, {failed} Failed ---")
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
-
+from collections import deque
+import heapq
 def solution(t: int, capacity: List[int], recharge: List[int]) -> int:
-    pass
+    # my understanding
+    # return number of batteries used to reach t time
+    # if final battery does not fully deplete. Do not count it
+    # if t not achieved and no batteries avilable... you return -1
+    inuse, out, clock, n= None, 0, 0, len(capacity)
+    ready = deque(range(n))
+    charging = []                # heapified list of (ready_time, index)
+    def swapper():
+        #if charging : print ("In Swapper   ", clock , charging[0][0])
+        while charging and charging[0][0] <= clock:
+            _, idx = heapq.heappop(charging)
+            ready.append(idx)
+            
+    inuse = ready.popleft()
+    clock = capacity[inuse]
+    
+    while t > clock:
+        swapper()
+        if not ready:
+            return -1
+        #swapping. send battery to the charger
+        heapq.heappush(charging, (clock + recharge[inuse], inuse))  # ← was missing
+        inuse = ready.popleft()
+        # add batteries only as you are swapping them
+        out += 1
+        #advance time
+        clock += capacity[inuse]
 
+        # last battery drained completely
+    if clock == t :
+        out += 1
+    return out
 
 harness(solution)
