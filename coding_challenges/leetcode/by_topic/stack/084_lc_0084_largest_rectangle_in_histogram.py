@@ -82,6 +82,23 @@ def largestRectangleArea(heights: List[int]) -> int:
     Returns:
         The maximum area of a rectangle.
     """
-    pass
+    stack = []          # mono stack h, inherited index
+                        # if cur height is smaller.. pop and calculate
+    max_area, n = 0, len(heights) 
+                        
+    for i, h in enumerate(heights):
+        inh_idx = i
+        while stack and h < stack[-1][0]:
+            ph, pidx = stack.pop()
+            max_area = max(max_area, (i - pidx) * ph)
+            inh_idx = pidx
+        stack.append((h, inh_idx))
+        
+    while stack:
+        ph, pidx = stack.pop()
+        max_area = max(max_area, (n - pidx) * ph)
+            
+            
+    return max_area
 
 harness(largestRectangleArea)
