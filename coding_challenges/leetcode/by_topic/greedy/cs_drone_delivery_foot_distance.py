@@ -106,3 +106,9 @@ def harness(func: Callable) -> None:
     print(f"\n--- Result: {passed} Passed, {failed} Failed ---")
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
+
+def solution(target: int, stations: List[int]) -> int:
+    pass
+
+
+harness(solution)
