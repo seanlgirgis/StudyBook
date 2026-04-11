@@ -88,7 +88,7 @@ def largestRectangleArea(heights: List[int]) -> int:
                         
     for i, h in enumerate(heights):
         inh_idx = i
-        while stack and h < stack[-1][0]:
+        while stack and h <= stack[-1][0]:
             ph, pidx = stack.pop()
             max_area = max(max_area, (i - pidx) * ph)
             inh_idx = pidx

@@ -94,6 +94,28 @@ def evalRPN(tokens: List[str]) -> int:
     Evaluates the value of an arithmetic expression in Reverse Polish Notation.
     Truncates division toward zero: int(a / b) in Python handles this correctly.
     """
-    pass
+    ops = set(['+', '-', '*', '/'])
+    stack = []
+    
+    for tk in tokens:
+        if not tk in ops:
+            stack.append(int(tk))
+        else:
+            b = stack.pop()
+            a = stack.pop()
+            if tk == "+":
+                stack.append(a+b)
+            elif tk == "-":
+                stack.append(a-b)
+            elif tk == "*":
+                stack.append(a*b)    
+            #The division between two integers always truncates toward zero.
+            elif tk == "/":
+                stack.append(int(a/b))    
+
+    return stack[-1]
+        
+        
+        
 
 harness(evalRPN)
