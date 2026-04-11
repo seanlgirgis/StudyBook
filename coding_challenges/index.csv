@@ -3,6 +3,7 @@ lc_0055,leetcode/by_topic/arrays/055_lc_0055_jump_game.py,arrays,arrays;greedy;d
 lc_0152,leetcode/by_topic/arrays/152_lc_152_maximum_product_subarray.py,arrays,arrays;dynamic-programming,Maximum Product Subarray,leetcode
 lc_0238,leetcode/by_topic/arrays/238_lc_0238_product_of_array_except_self.py,arrays,arrays;prefix-sum;suffix-sum,Product of Array Except Self,leetcode
 lc_0462,leetcode/by_topic/arrays/462_lc_0462_minimum_moves_to_equal_array_elements_ii.py,arrays,arrays;math;sorting;median,Minimum Moves to Equal Array Elements II,leetcode
+cs_drone_delivery_foot_distance,leetcode/by_topic/greedy/cs_drone_delivery_foot_distance.py,greedy,greedy;simulation;sorting,Drone Delivery Foot Distance,codesignal
 lc_custom_harmonious_buildings,leetcode/by_topic/greedy/custom_codesignal_harmonious_building_patterns.py,greedy,greedy;math;array;sequence,Harmonious Building Patterns,codesignal
 lc_custom_harmonious_buildings_flexible,leetcode/by_topic/greedy/custom_harmonious_building_patterns_flexible.py,greedy,greedy;math;median;geometry,Harmonious Building Patterns (Flexible),codesignal
 cs_key_changes_counter,leetcode/by_topic/simulation/cs_key_changes_counter.py,simulation,simulation;arrays;strings,Key Changes Counter,codesignal
