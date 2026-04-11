@@ -15,17 +15,19 @@ from __future__ import annotations
 import argparse
 import csv
 import re
-import zipfile
+from copy import copy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
-from xml.sax.saxutils import escape
+
+from openpyxl import Workbook, load_workbook
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCAN_ROOT = ROOT / "leetcode" / "by_topic"
 DEFAULT_INDEX_PATH = ROOT / "index.xlsx"
 DEFAULT_EXTS = {".py"}
+HEADERS = ["id", "path", "primary", "tags", "title", "source"]
 
 ID_RE = re.compile(r"^(?:LC|lc)[\-_ ]?(\d{1,5})")
 KV_RE = re.compile(r"^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:\s*(.+?)\s*$")
@@ -154,100 +156,46 @@ def write_csv(index_path: Path, rows: list[Row]) -> None:
     index_path.parent.mkdir(parents=True, exist_ok=True)
     with index_path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["id", "path", "primary", "tags", "title", "source"])
+        writer.writerow(HEADERS)
         for row in rows:
             writer.writerow([row.row_id, row.path, row.primary, row.tags, row.title, row.source])
 
 
-def col_letter(index: int) -> str:
-    # 1 -> A, 2 -> B, ... 27 -> AA
-    result = ""
-    while index > 0:
-        index, rem = divmod(index - 1, 26)
-        result = chr(65 + rem) + result
-    return result
-
-
-def build_sheet_xml(rows: list[Row]) -> str:
-    table: list[list[str]] = [
-        ["id", "path", "primary", "tags", "title", "source"],
-        *[[r.row_id, r.path, r.primary, r.tags, r.title, r.source] for r in rows],
-    ]
-    row_xml: list[str] = []
-    for r_i, row in enumerate(table, start=1):
-        cell_xml: list[str] = []
-        for c_i, value in enumerate(row, start=1):
-            ref = f"{col_letter(c_i)}{r_i}"
-            text = escape(value or "")
-            cell_xml.append(f'<c r="{ref}" t="inlineStr"><is><t>{text}</t></is></c>')
-        row_xml.append(f'<row r="{r_i}">{"".join(cell_xml)}</row>')
-    return (
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-        f'<sheetData>{"".join(row_xml)}</sheetData>'
-        "</worksheet>"
-    )
-
-
 def write_xlsx(index_path: Path, rows: list[Row]) -> None:
     index_path.parent.mkdir(parents=True, exist_ok=True)
-    sheet_xml = build_sheet_xml(rows)
-    with zipfile.ZipFile(index_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-        zf.writestr(
-            "[Content_Types].xml",
-            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-            '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
-            '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
-            '<Default Extension="xml" ContentType="application/xml"/>'
-            '<Override PartName="/xl/workbook.xml" '
-            'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
-            '<Override PartName="/xl/worksheets/sheet1.xml" '
-            'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
-            '<Override PartName="/xl/styles.xml" '
-            'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
-            "</Types>",
-        )
-        zf.writestr(
-            "_rels/.rels",
-            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-            '<Relationship Id="rId1" '
-            'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" '
-            'Target="xl/workbook.xml"/>'
-            "</Relationships>",
-        )
-        zf.writestr(
-            "xl/workbook.xml",
-            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-            '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
-            'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
-            '<sheets><sheet name="index" sheetId="1" r:id="rId1"/></sheets>'
-            "</workbook>",
-        )
-        zf.writestr(
-            "xl/_rels/workbook.xml.rels",
-            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-            '<Relationship Id="rId1" '
-            'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" '
-            'Target="worksheets/sheet1.xml"/>'
-            '<Relationship Id="rId2" '
-            'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" '
-            'Target="styles.xml"/>'
-            "</Relationships>",
-        )
-        zf.writestr(
-            "xl/styles.xml",
-            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-            '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-            '<fonts count="1"><font><sz val="11"/><name val="Calibri"/></font></fonts>'
-            '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>'
-            '<borders count="1"><border/></borders>'
-            '<cellStyleXfs count="1"><xf/></cellStyleXfs>'
-            '<cellXfs count="1"><xf/></cellXfs>'
-            "</styleSheet>",
-        )
-        zf.writestr("xl/worksheets/sheet1.xml", sheet_xml)
+    if index_path.exists():
+        wb = load_workbook(index_path)
+        ws = wb["index"] if "index" in wb.sheetnames else wb.active
+    else:
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "index"
+
+    existing_max_row = ws.max_row
+
+    template_styles: dict[int, object] = {}
+    if existing_max_row >= 2:
+        for col_idx in range(1, len(HEADERS) + 1):
+            template_styles[col_idx] = copy(ws.cell(row=2, column=col_idx)._style)
+
+    for col_idx, header in enumerate(HEADERS, start=1):
+        ws.cell(row=1, column=col_idx, value=header)
+
+    for row_idx, row in enumerate(rows, start=2):
+        values = [row.row_id, row.path, row.primary, row.tags, row.title, row.source]
+        is_new_row = row_idx > existing_max_row
+        for col_idx, value in enumerate(values, start=1):
+            cell = ws.cell(row=row_idx, column=col_idx, value=value)
+            if is_new_row and col_idx in template_styles:
+                cell._style = copy(template_styles[col_idx])
+
+    last_needed_row = len(rows) + 1
+    if existing_max_row > last_needed_row:
+        for row_idx in range(last_needed_row + 1, existing_max_row + 1):
+            for col_idx in range(1, len(HEADERS) + 1):
+                ws.cell(row=row_idx, column=col_idx, value=None)
+
+    wb.save(index_path)
 
 
 def write_index(index_path: Path, rows: list[Row]) -> None:

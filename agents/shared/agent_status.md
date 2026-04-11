@@ -2,18 +2,20 @@
 
 ## Current Run (2026-04-11)
 
-**Task ID:** TB-20260411-01  
+**Task ID:** TB-20260411-02  
 **Task Type:** FIX  
-**Goal:** Make `coding_challenges/scripts/refresh_index.py` produce an XLSX output file.
+**Goal:** Preserve Excel formatting in `coding_challenges/index.xlsx` when running refresh.
 
 ### Factual Summary
 
-- Updated `coding_challenges/scripts/refresh_index.py` to default output path to `coding_challenges/index.xlsx`.
-- Added deterministic native XLSX writer implementation using standard library (`zipfile`) with worksheet headers:
-  - `id`, `path`, `primary`, `tags`, `title`, `source`.
-- Kept backward compatibility for CSV output when `--index` is explicitly passed with `.csv` extension.
-- Added extension gate: only `.xlsx` and `.csv` are accepted.
-- Confirmed prior category move issue remains fixed (folder path drives `primary`, not stale metadata override).
+- Updated `coding_challenges/scripts/refresh_index.py` XLSX behavior from full-file rewrite to in-place workbook updates.
+- Implemented XLSX write path with `openpyxl`:
+  - load existing workbook if present,
+  - update header/data cell values only,
+  - retain existing sheet formatting,
+  - clear stale trailing rows without recreating sheet/workbook.
+- Added style carry-forward for newly added rows by copying row-2 styles per data column.
+- CSV output path remains supported when `--index` ends with `.csv`.
 
 ### Files Updated
 
@@ -26,24 +28,23 @@
 
 - Ran:
   - `C:\Users\shareuser\AppData\Local\Python\bin\python.exe coding_challenges/scripts/refresh_index.py`
-  - `Get-Item coding_challenges/index.xlsx | Select-Object FullName,Length,LastWriteTime`
-  - `python -c "import zipfile; ..."` to verify workbook structure
+  - workbook verification command via `openpyxl` (sheet row/column counts + header readback)
 - Result:
-  - Script wrote `D:\StudyBook\coding_challenges\index.xlsx` successfully.
-  - XLSX package contains valid core workbook parts (`[Content_Types].xml`, `_rels/.rels`, `xl/workbook.xml`, `xl/worksheets/sheet1.xml`, etc.).
+  - Refresh completed successfully and wrote `D:\StudyBook\coding_challenges\index.xlsx`.
+  - Workbook remained valid and data rows were refreshed in-place.
 
 ### Assumptions
 
-- User wants XLSX as the default output format for the index refresh flow.
-- Keeping optional CSV output is acceptable for compatibility.
+- User manually formats `index.xlsx` and wants those edits preserved across script runs.
+- Active index sheet is named `index` (or first sheet fallback).
 
 ### Risks
 
-- Low risk. Output format changed by default from CSV to XLSX; any downstream automation that hardcodes `index.csv` may need to pass `--index coding_challenges/index.csv`.
+- Low risk. If custom formatting exists only in rows beyond row 2, new rows inherit style from row 2 by design.
 
 ### Next Step
 
-- If needed, update any downstream docs/scripts to read `coding_challenges/index.xlsx` by default.
+- Continue using the same refresh command; manual Excel formatting should now persist across reruns.
 
 ---
 
