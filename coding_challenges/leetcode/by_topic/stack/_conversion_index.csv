@@ -1,7 +1,7 @@
 lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
 ,,,,,,,,,
 ,,,,,,,,,
-LC150,Evaluate Reverse Polish Notation,stack,LC150_evaluate-reverse-polish-notation.md,LC150_evaluate-reverse-polish-notation.py,no,Day-32,todo,stack,
+,,,,,,,,,
 LC155,Min Stack,stack,LC155_min-stack.md,LC155_min-stack.py,no,Day-03,todo,stack,
 LC239,Sliding Window Maximum,stack,LC239_sliding-window-maximum.md,LC239_sliding-window-maximum.py,no,Day-02;Day-68,todo,stack,
 LC496,Next Greater Element I,stack,LC496_next-greater-element-i.md,LC496_next-greater-element-i.py,no,Day-71,todo,stack,
