@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Refresh coding_challenges/index.csv from files under leetcode/by_topic.
+Refresh coding_challenges/index.xlsx from files under leetcode/by_topic.
 
 Default behavior:
 - scans configured solution file extensions
 - reads optional metadata header keys when present:
   id, title, tags, source
 - falls back to filename/folder-based inference when metadata is absent
-- writes deterministic CSV sorted by path
+- writes deterministic output sorted by path
 """
 
 from __future__ import annotations
@@ -15,14 +15,16 @@ from __future__ import annotations
 import argparse
 import csv
 import re
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
+from xml.sax.saxutils import escape
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCAN_ROOT = ROOT / "leetcode" / "by_topic"
-DEFAULT_INDEX_PATH = ROOT / "index.csv"
+DEFAULT_INDEX_PATH = ROOT / "index.xlsx"
 DEFAULT_EXTS = {".py"}
 
 ID_RE = re.compile(r"^(?:LC|lc)[\-_ ]?(\d{1,5})")
@@ -157,10 +159,112 @@ def write_csv(index_path: Path, rows: list[Row]) -> None:
             writer.writerow([row.row_id, row.path, row.primary, row.tags, row.title, row.source])
 
 
+def col_letter(index: int) -> str:
+    # 1 -> A, 2 -> B, ... 27 -> AA
+    result = ""
+    while index > 0:
+        index, rem = divmod(index - 1, 26)
+        result = chr(65 + rem) + result
+    return result
+
+
+def build_sheet_xml(rows: list[Row]) -> str:
+    table: list[list[str]] = [
+        ["id", "path", "primary", "tags", "title", "source"],
+        *[[r.row_id, r.path, r.primary, r.tags, r.title, r.source] for r in rows],
+    ]
+    row_xml: list[str] = []
+    for r_i, row in enumerate(table, start=1):
+        cell_xml: list[str] = []
+        for c_i, value in enumerate(row, start=1):
+            ref = f"{col_letter(c_i)}{r_i}"
+            text = escape(value or "")
+            cell_xml.append(f'<c r="{ref}" t="inlineStr"><is><t>{text}</t></is></c>')
+        row_xml.append(f'<row r="{r_i}">{"".join(cell_xml)}</row>')
+    return (
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+        f'<sheetData>{"".join(row_xml)}</sheetData>'
+        "</worksheet>"
+    )
+
+
+def write_xlsx(index_path: Path, rows: list[Row]) -> None:
+    index_path.parent.mkdir(parents=True, exist_ok=True)
+    sheet_xml = build_sheet_xml(rows)
+    with zipfile.ZipFile(index_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr(
+            "[Content_Types].xml",
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+            '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+            '<Default Extension="xml" ContentType="application/xml"/>'
+            '<Override PartName="/xl/workbook.xml" '
+            'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
+            '<Override PartName="/xl/worksheets/sheet1.xml" '
+            'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+            '<Override PartName="/xl/styles.xml" '
+            'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
+            "</Types>",
+        )
+        zf.writestr(
+            "_rels/.rels",
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+            '<Relationship Id="rId1" '
+            'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" '
+            'Target="xl/workbook.xml"/>'
+            "</Relationships>",
+        )
+        zf.writestr(
+            "xl/workbook.xml",
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
+            'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+            '<sheets><sheet name="index" sheetId="1" r:id="rId1"/></sheets>'
+            "</workbook>",
+        )
+        zf.writestr(
+            "xl/_rels/workbook.xml.rels",
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+            '<Relationship Id="rId1" '
+            'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" '
+            'Target="worksheets/sheet1.xml"/>'
+            '<Relationship Id="rId2" '
+            'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" '
+            'Target="styles.xml"/>'
+            "</Relationships>",
+        )
+        zf.writestr(
+            "xl/styles.xml",
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+            '<fonts count="1"><font><sz val="11"/><name val="Calibri"/></font></fonts>'
+            '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>'
+            '<borders count="1"><border/></borders>'
+            '<cellStyleXfs count="1"><xf/></cellStyleXfs>'
+            '<cellXfs count="1"><xf/></cellXfs>'
+            "</styleSheet>",
+        )
+        zf.writestr("xl/worksheets/sheet1.xml", sheet_xml)
+
+
+def write_index(index_path: Path, rows: list[Row]) -> None:
+    suffix = index_path.suffix.lower()
+    if suffix == ".csv":
+        write_csv(index_path, rows)
+        return
+    if suffix == ".xlsx":
+        write_xlsx(index_path, rows)
+        return
+    raise SystemExit(f"Unsupported output extension '{index_path.suffix}'. Use .xlsx or .csv.")
+
+
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Refresh coding_challenges/index.csv")
+    parser = argparse.ArgumentParser(description="Refresh coding_challenges/index.xlsx")
     parser.add_argument("--scan-root", type=Path, default=DEFAULT_SCAN_ROOT, help="Root directory to scan")
-    parser.add_argument("--index", type=Path, default=DEFAULT_INDEX_PATH, help="CSV index output path")
+    parser.add_argument("--index", type=Path, default=DEFAULT_INDEX_PATH, help="Index output path (.xlsx or .csv)")
     parser.add_argument("--ext", action="append", default=None, help="File extension to include (repeatable)")
     parser.add_argument("--check", action="store_true", help="Check mode: do not write, only report count")
     return parser.parse_args()
@@ -183,7 +287,7 @@ def main() -> int:
         print(f"Would index {len(rows)} files into {index_path}")
         return 0
 
-    write_csv(index_path, rows)
+    write_index(index_path, rows)
     print(f"Wrote {len(rows)} rows to {index_path}")
     return 0
 

@@ -1,25 +1,23 @@
 # Agent Status
 
-## Current Run (2026-04-10)
+## Current Run (2026-04-11)
 
-**Task ID:** TB-20260410-05  
-**Task Type:** SYNC  
-**Goal:** Add cross-platform publishing reminders to the daily todo system.
+**Task ID:** TB-20260411-01  
+**Task Type:** FIX  
+**Goal:** Make `coding_challenges/scripts/refresh_index.py` produce an XLSX output file.
 
 ### Factual Summary
 
-- Added channel reminders in `agents/shared/daily_todo.json` for:
-  - X weekly cadence (5 short posts target + 1 weekly thread),
-  - YouTube weekly video and community posts,
-  - GitHub weekly proof-of-work commits,
-  - Reddit weekly contribution,
-  - Medium/Dev.to monthly long-form article.
-- Preserved prior LinkedIn and website reminders.
-- Final open todo footprint now includes IDs `TODO-0001` through `TODO-0019`.
+- Updated `coding_challenges/scripts/refresh_index.py` to default output path to `coding_challenges/index.xlsx`.
+- Added deterministic native XLSX writer implementation using standard library (`zipfile`) with worksheet headers:
+  - `id`, `path`, `primary`, `tags`, `title`, `source`.
+- Kept backward compatibility for CSV output when `--index` is explicitly passed with `.csv` extension.
+- Added extension gate: only `.xlsx` and `.csv` are accepted.
+- Confirmed prior category move issue remains fixed (folder path drives `primary`, not stale metadata override).
 
 ### Files Updated
 
-- `agents/shared/daily_todo.json`
+- `coding_challenges/scripts/refresh_index.py`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
 - `agents/shared/agent_status.md`
@@ -27,28 +25,27 @@
 ### Validation
 
 - Ran:
-  - `.\scripts\ops\daily_todo.ps1 -Action list`
+  - `C:\Users\shareuser\AppData\Local\Python\bin\python.exe coding_challenges/scripts/refresh_index.py`
+  - `Get-Item coding_challenges/index.xlsx | Select-Object FullName,Length,LastWriteTime`
+  - `python -c "import zipfile; ..."` to verify workbook structure
 - Result:
-  - Cross-platform reminders are present with date-based due items across 2026-04-11 through 2026-04-30.
+  - Script wrote `D:\StudyBook\coding_challenges\index.xlsx` successfully.
+  - XLSX package contains valid core workbook parts (`[Content_Types].xml`, `_rels/.rels`, `xl/workbook.xml`, `xl/worksheets/sheet1.xml`, etc.).
 
 ### Assumptions
 
-- User wants reminders operationalized in the current repository todo system rather than external calendar tooling.
-- Date-based reminders for next cycle (week of 2026-04-13) are acceptable.
+- User wants XLSX as the default output format for the index refresh flow.
+- Keeping optional CSV output is acceptable for compatibility.
 
 ### Risks
 
-- Low risk. Local todo data updates only.
-- Note: parallel writes to the todo JSON can race; reminders were finalized with sequential writes.
+- Low risk. Output format changed by default from CSV to XLSX; any downstream automation that hardcodes `index.csv` may need to pass `--index coding_challenges/index.csv`.
 
 ### Next Step
 
-- Use:
-  - `.\scripts\ops\daily_todo.ps1 -Action summary`
-  daily, then close tasks with:
-  - `.\scripts\ops\daily_todo.ps1 -Action done -Id TODO-xxxx`
+- If needed, update any downstream docs/scripts to read `coding_challenges/index.xlsx` by default.
 
 ---
 
-**Run completed:** 2026-04-10  
+**Run completed:** 2026-04-11  
 **Status:** DONE

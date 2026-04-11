@@ -114,3 +114,4 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-080 | TB-20260410-03 | Create daily reminder/todo system and seed tomorrow website submission inspection task | closed | none | 2026-04-10 |
 | LOOP-081 | TB-20260410-04 | Add day-based LinkedIn posting reminders to daily todo system | closed | none | 2026-04-10 |
 | LOOP-082 | TB-20260410-05 | Add multi-channel publishing reminders (X, YouTube, GitHub, Reddit, Medium/Dev.to) to daily todo system | closed | none | 2026-04-10 |
+| LOOP-083 | TB-20260411-01 | Switch coding_challenges index output from CSV default to XLSX with deterministic generation | closed | none | 2026-04-11 |
