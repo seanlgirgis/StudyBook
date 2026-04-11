@@ -82,7 +82,56 @@ tests = [
         ["MinStack", "push", "push", "getMin", "push", "getMin", "push", "getMin", "pop", "getMin", "pop", "getMin"],
         [[], [0], [1], [], [0], [], [-1], [], [], [], [], []],
         [None, None, None, 0, None, 0, None, -1, None, 0, None, 0]
-    ) # Complex pattern with zero
+    ), # Complex pattern with zero
+
+    # -------------------------------------------------------------------------
+    # BUG EXPOSURE TESTS — target the data[0] vs data[-1] flaw in push()
+    # All scenarios: push a value AFTER the minimum was established by a
+    # middle element. data[0][1] is the first element's min (stale);
+    # data[-1][1] is the running min at the top (correct).
+    # -------------------------------------------------------------------------
+
+    (
+        ["MinStack", "push", "push", "push", "pop", "push", "getMin"],
+        [[], [5], [3], [7], [], [4], []],
+        [None, None, None, None, None, None, 3]
+    ), # push high-low-high, pop high, push mid — min must still be 3
+
+    (
+        ["MinStack", "push", "push", "push", "pop", "push", "getMin"],
+        [[], [5], [3], [1], [], [4], []],
+        [None, None, None, None, None, None, 3]
+    ), # push high-low-lowest, pop lowest, push mid — min must revert to 3
+
+    (
+        ["MinStack", "push", "push", "push", "pop", "push", "getMin"],
+        [[], [10], [5], [8], [], [6], []],
+        [None, None, None, None, None, None, 5]
+    ), # push 10-5-8, pop 8, push 6 — min must still be 5 not 6
+
+    (
+        ["MinStack", "push", "push", "push", "push", "pop", "getMin"],
+        [[], [2], [0], [3], [0], [], []],
+        [None, None, None, None, None, None, 0]
+    ), # push 2-0-3-0, pop top 0 — min of [2,0,3] must still be 0
+
+    (
+        ["MinStack", "push", "push", "push", "push", "pop", "push", "getMin"],
+        [[], [3], [5], [1], [7], [], [4], []],
+        [None, None, None, None, None, None, None, 1]
+    ), # push 3-5-1-7, pop 7, push 4 — min of [3,5,1,4] must be 1
+
+    (
+        ["MinStack", "push", "push", "push", "pop", "push", "getMin"],
+        [[], [4], [2], [6], [], [5], []],
+        [None, None, None, None, None, None, 2]
+    ), # push 4-2-6, pop 6, push 5 — stack [4,2,5], min must be 2 not 4
+
+    (
+        ["MinStack", "push", "push", "push", "push", "pop", "pop", "push", "getMin"],
+        [[], [6], [3], [8], [1], [], [], [5], []],
+        [None, None, None, None, None, None, None, None, 3]
+    ), # push 6-3-8-1, pop 1, pop 8 — stack [6,3], push 5 → [6,3,5], min=3
 ]
 
 def harness():
@@ -124,7 +173,7 @@ class MinStack:
 
     def push(self, val: int) -> None:
         if self.data:
-            self.data.append((val,min(val, self.data[0][1])))
+            self.data.append((val,min(val, self.data[-1][1])))
         else:
             self.data.append((val, val))
         
