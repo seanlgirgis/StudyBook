@@ -1,5 +1,5 @@
 lc_id,title,topic,source_md,target_py,py_exists,seen_in_days,status,tags,notes
-LC020,Valid Parentheses,stack,LC020_valid-parentheses.md,LC020_valid-parentheses.py,no,Day-03;Day-32,todo,stack,
+,,,,,,,,,
 LC084,Largest Rectangle In Histogram,stack,LC084_largest-rectangle-in-histogram.md,LC084_largest-rectangle-in-histogram.py,no,Day-03;Day-24;Day-45;Day-54,todo,stack,
 LC150,Evaluate Reverse Polish Notation,stack,LC150_evaluate-reverse-polish-notation.md,LC150_evaluate-reverse-polish-notation.py,no,Day-32,todo,stack,
 LC155,Min Stack,stack,LC155_min-stack.md,LC155_min-stack.py,no,Day-03,todo,stack,
