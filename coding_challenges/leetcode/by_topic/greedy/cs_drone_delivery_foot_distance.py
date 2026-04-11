@@ -108,7 +108,24 @@ def harness(func: Callable) -> None:
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 
 def solution(target: int, stations: List[int]) -> int:
-    pass
+
+    stations.sort()
+    walked = 0
+    pos = 0
+    
+    for  stationPos in stations:
+        if pos >= target:
+            break
+            
+        if stationPos >= pos:
+            walked += (stationPos - pos)
+            pos = stationPos + 10
+
+    if pos < target:
+        walked += (target - pos)
+    
+    return walked
+
 
 
 harness(solution)
