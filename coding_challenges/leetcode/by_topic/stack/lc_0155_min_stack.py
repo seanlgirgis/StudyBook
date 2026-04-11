@@ -134,16 +134,17 @@ tests = [
     ), # push 6-3-8-1, pop 1, pop 8 — stack [6,3], push 5 → [6,3,5], min=3
 ]
 
-def harness():
+def harness(cls):
     passed = 0
+    failed = 0
+    print(f"--- Running Tests for: {cls.__name__} ---")
     for i, (ops, args, expected) in enumerate(tests):
-        print(f"Test Case {i+1}: ", end="")
         try:
             obj = None
             results = []
             for op, arg in zip(ops, args):
                 if op == "MinStack":
-                    obj = MinStack()
+                    obj = cls()
                     results.append(None)
                 elif op == "push":
                     results.append(obj.push(arg[0]))
@@ -155,14 +156,18 @@ def harness():
                     results.append(obj.getMin())
             
             if results == expected:
-                print("PASSED")
+                status = "PASSED"
                 passed += 1
             else:
-                print(f"FAILED\n  Expected: {expected}\n  Actual:   {results}")
+                status = f"FAILED\n    Expected: {expected}\n    Actual:   {results}"
+                failed += 1
         except Exception as e:
-            print(f"ERROR: {e}")
-    
-    print(f"\nSummary: {passed}/{len(tests)} tests passed.")
+            status = f"ERROR ({type(e).__name__}: {e})"
+            failed += 1
+
+        print(f"Test {i+1:02d}: {status}")
+
+    print(f"\n--- Result: {passed} Passed, {failed} Failed ---")
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 
@@ -190,5 +195,37 @@ class MinStack:
         if self.data :
             return self.data [-1][1]
 
-harness()
+
+class MinStackTwoStacks:
+
+    def __init__(self):
+        self.main = []
+        self.mins = []
+
+    def push(self, val: int) -> None:
+        self.main.append(val)
+        #append mins only if the val is less than or equal top of min
+        if not self.mins or val <= self.mins[-1]:
+            self.mins.append(val)
+
+    def pop(self) -> None:
+        if self.main:
+            val = self.main.pop()
+            if self.mins and val == self.mins[-1]:
+                self.mins.pop()
+
+    def top(self) -> int:
+        if self.main:
+            return self.main[-1]
+
+    def getMin(self) -> int:
+        if self.mins:
+            return self.mins[-1]
+
+
+solutions = [MinStack, MinStackTwoStacks]
+
+for sol in solutions:
+    print()
+    harness(sol)
 
