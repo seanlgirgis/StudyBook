@@ -3,9 +3,9 @@
 Refresh coding_challenges/index.csv from files under leetcode/by_topic.
 
 Default behavior:
-- scans .md, .py, .ipynb files
+- scans configured solution file extensions
 - reads optional metadata header keys when present:
-  id, title, primary, tags, source
+  id, title, tags, source
 - falls back to filename/folder-based inference when metadata is absent
 - writes deterministic CSV sorted by path
 """
@@ -87,7 +87,7 @@ def read_header_metadata(path: Path) -> dict[str, str]:
             continue
         key = match.group(1).strip().lower()
         value = match.group(2).strip()
-        if key in {"id", "title", "primary", "tags", "source"}:
+        if key in {"id", "title", "tags", "source"}:
             metadata[key] = value
     return metadata
 
@@ -104,7 +104,6 @@ def build_row(scan_root: Path, file_path: Path) -> Row:
 
     row_id = meta.get("id", inferred_id).strip()
     title = meta.get("title", inferred_title).strip()
-    primary = meta.get("primary", primary).strip().lower()
     source = meta.get("source", inferred_source).strip().lower()
 
     if "tags" in meta:
