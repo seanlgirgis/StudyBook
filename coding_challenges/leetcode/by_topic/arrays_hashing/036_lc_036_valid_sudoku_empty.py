@@ -182,6 +182,7 @@ def isValidSudoku(board: List[List[str]]) -> bool:
                 seen.add(board[r][c])
         return True
     # rows and columns
+    
     for i in range(9):
         iterator = ((i, x) for x in range(9))
         if not is_valid(iterator):
