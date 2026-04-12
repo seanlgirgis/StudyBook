@@ -55,7 +55,7 @@ if ($hasJson) {
         throw "Json file is empty: $jsonPath"
     }
 
-    $jsonData = $jsonRaw | ConvertFrom-Json -AsHashtable
+    $jsonData = ConvertFrom-JsonToHashtable -Json $jsonRaw
     foreach ($key in $jsonData.Keys) {
         $updates[[string]$key] = [string]$jsonData[$key]
     }
@@ -117,7 +117,7 @@ $secrets = @{}
 if (Test-Path -LiteralPath $encryptedPath) {
     $existingJson = Unprotect-StudyBookSecretFile -EncryptedPath $encryptedPath -Passphrase $passphrase
     if (-not [string]::IsNullOrWhiteSpace($existingJson)) {
-        $existing = $existingJson | ConvertFrom-Json -AsHashtable
+        $existing = ConvertFrom-JsonToHashtable -Json $existingJson
         foreach ($key in $existing.Keys) {
             $secrets[[string]$key] = [string]$existing[$key]
         }

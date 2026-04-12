@@ -25,7 +25,7 @@ if ($seedExists) {
     try {
         $raw = Get-Content -LiteralPath $seedPathResolved -Raw -Encoding UTF8
         if (-not [string]::IsNullOrWhiteSpace($raw)) {
-            $seedMetadata = $raw | ConvertFrom-Json -AsHashtable
+            $seedMetadata = ConvertFrom-JsonToHashtable -Json $raw
         }
     }
     catch {

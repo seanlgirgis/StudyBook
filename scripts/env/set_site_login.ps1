@@ -63,7 +63,7 @@ $secrets = @{}
 if (Test-Path -LiteralPath $encryptedPath) {
     $existingJson = Unprotect-StudyBookSecretFile -EncryptedPath $encryptedPath -Passphrase $passphrase
     if (-not [string]::IsNullOrWhiteSpace($existingJson)) {
-        $existing = $existingJson | ConvertFrom-Json -AsHashtable
+        $existing = ConvertFrom-JsonToHashtable -Json $existingJson
         foreach ($k in $existing.Keys) {
             $secrets[[string]$k] = [string]$existing[$k]
         }

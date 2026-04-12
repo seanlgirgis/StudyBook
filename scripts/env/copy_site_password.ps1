@@ -57,7 +57,7 @@ if ([string]::IsNullOrWhiteSpace($plain)) {
     throw "Decrypted secrets content is empty."
 }
 
-$secrets = $plain | ConvertFrom-Json -AsHashtable
+$secrets = ConvertFrom-JsonToHashtable -Json $plain
 if (-not $secrets.ContainsKey($passKey)) {
     throw "No password key found for site '$SiteKey' (expected key: $passKey)."
 }

@@ -30,7 +30,7 @@ if (-not (Test-Path -LiteralPath $encryptedPath)) {
 }
 
 $payloadJson = Unprotect-StudyBookSecretFile -EncryptedPath $encryptedPath -Passphrase $passphrase
-$data = $payloadJson | ConvertFrom-Json -AsHashtable
+$data = ConvertFrom-JsonToHashtable -Json $payloadJson
 
 if (-not $data.ContainsKey("AWS_CREDENTIALS_INI")) {
     throw "Encrypted payload does not include AWS_CREDENTIALS_INI."

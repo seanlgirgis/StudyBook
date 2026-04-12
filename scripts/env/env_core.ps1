@@ -166,6 +166,77 @@ function Protect-StudyBookSecretContent {
     }
 }
 
+function ConvertTo-NestedHashtable {
+    param(
+        [Parameter(Mandatory = $false)]
+        $InputObject
+    )
+
+    if ($null -eq $InputObject) {
+        return $null
+    }
+
+    if ($InputObject -is [hashtable]) {
+        $out = @{}
+        foreach ($k in $InputObject.Keys) {
+            $out[$k] = ConvertTo-NestedHashtable -InputObject $InputObject[$k]
+        }
+        return $out
+    }
+
+    if ($InputObject -is [System.Collections.IDictionary]) {
+        $out = @{}
+        foreach ($k in $InputObject.Keys) {
+            $out[$k] = ConvertTo-NestedHashtable -InputObject $InputObject[$k]
+        }
+        return $out
+    }
+
+    if (($InputObject -is [System.Collections.IEnumerable]) -and -not ($InputObject -is [string])) {
+        $arr = @()
+        foreach ($item in $InputObject) {
+            $arr += ,(ConvertTo-NestedHashtable -InputObject $item)
+        }
+        return $arr
+    }
+
+    if ($InputObject -is [psobject]) {
+        $out = @{}
+        foreach ($prop in $InputObject.PSObject.Properties) {
+            $out[$prop.Name] = ConvertTo-NestedHashtable -InputObject $prop.Value
+        }
+        return $out
+    }
+
+    return $InputObject
+}
+
+function ConvertFrom-JsonToHashtable {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Json
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Json)) {
+        return @{}
+    }
+
+    $convertCmd = Get-Command -Name ConvertFrom-Json -ErrorAction Stop
+    if ($convertCmd.Parameters.ContainsKey("AsHashtable")) {
+        return $Json | ConvertFrom-Json -AsHashtable
+    }
+
+    $obj = $Json | ConvertFrom-Json
+    $converted = ConvertTo-NestedHashtable -InputObject $obj
+    if ($null -eq $converted) {
+        return @{}
+    }
+    if ($converted -isnot [hashtable]) {
+        throw "Expected JSON object at root."
+    }
+    return $converted
+}
+
 function Protect-StudyBookSecretFile {
     param(
         [Parameter(Mandatory = $true)]
@@ -201,7 +272,7 @@ function Unprotect-StudyBookSecretFile {
     }
 
     $raw = Get-Content -LiteralPath $EncryptedPath -Raw -Encoding UTF8
-    $payload = $raw | ConvertFrom-Json -AsHashtable
+    $payload = ConvertFrom-JsonToHashtable -Json $raw
 
     $saltBytes = [Convert]::FromBase64String([string]$payload.salt)
     $ivBytes = [Convert]::FromBase64String([string]$payload.iv)
@@ -307,7 +378,7 @@ function Unprotect-StudyBookSecretSeed {
             return $null
         }
 
-        $payload = $raw | ConvertFrom-Json -AsHashtable
+        $payload = ConvertFrom-JsonToHashtable -Json $raw
         if (-not $payload.ContainsKey("ciphertext")) {
             Write-Warning "Seed file exists but ciphertext is missing: $SeedPath"
             return $null
@@ -490,7 +561,7 @@ function Invoke-StudyBookEnvBootstrap {
                 else {
                     foreach ($secretPath in $existingSecretFiles) {
                         $secretJson = Unprotect-StudyBookSecretFile -EncryptedPath $secretPath -Passphrase $passphrase
-                        $secretData = $secretJson | ConvertFrom-Json -AsHashtable
+                        $secretData = ConvertFrom-JsonToHashtable -Json $secretJson
                         foreach ($secretKey in $secretData.Keys) {
                             [Environment]::SetEnvironmentVariable($secretKey, [string]$secretData[$secretKey], "Process")
                         }

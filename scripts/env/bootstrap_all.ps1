@@ -96,7 +96,7 @@ function Test-SecretJsonReady {
         return $false
     }
 
-    $data = $json | ConvertFrom-Json -AsHashtable
+    $data = ConvertFrom-JsonToHashtable -Json $json
     foreach ($key in $data.Keys) {
         $value = [string]$data[$key]
         if ([string]::IsNullOrWhiteSpace($value) -or $value -eq "replace-me") {
