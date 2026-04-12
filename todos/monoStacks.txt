@@ -1,0 +1,128 @@
+**Rule 1: The stack is never random — it has a personality**
+
+It's either always increasing (bottom→top) or always decreasing. Pick one before you write a line. That personality is the whole point.
+
+---
+
+**Rule 2: The eviction tells you the answer**
+
+The moment you kick something off the stack is the moment you learn something about it. 
+
+- NGE: you evict X because you found something bigger → that bigger thing IS X's answer
+- Daily Temps: same — evict when warmer found → distance is the answer
+- Stock Span: evict smaller prices → absorb their span
+
+**If you're not recording on the pop, you're probably missing something.**
+
+---
+
+**Rule 3: What stays on the stack is "unresolved"**
+
+Everything still on the stack hasn't found its answer yet. At the end, unresolved items get a default (usually -1 or 0).
+
+---
+
+**Rule 4: The eviction condition is your toggle between increasing and decreasing**
+
+```
+while stack and stack[-1] >= val:   # evict equal-or-bigger → gives INCREASING stack
+while stack and stack[-1] <= val:   # evict equal-or-smaller → gives DECREASING stack
+```
+
+Flip the sign, flip the personality.
+
+---
+
+**Rule 5: Store indices, not just values**
+
+You almost always need the position, not just the number. Store `i` or `(val, i)`. Pure values work only for the simplest cases.
+
+---
+
+**Rule 6: Visualize it as a bouncer at a door**
+
+New element walks up. The bouncer checks the top of stack:
+- "You're weaker than me? You're out." (pop, record answer)
+- "You're stronger? You stay, I come in behind you."
+
+The stack at any moment is a line of people who haven't been beaten yet.
+
+---
+
+**Rule 7: Circular = run twice, use modulo**
+
+For circular arrays (LC 503), loop `2n` times, access with `i % n`. The second pass resolves the ones left unresolved from the first.
+
+---
+
+**The one-line mental check before coding:**
+
+> *"When I pop something, what do I know at that moment — and is that the answer I'm looking for?"*
+
+If yes — you have your solution. If no — reconsider your eviction condition.
+
+
+
+
+
+
+Here's what belongs in a proper `stack_monotonic` folder:
+
+
+
+
+
+
+**Classic hard problems**
+| LC# | Problem | Pattern |
+|-----|---------|---------|
+| 
+| 42 | Trapping Rain Water | mono stack or two-pointer |
+
+**Greedy + mono stack**
+| LC# | Problem | Pattern |
+|-----|---------|---------|
+| 402 | Remove K Digits | increasing stack, pop k times |
+| 316 | Remove Duplicate Letters | increasing stack + seen set |
+| 853 | Car Fleet | decreasing stack by time |
+
+**Subarray min/max**
+| LC# | Problem | Pattern |
+|-----|---------|---------|
+| 907 | Sum of Subarray Minimums | mono stack → contribution |
+| 2104 | Sum of Subarray Ranges | same idea |
+| 239 | Sliding Window Maximum | monotonic deque |
+
+**456 (132 Pattern)** is also mono stack but a bit quirky — optional.
+
+Start with the core NGE family (you mostly have those), then 402 and 316 are great next steps — they show mono stack used for greedy decisions, not just lookups.
+
+1. `20` Valid Parentheses  
+2. `155` Min Stack  
+3. `150` Evaluate Reverse Polish Notation  
+4. `739` Daily Temperatures  
+5. `496` Next Greater Element I  
+6. `503` Next Greater Element II  
+7. `42` Trapping Rain Water  
+8. `84` Largest Rectangle in Histogram  
+9. `85` Maximal Rectangle  
+10. `901` Online Stock Span  
+11. `402` Remove K Digits  
+12. `456` 132 Pattern  
+13. `907` Sum of Subarray Minimums  
+14. `2104` Sum of Subarray Ranges  
+15. `1475` Final Prices With a Special Discount in a Shop  
+16. `1944` Number of Visible People in a Queue  
+17. `2281` Sum of Total Strength of Wizards  
+
+Good starter progression: `20 -> 155 -> 739 -> 496 -> 503 -> 84 -> 42 -> 907`.
+
+
+
+
+
+
+| 496 | Next Greater Element I | NGE with lookup dict |
+| 503 | Next Greater Element II | NGE circular |
+| 739 | Daily Temperatures | NGE → index distance |
+| 901 | Online Stock Span | NGE → span accumulation |

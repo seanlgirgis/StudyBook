@@ -1,0 +1,99 @@
+id,path,primary,tags,title,source
+lc_0055,leetcode/by_topic/arrays/055_lc_0055_jump_game.py,arrays,arrays;greedy;dynamic-programming,Jump Game,leetcode
+lc_0152,leetcode/by_topic/arrays/152_lc_152_maximum_product_subarray.py,arrays,arrays;dynamic-programming,Maximum Product Subarray,leetcode
+lc_0238,leetcode/by_topic/arrays/238_lc_0238_product_of_array_except_self.py,arrays,arrays;prefix-sum;suffix-sum,Product of Array Except Self,leetcode
+
+
+
+
+
+------------------
+
+## Similar LeetCode Problems
+
+The core algorithmic pattern here is: **index-offset normalization + greedy min-start** (subtracting index `i` converts an arithmetic sequence problem into a "find the ceiling and sum the gaps" problem). Here are the most relevant problems to train on:
+
+---
+
+### Tier 1 — Direct Pattern Match (Add-Only + Arithmetic Sequence)
+
+| # | Problem | Why Similar |
+|---|---------|-------------|
+| **1827** | Minimum Operations to Make Array Increasing | Greedy add-only, same O(N) structure — just ascending, no descending branch |
+| **945** | Minimum Increment to Make Array Unique | Add-only greedy, transform array to satisfy a global ordering constraint |
+| **453** | Minimum Moves to Equal Array Elements | Cost = sum of gaps to a target level; mathematically equivalent to this problem's inner loop |
+
+---
+
+### Tier 2 — Greedy / Math Variants
+
+| # | Problem | Why Similar |
+|---|---------|-------------|
+| **462** | Minimum Moves to Equal Array Elements II | Median-trick version of 453 — teaches *why* max vs median matters for add-only vs add+subtract |
+| **2033** | Minimum Operations to Make Uni-Value Grid | Same "lift all values to a common level" pattern, extended to 2D |
+| **665** | Non-decreasing Array | Simpler prerequisite: checking/fixing monotone sequences with minimal edits |
+
+---
+
+### Tier 3 — Index Offset Trick / Dual Direction
+
+| # | Problem | Why Similar |
+|---|---------|-------------|
+| **1218** | Longest Arithmetic Subsequence of Given Difference | Uses the same `arr[i] - i` normalization to reduce arithmetic sequence → flat array |
+| **376** | Wiggle Subsequence | Trains the "try ascending vs descending, take min" branching pattern |
+| **1827** variant | Make Array Strictly Decreasing | Mental inverse of 1827 — same code with sign flipped, like your `cost_to_desc` |
+
+---
+
+### Key Insight to Internalize
+
+The `structures[i] - i` trick generalizes broadly:
+
+```
+Ascending target:  H[0] + i  =>  normalize: structures[i] - i  =>  find max, sum gaps
+Descending target: H[0] - i  =>  normalize: structures[i] + i  =>  find max, sum gaps
+```
+
+Once you normalize, *both branches reduce to*: **"how much do I need to raise a flat floor so everyone fits under it?"** — which is just `max(normalized) - normalized[i]` summed. That exact reduction also appears in 945, 453, and 2033.
+
+---
+
+### Recommended Study Order
+```
+665 → 1827 → 945 → 453 → 462 → 2033 → 1218 → 376
+```
+Start with 665 (prerequisite intuition), then 1827 (closest 1:1 match to your problem).
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+The core ideas in this problem are:
+
+Greedy scan over a sorted linear structure
+Fixed-range jumping (drone = 10 units)
+Interval covering (get from 0 to target with minimum cost)
+Problems that exercise the same muscles:
+
+Direct analogs (jump/range greedy):
+
+LC 45 - Jump Game II — minimum jumps to reach end, variable range per position. Closest structural cousin.
+LC 55 - Jump Game — can you reach the end at all (you already have this one)
+LC 1871 - Jump Game VII — jump within a [minJump, maxJump] range
+Interval covering (same greedy intuition, different framing):
+
+LC 1024 - Video Stitching — cover [0, T] using video clips, minimum clips needed
+LC 1326 - Minimum Number of Taps to Open to Water a Garden — essentially the same as 1024 but framed as garden watering
+LC 452 - Minimum Number of Arrows to Burst Balloons
+Station/waypoint greedy:
+
+LC 134 - Gas Station — can you complete a circular route given fuel at each station
+Recommended order to work through:
+
+LC 45 (Jump Game II) — most direct
+LC 1024 (Video Stitching) — reframes the same idea as interval covering
+LC 1326 — same as 1024, good repetition with different framing
+LC 134 — shifts to circular + feasibility check
+Want me to create harness files for any of these?
+
+
+
