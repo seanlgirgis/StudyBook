@@ -118,3 +118,4 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-084 | TB-20260411-02 | Preserve manual formatting in coding_challenges/index.xlsx during refresh runs | closed | none | 2026-04-11 |
 | LOOP-085 | TB-20260412-01 | Persist durable memory for high-frequency index commands (`refresh_index_and_push.ps1`, `search_index.ps1`) | closed | none | 2026-04-12 |
 | LOOP-086 | TB-20260412-02 | Fix PowerShell 5.1 JSON hashtable compatibility in env bootstrap/secret scripts | closed | none | 2026-04-12 |
+| LOOP-087 | TB-20260412-03 | Create second-machine Codex handoff doc for seed/env bootstrap recovery | closed | none | 2026-04-12 |

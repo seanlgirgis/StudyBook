@@ -2,56 +2,45 @@
 
 ## Current Run (2026-04-12)
 
-**Task ID:** TB-20260412-02  
-**Task Type:** FIX  
-**Goal:** Resolve `ConvertFrom-Json -AsHashtable` failures on Windows PowerShell 5.1 during env/seed bootstrap flows on a second machine.
+**Task ID:** TB-20260412-03  
+**Task Type:** ENHANCEMENT  
+**Goal:** Create a ready-to-share communication file for Codex on machine #2 that explains full seed/env startup and recovery steps.
 
 ### Factual Summary
 
-- Added cross-version JSON helper support to `scripts/env/env_core.ps1`:
-  - `ConvertFrom-JsonToHashtable`
-  - `ConvertTo-NestedHashtable`
-- Updated env scripts to use the compatibility helper instead of direct `ConvertFrom-Json -AsHashtable` in caller code:
-  - `scripts/env/bootstrap_all.ps1`
-  - `scripts/env/set_secret.ps1`
-  - `scripts/env/set_site_login.ps1`
-  - `scripts/env/copy_site_password.ps1`
-  - `scripts/env/seed_status.ps1`
-  - `scripts/env/restore_aws_credentials.ps1`
+- Added second-machine handoff doc:
+  - `docs/operations/CODEX_SECOND_MACHINE_SEED_HANDOFF.md`
+- Included:
+  - root cause summary of `-AsHashtable` compatibility error,
+  - exact setup commands,
+  - validation target (`Secrets Loaded: True`),
+  - diagnostics and recovery playbook,
+  - copy/paste Codex prompt for machine #2.
 
 ### Files Updated
 
-- `scripts/env/env_core.ps1`
-- `scripts/env/bootstrap_all.ps1`
-- `scripts/env/set_secret.ps1`
-- `scripts/env/set_site_login.ps1`
-- `scripts/env/copy_site_password.ps1`
-- `scripts/env/seed_status.ps1`
-- `scripts/env/restore_aws_credentials.ps1`
+- `docs/operations/CODEX_SECOND_MACHINE_SEED_HANDOFF.md`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
 - `agents/shared/agent_status.md`
 
 ### Validation
 
-- Ran:
-  - `.\scripts\env\bootstrap_all.ps1 -NonInteractive -SkipValidation`
-- Result:
-  - Script completed successfully with no `-AsHashtable` parameter-binding failure.
+- Verified new handoff file exists and is in `docs/operations` for easy discovery.
+- Verified continuity entries were added to task/open-loop trackers.
 
 ### Assumptions
 
-- Target machine is running a PowerShell edition/version where `ConvertFrom-Json -AsHashtable` is unavailable.
+- User will transfer/share the handoff file content with Codex on the second machine.
 
 ### Risks
 
-- Low risk. JSON conversion behavior is preserved; helper uses native `-AsHashtable` when available and falls back to recursive conversion otherwise.
+- Low risk. Documentation and continuity updates only.
 
 ### Next Step
 
-- Pull/sync these script changes on machine #2, then rerun:
-  - `.\scripts\env\bootstrap_all.ps1`
-  - seed registration + `.\env_setter.ps1 -NonInteractive`
+- On machine #2, run the handoff flow in:
+  - `docs/operations/CODEX_SECOND_MACHINE_SEED_HANDOFF.md`
 
 ---
 
