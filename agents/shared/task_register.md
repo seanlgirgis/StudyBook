@@ -1,4 +1,4 @@
-# Task Register
+﻿# Task Register
 
 Track active and completed tasks to avoid losing continuity.
 
@@ -148,6 +148,8 @@ Track active and completed tasks to avoid losing continuity.
 
 | TB-20260406-10 | Review next_greater_element_496 solution implementation and confirm code quality | done | 2026-04-06 | Reviewed monotonic-stack logic in next_greater_element_496_empty.py; correctness and complexity are solid, no code changes required |
 | TB-20260408-01 | Build guided repetition practice workspace with blank implementations and confidence tracker | done | 2026-04-08 | Created/updated round_05_empty/practice with basics+weak-point files blanked and PRACTICE_TRACKER.md for coached loops |
+| TB-20260409-01 | Diagnose env_setter failure after repo transfer and document required fixes | done | 2026-04-09 | Missing config/env/base.psd1; seed file not portable; restore base config and re-register seed |
+| TB-20260409-02 | Identify problem solved by provided min-cost consecutive-sequence snippet | done | 2026-04-09 | Interpreted as min-increment transform to arithmetic progression with step +/-1 |
 | TB-20260410-01 | Stabilize website blog structure visibility (LeetCode section, sitemap accuracy, article UX cleanup) | done | 2026-04-10 | Added persistent LeetCode category pages (`/blog/leetcode/<category-id>.html`), multi-category post mapping, alias redirects for taxonomy evolution, recursive sitemap coverage for nested pages, duplicate-title handling, blog-list image cleanup, structured articles hub sections, and stale-page pruning |
 | TB-20260410-02 | Persist website search-engine owner-account memory for future submission runs | done | 2026-04-10 | Stored Google/Bing site-submission owner accounts in `agents/shared/user_profile.md` under a dedicated Search Engine Ownership section |
 | TB-20260410-03 | Create daily reminder/todo system and seed website submission inspection task for tomorrow | done | 2026-04-10 | Added `scripts/ops/daily_todo.ps1`, `agents/shared/daily_todo.json`, operations runbook doc, and seeded TODO-0001 due 2026-04-11 |
@@ -158,3 +160,4 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260412-01 | Persist durable memory for high-frequency index commands (`refresh_index_and_push.ps1`, `search_index.ps1`) | done | 2026-04-12 | Added command-memory entries to `agents/shared/user_profile.md` and `agents/shared/context_index.md` so startup reads capture them |
 | TB-20260412-02 | Fix PowerShell 5.1 JSON hashtable compatibility in env bootstrap/secret scripts | done | 2026-04-12 | Added JSON compatibility helper in `env_core.ps1` and replaced direct `ConvertFrom-Json -AsHashtable` usage across `scripts/env` callers |
 | TB-20260412-03 | Create second-machine Codex handoff doc for seed/env bootstrap recovery | done | 2026-04-12 | Added `docs/operations/CODEX_SECOND_MACHINE_SEED_HANDOFF.md` with exact commands, diagnostics, and recovery flow |
+
