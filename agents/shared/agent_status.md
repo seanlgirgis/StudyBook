@@ -4,17 +4,16 @@
 
 **Task ID:** TB-20260412-04  
 **Task Type:** FIX  
-**Goal:** Resolve rebase conflicts in shared status files and continue rebase.
+**Goal:** Resolve rebase conflicts in shared status files and complete rebase.
 
 ### Factual Summary
 
-- Resolved merge conflicts in `agents/shared/agent_status.md`, `agents/shared/open_loops.md`, and `agents/shared/task_register.md`.
-- Normalized task/open-loop entries to include the latest items and removed conflict markers.
+- Resolved merge conflicts in `agents/shared/agent_status.md` and `agents/shared/task_register.md`.
+- Preserved latest task list entries and removed conflict markers.
 
 ### Files Inspected
 
 - `agents/shared/agent_status.md`
-- `agents/shared/open_loops.md`
 - `agents/shared/task_register.md`
 
 ### Validation
@@ -23,7 +22,7 @@
 
 ### Assumptions
 
-- Latest task/open-loop entries should be preserved in unified form.
+- Latest task entries should be preserved in unified form.
 
 ### Risks
 
