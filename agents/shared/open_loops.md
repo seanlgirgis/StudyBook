@@ -116,3 +116,4 @@ Track incomplete but in-scope work items so sessions resume cleanly.
 | LOOP-082 | TB-20260410-05 | Add multi-channel publishing reminders (X, YouTube, GitHub, Reddit, Medium/Dev.to) to daily todo system | closed | none | 2026-04-10 |
 | LOOP-083 | TB-20260411-01 | Switch coding_challenges index output from CSV default to XLSX with deterministic generation | closed | none | 2026-04-11 |
 | LOOP-084 | TB-20260411-02 | Preserve manual formatting in coding_challenges/index.xlsx during refresh runs | closed | none | 2026-04-11 |
+| LOOP-085 | TB-20260412-01 | Persist durable memory for high-frequency index commands (`refresh_index_and_push.ps1`, `search_index.ps1`) | closed | none | 2026-04-12 |

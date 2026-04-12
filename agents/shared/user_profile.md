@@ -93,3 +93,11 @@
   - stack holds indices still waiting for their next greater,
   - when current value is greater than stack-top value, pop and resolve those indices.
 - This frame is preferred over right-to-left "what is greater to my right?" explanations unless explicitly requested otherwise.
+
+## StudyBook Command Shortcuts
+
+- High-frequency index workflow commands to preserve in durable memory:
+  - `D:\StudyBook\refresh_index_and_push.ps1` (refreshes `coding_challenges/index.xlsx`, commits, pushes)
+  - `D:\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]` (grep-like lookup over `coding_challenges/index.xlsx`)
+- Example:
+  - `.\search_index.ps1 48`

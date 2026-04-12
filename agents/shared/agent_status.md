@@ -1,52 +1,47 @@
 # Agent Status
 
-## Current Run (2026-04-11)
+## Current Run (2026-04-12)
 
-**Task ID:** TB-20260411-02  
-**Task Type:** FIX  
-**Goal:** Preserve Excel formatting in `coding_challenges/index.xlsx` when running refresh.
+**Task ID:** TB-20260412-01  
+**Task Type:** ENHANCEMENT  
+**Goal:** Persist durable memory for high-frequency index commands so future agent runs can reuse them without chat reliance.
 
 ### Factual Summary
 
-- Updated `coding_challenges/scripts/refresh_index.py` XLSX behavior from full-file rewrite to in-place workbook updates.
-- Implemented XLSX write path with `openpyxl`:
-  - load existing workbook if present,
-  - update header/data cell values only,
-  - retain existing sheet formatting,
-  - clear stale trailing rows without recreating sheet/workbook.
-- Added style carry-forward for newly added rows by copying row-2 styles per data column.
-- CSV output path remains supported when `--index` ends with `.csv`.
+- Added a durable "StudyBook Command Shortcuts" section to `agents/shared/user_profile.md`.
+- Added a startup-read command-memory section to `agents/shared/context_index.md`.
+- Recorded run continuity updates in `agents/shared/task_register.md` and `agents/shared/open_loops.md`.
 
 ### Files Updated
 
-- `coding_challenges/scripts/refresh_index.py`
+- `agents/shared/user_profile.md`
+- `agents/shared/context_index.md`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
 - `agents/shared/agent_status.md`
 
 ### Validation
 
-- Ran:
-  - `C:\Users\shareuser\AppData\Local\Python\bin\python.exe coding_challenges/scripts/refresh_index.py`
-  - workbook verification command via `openpyxl` (sheet row/column counts + header readback)
-- Result:
-  - Refresh completed successfully and wrote `D:\StudyBook\coding_challenges\index.xlsx`.
-  - Workbook remained valid and data rows were refreshed in-place.
+- Verified entries exist in startup-read files:
+  - `agents/shared/context_index.md`
+  - `agents/shared/user_profile.md`
+- No runtime/system changes required.
 
 ### Assumptions
 
-- User manually formats `index.xlsx` and wants those edits preserved across script runs.
-- Active index sheet is named `index` (or first sheet fallback).
+- User wants command shortcuts persisted in shared agent memory files so all future sessions can discover them.
 
 ### Risks
 
-- Low risk. If custom formatting exists only in rows beyond row 2, new rows inherit style from row 2 by design.
+- Low risk. Documentation-only update.
 
 ### Next Step
 
-- Continue using the same refresh command; manual Excel formatting should now persist across reruns.
+- Future runs should reuse:
+  - `D:\StudyBook\refresh_index_and_push.ps1`
+  - `D:\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]`
 
 ---
 
-**Run completed:** 2026-04-11  
+**Run completed:** 2026-04-12  
 **Status:** DONE

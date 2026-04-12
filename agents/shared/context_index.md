@@ -182,7 +182,13 @@ Purpose: compact durable memory map for fast session bootstrap.
   - Atlas Search requires `default` search index on `nugget_lab.search_demo` in Atlas UI.
 ## Last Updated
 
-- 2026-04-04
+- 2026-04-12
+
+## StudyBook Command Memory
+
+- Frequently used coding-challenges index commands:
+  - `D:\StudyBook\refresh_index_and_push.ps1`
+  - `D:\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]`
 
 
 
