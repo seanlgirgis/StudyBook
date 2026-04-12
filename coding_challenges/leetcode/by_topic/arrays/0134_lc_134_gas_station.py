@@ -9,9 +9,9 @@ leetcode_url: https://leetcode.com/problems/gas-station/
 status: draft
 last_updated: 2026-04-12
 notes: 
-- key idea: 
-- time: 
-- space: 
+- key idea: Greedy approach; if total gas >= total cost, a solution must exist.
+- time: O(n)
+- space: O(1)
 """
 
 # ============================================================================
@@ -32,9 +32,6 @@ notes:
 # EXAMPLES:
 # Input: gas = [1,2,3,4,5], cost = [3,4,5,1,2]
 # Output: 3
-# Explanation: Start at station 3 (index 3) and fill up with 4 unit of gas. 
-# Your tank = 0 + 4 = 4. Cost to next station = 1. Remaining gas = 4 - 1 = 3.
-# ... (Total circuit possible)
 #
 # Input: gas = [2,3,4], cost = [3,4,3]
 # Output: -1
@@ -42,25 +39,26 @@ notes:
 
 from typing import List, Callable, Tuple
 
-# Test cases: (gas, cost, expected_output)
-tests: List[Tuple[List[int], List[int], int]] = [
-    ([1, 2, 3, 4, 5], [3, 4, 5, 1, 2], 3),        # Standard Case: Example 1
-    ([2, 3, 4], [3, 4, 3], -1),                  # Standard Case: Example 2 (Impossible)
-    ([5, 1, 2, 3, 4], [4, 4, 1, 5, 1], 4),        # Shifted: Success at last index
-    ([3, 1, 1], [1, 2, 2], 0),                   # Edge Case: Success at first index
-    ([2], [2], 0),                               # Edge Case: Single element (exact match)
-    ([1], [2], -1),                              # Edge Case: Single element (impossible)
-    ([5, 8, 2, 8], [6, 5, 6, 6], 3),             # Complex: Multiple local dips
-    ([0, 0, 0, 2], [0, 0, 1, 0], 3),             # Boundary: Lots of zeros
-    ([1, 2], [2, 1], 1),                         # Small: Two elements flip
-    ([1, 2, 3, 4, 5], [1, 2, 3, 4, 5], 0),       # Boundary: Net change zero at every step
-    ([4, 5, 2, 6, 5, 3], [3, 2, 7, 3, 2, 9], -1), # Large: Total gas < Total cost
-    ([1, 1, 1, 1, 10], [2, 2, 2, 2, 1], 4)       # Greedy: One massive surplus at the end
+# Test cases: (gas, cost, expected_output, description)
+tests: List[Tuple[List[int], List[int], int, str]] = [
+    ([1, 2, 3, 4, 5], [3, 4, 5, 1, 2], 3, "Standard Case: Example 1"),
+    ([2, 3, 4], [3, 4, 3], -1, "Standard Case: Example 2 (Impossible)"),
+    ([5, 1, 2, 3, 4], [4, 4, 1, 5, 1], 4, "Shifted: Success at last index"),
+    ([3, 1, 1], [1, 2, 2], 0, "Edge Case: Success at first index"),
+    ([2], [2], 0, "Edge Case: Single element (exact match)"),
+    ([1], [2], -1, "Edge Case: Single element (impossible)"),
+    ([5, 8, 2, 8], [6, 5, 6, 6], 3, "Complex: Multiple local dips"),
+    ([0, 0, 0, 2], [0, 0, 1, 0], 3, "Boundary: Lots of zeros"),
+    ([1, 2], [2, 1], 1, "Small: Two elements flip"),
+    ([1, 2, 3, 4, 5], [1, 2, 3, 4, 5], 0, "Boundary: Net change zero at every step"),
+    ([4, 5, 2, 6, 5, 3], [3, 2, 7, 3, 2, 9], -1, "Large: Total gas < Total cost"),
+    ([1, 1, 1, 1, 10], [2, 2, 2, 2, 1], 4, "Greedy: One massive surplus at the end")
 ]
 
 def harness(func: Callable) -> None:
+    print(f"\n--- Running Harness for: {func.__name__} ---")
     passed = 0
-    for i, (gas, cost, expected) in enumerate(tests):
+    for i, (gas, cost, expected, desc) in enumerate(tests):
         # Pass deep copies to protect test data integrity
         g_copy = gas[:]
         c_copy = cost[:]
@@ -68,12 +66,15 @@ def harness(func: Callable) -> None:
         try:
             result = func(g_copy, c_copy)
             if result == expected:
-                print(f"Test {i+1}: PASSED")
+                print(f"Test {i+1}: PASSED | {desc}")
                 passed += 1
             else:
-                print(f"Test {i+1}: FAILED | Input: gas={gas[:5]}... cost={cost[:5]}... | Expected: {expected}, Got: {result}")
+                print(f"Test {i+1}: FAILED | {desc}")
+                print(f"    Input: gas={gas[:5]}... cost={cost[:5]}...")
+                print(f"    Expected: {expected}, Got: {result}")
         except Exception as e:
-            print(f"Test {i+1}: ERROR  | {type(e).__name__}: {e}")
+            print(f"Test {i+1}: ERROR  | {desc}")
+            print(f"    {type(e).__name__}: {e}")
 
     print(f"\nResult: {passed}/{len(tests)} cases passed.")
 
@@ -82,21 +83,39 @@ def harness(func: Callable) -> None:
 def canCompleteCircuit(gas: List[int], cost: List[int]) -> int:
     """
     Finds the starting gas station index to complete a circular circuit.
+    Space Complexity: O(N) due to net_gain list
     """
-    net_gain = [x-y for x,y in zip(gas,cost)]
-    if sum(net_gain) < 0 :   # a whoel circle can never happen
+    net_gain = [x - y for x, y in zip(gas, cost)]
+    if sum(net_gain) < 0:
         return -1
         
-    current_balance= 0
-    start_index= 0
+    current_balance = 0
+    start_index = 0
     
     for i, amount in enumerate(net_gain):
         current_balance += amount
-        #if current_balance < 0 reset
         if current_balance < 0:
             current_balance = 0
             start_index = i + 1
             
     return start_index
-
 harness(canCompleteCircuit)
+
+def canCompleteCircuit_o_1(gas: List[int], cost: List[int]) -> int:
+    """
+    Finds the starting gas station index to complete a circular circuit.
+    Space Complexity: O(1)
+    """
+    total, balance, start = 0, 0, 0
+    for i in range(len(gas)):
+        diff = gas[i] - cost[i]
+        total   += diff
+        balance += diff
+        if balance < 0:
+            balance = 0
+            start = i + 1
+
+    return start if total >= 0 else -1
+
+
+harness(canCompleteCircuit_o_1)
