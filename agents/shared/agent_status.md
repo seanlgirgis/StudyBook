@@ -9,7 +9,7 @@
 ### Factual Summary
 
 - Resolved merge conflicts in `agents/shared/agent_status.md`, `agents/shared/open_loops.md`, and `agents/shared/task_register.md`.
-- Normalized task/open-loop entries to include all latest items and removed conflict markers.
+- Normalized task/open-loop entries to include the latest items and removed conflict markers.
 
 ### Files Inspected
 
