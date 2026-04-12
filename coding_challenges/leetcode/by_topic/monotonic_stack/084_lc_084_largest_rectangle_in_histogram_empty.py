@@ -86,6 +86,25 @@ def largestRectangleArea(heights: List[int]) -> int:
     """
     Calculates the largest rectangle area in the histogram using a monotonic stack.
     """
-    pass
+    #mono increasing array .. evict when cur is smaller .. inherit the evicted indexes
+    
+    stack = []
+    max_area = 0
+    
+    for i, h in enumerate(heights):
+        idx = i
+        while stack and h <= stack[-1][0]:
+            ph, p_id = stack.pop()
+            idx = p_id
+            max_area = max(max_area, ph * (i - p_id))
+            
+        stack.append((h,idx))
+
+    while stack:
+        p_h , p_id = stack.pop()
+        max_area = max(max_area, p_h * (len(heights) - p_id))
+        
+    return max_area
+         
 
 harness(largestRectangleArea)
