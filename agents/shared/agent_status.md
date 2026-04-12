@@ -2,37 +2,36 @@
 
 ## Current Run (2026-04-12)
 
-**Task ID:** TB-20260412-04  
-**Task Type:** FIX  
-**Goal:** Resolve rebase conflicts and complete the rebase.
+**Task ID:** TB-20260412-07  
+**Task Type:** DOC  
+**Goal:** Update the second-machine seed handoff guide with the latest fixes and recovery steps.
 
 ### Factual Summary
 
-- Resolved merge conflicts in `agents/shared/agent_status.md`, `agents/shared/open_loops.md`, and `agents/shared/task_register.md`.
-- Completed the rebase sequence and restored `main`.
-- `main` is now ahead of `origin/main` by 3 commits.
+- Updated `docs/operations/CODEX_SECOND_MACHINE_SEED_HANDOFF.md` to include:
+  - DPAPI ProtectedData load guidance for PowerShell 7.
+  - Passphrase mismatch (padding invalid) troubleshooting and re-encrypt steps.
+  - Reminder to clear the passphrase env var after seeding.
 
 ### Files Inspected
 
-- `agents/shared/agent_status.md`
-- `agents/shared/open_loops.md`
-- `agents/shared/task_register.md`
+- `docs/operations/CODEX_SECOND_MACHINE_SEED_HANDOFF.md`
 
 ### Validation
 
-- `git status -sb`
+- No runtime validation commands executed.
 
 ### Assumptions
 
-- You want the local rebase completed and can decide whether to push.
+- This guide is the canonical recall source for new-machine bootstrap recovery.
 
 ### Risks
 
-- Low risk; documentation-only conflict resolution.
+- Low risk; documentation-only update.
 
 ### Next Step
 
-- If you want remote updated, run `git push` (or ask me to do it).
+- Use the updated guide for any new machine setup.
 
 ---
 

@@ -171,5 +171,8 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260412-02 | Fix PowerShell 5.1 JSON hashtable compatibility in env bootstrap/secret scripts | done | 2026-04-12 | Added JSON compatibility helper in `env_core.ps1` and replaced direct `ConvertFrom-Json -AsHashtable` usage across `scripts/env` callers |
 | TB-20260412-03 | Create second-machine Codex handoff doc for seed/env bootstrap recovery | done | 2026-04-12 | Added `docs/operations/CODEX_SECOND_MACHINE_SEED_HANDOFF.md` with exact commands, diagnostics, and recovery flow |
 | TB-20260412-04 | Resolve rebase conflicts in shared status files | done | 2026-04-12 | Resolved conflicts in agent_status/open_loops/task_register during rebase |
+| TB-20260412-05 | Fix DPAPI ProtectedData load for seed registration in PowerShell 7 | done | 2026-04-12 | Added assembly load fallback in `scripts/env/env_core.ps1` for ProtectedData |
+| TB-20260412-06 | Add secret decrypt error messaging and nonfatal handling when secrets are optional | done | 2026-04-12 | Added try/catch around secret decrypt to surface file path and passphrase mismatch guidance |
+| TB-20260412-07 | Update second-machine seed handoff guide with latest fixes and recovery paths | done | 2026-04-12 | Added ProtectedData and padding-error guidance plus re-encrypt steps |
 
 

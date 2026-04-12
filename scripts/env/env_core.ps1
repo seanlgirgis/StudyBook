@@ -333,6 +333,20 @@ function Protect-StudyBookSecretSeed {
         [string]$SeedPath
     )
 
+    if (-not ([Type]::GetType("System.Security.Cryptography.ProtectedData", $false))) {
+        try {
+            Add-Type -AssemblyName "System.Security.Cryptography.ProtectedData" -ErrorAction Stop
+        }
+        catch {
+            try {
+                Add-Type -AssemblyName "System.Security" -ErrorAction Stop
+            }
+            catch {
+                throw "DPAPI ProtectedData type is unavailable. Use Windows PowerShell 5.1 or ensure System.Security.Cryptography.ProtectedData is installed."
+            }
+        }
+    }
+
     $passphraseText = ConvertTo-PlainTextFromSecureString -SecureString $Passphrase
     if ([string]::IsNullOrWhiteSpace($passphraseText)) {
         throw "Passphrase cannot be empty."
@@ -367,6 +381,21 @@ function Unprotect-StudyBookSecretSeed {
         [Parameter(Mandatory = $true)]
         [string]$SeedPath
     )
+
+    if (-not ([Type]::GetType("System.Security.Cryptography.ProtectedData", $false))) {
+        try {
+            Add-Type -AssemblyName "System.Security.Cryptography.ProtectedData" -ErrorAction Stop
+        }
+        catch {
+            try {
+                Add-Type -AssemblyName "System.Security" -ErrorAction Stop
+            }
+            catch {
+                Write-Warning "DPAPI ProtectedData type is unavailable. Use Windows PowerShell 5.1 or install System.Security.Cryptography.ProtectedData."
+                return $null
+            }
+        }
+    }
 
     if (-not (Test-Path -LiteralPath $SeedPath)) {
         return $null
@@ -560,10 +589,24 @@ function Invoke-StudyBookEnvBootstrap {
                 }
                 else {
                     foreach ($secretPath in $existingSecretFiles) {
-                        $secretJson = Unprotect-StudyBookSecretFile -EncryptedPath $secretPath -Passphrase $passphrase
-                        $secretData = ConvertFrom-JsonToHashtable -Json $secretJson
-                        foreach ($secretKey in $secretData.Keys) {
-                            [Environment]::SetEnvironmentVariable($secretKey, [string]$secretData[$secretKey], "Process")
+                        try {
+                            $secretJson = Unprotect-StudyBookSecretFile -EncryptedPath $secretPath -Passphrase $passphrase
+                            $secretData = ConvertFrom-JsonToHashtable -Json $secretJson
+                            foreach ($secretKey in $secretData.Keys) {
+                                [Environment]::SetEnvironmentVariable($secretKey, [string]$secretData[$secretKey], "Process")
+                            }
+                        }
+                        catch {
+                            $message = $_.Exception.Message
+                            if ($message -match "Padding is invalid") {
+                                $message = "Failed to decrypt $secretPath. This usually means the passphrase does not match the encrypted file or the file is corrupted."
+                            }
+
+                            if ($secretsRequired) {
+                                throw $message
+                            }
+
+                            Write-Warning $message
                         }
                     }
                 }

@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-12
+Last reviewed: 2026-04-12 (seed + decrypt + handoff guide)
 
 ## Status Meanings
 

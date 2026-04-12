@@ -19,6 +19,8 @@ Error:
 
 Likely cause:
 - Windows PowerShell version compatibility issue (`ConvertFrom-Json -AsHashtable` unavailable).
+  - If you see `Unable to find type [System.Security.Cryptography.ProtectedData]`, you're in PowerShell 7 without the assembly loaded.
+  - If you see `Padding is invalid and cannot be removed`, the encrypted secret file was created with a different passphrase.
 
 ## Expected End State
 
@@ -27,6 +29,7 @@ Likely cause:
    - `C:\StudyBook\config\secrets\.local\studybook.secret.seed.dpapi.json`
 3. `.\env_setter.ps1 -NonInteractive` succeeds and prints:
    - `Secrets Loaded: True`
+4. Future runs of `.\env_setter.ps1` do **not** prompt for the passphrase.
 
 ## What Codex Should Do (Exact Plan)
 
@@ -65,6 +68,7 @@ Files expected to include fix:
 Compatibility fix behavior:
 - introduce helper that converts JSON to hashtable in both older and newer PowerShell.
 - replace direct caller usage of `ConvertFrom-Json -AsHashtable` with helper calls.
+ - add ProtectedData assembly load fallback so DPAPI works in PowerShell 7.
 
 ### 3) Run Bootstrap
 
@@ -77,6 +81,7 @@ Compatibility fix behavior:
 ```powershell
 $env:STUDYBOOK_SECRET_PASSPHRASE = "<same-passphrase-used-for-encrypted-secrets>"
 .\scripts\env\register_secret_seed.ps1 -NonInteractive -Force
+Remove-Item Env:STUDYBOOK_SECRET_PASSPHRASE
 ```
 
 ### 5) Validate Env Startup
@@ -109,6 +114,19 @@ Test-Path C:\StudyBook\config\secrets\.local\studybook.secret.seed.dpapi.json
 Interpretation:
 - If seed exists but decrypt fails with `Key not valid for use in specified state`, this is usually user-context mismatch.
 - Switch to the same normal Windows user context (non-service/non-elevated mismatch) and rerun.
+- If you see `Padding is invalid and cannot be removed`, the passphrase does not match the encrypted file. Re-encrypt the failing file with the correct passphrase.
+
+Re-encrypt shared secrets:
+
+```powershell
+.\scripts\env\encrypt_secrets.ps1 -InputFile config\secrets\shared.secrets.json -OutputFile config\secrets\shared.secrets.enc.json
+```
+
+Re-encrypt machine secrets (example: inspiron16):
+
+```powershell
+.\scripts\env\encrypt_secrets.ps1 -InputFile config\secrets\inspiron16.secrets.json -OutputFile config\secrets\inspiron16.secrets.enc.json
+```
 
 ### B) Seed missing/corrupt
 
@@ -123,6 +141,10 @@ $env:STUDYBOOK_SECRET_PASSPHRASE = "<same-passphrase>"
 ### C) Immediate temporary bypass if patch is not yet synced
 
 Run in PowerShell 7 (`pwsh`) temporarily, then still apply the compatibility fix for durable support.
+
+### D) ProtectedData type missing in PowerShell 7
+
+If `register_secret_seed.ps1` fails with `Unable to find type [System.Security.Cryptography.ProtectedData]`, update to the latest repo (or add the assembly load fallback in `scripts/env/env_core.ps1`).
 
 ## Guardrails
 
