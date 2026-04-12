@@ -88,7 +88,7 @@ def canCompleteCircuit(gas: List[int], cost: List[int]) -> int:
     net_gain = [x - y for x, y in zip(gas, cost)]
     if sum(net_gain) < 0:
         return -1
-        
+    print(gas, cost, net_gain)
     current_balance = 0
     start_index = 0
     
