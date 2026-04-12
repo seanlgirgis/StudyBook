@@ -66,19 +66,6 @@ If yes — you have your solution. If no — reconsider your eviction condition.
 
 
 
-Here's what belongs in a proper `stack_monotonic` folder:
-
-
-
-
-
-
-**Classic hard problems**
-| LC# | Problem | Pattern |
-|-----|---------|---------|
-| 
-| 42 | Trapping Rain Water | mono stack or two-pointer |
-
 **Greedy + mono stack**
 | LC# | Problem | Pattern |
 |-----|---------|---------|
@@ -97,16 +84,7 @@ Here's what belongs in a proper `stack_monotonic` folder:
 
 Start with the core NGE family (you mostly have those), then 402 and 316 are great next steps — they show mono stack used for greedy decisions, not just lookups.
 
-1. `20` Valid Parentheses  
-2. `155` Min Stack  
-3. `150` Evaluate Reverse Polish Notation  
-4. `739` Daily Temperatures  
-5. `496` Next Greater Element I  
-6. `503` Next Greater Element II  
-7. `42` Trapping Rain Water  
-8. `84` Largest Rectangle in Histogram  
-9. `85` Maximal Rectangle  
-10. `901` Online Stock Span  
+
 11. `402` Remove K Digits  
 12. `456` 132 Pattern  
 13. `907` Sum of Subarray Minimums  
@@ -115,14 +93,12 @@ Start with the core NGE family (you mostly have those), then 402 and 316 are gre
 16. `1944` Number of Visible People in a Queue  
 17. `2281` Sum of Total Strength of Wizards  
 
-Good starter progression: `20 -> 155 -> 739 -> 496 -> 503 -> 84 -> 42 -> 907`.
 
 
 
 
 
 
-| 496 | Next Greater Element I | NGE with lookup dict |
-| 503 | Next Greater Element II | NGE circular |
-| 739 | Daily Temperatures | NGE → index distance |
-| 901 | Online Stock Span | NGE → span accumulation |
+
+
+
