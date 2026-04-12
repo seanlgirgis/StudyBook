@@ -82,6 +82,20 @@ def nextGreaterElement(nums1: List[int], nums2: List[int]) -> List[int]:
     """
     Finds the next greater element in nums2 for every element in nums1.
     """
-    pass
+    # we require mono decreasing stack calculated on nums2 
+    # but shoudl reflect in List1
+    n1 = len (nums1)
+    out = [-1] * n1
+    lookup = {val: i for i, val in enumerate(nums1)}  
+    stack =[]
+
+    for i, val in enumerate(nums2):
+        while stack and stack[-1][1] < val:
+            _, lookup_val = stack.pop()
+            if lookup_val in lookup:
+                out[lookup[lookup_val]] = val
+        stack.append((i, val))
+    return out    
+
 
 harness(nextGreaterElement)
