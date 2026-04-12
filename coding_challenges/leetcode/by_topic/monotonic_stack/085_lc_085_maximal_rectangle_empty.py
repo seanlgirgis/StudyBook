@@ -166,7 +166,7 @@ def maximalRectangle(matrix: List[List[str]]) -> int:
         max_area = 0
         for i, h in enumerate(heights):
             idx = i
-            while stack and h <= stack[-1][0]:
+            while stack and h < stack[-1][0]:
                 ph, p_id = stack.pop()
                 idx = p_id
                 max_area = max(max_area, ph * (i - p_id))
