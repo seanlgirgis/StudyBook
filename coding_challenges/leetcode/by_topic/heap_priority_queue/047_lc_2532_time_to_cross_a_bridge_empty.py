@@ -103,6 +103,34 @@ class MaxHeapt:
         return len(self._data)  
 
 def findCrossingTime(n: int, k: int, time: List[List[int]]) -> int:
-    raise NotImplementedError("Implement me")
+    boxes_crossed_to_left, clock, boxes_available_to_pick_right_to_left = 0, 0 , n
+    
+    @dataclass(frozen=True)
+    class Worker:
+        worker_id: int
+        left_to_right: int
+        pick_box: int
+        right_to_left: int
+        put_box: int
+
+        @property
+        def inefficiency(self) -> int:
+            return self.left_to_right + self.right_to_left
+
+        def finish_pick_at_right(self) -> int:
+            return clock + self.pick_box
+
+        def finish_put_at_left(self) -> int:
+            return clock + self.put_box   
+    
+    
+    workers = [Worker(
+            worker_id=i,
+            left_to_right=row[0],
+            pick_box=row[1],
+            right_to_left=row[2],
+            put_box=row[3],
+        ) for i, row in enumerate(time)]
+    for worker in workers: print(worker.worker_id)
 
 harness(findCrossingTime)
