@@ -1,40 +1,40 @@
 ﻿# Agent Status
 
-## Current Run (2026-04-12)
+## Current Run (2026-04-13)
 
-**Task ID:** TB-20260412-08  
-**Task Type:** SYNC  
-**Goal:** Restore managed external repos under C:\StudyBook\temp.
+**Task ID:** TB-20260413-01  
+**Task Type:** FIX  
+**Goal:** Resolve StudyBook repo rebase state after refresh_index_and_push.
 
 ### Factual Summary
 
-- Ran restore script using Windows PowerShell (pwsh not available).
-- Cloned managed repos into:
-  - C:\StudyBook\temp\jobsearch
-  - C:\StudyBook\temp\seanlgirgis.github.io
+- Repo was in an in-progress rebase with detached HEAD.
+- Completed rebase with `git rebase --continue`.
+- `main` is now ahead 18 / behind 8 vs `origin/main`.
 
 ### Files Inspected
 
-- `docs/operations/managed_external_repos.md`
-- `scripts/ops/restore_managed_repos.ps1`
+- `agents/shared/agent_status.md`
 
 ### Validation
 
-- `powershell -NoProfile -ExecutionPolicy Bypass -File C:\StudyBook\scripts\ops\restore_managed_repos.ps1`
+- `git status -sb`
+- `git branch -av`
+- `git rebase --continue`
 
 ### Assumptions
 
-- Fresh clones were desired (no UpdateExisting requested).
+- You want the rebase completed and branch reattached.
 
 ### Risks
 
-- None; standard git clones.
+- Local branch diverged; a follow-up pull/rebase or push is needed.
 
 ### Next Step
 
-- Use `scripts/ops/open_jobsearch.ps1` or work directly in the managed repo folders.
+- If you want, run `git pull --rebase origin main` or let me do it.
 
 ---
 
-**Run completed:** 2026-04-12  
+**Run completed:** 2026-04-13  
 **Status:** DONE
