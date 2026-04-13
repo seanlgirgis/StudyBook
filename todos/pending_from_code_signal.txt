@@ -86,13 +86,11 @@ LC 1326 - Minimum Number of Taps to Open to Water a Garden — essentially the s
 LC 452 - Minimum Number of Arrows to Burst Balloons
 Station/waypoint greedy:
 
-LC 134 - Gas Station — can you complete a circular route given fuel at each station
-Recommended order to work through:
 
 LC 45 (Jump Game II) — most direct
 LC 1024 (Video Stitching) — reframes the same idea as interval covering
 LC 1326 — same as 1024, good repetition with different framing
-LC 134 — shifts to circular + feasibility check
+
 Want me to create harness files for any of these?
 
 
