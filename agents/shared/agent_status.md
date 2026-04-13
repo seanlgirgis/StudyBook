@@ -1,40 +1,39 @@
 ﻿# Agent Status
 
-## Current Run (2026-04-12)
+## Current Run (2026-04-13)
 
-**Task ID:** TB-20260412-08  
-**Task Type:** SYNC  
-**Goal:** Restore managed external repos under C:\StudyBook\temp.
+**Task ID:** TB-20260413-02  
+**Task Type:** FIX  
+**Goal:** Resolve binary conflict in coding_challenges/index.xlsx during rebase.
 
 ### Factual Summary
 
-- Ran restore script using Windows PowerShell (pwsh not available).
-- Cloned managed repos into:
-  - C:\StudyBook\temp\jobsearch
-  - C:\StudyBook\temp\seanlgirgis.github.io
+- Chose remote version for `coding_challenges/index.xlsx` using `git checkout --theirs`.
+- Completed rebase with manual commit (`git commit --no-edit`) due to missing editor.
+- `main` now ahead of `origin/main` by 19 commits.
 
 ### Files Inspected
 
-- `docs/operations/managed_external_repos.md`
-- `scripts/ops/restore_managed_repos.ps1`
+- `coding_challenges/index.xlsx`
 
 ### Validation
 
-- `powershell -NoProfile -ExecutionPolicy Bypass -File C:\StudyBook\scripts\ops\restore_managed_repos.ps1`
+- `git status -sb`
+- `git rebase --continue`
 
 ### Assumptions
 
-- Fresh clones were desired (no UpdateExisting requested).
+- Remote index.xlsx was the desired source of truth.
 
 ### Risks
 
-- None; standard git clones.
+- Local regenerated index.xlsx was discarded in favor of remote.
 
 ### Next Step
 
-- Use `scripts/ops/open_jobsearch.ps1` or work directly in the managed repo folders.
+- Push when ready.
 
 ---
 
-**Run completed:** 2026-04-12  
+**Run completed:** 2026-04-13  
 **Status:** DONE
