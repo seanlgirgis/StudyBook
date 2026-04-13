@@ -1,24 +1,21 @@
 #!/usr/bin/env python3
-"""
-Search coding_challenges/index.xlsx by substring (grep-like).
-"""
+"""Search coding_challenges/index.csv by substring (grep-like)."""
 
 from __future__ import annotations
 
 import argparse
+import csv
 from pathlib import Path
-
-from openpyxl import load_workbook
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_INDEX_PATH = ROOT / "index.xlsx"
+DEFAULT_INDEX_PATH = ROOT / "index.csv"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Search coding_challenges/index.xlsx by substring")
+    parser = argparse.ArgumentParser(description="Search coding_challenges/index.csv by substring")
     parser.add_argument("needle", help="Substring to search for (example: 48)")
-    parser.add_argument("--index", type=Path, default=DEFAULT_INDEX_PATH, help="Path to .xlsx index file")
+    parser.add_argument("--index", type=Path, default=DEFAULT_INDEX_PATH, help="Path to .csv index file")
     parser.add_argument("--case-sensitive", action="store_true", help="Use case-sensitive search")
     parser.add_argument("--limit", type=int, default=50, help="Max rows to print")
     return parser.parse_args()
@@ -35,31 +32,30 @@ def main() -> int:
     if not index_path.exists():
         raise SystemExit(f"Index file does not exist: {index_path}")
 
-    wb = load_workbook(index_path, read_only=True, data_only=True)
-    ws = wb["index"] if "index" in wb.sheetnames else wb.active
+    with index_path.open("r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        headers = list(reader.fieldnames or [])
+        rows = list(reader)
 
-    header_cells = next(ws.iter_rows(min_row=1, max_row=1, values_only=True), None)
-    if not header_cells:
+    if not headers:
         print("No headers found.")
         return 0
 
-    headers = [str(h).strip() if h is not None else "" for h in header_cells]
     needle = normalize(args.needle, args.case_sensitive)
 
     matches: list[str] = []
     total = 0
-    for excel_row_num, row in enumerate(ws.iter_rows(min_row=2, values_only=True), start=2):
+    for csv_row_num, row in enumerate(rows, start=2):
         parts = []
-        for i, value in enumerate(row):
-            key = headers[i] if i < len(headers) and headers[i] else f"col_{i+1}"
-            text = "" if value is None else str(value)
+        for key in headers:
+            text = str(row.get(key, "") or "")
             parts.append((key, text))
 
         searchable = " | ".join(text for _, text in parts)
         if needle in normalize(searchable, args.case_sensitive):
             total += 1
             rendered = " | ".join(f"{k}={v}" for k, v in parts)
-            matches.append(f"{excel_row_num}: {rendered}")
+            matches.append(f"{csv_row_num}: {rendered}")
             if len(matches) >= args.limit:
                 break
 

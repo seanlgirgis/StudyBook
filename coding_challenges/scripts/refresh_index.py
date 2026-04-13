@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Refresh coding_challenges/index.xlsx from files under leetcode/by_topic.
+Refresh coding_challenges/index.csv from files under leetcode/by_topic.
 
 Default behavior:
 - scans configured solution file extensions
 - reads optional metadata header keys when present:
   id, title, tags, source
 - falls back to filename/folder-based inference when metadata is absent
-- writes deterministic output sorted by path
+- writes deterministic CSV output sorted by path
 """
 
 from __future__ import annotations
@@ -15,17 +15,14 @@ from __future__ import annotations
 import argparse
 import csv
 import re
-from copy import copy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
-from openpyxl import Workbook, load_workbook
-
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCAN_ROOT = ROOT / "leetcode" / "by_topic"
-DEFAULT_INDEX_PATH = ROOT / "index.xlsx"
+DEFAULT_INDEX_PATH = ROOT / "index.csv"
 DEFAULT_EXTS = {".py"}
 HEADERS = ["id", "path", "primary", "tags", "title", "source"]
 
@@ -161,58 +158,10 @@ def write_csv(index_path: Path, rows: list[Row]) -> None:
             writer.writerow([row.row_id, row.path, row.primary, row.tags, row.title, row.source])
 
 
-def write_xlsx(index_path: Path, rows: list[Row]) -> None:
-    index_path.parent.mkdir(parents=True, exist_ok=True)
-    if index_path.exists():
-        wb = load_workbook(index_path)
-        ws = wb["index"] if "index" in wb.sheetnames else wb.active
-    else:
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "index"
-
-    existing_max_row = ws.max_row
-
-    template_styles: dict[int, object] = {}
-    if existing_max_row >= 2:
-        for col_idx in range(1, len(HEADERS) + 1):
-            template_styles[col_idx] = copy(ws.cell(row=2, column=col_idx)._style)
-
-    for col_idx, header in enumerate(HEADERS, start=1):
-        ws.cell(row=1, column=col_idx, value=header)
-
-    for row_idx, row in enumerate(rows, start=2):
-        values = [row.row_id, row.path, row.primary, row.tags, row.title, row.source]
-        is_new_row = row_idx > existing_max_row
-        for col_idx, value in enumerate(values, start=1):
-            cell = ws.cell(row=row_idx, column=col_idx, value=value)
-            if is_new_row and col_idx in template_styles:
-                cell._style = copy(template_styles[col_idx])
-
-    last_needed_row = len(rows) + 1
-    if existing_max_row > last_needed_row:
-        for row_idx in range(last_needed_row + 1, existing_max_row + 1):
-            for col_idx in range(1, len(HEADERS) + 1):
-                ws.cell(row=row_idx, column=col_idx, value=None)
-
-    wb.save(index_path)
-
-
-def write_index(index_path: Path, rows: list[Row]) -> None:
-    suffix = index_path.suffix.lower()
-    if suffix == ".csv":
-        write_csv(index_path, rows)
-        return
-    if suffix == ".xlsx":
-        write_xlsx(index_path, rows)
-        return
-    raise SystemExit(f"Unsupported output extension '{index_path.suffix}'. Use .xlsx or .csv.")
-
-
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Refresh coding_challenges/index.xlsx")
+    parser = argparse.ArgumentParser(description="Refresh coding_challenges/index.csv")
     parser.add_argument("--scan-root", type=Path, default=DEFAULT_SCAN_ROOT, help="Root directory to scan")
-    parser.add_argument("--index", type=Path, default=DEFAULT_INDEX_PATH, help="Index output path (.xlsx or .csv)")
+    parser.add_argument("--index", type=Path, default=DEFAULT_INDEX_PATH, help="Index output CSV path")
     parser.add_argument("--ext", action="append", default=None, help="File extension to include (repeatable)")
     parser.add_argument("--check", action="store_true", help="Check mode: do not write, only report count")
     return parser.parse_args()
@@ -235,7 +184,10 @@ def main() -> int:
         print(f"Would index {len(rows)} files into {index_path}")
         return 0
 
-    write_index(index_path, rows)
+    if index_path.suffix.lower() != ".csv":
+        raise SystemExit(f"Unsupported output extension '{index_path.suffix}'. Use .csv.")
+
+    write_csv(index_path, rows)
     print(f"Wrote {len(rows)} rows to {index_path}")
     return 0
 

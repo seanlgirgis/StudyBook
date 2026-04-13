@@ -2,44 +2,55 @@
 
 ## Current Run (2026-04-13)
 
-**Task ID:** TB-20260413-03  
-**Task Type:** FIX  
-**Goal:** Resolve non-fast-forward push rejection for StudyBook main by handling `coding_challenges/index.xlsx` merge conflict and completing push.
+**Task ID:** TB-20260413-04  
+**Task Type:** ENHANCEMENT  
+**Goal:** Replace binary-index workflow with CSV-first index management and add a CLI for search/update/open operations.
 
 ### Factual Summary
 
-- Confirmed repository was diverged (`ahead 2, behind 1`) with one unresolved binary conflict in `coding_challenges/index.xlsx`.
-- Resolved conflict by keeping local workbook (`--ours`) to preserve the latest local index refresh.
-- Created merge-resolution commit `50cafff`.
-- Pushed `main` successfully to `origin/main` (`32249bb..50cafff`).
+- Switched `coding_challenges/scripts/refresh_index.py` default and supported output to `index.csv` only.
+- Converted `coding_challenges/scripts/search_index.py` from XLSX/OpenPyXL search to CSV search.
+- Added new CLI: `coding_challenges/scripts/index_cli.py` with commands:
+  - `headers`, `list`, `find`, `show`, `add`, `update`, `delete`, `open`
+- Added root wrapper: `index_cli.ps1` for easy invocation from `D:\StudyBook`.
+- Added `.gitignore` rule for `coding_challenges/index.xlsx`.
+- Untracked `coding_challenges/index.xlsx` via `git rm --cached` to prevent future binary merge/push conflicts.
 
-### Files Inspected
+### Files Modified
 
-- `coding_challenges/index.xlsx`
-- `agents/shared/approval_matrix.md`
-- `agents/shared/command_allowlist.md`
-- `agents/shared/task_register.md`
-- `agents/shared/open_loops.md`
+- `.gitignore`
+- `coding_challenges/scripts/refresh_index.py`
+- `coding_challenges/scripts/search_index.py`
+- `coding_challenges/scripts/index_cli.py` (new)
+- `index_cli.ps1` (new)
+- `coding_challenges/index.csv` (refreshed)
+- `coding_challenges/index.xlsx` (removed from git tracking)
 
 ### Validation
 
-- `git status --short --branch`
-- `git status`
-- `git log --oneline --decorate --graph -n 10 --all`
-- `git ls-files -u coding_challenges/index.xlsx`
-- `git push origin main`
+- `./refresh_index_and_push.ps1 -SkipGit` → wrote CSV successfully.
+- `./search_index.ps1 lc_0238 -Limit 3` → match returned from CSV.
+- `./index_cli.ps1 headers` → headers printed.
+- `./index_cli.ps1 find leetcode --field source --limit 2` → filtered rows returned.
+- `./index_cli.ps1 open lc_0238 --print-only` → resolved absolute path printed.
+- CRUD smoke test:
+  - `add tmp_cli_smoke`
+  - `update tmp_cli_smoke`
+  - `show tmp_cli_smoke`
+  - `delete tmp_cli_smoke`
 
 ### Assumptions
 
-- Local regenerated workbook was the intended source of truth for this run.
+- CSV should be the single source of truth for repository index data.
+- Excel output is optional/local and should not be version-controlled.
 
 ### Risks
 
-- If remote workbook contained intentional manual edits absent locally, those edits were superseded by local resolution.
+- Existing workflows that directly expect `index.xlsx` in git may need to transition to CSV/CLI commands.
 
 ### Next Step
 
-- Optional: rerun `./refresh_index_and_push.ps1` on the next refresh cycle to confirm fully automated happy path.
+- If desired, add a small helper script to regenerate a local-only `index.xlsx` view from CSV on demand (not tracked).
 
 ---
 

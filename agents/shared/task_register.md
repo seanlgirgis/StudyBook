@@ -181,3 +181,4 @@ Track active and completed tasks to avoid losing continuity.
 
 
 | TB-20260413-03 | Resolve StudyBook push rejection and close index.xlsx binary merge conflict on main | done | 2026-04-13 | Kept local `coding_challenges/index.xlsx` during merge conflict resolution and pushed `main` successfully (`50cafff`) |
+| TB-20260413-04 | Move coding_challenges index workflow to CSV-first and add index CLI for CRUD/search/open | done | 2026-04-13 | Added `index_cli.py` + `index_cli.ps1`, converted refresh/search scripts to CSV, and untracked binary `index.xlsx` |

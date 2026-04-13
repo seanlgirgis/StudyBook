@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-13 (index.xlsx push conflict resolved)
+Last reviewed: 2026-04-13 (index workflow moved to CSV-first)
 
 ## Status Meanings
 
@@ -126,3 +126,6 @@ Last reviewed: 2026-04-13 (index.xlsx push conflict resolved)
 
 
 | LOOP-089 | TB-20260413-03 | Resolve non-fast-forward push rejection caused by binary conflict in coding_challenges/index.xlsx | closed | none | 2026-04-13 |
+
+
+| LOOP-090 | TB-20260413-04 | Replace binary index workflow with CSV-first index + CLI operations | closed | none | 2026-04-13 |

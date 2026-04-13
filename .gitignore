@@ -227,6 +227,7 @@ temp/
 # Large local runtime artifacts (do not commit)
 tracks/08_databases/_setup/volumes/
 tracks/08_databases/practice/**/_artifacts/
+coding_challenges/index.xlsx
 
 # Ignore local Claude worktrees (can contain nested git repos)
 .claude/worktrees/
