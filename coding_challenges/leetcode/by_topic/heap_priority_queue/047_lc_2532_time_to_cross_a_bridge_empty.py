@@ -66,9 +66,6 @@ def harness(func: Callable[[int, int, List[List[int]]], int]) -> None:
             )
 
     print(f"\nSummary: {passed}/{len(tests)} tests passed.\n")
-    
-    
-# Minimum heap that keeps track of a tuples
 
 import heapq
 class MinHeapt:
@@ -83,9 +80,8 @@ class MinHeapt:
     def __bool__(self):
         return bool(self._data)
     def __len__(self):
-        return len(self._data) 
-        
-# Maximum heap that keeps track of a tuples
+        return len(self._data)        
+
 class MaxHeapt:
     def __init__(self):
         self._data = []
@@ -100,9 +96,13 @@ class MaxHeapt:
     def __bool__(self):
         return bool(self._data)
     def __len__(self):
-        return len(self._data)  
+        return len(self._data)    
+        
 
+        
 def findCrossingTime(n: int, k: int, time: List[List[int]]) -> int:
+    # just for harness sanity
+    assert k == len(time)
     boxes_crossed_to_left, clock, boxes_available_to_pick_right_to_left = 0, 0 , n
     
     @dataclass(frozen=True)
@@ -121,16 +121,88 @@ def findCrossingTime(n: int, k: int, time: List[List[int]]) -> int:
             return clock + self.pick_box
 
         def finish_put_at_left(self) -> int:
-            return clock + self.put_box   
+            return clock + self.put_box    
+        
+        
     
-    
-    workers = [Worker(
+    workers = [
+        Worker(
             worker_id=i,
             left_to_right=row[0],
             pick_box=row[1],
             right_to_left=row[2],
             put_box=row[3],
-        ) for i, row in enumerate(time)]
-    for worker in workers: print(worker.worker_id)
+        )
+        for i, row in enumerate(time)
+    ]    
+      
+    
+    
+    # Workers currently waiting on each side to use the bridge.
+    left_side_worker_ready_q = MaxHeapt()
+    right_side_worker_ready_q = MaxHeapt()
+
+    # Workers currently busy doing non-bridge work.
+    left_side_workers_dropping = MinHeapt()   # (finish_time, worker_id)
+    right_side_workers_picking = MinHeapt()   # (finish_time, worker_id)
+
+    # Initially, all workers queue on the left_side ready q
+    for worker in workers:
+        left_side_worker_ready_q.push(worker.inefficiency, worker.worker_id)    
+        
+    def release_finished_workers():
+        
+        # Finished picking on right -> ready on right bridge queue.
+        while right_side_workers_picking and right_side_workers_picking.peek()[0] <= clock:
+            _, worker_id = right_side_workers_picking.pop()
+            right_side_worker_ready_q.push(workers[worker_id].inefficiency, worker_id)   
+        
+        # Finished dropping on left -> ready on left bridge queue.
+        while left_side_workers_dropping and left_side_workers_dropping.peek()[0] <= clock:
+            _, worker_id = left_side_workers_dropping.pop()
+            left_side_worker_ready_q.push(workers[worker_id].inefficiency, worker_id)
+            
+    
+    while boxes_crossed_to_left < n:
+        release_finished_workers()
+       
+        if right_side_worker_ready_q:
+           _, worker_id = right_side_worker_ready_q.pop()
+           #advance the clock by time of crossing
+           clock += workers[worker_id].right_to_left
+           #increment the number of crossed boxes
+           boxes_crossed_to_left += 1
+           #if last box crossed.. Time to quit
+           if boxes_crossed_to_left == n:
+               return clock
+           # push the box at the q of dropping
+           left_side_workers_dropping.push(clock + workers[worker_id].put_box , worker_id)
+           continue
+        
+        # a worker in the left.. No need to cross if the right side ran out of boxes
+        
+        if boxes_available_to_pick_right_to_left > 0 and left_side_worker_ready_q:
+            _, worker_id = left_side_worker_ready_q.pop()
+            #advance the clock by time of crossing
+            clock += workers[worker_id].left_to_right
+            boxes_available_to_pick_right_to_left -= 1
+            right_side_workers_picking.push(clock + workers[worker_id].pick_box , worker_id)
+            continue
+            
+        #at a time we reach here where the ready qs are empty .. Advance the clock
+        
+        clock = min(
+            left_side_workers_dropping.peek()[0] if left_side_workers_dropping else float("inf"),
+            right_side_workers_picking.peek()[0] if right_side_workers_picking else float("inf"),
+            )
+            
+    return clock
+            
+        
+        
+        
+     
+    
+
 
 harness(findCrossingTime)
