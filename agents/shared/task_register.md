@@ -175,5 +175,6 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260412-05 | Fix DPAPI ProtectedData load for seed registration in PowerShell 7 | done | 2026-04-12 | Added assembly load fallback in `scripts/env/env_core.ps1` for ProtectedData |
 | TB-20260412-06 | Add secret decrypt error messaging and nonfatal handling when secrets are optional | done | 2026-04-12 | Added try/catch around secret decrypt to surface file path and passphrase mismatch guidance |
 | TB-20260412-07 | Update second-machine seed handoff guide with latest fixes and recovery paths | done | 2026-04-12 | Added ProtectedData and padding-error guidance plus re-encrypt steps |
+| TB-20260412-08 | Restore managed external repos under temp | done | 2026-04-12 | Ran restore_managed_repos.ps1; cloned jobsearch + website repos |
 
 
