@@ -180,3 +180,4 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260413-02 | Resolve binary conflict in coding_challenges index.xlsx | done | 2026-04-13 | Took remote version during rebase and completed rebase |
 
 
+| TB-20260413-03 | Resolve StudyBook push rejection and close index.xlsx binary merge conflict on main | done | 2026-04-13 | Kept local `coding_challenges/index.xlsx` during merge conflict resolution and pushed `main` successfully (`50cafff`) |

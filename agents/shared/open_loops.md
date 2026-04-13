@@ -1,8 +1,8 @@
-﻿# Open Loops
+# Open Loops
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-13 (index.xlsx conflict)
+Last reviewed: 2026-04-13 (index.xlsx push conflict resolved)
 
 ## Status Meanings
 
@@ -123,3 +123,6 @@ Last reviewed: 2026-04-13 (index.xlsx conflict)
 | LOOP-087 | TB-20260412-03 | Create second-machine Codex handoff doc for seed/env bootstrap recovery | closed | none | 2026-04-12 |
 | LOOP-088 | TB-20260412-04 | Standardize external repo management under StudyBook temp and add cross-machine restore workflow | closed | none | 2026-04-12 |
 | LOOP-088 | TB-20260409-01 | Restore missing base env config and re-register local seed on new laptop | closed | Added `config/env/base.psd1`; rerun `env_setter.ps1` | 2026-04-12 |
+
+
+| LOOP-089 | TB-20260413-03 | Resolve non-fast-forward push rejection caused by binary conflict in coding_challenges/index.xlsx | closed | none | 2026-04-13 |
