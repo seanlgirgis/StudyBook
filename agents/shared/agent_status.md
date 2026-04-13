@@ -2,37 +2,36 @@
 
 ## Current Run (2026-04-13)
 
-**Task ID:** TB-20260413-01  
+**Task ID:** TB-20260413-02  
 **Task Type:** FIX  
-**Goal:** Resolve StudyBook repo rebase state after refresh_index_and_push.
+**Goal:** Resolve binary conflict in coding_challenges/index.xlsx during rebase.
 
 ### Factual Summary
 
-- Repo was in an in-progress rebase with detached HEAD.
-- Completed rebase with `git rebase --continue`.
-- `main` is now ahead 18 / behind 8 vs `origin/main`.
+- Chose remote version for `coding_challenges/index.xlsx` using `git checkout --theirs`.
+- Completed rebase with manual commit (`git commit --no-edit`) due to missing editor.
+- `main` now ahead of `origin/main` by 19 commits.
 
 ### Files Inspected
 
-- `agents/shared/agent_status.md`
+- `coding_challenges/index.xlsx`
 
 ### Validation
 
 - `git status -sb`
-- `git branch -av`
 - `git rebase --continue`
 
 ### Assumptions
 
-- You want the rebase completed and branch reattached.
+- Remote index.xlsx was the desired source of truth.
 
 ### Risks
 
-- Local branch diverged; a follow-up pull/rebase or push is needed.
+- Local regenerated index.xlsx was discarded in favor of remote.
 
 ### Next Step
 
-- If you want, run `git pull --rebase origin main` or let me do it.
+- Push when ready.
 
 ---
 

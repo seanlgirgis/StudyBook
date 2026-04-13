@@ -177,5 +177,6 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260412-07 | Update second-machine seed handoff guide with latest fixes and recovery paths | done | 2026-04-12 | Added ProtectedData and padding-error guidance plus re-encrypt steps |
 | TB-20260412-08 | Restore managed external repos under temp | done | 2026-04-12 | Ran restore_managed_repos.ps1; cloned jobsearch + website repos |
 | TB-20260413-01 | Resolve in-progress StudyBook rebase after refresh_index_and_push | done | 2026-04-13 | Completed rebase; main ahead 18/behind 8 |
+| TB-20260413-02 | Resolve binary conflict in coding_challenges index.xlsx | done | 2026-04-13 | Took remote version during rebase and completed rebase |
 
 
