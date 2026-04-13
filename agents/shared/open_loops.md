@@ -121,4 +121,5 @@ Last reviewed: 2026-04-12 (seed + decrypt + handoff guide)
 | LOOP-085 | TB-20260412-01 | Persist durable memory for high-frequency index commands (`refresh_index_and_push.ps1`, `search_index.ps1`) | closed | none | 2026-04-12 |
 | LOOP-086 | TB-20260412-02 | Fix PowerShell 5.1 JSON hashtable compatibility in env bootstrap/secret scripts | closed | none | 2026-04-12 |
 | LOOP-087 | TB-20260412-03 | Create second-machine Codex handoff doc for seed/env bootstrap recovery | closed | none | 2026-04-12 |
+| LOOP-088 | TB-20260412-04 | Standardize external repo management under StudyBook temp and add cross-machine restore workflow | closed | none | 2026-04-12 |
 | LOOP-088 | TB-20260409-01 | Restore missing base env config and re-register local seed on new laptop | closed | Added `config/env/base.psd1`; rerun `env_setter.ps1` | 2026-04-12 |

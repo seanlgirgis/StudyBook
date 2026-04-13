@@ -50,5 +50,37 @@ else {
 }
 
 if (-not $SkipGit) {
-    gitq
+    $GitqCmd = Get-Command gitq -ErrorAction SilentlyContinue
+    if (-not $GitqCmd) {
+        throw "gitq is not available in this shell."
+    }
+
+    $GitqTargets = @(
+        ".",
+        "temp\seanlgirgis.github.io",
+        "temp\jobsearch"
+    )
+
+    foreach ($target in $GitqTargets) {
+        $targetPath = Join-Path -Path $Root -ChildPath $target
+        if (-not (Test-Path -LiteralPath $targetPath)) {
+            Write-Warning "Skipping missing path: $targetPath"
+            continue
+        }
+
+        $gitDir = Join-Path -Path $targetPath -ChildPath ".git"
+        if (-not (Test-Path -LiteralPath $gitDir)) {
+            Write-Warning "Skipping non-git path: $targetPath"
+            continue
+        }
+
+        Write-Host "Running gitq in $targetPath" -ForegroundColor Cyan
+        Push-Location -LiteralPath $targetPath
+        try {
+            gitq
+        }
+        finally {
+            Pop-Location
+        }
+    }
 }

@@ -52,6 +52,22 @@ Rule:
 - Always use canonical keys `JOBSITE_<SITEKEY>_{URL,USER,PASSWORD}`.
 - Do not create new ad-hoc keys like `SAPSF_*` for job-site credentials.
 
+## Managed External Repos
+
+StudyBook is the launchpad for two separately versioned repos under `temp`:
+- `temp\jobsearch`
+- `temp\seanlgirgis.github.io`
+
+Restore on a new machine:
+`pwsh .\scripts\ops\restore_managed_repos.ps1`
+
+Update existing clones:
+`pwsh .\scripts\ops\restore_managed_repos.ps1 -UpdateExisting`
+
+Rule:
+- Prefer `{PROJECT_ROOT}\temp\...` style paths in tracked files.
+- Avoid hardcoded absolute paths (for example `C:\jobsearch`) in repo-managed scripts/config.
+
 ## Command Safety
 
 | Safe (no approval) | Needs Approval |

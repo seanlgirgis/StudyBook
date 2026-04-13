@@ -6,7 +6,7 @@
 
 ## Confirmed Resume Source of Truth
 
-- Canonical file: `C:\jobsearch\data\source_of_truth.json`
+- Canonical file: `D:\StudyBook\temp\jobsearch\data\source_of_truth.json`
 - This file contains the authoritative structured profile for:
   - personal identity metadata,
   - target roles,
@@ -24,7 +24,7 @@
 
 ## Personal Website Repo Familiarity
 
-Repository: `C:\pyproj\seanlgirgis.github.io`
+Repository: `D:\StudyBook\temp\seanlgirgis.github.io`
 
 ### Observed architecture
 

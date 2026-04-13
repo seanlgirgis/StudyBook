@@ -13,6 +13,7 @@ Use this folder for repeatable day-to-day runbooks.
 - `docs/operations/aws_credentials_workflow.md` - AWS profile login + encrypted credential portability workflow
 - `poc/connection_proofs/README.md` - POC connection proof scripts for fast resource reachability checks
 - `docs/operations/jobsearch_launchpad.md` - StudyBook launch wrappers for JobSearch with machine-configurable root path
+- `docs/operations/managed_external_repos.md` - managed external repos policy (`temp\jobsearch`, `temp\seanlgirgis.github.io`) and cross-machine restore command
 - `docs/operations/jobsearch_direct_mode_playbook.md` - direct-mode jobsearch SOP in StudyBook (applied-before checks, tailored generation, status tracking)
 - `docs/operations/jobsite_credentials_workflow.md` - canonical job-site credential save/retrieve workflow using JOBSITE_* keys and skill scripts
 - `docs/operations/seed_context_and_decryption_reminder.md` - cross-machine/sandbox DPAPI seed reminder (diagnose with `whoami`, do not re-ask passphrase once seed exists)

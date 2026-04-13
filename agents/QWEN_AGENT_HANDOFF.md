@@ -163,7 +163,31 @@ Needs explicit user approval:
 
 If unclear, treat as approval-required.
 
-## 6) Validation Rule
+## 6) Managed External Repositories (JobSearch + Website)
+
+StudyBook manages these external repos under `temp` while preserving separate Git history:
+
+- `D:\StudyBook\temp\jobsearch`
+- `D:\StudyBook\temp\seanlgirgis.github.io`
+
+Cross-machine restore command:
+
+```powershell
+cd D:\StudyBook
+pwsh .\scripts\ops\restore_managed_repos.ps1
+```
+
+To update existing clones:
+
+```powershell
+pwsh .\scripts\ops\restore_managed_repos.ps1 -UpdateExisting
+```
+
+Path policy:
+- Use `{PROJECT_ROOT}` + relative child paths in tracked config/scripts.
+- Do not hardcode machine-specific absolute repo paths in source-controlled files.
+
+## 7) Validation Rule
 
 If behavior changes:
 - run real validation commands
@@ -173,7 +197,7 @@ If behavior changes:
 If still failing:
 - stop and log exact failure + blocker in `agent_status.md`
 
-## 7) Practical Start Prompt For Qwen
+## 8) Practical Start Prompt For Qwen
 
 Use this as your first prompt in Qwen:
 

@@ -2,8 +2,8 @@
 
 **Last Updated:** 2026-04-10  
 **Primary Sources:**  
-- `C:\jobsearch\data\source_of_truth.json`  
-- `C:\pyproj\seanlgirgis.github.io` (repo structure and generators)
+- `D:\StudyBook\temp\jobsearch\data\source_of_truth.json`  
+- `D:\StudyBook\temp\seanlgirgis.github.io` (repo structure and generators)
 
 ## Core Career Identity
 
@@ -45,12 +45,12 @@
 
 ## JobSearch Source of Truth Rule
 
-- Treat `C:\jobsearch\data\source_of_truth.json` as canonical career/resume data for JobSearch workflows.
+- Treat `D:\StudyBook\temp\jobsearch\data\source_of_truth.json` as canonical career/resume data for JobSearch workflows.
 - Any generated resume, tailoring, or job-fit logic should reconcile against this file first.
 
 ## Website Repo Map (High-Level)
 
-- `C:\pyproj\seanlgirgis.github.io\generate.py` is the central multi-format build orchestrator.
+- `D:\StudyBook\temp\seanlgirgis.github.io\generate.py` is the central multi-format build orchestrator.
 - Data/layout inputs are YAML-driven under `...\data\` with a `store.yaml` content model plus target layouts.
 - Renderers live under `...\renderers\` (`docx`, `html`, `pdf`, `md`).
 - Build outputs include `resume/cv` docx/pdf/md/html assets and site components.

@@ -190,5 +190,15 @@ Purpose: compact durable memory map for fast session bootstrap.
   - `D:\StudyBook\refresh_index_and_push.ps1`
   - `D:\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]`
 
+## Managed External Repos Memory
+
+- Managed under StudyBook launchpad `temp` (separate Git repos):
+  - `D:\StudyBook\temp\jobsearch`
+  - `D:\StudyBook\temp\seanlgirgis.github.io`
+- Cross-machine restore command:
+  - `pwsh .\scripts\ops\restore_managed_repos.ps1`
+- Rule:
+  - prefer `{PROJECT_ROOT}\temp\...` pathing in tracked files; avoid hardcoded machine-specific absolute paths.
+
 
 
