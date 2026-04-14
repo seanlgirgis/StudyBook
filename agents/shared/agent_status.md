@@ -2,34 +2,34 @@
 
 ## Current Run (2026-04-13)
 
-**Task ID:** TB-20260413-13  
+**Task ID:** TB-20260413-14  
 **Task Type:** FIX  
-**Goal:** Prevent duplicate sections on learning-aws-analytics page.
+**Goal:** Update AWS Lambda learning page media links and show Cloudflare bucket path.
 
 ### Factual Summary
 
-- Added a load sequence guard in `assets/js/router.js` to prevent overlapping async loads from appending duplicate content.
+- Replaced placeholder audio/video box on the AWS Lambda learning page with the provided R2 audio and video sources.
+- Added the Cloudflare R2 bucket base path as a visible hint under the audio player.
 
 ### Files Inspected
 
-- `temp/seanlgirgis.github.io/components/learning-aws-analytics.html`
-- `temp/seanlgirgis.github.io/assets/js/router.js`
+- `temp/seanlgirgis.github.io/learning/aws-lambda.html`
 
 ### Validation
 
-- Not run (browser verification pending).
+- Not run (no browser preview executed).
 
 ### Assumptions
 
-- Duplicate sections were caused by concurrent `loadPage` calls on initial hash load.
+- The media is hosted at the provided Cloudflare R2 public bucket and should be referenced directly in the page.
 
 ### Risks
 
-- Low; guard only prevents stale loads from mutating the DOM.
+- Low; only static HTML media tags were updated.
 
 ### Next Step
 
-- Refresh the page and confirm duplicates are gone.
+- Open the AWS Lambda page and confirm the audio/video players load and play.
 
 ---
 

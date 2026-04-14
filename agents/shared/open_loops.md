@@ -147,3 +147,4 @@ Last reviewed: 2026-04-13 (router duplicate guard)
 
 
 | LOOP-096 | TB-20260413-10 | Persist cross-machine instruction memory for index UI Docker bootstrap/start | closed | none | 2026-04-13 |
+| LOOP-097 | TB-20260413-14 | Update AWS Lambda learning page audio/video media links | closed | none | 2026-04-13 |
