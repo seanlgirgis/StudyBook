@@ -55,6 +55,36 @@ if (-not $SkipGit) {
         throw "gitq is not available in this shell."
     }
 
+    function Ensure-GitIdentity {
+        param(
+            [Parameter(Mandatory = $true)]
+            [string]$RepoPath,
+            [AllowEmptyString()]
+            [string]$FallbackName,
+            [AllowEmptyString()]
+            [string]$FallbackEmail
+        )
+
+        $name = git -C $RepoPath config --get user.name 2>$null
+        $email = git -C $RepoPath config --get user.email 2>$null
+
+        if ([string]::IsNullOrWhiteSpace($name) -and -not [string]::IsNullOrWhiteSpace($FallbackName)) {
+            git -C $RepoPath config user.name $FallbackName | Out-Null
+        }
+        if ([string]::IsNullOrWhiteSpace($email) -and -not [string]::IsNullOrWhiteSpace($FallbackEmail)) {
+            git -C $RepoPath config user.email $FallbackEmail | Out-Null
+        }
+    }
+
+    $RootGitName = git -C $Root config --get user.name 2>$null
+    $RootGitEmail = git -C $Root config --get user.email 2>$null
+    if ([string]::IsNullOrWhiteSpace($RootGitName)) {
+        $RootGitName = git config --global --get user.name 2>$null
+    }
+    if ([string]::IsNullOrWhiteSpace($RootGitEmail)) {
+        $RootGitEmail = git config --global --get user.email 2>$null
+    }
+
     $GitqTargets = @(
         ".",
         "temp\seanlgirgis.github.io",
@@ -73,6 +103,8 @@ if (-not $SkipGit) {
             Write-Warning "Skipping non-git path: $targetPath"
             continue
         }
+
+        Ensure-GitIdentity -RepoPath $targetPath -FallbackName $RootGitName -FallbackEmail $RootGitEmail
 
         Write-Host "Running gitq in $targetPath" -ForegroundColor Cyan
         Push-Location -LiteralPath $targetPath
