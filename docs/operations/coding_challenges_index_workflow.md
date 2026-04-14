@@ -48,6 +48,21 @@ Then:
 5. Click **Apply Changes**.
 6. Click **Save CSV** in sidebar to persist to disk.
 
+## Dockerized Streamlit Workflow
+
+Use Docker wrapper:
+- `.\run_index_ui_docker.ps1` (same as `-Action up`)
+- `.\run_index_ui_docker.ps1 -Action logs`
+- `.\run_index_ui_docker.ps1 -Action down`
+- `.\run_index_ui_docker.ps1 -Action restart`
+
+Compose file:
+- `docker/index_ui/docker-compose.yml`
+
+Notes:
+- Container maps `localhost:8501`.
+- `coding_challenges` is volume-mounted so CSV edits persist on host.
+
 ## Standard Daily Flow
 
 1. `.\refresh_index_and_push.ps1 -SkipGit`

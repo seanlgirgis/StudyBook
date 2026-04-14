@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-13 (index workflow guide added + xlsx removed)
+Last reviewed: 2026-04-13 (index UI dockerized)
 
 ## Status Meanings
 
@@ -141,3 +141,6 @@ Last reviewed: 2026-04-13 (index workflow guide added + xlsx removed)
 
 
 | LOOP-094 | TB-20260413-08 | Document CSV-first index workflow and remove local index.xlsx from active flow | closed | none | 2026-04-13 |
+
+
+| LOOP-095 | TB-20260413-09 | Dockerize Streamlit index UI with compose + runner script | closed | none | 2026-04-13 |

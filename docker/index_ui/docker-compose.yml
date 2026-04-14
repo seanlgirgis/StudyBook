@@ -1,0 +1,11 @@
+services:
+  studybook_index_ui:
+    build:
+      context: ../..
+      dockerfile: docker/index_ui/Dockerfile
+    container_name: studybook_index_ui
+    ports:
+      - "8501:8501"
+    volumes:
+      - ../../coding_challenges:/app/coding_challenges
+    restart: unless-stopped

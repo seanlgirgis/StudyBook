@@ -186,3 +186,4 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260413-06 | Redesign index Streamlit UI to compact summary table + popup edit dialog workflow | done | 2026-04-13 | Table now shows id/title/primary/tags with select+edit dialog, add dialog, and explicit save workflow |
 | TB-20260413-07 | Enable click-to-select record in Streamlit summary table for edit workflow | done | 2026-04-13 | Table row click now sets selected record used by Edit Selected action |
 | TB-20260413-08 | Add index workflow guide and fully remove index.xlsx from active repository workflow | done | 2026-04-13 | Added operations guide and removed local `coding_challenges/index.xlsx`; CSV remains source of truth |
+| TB-20260413-09 | Dockerize Streamlit index UI and add compose-based runner script | done | 2026-04-13 | Added Dockerfile/compose/runner + operations guide updates; runner now fails on docker errors |
