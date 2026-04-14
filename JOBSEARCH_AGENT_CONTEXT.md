@@ -143,3 +143,21 @@ Default operating behavior for JobSearch in this repo:
 
 Exception handling:
 - Ask only when there is high-risk ambiguity that could cause incorrect company/job mapping or destructive data changes.
+
+## AI-Native Execution Rule (Preferred Default)
+
+- Default to agent-driven execution using built-in AI reasoning and direct file updates.
+- Do not depend on xAI/Grok-backed generation scripts for normal job processing.
+- Use local scripts only as optional helpers for rendering or indexing when they do not require external model keys.
+- If an external-model key is missing, continue without blocking:
+  - generate score/match analysis directly,
+  - create/update job artifacts directly,
+  - generate resume/cover content directly.
+
+## Reject/Skip Storage Rule
+
+- If the user decision is `reject` or `skip` and there was no application submitted, do not create a job folder under `data/jobs/...`.
+- Keep the decision in conversational output only (score, rationale, and recommendation).
+- Create/update `data/jobs/...` artifacts only when:
+  - the user has applied, or
+  - the user explicitly asks to save/archive a non-applied rejected job.
