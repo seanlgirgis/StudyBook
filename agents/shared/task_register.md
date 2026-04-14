@@ -193,3 +193,4 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260413-08 | Add index workflow guide and fully remove index.xlsx from active repository workflow | done | 2026-04-13 | Added operations guide and removed local `coding_challenges/index.xlsx`; CSV remains source of truth |
 | TB-20260413-09 | Dockerize Streamlit index UI and add compose-based runner script | done | 2026-04-13 | Added Dockerfile/compose/runner + operations guide updates; runner now fails on docker errors |
 | TB-20260413-10 | Persist cross-machine Docker-start reminder and refresh index command memory in user profile | done | 2026-04-13 | Added durable note for "create docker and start it" workflow plus current CSV/CLI/Streamlit command set |
+| TB-20260413-15 | Bootstrap JobSearch startup context and verify latest pipeline item state | done | 2026-04-13 | Loaded startup + JobSearch context files, ran noninteractive env bootstrap, and confirmed `00051_d7c3a912` is already applied |
