@@ -148,4 +148,8 @@ Last reviewed: 2026-04-13 (router duplicate guard)
 
 | LOOP-096 | TB-20260413-10 | Persist cross-machine instruction memory for index UI Docker bootstrap/start | closed | none | 2026-04-13 |
 | LOOP-097 | TB-20260413-14 | Update AWS Lambda learning page audio/video media links | closed | none | 2026-04-13 |
+| LOOP-098 | TB-20260413-16 | Update AWS EC2 learning page audio/video media links | closed | none | 2026-04-13 |
+| LOOP-099 | TB-20260413-17 | Clean EC2 audio label text | closed | none | 2026-04-13 |
+| LOOP-100 | TB-20260413-18 | Normalize EC2 headings dash characters | closed | none | 2026-04-13 |
+| LOOP-101 | TB-20260413-19 | Add website maintenance agent context | closed | none | 2026-04-13 |
 | LOOP-098 | TB-20260413-15 | Resolve local DPAPI seed decrypt mismatch during noninteractive env bootstrap | open | Re-register or repair machine-local seed so encrypted secrets load successfully in this shell user context | 2026-04-13 |

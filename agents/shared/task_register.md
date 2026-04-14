@@ -183,6 +183,10 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260413-12 | Start Streamlit index UI Docker app | done | 2026-04-13 | Started docker/index_ui compose; container reported running |
 | TB-20260413-13 | Prevent duplicate learning-aws-analytics sections | done | 2026-04-13 | Added router load guard to avoid concurrent DOM appends |
 | TB-20260413-14 | Update AWS Lambda learning page audio/video media links | done | 2026-04-13 | Added R2 audio/video sources and displayed bucket base path |
+| TB-20260413-16 | Update AWS EC2 learning page audio/video media links | done | 2026-04-13 | Added R2 audio/video sources using new EC2 media filenames |
+| TB-20260413-17 | Clean EC2 audio label text | done | 2026-04-13 | Removed garbled prefix from audio label |
+| TB-20260413-18 | Normalize EC2 headings dash characters | done | 2026-04-13 | Replaced em/en dashes with ASCII hyphens |
+| TB-20260413-19 | Add website maintenance agent context | done | 2026-04-13 | Created WEBSITE_AGENT_CONTEXT.md with media rules and update workflow |
 
 
 | TB-20260413-03 | Resolve StudyBook push rejection and close index.xlsx binary merge conflict on main | done | 2026-04-13 | Kept local `coding_challenges/index.xlsx` during merge conflict resolution and pushed `main` successfully (`50cafff`) |
