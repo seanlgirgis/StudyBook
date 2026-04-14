@@ -1,6 +1,6 @@
 # User Profile
 
-**Last Updated:** 2026-04-10  
+**Last Updated:** 2026-04-13  
 **Primary Sources:**  
 - `D:\StudyBook\temp\jobsearch\data\source_of_truth.json`  
 - `D:\StudyBook\temp\seanlgirgis.github.io` (repo structure and generators)
@@ -97,7 +97,19 @@
 ## StudyBook Command Shortcuts
 
 - High-frequency index workflow commands to preserve in durable memory:
-  - `D:\StudyBook\refresh_index_and_push.ps1` (refreshes `coding_challenges/index.xlsx`, commits, pushes)
-  - `D:\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]` (grep-like lookup over `coding_challenges/index.xlsx`)
+  - `D:\StudyBook\refresh_index_and_push.ps1` (refreshes `coding_challenges/index.csv`, then git workflow)
+  - `D:\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]` (grep-like lookup over `coding_challenges/index.csv`)
+  - `D:\StudyBook\index_cli.ps1 <command> ...` (CLI add/update/delete/find/show/open for CSV index)
+  - `D:\StudyBook\run_index_ui.ps1` (local Streamlit UI)
+  - `D:\StudyBook\run_index_ui_docker.ps1 -Action up|down|logs|restart` (Dockerized Streamlit UI)
 - Example:
   - `.\search_index.ps1 48`
+
+## Cross-Machine Docker Reminder
+
+- Owner preference (2026-04-13): from any new machine/session, user may ask:
+  - "create the docker in there and start it for me"
+- This specifically means bootstrap and run the index UI Docker stack in StudyBook:
+  - compose file: `D:\StudyBook\docker\index_ui\docker-compose.yml`
+  - runner: `D:\StudyBook\run_index_ui_docker.ps1`
+  - target URL: `http://localhost:8501` (or next available mapped port if changed)

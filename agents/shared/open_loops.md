@@ -144,3 +144,6 @@ Last reviewed: 2026-04-13 (index UI dockerized)
 
 
 | LOOP-095 | TB-20260413-09 | Dockerize Streamlit index UI with compose + runner script | closed | none | 2026-04-13 |
+
+
+| LOOP-096 | TB-20260413-10 | Persist cross-machine instruction memory for index UI Docker bootstrap/start | closed | none | 2026-04-13 |
