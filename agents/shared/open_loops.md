@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-13 (index UI dockerized)
+Last reviewed: 2026-04-13 (rebase conflict resolve)
 
 ## Status Meanings
 

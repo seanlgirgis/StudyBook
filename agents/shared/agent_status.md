@@ -1,35 +1,36 @@
-# Agent Status
+﻿# Agent Status
 
 ## Current Run (2026-04-13)
 
-**Task ID:** TB-20260413-10  
-**Task Type:** SYNC  
-**Goal:** Persist durable cross-machine reminder to bootstrap/start the index UI Docker stack on request.
+**Task ID:** TB-20260413-11  
+**Task Type:** FIX  
+**Goal:** Resolve merge conflicts during StudyBook rebase/pull.
 
 ### Factual Summary
 
-- Updated `agents/shared/user_profile.md` with a new cross-machine reminder:
-  - If user asks to "create the docker in there and start it for me", treat it as instruction to bootstrap and run StudyBook index UI Docker stack.
-- Refreshed StudyBook command shortcuts in user profile to current CSV/CLI/Streamlit workflow (removed outdated xlsx wording).
+- Resolved conflicts in `agents/shared/agent_status.md` and `agents/shared/open_loops.md`.
+- Ready to continue rebase and reconcile branch divergence.
+
+### Files Inspected
+
+- `agents/shared/agent_status.md`
+- `agents/shared/open_loops.md`
 
 ### Validation
 
-- Confirmed `agents/shared/user_profile.md` now contains:
-  - `run_index_ui_docker.ps1` usage
-  - compose file path reference
-  - target URL reminder
+- Pending: `git status -sb` after rebase continue.
 
 ### Assumptions
 
-- User wants this preference durable in repo memory for future sessions/machines.
+- Prefer to keep latest run metadata and preserve open loop list as-is.
 
 ### Risks
 
-- None; documentation-only memory update.
+- Low risk; documentation-only conflict resolution.
 
 ### Next Step
 
-- Commit/push when requested.
+- Stage conflict resolutions and run `git rebase --continue`.
 
 ---
 

@@ -178,6 +178,7 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260412-08 | Restore managed external repos under temp | done | 2026-04-12 | Ran restore_managed_repos.ps1; cloned jobsearch + website repos |
 | TB-20260413-01 | Resolve in-progress StudyBook rebase after refresh_index_and_push | done | 2026-04-13 | Completed rebase; main ahead 18/behind 8 |
 | TB-20260413-02 | Resolve binary conflict in coding_challenges index.xlsx | done | 2026-04-13 | Took remote version during rebase and completed rebase |
+| TB-20260413-03 | Push AWS Glue media link updates to website repo | done | 2026-04-13 | Committed and pushed updated R2 audio/video links |
 
 
 | TB-20260413-03 | Resolve StudyBook push rejection and close index.xlsx binary merge conflict on main | done | 2026-04-13 | Kept local `coding_challenges/index.xlsx` during merge conflict resolution and pushed `main` successfully (`50cafff`) |
