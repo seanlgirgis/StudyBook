@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-13 (index workflow moved to CSV-first)
+Last reviewed: 2026-04-13 (index workflow guide added + xlsx removed)
 
 ## Status Meanings
 
@@ -129,3 +129,15 @@ Last reviewed: 2026-04-13 (index workflow moved to CSV-first)
 
 
 | LOOP-090 | TB-20260413-04 | Replace binary index workflow with CSV-first index + CLI operations | closed | none | 2026-04-13 |
+
+
+| LOOP-091 | TB-20260413-05 | Add Streamlit local GUI for CSV index edit/search workflow | closed | none | 2026-04-13 |
+
+
+| LOOP-092 | TB-20260413-06 | Rework Streamlit index UI to compact summary table with popup edit flow | closed | none | 2026-04-13 |
+
+
+| LOOP-093 | TB-20260413-07 | Enable row-click selection to drive Edit Selected workflow in Streamlit UI | closed | none | 2026-04-13 |
+
+
+| LOOP-094 | TB-20260413-08 | Document CSV-first index workflow and remove local index.xlsx from active flow | closed | none | 2026-04-13 |

@@ -3,10 +3,25 @@ $ErrorActionPreference = "Stop"
 
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $AppPath = Join-Path $Root "coding_challenges\scripts\index_ui_streamlit.py"
+$EnvSetterPath = Join-Path $Root "env_setter.ps1"
 
 if (-not (Test-Path -LiteralPath $AppPath)) {
     throw "Streamlit app not found at $AppPath"
 }
+
+if (Test-Path -LiteralPath $EnvSetterPath) {
+    # Ensure project-standard Python/venv activation before launching Streamlit.
+    . $EnvSetterPath -NonInteractive
+}
+
+# Keep Streamlit state local to this repo/session to avoid machine-profile permission issues.
+$StreamlitHome = Join-Path $Root ".streamlit_local"
+if (-not (Test-Path -LiteralPath $StreamlitHome)) {
+    New-Item -ItemType Directory -Path $StreamlitHome | Out-Null
+}
+$env:HOME = $StreamlitHome
+$env:USERPROFILE = $StreamlitHome
+$env:STREAMLIT_BROWSER_GATHER_USAGE_STATS = "false"
 
 function Resolve-PythonCmd {
     if (-not [string]::IsNullOrWhiteSpace($env:VIRTUAL_ENV)) {
@@ -40,8 +55,8 @@ if (-not $PythonCmd) {
 }
 
 if ($PythonCmd -like "*\py.exe") {
-    & $PythonCmd -3 -m streamlit run $AppPath
+    & $PythonCmd -3 -m streamlit run $AppPath --server.headless true --browser.gatherUsageStats false
 }
 else {
-    & $PythonCmd -m streamlit run $AppPath
+    & $PythonCmd -m streamlit run $AppPath --server.headless true --browser.gatherUsageStats false
 }

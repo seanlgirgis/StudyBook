@@ -1,39 +1,39 @@
-id,path,primary,tags,title,source
-lc_0134,leetcode/by_topic/arrays/0134_lc_134_gas_station.py,arrays,arrays;greedy,Gas Station,leetcode
-lc_0055,leetcode/by_topic/arrays/055_lc_0055_jump_game.py,arrays,arrays;greedy;dynamic-programming,Jump Game,leetcode
-lc_0152,leetcode/by_topic/arrays/152_lc_152_maximum_product_subarray.py,arrays,arrays;dynamic-programming,Maximum Product Subarray,leetcode
-lc_0238,leetcode/by_topic/arrays/238_lc_0238_product_of_array_except_self.py,arrays,arrays;prefix-sum;suffix-sum,Product of Array Except Self,leetcode
-lc_0462,leetcode/by_topic/arrays/462_lc_0462_minimum_moves_to_equal_array_elements_ii.py,arrays,arrays;math;sorting;median,Minimum Moves to Equal Array Elements II,leetcode
-lc_0001,leetcode/by_topic/arrays_hashing/001_lc_0001_two_sum_empty.py,arrays_hashing,arrays_hashing;arrays;hash-table,Two Sum,leetcode
-lc_0036,leetcode/by_topic/arrays_hashing/036_lc_036_valid_sudoku_empty.py,arrays_hashing,arrays_hashing;hash-table;matrix;set,Valid Sudoku,leetcode
-lc_0049,leetcode/by_topic/arrays_hashing/049_lc_049_group_anagrams_empty.py,arrays_hashing,arrays_hashing;hash-table;strings;sorting,Group Anagrams,leetcode
-lc_0128,leetcode/by_topic/arrays_hashing/128_lc_128_longest_consecutive_sequence_empty.py,arrays_hashing,arrays_hashing;hash-table;arrays;union-find,Longest Consecutive Sequence,leetcode
-lc_0217,leetcode/by_topic/arrays_hashing/217_lc_0217_contains_duplicate_empty.py,arrays_hashing,arrays_hashing;hash-table;arrays;sorting,Contains Duplicate,leetcode
-lc_0242,leetcode/by_topic/arrays_hashing/242_lc_0242_valid_anagram_empty.py,arrays_hashing,arrays_hashing;hash-table;strings;sorting,Valid Anagram,leetcode
-lc_0271,leetcode/by_topic/arrays_hashing/271_lc_0271_encode_and_decode_strings_empty.py,arrays_hashing,arrays_hashing;strings;design;encoding,Encode and Decode Strings,leetcode
-lc_0347,leetcode/by_topic/arrays_hashing/347_lc_0347_top_k_frequent_elements_empty.py,arrays_hashing,arrays_hashing;hash-table;heap;bucket-sort;counting,Top K Frequent Elements,leetcode
-lc_0560,leetcode/by_topic/arrays_hashing/560_lc_0560_subarray_sum_equals_k_empty.py,arrays_hashing,arrays_hashing;hash-table;prefix-sum;arrays,Subarray Sum Equals K,leetcode
-cs_drone_delivery_foot_distance,leetcode/by_topic/greedy/cs_drone_delivery_foot_distance.py,greedy,greedy;simulation;sorting,Drone Delivery Foot Distance,codesignal
-cs_key_changes_counter,leetcode/by_topic/greedy/cs_key_changes_counter.py,greedy,greedy;simulation;arrays;strings,Key Changes Counter,codesignal
-lc_custom_harmonious_buildings,leetcode/by_topic/greedy/custom_codesignal_harmonious_building_patterns.py,greedy,greedy;math;array;sequence,Harmonious Building Patterns,codesignal
-lc_custom_harmonious_buildings_flexible,leetcode/by_topic/greedy/custom_harmonious_building_patterns_flexible.py,greedy,greedy;math;median;geometry,Harmonious Building Patterns (Flexible),codesignal
-047_lc_2532_time_to_cross_a_bridge_empty,leetcode/by_topic/heap_priority_queue/047_lc_2532_time_to_cross_a_bridge_empty.py,heap_priority_queue,heap_priority_queue,047 Lc 2532 Time To Cross A Bridge Empty,leetcode
-lc_0042,leetcode/by_topic/monotonic_stack/042_lc_042_trapping_rain_water_empty.py,monotonic_stack,monotonic_stack;stack;monotonic-stack;two-pointers;dynamic-programming,Trapping Rain Water,leetcode
-lc_0084,leetcode/by_topic/monotonic_stack/084_lc_084_largest_rectangle_in_histogram_empty.py,monotonic_stack,monotonic_stack;stack;monotonic-stack;arrays,Largest Rectangle in Histogram,leetcode
-lc_0085,leetcode/by_topic/monotonic_stack/085_lc_085_maximal_rectangle_empty.py,monotonic_stack,monotonic_stack;stack;monotonic-stack;dynamic-programming;matrix,Maximal Rectangle,leetcode
-lc_1019,leetcode/by_topic/monotonic_stack/1019_lc_1019_next_greater_node_in_linked_list_empty.py,monotonic_stack,monotonic_stack;linked-list;stack;monotonic-stack;arrays,Next Greater Node In Linked List,leetcode
-lc_1475,leetcode/by_topic/monotonic_stack/1475_lc_1475_final_prices_with_special_discount_empty.py,monotonic_stack,monotonic_stack;stack;monotonic-stack;arrays,Final Prices With a Special Discount in a Shop,leetcode
-lc_0907,leetcode/by_topic/monotonic_stack/907_lc_0907_sum_of_subarray_minimums_empty.py,monotonic_stack,monotonic_stack;stack;monotonic-stack;arrays;dynamic-programming,Sum of Subarray Minimums,leetcode
-cs_phone_battery_simulation,leetcode/by_topic/simulation/cs_phone_battery_simulation.py,simulation,simulation;arrays,Phone Battery Simulation,codesignal
-lc_0020,leetcode/by_topic/stack/020_lc_0020_valid_parentheses.py,stack,stack;string,Valid Parentheses,leetcode
-lc_0496,leetcode/by_topic/stack/024_next_greater_single_list_empty.py,stack,stack;monotonic-stack;arrays,Next Greater Element I,leetcode
-lc_0000,leetcode/by_topic/stack/025_next_smaller_single_list_empty.py,stack,stack;monotonic-stack;arrays,Next Smaller Element,leetcode
-lc_0084,leetcode/by_topic/stack/084_lc_0084_largest_rectangle_in_histogram.py,stack,stack;monotonic-stack;arrays,Largest Rectangle in Histogram,leetcode
-lc_0853,leetcode/by_topic/stack/0853_lc_0853_car_fleet_empty.py,stack,stack;greedy;sorting;arrays,Car Fleet,leetcode
-lc_0901,leetcode/by_topic/stack/0901_lc_901_online_stock_span.py,stack,stack;design;monotonic-stack;data-stream,Online Stock Span,leetcode
-lc_0150,leetcode/by_topic/stack/150_lc_0150_evaluate_reverse_polish_notation.py,stack,stack;array;math,Evaluate Reverse Polish Notation,leetcode
-lc_0239,leetcode/by_topic/stack/239_lc_0239_sliding_window_maximum.py,stack,stack;sliding-window;heap;queue;monotonic-queue,Sliding Window Maximum,leetcode
-lc_0496,leetcode/by_topic/stack/496_lc_0496_next_greater_element_i_empty.py,stack,stack;hash-table;monotonic-stack;arrays,Next Greater Element I,leetcode
-lc_0503,leetcode/by_topic/stack/503_lc_0503_next_greater_element_ii_empty.py,stack,stack;monotonic-stack;arrays;circular-array,Next Greater Element II,leetcode
-lc_0739,leetcode/by_topic/stack/739_lc_0739_daily_temperatures_empty.py,stack,stack;monotonic-stack;arrays,Daily Temperatures,leetcode
-lc_0155,leetcode/by_topic/stack/lc_0155_min_stack.py,stack,stack;design,Min Stack,leetcode
+id,path,primary,tags,title,source,difficulty,status,pattern,data_structures,my_impression,key_nugget
+lc_0134,leetcode/by_topic/arrays/0134_lc_134_gas_station.py,arrays,arrays;greedy,Gas Station,leetcode,medium,draft,,,,
+lc_0055,leetcode/by_topic/arrays/055_lc_0055_jump_game.py,arrays,arrays;greedy;dynamic-programming,Jump Game,leetcode,medium,complete,,,,
+lc_0152,leetcode/by_topic/arrays/152_lc_152_maximum_product_subarray.py,arrays,arrays;dynamic-programming,Maximum Product Subarray,leetcode,medium,draft,,,,
+lc_0238,leetcode/by_topic/arrays/238_lc_0238_product_of_array_except_self.py,arrays,arrays;prefix-sum;suffix-sum,Product of Array Except Self,leetcode,medium,draft,,,,
+lc_0462,leetcode/by_topic/arrays/462_lc_0462_minimum_moves_to_equal_array_elements_ii.py,arrays,arrays;math;sorting;median,Minimum Moves to Equal Array Elements II,leetcode,medium,draft,,,,
+lc_0001,leetcode/by_topic/arrays_hashing/001_lc_0001_two_sum_empty.py,arrays_hashing,arrays_hashing;arrays;hash-table,Two Sum,leetcode,easy,draft,,,,
+lc_0036,leetcode/by_topic/arrays_hashing/036_lc_036_valid_sudoku_empty.py,arrays_hashing,arrays_hashing;hash-table;matrix;set,Valid Sudoku,leetcode,medium,draft,,,,
+lc_0049,leetcode/by_topic/arrays_hashing/049_lc_049_group_anagrams_empty.py,arrays_hashing,arrays_hashing;hash-table;strings;sorting,Group Anagrams,leetcode,medium,draft,,,,
+lc_0128,leetcode/by_topic/arrays_hashing/128_lc_128_longest_consecutive_sequence_empty.py,arrays_hashing,arrays_hashing;hash-table;arrays;union-find,Longest Consecutive Sequence,leetcode,medium,draft,,,,
+lc_0217,leetcode/by_topic/arrays_hashing/217_lc_0217_contains_duplicate_empty.py,arrays_hashing,arrays_hashing;hash-table;arrays;sorting,Contains Duplicate,leetcode,easy,draft,,,,
+lc_0242,leetcode/by_topic/arrays_hashing/242_lc_0242_valid_anagram_empty.py,arrays_hashing,arrays_hashing;hash-table;strings;sorting,Valid Anagram,leetcode,easy,draft,,,,
+lc_0271,leetcode/by_topic/arrays_hashing/271_lc_0271_encode_and_decode_strings_empty.py,arrays_hashing,arrays_hashing;strings;design;encoding,Encode and Decode Strings,leetcode,medium,draft,,,,
+lc_0347,leetcode/by_topic/arrays_hashing/347_lc_0347_top_k_frequent_elements_empty.py,arrays_hashing,arrays_hashing;hash-table;heap;bucket-sort;counting,Top K Frequent Elements,leetcode,medium,draft,,,,
+lc_0560,leetcode/by_topic/arrays_hashing/560_lc_0560_subarray_sum_equals_k_empty.py,arrays_hashing,arrays_hashing;hash-table;prefix-sum;arrays,Subarray Sum Equals K,leetcode,medium,draft,,,,
+cs_drone_delivery_foot_distance,leetcode/by_topic/greedy/cs_drone_delivery_foot_distance.py,greedy,greedy;simulation;sorting,Drone Delivery Foot Distance,codesignal,medium,draft,,,,
+cs_key_changes_counter,leetcode/by_topic/greedy/cs_key_changes_counter.py,greedy,greedy;simulation;arrays;strings,Key Changes Counter,codesignal,easy,draft,,,,
+lc_custom_harmonious_buildings,leetcode/by_topic/greedy/custom_codesignal_harmonious_building_patterns.py,greedy,greedy;math;array;sequence,Harmonious Building Patterns,codesignal,medium,draft,,,,
+lc_custom_harmonious_buildings_flexible,leetcode/by_topic/greedy/custom_harmonious_building_patterns_flexible.py,greedy,greedy;math;median;geometry,Harmonious Building Patterns (Flexible),codesignal,medium,draft,,,,
+047_lc_2532_time_to_cross_a_bridge_empty,leetcode/by_topic/heap_priority_queue/047_lc_2532_time_to_cross_a_bridge_empty.py,heap_priority_queue,heap_priority_queue,047 Lc 2532 Time To Cross A Bridge Empty,leetcode,,,,,,
+lc_0042,leetcode/by_topic/monotonic_stack/042_lc_042_trapping_rain_water_empty.py,monotonic_stack,monotonic_stack;stack;monotonic-stack;two-pointers;dynamic-programming,Trapping Rain Water,leetcode,hard,draft,,,,
+lc_0084,leetcode/by_topic/monotonic_stack/084_lc_084_largest_rectangle_in_histogram_empty.py,monotonic_stack,monotonic_stack;stack;monotonic-stack;arrays,Largest Rectangle in Histogram,leetcode,hard,draft,,,,
+lc_0085,leetcode/by_topic/monotonic_stack/085_lc_085_maximal_rectangle_empty.py,monotonic_stack,monotonic_stack;stack;monotonic-stack;dynamic-programming;matrix,Maximal Rectangle,leetcode,hard,draft,,,,
+lc_1019,leetcode/by_topic/monotonic_stack/1019_lc_1019_next_greater_node_in_linked_list_empty.py,monotonic_stack,monotonic_stack;linked-list;stack;monotonic-stack;arrays,Next Greater Node In Linked List,leetcode,medium,draft,,,,
+lc_1475,leetcode/by_topic/monotonic_stack/1475_lc_1475_final_prices_with_special_discount_empty.py,monotonic_stack,monotonic_stack;stack;monotonic-stack;arrays,Final Prices With a Special Discount in a Shop,leetcode,easy,draft,,,,
+lc_0907,leetcode/by_topic/monotonic_stack/907_lc_0907_sum_of_subarray_minimums_empty.py,monotonic_stack,monotonic_stack;stack;monotonic-stack;arrays;dynamic-programming,Sum of Subarray Minimums,leetcode,medium,draft,,,,
+cs_phone_battery_simulation,leetcode/by_topic/simulation/cs_phone_battery_simulation.py,simulation,simulation;arrays,Phone Battery Simulation,codesignal,medium,draft,,,,
+lc_0020,leetcode/by_topic/stack/020_lc_0020_valid_parentheses.py,stack,stack;string,Valid Parentheses,leetcode,easy,draft,,,,
+lc_0496,leetcode/by_topic/stack/024_next_greater_single_list_empty.py,stack,stack;monotonic-stack;arrays,Next Greater Element I,leetcode,easy,draft,,,,
+lc_0000,leetcode/by_topic/stack/025_next_smaller_single_list_empty.py,stack,stack;monotonic-stack;arrays,Next Smaller Element,leetcode,medium,draft,,,,
+lc_0084,leetcode/by_topic/stack/084_lc_0084_largest_rectangle_in_histogram.py,stack,stack;monotonic-stack;arrays,Largest Rectangle in Histogram,leetcode,hard,draft,,,,
+lc_0853,leetcode/by_topic/stack/0853_lc_0853_car_fleet_empty.py,stack,stack;greedy;sorting;arrays,Car Fleet,leetcode,medium,draft,,,,
+lc_0901,leetcode/by_topic/stack/0901_lc_901_online_stock_span.py,stack,stack;design;monotonic-stack;data-stream,Online Stock Span,leetcode,medium,draft,,,,
+lc_0150,leetcode/by_topic/stack/150_lc_0150_evaluate_reverse_polish_notation.py,stack,stack;array;math,Evaluate Reverse Polish Notation,leetcode,medium,draft,,,,
+lc_0239,leetcode/by_topic/stack/239_lc_0239_sliding_window_maximum.py,stack,stack;sliding-window;heap;queue;monotonic-queue,Sliding Window Maximum,leetcode,hard,draft,,,,
+lc_0496,leetcode/by_topic/stack/496_lc_0496_next_greater_element_i_empty.py,stack,stack;hash-table;monotonic-stack;arrays,Next Greater Element I,leetcode,easy,draft,,,,
+lc_0503,leetcode/by_topic/stack/503_lc_0503_next_greater_element_ii_empty.py,stack,stack;monotonic-stack;arrays;circular-array,Next Greater Element II,leetcode,medium,draft,,,,
+lc_0739,leetcode/by_topic/stack/739_lc_0739_daily_temperatures_empty.py,stack,stack;monotonic-stack;arrays,Daily Temperatures,leetcode,medium,draft,,,,
+lc_0155,leetcode/by_topic/stack/lc_0155_min_stack.py,stack,stack;design,Min Stack,leetcode,easy,draft,,,,

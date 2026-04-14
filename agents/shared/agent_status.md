@@ -2,55 +2,37 @@
 
 ## Current Run (2026-04-13)
 
-**Task ID:** TB-20260413-04  
+**Task ID:** TB-20260413-08  
 **Task Type:** ENHANCEMENT  
-**Goal:** Replace binary-index workflow with CSV-first index management and add a CLI for search/update/open operations.
+**Goal:** Document complete index workflow guide and remove `coding_challenges/index.xlsx` from repository workflow.
 
 ### Factual Summary
 
-- Switched `coding_challenges/scripts/refresh_index.py` default and supported output to `index.csv` only.
-- Converted `coding_challenges/scripts/search_index.py` from XLSX/OpenPyXL search to CSV search.
-- Added new CLI: `coding_challenges/scripts/index_cli.py` with commands:
-  - `headers`, `list`, `find`, `show`, `add`, `update`, `delete`, `open`
-- Added root wrapper: `index_cli.ps1` for easy invocation from `D:\StudyBook`.
-- Added `.gitignore` rule for `coding_challenges/index.xlsx`.
-- Untracked `coding_challenges/index.xlsx` via `git rm --cached` to prevent future binary merge/push conflicts.
-
-### Files Modified
-
-- `.gitignore`
-- `coding_challenges/scripts/refresh_index.py`
-- `coding_challenges/scripts/search_index.py`
-- `coding_challenges/scripts/index_cli.py` (new)
-- `index_cli.ps1` (new)
-- `coding_challenges/index.csv` (refreshed)
-- `coding_challenges/index.xlsx` (removed from git tracking)
+- Removed local file `D:\StudyBook\coding_challenges\index.xlsx` (file no longer exists in working tree).
+- Added new runbook: `docs/operations/coding_challenges_index_workflow.md` with:
+  - CSV source-of-truth policy
+  - refresh/search commands
+  - CLI add/update/delete/find/show/open commands
+  - Streamlit UI workflow
+  - recommended daily flow
+- Updated `docs/operations/README.md` index to link new runbook.
 
 ### Validation
 
-- `./refresh_index_and_push.ps1 -SkipGit` → wrote CSV successfully.
-- `./search_index.ps1 lc_0238 -Limit 3` → match returned from CSV.
-- `./index_cli.ps1 headers` → headers printed.
-- `./index_cli.ps1 find leetcode --field source --limit 2` → filtered rows returned.
-- `./index_cli.ps1 open lc_0238 --print-only` → resolved absolute path printed.
-- CRUD smoke test:
-  - `add tmp_cli_smoke`
-  - `update tmp_cli_smoke`
-  - `show tmp_cli_smoke`
-  - `delete tmp_cli_smoke`
+- `Test-Path D:\StudyBook\coding_challenges\index.xlsx` -> `False`
+- `rg -n "index\\.xlsx"` across active scripts/docs confirms only intentional mention in the new runbook policy note.
 
 ### Assumptions
 
-- CSV should be the single source of truth for repository index data.
-- Excel output is optional/local and should not be version-controlled.
+- "Remove excel from repository completely" means no tracked/useful dependency on `coding_challenges/index.xlsx` in active workflow, with CSV as canonical index.
 
 ### Risks
 
-- Existing workflows that directly expect `index.xlsx` in git may need to transition to CSV/CLI commands.
+- Historical migration artifacts may still include `.xlsx` references; these are immutable evidence files and not active workflow dependencies.
 
 ### Next Step
 
-- If desired, add a small helper script to regenerate a local-only `index.xlsx` view from CSV on demand (not tracked).
+- Commit and push when ready so repository state reflects the removal + guide.
 
 ---
 

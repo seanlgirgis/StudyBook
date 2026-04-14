@@ -24,7 +24,20 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCAN_ROOT = ROOT / "leetcode" / "by_topic"
 DEFAULT_INDEX_PATH = ROOT / "index.csv"
 DEFAULT_EXTS = {".py"}
-HEADERS = ["id", "path", "primary", "tags", "title", "source"]
+HEADERS = [
+    "id",
+    "path",
+    "primary",
+    "tags",
+    "title",
+    "source",
+    "difficulty",
+    "status",
+    "pattern",
+    "data_structures",
+    "my_impression",
+    "key_nugget",
+]
 
 ID_RE = re.compile(r"^(?:LC|lc)[\-_ ]?(\d{1,5})")
 KV_RE = re.compile(r"^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:\s*(.+?)\s*$")
@@ -38,6 +51,12 @@ class Row:
     tags: str
     title: str
     source: str
+    difficulty: str
+    status: str
+    pattern: str
+    data_structures: str
+    my_impression: str
+    key_nugget: str
 
 
 def normalize_primary(folder_name: str) -> str:
@@ -88,7 +107,18 @@ def read_header_metadata(path: Path) -> dict[str, str]:
             continue
         key = match.group(1).strip().lower()
         value = match.group(2).strip()
-        if key in {"id", "title", "tags", "source"}:
+        if key in {
+            "id",
+            "title",
+            "tags",
+            "source",
+            "difficulty",
+            "status",
+            "pattern",
+            "data_structures",
+            "my_impression",
+            "key_nugget",
+        }:
             metadata[key] = value
     return metadata
 
@@ -106,6 +136,12 @@ def build_row(scan_root: Path, file_path: Path) -> Row:
     row_id = meta.get("id", inferred_id).strip()
     title = meta.get("title", inferred_title).strip()
     source = meta.get("source", inferred_source).strip().lower()
+    difficulty = meta.get("difficulty", "").strip()
+    status = meta.get("status", "").strip()
+    pattern = meta.get("pattern", "").strip()
+    data_structures = meta.get("data_structures", "").strip()
+    my_impression = meta.get("my_impression", "").strip()
+    key_nugget = meta.get("key_nugget", "").strip()
 
     if "tags" in meta:
         tags_list = parse_tags(meta["tags"])
@@ -125,6 +161,12 @@ def build_row(scan_root: Path, file_path: Path) -> Row:
         tags=tags,
         title=title,
         source=source,
+        difficulty=difficulty,
+        status=status,
+        pattern=pattern,
+        data_structures=data_structures,
+        my_impression=my_impression,
+        key_nugget=key_nugget,
     )
 
 
@@ -155,7 +197,22 @@ def write_csv(index_path: Path, rows: list[Row]) -> None:
         writer = csv.writer(f)
         writer.writerow(HEADERS)
         for row in rows:
-            writer.writerow([row.row_id, row.path, row.primary, row.tags, row.title, row.source])
+            writer.writerow(
+                [
+                    row.row_id,
+                    row.path,
+                    row.primary,
+                    row.tags,
+                    row.title,
+                    row.source,
+                    row.difficulty,
+                    row.status,
+                    row.pattern,
+                    row.data_structures,
+                    row.my_impression,
+                    row.key_nugget,
+                ]
+            )
 
 
 def parse_args() -> argparse.Namespace:

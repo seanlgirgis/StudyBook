@@ -182,3 +182,7 @@ Track active and completed tasks to avoid losing continuity.
 
 | TB-20260413-03 | Resolve StudyBook push rejection and close index.xlsx binary merge conflict on main | done | 2026-04-13 | Kept local `coding_challenges/index.xlsx` during merge conflict resolution and pushed `main` successfully (`50cafff`) |
 | TB-20260413-04 | Move coding_challenges index workflow to CSV-first and add index CLI for CRUD/search/open | done | 2026-04-13 | Added `index_cli.py` + `index_cli.ps1`, converted refresh/search scripts to CSV, and untracked binary `index.xlsx` |
+| TB-20260413-05 | Add Streamlit CSV index GUI and env_setter-aligned launcher | done | 2026-04-13 | Added `index_ui_streamlit.py` + `run_index_ui.ps1`; launcher now boots through env_setter and serves GUI at localhost:8501 |
+| TB-20260413-06 | Redesign index Streamlit UI to compact summary table + popup edit dialog workflow | done | 2026-04-13 | Table now shows id/title/primary/tags with select+edit dialog, add dialog, and explicit save workflow |
+| TB-20260413-07 | Enable click-to-select record in Streamlit summary table for edit workflow | done | 2026-04-13 | Table row click now sets selected record used by Edit Selected action |
+| TB-20260413-08 | Add index workflow guide and fully remove index.xlsx from active repository workflow | done | 2026-04-13 | Added operations guide and removed local `coding_challenges/index.xlsx`; CSV remains source of truth |
