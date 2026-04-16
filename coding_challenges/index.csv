@@ -17,7 +17,7 @@ lc_0198,leetcode/by_topic/dynamic_programming/0198_lc_house_robber.py,dynamic_pr
 lc_0055,leetcode/by_topic/dynamic_programming/055_lc_0055_jump_game.py,dynamic_programming,dynamic_programming;arrays;greedy;dynamic-programming,Jump Game,leetcode,medium,complete,,,,
 lc_0062,leetcode/by_topic/dynamic_programming/062_lc_0062_unique_paths.py,dynamic_programming,dynamic_programming;dynamic-programming;combinatorics;math,Unique Paths,leetcode,medium,draft,,,,
 lc_0070,leetcode/by_topic/dynamic_programming/070_lc_0070_climbing_stairs.py,dynamic_programming,dynamic_programming;dynamic-programming;math;recursion,Climbing Stairs,leetcode,easy,draft,,,,
-994_lc_0994_rotting_oranges,leetcode/by_topic/graphs/994_lc_0994_rotting_oranges.py,graphs,graphs,994 Lc 0994 Rotting Oranges,leetcode,,,,,,
+lc_0994,leetcode/by_topic/graphs/994_lc_0994_rotting_oranges.py,graphs,graphs;arrays;bfs;matrix;graph;multi_source_bfs,Rotting Oranges,leetcode,medium,draft,,,,
 cs_drone_delivery_foot_distance,leetcode/by_topic/greedy/cs_drone_delivery_foot_distance.py,greedy,greedy;simulation;sorting,Drone Delivery Foot Distance,codesignal,medium,draft,,,,
 cs_key_changes_counter,leetcode/by_topic/greedy/cs_key_changes_counter.py,greedy,greedy;simulation;arrays;strings,Key Changes Counter,codesignal,easy,draft,,,,
 lc_custom_harmonious_buildings,leetcode/by_topic/greedy/custom_codesignal_harmonious_building_patterns.py,greedy,greedy;math;array;sequence,Harmonious Building Patterns,codesignal,medium,draft,,,,
