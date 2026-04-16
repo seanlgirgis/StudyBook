@@ -44,8 +44,8 @@ tests: List[Tuple[List[List[int]], int, str]] = [
     ([[1], [2], [5]], 8, "Edge Case: Single column"),
     ([[1, 1], [1, 1]], 3, "Boundary: All elements identical"),
     ([[0, 0], [0, 0]], 0, "Boundary: All elements zero"),
-    ([[10, 1, 1], [1, 1, 1], [1, 1, 1]], 5, "Path involving non-obvious greedy choice"),
-    ([[1, 2], [1, 1], [4, 1]], 5, "Tall grid 3x2"),
+    ([[1, 9, 1], [1, 9, 1], [1, 1, 1]], 5, "Path involving non-obvious greedy choice"),
+    ([[1, 2], [1, 1], [4, 1]], 4, "Tall grid 3x2"),
     ([[1, 5, 1], [1, 1, 1], [5, 5, 1]], 5, "Path along bottom and right edges"),
 ]
 
