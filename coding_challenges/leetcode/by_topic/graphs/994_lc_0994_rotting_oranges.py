@@ -84,11 +84,35 @@ def harness(func: Callable) -> None:
     print(f"\nSummary: {passed}/{len(tests)} tests passed.")
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
-from collections impoort deqeue
+from collections import deque
+import itertools
 def orangesRotting(grid: List[List[int]]) -> int:
     """
     Determine the minimum time until all oranges are rotten.
     """
-    pass
+    rows, cols = len(grid),len(grid[0])
+    combinations = list(itertools.product(range(rows), range(cols)))
+    fresh = 0
+    q = deque()
+    clock = 0
+    
+    for r, c in combinations:
+        if grid[r][c] == 2:
+            q.append((r,c,0))      # (row, col, minute))
+        elif grid[r][c] == 1:
+            fresh += 1
+
+    while q:
+        r, c, time = q.popleft()
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1:
+                grid[nr][nc] = 2          # rot it
+                fresh -= 1
+                q.append((nr, nc, time + 1))
+                clock = time + 1        # furthest minute reached
+
+    # Step 3: if fresh remain, it's impossible
+    return clock if fresh == 0 else -1
 
 harness(orangesRotting)

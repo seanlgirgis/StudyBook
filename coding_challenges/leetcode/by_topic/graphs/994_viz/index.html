@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LC 994 — Rotting Oranges Visualizer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0f1117;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+    gap: 24px;
+  }
+
+  h1 { font-size: 1.4rem; font-weight: 700; color: #a78bfa; letter-spacing: 0.02em; }
+  .subtitle { font-size: 0.85rem; color: #64748b; margin-top: -16px; }
+
+  /* ── picker ── */
+  .picker {
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 860px;
+  }
+  .picker button {
+    background: #1e2130; border: 1px solid #334155; border-radius: 8px;
+    color: #cbd5e1; padding: 6px 13px; font-size: 0.78rem; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .picker button:hover        { border-color: #a78bfa; color: #a78bfa; }
+  .picker button.active       { background: #4c1d95; border-color: #a78bfa; color: #e9d5ff; }
+  .picker button.neg          { border-color: #7f1d1d; color: #fca5a5; }
+  .picker button.neg.active   { background: #7f1d1d; border-color: #ef4444; color: #fee2e2; }
+  .picker button.neg:hover    { border-color: #ef4444; color: #ef4444; }
+
+  /* ── stage ── */
+  .stage {
+    display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; justify-content: center;
+  }
+
+  /* ── grid panel ── */
+  .grid-panel { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .panel-label {
+    font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: #64748b;
+  }
+  .grid-wrap { display: inline-grid; gap: 6px; }
+
+  .cell {
+    width: 66px; height: 66px; border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 1.6rem; position: relative;
+    transition: background 0.3s, transform 0.25s, box-shadow 0.3s, border-color 0.3s;
+    border: 2px solid transparent;
+  }
+
+  .cell-empty  { background: #141825; border-color: #1e293b; }
+  .cell-fresh  { background: #431407; border-color: #c2410c; }
+  .cell-rotten { background: #2d0808; border-color: #7f1d1d; }
+  .cell-active { background: #312e81; border-color: #818cf8; color: #e0e7ff;
+                 transform: scale(1.12); box-shadow: 0 0 22px #6366f166; z-index: 2; }
+  .cell-new    { background: #5c3205; border-color: #f59e0b;
+                 transform: scale(1.07); box-shadow: 0 0 14px #f59e0b55; }
+  .cell-stuck  { background: #450a0a; border-color: #ef4444;
+                 animation: pulse-red 1.2s ease-in-out infinite; }
+
+  @keyframes pulse-red {
+    0%,100% { box-shadow: 0 0 0 0 #ef444430; }
+    50%      { box-shadow: 0 0 0 7px #ef444430; }
+  }
+
+  .cell .time-badge {
+    position: absolute; bottom: 4px; right: 6px;
+    font-size: 0.58rem; font-weight: 700; opacity: 0.85;
+    color: #94a3b8;
+  }
+  .cell-active .time-badge { color: #c4b5fd; }
+  .cell-new    .time-badge { color: #fbbf24; }
+  .cell-rotten .time-badge { color: #f87171; }
+
+  /* ── queue panel ── */
+  .queue-panel { display: flex; flex-direction: column; gap: 8px; min-width: 168px; }
+  .queue-list {
+    background: #1a1f2e; border: 1px solid #2d3748; border-radius: 10px;
+    padding: 10px 8px; display: flex; flex-direction: column; gap: 5px;
+    min-height: 80px; max-height: 360px; overflow-y: auto;
+  }
+  .q-item {
+    background: #0f1420; border: 1px solid #1e293b; border-radius: 6px;
+    padding: 5px 9px; font-size: 0.75rem; color: #94a3b8;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  }
+  .q-coord { color: #e2e8f0; font-weight: 700; font-size: 0.8rem; }
+  .q-time  { color: #f59e0b; font-size: 0.7rem; font-weight: 600; }
+  .q-empty { color: #475569; font-size: 0.78rem; text-align: center; padding: 10px 0; }
+  .q-overflow { color: #64748b; font-size: 0.7rem; text-align: center; padding-top: 2px; }
+
+  /* ── badges ── */
+  .badges { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .badge {
+    border-radius: 8px; padding: 7px 18px; font-size: 0.88rem; font-weight: 700; border: 1px solid;
+  }
+  .badge-clock { background: #1a1f2e; border-color: #818cf8; color: #a78bfa; }
+  .badge-fresh { background: #1a1f2e; border-color: #ea580c; color: #fb923c; }
+  .badge-fresh.zero { border-color: #22c55e; color: #4ade80; }
+
+  /* ── explain ── */
+  .explain {
+    background: #1a1f2e; border: 1px solid #2d3748; border-radius: 12px;
+    padding: 14px 18px; max-width: 620px; width: 100%;
+    font-size: 0.88rem; line-height: 1.65; min-height: 64px; color: #cbd5e1;
+  }
+  .explain .hl  { color: #a78bfa; font-weight: 600; }
+  .explain .grn { color: #4ade80; font-weight: 600; }
+  .explain .org { color: #fb923c; font-weight: 600; }
+  .explain .red { color: #f87171; font-weight: 600; }
+  .explain .yel { color: #fbbf24; font-weight: 600; }
+
+  /* ── controls ── */
+  .controls { display: flex; gap: 10px; align-items: center; }
+  .btn {
+    background: #1a1f2e; border: 1px solid #334155; border-radius: 8px;
+    color: #cbd5e1; padding: 9px 18px; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn:hover   { border-color: #a78bfa; color: #a78bfa; }
+  .btn.primary { background: #4c1d95; border-color: #a78bfa; color: #e9d5ff; }
+  .btn.primary:hover { background: #5b21b6; }
+  .btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+  .step-counter { font-size: 0.8rem; color: #475569; min-width: 90px; text-align: center; }
+
+  /* ── answer ── */
+  .answer { display: none; border-radius: 10px; padding: 10px 28px; font-size: 1rem; font-weight: 700; }
+  .answer.show { display: block; }
+  .answer.ok  { background: #14532d; border: 1px solid #22c55e; color: #86efac; }
+  .answer.neg { background: #450a0a; border: 1px solid #dc2626; color: #fca5a5; }
+
+  /* ── legend ── */
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: #64748b; }
+  .swatch { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid; }
+  .sw-empty  { background: #141825; border-color: #1e293b; }
+  .sw-fresh  { background: #431407; border-color: #c2410c; }
+  .sw-rotten { background: #2d0808; border-color: #7f1d1d; }
+  .sw-active { background: #312e81; border-color: #818cf8; }
+  .sw-new    { background: #5c3205; border-color: #f59e0b; }
+  .sw-stuck  { background: #450a0a; border-color: #ef4444; }
+</style>
+</head>
+<body>
+
+<h1>LC 994 — Rotting Oranges</h1>
+<p class="subtitle">Multi-source BFS · step through the queue one pop at a time</p>
+
+<div class="picker" id="picker"></div>
+
+<div class="stage">
+  <div class="grid-panel">
+    <div class="panel-label">Grid</div>
+    <div class="grid-wrap" id="main-grid"></div>
+  </div>
+
+  <div class="queue-panel">
+    <div class="panel-label">Queue</div>
+    <div class="queue-list" id="queue-list"></div>
+  </div>
+</div>
+
+<div class="badges">
+  <div class="badge badge-clock" id="badge-clock">Minute: 0</div>
+  <div class="badge badge-fresh" id="badge-fresh">Fresh: 0</div>
+</div>
+
+<div class="explain" id="explain">
+  Select a preset above, then press <strong>Next →</strong> to step through BFS one queue-pop at a time.
+</div>
+
+<div class="controls">
+  <button class="btn" id="btn-prev" disabled>← Prev</button>
+  <span class="step-counter" id="step-counter">Step 0 / 0</span>
+  <button class="btn primary" id="btn-next">Next →</button>
+  <button class="btn" id="btn-auto">▶ Auto</button>
+  <button class="btn" id="btn-reset">↺ Reset</button>
+</div>
+
+<div class="answer" id="answer"></div>
+
+<div class="legend">
+  <div class="legend-item"><div class="swatch sw-empty"></div>Empty (0)</div>
+  <div class="legend-item"><div class="swatch sw-fresh"></div>Fresh orange (1)</div>
+  <div class="legend-item"><div class="swatch sw-rotten"></div>Rotten (2)</div>
+  <div class="legend-item"><div class="swatch sw-active"></div>Just popped from queue</div>
+  <div class="legend-item"><div class="swatch sw-new"></div>Just infected this step</div>
+  <div class="legend-item"><div class="swatch sw-stuck"></div>Unreachable → −1</div>
+</div>
+
+<script>
+// ── presets ──────────────────────────────────────────────────────
+const PRESETS = [
+  { label: "3×3 Classic (4)",        neg: false, grid: [[2,1,1],[1,1,0],[0,1,1]]     },
+  { label: "Blocked by 0s (−1)",     neg: true,  grid: [[2,1,1],[0,1,1],[1,0,1]]     },
+  { label: "No fresh → 0",           neg: false, grid: [[0,2]]                        },
+  { label: "Single fresh (−1)",      neg: true,  grid: [[1]]                          },
+  { label: "Single rotten → 0",      neg: false, grid: [[2]]                          },
+  { label: "Linear mid (2)",         neg: false, grid: [[1,2,1,1]]                    },
+  { label: "All rotten → 0",         neg: false, grid: [[2,2,2],[2,2,2]]              },
+  { label: "All fresh (−1)",         neg: true,  grid: [[1,1,1],[1,1,1]]              },
+  { label: "2×2 corner (2)",         neg: false, grid: [[2,1],[1,1]]                  },
+  { label: "Wall gap (−1)",          neg: true,  grid: [[2,0,1],[0,0,0],[1,0,2]]     },
+  { label: "Two corners (2)",        neg: false, grid: [[2,1,1],[1,1,1],[0,1,2]]      },
+  { label: "Spread from middle (4)", neg: false, grid: [[1,1,1,1,1],[1,1,2,1,1],[1,1,1,1,1]] },
+];
+
+// ── step builder ─────────────────────────────────────────────────
+function buildSteps(g) {
+  const R = g.length, C = g[0].length;
+  const gridState = g.map(r => [...r]);
+  const rottedAt  = Array.from({length: R}, () => Array(C).fill(null));
+  const steps     = [];
+  const bfsQueue  = [];
+  let fresh = 0;
+  let clock = 0;
+
+  // Seed
+  for (let r = 0; r < R; r++) {
+    for (let c = 0; c < C; c++) {
+      if (gridState[r][c] === 2) {
+        bfsQueue.push({r, c, time: 0});
+        rottedAt[r][c] = 0;
+      } else if (gridState[r][c] === 1) {
+        fresh++;
+      }
+    }
+  }
+
+  // Initial step
+  let initDesc;
+  if (bfsQueue.length === 0 && fresh === 0) {
+    initDesc = `Grid has no oranges at all — nothing to rot. Answer will be <span class="grn">0</span>.`;
+  } else if (bfsQueue.length === 0) {
+    initDesc = `No rotten oranges found — <span class="org">${fresh}</span> fresh orange(s) can never rot. Answer will be <span class="red">−1</span>.`;
+  } else {
+    initDesc = `Seeded queue with <span class="hl">${bfsQueue.length}</span> rotten source(s) at minute 0. `
+             + `Found <span class="org">${fresh}</span> fresh orange(s). BFS begins.`;
+  }
+
+  steps.push({
+    type: 'init',
+    grid:          gridState.map(r => [...r]),
+    rottedAt:      rottedAt.map(r => [...r]),
+    queueSnapshot: [...bfsQueue],
+    active:        null,
+    newlyRotten:   [],
+    fresh, clock,
+    desc: initDesc,
+  });
+
+  // BFS
+  let qi = 0;
+  while (qi < bfsQueue.length) {
+    const {r, c, time} = bfsQueue[qi++];
+    const newlyRotten = [];
+
+    for (const [dr, dc] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+      const nr = r + dr, nc = c + dc;
+      if (nr >= 0 && nr < R && nc >= 0 && nc < C && gridState[nr][nc] === 1) {
+        gridState[nr][nc] = 2;
+        rottedAt[nr][nc] = time + 1;
+        fresh--;
+        clock = time + 1;
+        bfsQueue.push({r: nr, c: nc, time: time + 1});
+        newlyRotten.push({r: nr, c: nc});
+      }
+    }
+
+    let desc;
+    const remaining = bfsQueue.length - qi;
+    if (newlyRotten.length === 0) {
+      desc = `Pop <span class="hl">(${r},${c})</span> @ minute <span class="yel">${time}</span> — `
+           + `no fresh neighbors. Queue: <span class="hl">${remaining}</span> item(s) left.`;
+    } else {
+      const coords = newlyRotten.map(n => `(${n.r},${n.c})`).join(', ');
+      desc = `Pop <span class="hl">(${r},${c})</span> @ minute <span class="yel">${time}</span> — `
+           + `infected <span class="org">${newlyRotten.length}</span> neighbor(s): ${coords} → rotten at minute <span class="yel">${time+1}</span>. `
+           + `Queue: <span class="hl">${remaining}</span> item(s) left.`;
+    }
+
+    steps.push({
+      type: 'pop',
+      grid:          gridState.map(r => [...r]),
+      rottedAt:      rottedAt.map(r => [...r]),
+      queueSnapshot: bfsQueue.slice(qi),
+      active:        {r, c, time},
+      newlyRotten,
+      fresh, clock,
+      desc,
+    });
+  }
+
+  // Done
+  const result = fresh > 0 ? -1 : clock;
+  steps.push({
+    type: 'done',
+    grid:          gridState.map(r => [...r]),
+    rottedAt:      rottedAt.map(r => [...r]),
+    queueSnapshot: [],
+    active:        null,
+    newlyRotten:   [],
+    fresh, clock,
+    result,
+    desc: result === -1
+      ? `Queue empty — <span class="red">${fresh}</span> fresh orange(s) remain (pulsing red). They were unreachable. Answer: <span class="red">−1</span>`
+      : `Queue empty — every orange rotted! Clock stopped at <span class="grn">${clock}</span>. Answer: <span class="grn">${clock}</span> minute(s).`,
+  });
+
+  return steps;
+}
+
+// ── state ─────────────────────────────────────────────────────────
+let steps = [], stepIdx = 0, autoTimer = null;
+let currentGrid = null;
+let R = 0, C = 0, cells = [];
+
+// ── picker ────────────────────────────────────────────────────────
+const pickerEl = document.getElementById('picker');
+PRESETS.forEach((p, i) => {
+  const b = document.createElement('button');
+  b.textContent = p.label;
+  if (p.neg) b.classList.add('neg');
+  if (i === 0) b.classList.add('active');
+  b.onclick = () => {
+    pickerEl.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    loadGrid(p.grid);
+  };
+  pickerEl.appendChild(b);
+});
+
+// ── load ──────────────────────────────────────────────────────────
+function loadGrid(g) {
+  clearAuto();
+  currentGrid = g;
+  R = g.length; C = g[0].length;
+  steps = buildSteps(g);
+  stepIdx = 0;
+
+  const gridEl = document.getElementById('main-grid');
+  gridEl.style.gridTemplateColumns = `repeat(${C}, 66px)`;
+  gridEl.innerHTML = '';
+  cells = [];
+  for (let r = 0; r < R; r++) {
+    cells[r] = [];
+    for (let c = 0; c < C; c++) {
+      const div = document.createElement('div');
+      div.className = 'cell';
+      gridEl.appendChild(div);
+      cells[r][c] = div;
+    }
+  }
+
+  renderStep(0);
+}
+
+// ── render ────────────────────────────────────────────────────────
+const ICONS = { fresh: '🍊', rotten: '💀', empty: '' };
+
+function renderStep(idx) {
+  const s = steps[idx];
+
+  // Grid
+  for (let r = 0; r < R; r++) {
+    for (let c = 0; c < C; c++) {
+      const el = cells[r][c];
+      el.innerHTML = '';
+      el.className = 'cell';
+
+      const val     = s.grid[r][c];
+      const isActive = s.active && s.active.r === r && s.active.c === c;
+      const isNew    = s.newlyRotten.some(n => n.r === r && n.c === c);
+      const isStuck  = s.type === 'done' && s.result === -1 && val === 1;
+
+      if      (isActive)  el.classList.add('cell-active');
+      else if (isNew)     el.classList.add('cell-new');
+      else if (isStuck)   el.classList.add('cell-stuck');
+      else if (val === 0) el.classList.add('cell-empty');
+      else if (val === 1) el.classList.add('cell-fresh');
+      else                el.classList.add('cell-rotten');
+
+      // Icon
+      if (val === 1 || isStuck) {
+        el.textContent = ICONS.fresh;
+      } else if (val === 2) {
+        el.textContent = ICONS.rotten;
+      }
+
+      // Time badge on rotten cells
+      if (val === 2 && s.rottedAt[r][c] !== null) {
+        const tb = document.createElement('span');
+        tb.className = 'time-badge';
+        tb.textContent = `t=${s.rottedAt[r][c]}`;
+        el.appendChild(tb);
+      }
+    }
+  }
+
+  // Queue panel
+  const qEl = document.getElementById('queue-list');
+  qEl.innerHTML = '';
+  const q = s.queueSnapshot;
+  if (q.length === 0) {
+    const e = document.createElement('div');
+    e.className = 'q-empty';
+    e.textContent = 'Queue empty';
+    qEl.appendChild(e);
+  } else {
+    const MAX = 12;
+    q.slice(0, MAX).forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'q-item';
+      div.innerHTML = `<span class="q-coord">(${item.r}, ${item.c})</span><span class="q-time">t=${item.time}</span>`;
+      qEl.appendChild(div);
+    });
+    if (q.length > MAX) {
+      const more = document.createElement('div');
+      more.className = 'q-overflow';
+      more.textContent = `+ ${q.length - MAX} more…`;
+      qEl.appendChild(more);
+    }
+  }
+
+  // Badges
+  document.getElementById('badge-clock').textContent = `Minute: ${s.clock}`;
+  const freshEl = document.getElementById('badge-fresh');
+  freshEl.textContent = `Fresh: ${s.fresh}`;
+  freshEl.className = `badge badge-fresh${s.fresh === 0 ? ' zero' : ''}`;
+
+  // Explain
+  document.getElementById('explain').innerHTML = s.desc;
+
+  // Step counter
+  document.getElementById('step-counter').textContent = `Step ${idx} / ${steps.length - 1}`;
+
+  // Buttons
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === steps.length - 1;
+
+  // Answer badge
+  const ansEl = document.getElementById('answer');
+  if (s.type === 'done') {
+    ansEl.textContent = s.result === -1 ? 'Answer: −1 (impossible)' : `Answer: ${s.result} minute(s)`;
+    ansEl.className = `answer show ${s.result === -1 ? 'neg' : 'ok'}`;
+    clearAuto();
+  } else {
+    ansEl.className = 'answer';
+  }
+}
+
+// ── controls ──────────────────────────────────────────────────────
+document.getElementById('btn-next').onclick = () => {
+  if (stepIdx < steps.length - 1) { stepIdx++; renderStep(stepIdx); }
+};
+document.getElementById('btn-prev').onclick = () => {
+  if (stepIdx > 0) { stepIdx--; renderStep(stepIdx); }
+};
+document.getElementById('btn-reset').onclick = () => { clearAuto(); loadGrid(currentGrid); };
+
+function clearAuto() {
+  clearInterval(autoTimer); autoTimer = null;
+  document.getElementById('btn-auto').textContent = '▶ Auto';
+}
+document.getElementById('btn-auto').onclick = () => {
+  if (autoTimer) { clearAuto(); return; }
+  document.getElementById('btn-auto').textContent = '⏸ Pause';
+  autoTimer = setInterval(() => {
+    if (stepIdx >= steps.length - 1) { clearAuto(); return; }
+    stepIdx++; renderStep(stepIdx);
+  }, 750);
+};
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (stepIdx < steps.length - 1) { stepIdx++; renderStep(stepIdx); }
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (stepIdx > 0) { stepIdx--; renderStep(stepIdx); }
+  }
+});
+
+// ── boot ──────────────────────────────────────────────────────────
+loadGrid(PRESETS[0].grid);
+</script>
+</body>
+</html>
