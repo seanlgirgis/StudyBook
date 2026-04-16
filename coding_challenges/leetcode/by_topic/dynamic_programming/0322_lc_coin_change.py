@@ -81,10 +81,28 @@ def harness(func: Callable) -> None:
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 
-def coinChange(coins: List[int], amount: int) -> int:
+from typing import List
+
+def coin_change(coins: List[int], amount: int) -> int:
     """
     Finds the fewest number of coins needed to make up 'amount'.
     """
-    pass
+    inf_amt = amount + 1
+    buckets = [inf_amt] * (amount + 1)
+    
+    buckets[0] = 0
+    
+    for i in range(1, len(buckets)):
+        n = inf_amt
+        for coin in coins:
+            rem = i - coin
+            if 0 <= rem < amount:
+                if buckets[rem] != inf_amt:
+                    n = min(n, buckets[rem] + 1)
+        if n != inf_amt: buckets[i] = n
+    return buckets[-1] if buckets[-1] != inf_amt else -1
 
-harness(coinChange)
+    
+    
+
+harness(coin_change)
