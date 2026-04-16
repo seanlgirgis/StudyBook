@@ -14,6 +14,7 @@ lc_0271,leetcode/by_topic/arrays_hashing/271_lc_0271_encode_and_decode_strings_e
 lc_0347,leetcode/by_topic/arrays_hashing/347_lc_0347_top_k_frequent_elements_empty.py,arrays_hashing,arrays_hashing;hash-table;heap;bucket-sort;counting,Top K Frequent Elements,leetcode,medium,draft,,,,
 lc_0560,leetcode/by_topic/arrays_hashing/560_lc_0560_subarray_sum_equals_k_empty.py,arrays_hashing,arrays_hashing;hash-table;prefix-sum;arrays,Subarray Sum Equals K,leetcode,medium,draft,,,,
 lc_0198,leetcode/by_topic/dynamic_programming/0198_lc_house_robber.py,dynamic_programming,dynamic_programming;arrays;dynamic-programming,House Robber,leetcode,medium,draft,,,,
+lc_0322,leetcode/by_topic/dynamic_programming/0322_lc_coin_change.py,dynamic_programming,dynamic_programming;dynamic-programming;breadth-first-search;arrays,Coin Change,leetcode,medium,draft,,,,
 lc_0055,leetcode/by_topic/dynamic_programming/055_lc_0055_jump_game.py,dynamic_programming,dynamic_programming;arrays;greedy;dynamic-programming,Jump Game,leetcode,medium,complete,,,,
 lc_0062,leetcode/by_topic/dynamic_programming/062_lc_0062_unique_paths.py,dynamic_programming,dynamic_programming;dynamic-programming;combinatorics;math,Unique Paths,leetcode,medium,draft,,,,
 lc_0063,leetcode/by_topic/dynamic_programming/063_lc_0063_unique_paths_ii.py,dynamic_programming,dynamic_programming;array;dynamic-programming;matrix,Unique Paths II,leetcode,medium,draft,,,,
