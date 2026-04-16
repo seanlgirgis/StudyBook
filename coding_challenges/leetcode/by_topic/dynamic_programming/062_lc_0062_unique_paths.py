@@ -83,18 +83,15 @@ def harness(func: Callable) -> None:
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 
-def uniquePaths(m: int, n: int) -> int:
-    """
-    Calculates the number of unique paths from top-left to bottom-right.
-    """
-    # create a gid of 1s
-  
-    dp = [[1] * n for _ in range(m)]
-    for i in range(1, m):
-        for j in range(1, n):
-            dp[i][j] = dp[i-1][j]+dp[i][j-1]
-    return dp[-1][-1]
+def unique_paths(m: int, n: int) -> int:
+    grid: list[list[int]] = []
+    for i in range(m):
+        grid.append([1 for _ in range(n)])
+    for i in range(1,m):
+        for j in range(1,n):
+            grid[i][j] = grid[i-1][j] + grid[i][j-1]
+    return grid[-1][-1]
             
     
 
-harness(uniquePaths)
+harness(unique_paths)
