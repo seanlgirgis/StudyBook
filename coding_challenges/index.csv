@@ -1,6 +1,7 @@
 id,path,primary,tags,title,source,difficulty,status,pattern,data_structures,my_impression,key_nugget
 lc_0134,leetcode/by_topic/arrays/0134_lc_134_gas_station.py,arrays,arrays;greedy,Gas Station,leetcode,medium,draft,,,,
 lc_0055,leetcode/by_topic/arrays/055_lc_0055_jump_game.py,arrays,arrays;greedy;dynamic-programming,Jump Game,leetcode,medium,complete,,,,
+lc_0064,leetcode/by_topic/arrays/064_lc_0064_minimum_path_sum.py,arrays,arrays;dynamic-programming;matrix,Minimum Path Sum,leetcode,medium,draft,,,,
 lc_0152,leetcode/by_topic/arrays/152_lc_152_maximum_product_subarray.py,arrays,arrays;dynamic-programming,Maximum Product Subarray,leetcode,medium,draft,,,,
 lc_0238,leetcode/by_topic/arrays/238_lc_0238_product_of_array_except_self.py,arrays,arrays;prefix-sum;suffix-sum,Product of Array Except Self,leetcode,medium,draft,,,,
 lc_0462,leetcode/by_topic/arrays/462_lc_0462_minimum_moves_to_equal_array_elements_ii.py,arrays,arrays;math;sorting;median,Minimum Moves to Equal Array Elements II,leetcode,medium,draft,,,,
