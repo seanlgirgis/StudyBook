@@ -82,16 +82,24 @@ def harness(func: Callable) -> None:
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 
-def climbStairs(n: int) -> int:
-    """
-    Find the number of distinct ways to climb to the top.
-    
-    Args:
-        n (int): The number of steps to the top.
-        
-    Returns:
-        int: Total number of ways.
-    """
-    pass
+# DP Confidence Reps (Do now, no tomorrow)
+# Solve all 3, then paste your answers.
 
-harness(climbStairs)
+# -------------------------------------------------
+# Q1) Climbing Stairs
+# You can climb 1 or 2 steps. How many distinct ways to reach step n?
+def climb_stairs(n: int) -> int:
+
+    if n <= 2:
+        return n
+    prevprev = 1
+    prev = 2
+    for _ in range(3, n+1):
+        prev , prevprev = prev + prevprev, prev
+    return prev
+
+print(climb_stairs(2))  # 2
+print(climb_stairs(3))  # 3
+print(climb_stairs(5))  # 8
+
+harness(climb_stairs)
