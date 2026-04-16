@@ -1,6 +1,5 @@
 id,path,primary,tags,title,source,difficulty,status,pattern,data_structures,my_impression,key_nugget
 lc_0134,leetcode/by_topic/arrays/0134_lc_134_gas_station.py,arrays,arrays;greedy,Gas Station,leetcode,medium,draft,,,,
-lc_0055,leetcode/by_topic/arrays/055_lc_0055_jump_game.py,arrays,arrays;greedy;dynamic-programming,Jump Game,leetcode,medium,complete,,,,
 lc_0064,leetcode/by_topic/arrays/064_lc_0064_minimum_path_sum.py,arrays,arrays;dynamic-programming;matrix,Minimum Path Sum,leetcode,medium,draft,,,,
 lc_0152,leetcode/by_topic/arrays/152_lc_152_maximum_product_subarray.py,arrays,arrays;dynamic-programming,Maximum Product Subarray,leetcode,medium,draft,,,,
 lc_0238,leetcode/by_topic/arrays/238_lc_0238_product_of_array_except_self.py,arrays,arrays;prefix-sum;suffix-sum,Product of Array Except Self,leetcode,medium,draft,,,,
@@ -14,6 +13,8 @@ lc_0242,leetcode/by_topic/arrays_hashing/242_lc_0242_valid_anagram_empty.py,arra
 lc_0271,leetcode/by_topic/arrays_hashing/271_lc_0271_encode_and_decode_strings_empty.py,arrays_hashing,arrays_hashing;strings;design;encoding,Encode and Decode Strings,leetcode,medium,draft,,,,
 lc_0347,leetcode/by_topic/arrays_hashing/347_lc_0347_top_k_frequent_elements_empty.py,arrays_hashing,arrays_hashing;hash-table;heap;bucket-sort;counting,Top K Frequent Elements,leetcode,medium,draft,,,,
 lc_0560,leetcode/by_topic/arrays_hashing/560_lc_0560_subarray_sum_equals_k_empty.py,arrays_hashing,arrays_hashing;hash-table;prefix-sum;arrays,Subarray Sum Equals K,leetcode,medium,draft,,,,
+lc_0055,leetcode/by_topic/dynamic_programming/055_lc_0055_jump_game.py,dynamic_programming,dynamic_programming;arrays;greedy;dynamic-programming,Jump Game,leetcode,medium,complete,,,,
+lc_0070,leetcode/by_topic/dynamic_programming/070_lc_0070_climbing_stairs.py,dynamic_programming,dynamic_programming;dynamic-programming;math;recursion,Climbing Stairs,leetcode,easy,draft,,,,
 cs_drone_delivery_foot_distance,leetcode/by_topic/greedy/cs_drone_delivery_foot_distance.py,greedy,greedy;simulation;sorting,Drone Delivery Foot Distance,codesignal,medium,draft,,,,
 cs_key_changes_counter,leetcode/by_topic/greedy/cs_key_changes_counter.py,greedy,greedy;simulation;arrays;strings,Key Changes Counter,codesignal,easy,draft,,,,
 lc_custom_harmonious_buildings,leetcode/by_topic/greedy/custom_codesignal_harmonious_building_patterns.py,greedy,greedy;math;array;sequence,Harmonious Building Patterns,codesignal,medium,draft,,,,
