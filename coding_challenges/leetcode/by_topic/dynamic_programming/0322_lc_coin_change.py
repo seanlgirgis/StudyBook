@@ -81,7 +81,6 @@ def harness(func: Callable) -> None:
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 
-from typing import List
 
 def coin_change(coins: List[int], amount: int) -> int:
     """
@@ -96,7 +95,7 @@ def coin_change(coins: List[int], amount: int) -> int:
         n = inf_amt
         for coin in coins:
             rem = i - coin
-            if 0 <= rem < amount:
+            if rem >= 0:
                 if buckets[rem] != inf_amt:
                     n = min(n, buckets[rem] + 1)
         if n != inf_amt: buckets[i] = n
