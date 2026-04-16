@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LC 64 — Minimum Path Sum Visualizer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0f1117;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+    gap: 28px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #a78bfa;
+    letter-spacing: 0.02em;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: -20px;
+  }
+
+  /* ── grid picker ── */
+  .picker {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .picker button {
+    background: #1e2130;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #cbd5e1;
+    padding: 7px 14px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .picker button:hover  { border-color: #a78bfa; color: #a78bfa; }
+  .picker button.active { background: #4c1d95; border-color: #a78bfa; color: #e9d5ff; }
+
+  /* ── main layout ── */
+  .stage {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .panel-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+  }
+
+  /* ── grids ── */
+  .grid-wrap {
+    display: inline-grid;
+    gap: 6px;
+  }
+
+  .cell {
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    position: relative;
+    transition: background 0.35s, transform 0.2s, box-shadow 0.35s;
+    border: 2px solid transparent;
+  }
+
+  /* original grid */
+  .orig .cell { background: #1e2130; border-color: #334155; color: #94a3b8; }
+  .orig .cell.on-path { background: #1e3a5f; border-color: #3b82f6; color: #93c5fd; }
+
+  /* dp grid states */
+  .dp .cell { background: #1a1f2e; border-color: #334155; color: #475569; }
+  .dp .cell.filled   { background: #1e2d3d; border-color: #334155; color: #94a3b8; }
+  .dp .cell.active   { background: #312e81; border-color: #818cf8; color: #e0e7ff;
+                        transform: scale(1.08); box-shadow: 0 0 20px #6366f166; }
+  .dp .cell.on-path  { background: #14532d; border-color: #22c55e; color: #86efac; }
+  .dp .cell.source   { background: #1c1f3a; border-color: #475569; color: #64748b; }
+
+  .cell .orig-val {
+    font-size: 0.65rem;
+    font-weight: 400;
+    color: #475569;
+    position: absolute;
+    top: 6px;
+    right: 8px;
+  }
+  .dp .cell.on-path .orig-val { color: #4ade8090; }
+
+  /* arrows in dp cell showing which neighbors contributed */
+  .cell .arrow {
+    font-size: 0.7rem;
+    position: absolute;
+    color: #818cf8;
+    opacity: 0;
+    transition: opacity 0.3s 0.2s;
+  }
+  .cell.active .arrow { opacity: 1; }
+  .arrow.from-top   { top: 4px;  left: 50%; transform: translateX(-50%); }
+  .arrow.from-left  { left: 4px; top: 50%;  transform: translateY(-50%); }
+
+  /* ── explanation box ── */
+  .explain {
+    background: #1e2130;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 16px 20px;
+    max-width: 560px;
+    width: 100%;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    min-height: 72px;
+    color: #cbd5e1;
+  }
+  .explain .hl  { color: #a78bfa; font-weight: 600; }
+  .explain .grn { color: #4ade80; font-weight: 600; }
+  .explain .blu { color: #60a5fa; font-weight: 600; }
+
+  /* ── controls ── */
+  .controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .btn {
+    background: #1e2130;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #cbd5e1;
+    padding: 9px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn:hover    { border-color: #a78bfa; color: #a78bfa; }
+  .btn.primary  { background: #4c1d95; border-color: #a78bfa; color: #e9d5ff; }
+  .btn.primary:hover { background: #5b21b6; }
+  .btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+
+  .step-counter {
+    font-size: 0.8rem;
+    color: #475569;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  /* ── answer badge ── */
+  .answer {
+    display: none;
+    background: #14532d;
+    border: 1px solid #22c55e;
+    border-radius: 10px;
+    padding: 10px 24px;
+    font-size: 1rem;
+    color: #86efac;
+    font-weight: 700;
+  }
+  .answer.show { display: block; }
+
+  /* ── legend ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+  .legend-swatch {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    border: 1.5px solid transparent;
+  }
+  .sw-active  { background: #312e81; border-color: #818cf8; }
+  .sw-filled  { background: #1e2d3d; border-color: #334155; }
+  .sw-path    { background: #14532d; border-color: #22c55e; }
+</style>
+</head>
+<body>
+
+<h1>LC 64 — Minimum Path Sum</h1>
+<p class="subtitle">Step-by-step DP table fill · move right or down only</p>
+
+<!-- grid picker -->
+<div class="picker" id="picker"></div>
+
+<div class="stage">
+  <div class="panel">
+    <div class="panel-label">Original Grid</div>
+    <div class="grid-wrap orig" id="orig-grid"></div>
+  </div>
+  <div class="panel">
+    <div class="panel-label">DP Table (running min-cost)</div>
+    <div class="grid-wrap dp" id="dp-grid"></div>
+  </div>
+</div>
+
+<div class="explain" id="explain">Press <strong>Next</strong> to start stepping through the DP.</div>
+
+<div class="controls">
+  <button class="btn" id="btn-prev" disabled>← Prev</button>
+  <span class="step-counter" id="step-counter">Step 0</span>
+  <button class="btn primary" id="btn-next">Next →</button>
+  <button class="btn" id="btn-auto">▶ Auto</button>
+  <button class="btn" id="btn-reset">↺ Reset</button>
+</div>
+
+<div class="answer" id="answer"></div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-swatch sw-active"></div>Current cell being filled</div>
+  <div class="legend-item"><div class="legend-swatch sw-filled"></div>Already filled</div>
+  <div class="legend-item"><div class="legend-swatch sw-path"></div>Optimal path</div>
+</div>
+
+<script>
+// ── preset grids ────────────────────────────────────────────
+const PRESETS = [
+  { label: "3×3 Standard",    grid: [[1,3,1],[1,5,1],[4,2,1]] },
+  { label: "2×3 Rectangle",   grid: [[1,2,3],[4,5,6]] },
+  { label: "Greedy Trap",     grid: [[1,9,1],[1,9,1],[1,1,1]] },
+  { label: "Tall 3×2",        grid: [[1,2],[1,1],[4,1]] },
+  { label: "1×1",             grid: [[5]] },
+  { label: "Single Row",      grid: [[1,2,5]] },
+];
+
+// ── state ───────────────────────────────────────────────────
+let grid, dp, steps, stepIdx, autoTimer, rows, cols;
+
+// ── init picker ─────────────────────────────────────────────
+const pickerEl = document.getElementById('picker');
+PRESETS.forEach((p, i) => {
+  const b = document.createElement('button');
+  b.textContent = p.label;
+  if (i === 0) b.classList.add('active');
+  b.onclick = () => {
+    pickerEl.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    loadGrid(p.grid);
+  };
+  pickerEl.appendChild(b);
+});
+
+// ── DP step builder ─────────────────────────────────────────
+function buildSteps(g) {
+  const R = g.length, C = g[0].length;
+  const d = Array.from({length: R}, () => Array(C).fill(0));
+  const st = [];
+
+  for (let r = 0; r < R; r++) {
+    for (let c = 0; c < C; c++) {
+      let fromTop = false, fromLeft = false, chosen = '';
+
+      if (r === 0 && c === 0) {
+        d[r][c] = g[r][c];
+        chosen = `Start cell. dp[0][0] = ${g[r][c]}`;
+      } else if (r === 0) {
+        d[r][c] = d[r][c-1] + g[r][c];
+        fromLeft = true;
+        chosen = `Top row — can only come from the left.\ndp[${r}][${c}] = dp[${r}][${c-1}] + ${g[r][c]} = ${d[r][c-1]} + ${g[r][c]} = ${d[r][c]}`;
+      } else if (c === 0) {
+        d[r][c] = d[r-1][c] + g[r][c];
+        fromTop = true;
+        chosen = `Left column — can only come from above.\ndp[${r}][${c}] = dp[${r-1}][${c}] + ${g[r][c]} = ${d[r-1][c]} + ${g[r][c]} = ${d[r][c]}`;
+      } else {
+        const t = d[r-1][c], l = d[r][c-1];
+        if (t <= l) { fromTop = true; }
+        else        { fromLeft = true; }
+        d[r][c] = Math.min(t, l) + g[r][c];
+        chosen = `min(from above=${t}, from left=${l}) + ${g[r][c]} = ${Math.min(t,l)} + ${g[r][c]} = ${d[r][c]}`;
+      }
+
+      st.push({
+        r, c,
+        dpSnapshot: d.map(row => [...row]),
+        fromTop, fromLeft,
+        desc: chosen,
+        filled: r * C + c   // how many cells are done after this step
+      });
+    }
+  }
+  return { d, st, R, C };
+}
+
+// ── trace optimal path ───────────────────────────────────────
+function tracePath(d, R, C) {
+  const path = new Set();
+  let r = R - 1, c = C - 1;
+  path.add(`${r},${c}`);
+  while (r > 0 || c > 0) {
+    if (r === 0) c--;
+    else if (c === 0) r--;
+    else if (d[r-1][c] <= d[r][c-1]) r--;
+    else c--;
+    path.add(`${r},${c}`);
+  }
+  return path;
+}
+
+// ── DOM helpers ──────────────────────────────────────────────
+function makeGridEl(id, R, C) {
+  const el = document.getElementById(id);
+  el.style.gridTemplateColumns = `repeat(${C}, 72px)`;
+  el.innerHTML = '';
+  const cells = [];
+  for (let r = 0; r < R; r++) {
+    cells[r] = [];
+    for (let c = 0; c < C; c++) {
+      const div = document.createElement('div');
+      div.className = 'cell';
+      el.appendChild(div);
+      cells[r][c] = div;
+    }
+  }
+  return cells;
+}
+
+let origCells, dpCells;
+
+function loadGrid(g) {
+  clearAuto();
+  grid = g.map(r => [...r]);
+  rows = g.length; cols = g[0].length;
+  const { d, st } = buildSteps(grid);
+  dp = d;
+  steps = st;
+  stepIdx = 0;
+
+  origCells = makeGridEl('orig-grid', rows, cols);
+  dpCells   = makeGridEl('dp-grid',   rows, cols);
+
+  // fill original
+  for (let r = 0; r < rows; r++)
+    for (let c = 0; c < cols; c++) {
+      origCells[r][c].textContent = grid[r][c];
+      origCells[r][c].classList.remove('on-path');
+    }
+
+  // blank dp
+  for (let r = 0; r < rows; r++)
+    for (let c = 0; c < cols; c++) {
+      dpCells[r][c].innerHTML = '';
+      dpCells[r][c].className = 'cell';
+    }
+
+  document.getElementById('explain').innerHTML =
+    'Press <strong>Next</strong> to start stepping through the DP.';
+  document.getElementById('step-counter').textContent = `Step 0 / ${steps.length}`;
+  document.getElementById('answer').classList.remove('show');
+  document.getElementById('btn-prev').disabled = true;
+  document.getElementById('btn-next').disabled = false;
+  document.getElementById('btn-auto').disabled = false;
+}
+
+// ── render a step ────────────────────────────────────────────
+function renderStep(idx) {
+  const s = steps[idx];
+  const R = rows, C = cols;
+
+  for (let r = 0; r < R; r++) {
+    for (let c = 0; c < C; c++) {
+      const cell = dpCells[r][c];
+      cell.innerHTML = '';
+      cell.className = 'cell';
+
+      const cellIdx = r * C + c;
+      const curIdx  = s.r * C + s.c;
+
+      if (cellIdx > curIdx) continue;  // not yet reached
+
+      if (cellIdx === curIdx) {
+        cell.classList.add('active');
+        // arrows
+        if (s.fromTop) {
+          const a = document.createElement('span');
+          a.className = 'arrow from-top'; a.textContent = '↓';
+          cell.appendChild(a);
+        }
+        if (s.fromLeft) {
+          const a = document.createElement('span');
+          a.className = 'arrow from-left'; a.textContent = '→';
+          cell.appendChild(a);
+        }
+      } else {
+        cell.classList.add('filled');
+      }
+
+      const val = document.createElement('span');
+      val.textContent = s.dpSnapshot[r][c];
+      cell.appendChild(val);
+
+      // show original value as superscript hint
+      const ov = document.createElement('span');
+      ov.className = 'orig-val';
+      ov.textContent = grid[r][c];
+      cell.appendChild(ov);
+    }
+  }
+
+  // explain
+  const coords = `(row ${s.r}, col ${s.c})`;
+  document.getElementById('explain').innerHTML =
+    `<span class="hl">Cell ${coords}</span> &nbsp;|&nbsp; grid value = <span class="blu">${grid[s.r][s.c]}</span><br>${s.desc.replace(/\n/g,'<br>')}`;
+
+  document.getElementById('step-counter').textContent =
+    `Step ${idx + 1} / ${steps.length}`;
+
+  document.getElementById('btn-prev').disabled = (idx === 0);
+  document.getElementById('btn-next').disabled = (idx === steps.length - 1);
+
+  // final step — show path + answer
+  if (idx === steps.length - 1) {
+    const path = tracePath(dp, R, C);
+    path.forEach(key => {
+      const [r, c] = key.split(',').map(Number);
+      origCells[r][c].classList.add('on-path');
+      dpCells[r][c].classList.remove('active', 'filled');
+      dpCells[r][c].classList.add('on-path');
+    });
+    const ans = document.getElementById('answer');
+    ans.textContent = `Minimum path sum = ${dp[R-1][C-1]}`;
+    ans.classList.add('show');
+    document.getElementById('explain').innerHTML =
+      `<span class="grn">Done!</span> The bottom-right cell holds the answer. `+
+      `The <span class="grn">green cells</span> trace the optimal path with sum <span class="grn">${dp[R-1][C-1]}</span>.`;
+    clearAuto();
+  } else {
+    document.getElementById('answer').classList.remove('show');
+  }
+}
+
+// ── button wiring ────────────────────────────────────────────
+document.getElementById('btn-next').onclick = () => {
+  if (stepIdx < steps.length - 1) { stepIdx++; renderStep(stepIdx); }
+  else renderStep(stepIdx);
+};
+document.getElementById('btn-prev').onclick = () => {
+  if (stepIdx > 0) { stepIdx--; renderStep(stepIdx); }
+};
+document.getElementById('btn-reset').onclick = () => {
+  clearAuto(); stepIdx = 0; loadGrid(grid);
+};
+
+function clearAuto() {
+  clearInterval(autoTimer); autoTimer = null;
+  document.getElementById('btn-auto').textContent = '▶ Auto';
+}
+document.getElementById('btn-auto').onclick = () => {
+  if (autoTimer) { clearAuto(); return; }
+  document.getElementById('btn-auto').textContent = '⏸ Pause';
+  autoTimer = setInterval(() => {
+    if (stepIdx >= steps.length - 1) { clearAuto(); return; }
+    stepIdx++; renderStep(stepIdx);
+  }, 900);
+};
+
+// ── boot ─────────────────────────────────────────────────────
+loadGrid(PRESETS[0].grid);
+</script>
+</body>
+</html>
