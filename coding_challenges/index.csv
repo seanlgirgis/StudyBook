@@ -21,6 +21,7 @@ lc_0062,leetcode/by_topic/dynamic_programming/062_lc_0062_unique_paths.py,dynami
 lc_0063,leetcode/by_topic/dynamic_programming/063_lc_0063_unique_paths_ii.py,dynamic_programming,dynamic_programming;array;dynamic-programming;matrix,Unique Paths II,leetcode,medium,draft,,,,
 lc_0070,leetcode/by_topic/dynamic_programming/070_lc_0070_climbing_stairs.py,dynamic_programming,dynamic_programming;dynamic-programming;math;recursion,Climbing Stairs,leetcode,easy,draft,,,,
 lc_0091,leetcode/by_topic/dynamic_programming/091_lc_0091_decode_ways.py,dynamic_programming,dynamic_programming;dynamic-programming;string;memoization,Decode Ways,leetcode,medium,draft,,,,
+lc_0139,leetcode/by_topic/dynamic_programming/139_lc_0139_word_break_empty.py,dynamic_programming,dynamic_programming;string;hash-table;dynamic-programming;trie;memoization,Word Break,leetcode,medium,draft,,,,
 lc_0994,leetcode/by_topic/graphs/994_lc_0994_rotting_oranges.py,graphs,graphs;arrays;bfs;matrix;graph;multi_source_bfs,Rotting Oranges,leetcode,medium,draft,,,,
 cs_drone_delivery_foot_distance,leetcode/by_topic/greedy/cs_drone_delivery_foot_distance.py,greedy,greedy;simulation;sorting,Drone Delivery Foot Distance,codesignal,medium,draft,,,,
 cs_key_changes_counter,leetcode/by_topic/greedy/cs_key_changes_counter.py,greedy,greedy;simulation;arrays;strings,Key Changes Counter,codesignal,easy,draft,,,,
