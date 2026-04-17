@@ -92,9 +92,16 @@ def harness(func: Callable) -> None:
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 
 def lengthOfLIS(nums: List[int]) -> int:
-    """
-    Finds the length of the longest strictly increasing subsequence.
-    """
-    pass
-
+    n = len(nums)
+    if n == 0 : return 0
+    if n == 1 : return 1
+    longest = 0
+    LIS = [1] * n
+    for i in range(n -1, -1, -1):
+        for j in range (i+1, n):
+            if nums[i] < nums[j]:
+                LIS[i] = max(LIS[i], 1 + LIS[j])
+                longest  = max(longest , LIS[i])
+    return max(LIS)
+    
 harness(lengthOfLIS)
