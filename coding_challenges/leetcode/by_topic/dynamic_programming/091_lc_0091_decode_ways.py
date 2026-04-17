@@ -93,10 +93,26 @@ def harness(func: Callable) -> None:
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 
-def numDecodings(s: str) -> int:
-    """
-    Returns the number of ways to decode the digit string.
-    """
-    pass
+def num_decodings(s: str) -> int:
+    # Base case: an empty string (end of input) counts as 1 valid decoding path
+    dp = { len(s) : 1 }
+    
+    # Iterate backwards through the string
+    for i in range(len(s) - 1, -1, -1):
+        # Case 1: If current digit is '0', it cannot start a valid letter
+        if s[i] == "0":
+            dp[i] = 0
+        else:
+            # Standard case: Use current digit as a single letter
+            dp[i] = dp[i + 1]
+    
+        # Case 2: Check if current and next digit can form a valid double-digit letter (10-26)
+        if (i + 1 < len(s) and (s[i] == "1" or 
+            s[i] == "2" and s[i + 1] in "0123456")):
+            # Add the paths possible from the position after the pair
+            dp[i] += dp[i + 2]
+    
+    # The result is the number of ways to decode starting from the first character
+    return dp[0]
 
-harness(numDecodings)
+harness(num_decodings)
