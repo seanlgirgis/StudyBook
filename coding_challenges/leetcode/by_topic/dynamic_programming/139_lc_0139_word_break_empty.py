@@ -55,7 +55,7 @@ tests: List[Tuple[str, List[str], bool, str]] = [
     ("bb", ["a", "b", "bbb", "bbbb"], True, "Short match in long dict"),
     ("", ["apple"], False, "Edge Case: Empty string (usually False per constraints)"),
     ("ab", ["a", "b"], True, "Multiple single characters"),
-    ("bccdbacdb", ["bc", "cd", "db", "ac"], True, "Complex sequence"),
+    ("bccdbacdb", ["bc", "cd", "db", "ac"], False, "Complex sequence (odd length with only 2-char tokens)"),
     ("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab", 
      ["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"], 
      False, "Stress Test: TLE Prevention (Exponential recursion check)")
@@ -85,10 +85,16 @@ def harness(func: Callable) -> None:
 
 # --- USER TO IMPLEMENT SOLUTION BELOW ---
 
-def wordBreak(s: str, wordDict: List[str]) -> bool:
-    """
-    Determines if s can be segmented into words from wordDict.
-    """
-    pass
+def word_break(s: str, wordDict: List[str]) -> bool:
+    if s == "": return False
+    word_set = set(wordDict)
+    dp = [False] * (len(s) + 1)
+    dp[0] = True                    # empty prefix is segmentable
+    for r in range(1, len(s) + 1):
+        for l in range(r):
+            if dp[l] and s[l:r] in word_set:
+                dp[r] = True
+                break               # segment ending at r found
+    return dp[len(s)]
 
-harness(wordBreak)
+harness(word_break)
