@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LC 416 — Partition Equal Subset Sum Visualizer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0f1117; color: #e2e8f0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 32px 16px; gap: 20px;
+  }
+  h1 { font-size: 1.4rem; font-weight: 700; color: #a78bfa; letter-spacing: 0.02em; }
+  .subtitle { font-size: 0.85rem; color: #64748b; margin-top: -14px; }
+
+  .recurrence {
+    background: #1a1f2e; border: 1px solid #2d3748; border-radius: 10px;
+    padding: 10px 18px; font-family: monospace; font-size: 0.8rem;
+    color: #94a3b8; line-height: 1.9; max-width: 580px; width: 100%;
+  }
+  .recurrence .kw  { color: #a78bfa; }
+  .recurrence .grn { color: #4ade80; }
+  .recurrence .org { color: #fb923c; }
+  .recurrence .red { color: #f87171; }
+  .recurrence .dim { color: #475569; }
+
+  /* picker */
+  .picker { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 800px; }
+  .picker button {
+    background: #1e2130; border: 1px solid #334155; border-radius: 8px;
+    color: #cbd5e1; padding: 6px 12px; font-size: 0.75rem; cursor: pointer;
+    transition: all 0.15s; font-family: monospace;
+  }
+  .picker button:hover        { border-color: #a78bfa; color: #a78bfa; }
+  .picker button.active       { background: #4c1d95; border-color: #a78bfa; color: #e9d5ff; }
+  .picker button.is-false     { border-color: #7f1d1d; color: #fca5a5; }
+  .picker button.is-false.active { background: #7f1d1d; border-color: #ef4444; }
+
+  /* nums display */
+  .nums-display { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .num-chip {
+    background: #1a1f2e; border: 1.5px solid #334155; border-radius: 8px;
+    padding: 6px 14px; font-family: monospace; font-size: 1rem; font-weight: 700;
+    color: #cbd5e1; transition: all 0.25s;
+  }
+  .num-chip.active { border-color: #a78bfa; color: #a78bfa; background: #1e1b4b; box-shadow: 0 0 12px #6366f155; }
+  .num-chip.used   { border-color: #1e293b; color: #374151; }
+
+  /* table */
+  .table-wrapper { overflow-x: auto; max-width: 95vw; }
+  .dp-grid { display: inline-grid; gap: 3px; padding: 8px; }
+
+  .header-cell {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; color: #475569; font-family: monospace; height: 22px; min-width: 44px;
+  }
+  .col-target { color: #a78bfa; font-weight: 700; }
+
+  .row-label {
+    display: flex; align-items: center; justify-content: flex-end;
+    font-size: 0.7rem; color: #475569; font-family: monospace;
+    padding-right: 8px; min-width: 62px; height: 40px; white-space: nowrap;
+  }
+  .row-label .val { color: #a78bfa; font-weight: 700; }
+  .row-label.active-row { color: #a78bfa; }
+
+  .dp-cell {
+    width: 44px; height: 40px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.82rem; font-weight: 700; font-family: monospace;
+    border: 1.5px solid; transition: all 0.22s; user-select: none;
+  }
+
+  /* cell states */
+  .c-unknown  { background: #0d1018; border-color: #1e293b;  color: #2d3748; }
+  .c-true     { background: #0a1f13; border-color: #1e4d30;  color: #4ade80; }
+  .c-false    { background: #0f0f14; border-color: #1a2030;  color: #374151; }
+  .c-base     { background: #14532d; border-color: #22c55e;  color: #86efac; }
+  .c-curr     { background: #1e1b4b; border-color: #818cf8;  color: #a78bfa;
+                box-shadow: 0 0 14px #6366f155; transform: scale(1.1); z-index: 1; position: relative; }
+  .c-skip     { background: #0a1f13; border-color: #4ade80;  color: #4ade80;
+                box-shadow: 0 0 10px #4ade8040; }
+  .c-take     { background: #1f0e04; border-color: #fb923c;  color: #fb923c;
+                box-shadow: 0 0 10px #fb923c40; }
+  .c-result-t { background: #14532d; border-color: #22c55e;  color: #86efac;
+                box-shadow: 0 0 20px #22c55e66; transform: scale(1.13); z-index: 1; position: relative; }
+  .c-result-f { background: #450a0a; border-color: #dc2626;  color: #f87171;
+                box-shadow: 0 0 20px #dc262666; transform: scale(1.13); z-index: 1; position: relative; }
+
+  /* explain */
+  .explain {
+    background: #1a1f2e; border: 1px solid #2d3748; border-radius: 12px;
+    padding: 14px 18px; max-width: 740px; width: 100%;
+    font-size: 0.88rem; line-height: 1.7; min-height: 62px; color: #cbd5e1;
+  }
+  .explain .hl  { color: #a78bfa; font-weight: 600; }
+  .explain .grn { color: #4ade80; font-weight: 600; }
+  .explain .org { color: #fb923c; font-weight: 600; }
+  .explain .red { color: #f87171; font-weight: 600; }
+  .explain .dim { color: #64748b; }
+
+  /* controls */
+  .controls { display: flex; gap: 10px; align-items: center; }
+  .btn {
+    background: #1a1f2e; border: 1px solid #334155; border-radius: 8px;
+    color: #cbd5e1; padding: 9px 18px; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn:hover         { border-color: #a78bfa; color: #a78bfa; }
+  .btn.primary       { background: #4c1d95; border-color: #a78bfa; color: #e9d5ff; }
+  .btn.primary:hover { background: #5b21b6; }
+  .btn:disabled      { opacity: 0.3; cursor: default; pointer-events: none; }
+  .step-counter      { font-size: 0.8rem; color: #475569; min-width: 90px; text-align: center; }
+
+  /* answer */
+  .answer { display: none; border-radius: 10px; padding: 10px 28px; font-size: 1rem; font-weight: 700; }
+  .answer.show { display: block; }
+  .answer.ok   { background: #14532d; border: 1px solid #22c55e; color: #86efac; }
+  .answer.neg  { background: #450a0a; border: 1px solid #dc2626; color: #fca5a5; }
+
+  /* legend */
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.73rem; color: #64748b; }
+  .swatch { width: 13px; height: 13px; border-radius: 3px; border: 1.5px solid; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<h1>LC 416 — Partition Equal Subset Sum</h1>
+<p class="subtitle">0/1 Subset Sum DP &nbsp;·&nbsp; canReach[i][s] = can first i elements reach sum s?</p>
+
+<div class="recurrence">
+  <span class="kw">canReach</span>[0][0] = <span class="grn">True</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">// base: no elements → only sum 0 reachable</span><br>
+  <span class="kw">canReach</span>[0][s&gt;0] = <span class="red">False</span><br>
+  <span class="kw">canReach</span>[i][s] = <span class="grn">skip</span> <span class="dim">or</span> <span class="org">take</span><br>
+  &nbsp;&nbsp;where &nbsp;<span class="grn">skip</span> = canReach[i-1][s] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">// don't use nums[i-1]</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="org">take</span> = canReach[i-1][s - nums[i-1]] <span class="dim">if s ≥ nums[i-1]</span> &nbsp;<span class="dim">// use it (row i-1 enforces 0/1)</span>
+</div>
+
+<div class="picker" id="picker"></div>
+
+<div class="nums-display" id="nums-display"></div>
+
+<div class="table-wrapper">
+  <div class="dp-grid" id="dp-grid"></div>
+</div>
+
+<div class="explain" id="explain">
+  Select a case above, then press <strong>Next →</strong> (or ← → keys) to fill one cell at a time.
+</div>
+
+<div class="controls">
+  <button class="btn" id="btn-prev" disabled>← Prev</button>
+  <span class="step-counter" id="step-counter">Step 0 / 0</span>
+  <button class="btn primary" id="btn-next">Next →</button>
+  <button class="btn" id="btn-auto">▶ Auto</button>
+  <button class="btn" id="btn-reset">↺ Reset</button>
+</div>
+
+<div class="answer" id="answer"></div>
+
+<div class="legend">
+  <div class="legend-item"><div class="swatch" style="background:#14532d;border-color:#22c55e;"></div>True (reachable)</div>
+  <div class="legend-item"><div class="swatch" style="background:#1e1b4b;border-color:#818cf8;"></div>Currently filling</div>
+  <div class="legend-item"><div class="swatch" style="background:#0a1f13;border-color:#4ade80;"></div>Skip source (row above, same col)</div>
+  <div class="legend-item"><div class="swatch" style="background:#1f0e04;border-color:#fb923c;"></div>Take source (row above, shifted col)</div>
+  <div class="legend-item"><div class="swatch" style="background:#0f0f14;border-color:#1a2030;"></div>False</div>
+</div>
+
+<script>
+const PRESETS = [
+  { label: '[2, 2] → True',       nums: [2, 2],        ok: true  },
+  { label: '[3, 1, 4, 2] → True', nums: [3, 1, 4, 2],  ok: true  },
+  { label: '[1, 5, 5, 11] → True',nums: [1, 5, 5, 11], ok: true  },
+  { label: '[1, 3, 4, 8] → True', nums: [1, 3, 4, 8],  ok: true  },
+  { label: '[1, 2, 5] → False',   nums: [1, 2, 5],     ok: false },
+  { label: '[1,2,3,5] → False',   nums: [1, 2, 3, 5],  ok: false },
+];
+
+function copy2D(arr) { return arr.map(r => [...r]); }
+
+function buildSteps(nums) {
+  const total = nums.reduce((a, b) => a + b, 0);
+  const steps = [];
+
+  if (total % 2 !== 0) {
+    steps.push({
+      type: 'odd', total,
+      desc: `Sum of all elements is <span class="hl">${total}</span> (odd). `
+          + `We need two equal groups but <span class="red">${total} ÷ 2</span> is not a whole number. `
+          + `Answer: <span class="red">False</span> — no need to build the table.`
+    });
+    return { steps, target: 0, n: nums.length, oddSum: true };
+  }
+
+  const target = total / 2;
+  const n = nums.length;
+  const cr = Array.from({ length: n + 1 }, () => Array(target + 1).fill(null));
+
+  // Step 0: init (all ?)
+  steps.push({
+    type: 'init', canReach: copy2D(cr), curr: null, skipSrc: null, takeSrc: null,
+    desc: `nums = [${nums}] &nbsp;·&nbsp; total = ${total} &nbsp;·&nbsp; <span class="hl">target = ${total}/2 = ${target}</span>.<br>`
+        + `Building <span class="hl">canReach[${n + 1}][${target + 1}]</span> — `
+        + `${n + 1} rows (element prefixes 0–${n}) × ${target + 1} columns (sums 0–${target}). `
+        + `All cells start as <span class="dim">?</span>.`
+  });
+
+  // Base row
+  cr[0][0] = true;
+  for (let s = 1; s <= target; s++) cr[0][s] = false;
+
+  steps.push({
+    type: 'base', canReach: copy2D(cr), curr: [0, 0], skipSrc: null, takeSrc: null,
+    desc: `Base case — row 0 (zero elements used):<br>`
+        + `<span class="grn">canReach[0][0] = True</span> — zero elements can reach sum 0 (pick nothing).<br>`
+        + `canReach[0][1..${target}] = False — can't reach any positive sum with no elements.`
+  });
+
+  // Fill rows 1..n
+  for (let i = 1; i <= n; i++) {
+    for (let s = 0; s <= target; s++) {
+      const skip     = cr[i - 1][s];
+      const canTake  = s >= nums[i - 1];
+      const takeVal  = canTake ? cr[i - 1][s - nums[i - 1]] : false;
+      cr[i][s]       = skip || takeVal;
+
+      const skipSrc  = [i - 1, s];
+      const takeSrc  = canTake ? [i - 1, s - nums[i - 1]] : null;
+
+      let desc = `Row <span class="hl">${i}</span>, col <span class="hl">${s}</span> &nbsp;·&nbsp; `
+               + `considering <span class="hl">nums[${i - 1}] = ${nums[i - 1]}</span><br>`;
+      desc += `<span class="grn">skip</span> = canReach[${i-1}][${s}] = <span class="${skip ? 'grn' : 'dim'}">${skip ? 'T' : 'F'}</span>`;
+      if (canTake) {
+        desc += ` &nbsp;|&nbsp; <span class="org">take</span> = canReach[${i-1}][${s}−${nums[i-1]}]`
+              + ` = canReach[${i-1}][${s - nums[i-1]}] = <span class="${takeVal ? 'org' : 'dim'}">${takeVal ? 'T' : 'F'}</span>`;
+      } else {
+        desc += ` &nbsp;|&nbsp; <span class="dim">take: N/A (sum ${s} &lt; nums[${i-1}]=${nums[i-1]})</span>`;
+      }
+      desc += `<br>canReach[${i}][${s}] = <span class="${cr[i][s] ? 'grn' : 'red'}">${cr[i][s] ? 'True' : 'False'}</span>`;
+
+      steps.push({ type: 'fill', canReach: copy2D(cr), curr: [i, s], skipSrc, takeSrc, desc });
+    }
+  }
+
+  const finalVal = cr[n][target];
+  steps.push({
+    type: 'done', canReach: copy2D(cr), curr: [n, target], result: finalVal,
+    desc: `Done! &nbsp;<span class="hl">canReach[${n}][${target}]</span> = `
+        + `<span class="${finalVal ? 'grn' : 'red'}">${finalVal ? 'True' : 'False'}</span>.<br>`
+        + (finalVal
+          ? `Some subset of [${nums}] sums to <span class="grn">${target}</span> → equal partition exists.`
+          : `No subset of [${nums}] sums to <span class="red">${target}</span> → equal partition impossible.`)
+  });
+
+  return { steps, target, n, oddSum: false };
+}
+
+// ── state ─────────────────────────────────────────────────────────────────────
+let state  = { steps: [], stepIdx: 0, target: 0, n: 0, nums: [], oddSum: false };
+let autoTimer = null;
+
+// ── picker ────────────────────────────────────────────────────────────────────
+const pickerEl = document.getElementById('picker');
+PRESETS.forEach((p, pi) => {
+  const b = document.createElement('button');
+  b.textContent = p.label;
+  if (!p.ok) b.classList.add('is-false');
+  if (pi === 0) b.classList.add('active');
+  b.onclick = () => {
+    pickerEl.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    load(p.nums);
+  };
+  pickerEl.appendChild(b);
+});
+
+// ── load ──────────────────────────────────────────────────────────────────────
+function load(nums) {
+  clearAuto();
+  const built = buildSteps(nums);
+  state = { ...built, stepIdx: 0, nums };
+  buildNumsDisplay();
+  buildGrid();
+  render(0);
+}
+
+function buildNumsDisplay() {
+  const el = document.getElementById('nums-display');
+  el.innerHTML = '';
+  state.nums.forEach((v, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'num-chip';
+    chip.id = `chip-${i}`;
+    chip.textContent = v;
+    el.appendChild(chip);
+  });
+}
+
+function buildGrid() {
+  const grid = document.getElementById('dp-grid');
+  grid.innerHTML = '';
+
+  if (state.oddSum) { grid.style.display = 'none'; return; }
+  grid.style.display = 'inline-grid';
+
+  const { target, n, nums } = state;
+  grid.style.gridTemplateColumns = `62px repeat(${target + 1}, 44px)`;
+
+  // Header row: corner + sum labels
+  const corner = document.createElement('div');
+  corner.className = 'header-cell';
+  corner.textContent = 'i \\ s';
+  grid.appendChild(corner);
+
+  for (let s = 0; s <= target; s++) {
+    const h = document.createElement('div');
+    h.className = `header-cell${s === target ? ' col-target' : ''}`;
+    h.textContent = s;
+    if (s === target) h.title = `target = ${target}`;
+    grid.appendChild(h);
+  }
+
+  // Data rows
+  for (let i = 0; i <= n; i++) {
+    const label = document.createElement('div');
+    label.className = 'row-label';
+    label.id = `row-label-${i}`;
+    label.innerHTML = i === 0
+      ? `<span style="color:#475569">∅</span>`
+      : `+<span class="val">${nums[i - 1]}</span>`;
+    grid.appendChild(label);
+
+    for (let s = 0; s <= target; s++) {
+      const cell = document.createElement('div');
+      cell.className = 'dp-cell c-unknown';
+      cell.id = `c-${i}-${s}`;
+      cell.textContent = '?';
+      grid.appendChild(cell);
+    }
+  }
+}
+
+// ── render ────────────────────────────────────────────────────────────────────
+function render(idx) {
+  const step = state.steps[idx];
+  const { target, n, oddSum, nums } = state;
+
+  document.getElementById('explain').innerHTML = step.desc;
+  document.getElementById('step-counter').textContent = `Step ${idx} / ${state.steps.length - 1}`;
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === state.steps.length - 1;
+
+  const ansEl = document.getElementById('answer');
+  if (step.type === 'done') {
+    ansEl.className = `answer show ${step.result ? 'ok' : 'neg'}`;
+    ansEl.textContent = step.result
+      ? `True — [${nums}] can be partitioned into two equal subsets`
+      : `False — [${nums}] cannot be partitioned into two equal subsets`;
+  } else if (step.type === 'odd') {
+    ansEl.className = 'answer show neg';
+    ansEl.textContent = `False — sum ${step.total} is odd, immediate reject`;
+  } else {
+    ansEl.className = 'answer';
+  }
+
+  if (oddSum) return;
+
+  // Highlight active num chip
+  nums.forEach((_, i) => {
+    const chip = document.getElementById(`chip-${i}`);
+    if (!chip) return;
+    chip.className = 'num-chip';
+    if (step.curr && step.curr[0] === i + 1) chip.classList.add('active');
+    else if (step.curr && i + 1 < step.curr[0]) chip.classList.add('used');
+  });
+
+  // Active row label
+  for (let i = 0; i <= n; i++) {
+    const lbl = document.getElementById(`row-label-${i}`);
+    if (lbl) {
+      lbl.className = 'row-label' + (step.curr && step.curr[0] === i && step.type !== 'done' ? ' active-row' : '');
+    }
+  }
+
+  // Grid cells
+  for (let i = 0; i <= n; i++) {
+    for (let s = 0; s <= target; s++) {
+      const cell = document.getElementById(`c-${i}-${s}`);
+      if (!cell) continue;
+
+      const val      = step.canReach[i][s];
+      const isCurr   = step.curr && step.curr[0] === i && step.curr[1] === s && step.type !== 'done';
+      const isSkip   = step.skipSrc && step.skipSrc[0] === i && step.skipSrc[1] === s && !isCurr;
+      const isTake   = step.takeSrc && step.takeSrc[0] === i && step.takeSrc[1] === s && !isCurr;
+      const isResult = step.type === 'done' && i === n && s === target;
+
+      cell.className = 'dp-cell';
+      if      (isResult && val)      cell.classList.add('c-result-t');
+      else if (isResult)             cell.classList.add('c-result-f');
+      else if (isCurr)               cell.classList.add('c-curr');
+      else if (isSkip)               cell.classList.add('c-skip');
+      else if (isTake)               cell.classList.add('c-take');
+      else if (val === null)         cell.classList.add('c-unknown');
+      else if (i === 0 && s === 0)   cell.classList.add('c-base');
+      else if (val)                  cell.classList.add('c-true');
+      else                           cell.classList.add('c-false');
+
+      cell.textContent = val === null ? '?' : (val ? 'T' : 'F');
+    }
+  }
+}
+
+// ── controls ──────────────────────────────────────────────────────────────────
+function clearAuto() {
+  clearInterval(autoTimer); autoTimer = null;
+  document.getElementById('btn-auto').textContent = '▶ Auto';
+}
+
+document.getElementById('btn-next').onclick  = () => {
+  if (state.stepIdx < state.steps.length - 1) { state.stepIdx++; render(state.stepIdx); }
+};
+document.getElementById('btn-prev').onclick  = () => {
+  if (state.stepIdx > 0) { state.stepIdx--; render(state.stepIdx); }
+};
+document.getElementById('btn-reset').onclick = () => { clearAuto(); state.stepIdx = 0; render(0); };
+document.getElementById('btn-auto').onclick  = () => {
+  if (autoTimer) { clearAuto(); return; }
+  document.getElementById('btn-auto').textContent = '⏸ Pause';
+  autoTimer = setInterval(() => {
+    if (state.stepIdx >= state.steps.length - 1) { clearAuto(); return; }
+    state.stepIdx++; render(state.stepIdx);
+  }, 650);
+};
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (state.stepIdx < state.steps.length - 1) { state.stepIdx++; render(state.stepIdx); }
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (state.stepIdx > 0) { state.stepIdx--; render(state.stepIdx); }
+  }
+});
+
+load(PRESETS[0].nums);
+</script>
+</body>
+</html>
