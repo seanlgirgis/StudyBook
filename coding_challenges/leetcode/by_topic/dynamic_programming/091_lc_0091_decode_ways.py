@@ -50,8 +50,7 @@ notes:
 # Explanation: "06" cannot be mapped to "F" because of the leading zero.
 # ============================================================================
 
-from typing import List, Callable, Tuple
-import copy
+from typing import Callable, Tuple
 
 # Test cases: (s, expected_output, description)
 tests: List[Tuple[str, int, str]] = [
@@ -107,8 +106,9 @@ def num_decodings(s: str) -> int:
             dp[i] = dp[i + 1]
     
         # Case 2: Check if current and next digit can form a valid double-digit letter (10-26)
-        if (i + 1 < len(s) and (s[i] == "1" or 
-            s[i] == "2" and s[i + 1] in "0123456")):
+        if i + 1 < len(s) and (
+            s[i] == "1" or (s[i] == "2" and s[i + 1] in "0123456")
+        ):
             # Add the paths possible from the position after the pair
             dp[i] += dp[i + 2]
     

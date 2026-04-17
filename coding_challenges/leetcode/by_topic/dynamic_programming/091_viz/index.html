@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LC 91 — Decode Ways Visualizer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0f1117; color: #e2e8f0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 32px 16px; gap: 20px;
+  }
+  h1 { font-size: 1.4rem; font-weight: 700; color: #a78bfa; letter-spacing: 0.02em; }
+  .subtitle { font-size: 0.85rem; color: #64748b; margin-top: -14px; }
+
+  .recurrence {
+    background: #1a1f2e; border: 1px solid #2d3748; border-radius: 10px;
+    padding: 10px 18px; font-family: monospace; font-size: 0.8rem;
+    color: #94a3b8; line-height: 1.8; max-width: 480px; width: 100%;
+  }
+  .recurrence .kw  { color: #a78bfa; }
+  .recurrence .grn { color: #4ade80; }
+  .recurrence .org { color: #fb923c; }
+  .recurrence .red { color: #f87171; }
+
+  /* picker */
+  .picker { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 940px; }
+  .picker button {
+    background: #1e2130; border: 1px solid #334155; border-radius: 8px;
+    color: #cbd5e1; padding: 6px 12px; font-size: 0.75rem; cursor: pointer;
+    transition: all 0.15s; font-family: monospace;
+  }
+  .picker button:hover       { border-color: #a78bfa; color: #a78bfa; }
+  .picker button.active      { background: #4c1d95; border-color: #a78bfa; color: #e9d5ff; }
+  .picker button.zero        { border-color: #7f1d1d; color: #fca5a5; }
+  .picker button.zero.active { background: #7f1d1d; border-color: #ef4444; }
+  .picker button.zero:hover  { border-color: #ef4444; color: #ef4444; }
+
+  /* table */
+  .dp-table { display: flex; gap: 5px; align-items: flex-end; padding: 10px 4px; overflow-x: auto; }
+  .dp-col { display: flex; flex-direction: column; align-items: center; gap: 5px; width: 68px; flex-shrink: 0; }
+
+  .idx-label { font-size: 0.68rem; color: #4b5563; font-weight: 600; height: 18px; line-height: 18px; }
+
+  .char-cell {
+    width: 60px; height: 60px; border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 1.6rem; font-weight: 700; color: #e2e8f0;
+    border: 2px solid #1e293b; background: #141825; position: relative;
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    user-select: none;
+  }
+  .char-cell .letter-hint {
+    position: absolute; bottom: 4px;
+    font-size: 0.55rem; font-weight: 700; color: #4b5563; letter-spacing: 0.03em;
+  }
+  .char-cell.curr-both   { border-color: #fbbf24; background: #1f1803; box-shadow: 0 0 14px #fbbf2450; }
+  .char-cell.curr-single { border-color: #4ade80; background: #0f2e1f; box-shadow: 0 0 12px #4ade8040; }
+  .char-cell.curr-double { border-color: #fb923c; background: #2a1806; box-shadow: 0 0 12px #fb923c40; }
+  .char-cell.curr-zero   { border-color: #dc2626; background: #1a0505; box-shadow: 0 0 12px #dc262640; }
+  .char-cell.is-zero     { border-color: #7f1d1d; background: #1a0505; color: #f87171; }
+  .char-cell.is-base     { background: #0f1117; border-color: #1e293b; color: #374151; font-size: 1rem; }
+
+  .dp-cell {
+    width: 60px; height: 50px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; font-weight: 700;
+    border: 2px solid #1e293b; background: #0f1420; color: #374151;
+    transition: all 0.3s; user-select: none;
+  }
+  .dp-cell.s-base    { background: #14532d; border-color: #22c55e; color: #86efac; }
+  .dp-cell.s-unknown { background: #0f1420; border-color: #1e293b; color: #374151; }
+  .dp-cell.s-current { background: #1e1b4b; border-color: #818cf8; color: #a78bfa;
+                       box-shadow: 0 0 14px #6366f155; transform: scale(1.06); }
+  .dp-cell.s-zero    { background: #450a0a; border-color: #dc2626; color: #f87171; }
+  .dp-cell.s-filled  { background: #1a1f2e; border-color: #334155; color: #e2e8f0; }
+  .dp-cell.s-src-s   { border-color: #4ade80; color: #4ade80; background: #0a1f13;
+                       box-shadow: 0 0 10px #4ade8040; }
+  .dp-cell.s-src-d   { border-color: #fb923c; color: #fb923c; background: #1f0e04;
+                       box-shadow: 0 0 10px #fb923c40; }
+  .dp-cell.s-result  { background: #14532d; border-color: #22c55e; color: #86efac;
+                       box-shadow: 0 0 18px #22c55e55; transform: scale(1.1); }
+  .dp-cell.s-result0 { background: #450a0a; border-color: #dc2626; color: #f87171;
+                       box-shadow: 0 0 18px #dc262655; transform: scale(1.1); }
+
+  .dp-label { font-size: 0.66rem; color: #374151; height: 16px; line-height: 16px; font-family: monospace; }
+
+  /* explain */
+  .explain {
+    background: #1a1f2e; border: 1px solid #2d3748; border-radius: 12px;
+    padding: 14px 18px; max-width: 720px; width: 100%;
+    font-size: 0.88rem; line-height: 1.65; min-height: 62px; color: #cbd5e1;
+  }
+  .explain .hl  { color: #a78bfa; font-weight: 600; }
+  .explain .grn { color: #4ade80; font-weight: 600; }
+  .explain .org { color: #fb923c; font-weight: 600; }
+  .explain .red { color: #f87171; font-weight: 600; }
+  .explain .dim { color: #64748b; }
+
+  /* controls */
+  .controls { display: flex; gap: 10px; align-items: center; }
+  .btn {
+    background: #1a1f2e; border: 1px solid #334155; border-radius: 8px;
+    color: #cbd5e1; padding: 9px 18px; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn:hover    { border-color: #a78bfa; color: #a78bfa; }
+  .btn.primary  { background: #4c1d95; border-color: #a78bfa; color: #e9d5ff; }
+  .btn.primary:hover { background: #5b21b6; }
+  .btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+  .step-counter { font-size: 0.8rem; color: #475569; min-width: 90px; text-align: center; }
+
+  /* answer */
+  .answer { display: none; border-radius: 10px; padding: 10px 28px; font-size: 1rem; font-weight: 700; }
+  .answer.show { display: block; }
+  .answer.ok  { background: #14532d; border: 1px solid #22c55e; color: #86efac; }
+  .answer.neg { background: #450a0a; border: 1px solid #dc2626; color: #fca5a5; }
+
+  /* decodings */
+  .decodings-panel {
+    display: none; background: #1a1f2e; border: 1px solid #2d3748; border-radius: 12px;
+    padding: 14px 18px; max-width: 720px; width: 100%; gap: 12px;
+  }
+  .decodings-panel.show { display: flex; flex-direction: column; }
+  .decodings-title {
+    font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: #64748b;
+  }
+  .decodings-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .decoding-chip {
+    background: #0f1420; border: 1px solid #334155; border-radius: 8px;
+    padding: 7px 14px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    transition: border-color 0.15s; cursor: default;
+  }
+  .decoding-chip:hover { border-color: #a78bfa; }
+  .d-letters { font-size: 1rem; font-weight: 700; color: #a78bfa; font-family: monospace; letter-spacing: 0.05em; }
+  .d-groups  { font-size: 0.68rem; color: #64748b; font-family: monospace; }
+
+  /* legend */
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.73rem; color: #64748b; }
+  .swatch { width: 13px; height: 13px; border-radius: 3px; border: 1.5px solid; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<h1>LC 91 — Decode Ways</h1>
+<p class="subtitle">Bottom-up DP · fills dp[i] right-to-left, dp[n]=1 → dp[0] = answer</p>
+
+<div class="recurrence">
+  <span class="kw">dp</span>[n] = 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">// base: empty suffix</span><br>
+  <span class="kw">dp</span>[i] = 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">// if s[i] == '0'</span><br>
+  <span class="kw">dp</span>[i] = <span class="grn">dp[i+1]</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">// single digit (always, if s[i] ≠ '0')</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + <span class="org">dp[i+2]</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">// + two-digit, if s[i..i+1] ∈ [10,26]</span>
+</div>
+
+<div class="picker" id="picker"></div>
+
+<div class="dp-table" id="dp-table"></div>
+
+<div class="explain" id="explain">
+  Select a case above, then press <strong>Next →</strong> (or ← →  keys) to fill one dp cell at a time.
+</div>
+
+<div class="controls">
+  <button class="btn" id="btn-prev" disabled>← Prev</button>
+  <span class="step-counter" id="step-counter">Step 0 / 0</span>
+  <button class="btn primary" id="btn-next">Next →</button>
+  <button class="btn" id="btn-auto">▶ Auto</button>
+  <button class="btn" id="btn-reset">↺ Reset</button>
+</div>
+
+<div class="answer" id="answer"></div>
+
+<div class="decodings-panel" id="decodings-panel">
+  <div class="decodings-title">All valid decodings</div>
+  <div class="decodings-list" id="decodings-list"></div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="swatch" style="background:#14532d;border-color:#22c55e;"></div>Base dp[n]=1 / result</div>
+  <div class="legend-item"><div class="swatch" style="background:#1e1b4b;border-color:#818cf8;"></div>Currently filling</div>
+  <div class="legend-item"><div class="swatch" style="background:#1a1f2e;border-color:#334155;"></div>Already filled</div>
+  <div class="legend-item"><div class="swatch" style="background:#450a0a;border-color:#dc2626;"></div>Zero / invalid</div>
+  <div class="legend-item"><div class="swatch" style="background:#0a1f13;border-color:#4ade80;"></div>Single-digit source dp[i+1]</div>
+  <div class="legend-item"><div class="swatch" style="background:#1f0e04;border-color:#fb923c;"></div>Two-digit source dp[i+2]</div>
+</div>
+
+<script>
+// ── presets ───────────────────────────────────────────────────────
+const PRESETS = [
+  { label: '"12" → 2',     s: "12",    expected: 2  },
+  { label: '"226" → 3',    s: "226",   expected: 3  },
+  { label: '"1212" → 5',   s: "1212",  expected: 5  },
+  { label: '"11111" → 8',  s: "11111", expected: 8  },
+  { label: '"111" → 3',    s: "111",   expected: 3  },
+  { label: '"1226" → 5',   s: "1226",  expected: 5  },
+  { label: '"2727" → 1',   s: "2727",  expected: 1  },
+  { label: '"10" → 1',     s: "10",    expected: 1  },
+  { label: '"27" → 1',     s: "27",    expected: 1  },
+  { label: '"2101" → 1',   s: "2101",  expected: 1  },
+  { label: '"06" → 0',     s: "06",    expected: 0, zero: true },
+  { label: '"0" → 0',      s: "0",     expected: 0, zero: true },
+  { label: '"100" → 0',    s: "100",   expected: 0, zero: true },
+  { label: '"30" → 0',     s: "30",    expected: 0, zero: true },
+];
+
+// ── helpers ───────────────────────────────────────────────────────
+const ALPHA = n => (n >= 1 && n <= 26) ? String.fromCharCode(64 + n) : null;
+
+function canDouble(s, i) {
+  const n = s.length;
+  return i + 1 < n && (s[i] === '1' || (s[i] === '2' && '0123456'.includes(s[i + 1])));
+}
+
+function getAllDecodings(s) {
+  const result = [];
+  function dfs(i, letters, groups) {
+    if (i === s.length) { result.push({ letters, groups: [...groups] }); return; }
+    if (s[i] === '0') return;
+    const d1 = parseInt(s[i]);
+    dfs(i + 1, letters + ALPHA(d1), [...groups, s[i]]);
+    if (i + 1 < s.length) {
+      const d2 = parseInt(s[i] + s[i + 1]);
+      if (d2 >= 10 && d2 <= 26)
+        dfs(i + 2, letters + ALPHA(d2), [...groups, s[i] + s[i + 1]]);
+    }
+  }
+  dfs(0, '', []);
+  return result;
+}
+
+// ── build steps ───────────────────────────────────────────────────
+function buildSteps(s) {
+  const n = s.length;
+  const dp = Array(n + 1).fill(null);
+  dp[n] = 1;
+  const steps = [];
+
+  steps.push({
+    type: 'init', dp: [...dp], currentIdx: null, singleSrc: null, doubleSrc: null,
+    desc: `Initialize: <span class="hl">dp[${n}] = 1</span> — the empty suffix (past the last character) `
+        + `has exactly <span class="grn">one</span> way to decode it (do nothing). `
+        + `All positions <span class="dim">dp[0]…dp[${n - 1}]</span> start as <span class="dim">?</span>. `
+        + `We fill <strong>right-to-left</strong>, from index ${n - 1} down to 0.`
+  });
+
+  for (let i = n - 1; i >= 0; i--) {
+    let singleSrc = null, doubleSrc = null, desc = '';
+
+    if (s[i] === '0') {
+      dp[i] = 0;
+      desc = `Index <span class="hl">${i}</span>: digit is <span class="red">'0'</span>. `
+           + `'0' cannot be the start of any letter (letters map from '1' through '26'). `
+           + `<span class="hl">dp[${i}] = 0</span>.`;
+    } else {
+      const d1 = parseInt(s[i]);
+      const letter1 = ALPHA(d1);
+      dp[i] = dp[i + 1];
+      singleSrc = i + 1;
+
+      if (canDouble(s, i)) {
+        const prev = dp[i];
+        const d2val = dp[i + 2];
+        dp[i] += d2val;
+        doubleSrc = i + 2;
+        const twoStr = s[i] + s[i + 1];
+        const letter2 = ALPHA(parseInt(twoStr));
+        desc = `Index <span class="hl">${i}</span>: `
+             + `'<span class="grn">${s[i]}</span>' → <span class="grn">${letter1}</span> (single-digit) `
+             + `adds <span class="grn">dp[${i + 1}] = ${prev}</span>. `
+             + `"<span class="org">${twoStr}</span>" → <span class="org">${letter2}</span> is in [10,26] `
+             + `adds <span class="org">dp[${i + 2}] = ${d2val}</span>. `
+             + `<span class="hl">dp[${i}] = ${prev} + ${d2val} = ${dp[i]}</span>.`;
+      } else {
+        const twoStr = i + 1 < n ? s[i] + s[i + 1] : '';
+        const d2num  = twoStr ? parseInt(twoStr) : 0;
+        const reason = !twoStr     ? 'last position'
+                     : d2num > 26  ? `${d2num} > 26`
+                     : twoStr[1] === '0' ? `"${twoStr}" ends with 0, out of range`
+                     : 'out of [10,26]';
+        if (twoStr) {
+          desc = `Index <span class="hl">${i}</span>: `
+               + `'<span class="grn">${s[i]}</span>' → <span class="grn">${letter1}</span> (single-digit only) `
+               + `adds <span class="grn">dp[${i + 1}] = ${dp[i]}</span>. `
+               + `"<span class="red">${twoStr}</span>" invalid (${reason}) — no two-digit decode. `
+               + `<span class="hl">dp[${i}] = ${dp[i]}</span>.`;
+        } else {
+          desc = `Index <span class="hl">${i}</span>: `
+               + `'<span class="grn">${s[i]}</span>' → <span class="grn">${letter1}</span> (last position, single-digit only). `
+               + `<span class="hl">dp[${i}] = dp[${i + 1}] = ${dp[i]}</span>.`;
+        }
+      }
+    }
+
+    steps.push({ type: 'fill', dp: [...dp], currentIdx: i, singleSrc, doubleSrc, desc });
+  }
+
+  const allDecodings = getAllDecodings(s);
+  steps.push({
+    type: 'done', dp: [...dp], currentIdx: 0, singleSrc: null, doubleSrc: null,
+    result: dp[0], allDecodings,
+    desc: dp[0] > 0
+      ? `Complete! <span class="hl">dp[0] = <span class="grn">${dp[0]}</span></span> — `
+        + `"${s}" has <span class="grn">${dp[0]}</span> valid decoding(s). All shown below.`
+      : `Complete! <span class="hl">dp[0] = <span class="red">0</span></span> — `
+        + `"${s}" cannot be decoded (a <span class="red">'0'</span> digit blocked every path).`
+  });
+
+  return steps;
+}
+
+// ── state ─────────────────────────────────────────────────────────
+let steps = [], stepIdx = 0, autoTimer = null, currentS = '';
+
+// ── picker ────────────────────────────────────────────────────────
+const pickerEl = document.getElementById('picker');
+PRESETS.forEach((p, i) => {
+  const b = document.createElement('button');
+  b.textContent = p.label;
+  if (p.zero) b.classList.add('zero');
+  if (i === 0) b.classList.add('active');
+  b.onclick = () => {
+    pickerEl.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    loadString(p.s);
+  };
+  pickerEl.appendChild(b);
+});
+
+// ── build table DOM ───────────────────────────────────────────────
+function buildTable(s) {
+  const n = s.length;
+  const tableEl = document.getElementById('dp-table');
+  tableEl.innerHTML = '';
+
+  for (let i = 0; i <= n; i++) {
+    const col = document.createElement('div');
+    col.className = 'dp-col';
+
+    const idxLabel = document.createElement('div');
+    idxLabel.className = 'idx-label';
+    idxLabel.textContent = i;
+    col.appendChild(idxLabel);
+
+    const charCell = document.createElement('div');
+    charCell.id = `char-${i}`;
+    if (i === n) {
+      charCell.className = 'char-cell is-base';
+      charCell.textContent = 'ε';
+    } else {
+      charCell.className = `char-cell${s[i] === '0' ? ' is-zero' : ''}`;
+      charCell.textContent = s[i];
+      const hint = document.createElement('span');
+      hint.className = 'letter-hint';
+      hint.id = `hint-${i}`;
+      charCell.appendChild(hint);
+    }
+    col.appendChild(charCell);
+
+    const dpCell = document.createElement('div');
+    dpCell.id = `dp-${i}`;
+    dpCell.className = `dp-cell ${i === n ? 's-base' : 's-unknown'}`;
+    dpCell.textContent = i === n ? '1' : '?';
+    col.appendChild(dpCell);
+
+    const dpLabel = document.createElement('div');
+    dpLabel.className = 'dp-label';
+    dpLabel.textContent = `dp[${i}]`;
+    col.appendChild(dpLabel);
+
+    tableEl.appendChild(col);
+  }
+}
+
+// ── render ────────────────────────────────────────────────────────
+function renderStep(idx) {
+  const s = steps[idx];
+  const n = currentS.length;
+
+  for (let i = 0; i <= n; i++) {
+    const dpEl   = document.getElementById(`dp-${i}`);
+    const charEl = document.getElementById(`char-${i}`);
+    const hintEl = document.getElementById(`hint-${i}`);
+    if (!dpEl) continue;
+
+    const val      = s.dp[i];
+    const isCurr   = s.currentIdx === i && s.type !== 'done';
+    const isSrcS   = s.singleSrc  === i && s.type !== 'done';
+    const isSrcD   = s.doubleSrc  === i && s.type !== 'done';
+    const isResult = i === 0 && s.type === 'done';
+
+    // dp cell
+    dpEl.className = 'dp-cell';
+    if      (isResult && val === 0) dpEl.classList.add('s-result0');
+    else if (isResult)              dpEl.classList.add('s-result');
+    else if (i === n)               dpEl.classList.add('s-base');
+    else if (isCurr)                dpEl.classList.add('s-current');
+    else if (isSrcD)                dpEl.classList.add('s-src-d');
+    else if (isSrcS)                dpEl.classList.add('s-src-s');
+    else if (val === null)          dpEl.classList.add('s-unknown');
+    else if (val === 0)             dpEl.classList.add('s-zero');
+    else                            dpEl.classList.add('s-filled');
+    dpEl.textContent = val === null ? '?' : val;
+
+    // char cell
+    if (charEl && i < n) {
+      charEl.className = `char-cell${currentS[i] === '0' ? ' is-zero' : ''}`;
+      if (isCurr) {
+        const hs = s.singleSrc !== null, hd = s.doubleSrc !== null;
+        charEl.classList.add(hs && hd ? 'curr-both' : hd ? 'curr-double' : hs ? 'curr-single' : 'curr-zero');
+        if (hintEl) {
+          const hints = [];
+          if (hs) hints.push(ALPHA(parseInt(currentS[i])));
+          if (hd && i + 1 < n) hints.push(ALPHA(parseInt(currentS[i] + currentS[i + 1])));
+          hintEl.textContent = hints.filter(Boolean).join('/');
+        }
+      } else {
+        if (hintEl) hintEl.textContent = '';
+      }
+    }
+  }
+
+  document.getElementById('explain').innerHTML = s.desc;
+  document.getElementById('step-counter').textContent = `Step ${idx} / ${steps.length - 1}`;
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === steps.length - 1;
+
+  const ansEl = document.getElementById('answer');
+  const dpanel = document.getElementById('decodings-panel');
+  const dlist  = document.getElementById('decodings-list');
+
+  if (s.type === 'done') {
+    ansEl.className = `answer show ${s.result > 0 ? 'ok' : 'neg'}`;
+    ansEl.textContent = s.result > 0
+      ? `Answer: ${s.result} way(s) to decode "${currentS}"`
+      : `Answer: 0 — "${currentS}" cannot be decoded`;
+    dlist.innerHTML = '';
+    if (s.allDecodings && s.allDecodings.length > 0) {
+      s.allDecodings.forEach(d => {
+        const chip = document.createElement('div');
+        chip.className = 'decoding-chip';
+        chip.innerHTML = `<div class="d-letters">${d.letters}</div><div class="d-groups">(${d.groups.join(' · ')})</div>`;
+        dlist.appendChild(chip);
+      });
+      dpanel.classList.add('show');
+    } else {
+      dpanel.classList.remove('show');
+    }
+    clearAuto();
+  } else {
+    ansEl.className = 'answer';
+    dpanel.classList.remove('show');
+  }
+}
+
+// ── load ──────────────────────────────────────────────────────────
+function loadString(s) {
+  clearAuto();
+  currentS = s;
+  steps = buildSteps(s);
+  stepIdx = 0;
+  buildTable(s);
+  renderStep(0);
+}
+
+// ── controls ──────────────────────────────────────────────────────
+document.getElementById('btn-next').onclick  = () => { if (stepIdx < steps.length - 1) { stepIdx++; renderStep(stepIdx); } };
+document.getElementById('btn-prev').onclick  = () => { if (stepIdx > 0) { stepIdx--; renderStep(stepIdx); } };
+document.getElementById('btn-reset').onclick = () => { clearAuto(); loadString(currentS); };
+
+function clearAuto() {
+  clearInterval(autoTimer); autoTimer = null;
+  document.getElementById('btn-auto').textContent = '▶ Auto';
+}
+document.getElementById('btn-auto').onclick = () => {
+  if (autoTimer) { clearAuto(); return; }
+  document.getElementById('btn-auto').textContent = '⏸ Pause';
+  autoTimer = setInterval(() => {
+    if (stepIdx >= steps.length - 1) { clearAuto(); return; }
+    stepIdx++; renderStep(stepIdx);
+  }, 900);
+};
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (stepIdx < steps.length - 1) { stepIdx++; renderStep(stepIdx); }
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (stepIdx > 0) { stepIdx--; renderStep(stepIdx); }
+  }
+});
+
+// ── boot ──────────────────────────────────────────────────────────
+loadString(PRESETS[0].s);
+</script>
+</body>
+</html>
