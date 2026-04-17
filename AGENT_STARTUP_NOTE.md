@@ -30,3 +30,9 @@ Use these key-value entries to load task-specific operating context:
 
 If user says: "AGENT_STARTUP_NOTE.md and JobSearch"
 then read this file, resolve the key, and ingest `JOBSEARCH_AGENT_CONTEXT.md` before doing work.
+
+## User Authorization Note
+
+User authorization (recorded April 16, 2026):
+- The user grants the agent permission to read and modify files under the main project directory `D:\StudyBook` when needed for active tasks.
+- This note expresses user intent; platform sandbox/security controls still apply.
