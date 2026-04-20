@@ -146,6 +146,7 @@ def app() -> None:
 
     with st.sidebar:
         st.subheader("Data")
+        st.code(str(index_path))
         if st.button("Reload From CSV", use_container_width=True):
             st.session_state.index_df = load_csv(index_path)
             st.session_state.ui_message = "Reloaded from disk."
@@ -155,6 +156,15 @@ def app() -> None:
             save_csv(index_path, st.session_state.index_df)
             st.session_state.ui_message = f"Saved {len(st.session_state.index_df)} rows."
             st.rerun()
+
+        csv_bytes = st.session_state.index_df.fillna("").to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="Download Source CSV",
+            data=csv_bytes,
+            file_name="index.csv",
+            mime="text/csv",
+            use_container_width=True,
+        )
 
     if st.session_state.get("ui_message"):
         st.success(st.session_state["ui_message"])
@@ -241,6 +251,10 @@ def app() -> None:
                         st.success(msg)
                     else:
                         st.error(msg)
+
+    with st.expander("Underlying Source List (Raw index.csv rows)", expanded=False):
+        st.caption("Direct view of all rows and columns from the in-memory index dataset.")
+        st.dataframe(st.session_state.index_df, width="stretch", hide_index=True)
 
 
 if __name__ == "__main__":
