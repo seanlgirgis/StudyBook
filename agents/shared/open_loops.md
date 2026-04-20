@@ -159,3 +159,4 @@ Last reviewed: 2026-04-20 (jupyter markdown preview mount fix)
 | LOOP-104 | TB-20260420-02 | Enforce read-only list access in dashboard while preserving source visibility actions | closed | none | 2026-04-20 |
 | LOOP-105 | TB-20260420-03 | Set JupyterLab markdown default viewer to Markdown Preview in containerized setup | closed | none | 2026-04-20 |
 | LOOP-106 | TB-20260420-04 | Fix Jupyter markdown preview by mounting user-settings path and recreating container | closed | none | 2026-04-20 |
+| LOOP-107 | TB-20260420-05 | Maintain Thursday coding-test prep continuity and update progress tracker after each LeetCode session | open | Append session outcomes in `playground/THURSDAY_CODING_TEST_PROGRESS.md` and keep prep priorities current through test day | 2026-04-20 |

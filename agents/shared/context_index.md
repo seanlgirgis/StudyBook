@@ -200,5 +200,16 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Rule:
   - prefer `{PROJECT_ROOT}\temp\...` pathing in tracked files; avoid hardcoded machine-specific absolute paths.
 
+## Coding Test Prep Memory
+
+- Active prep objective:
+  - LeetCode/coding-test rehearsal for Thursday early morning (`2026-04-23`, America/Chicago).
+- Canonical prep workspace:
+  - `D:\StudyBook\playground`
+- Quick progress tracker (session-to-session source of truth):
+  - `D:\StudyBook\playground\THURSDAY_CODING_TEST_PROGRESS.md`
+- Deep historical notes:
+  - `D:\StudyBook\playground\claude_progress.md`
+
 
 

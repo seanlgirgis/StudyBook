@@ -212,3 +212,11 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: keeps reminders durable across sessions and enables fast “due today / leftover” answers without relying on chat memory
 - Alternatives considered: ad-hoc reminders in chat only; plain markdown checklist without command tooling
 - Impacted files: agents/shared/daily_todo.json, scripts/ops/daily_todo.ps1, docs/operations/daily_todo_system.md, docs/operations/README.md
+
+- Date: 2026-04-20
+- Decision ID: DEC-026
+- Task ID: TB-20260420-05
+- Decision: track coding-test prep continuity via a dedicated `playground/THURSDAY_CODING_TEST_PROGRESS.md` quick-log while retaining `playground/claude_progress.md` for deep historical notes
+- Rationale: gives fast session bootstrap for day-to-day drill status without losing long-form accumulated insights
+- Alternatives considered: continue using only `claude_progress.md`; keep prep status only in chat
+- Impacted files: playground/THURSDAY_CODING_TEST_PROGRESS.md, agents/shared/context_index.md, agents/shared/open_loops.md, agents/shared/task_register.md, agents/shared/pending_task.md

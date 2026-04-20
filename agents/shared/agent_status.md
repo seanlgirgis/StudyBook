@@ -2,25 +2,22 @@
 
 ## Current Run (2026-04-20)
 
-**Task ID:** TB-20260420-04  
-**Task Type:** FIX  
-**Goal:** Fix markdown preview default in running JupyterLab container after restart did not apply.
+**Task ID:** TB-20260420-05  
+**Task Type:** SYNC  
+**Goal:** Familiarize with `playground`, persist Thursday coding-test prep context in durable memory files, and create/update a progress file for ongoing LeetCode tracking.
 
 ### Factual Summary
 
-- Loaded required startup/control files per `AGENTS.md` order before edits.
-- Diagnosed root cause in live container:
-  - JupyterLab version: `4.5.6`.
-  - No `/opt/conda/share/jupyter/lab/settings` directory exists in this image.
-  - Prior approach mounted to non-existent path, so settings never applied.
-- Implemented durable fix:
-  - Added user-level JupyterLab settings file at `_infra/jupyter/user-settings/@jupyterlab/docmanager-extension/plugin.jupyterlab-settings`.
-  - Updated both compose files to mount `../../_infra/jupyter/user-settings` to `/home/jovyan/.jupyter/lab/user-settings:ro`.
-  - Removed unused `_infra/jupyter/lab-settings-overrides.json`.
-- Recreated running container (not just restart) so new mounts apply:
-  - Removed old `citi_jupyterlab`.
-  - Started new `citi_jupyterlab` via compose.
-  - Verified mounted settings file exists inside container and contains markdown preview mapping.
+- Loaded required startup/control files in AGENTS order before edits.
+- Inspected `D:\StudyBook\playground` structure and inventory.
+- Confirmed active prep assets:
+  - `playground/STUDY_GUIDE.ipynb`
+  - `playground/SESSION_HANDOFF.md`
+  - `playground/claude_progress.md`
+  - numbered notebook sequence `0001` through `0157` present.
+- Created dedicated quick tracker:
+  - `playground/THURSDAY_CODING_TEST_PROGRESS.md`
+- Updated durable memory and task continuity files to reflect Thursday prep objective and progress workflow.
 
 ### Files Inspected
 
@@ -30,45 +27,41 @@
 - `agents/shared/approval_matrix.md`
 - `agents/shared/command_allowlist.md`
 - `docs/adr/ADR-INDEX.md`
-- `agents/shared/pending_task.md`
+- `agents/shared/pending_task.md` (prior content)
 - `agents/shared/agent_status.md` (prior run)
 - `agents/shared/decision_log.md`
-- `_infra/docker/pipeline.yml`
-- `_infra/docker/docker-compose.yml`
-- `_infra/README.md`
-- Live container paths under `/opt/conda/share/jupyter/lab` and `/home/jovyan/.jupyter/lab`
+- `agents/shared/task_register.md`
+- `playground/STUDY_GUIDE.ipynb`
+- `playground/SESSION_HANDOFF.md`
+- `playground/claude_progress.md`
 
 ### Files Modified
 
-- `_infra/jupyter/user-settings/@jupyterlab/docmanager-extension/plugin.jupyterlab-settings`
-- `_infra/docker/pipeline.yml`
-- `_infra/docker/docker-compose.yml`
-- `_infra/README.md`
-- `_infra/jupyter/lab-settings-overrides.json` (deleted)
-- `agents/shared/agent_status.md`
-- `agents/shared/task_register.md`
+- `playground/THURSDAY_CODING_TEST_PROGRESS.md` (new)
+- `agents/shared/pending_task.md`
+- `agents/shared/context_index.md`
 - `agents/shared/open_loops.md`
+- `agents/shared/task_register.md`
+- `agents/shared/decision_log.md`
+- `agents/shared/agent_status.md`
 
 ### Validation
 
-- `docker exec citi_jupyterlab sh -lc "jupyter lab --version"` -> `4.5.6`
-- `docker compose -f _infra/docker/pipeline.yml config` (pass; user-settings mount resolves)
-- `docker compose -f _infra/docker/docker-compose.yml config` (pass; user-settings mount resolves)
-- `docker rm -f citi_jupyterlab && docker compose -f _infra/docker/docker-compose.yml up -d jupyterlab` (pass)
-- `docker exec citi_jupyterlab sh -lc "cat /home/jovyan/.jupyter/lab/user-settings/@jupyterlab/docmanager-extension/plugin.jupyterlab-settings"` (pass; expected JSON content)
-- Non-blocking environment warnings observed: docker client config access warning and existing `studybook_net` ownership warning.
+- Repository inspection only (no runtime behavior change).
+- Validation commands required: none.
 
 ### Assumptions
 
-- User launches JupyterLab from `citi_jupyterlab` compose service.
+- "Thursday early morning" refers to local timezone `America/Chicago` and target date `2026-04-23`.
+- Existing deep notes in `playground/claude_progress.md` remain valuable and should not be replaced; new tracker is a lightweight daily continuity layer.
 
 ### Risks
 
-- Low: already applied to running container; user may need browser hard refresh to clear old UI state.
+- Low: tracker quality depends on consistent post-session updates.
 
 ### Next Step
 
-- In browser: hard refresh JupyterLab and reopen `.md`; if old editor tab remains, close it and reopen the file.
+- After each practice block, append concise session entries in `playground/THURSDAY_CODING_TEST_PROGRESS.md` (attempted notebooks, blockers, next drills).
 
 ---
 
