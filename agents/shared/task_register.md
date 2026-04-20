@@ -200,3 +200,7 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260413-15 | Bootstrap JobSearch startup context and verify latest pipeline item state | done | 2026-04-13 | Loaded startup + JobSearch context files, ran noninteractive env bootstrap, and confirmed `00051_d7c3a912` is already applied |
 
 | TB-20260417-01 | Run JobSearch force pipeline for Capital One intake and record application status | done | 2026-04-17 | Duplicate gate flagged prior similar role; force pipeline completed with UUID 00078_5ca49264 and application marked applied via Company Website |
+| TB-20260420-01 | Expose direct dashboard access to underlying coding_challenges source list | done | 2026-04-20 | Updated Streamlit index UI to show source path, download source CSV, and render raw source list table |
+| TB-20260420-02 | Enforce read-only dashboard access for coding_challenges source list | done | 2026-04-20 | Added read-only mode (default ON) and disabled all mutation controls while preserving source view/open/download |
+| TB-20260420-03 | Set containerized JupyterLab markdown files to open in Preview by default | done | 2026-04-20 | Added JupyterLab overrides.json and mounted into pipeline/full compose jupyter service |
+| TB-20260420-04 | Fix Jupyter markdown preview default mount path and recreate live container | done | 2026-04-20 | Switched to user-settings mount, removed dead overrides file, and recreated `citi_jupyterlab` with verified settings file present |

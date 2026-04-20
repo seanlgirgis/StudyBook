@@ -51,6 +51,7 @@ docker compose -f D:\StudyBook\_infra\docker\docker-compose.yml --env-file D:\St
 ## Path-Agnostic Notes
 - StudyBook compose files are path-agnostic for core services (named volumes, no `D:\Workspace` bind paths).
 - Jupyter bind mount uses a repo-relative source (`../../`) so it follows wherever the StudyBook folder lives.
+- JupyterLab user defaults are pinned via `_infra/jupyter/user-settings` (for example `.md` files open in Markdown Preview by default).
 - `infra_up.ps1` now auto-removes stale containers created from legacy `D:\Workspace\...` compose projects that collide by container name (for example `de_postgres`).
 - To skip this safety cleanup in exceptional cases, pass `-SkipLegacyCleanup`.
 

@@ -1,20 +1,26 @@
 # Agent Status
 
-## Current Run (2026-04-17)
+## Current Run (2026-04-20)
 
-**Task ID:** TB-20260417-01  
-**Task Type:** SYNC  
-**Goal:** Run JobSearch pipeline for `temp/jobsearch/intake/intake.md` and apply/track the Capital One Senior Lead Data Engineer application.
+**Task ID:** TB-20260420-04  
+**Task Type:** FIX  
+**Goal:** Fix markdown preview default in running JupyterLab container after restart did not apply.
 
 ### Factual Summary
 
-- Loaded required startup/control files per `AGENTS.md` order.
-- Ran `job-check.ps1 intake\intake.md`; duplicate gate flagged semantic duplicate (0.8940) against prior Capital One role (`00006_71`).
-- Executed force pipeline (`scripts/10b_force_pipeline.py`) to intentionally bypass duplicate gate and continue end-to-end.
-- First force run failed on Grok API connection in sandbox; reran with elevated network permission.
-- Elevated run succeeded: scoring, accept decision, tailoring, resume/cover generation, strict quality gate, and application status update.
-- New job folder created: `temp/jobsearch/data/jobs/00078_5ca49264`.
-- Application tracking recorded as applied on `2026-04-17` via `Company Website`.
+- Loaded required startup/control files per `AGENTS.md` order before edits.
+- Diagnosed root cause in live container:
+  - JupyterLab version: `4.5.6`.
+  - No `/opt/conda/share/jupyter/lab/settings` directory exists in this image.
+  - Prior approach mounted to non-existent path, so settings never applied.
+- Implemented durable fix:
+  - Added user-level JupyterLab settings file at `_infra/jupyter/user-settings/@jupyterlab/docmanager-extension/plugin.jupyterlab-settings`.
+  - Updated both compose files to mount `../../_infra/jupyter/user-settings` to `/home/jovyan/.jupyter/lab/user-settings:ro`.
+  - Removed unused `_infra/jupyter/lab-settings-overrides.json`.
+- Recreated running container (not just restart) so new mounts apply:
+  - Removed old `citi_jupyterlab`.
+  - Started new `citi_jupyterlab` via compose.
+  - Verified mounted settings file exists inside container and contains markdown preview mapping.
 
 ### Files Inspected
 
@@ -27,39 +33,44 @@
 - `agents/shared/pending_task.md`
 - `agents/shared/agent_status.md` (prior run)
 - `agents/shared/decision_log.md`
-- `temp/jobsearch/intake/intake.md`
-- `temp/jobsearch/PIPELINE_RUNBOOK.md`
-- `temp/jobsearch/job-check.ps1`
-- `temp/jobsearch/job-score.ps1`
-- `temp/jobsearch/job-accept.ps1`
-- `temp/jobsearch/job-run.ps1`
-- `temp/jobsearch/job-apply.ps1`
-- `temp/jobsearch/scripts/10b_force_pipeline.py`
-- `temp/jobsearch/scripts/10_auto_pipeline.py`
-- `temp/jobsearch/data/jobs/00078_5ca49264/metadata.yaml`
+- `_infra/docker/pipeline.yml`
+- `_infra/docker/docker-compose.yml`
+- `_infra/README.md`
+- Live container paths under `/opt/conda/share/jupyter/lab` and `/home/jovyan/.jupyter/lab`
+
+### Files Modified
+
+- `_infra/jupyter/user-settings/@jupyterlab/docmanager-extension/plugin.jupyterlab-settings`
+- `_infra/docker/pipeline.yml`
+- `_infra/docker/docker-compose.yml`
+- `_infra/README.md`
+- `_infra/jupyter/lab-settings-overrides.json` (deleted)
+- `agents/shared/agent_status.md`
+- `agents/shared/task_register.md`
+- `agents/shared/open_loops.md`
 
 ### Validation
 
-- `.
-job-check.ps1 "intake\intake.md"` (failed as expected due to semantic duplicate gate)
-- `. .\env_setter.ps1; python scripts\10b_force_pipeline.py intake\intake.md --method "Company Website" --notes "Reapplied via force pipeline"` (succeeded with elevated network)
-- Verified generated outputs exist under `temp/jobsearch/data/jobs/00078_5ca49264/generated`.
+- `docker exec citi_jupyterlab sh -lc "jupyter lab --version"` -> `4.5.6`
+- `docker compose -f _infra/docker/pipeline.yml config` (pass; user-settings mount resolves)
+- `docker compose -f _infra/docker/docker-compose.yml config` (pass; user-settings mount resolves)
+- `docker rm -f citi_jupyterlab && docker compose -f _infra/docker/docker-compose.yml up -d jupyterlab` (pass)
+- `docker exec citi_jupyterlab sh -lc "cat /home/jovyan/.jupyter/lab/user-settings/@jupyterlab/docmanager-extension/plugin.jupyterlab-settings"` (pass; expected JSON content)
+- Non-blocking environment warnings observed: docker client config access warning and existing `studybook_net` ownership warning.
 
 ### Assumptions
 
-- User intent was to proceed with reapplication despite duplicate detection.
-- `job-apply` tracking update is acceptable in the same run after pipeline completion.
+- User launches JupyterLab from `citi_jupyterlab` compose service.
 
 ### Risks
 
-- Medium: duplicate bypass may create parallel entries for materially similar postings.
-- Medium: local tracking now marks as applied; if user did not submit externally yet, status may be ahead of real-world submission.
+- Low: already applied to running container; user may need browser hard refresh to clear old UI state.
 
 ### Next Step
 
-- If external submission was not completed yet, either submit now using generated docs or revert local status to accepted/pending before next reporting.
+- In browser: hard refresh JupyterLab and reopen `.md`; if old editor tab remains, close it and reopen the file.
 
 ---
 
-**Run completed:** 2026-04-17  
+**Run completed:** 2026-04-20  
 **Status:** DONE

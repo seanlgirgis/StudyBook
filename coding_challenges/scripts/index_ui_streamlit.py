@@ -34,6 +34,12 @@ DEFAULT_COLUMNS = [
     "key_nugget",
 ]
 SUMMARY_COLUMNS = ["id", "title", "primary", "tags"]
+READ_ONLY_DEFAULT = os.environ.get("STUDYBOOK_INDEX_UI_READ_ONLY", "1").strip().lower() not in {
+    "0",
+    "false",
+    "no",
+    "off",
+}
 
 
 def load_csv(path: Path) -> pd.DataFrame:
@@ -146,13 +152,27 @@ def app() -> None:
 
     with st.sidebar:
         st.subheader("Data")
+        read_only_mode = st.checkbox(
+            "Read-only mode",
+            value=READ_ONLY_DEFAULT,
+            help="When enabled, Add/Edit/Delete and Save actions are disabled.",
+        )
+        if read_only_mode:
+            st.caption("Read-only mode is ON.")
         st.code(str(index_path))
+        if st.button("Open Source CSV", use_container_width=True):
+            ok, msg = open_local_path(index_path)
+            if ok:
+                st.session_state.ui_message = msg
+            else:
+                st.session_state.ui_message = msg
+            st.rerun()
         if st.button("Reload From CSV", use_container_width=True):
             st.session_state.index_df = load_csv(index_path)
             st.session_state.ui_message = "Reloaded from disk."
             st.rerun()
 
-        if st.button("Save CSV", use_container_width=True, type="primary"):
+        if st.button("Save CSV", use_container_width=True, type="primary", disabled=read_only_mode):
             save_csv(index_path, st.session_state.index_df)
             st.session_state.ui_message = f"Saved {len(st.session_state.index_df)} rows."
             st.rerun()
@@ -221,14 +241,18 @@ def app() -> None:
 
     b1, b2, b3 = st.columns(3)
     with b1:
-        if st.button("Edit Selected", type="primary", disabled=(st.session_state.selected_id == "")):
+        if st.button(
+            "Edit Selected",
+            type="primary",
+            disabled=(read_only_mode or st.session_state.selected_id == ""),
+        ):
             row = df[df["id"] == st.session_state.selected_id].iloc[0].to_dict()
             edit_record_dialog(row)
     with b2:
-        if st.button("Add New"):
+        if st.button("Add New", disabled=read_only_mode):
             add_record_dialog()
     with b3:
-        if st.button("Delete Selected", disabled=(st.session_state.selected_id == "")):
+        if st.button("Delete Selected", disabled=(read_only_mode or st.session_state.selected_id == "")):
             st.session_state.index_df = st.session_state.index_df[
                 st.session_state.index_df["id"] != st.session_state.selected_id
             ].reset_index(drop=True)

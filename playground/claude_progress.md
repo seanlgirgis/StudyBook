@@ -19,7 +19,35 @@ This is a **continuous project** — beyond the test, toward mastery.
 | 0001 | key_changes | String, counting | ✅ | -1 trick, case-insensitive |
 | 0002 | battery_swap | Heapq, cyclic | ✅ | Two heaps: ready + recovering |
 | 0003 | zigzag | Array patterns | ✅ | Detect peaks/valleys |
-| 0004 | harmonious_structures | Vector math | ✅ | zip, stepwise +1 |
+| 0004 | harmonious_structures | Vectodef solution(nums):
+    if not nums:
+        return 0
+    
+    res = nums[0]
+    cur_max, cur_min = nums[0], nums[0]
+    
+    for i in range(1, len(nums)):
+        n = nums[i]
+        
+        old_max = cur_max
+        
+        # tracking max and min to compensate for product of negative number
+        cur_max = max(n, n * cur_max, n * cur_min)
+        cur_min = min(n, n * old_max, n * cur_min)
+        
+        # Update the global result
+        res = max(res, cur_max)
+        
+    return res
+
+
+assert solution([2,3,-2,4])   == 6
+assert solution([-2,0,-1])    == 0
+assert solution([-2,3,-4])    == 24
+assert solution([0,2])        == 2
+assert solution([-2])         == -2
+assert solution([2,-5,-2,-4,3]) == 24
+print('All Pass!')r math | ✅ | zip, stepwise +1 |
 | 0005 | drone_delivery | Simulation | ✅ | Range=10, nearest station |
 | 0006 | channel_surfing | Spaced repeat 0001 | ✅ | |
 | 0007 | terrain_analysis | Spaced repeat 0003 | ✅ | |
@@ -124,8 +152,42 @@ This is a **continuous project** — beyond the test, toward mastery.
 | 0104 | next_greater_element_circular | Monotonic stack circular | ✅ | range(2*n), i%n; only push if i<n |
 | 0105 | find_min_rotated | Binary search variant | ✅ | nums[mid]>nums[r] → l=mid+1; else r=mid; pivot = min = rotation point |
 | 0106 | find_pivot_rotated | Binary search | ✅ | same as find_min_rotated; return l (index) instead of nums[l] |
-| 0107 | next_smaller_element | Monotonic stack (increasing) | 🔲 | — |
-| 0108 | previous_greater_element | Monotonic stack | 🔲 | — |
+| 0107 | next_smaller_element | Monotonic stack (increasing) | ✅ | val < top to pop; increasing stack; same template flipped |
+| 0108 | previous_greater_element | Monotonic stack | ✅ | right-to-left; pop when val > top; ans[popped] = val (current is to the left) |
+| 0109 | final_prices_discount | Monotonic stack (easy) | ✅ | next smaller-or-equal; pop when prices[top]>=price; result[idx]-=price; copy input first |
+| 0110 | online_stock_span | Monotonic stack (medium) | ✅ | (price,span) tuples; pop when price>=top; span+=prev_span; O(1) amortized |
+| 0111 | car_fleet | Stack + sort + greedy | ✅ | sort by dist ascending; time=dist/speed; push if stack[-1]<time (new fleet); len(stack) |
+| 0112 | evaluate_rpn | Stack | ✅ | push nums; on op pop b,a; compute a op b; int(a/b) for truncate-toward-zero |
+| 0113 | next_greater_node_linked_list | Mono stack + linked list | ✅ | flatten to array; next greater stack; res[stack.pop()]=values[i] |
+| 0114 | unique_paths_ii | 2D DP with obstacles | ✅ | same as unique_paths; obstacle zeros cell; accumulate from top+left |
+| 0115 | decode_ways | DP + string | ✅ | dp[0]=1 dummy; dp[1]=1; one-digit if s[i-1]!='0'; two-digit if 10<=val<=26 |
+| 0116 | word_break | DP + string | ✅ | dp[0]=True; for i,j: if dp[j] and s[j:i] in word_set → dp[i]=True; break |
+| 0117 | maximum_product_subarray | DP | ✅ | track cur_max+cur_min; save old_max before update; neg×neg can flip; res=max(res,cur_max) |
+| 0118 | longest_increasing_subsequence | DP | ✅ | dp[i]=1; for j<i: if nums[j]<nums[i]: dp[i]=max(dp[i],dp[j]+1); return max(dp) |
+| 0119 | gas_station | Greedy | ✅ | sum check first; tank+=gas[i]-cost[i]; if tank<0: reset start=i+1,tank=0 |
+| 0120 | encode_decode_strings | String design | ✅ | length-prefix: "5#hello"; decode: find #, slice length chars, advance i |
+| 0121 | search_rotated_sorted_array | Binary search | ✅ | check which half is sorted; narrow to half containing target |
+| 0122 | longest_repeating_char_replacement | Sliding window | ✅ | track max_freq; shrink when (window_size - max_freq) > k |
+| 0123 | house_robber_ii | DP circular | ✅ | run rob() on nums[:-1] and nums[1:]; return max — can't rob both ends |
+| 0124 | kth_largest_element | Heap | ✅ | min-heap size k; evict smallest; heap[0] = kth largest |
+| 0125 | insert_interval | Intervals | ✅ | 3 cases: before (insert+return rest), after (append), overlap (merge newInterval) |
+| 0126 | reorder_list | Linked list | ✅ | find mid (slow/fast); reverse second half; merge alternately |
+| 0127 | permutations | Backtracking | ✅ | backtrack(path, remaining): pick any, recurse with remaining[:i]+remaining[i+1:], pop |
+| 0128 | two_sum_ii_sorted | Two pointers | ✅ | l,r; sum<target→l++; sum>target→r--; return 1-indexed |
+| 0129 | lca_binary_tree | Tree | ✅ | if node==p or q return node; recurse left+right; both non-null→current is LCA |
+| 0130 | course_schedule_ii | Topological sort | ✅ | same 3-state DFS; append to order post-order (after all neighbors done) |
+| 0131 | counting_bits | Bit manipulation | ✅ | dp[i]=dp[i>>1]+(i&1); right-shift + check lowest bit |
+| 0132 | subtree_of_another_tree | Tree | ✅ | same_tree helper; at each node check if matches subRoot; recurse left/right |
+| 0133 | palindromic_substrings | Expand center | ✅ | expand(l,r): count++ on each valid expansion; odd+even pivots |
+| 0134 | non_overlapping_intervals | Intervals | ✅ | sort by end; keep if start>=last_end; else remove++; greedy |
+| 0135 | combination_sum | Backtracking | ✅ | backtrack(start,path,rem); reuse allowed (pass i not i+1); break if candidates[i]>rem |
+| 0136 | jump_game_ii | Greedy | ✅ | window [l,r]; farthest=max(i+nums[i]); l=r+1, r=farthest; jumps++ |
+| 0137 | buy_sell_stock_cooldown | DP | ✅ | 3 states: held/sold/idle; held=max(held,idle-price); sold=held+price; idle=max(idle,sold) |
+| 0138 | task_scheduler | Heap+deque simulation | ✅ | max-heap of counts; cooldown queue (cnt,available_at); release when time reached |
+| 0139 | phone_battery_rotation | Circular simulation | ✅ | ready_at[]; circular pointer; full drain→count+update; partial→return; none ready→-1 |
+| 0140 | token_ring_cooldown | Circular simulation | ✅ | same as 0139 using deque.rotate(-1) instead of modular pointer |
+| 0141 | printer_slots_round_robin | Circular simulation | ✅ | same pattern — deque rotate, full/partial/gap logic identical |
+| 0142 | circular_workers_with_rest | Circular simulation | ✅ | same pattern — all 4 custom drills share one template |
 
 **Spaced repeats due (not yet written):**
 - 0021 is min_subarray (spaced repeat of 0017) ✅

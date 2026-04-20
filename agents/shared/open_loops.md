@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-13 (router duplicate guard)
+Last reviewed: 2026-04-20 (jupyter markdown preview mount fix)
 
 ## Status Meanings
 
@@ -155,3 +155,7 @@ Last reviewed: 2026-04-13 (router duplicate guard)
 | LOOP-098 | TB-20260413-15 | Resolve local DPAPI seed decrypt mismatch during noninteractive env bootstrap | open | Re-register or repair machine-local seed so encrypted secrets load successfully in this shell user context | 2026-04-13 |
 
 | LOOP-102 | TB-20260417-01 | Process Capital One Senior Lead Data Engineer intake through force pipeline due semantic duplicate gate and record application | closed | none | 2026-04-17 |
+| LOOP-103 | TB-20260420-01 | Expose direct access to dashboard source list (`coding_challenges/index.csv`) | closed | none | 2026-04-20 |
+| LOOP-104 | TB-20260420-02 | Enforce read-only list access in dashboard while preserving source visibility actions | closed | none | 2026-04-20 |
+| LOOP-105 | TB-20260420-03 | Set JupyterLab markdown default viewer to Markdown Preview in containerized setup | closed | none | 2026-04-20 |
+| LOOP-106 | TB-20260420-04 | Fix Jupyter markdown preview by mounting user-settings path and recreating container | closed | none | 2026-04-20 |
