@@ -153,3 +153,5 @@ Last reviewed: 2026-04-13 (router duplicate guard)
 | LOOP-100 | TB-20260413-18 | Normalize EC2 headings dash characters | closed | none | 2026-04-13 |
 | LOOP-101 | TB-20260413-19 | Add website maintenance agent context | closed | none | 2026-04-13 |
 | LOOP-098 | TB-20260413-15 | Resolve local DPAPI seed decrypt mismatch during noninteractive env bootstrap | open | Re-register or repair machine-local seed so encrypted secrets load successfully in this shell user context | 2026-04-13 |
+
+| LOOP-102 | TB-20260417-01 | Process Capital One Senior Lead Data Engineer intake through force pipeline due semantic duplicate gate and record application | closed | none | 2026-04-17 |
