@@ -119,8 +119,13 @@ This is a **continuous project** — beyond the test, toward mastery.
 
 
 | 0101 | daily_temperatures | Monotonic stack (decreasing) | ✅ | store indices; pop when val > top; ans[idx] = i - idx |
-| 0102 | next_greater_element | Monotonic stack repeat | 🔲 | — |
-| 0103 | find_min_rotated | Binary search variant | 🔲 | — |
+| 0102 | next_greater_element (two lists) | Monotonic stack | ✅ | lookup map value→index; stack of values; write on pop |
+| 0103 | next_greater_element_single_list | Monotonic stack | ✅ | stack of indices; ans[stack.pop()] = val |
+| 0104 | next_greater_element_circular | Monotonic stack circular | ✅ | range(2*n), i%n; only push if i<n |
+| 0105 | find_min_rotated | Binary search variant | ✅ | nums[mid]>nums[r] → l=mid+1; else r=mid; pivot = min = rotation point |
+| 0106 | find_pivot_rotated | Binary search | ✅ | same as find_min_rotated; return l (index) instead of nums[l] |
+| 0107 | next_smaller_element | Monotonic stack (increasing) | 🔲 | — |
+| 0108 | previous_greater_element | Monotonic stack | 🔲 | — |
 
 **Spaced repeats due (not yet written):**
 - 0021 is min_subarray (spaced repeat of 0017) ✅
