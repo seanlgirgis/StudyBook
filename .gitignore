@@ -232,3 +232,7 @@ coding_challenges/index.xlsx
 # Ignore local Claude worktrees (can contain nested git repos)
 .claude/worktrees/
 .claude/worktrees/*
+
+# Node runtime deps (installed locally)
+node_modules/
+npm-debug.log*
