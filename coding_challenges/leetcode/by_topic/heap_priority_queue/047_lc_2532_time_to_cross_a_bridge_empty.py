@@ -15,7 +15,7 @@ Bridge rules:
    on the LEFT side.
 3) On the same side, the "less efficient" worker crosses first, where:
    efficiency_key(i) = time[i][0] + time[i][2]
-   larger key means less efficient; tie breaks by larger index.
+   larger key means less efficient; tie breaks by smaller index.
 
 Return:
 - Elapsed time when the LAST box reaches the left side.
@@ -86,13 +86,13 @@ class MaxHeapt:
     def __init__(self):
         self._data = []
     def push(self, a, b):
-        heapq.heappush(self._data , (-a,-b))
+        heapq.heappush(self._data , (-a,b))
     def pop(self):
         (a,b) = heapq.heappop(self._data)
-        return (-a, -b)
+        return (-a, b)
     def peek(self):
         (a,b) = self._data[0]
-        return (-a, -b)
+        return (-a, b)
     def __bool__(self):
         return bool(self._data)
     def __len__(self):
