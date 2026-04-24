@@ -263,6 +263,7 @@ services:
     volumes:
       - ../../:/workspaces/StudyBook
       - ../../_infra/jupyter/user-settings:/home/jovyan/.jupyter/lab/user-settings:ro
+      - ../../_infra/jupyter/workspaces:/home/jovyan/.jupyter/lab/workspaces
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks: [studybook_net]

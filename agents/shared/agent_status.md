@@ -1,69 +1,64 @@
 # Agent Status
 
-## Current Run (2026-04-20)
+## Current Run (2026-04-24)
 
-**Task ID:** TB-20260420-05  
-**Task Type:** SYNC  
-**Goal:** Familiarize with `playground`, persist Thursday coding-test prep context in durable memory files, and create/update a progress file for ongoing LeetCode tracking.
+**Task ID:** TB-20260424-05  
+**Task Type:** ENHANCEMENT  
+**Goal:** Create section notebooks 10-19 from `STUDY_GUIDE.ipynb` with TOC at top and per-case placeholders using `#TOC_TOP` back links.
 
 ### Factual Summary
 
-- Loaded required startup/control files in AGENTS order before edits.
-- Inspected `D:\StudyBook\playground` structure and inventory.
-- Confirmed active prep assets:
-  - `playground/STUDY_GUIDE.ipynb`
-  - `playground/SESSION_HANDOFF.md`
-  - `playground/claude_progress.md`
-  - numbered notebook sequence `0001` through `0157` present.
-- Created dedicated quick tracker:
-  - `playground/THURSDAY_CODING_TEST_PROGRESS.md`
-- Updated durable memory and task continuity files to reflect Thursday prep objective and progress workflow.
-
-### Files Inspected
-
-- `CONTROL_PROTOCOL.md`
-- `agents/shared/context_index.md`
-- `agents/shared/open_loops.md`
-- `agents/shared/approval_matrix.md`
-- `agents/shared/command_allowlist.md`
-- `docs/adr/ADR-INDEX.md`
-- `agents/shared/pending_task.md` (prior content)
-- `agents/shared/agent_status.md` (prior run)
-- `agents/shared/decision_log.md`
-- `agents/shared/task_register.md`
-- `playground/STUDY_GUIDE.ipynb`
-- `playground/SESSION_HANDOFF.md`
-- `playground/claude_progress.md`
+- Created new study-guide section notebooks:
+  - `10.Linked Lists.ipynb`
+  - `11.Trees.ipynb`
+  - `12.Graphs.ipynb`
+  - `13.Dynamic Programming (1D).ipynb`
+  - `14.Dynamic Programming (2D).ipynb`
+  - `15.Heap  -  Priority Queue.ipynb`
+  - `16.Backtracking.ipynb`
+  - `17.Intervals.ipynb`
+  - `18.Bit Manipulation.ipynb`
+  - `19.Greedy.ipynb`
+- For each file:
+  - section TOC copied to top.
+  - top anchor added: `<a id="TOC_TOP"></a>`.
+  - TOC number column linked to per-case anchors.
+  - placeholder markdown per case with `[↑ Back to TOC](#TOC_TOP)`.
+  - empty code cell immediately after each placeholder markdown.
 
 ### Files Modified
 
-- `playground/THURSDAY_CODING_TEST_PROGRESS.md` (new)
-- `agents/shared/pending_task.md`
-- `agents/shared/context_index.md`
-- `agents/shared/open_loops.md`
-- `agents/shared/task_register.md`
-- `agents/shared/decision_log.md`
+- `playground/studyGuide/10.Linked Lists.ipynb`
+- `playground/studyGuide/11.Trees.ipynb`
+- `playground/studyGuide/12.Graphs.ipynb`
+- `playground/studyGuide/13.Dynamic Programming (1D).ipynb`
+- `playground/studyGuide/14.Dynamic Programming (2D).ipynb`
+- `playground/studyGuide/15.Heap  -  Priority Queue.ipynb`
+- `playground/studyGuide/16.Backtracking.ipynb`
+- `playground/studyGuide/17.Intervals.ipynb`
+- `playground/studyGuide/18.Bit Manipulation.ipynb`
+- `playground/studyGuide/19.Greedy.ipynb`
 - `agents/shared/agent_status.md`
+- `agents/shared/task_register.md`
+- `agents/shared/open_loops.md`
 
 ### Validation
 
-- Repository inspection only (no runtime behavior change).
-- Validation commands required: none.
-
-### Assumptions
-
-- "Thursday early morning" refers to local timezone `America/Chicago` and target date `2026-04-23`.
-- Existing deep notes in `playground/claude_progress.md` remain valuable and should not be replaced; new tracker is a lightweight daily continuity layer.
+- All 10 notebooks parse successfully as JSON.
+- Verified for each file:
+  - TOC number links count matches placeholder section count.
+  - Back links to `#TOC_TOP` present for every placeholder markdown.
+  - Empty code cells present after each placeholder markdown.
 
 ### Risks
 
-- Low: tracker quality depends on consistent post-session updates.
+- Low: scaffold-only notebook generation.
 
 ### Next Step
 
-- After each practice block, append concise session entries in `playground/THURSDAY_CODING_TEST_PROGRESS.md` (attempted notebooks, blockers, next drills).
+- If needed, I can apply the same normalization to section 05/09 style naming so all section filenames are consistent.
 
 ---
 
-**Run completed:** 2026-04-20  
+**Run completed:** 2026-04-24  
 **Status:** DONE
