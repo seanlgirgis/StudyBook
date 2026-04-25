@@ -1,4 +1,4 @@
-# Streamlit for Data Engineers — ChatGPT Project Prompts
+﻿# Streamlit for Data Engineers — ChatGPT Project Prompts
 
 Priority: 🟡 Useful — used in both Citi and HorizonScale, fast internal tool pattern
 
@@ -26,9 +26,12 @@ st.data_editor — editable DataFrames, accepting user corrections to flagged re
 deploying Streamlit — Streamlit Community Cloud, Docker container on ECS, environment variables for secrets,
 security for internal tools — st.secrets, restricting access, not exposing database credentials in the UI,
 real scenario: the internal capacity planning dashboard at Citi — month-over-month progression, under-utilization list, near-capacity alerts.
-```
 
-Run pipeline after saving the script:
+SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
+one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
+has more items than exchanges, merge the least distinct ones. Do not elaborate into
+a textbook - this feeds a reference audio script, not a lecture series.
+```\r\n\r\nRun pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug streamlit -ChunkSize 750
 ```
@@ -46,6 +49,10 @@ Topic: Streamlit for Data Engineers
 Slug: streamlit
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_streamlit.mp3
 Today's date: 2026-04-25
+
+SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
+One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
+Reference page only - no step-by-step tutorials or full worked examples.
 Generate the complete HTML page.
 ```
 

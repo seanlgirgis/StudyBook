@@ -1,4 +1,4 @@
-# Python Concurrency for Data Engineers — ChatGPT Project Prompts
+﻿# Python Concurrency for Data Engineers — ChatGPT Project Prompts
 
 Priority: 🟠 Important — multiprocessing used in HorizonScale Phase 1, asked about at senior level
 
@@ -26,9 +26,12 @@ concurrent.futures.as_completed — processing results as they arrive rather tha
 rate limiting in concurrent code — semaphores, throttling API calls,
 the embarrassingly parallel pattern — when a problem has zero shared state and every task is independent,
 real scenario: local parallel forecasting across 2,000+ series before Spark migration in HorizonScale.
-```
 
-Run pipeline after saving the script:
+SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
+one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
+has more items than exchanges, merge the least distinct ones. Do not elaborate into
+a textbook - this feeds a reference audio script, not a lecture series.
+```\r\n\r\nRun pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug python-concurrency -ChunkSize 750
 ```
@@ -46,6 +49,10 @@ Topic: Python Concurrency for Data Engineers
 Slug: python-concurrency
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_python-concurrency.mp3
 Today's date: 2026-04-25
+
+SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
+One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
+Reference page only - no step-by-step tutorials or full worked examples.
 Generate the complete HTML page.
 ```
 

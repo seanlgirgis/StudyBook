@@ -1,4 +1,4 @@
-# Python Logging & Pipeline Observability — ChatGPT Project Prompts
+﻿# Python Logging & Pipeline Observability — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — production pipelines live or die by their observability
 
@@ -27,9 +27,12 @@ exception logging — log the full traceback, log the input state that caused th
 log rotation and retention — TimedRotatingFileHandler, S3 archival, CloudWatch retention policies,
 the silent success anti-pattern — why a pipeline that completes with exit code 0 but produced wrong output is the worst failure mode,
 real scenario: designing the observability layer for a 65,000-endpoint ETL pipeline that runs monthly.
-```
 
-Run pipeline after saving the script:
+SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
+one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
+has more items than exchanges, merge the least distinct ones. Do not elaborate into
+a textbook - this feeds a reference audio script, not a lecture series.
+```\r\n\r\nRun pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug python-logging-observability -ChunkSize 750
 ```
@@ -47,6 +50,10 @@ Topic: Python Logging and Pipeline Observability
 Slug: python-logging-observability
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_python-logging-observability.mp3
 Today's date: 2026-04-25
+
+SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
+One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
+Reference page only - no step-by-step tutorials or full worked examples.
 Generate the complete HTML page.
 ```
 

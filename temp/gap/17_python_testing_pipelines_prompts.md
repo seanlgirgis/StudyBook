@@ -1,4 +1,4 @@
-# Python Testing for Data Pipelines — ChatGPT Project Prompts
+﻿# Python Testing for Data Pipelines — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — asked in every senior data engineering interview
 
@@ -27,9 +27,12 @@ conftest.py patterns — shared fixtures for database connections, test data fac
 coverage — pytest-cov, what 80% coverage means and what it doesn't mean,
 CI integration — running pytest in GitLab CI, failing the pipeline on test failure,
 real scenario: testing the hostname normalization logic and enrichment join coverage gate from the Citi pipeline.
-```
 
-Run pipeline after saving the script:
+SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
+one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
+has more items than exchanges, merge the least distinct ones. Do not elaborate into
+a textbook - this feeds a reference audio script, not a lecture series.
+```\r\n\r\nRun pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug python-testing-pipelines -ChunkSize 750
 ```
@@ -47,6 +50,10 @@ Topic: Python Testing for Data Pipelines
 Slug: python-testing-pipelines
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_python-testing-pipelines.mp3
 Today's date: 2026-04-25
+
+SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
+One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
+Reference page only - no step-by-step tutorials or full worked examples.
 Generate the complete HTML page.
 ```
 

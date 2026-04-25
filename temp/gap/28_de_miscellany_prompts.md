@@ -1,4 +1,4 @@
-# Data Engineering Miscellany — ChatGPT Project Prompts
+﻿# Data Engineering Miscellany — ChatGPT Project Prompts
 
 Priority: 🟠 Important — the "randoms" every DE gets asked that don't fit one neat category
 
@@ -26,9 +26,12 @@ the medallion architecture in plain terms — bronze/silver/gold, what belongs i
 SLAs for data pipelines — defining freshness SLAs, latency SLAs, completeness SLAs — and what happens when you miss them,
 API versioning and schema evolution — backward vs forward compatibility, how to change a pipeline's output schema without breaking consumers,
 the ten commandments of data quality — the mental checklist every DE should run before marking a pipeline production-ready.
-```
 
-Run pipeline after saving the script:
+SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
+one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
+has more items than exchanges, merge the least distinct ones. Do not elaborate into
+a textbook - this feeds a reference audio script, not a lecture series.
+```\r\n\r\nRun pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug de-miscellany -ChunkSize 750
 ```
@@ -46,6 +49,10 @@ Topic: Data Engineering Miscellany — The Topics That Don't Fit Elsewhere
 Slug: de-miscellany
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_de-miscellany.mp3
 Today's date: 2026-04-25
+
+SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
+One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
+Reference page only - no step-by-step tutorials or full worked examples.
 Generate the complete HTML page.
 ```
 

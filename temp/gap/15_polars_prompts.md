@@ -1,4 +1,4 @@
-# Polars — ChatGPT Project Prompts
+﻿# Polars — ChatGPT Project Prompts
 
 Priority: 🟠 Important — fast-growing Pandas alternative, used in HorizonScale Phase 1
 
@@ -27,9 +27,12 @@ Polars and Arrow — to_arrow(), from_arrow(), zero-copy interop with DuckDB and
 Polars in a pipeline — replacing Pandas in an ETL script, what to rewrite vs keep,
 when Polars wins over Pandas — the scale and speed threshold,
 when to still use Pandas — ecosystem compatibility, libraries that expect Pandas DataFrames.
-```
 
-Run pipeline after saving the script:
+SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
+one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
+has more items than exchanges, merge the least distinct ones. Do not elaborate into
+a textbook - this feeds a reference audio script, not a lecture series.
+```\r\n\r\nRun pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug polars -ChunkSize 750
 ```
@@ -47,6 +50,10 @@ Topic: Polars for Data Engineers
 Slug: polars
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_polars.mp3
 Today's date: 2026-04-25
+
+SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
+One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
+Reference page only - no step-by-step tutorials or full worked examples.
 Generate the complete HTML page.
 ```
 

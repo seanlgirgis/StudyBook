@@ -1,4 +1,4 @@
-# DuckDB — ChatGPT Project Prompts
+﻿# DuckDB — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — hot in modern data stack, used in HorizonScale Phase 1
 
@@ -26,9 +26,12 @@ in-memory vs persistent database — when to use each,
 DuckDB for data pipeline development — local development against S3 data, replacing a Spark dev environment,
 DuckDB in production — appropriate scale, limitations (single node, no distributed mode),
 real scenario: using DuckDB for risk detection queries across 8,000+ forecast series in HorizonScale.
-```
 
-Run pipeline after saving the script:
+SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
+one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
+has more items than exchanges, merge the least distinct ones. Do not elaborate into
+a textbook - this feeds a reference audio script, not a lecture series.
+```\r\n\r\nRun pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug duckdb -ChunkSize 750
 ```
@@ -46,6 +49,10 @@ Topic: DuckDB for Data Engineers
 Slug: duckdb
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_duckdb.mp3
 Today's date: 2026-04-25
+
+SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
+One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
+Reference page only - no step-by-step tutorials or full worked examples.
 Generate the complete HTML page.
 ```
 

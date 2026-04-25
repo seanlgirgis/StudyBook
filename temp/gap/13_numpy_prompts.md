@@ -1,4 +1,4 @@
-# NumPy — ChatGPT Project Prompts
+﻿# NumPy — ChatGPT Project Prompts
 
 Priority: 🟠 Important — underpins Pandas, scikit-learn, and all numerical computing
 
@@ -27,9 +27,12 @@ np.percentile and np.nanpercentile — calculating P95 at scale,
 NumPy and Pandas — how Pandas is built on NumPy, accessing the underlying array with .values vs .to_numpy(),
 memory views and copies — when operations produce a view vs a copy and why it matters,
 when to reach for NumPy vs Pandas vs pure Python — the decision logic.
-```
 
-Run pipeline after saving the script:
+SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
+one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
+has more items than exchanges, merge the least distinct ones. Do not elaborate into
+a textbook - this feeds a reference audio script, not a lecture series.
+```\r\n\r\nRun pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug numpy -ChunkSize 750
 ```
@@ -47,6 +50,10 @@ Topic: NumPy for Data Engineers
 Slug: numpy
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_numpy.mp3
 Today's date: 2026-04-25
+
+SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
+One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
+Reference page only - no step-by-step tutorials or full worked examples.
 Generate the complete HTML page.
 ```
 

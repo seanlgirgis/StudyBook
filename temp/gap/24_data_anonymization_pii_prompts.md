@@ -1,4 +1,4 @@
-# Data Anonymization & PII Masking — ChatGPT Project Prompts
+﻿# Data Anonymization & PII Masking — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — financial services, healthcare, and any regulated industry requires this
 
@@ -27,9 +27,12 @@ right to erasure (right to be forgotten) — the engineering challenge of deleti
 anonymization in dev and test environments — why you must never copy production PII to non-production, anonymized replicas,
 audit logging for PII access — who accessed what sensitive data when, compliance evidence,
 real scenario: handling server ownership and departmental data in the Citi pipeline — what's sensitive, what needs masking.
-```
 
-Run pipeline after saving the script:
+SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
+one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
+has more items than exchanges, merge the least distinct ones. Do not elaborate into
+a textbook - this feeds a reference audio script, not a lecture series.
+```\r\n\r\nRun pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug data-anonymization-pii -ChunkSize 750
 ```
@@ -47,6 +50,10 @@ Topic: Data Anonymization and PII Masking for Data Engineers
 Slug: data-anonymization-pii
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_data-anonymization-pii.mp3
 Today's date: 2026-04-25
+
+SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
+One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
+Reference page only - no step-by-step tutorials or full worked examples.
 Generate the complete HTML page.
 ```
 

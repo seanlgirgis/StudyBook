@@ -1,4 +1,4 @@
-# CI/CD for Data Engineering — ChatGPT Project Prompts
+﻿# CI/CD for Data Engineering — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — every senior DE role expects CI/CD discipline on pipeline code
 
@@ -28,9 +28,12 @@ rollback strategy — what rolling back a pipeline means when data has already b
 infrastructure as code in the pipeline — Terraform plan in CI, Terraform apply gated on review approval,
 monitoring CI pipeline health — flaky tests, slow jobs, notification on pipeline failure to Slack or Teams,
 real scenario: GitLab CI/CD pipeline for the Citi ETL project — what runs on every merge request, what runs on merge to main.
-```
 
-Run pipeline after saving the script:
+SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
+one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
+has more items than exchanges, merge the least distinct ones. Do not elaborate into
+a textbook - this feeds a reference audio script, not a lecture series.
+```\r\n\r\nRun pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug cicd-data-engineering -ChunkSize 750
 ```
@@ -48,6 +51,10 @@ Topic: CI/CD for Data Engineering
 Slug: cicd-data-engineering
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_cicd-data-engineering.mp3
 Today's date: 2026-04-25
+
+SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
+One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
+Reference page only - no step-by-step tutorials or full worked examples.
 Generate the complete HTML page.
 ```
 
