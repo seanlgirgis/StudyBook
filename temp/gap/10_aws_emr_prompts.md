@@ -50,9 +50,10 @@ Slug: aws-emr
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-emr.mp3
 Today's date: 2026-04-25
 
-SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
-One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
-Reference page only - no step-by-step tutorials or full worked examples.
+Content sections — create exactly these, in this order:
+What EMR Is | Cluster Anatomy | EMR Variants (EC2 / Serverless / EKS) | Instance Fleets & Spot | Bootstrap Actions & Steps | EMRFS & Glue Catalog | Performance Tuning | EMR vs Glue | Cost Optimization
+Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
+Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
 Generate the complete HTML page.
 ```
 
