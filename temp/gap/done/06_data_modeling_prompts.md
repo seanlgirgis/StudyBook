@@ -10,7 +10,7 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 
 ```
 Topic: Data Modeling for Data Engineers
-Slug: data-modeling
+Slug: data-modelinghttps://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_dbt.mp3
 
 Extra coverage required:
 - Why data modeling matters — the wrong model makes every query slow and every report wrong; it is not a cosmetic choice
