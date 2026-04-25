@@ -2,48 +2,53 @@
 
 ## Current Run (2026-04-25)
 
-**Task ID:** TB-20260425-11  
+**Task ID:** TB-20260425-13  
 **Task Type:** ENHANCEMENT  
-**Goal:** Execute Terraform provided-files pipeline using existing script and activate site linking.
+**Goal:** Execute Snowflake/PyIceberg provided-files pipeline finalization using live R2 URL and activate site linking.
 
 ### Factual Summary
 
-- Verified provided files exist:
-  - `temp/jobsearch/data/interview_prep/audio_prep/AWS_Terraform/audio_script_terraform.md`
-  - `temp/seanlgirgis.github.io/learning/terraform.html`
-- Ran audio pipeline from existing script:
-  - `.\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\AWS_Terraform\audio_script_terraform.md" -ChunkSize 750 -RequestTimeoutSeconds 120`
-- Pipeline output:
-  - clips: `C:\temp\studybook_audio\terraform\audio_clips` (57 files)
-  - final: `C:\temp\studybook_audio\terraform\final_terraform.mp3`
-  - size: `13,357,197` bytes
-  - duration: `1421.560` sec
-  - upload guide: `C:\temp\studybook_audio\terraform\UPLOAD_INSTRUCTIONS.md`
-- Activated Terraform card in:
-  - `temp/seanlgirgis.github.io/components/learning-devops.html`
-  - card is now clickable to `learning/terraform.html`
-  - added Open Reference CTA
-  - badge currently set to `🎧 ○ Upload pending`
+- Loaded required control/context files per startup order in `AGENTS.md`.
+- Read and followed:
+  - `prompts/codex_missions/Existing_work_pipeline_execution_provided_files_master.md`
+- Confirmed provided files exist:
+  - `temp/seanlgirgis.github.io/learning/snowflake-pyiceberg.html`
+  - `temp/jobsearch/data/interview_prep/audio_prep/SnowFlake/audio_script_snowflake-pyiceberg.md`
+- Confirmed live audio source already set in HTML:
+  - `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_snowflake-pyiceberg.mp3`
+  - MIME type is `audio/mpeg`
+- Activated Snowflake card in `components/learning-cloud-other.html`:
+  - switched planned card to clickable live card
+  - added title link + Open Reference CTA to `learning/snowflake-pyiceberg.html`
+  - set badge to `Live`
 
 ### Files Modified
 
-- `temp/seanlgirgis.github.io/components/learning-devops.html`
+- `temp/seanlgirgis.github.io/components/learning-cloud-other.html`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
 - `agents/shared/agent_status.md`
 
 ### Validation
 
-- `Test-Path C:\temp\studybook_audio\terraform\final_terraform.mp3` => True
-- `Get-Item` confirms final file metadata
-- repo cleanliness guard found no terraform mp3/m4a/filelist in repo audio_prep path
-- component contains active terraform link + onclick and upload-pending badge
-- page `learning/terraform.html` already references `final_terraform.mp3` with `audio/mpeg`
+- `rg -n "final_snowflake-pyiceberg.mp3|audio/mpeg" temp/seanlgirgis.github.io/learning/snowflake-pyiceberg.html` -> URL + MIME confirmed.
+- `rg -n "snowflake-pyiceberg.html|Open Reference|Live" temp/seanlgirgis.github.io/components/learning-cloud-other.html` -> link/CTA/badge confirmed.
+- `rg -n "�|Â|Ã|â|ï|ð"` on modified HTML/component files -> no matches.
+- Repo cleanliness guard:
+  - `rg --files -g "*snowflake-pyiceberg*.mp3" -g "*snowflake-pyiceberg*.m4a" -g "*snowflake-pyiceberg*filelist.txt" temp/jobsearch/data/interview_prep/audio_prep` -> no matches.
+
+### Assumptions
+
+- User-provided R2 URL is the authoritative published audio URL for Snowflake/PyIceberg.
+- Audio generation itself was already completed/uploaded before this finalization step.
+
+### Risks
+
+- No code/runtime risk identified; remaining risk is browser cache if the old card state is still shown.
 
 ### Next Step
 
-- Upload `C:\temp\studybook_audio\terraform\final_terraform.mp3` to R2.
-- Share live URL, then update Terraform card badge from Upload pending to Live.
+- Hard refresh `/#learning-cloud-other` and click the Snowflake card to verify navigation and live-audio playback.
 
 ---
 

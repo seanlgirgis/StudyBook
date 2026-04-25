@@ -203,3 +203,5 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-128 | TB-20260425-11 | Terraform audio generated and page link activated; waiting for R2 upload confirmation | open | Upload final_terraform.mp3 to R2 and then mark badge Live | 2026-04-25 |
 
 | LOOP-128 | TB-20260425-11 | Terraform audio generated and page link activated; waiting for R2 upload confirmation | closed | none | 2026-04-25 |
+| LOOP-129 | TB-20260425-13 | Snowflake+PyIceberg page switched from planned to clickable live reference after R2 confirmation | closed | none | 2026-04-25 |
+| LOOP-130 | TB-20260425-14 | OpenSearch page finalized and component card activated to clickable Live state | closed | none | 2026-04-25 |

@@ -248,3 +248,5 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260425-11 | Execute Terraform provided-files pipeline and activate site linking | done | 2026-04-25 | Generated final_terraform.mp3 and switched Terraform card in learning-devops to clickable reference mode with upload-pending badge |
 
 | TB-20260425-12 | Mark Terraform card audio status as Live after R2 confirmation | done | 2026-04-25 | Updated learning-devops Terraform badge from Upload pending to Live |
+| TB-20260425-14 | Execute OpenSearch provided-files pipeline finalization and activate site linking | done | 2026-04-25 | Confirmed opensearch.html uses live final_opensearch.mp3 URL and added clickable Live OpenSearch card in learning-cloud-other |
+| TB-20260425-13 | Execute Snowflake+PyIceberg provided-files pipeline and activate live site linking | done | 2026-04-25 | Confirmed live MP3 URL in snowflake-pyiceberg.html and updated learning-cloud-other Snowflake card to clickable Live state |
