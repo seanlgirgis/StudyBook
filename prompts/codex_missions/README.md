@@ -48,6 +48,7 @@ One mission per Codex session where possible. Never combine missions.
   - `temp\jobsearch\data\interview_prep\audio_prep\<slug>\audio_script_<slug>.md`
 - Runner behavior is fail-fast (non-zero exit on generation/stitch failures).
 - Default chunk target is `750` chars with natural sentence-boundary splits.
+- For HTML updates, use UTF-8 and HTML entities for non-ASCII chrome glyphs (`&middot;`, `&uarr;`, `&micro;`, `&#127911;`, `&#127916;`) to prevent mojibake.
 
 ---
 
@@ -145,7 +146,20 @@ R2 base URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/`
 
 | Phase | Status |
 |-------|--------|
-| Phase 0 — Audit | ⏳ Not started |
-| Phase 1 — Fix existing audio | ⏳ EC2 test case ready |
+| Phase 0 — Audit | ✅ Complete — AUDIT_REPORT.md finalized |
+| Phase 1 — Fix existing audio | 🔄 In progress — EC2 ✅ · Athena next |
 | Phase 2 — New pages | ⏳ Not started |
 | Phase 3 — Tutorials + Capstone | ⏳ Not started |
+
+### Phase 1 Detail
+
+| # | File | Script | Pipeline | HTML | Browser test |
+|---|------|--------|----------|------|-------------|
+| 1 | aws-ec2.html | ✅ | ✅ 38 chunks / 696s | ✅ | ⏳ pending |
+| 2 | aws-athena.html | ⏳ | ⏳ | ⏳ | ⏳ |
+| 3 | aws-glue.html | ⏳ | ⏳ | ⏳ | ⏳ |
+| 4 | aws-redshift.html | ⏳ | ⏳ | ⏳ | ⏳ |
+| 5 | aws-lambda.html | ⏳ | ⏳ | ⏳ | ⏳ |
+| 6 | aws-s3.html | ⏳ | ⏳ | ⏳ | ⏳ |
+| 7 | apache-kafka.html | ⏳ | ⏳ | ⏳ | ⏳ |
+| 8 | aws-ecs.html | ⏳ | ⏳ | ⏳ | ⏳ |

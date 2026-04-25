@@ -68,12 +68,12 @@ Replace the ENTIRE `<div class="audio-box">...</div>` block — opening div to c
 New block:
 ```html
   <div class="audio-box">
-    <div class="audio-label">🎧 Audio Overview</div>
+    <div class="audio-label">&#127911; Audio Overview</div>
     <audio controls preload="metadata" style="width:100%;margin-top:6px;">
       <source src="https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-ec2.mp3" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>
-    <div class="video-hint" style="margin-top:10px;">🎬 Video Overview (NotebookLM)</div>
+    <div class="video-hint" style="margin-top:10px;">&#127916; Video Overview (NotebookLM)</div>
     <video controls preload="metadata" style="width:100%;max-width:100%;border-radius:4px;margin-top:8px;">
       <source src="KEEP_EXISTING_VIDEO_URL" type="video/mp4">
     </video>
@@ -100,12 +100,12 @@ What does NOT change:
 
 Find the `.subtitle` paragraph. It will look like:
 ```html
-<p class="subtitle">Engineering reference · Senior Data Engineer · Last updated 2026-04-13 · 25-35 min read</p>
+<p class="subtitle">Engineering reference &middot; Senior Data Engineer &middot; Last updated 2026-04-13 &middot; 25-35 min read</p>
 ```
 
 Update only the date portion to today's date:
 ```html
-<p class="subtitle">Engineering reference · Senior Data Engineer · Last updated 2026-04-24 · 25-35 min read</p>
+<p class="subtitle">Engineering reference &middot; Senior Data Engineer &middot; Last updated 2026-04-24 &middot; 25-35 min read</p>
 ```
 
 Change only the date. Do not alter the rest of the subtitle text.
@@ -134,6 +134,15 @@ Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ec2.html" -Pattern 
 Also confirm:
 - `2026-04-24` appears in the subtitle
 - Old `.m4a` URL from NotebookLM does NOT appear anywhere in the file
+- No mojibake tokens appear (`�`, `Â`, `Ã`)
+
+Encoding safety rule:
+- Use HTML entities for non-ASCII display glyphs in page chrome text:
+  - separator dot: `&middot;`
+  - up arrow: `&uarr;`
+  - microseconds: `&micro;s`
+  - headphone emoji: `&#127911;`
+  - clapper-board emoji: `&#127916;`
 
 ---
 

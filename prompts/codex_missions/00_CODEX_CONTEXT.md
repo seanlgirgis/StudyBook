@@ -125,12 +125,12 @@ Key CSS classes:
 Audio box — pages WITH existing video (keep video, replace audio only):
 ```html
 <div class="audio-box">
-  <div class="audio-label">🎧 Audio Overview</div>
+  <div class="audio-label">&#127911; Audio Overview</div>
   <audio controls preload="metadata" style="width:100%;margin-top:6px;">
     <source src="https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_{topic}.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
-  <div class="video-hint" style="margin-top:10px;">🎬 Video Overview (NotebookLM)</div>
+  <div class="video-hint" style="margin-top:10px;">&#127916; Video Overview (NotebookLM)</div>
   <video controls preload="metadata" style="width:100%;max-width:100%;border-radius:4px;margin-top:8px;">
     <source src="EXISTING_VIDEO_URL_UNCHANGED" type="video/mp4">
   </video>
@@ -140,7 +140,7 @@ Audio box — pages WITH existing video (keep video, replace audio only):
 Audio box — pages WITHOUT video (kafka, ecs, all new pages):
 ```html
 <div class="audio-box">
-  <div class="audio-label">🎧 Audio Overview</div>
+  <div class="audio-label">&#127911; Audio Overview</div>
   <audio controls preload="metadata" style="width:100%;margin-top:6px;">
     <source src="https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_{topic}.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
@@ -149,6 +149,15 @@ Audio box — pages WITHOUT video (kafka, ecs, all new pages):
 ```
 
 R2 bucket base URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/`
+
+Encoding safety for HTML edits:
+- Save HTML files as UTF-8.
+- Prefer HTML entities for non-ASCII UI glyphs to avoid mojibake across editors/shells:
+  - `&middot;` for separator dots in subtitle lines
+  - `&uarr;` for back-to-top arrows
+  - `&micro;s` for microseconds
+  - `&#127911;` and `&#127916;` for audio/video icons
+- Before finalizing page edits, scan for corruption tokens and fix if found: `�`, `Â`, `Ã`.
 
 ---
 
