@@ -67,11 +67,17 @@ New-Item -ItemType Directory -Force -Path $clipsDir | Out-Null
 
 Push-Location $repoRoot
 try {
-    if (-not $SkipEnvSetter) {
+    $preloadedKey = [Environment]::GetEnvironmentVariable("OPENAI_API_KEY", "Process")
+    $hasPreloadedKey = -not [string]::IsNullOrWhiteSpace($preloadedKey)
+
+    if (-not $SkipEnvSetter -and -not $hasPreloadedKey) {
         if (-not (Test-Path -LiteralPath $envSetter)) {
             throw "Missing env_setter.ps1 at: $envSetter"
         }
         . $envSetter -NonInteractive
+    }
+    elseif ($hasPreloadedKey) {
+        Write-Host "OPENAI_API_KEY already present in current shell; skipping env_setter.ps1." -ForegroundColor DarkGray
     }
 
     $keyLoaded = python -c "import os; print(bool(os.getenv('OPENAI_API_KEY')))"

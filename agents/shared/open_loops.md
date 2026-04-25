@@ -205,3 +205,6 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-128 | TB-20260425-11 | Terraform audio generated and page link activated; waiting for R2 upload confirmation | closed | none | 2026-04-25 |
 | LOOP-129 | TB-20260425-13 | Snowflake+PyIceberg page switched from planned to clickable live reference after R2 confirmation | closed | none | 2026-04-25 |
 | LOOP-130 | TB-20260425-14 | OpenSearch page finalized and component card activated to clickable Live state | closed | none | 2026-04-25 |
+| LOOP-131 | TB-20260425-15 | Add machine-local OPENAI key fallback to avoid env bootstrap stalls when DPAPI decrypt fails | closed | none | 2026-04-25 |
+| LOOP-132 | TB-20260425-16 | Add deterministic OPENAI key fallback file loading in env bootstrap and runner skip logic | closed | none | 2026-04-25 |
+| LOOP-133 | TB-20260425-17 | FastAPI audio generated and card activated; waiting for R2 upload confirmation to mark badge Live | closed | none | 2026-04-25 |

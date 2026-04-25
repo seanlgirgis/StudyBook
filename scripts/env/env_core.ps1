@@ -614,6 +614,19 @@ function Invoke-StudyBookEnvBootstrap {
         }
     }
 
+    # Last-mile local fallback for API key (gitignored, machine-local file).
+    # This avoids hard failures when DPAPI seed decrypt is unavailable in a shell context.
+    $currentOpenAiKey = [Environment]::GetEnvironmentVariable("OPENAI_API_KEY", "Process")
+    if ([string]::IsNullOrWhiteSpace($currentOpenAiKey)) {
+        $openAiFallbackPath = Join-Path -Path $projectRootFull -ChildPath "config\secrets\.local\openai_api_key.txt"
+        if (Test-Path -LiteralPath $openAiFallbackPath) {
+            $fallbackKey = (Get-Content -LiteralPath $openAiFallbackPath -Raw -Encoding UTF8).Trim()
+            if (-not [string]::IsNullOrWhiteSpace($fallbackKey)) {
+                [Environment]::SetEnvironmentVariable("OPENAI_API_KEY", $fallbackKey, "Process")
+            }
+        }
+    }
+
     $pythonPath = $null
     if (Get-Command python -ErrorAction SilentlyContinue) {
         $pythonPath = (Get-Command python).Source

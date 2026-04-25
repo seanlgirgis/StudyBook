@@ -41,6 +41,30 @@ cd D:\StudyBook
 - Supports `-JsonFile` for bulk updates from a local JSON file.
 - Script prints only key names, never values.
 
+## Fast Local Fallback (Gitignored, No Sync)
+
+Use this when DPAPI seed decrypt is unstable in a specific shell but you need reliable OpenAI key loading.
+
+This writes a machine-local config file that is already ignored by git:
+- `config\machines\<machine>.local.psd1`
+- ignore rule: `config/machines/*.local.psd1`
+- plus a fallback local key file:
+  - `config\secrets\.local\openai_api_key.txt`
+  - ignore rule: `config/secrets/.local/`
+
+```powershell
+cd D:\StudyBook
+.\scripts\env\set_openai_key_local.ps1
+.\env_setter.ps1
+python -c "import os; print('OPENAI_API_KEY loaded:', bool(os.getenv('OPENAI_API_KEY')))"
+```
+
+Optional:
+```powershell
+.\scripts\env\set_openai_key_local.ps1 -PersistToUserEnv
+```
+This also saves `OPENAI_API_KEY` to your Windows User environment variables.
+
 ## Encrypt Secret Files And Remove Plaintext
 
 ```powershell
