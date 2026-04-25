@@ -2,56 +2,56 @@
 
 ## Current Run (2026-04-24)
 
-**Task ID:** TB-20260424-10  
+**Task ID:** TB-20260424-11  
 **Task Type:** ENHANCEMENT  
-**Goal:** Execute Amazon S3 existing-work pipeline through Mission 19 (script + audio + HTML update).
+**Goal:** Execute Apache Kafka existing-work pipeline through Mission 22 (script + audio + HTML update).
 
 ### Factual Summary
 
 - Read required startup files in protocol order.
-- Created S3 mission triplet:
-  - `prompts/codex_missions/17_S3_GENERATE_AUDIO_SCRIPT.md`
-  - `prompts/codex_missions/18_S3_RUN_AUDIO_PIPELINE.md`
-  - `prompts/codex_missions/19_S3_UPDATE_HTML.md`
-- Completed Mission 17 script generation:
-  - `temp/jobsearch/data/interview_prep/audio_prep/aws-s3/audio_script_aws-s3.md`
-- Completed Mission 18 audio pipeline with adjusted script length to meet duration target:
-  - `C:\temp\studybook_audio\aws-s3\final_aws-s3.mp3`
-  - size: `5,665,317` bytes
-  - duration: `598.340` seconds
-- After user confirmed live R2 URL, completed Mission 19 HTML update:
-  - `temp/seanlgirgis.github.io/learning/aws-s3.html`
+- Created Kafka mission triplet:
+  - `prompts/codex_missions/20_KAFKA_GENERATE_AUDIO_SCRIPT.md`
+  - `prompts/codex_missions/21_KAFKA_RUN_AUDIO_PIPELINE.md`
+  - `prompts/codex_missions/22_KAFKA_UPDATE_HTML.md`
+- Completed Mission 20 script generation:
+  - `temp/jobsearch/data/interview_prep/audio_prep/apache-kafka/audio_script_apache-kafka.md`
+- Completed Mission 21 audio pipeline after extending script to hit target range:
+  - `C:\temp\studybook_audio\apache-kafka\final_apache-kafka.mp3`
+  - size: `5,134,053` bytes
+  - duration: `540.248` seconds
+- After user confirmed live R2 URL, completed Mission 22 HTML update:
+  - `temp/seanlgirgis.github.io/learning/apache-kafka.html`
 
 ### Files Modified
 
-- `prompts/codex_missions/17_S3_GENERATE_AUDIO_SCRIPT.md`
-- `prompts/codex_missions/18_S3_RUN_AUDIO_PIPELINE.md`
-- `prompts/codex_missions/19_S3_UPDATE_HTML.md`
-- `temp/jobsearch/data/interview_prep/audio_prep/aws-s3/audio_script_aws-s3.md`
-- `temp/seanlgirgis.github.io/learning/aws-s3.html`
+- `prompts/codex_missions/20_KAFKA_GENERATE_AUDIO_SCRIPT.md`
+- `prompts/codex_missions/21_KAFKA_RUN_AUDIO_PIPELINE.md`
+- `prompts/codex_missions/22_KAFKA_UPDATE_HTML.md`
+- `temp/jobsearch/data/interview_prep/audio_prep/apache-kafka/audio_script_apache-kafka.md`
+- `temp/seanlgirgis.github.io/learning/apache-kafka.html`
 - `agents/shared/agent_status.md`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
 
 ### Validation
 
-- S3 HTML checks passed:
-  - `final_aws-s3.mp3` present
+- Kafka HTML checks passed:
+  - `final_apache-kafka.mp3` present
   - `audio/mpeg` present
-  - existing video URL `S3__Engine_of_Big_Data_small.mp4` preserved
   - `.m4a` absent
-  - `.cheat-row` corrected to `170px 1fr` (`150px` absent)
+  - `.cheat-row` remains `170px 1fr`
   - subtitle date updated to `2026-04-24`
   - topnav normalized to `&larr;`
+  - video placeholder preserved as `&#127916; Video Overview (coming soon)`
   - no mojibake tokens (`�`, `Â`, `Ã`, `â`, `ï`, `ð`)
 
 ### Assumptions
 
-- ffmpeg DTS monotonic warnings are non-blocking for concat-copy workflow, consistent with prior mission runs.
+- Kafka page intentionally has no embedded video source yet; placeholder is the desired current state.
 
 ### Risks
 
-- Low: public page visibility still depends on standard website repo commit/push/deploy path.
+- Low: when a future Kafka video URL is available, Mission 22 should be updated to embed it explicitly.
 
 ### Next Step
 

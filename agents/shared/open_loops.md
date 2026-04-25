@@ -170,3 +170,4 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-115 | TB-20260424-08 | Execute Redshift existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
 | LOOP-116 | TB-20260424-09 | Execute Lambda existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
 | LOOP-117 | TB-20260424-10 | Execute S3 existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
+| LOOP-118 | TB-20260424-11 | Execute Kafka existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
