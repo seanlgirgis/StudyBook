@@ -228,3 +228,5 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260425-01 | Generate AWS IAM script and run audio pipeline to C:\temp\studybook_audio\aws-iam | done | 2026-04-25 | Created audio_script_aws-iam.md and generated final_aws-iam.mp3 (549.320s, 5,168,205 bytes) |
 
 | TB-20260425-02 | Mission 27: generate new aws-iam.html page with live R2 audio URL | done | 2026-04-25 | Created aws-iam.html with EC2 CSS parity, IAM sections s1-s13, QA, cheat sheet, and encoding-safe entities |
+
+| TB-20260425-03 | Fix non-clickable IAM card in learning-aws-security component | done | 2026-04-25 | Updated IAM card to live link and full-card click navigation to learning/aws-iam.html |
