@@ -18,12 +18,13 @@ All paths are relative to D:\StudyBook\. Use no absolute paths.
 
 ```
 D:\StudyBook\                                       ← ROOT (working directory)
-├── temp\jobsearch\                                 ← REPO 2 — read UPLOAD_INSTRUCTIONS.md
-│       data\interview_prep\audio_prep\aws-ec2\
-│           UPLOAD_INSTRUCTIONS.md                  ← confirm R2 URL from here
 └── temp\seanlgirgis.github.io\                    ← REPO 3 — HTML update happens here
         learning\
             aws-ec2.html                            ← TARGET FILE
+
+C:\temp\studybook_audio\aws-ec2\                    ← Audio artifacts (outside repo)
+    UPLOAD_INSTRUCTIONS.md                          ← confirm R2 URL from here
+    final_aws-ec2.mp3                               ← uploaded to R2 by Sean
 ```
 
 ---
@@ -32,7 +33,7 @@ D:\StudyBook\                                       ← ROOT (working directory)
 
 Read the upload instructions:
 ```
-temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\UPLOAD_INSTRUCTIONS.md
+C:\temp\studybook_audio\aws-ec2\UPLOAD_INSTRUCTIONS.md
 ```
 
 The expected R2 URL is:
