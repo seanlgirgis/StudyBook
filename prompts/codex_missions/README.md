@@ -35,6 +35,9 @@ D:\StudyBook\                              ← ROOT — always your working dire
 
 One mission per Codex session where possible. Never combine missions.
 
+Master reusable runbook:
+- `prompts\codex_missions\Existing_work_pipeline_execution_master.md`
+
 ---
 
 ## AUDIO EXECUTION STANDARD (DO NOT DEVIATE)
