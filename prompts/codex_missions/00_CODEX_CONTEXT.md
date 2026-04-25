@@ -163,11 +163,19 @@ Encoding safety for HTML edits:
 
 ## AUDIO PIPELINE — OVERVIEW
 
-Audio script source files live under:
-`temp\jobsearch\data\interview_prep\audio_prep\{topic-slug}\`
+## ⚠️ BINARY FILE RULE — NON-NEGOTIABLE
+Generated audio clips and final MP3 files are binary artifacts.
+They MUST be stored at C:\temp\studybook_audio\ — OUTSIDE the repository.
+NEVER write .mp3 or audio clip files anywhere under D:\StudyBook\.
+Binary files do not belong in git repositories. This rule has no exceptions.
 
-Generated clips/final files live under:
-`C:\temp\studybook_audio\{topic-slug}\`
+What lives IN the repo (text only):
+  temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
+
+What lives OUTSIDE the repo (binary — never committed):
+  C:\temp\studybook_audio\{slug}\audio_clips\     ← individual generated clips
+  C:\temp\studybook_audio\{slug}\final_{slug}.mp3 ← stitched final MP3
+  C:\temp\studybook_audio\{slug}\UPLOAD_INSTRUCTIONS.md
 
 ```
 Step 1  Codex writes HOST+SEAN dialogue script
@@ -178,13 +186,14 @@ Step 2  Load environment
 
 Step 3  Run fail-fast mission runner (preferred)
         → .\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md" -ChunkSize 750
-        → clips: C:\temp\studybook_audio\{slug}\audio_clips\
-        → final: C:\temp\studybook_audio\{slug}\final_{slug}.mp3
+        → clips: C:\temp\studybook_audio\{slug}\audio_clips\   (outside repo)
+        → final: C:\temp\studybook_audio\{slug}\final_{slug}.mp3  (outside repo)
         → upload guide: C:\temp\studybook_audio\{slug}\UPLOAD_INSTRUCTIONS.md
 
 Step 4  Upload final_{slug}.mp3 to R2 (Sean does this manually)
 
 Step 5  Codex updates the HTML src in temp\seanlgirgis.github.io\learning\{file}.html
+        (only the .html text file is touched — no audio files in the repo)
 ```
 
 ---

@@ -1,63 +1,53 @@
 # Agent Status
 
-## Current Run (2026-04-24)
+## Current Run (2026-04-25)
 
-**Task ID:** TB-20260424-11  
+**Task ID:** TB-20260425-02  
 **Task Type:** ENHANCEMENT  
-**Goal:** Execute Apache Kafka existing-work pipeline through Mission 22 (script + audio + HTML update).
+**Goal:** Execute Mission 27 after confirmed IAM R2 audio URL and generate new `aws-iam.html` page.
 
 ### Factual Summary
 
-- Read required startup files in protocol order.
-- Created Kafka mission triplet:
-  - `prompts/codex_missions/20_KAFKA_GENERATE_AUDIO_SCRIPT.md`
-  - `prompts/codex_missions/21_KAFKA_RUN_AUDIO_PIPELINE.md`
-  - `prompts/codex_missions/22_KAFKA_UPDATE_HTML.md`
-- Completed Mission 20 script generation:
-  - `temp/jobsearch/data/interview_prep/audio_prep/apache-kafka/audio_script_apache-kafka.md`
-- Completed Mission 21 audio pipeline after extending script to hit target range:
-  - `C:\temp\studybook_audio\apache-kafka\final_apache-kafka.mp3`
-  - size: `5,134,053` bytes
-  - duration: `540.248` seconds
-- After user confirmed live R2 URL, completed Mission 22 HTML update:
-  - `temp/seanlgirgis.github.io/learning/apache-kafka.html`
+- Received confirmed live audio URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-iam.mp3`.
+- Created new page file:
+  - `temp/seanlgirgis.github.io/learning/aws-iam.html`
+- Applied EC2 CSS framework parity and required structure:
+  - topnav, title/subtitle, tags, audio box, TOC, sections `s1` through `s13`, Interview Q&A, cheat sheet.
+- Kept page audio-only (no video block) per mission.
 
 ### Files Modified
 
-- `prompts/codex_missions/20_KAFKA_GENERATE_AUDIO_SCRIPT.md`
-- `prompts/codex_missions/21_KAFKA_RUN_AUDIO_PIPELINE.md`
-- `prompts/codex_missions/22_KAFKA_UPDATE_HTML.md`
-- `temp/jobsearch/data/interview_prep/audio_prep/apache-kafka/audio_script_apache-kafka.md`
-- `temp/seanlgirgis.github.io/learning/apache-kafka.html`
-- `agents/shared/agent_status.md`
+- `temp/seanlgirgis.github.io/learning/aws-iam.html`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
+- `agents/shared/agent_status.md`
 
 ### Validation
 
-- Kafka HTML checks passed:
-  - `final_apache-kafka.mp3` present
-  - `audio/mpeg` present
-  - `.m4a` absent
-  - `.cheat-row` remains `170px 1fr`
-  - subtitle date updated to `2026-04-24`
-  - topnav normalized to `&larr;`
-  - video placeholder preserved as `&#127916; Video Overview (coming soon)`
-  - no mojibake tokens (`�`, `Â`, `Ã`, `â`, `ï`, `ð`)
+- `Test-Path temp\seanlgirgis.github.io\learning\aws-iam.html` => True
+- `final_aws-iam.mp3` source found
+- `audio/mpeg` found
+- `grid-template-columns:170px 1fr` found
+- section anchor count `id="sN"` => 13
+- `<video` count => 0
+- Q&A block count (`<div class="qa">`) => 6
+- Cheat row count (`<div class="cheat-row">`) => 15
+- mojibake scan (`Ã|â|ï|Â|ð|�`) => no matches
 
 ### Assumptions
 
-- Kafka page intentionally has no embedded video source yet; placeholder is the desired current state.
+- User-provided URL indicates R2 upload and playback confirmation already completed.
 
 ### Risks
 
-- Low: when a future Kafka video URL is available, Mission 22 should be updated to embed it explicitly.
+- Low: final browser visual QA still recommended on local page render.
 
 ### Next Step
 
-- Wait for next service topic and execute the master pipeline loop.
+- Open `temp/seanlgirgis.github.io/learning/aws-iam.html` for manual browser QA.
+- If accepted, proceed to VPC mission execution (Mission 28 then pipeline then Mission 29).
 
 ---
 
-**Run completed:** 2026-04-24  
+**Run completed:** 2026-04-25  
 **Status:** DONE

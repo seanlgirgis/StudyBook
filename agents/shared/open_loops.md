@@ -171,3 +171,13 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-116 | TB-20260424-09 | Execute Lambda existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
 | LOOP-117 | TB-20260424-10 | Execute S3 existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
 | LOOP-118 | TB-20260424-11 | Execute Kafka existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
+
+| LOOP-119 | TB-20260424-12 | Create reusable VPC Phase 2 mission pair (script + new HTML page) | closed | none | 2026-04-24 |
+
+| LOOP-120 | TB-20260424-13 | Prevent generated audio artifacts from landing inside repo during Phase 2 runs | closed | none | 2026-04-24 |
+
+| LOOP-121 | TB-20260425-01 | AWS IAM audio generated and ready for R2 upload + Mission 27 HTML generation | open | Upload final_aws-iam.mp3 to R2, confirm playback URL, then run Mission 27 | 2026-04-25 |
+
+| LOOP-121 | TB-20260425-01 | AWS IAM audio generated and ready for R2 upload + Mission 27 HTML generation | closed | none | 2026-04-25 |
+
+| LOOP-122 | TB-20260425-02 | AWS IAM page generated from Mission 27 and ready for browser QA | open | Validate aws-iam.html in browser and proceed to VPC mission pair | 2026-04-25 |

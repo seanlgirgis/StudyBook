@@ -15,7 +15,7 @@ D:\StudyBook\                              ← ROOT — always your working dire
 │
 ├── temp\jobsearch\                        ← REPO 2: Job search system
 │   ├── scripts\                           ← Python tools (audio pipeline, etc.)
-│   ├── data\interview_prep\audio_prep\    ← Generated audio scripts and MP3s
+│   ├── data\interview_prep\audio_prep\    ← Audio scripts (.md only — no MP3s in repo)
 │   └── prompts\                           ← Artifact templates, TTS rules
 │
 └── temp\seanlgirgis.github.io\           ← REPO 3: Personal website
@@ -42,13 +42,18 @@ Master reusable runbook:
 
 ## AUDIO EXECUTION STANDARD (DO NOT DEVIATE)
 
+### ⚠️ BINARY FILE RULE — NON-NEGOTIABLE
+MP3 files and audio clips are binary. They NEVER go inside D:\StudyBook\ or any sub-repo.
+Only the text script (.md) is committed. Everything else lives under C:\temp\studybook_audio\.
+
+| What | Where | In repo? |
+|------|-------|----------|
+| Audio script (.md) | `temp\jobsearch\data\interview_prep\audio_prep\<slug>\audio_script_<slug>.md` | ✅ YES |
+| Audio clips (.mp3) | `C:\temp\studybook_audio\<slug>\audio_clips\` | ❌ NO — outside repo |
+| Final MP3 | `C:\temp\studybook_audio\<slug>\final_<slug>.mp3` | ❌ NO — outside repo |
+| Upload guide | `C:\temp\studybook_audio\<slug>\UPLOAD_INSTRUCTIONS.md` | ❌ NO — outside repo |
+
 - Use `scripts\run_mission_audio.ps1` for mission audio generation and stitching.
-- Keep generated audio artifacts OUTSIDE repo under:
-  - `C:\temp\studybook_audio\<slug>\audio_clips\`
-  - `C:\temp\studybook_audio\<slug>\final_<slug>.mp3`
-  - `C:\temp\studybook_audio\<slug>\UPLOAD_INSTRUCTIONS.md`
-- Keep only source scripts in repo under:
-  - `temp\jobsearch\data\interview_prep\audio_prep\<slug>\audio_script_<slug>.md`
 - Runner behavior is fail-fast (non-zero exit on generation/stitch failures).
 - Default chunk target is `750` chars with natural sentence-boundary splits.
 - For HTML updates, use UTF-8 and HTML entities for non-ASCII chrome glyphs (`&middot;`, `&uarr;`, `&micro;`, `&#127911;`, `&#127916;`) to prevent mojibake.

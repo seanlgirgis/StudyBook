@@ -220,3 +220,11 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260424-09 | Execute AWS Lambda existing-work pipeline (missions 14/15/16) | done | 2026-04-24 | Created Lambda missions, generated final_aws-lambda.mp3 (551.210s), and updated aws-lambda.html with final MP3 + encoding-safe entities |
 | TB-20260424-10 | Execute Amazon S3 existing-work pipeline (missions 17/18/19) | done | 2026-04-24 | Created S3 missions, generated final_aws-s3.mp3 (598.340s), and updated aws-s3.html with final MP3 + cheat-row + encoding-safe entities |
 | TB-20260424-11 | Execute Apache Kafka existing-work pipeline (missions 20/21/22) | done | 2026-04-24 | Created Kafka missions, generated final_apache-kafka.mp3 (540.248s), and updated apache-kafka.html with final MP3 + encoding-safe placeholder media block |
+
+| TB-20260424-12 | Create Phase 2 AWS VPC mission pair (28/29) for script+new-page workflow | done | 2026-04-24 | Added 28_VPC_GENERATE_AUDIO_SCRIPT.md and 29_VPC_GENERATE_HTML_PAGE.md aligned to IAM pattern and encoding-safe standards |
+
+| TB-20260424-13 | Enforce C:\temp audio-output policy in VPC missions and sweep repo for stray media artifacts | done | 2026-04-24 | Updated missions 28/29 with explicit out-of-repo output + cleanliness guard; repo sweep moved 0 files |
+
+| TB-20260425-01 | Generate AWS IAM script and run audio pipeline to C:\temp\studybook_audio\aws-iam | done | 2026-04-25 | Created audio_script_aws-iam.md and generated final_aws-iam.mp3 (549.320s, 5,168,205 bytes) |
+
+| TB-20260425-02 | Mission 27: generate new aws-iam.html page with live R2 audio URL | done | 2026-04-25 | Created aws-iam.html with EC2 CSS parity, IAM sections s1-s13, QA, cheat sheet, and encoding-safe entities |
