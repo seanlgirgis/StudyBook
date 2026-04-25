@@ -1,4 +1,4 @@
-﻿# AWS Kinesis — ChatGPT Project Prompts
+# AWS Kinesis — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — Toyota gap #4 (IoT / sensor data)
 
@@ -11,27 +11,31 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: AWS Kinesis
 Slug: aws-kinesis
-Extra coverage required: Kinesis Data Streams — shards, partition keys, sequence numbers, retention period,
-shard capacity math — 1 MB/s in, 2 MB/s out per shard — how to size for your throughput,
-enhanced fan-out — dedicated throughput per consumer, when it justifies the cost,
-Kinesis Data Firehose — fully managed delivery to S3, Redshift, OpenSearch, Splunk,
-Firehose buffering — time and size buffering, format conversion to Parquet, compression,
-Kinesis Data Analytics / Managed Apache Flink — stream processing SQL and stateful operators,
-Kinesis vs Kafka / MSK — architectural differences, operational tradeoffs, when to choose each,
-Kinesis vs SQS — when a queue is enough vs when you need a stream,
-Lambda as Kinesis consumer — batch window, bisect on error, iterator age metric,
-Kinesis for IoT and telemetry — ingesting high-frequency sensor data from manufacturing systems,
-resharding — split and merge shards for scaling, the hot shard problem,
-ordering guarantees — per-shard ordering, how partition key design affects order,
-consumer group patterns — KCL (Kinesis Client Library) for stateful consumers,
-monitoring — GetRecords.IteratorAgeMilliseconds as the key lag metric,
-cost model — shard-hour pricing, extended retention, enhanced fan-out costs.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- Kinesis Data Streams — shards, partition keys, sequence numbers, 24h default retention and how to extend it
+- Shard capacity math — 1 MB/s in, 2 MB/s out per shard; how to calculate required shards from ingestion rate
+- Enhanced fan-out — dedicated 2 MB/s throughput per registered consumer; when the cost is justified vs polling
+- Kinesis Data Firehose — fully managed delivery to S3, Redshift, OpenSearch; no consumer code needed
+- Firehose buffering — time-based and size-based buffering windows; format conversion to Parquet; Snappy compression
+- Kinesis Data Analytics / Managed Flink — stream processing with SQL or Java/Python; stateful operators and windowing
+- Kinesis vs Kafka / MSK — managed vs self-managed, replay semantics, ecosystem maturity, when each is the right call
+- Kinesis vs SQS — stream vs queue; when ordering and replay matter vs when a queue is sufficient
+- Lambda as Kinesis consumer — batch window, bisect-on-error for poison messages, iterator age as the key health metric
+- Resharding — splitting and merging shards to scale; the hot shard problem and how partition key design causes it
+- Ordering guarantees — ordering is per-shard only; how partition key choice determines co-location of related events
+- Monitoring — GetRecords.IteratorAgeMilliseconds is the single most important Kinesis health metric; what threshold to alarm on
+- Cost model — shard-hour pricing, extended retention add-on, enhanced fan-out per-consumer cost; how volume drives total spend
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug aws-kinesis -ChunkSize 750
 ```
@@ -50,10 +54,23 @@ Slug: aws-kinesis
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-kinesis.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-Kinesis Data Streams | Shard Sizing & Capacity | Enhanced Fan-Out | Kinesis Firehose | Kinesis Analytics & Flink | Kinesis vs Kafka vs SQS | Lambda as Consumer | Ordering & Resharding | Cost Model
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. Kinesis Data Streams — shards, partition keys, retention
+  2. Shard Sizing & Capacity Math
+  3. Enhanced Fan-Out vs Standard Polling
+  4. Kinesis Firehose — delivery, buffering, format conversion
+  5. Kinesis Analytics & Managed Flink
+  6. Kinesis vs Kafka vs SQS — decision guide
+  7. Lambda as Consumer — patterns and gotchas
+  8. Ordering, Resharding & Hot Shards
+  9. Monitoring & Cost Model
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 
