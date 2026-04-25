@@ -51,9 +51,10 @@ Slug: data-stubbing-synthetic
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_data-stubbing-synthetic.mp3
 Today's date: 2026-04-25
 
-SCOPE FENCE: 8-10 sections maximum. 2-3 tight paragraphs per section.
-One code block per section, 20 lines max. Cheat sheet: 12-15 rows.
-Reference page only - no step-by-step tutorials or full worked examples.
+Content sections — create exactly these, in this order:
+What Data Stubbing Is & Why | Faker Library | Test DataFrame Factories | Edge Case Coverage | Statistically Representative Data | Time Series Test Data | S3 Stubs with moto | API Response Stubs | Data Contract & Snapshot Testing
+Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
+Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
 Generate the complete HTML page.
 ```
 
