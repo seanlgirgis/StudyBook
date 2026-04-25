@@ -167,3 +167,4 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-112 | TB-20260424-04 | Add BinarySearch placeholders for 0113 and 0143 with bidirectional TOC links | closed | Added TOC rows, section anchors/back-links, and code placeholder cells | 2026-04-24 |
 | LOOP-113 | TB-20260424-05 | Create section notebooks 10-19 from STUDY_GUIDE with `TOC_TOP` backlink pattern | closed | Generated 10 files with TOC number links, placeholders, and empty code cells | 2026-04-24 |
 | LOOP-114 | TB-20260424-07 | Execute AWS Glue existing-work pipeline (Mission 08/09/10) and lock in entity-safe HTML mission rules | closed | none | 2026-04-24 |
+| LOOP-115 | TB-20260424-08 | Execute Redshift existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
