@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "map_path": "D:\\StudyBook\\temp\\migration_meta\\run_20260402_121903\\move_map.csv",
+  "scope_roots": [
+    "D:\\Workspace\\Technologies\\",
+    "D:\\Workspace\\Basics\\DE_Interview\\"
+  ],
+  "statuses_included": [
+    "copied",
+    "conflict_renamed"
+  ],
+  "mapped": 163,
+  "deleted": 163,
+  "missing": 0,
+  "blocked": 0,
+  "pruned_empty_dirs": 6,
+  "report_generated_at": "2026-04-02T12:28:31",
+  "blocked_items": []
+}

@@ -1,0 +1,947 @@
+[
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-A1_kafka_intro.md",
+    "size": 5812,
+    "sha256": "EB89C94F6C32C85F2CB70454C3ADCE16255EC2808425E082811BC6E6F2181F84"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-A2_kafka_concepts.md",
+    "size": 5528,
+    "sha256": "A7E48DA5336810CD5157C5AAD3A074A04AF027087B4B453E0A5337D913695912"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-B1_spark_intro.md",
+    "size": 6296,
+    "sha256": "7116C8F219BF8338211ED29FCFD7795207CB032F12D8033CD29E7D397C80B71B"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-B2_spark_concepts.md",
+    "size": 6038,
+    "sha256": "D13B46BE6B510EA6559C3E87EF8CCC31390519D1E12B16C36FCDD2F8D8D59FD8"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-C1_airflow_intro.md",
+    "size": 7432,
+    "sha256": "F515B08FCA7BCC4565A9B22A7A08A11DA3EDA1EB8386A8BE78BBDD5156829EFB"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-C2_airflow_concepts.md",
+    "size": 6477,
+    "sha256": "295E257E1191BA9FB7CB8108FB5387B306DCAA6DC405A5EA59121393C7F45BC9"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-D1_dbt_intro.md",
+    "size": 7351,
+    "sha256": "1B081F1EBC184F3969B41211B341DD0D708A8226B74E235D08DB4389AC52D726"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-D2_dbt_concepts.md",
+    "size": 6496,
+    "sha256": "0AB531378DF5721A04830E06A4A440409DEA93D1397288542F3785F03E43962B"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-E1_databricks_intro.md",
+    "size": 8178,
+    "sha256": "4FEC0683A055FB62D4530461582D17CBA86E2E39363620A2FF4DC9DAAA3DC34A"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-E2_lakehouse_concepts.md",
+    "size": 6791,
+    "sha256": "FB7C7A2386E01F8BB3BAD5B03663A05F3E27AE3B152F32613B180ED0E7899963"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-F1_docker_k8s_intro.md",
+    "size": 7700,
+    "sha256": "E48EF1B1B7F48AD1CE87FC25127895ECF6ED07EE02D5C239EF524AA5AE5BDF51"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-F2_terraform_intro.md",
+    "size": 8186,
+    "sha256": "61011DD26562628DDBBD3A593F89012D554901FB3A9D4B774855DEF4186E063E"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-F3_infra_concepts.md",
+    "size": 7337,
+    "sha256": "FE5E71F4E715ACEB9F16632A4BC9AA2C3620F4181EC4CD41D4F1954DA80FCDA9"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-G1_splunk_intro.md",
+    "size": 8341,
+    "sha256": "7D6A199AAB6BB5FA7A723EEBEBFB65BC10EF2CA9E6AFBAAACD71A67170AEFEF2"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-G2_splunk_concepts.md",
+    "size": 7089,
+    "sha256": "CE9E6F0A946D13D77ABA05C0200CE0F97292CE237C733FF24F39D1C82B3BCDE1"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-H1_aws_de_intro.md",
+    "size": 7498,
+    "sha256": "DB227AA7E9A55AE08FB9D9A72DE0B87474836280AF98D5774CAEB6890A241B3A"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-H2_aws_de_concepts.md",
+    "size": 7000,
+    "sha256": "ECA61AFF855861C581FF3760198D1715E45881D8D41DC34B5FC91735A9C01170"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-I1_gcp_de_intro.md",
+    "size": 7693,
+    "sha256": "53B67BC712D6B5355B4A3467E119693F669F23A2FE381661E6E2FBF644874A4D"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-I2_azure_de_intro.md",
+    "size": 8237,
+    "sha256": "A5444B25E0536A723C79913A4459C77702BA813BA4D7A03051A30E48BD5C75A2"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-I3_multicloud_concepts.md",
+    "size": 7535,
+    "sha256": "773E9003319668226974A624D19D1B8E23A0C0945F9D50EDC7753284CFF2D77F"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-J1_mlflow_intro.md",
+    "size": 8197,
+    "sha256": "8870ECF3C1959FFE8105DB1A5C006D37392BC0C6B70F7532294BB28B4064312F"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-J2_ml_platform_concepts.md",
+    "size": 8181,
+    "sha256": "194C1C4CA0AC794C2EA77A36FC0438F53BA49DFD5B9B4F72D5B4B2E7457B2450"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-K1_cicd_data_intro.md",
+    "size": 9706,
+    "sha256": "67D188944BBFF97A87A6FF5568467AE015A0158FF7D6C35ABC59D47476D63C8B"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r1\\\\T1-K2_cicd_data_concepts.md",
+    "size": 8361,
+    "sha256": "E3B6A4302C7DDDEF1CC0B6CF340A396831C975FF2272CC5B3577AD35191E11A1"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-A1_kafka_patterns_internals.md",
+    "size": 3839,
+    "sha256": "90E0281B224A1AE7A7C23329FE1AF452B53A16F5F2264673720A398AA888445E"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-A2_kafka_streams_ksql.md",
+    "size": 3765,
+    "sha256": "6346B2BE12BD39763FE3E89CCFD5DE7220DE526B9FD8A64B1E52BBF0D6F66BA3"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-A3_kafka_vs_kinesis.md",
+    "size": 3678,
+    "sha256": "12B2E3C977E9F337CF381805B40CA103B467280C8C2875267B77A8681DA15C04"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-A4_kafka_qa.md",
+    "size": 1892,
+    "sha256": "25A6E42F9DE98AD819C8EB4BFF83DC28BE94128C2B619EACD3ADFFA13EBA3AEC"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-A5_kafka_nuggets.md",
+    "size": 1870,
+    "sha256": "CCCE0586E90984988A304ED14F83C528E2176A9CE7A26EBE9FFA25AAC5C214BA"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-B1_spark_internals_tuning.md",
+    "size": 3851,
+    "sha256": "78F24E5106D9C587D636FFAA69604160C0AB6FCB8CA8F367804D47720CD67089"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-B2_spark_structured_streaming.md",
+    "size": 3577,
+    "sha256": "FE210AAAFCA0D5D25C0A0CDC3E76E410FD2C7A671B6F07194517E07EB9FA8564"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-B3_spark_performance_lab.md",
+    "size": 3798,
+    "sha256": "DE5358393AC135662CCED6983235BC0A7A389065154360D845F5622A0B456501"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-B4_spark_qa.md",
+    "size": 1780,
+    "sha256": "0AD3F3CB126432665623F04C506C88086BBB2D01C69FB129E5CFA35ED9DB2AC5"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-B5_spark_nuggets.md",
+    "size": 1891,
+    "sha256": "94BE3969D686C102B5F10853135FC26F1B54632E05F3C8ECB115B4F2E58CB625"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-C1_airflow_dag_patterns.md",
+    "size": 3896,
+    "sha256": "679481D3F27A926270906424BC4BA0A5982C3ED1F29D675651FD239FE604E136"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-C2_airflow_production.md",
+    "size": 3810,
+    "sha256": "918ECC7F87D83578A5296D4F1FDEF81A6F8982C50476BA799FD95E81CF70F8E9"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-C3_airflow_vs_alternatives.md",
+    "size": 3738,
+    "sha256": "34AD2C22850CFFA6A210B8F36D787B47525733277D14C10875BA426A09313915"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-C4_airflow_qa.md",
+    "size": 1681,
+    "sha256": "3B78A4BEF398A798FF1C0B5D77106FE4A8B49C33EBE923CE0D6A8F2E5FC15E3A"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-C5_airflow_nuggets.md",
+    "size": 2016,
+    "sha256": "DEA8AA9FAF55CCD8371D03349E504573D5C9E66B7CCD89C32A419FFD585D8308"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-D1_dbt_models_tests_lineage.md",
+    "size": 3967,
+    "sha256": "24476774DF3132898F7D6100C875797B7D2646FACA72F64B03FC56BAACEAEA8D"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-D2_dbt_advanced_patterns.md",
+    "size": 3729,
+    "sha256": "01F8F44E699E06072306AEB203F4F6221E527FAEDC1FFB4985AC0E4B8EC81D67"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-D3_dbt_qa.md",
+    "size": 1733,
+    "sha256": "0B87E916EB70328F7E8898EB70FE3A87F4CCFB3EF59D829DDDB666702FAE9B47"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-D4_dbt_nuggets.md",
+    "size": 1942,
+    "sha256": "52033616530D5FE55455B01D34D39323ED50FB4C00F88C1D88874076DF4AAD18"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-E1_databricks_delta_lake.md",
+    "size": 3809,
+    "sha256": "870B7A7A3F8CD33C6B0C978837FEA2FF3FDE11767FE1456728B5F6305C1BA3AA"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-E2_lakehouse_formats.md",
+    "size": 3784,
+    "sha256": "E03048163DDB375284BC811D7011777302E5B1B6A87639461E5C64D17B7609EB"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-E3_unity_catalog.md",
+    "size": 3824,
+    "sha256": "A0B72BBF4087D8B3D5117C2ED0FABE48F01880AB51ED7C1CCC5A63C4E9153994"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-E4_lakehouse_qa.md",
+    "size": 1712,
+    "sha256": "C639FD4E80E5634E8C951AEE51185930BEFC90C78DD15844EC95E50AC10EAB56"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-E5_lakehouse_nuggets.md",
+    "size": 2047,
+    "sha256": "AE56579054F7D7472ABCC879EF786A65764212A27B58C1B806D2482676151CFA"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-F1_docker_k8s_for_de.md",
+    "size": 4131,
+    "sha256": "6675788949F4B4613218CDCDF0FBAFCE0A9913149A3700F80B45A30A3428971A"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-F2_terraform_iac_basics.md",
+    "size": 4081,
+    "sha256": "0A9825FEBB905CE616A6BD42B6F28BA42504957070854DE12EB792319B20A41F"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-F3_infra_qa.md",
+    "size": 1728,
+    "sha256": "ACBBF7954809F22F9980CE255662EE0183EE1D47E932E2455A4F9F3F4BF7FBC4"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-F4_infra_nuggets.md",
+    "size": 1926,
+    "sha256": "895639C408D0666BEFC9F0FCDFE7D78C7990D56E80582E539DA2B1BC9AC60C64"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-G1_splunk_guide.md",
+    "size": 3746,
+    "sha256": "B35CB96E41228AB3BA9BF37C0292BEE18FBCE8197EEF7A60A4490796C1E58A47"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-G2_splunk_de_patterns.md",
+    "size": 3715,
+    "sha256": "5C03336D76EC3CBF256C08C57D6397830D5FD5F2F930B1AE4C03098A23488650"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-G3_splunk_vs_elk.md",
+    "size": 3719,
+    "sha256": "3F1D94E17D0995218A6A8D28223B3474B7EDFF10D4DB358E852E5ABDE8C886BB"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-G4_splunk_qa.md",
+    "size": 1663,
+    "sha256": "E9FAB7403CC87ED36708DB96D6B7FB0706C4EE72E0C7EB57A9976D29E0B0D0FC"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-G5_splunk_nuggets.md",
+    "size": 1935,
+    "sha256": "8893ECFCA91C2F91BA172342AB77EAB234BA5096718988DD0481FF99B4214B6F"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-G6_splunk_citi_narrative.md",
+    "size": 2272,
+    "sha256": "097A0B46277C00AFD74493AA8BC58264F06EC7272A8C43CBFC2813E451CF3D63"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-H1_aws_glue_emr_athena.md",
+    "size": 3878,
+    "sha256": "3D1D2906CED79B2333EF373FC9BD86A2D1784F120E97B7C3D5EA65AF2776E2B8"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-H2_aws_lake_formation.md",
+    "size": 3733,
+    "sha256": "CF8F60ECEB19A1453B094487A83884EEA4CDC3E7A6803E488B98D2538FE8CC8B"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-H3_aws_kinesis_patterns.md",
+    "size": 3685,
+    "sha256": "8E2E0BF626844181B3A84A092E4D3C71DFFA1E195C9FA8B735E571198B3700B1"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-H4_aws_de_qa.md",
+    "size": 1702,
+    "sha256": "FD0844A2F2E238BCB6CD509484E805D895132189C5C13C009CBB1B6DFACB91BB"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-H5_aws_de_nuggets.md",
+    "size": 2069,
+    "sha256": "9C09AAD2AFC480BFA6DD4CBD6A841DD18F22E0A7B3FFAF6F01FFA531FAD357EE"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-I1_gcp_dataflow_pubsub.md",
+    "size": 3858,
+    "sha256": "609965954F2A79C5DD391F9EAAE9A568D250E7AAEBFC9C22B16B3248E619E835"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-I2_azure_synapse_adf.md",
+    "size": 4026,
+    "sha256": "28751EFB13B79E47EA8ADB0D5439B2C48FF2A60C89A77013F40F8B8BCBB6F127"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-I3_multicloud_de_qa.md",
+    "size": 1724,
+    "sha256": "D9DCF18572AE61448733ACCF0BDB34AB55EEBEB8A780EB533C78A2A7643DDE12"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-I4_multicloud_nuggets.md",
+    "size": 2017,
+    "sha256": "0C4A6389CD16B4C48B3978230EDDF56C6EC5D50623A3C9048EF9178F79B6D3C5"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-J1_mlflow_tracking.md",
+    "size": 4020,
+    "sha256": "D5B39DAD9CDDB6A677D74BFD5A503341EA9EB149BD085AF79B5E6FF742CD31A8"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-J2_feature_store_guide.md",
+    "size": 4097,
+    "sha256": "A1762AB779E2FC6E41A6DE79CC132931C15D7338E5088A3EA1721897994CD37C"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-J3_vertex_sagemaker_ml.md",
+    "size": 3900,
+    "sha256": "3A5BBB100C2041DF23748D49862423057AF240DEFE073B04D41BAB8D96AD8FFD"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-J4_ml_platform_qa.md",
+    "size": 1734,
+    "sha256": "02C06AFD3A14A1D619AD15607CDAC3C46EB1B9304BC99C191305088B2698BD88"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-J5_ml_platform_nuggets.md",
+    "size": 2075,
+    "sha256": "5EA52AFA0AAEC317071D8CD28A09B718F846D56255E5D1BF29C5CDDA90BAB0F6"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-K1_github_actions_de.md",
+    "size": 4118,
+    "sha256": "45A7884F8A352C78A9AC1CFDDF5DB3BBA7E639D2DD066FE8E9B0F030E45837BD"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-K2_great_expectations_guide.md",
+    "size": 3967,
+    "sha256": "7731B41A116B6775DE9C7D51C646104364D167F62C89D17525691C269F544F90"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-K3_dataops_patterns.md",
+    "size": 4917,
+    "sha256": "CF057D2B2CB8AAB725A2897E4B2F932D75A97212DF62B090CC6A260F4823F5E1"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-K4_cicd_data_qa.md",
+    "size": 2209,
+    "sha256": "F77FECB3AFFD6B858ADE16743FEE76C23849479E93C9A6955C5DC799D5EEF1F7"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r2\\\\T2-K5_cicd_data_nuggets.md",
+    "size": 2393,
+    "sha256": "E13270086C6E96BD8DBDF93DF7721ACB0A4B3B17D483C900CFF37309296ACCE4"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-1_lambda_kappa_architecture.md",
+    "size": 4050,
+    "sha256": "C3E2F4BFD4F1E11449C3375139410CA69CD5F94D72C8A2E5F37B0271E96DCC32"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-10_technologies_nuggets_master.md",
+    "size": 5858,
+    "sha256": "ED85CB4934A81AF30CDCE740D88BC2905719217C4084400608D08E3F07DEF972"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-11_citi_narrative_technologies.md",
+    "size": 5785,
+    "sha256": "363E68CAF0357C3A47E5634EC4ED7BAF76500E6205FFD45293E640469887962C"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-2_streaming_pipeline_end2end.md",
+    "size": 4863,
+    "sha256": "7C94597FCB3FABA5C444EC640F7B62B4A07CF3F0827C60389106326E2EC18D32"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-3_batch_pipeline_end2end.md",
+    "size": 5019,
+    "sha256": "420C3D98EC1E15E96B6DB6B42895DE00EF8DF43FB73ADA6482F18E066C280C2B"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-4_platform_decision_matrix.md",
+    "size": 4599,
+    "sha256": "E496E5C56A649B654137AC6F8601F2CB9105E6F87B0FCA6055F21CC473D4661A"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-5_modern_de_stack_2026.md",
+    "size": 4461,
+    "sha256": "73E18CFCA257AFE5EDEE2476164F2C3004AB5CC287C064D577E8CD926A249347"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-6_system_design_streaming.md",
+    "size": 4731,
+    "sha256": "B04622D412F3065FCFF37E7DB3DD402E239D0D57A7999898A53606D29E7AEF95"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-7_system_design_batch.md",
+    "size": 4881,
+    "sha256": "0EBA79535654D97440F4867B7F17B3F28CFAC63F5C883FC0BEBF3CEE4491A6C3"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-8_technologies_interview_sim.md",
+    "size": 4731,
+    "sha256": "60E451FAE1A7980D4FBAC100349735A66330ED327041008C8EBAEE83135CAB49"
+  },
+  {
+    "path": "D:\\StudyBook\\_prompts\\tracks\\technologies\\r3\\\\T3-9_technologies_qa_master.md",
+    "size": 4189,
+    "sha256": "436B05D42588166D373D20743FFD52AF2EC6E1A5FA7FED7F22887B4FF89004EA"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_behavioral_aws_migration_guide.ipynb",
+    "size": 27086,
+    "sha256": "15CA3A7A403C8EF05553B80DC24037EA61232FA854BF7A340B82AA9C9D1D76FB"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_behavioral_horizonscale_guide.ipynb",
+    "size": 25747,
+    "sha256": "D249E73792D727DBA413F012386E69882EB208245CAB0C116F03C05550CB9212"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_behavioral_telemetry_guide.ipynb",
+    "size": 30658,
+    "sha256": "F0DEC2DD7C52D990DD380AA812C96D808EE147F769F60BAEC4D0D6085BD55620"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_cloud_data_platforms_guide.ipynb",
+    "size": 51004,
+    "sha256": "127D2B88EB4EADE85813AB49195ADB7C7684C6C642994F51D9D278BE0A03CDC5"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_data_pipeline_design_guide.ipynb",
+    "size": 54180,
+    "sha256": "CD14C6A2F1B12A6290C2F5F468EC847202BE941B968F6322E0252306FD36A892"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_data_quality_guide.ipynb",
+    "size": 52581,
+    "sha256": "E88B326D32BAE19AD85CCAA7113E7326FF58F9045F8069369EF5BF1798C0DDB6"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_data_warehouse_design_guide.ipynb",
+    "size": 55786,
+    "sha256": "DBE2D6C33CA3FE621192FF2BE0F9F21D2C33DC6A9C2D60AE799962D1050CFC70"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_distributed_systems_guide.ipynb",
+    "size": 55281,
+    "sha256": "B7910895ABB47159799DCA292818BB1B25286576D16DF2632DE77B04832206E4"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_ml_pipeline_guide.ipynb",
+    "size": 51902,
+    "sha256": "121C689565C4914DB0C32583951FFD65848AAE54ECAD3DA5ACB6AF485DD93E3D"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_orchestration_guide.ipynb",
+    "size": 52802,
+    "sha256": "6094421488C162C4BFE0DB7C11D751210C4EBCCB550873F50B7F52A96EEA73DB"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_query_optimization_guide.ipynb",
+    "size": 44687,
+    "sha256": "3A93C8A4AF23BE903F4B1F1E6696A1BE348EA0949905F8DB41BE78A5A7FA0259"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_sql_aggregations_guide.ipynb",
+    "size": 23867,
+    "sha256": "BAAE78F0BA0E4AC285E99925BF8E1F5FA70CCE8BE2DF4FB42C0F324D2B08A6F2"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_sql_ctes_recursive_guide.ipynb",
+    "size": 23645,
+    "sha256": "E178A31439CE8CF3B327B9C68A72B22A81001EE5A2B715A3F41B8B7FDDE44845"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_sql_joins_guide.ipynb",
+    "size": 23987,
+    "sha256": "8D27DABBFACF4D56D41CA1CAD4C6353CEF6E4732631EDA1EB396C88D6B9C4AD3"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_sql_query_optimization_guide.ipynb",
+    "size": 26047,
+    "sha256": "10729925346AF2FD9A0D5A8B10BF2FDACFC41D744211D897075DBF164594E60A"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_sql_schema_design_guide.ipynb",
+    "size": 28930,
+    "sha256": "F0267C9928D986EC0601DD839E68285B2F9A4DBA68805F102C3777969FC52D25"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_sql_window_functions_guide.ipynb",
+    "size": 24292,
+    "sha256": "C40E5D2512D7940032287A762061B66A10EC0785A9A5A8A409CABD35628C6E08"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_staff_positioning_guide.ipynb",
+    "size": 51621,
+    "sha256": "8043EF1F92B11DB1E9B66F56470ED798A4B643E4CE4480476B9087CF64A293D9"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_storage_formats_guide.ipynb",
+    "size": 49973,
+    "sha256": "3C8AB36BC7967795EF5BD8E6055FC7ED74A0DA8966CBD38DBDEF71E8B771DF8E"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_stream_processing_guide.ipynb",
+    "size": 68942,
+    "sha256": "AB7D24BBC7EA37DDD462C55CA2C360BA5D06E1CE0539BA1D8885B66CCE653843"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\de_interview_system_design_whiteboard_guide.ipynb",
+    "size": 57661,
+    "sha256": "895FD692A3F6371EC94FBF1641119BCFB033A7569C1835AD8B67EF96DA4B8B18"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\technologies_interview_sim_production.ipynb",
+    "size": 46653,
+    "sha256": "3E948377FCBDCFE18B9FA0071777710FFFC14D9F467ECA394F70AB3DCB6E1837"
+  },
+  {
+    "path": "D:\\StudyBook\\interview\\technologies_interview_sim.ipynb",
+    "size": 37713,
+    "sha256": "6689E873597D5CE3ABF3AD36BB28EB08A962E233CF14FD5BA9C1968E2C283E54"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\10_streaming\\\\r1\\\\kafka_intro.ipynb",
+    "size": 26284,
+    "sha256": "97EB2F19625E41182E936C259186DCE0AEB9913A49D625CCFC032446A3A62DE9"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\10_streaming\\\\r2\\\\kafka_intro_executed.ipynb",
+    "size": 16091,
+    "sha256": "0ACEBA8A134E428BEFE701846AC0DAFF3B25432886F934B29305D447115499E7"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\10_streaming\\\\r2\\\\kafka_patterns_internals.ipynb",
+    "size": 14121,
+    "sha256": "AC68B559264F9E1EBAA4F0669B4C5F17663046F0ECD2AD3062D3D89DADDCD18E"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\10_streaming\\\\r2\\\\kafka_streams_ksql.ipynb",
+    "size": 15177,
+    "sha256": "7106A62BCC586FAF2012306FF13396040C0DB8F8045A2B188E0E9A43AE304015"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\10_streaming\\\\r2\\\\kafka_vs_kinesis.ipynb",
+    "size": 17077,
+    "sha256": "D9642F0011F57B485279CF4C370AD9B878835F0BEA099906EA68D523EB064A99"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\10_streaming\\\\r3\\\\lambda_kappa_architecture.ipynb",
+    "size": 28089,
+    "sha256": "380138C47F7DE0451A4E5448FCC2F104462EFAA3AE025975209BE3A9784E19A9"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\10_streaming\\\\r3\\\\streaming_pipeline_end2end.ipynb",
+    "size": 10021,
+    "sha256": "E31D310E94C38B17D892EBDAD37A9C307C5621D2C2C75360259A9D349EE00A0F"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\11_batch_processing\\\\r1\\\\spark_intro.ipynb",
+    "size": 22590,
+    "sha256": "3C49919F15C2DA8D9A54940644D7D7047DBEE8136A8F03F764A07176D84F2BDE"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\11_batch_processing\\\\r2\\\\spark_internals_tuning.ipynb",
+    "size": 16442,
+    "sha256": "D421929D2A427CC71A6D63D72931B93059DBEA69DE7E5C23DC166168B0C2855B"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\11_batch_processing\\\\r2\\\\spark_performance_lab.ipynb",
+    "size": 27887,
+    "sha256": "731B7A4CE180202EA534DEF30D91D6234022D0EEE18905B721107061925F2AFA"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\11_batch_processing\\\\r2\\\\spark_structured_streaming.ipynb",
+    "size": 18309,
+    "sha256": "342AE11C6C3DBC3A6D4D8B9D6A2C4C5EDFDF40B2030ECDA49FF9D7E41F6C34EF"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\11_batch_processing\\\\r3\\\\batch_pipeline_end2end.ipynb",
+    "size": 10745,
+    "sha256": "51E47305F901DBCF8B04769C79325E1164F20D1D497C91CD9961D86146DD4B2D"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\12_orchestration\\\\r1\\\\airflow_intro.ipynb",
+    "size": 48865,
+    "sha256": "27E6CA4884B4BA763B13F0D8BE81A7BBEF574FB7CAA0007956C078D5455AFB82"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\12_orchestration\\\\r2\\\\airflow_dag_patterns.ipynb",
+    "size": 24106,
+    "sha256": "CB1B1C1ED088C5F86B15C42558E2A04CE556FBFAFC27AC8703B6312AD6E67118"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\12_orchestration\\\\r2\\\\airflow_production.ipynb",
+    "size": 27566,
+    "sha256": "D220E5E1527A6E9EA846F186D6F0815EE1D5C900484F86508C0BD2C8687AB9A5"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\12_orchestration\\\\r2\\\\airflow_vs_alternatives.ipynb",
+    "size": 25691,
+    "sha256": "7A165A13D6945FADB08B292CAB707D464CEEA13319F18CFE864A0F4331DE249B"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\\\r1\\\\databricks_intro.ipynb",
+    "size": 9117,
+    "sha256": "27DF1EC72AAE8668C71CB13E0DE97DEB4F67B6DE8F5D7535EFCF2B1367338582"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\\\r1\\\\feature_store_guide.ipynb",
+    "size": 15134,
+    "sha256": "F38D5DDDD00C28BF24F77F4DBD4D6D711589D759074D72FAD4ACAA32DE2609A5"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\\\r1\\\\mlflow_intro.ipynb",
+    "size": 39494,
+    "sha256": "164E8F675C9294B0D71B6DD5914FE2B79A60BA117974099DD3667E148F133D88"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\\\r2\\\\databricks_delta_lake.ipynb",
+    "size": 15149,
+    "sha256": "2C440671BD62122CCDF246EFEAF81886817F3E87EC9054CC650D2DC33200C6C3"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\\\r2\\\\lakehouse_formats.ipynb",
+    "size": 23387,
+    "sha256": "27BA7524E79DDB3E522C058B6F024378663D06DE6C80CDB6250679AB01C62043"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\\\r2\\\\mlflow_tracking.ipynb",
+    "size": 16178,
+    "sha256": "6F404BFF77BCB60E9F57D54E90565898CCBF72D0EC5CA4AFDE24DEA28513E5D2"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\\\r2\\\\unity_catalog.ipynb",
+    "size": 25836,
+    "sha256": "423163F7A2573361BD28875AFD475A61EE714F9E94DF51B61D7AED7924736C57"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\\\r2\\\\vertex_sagemaker_ml.ipynb",
+    "size": 20139,
+    "sha256": "75DC49E2DE3B21FE261687B99D26DAD2DB252BF7D1177452793327462E3BD3FF"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\Classical\\\\clustering_kmeans_dbscan.ipynb",
+    "size": 980,
+    "sha256": "E45732C13868A2A6D5D1043B7ED16E01F6DC1501DC4DD40E0F1733EDDC845573"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\Classical\\\\dimensionality_pca_umap.ipynb",
+    "size": 996,
+    "sha256": "7A79DD16AC26DD26769E78F8E5AB2A323A345820F0A232253E8A76CABB37BE2D"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\Classical\\\\evaluation_metrics_auc.ipynb",
+    "size": 1004,
+    "sha256": "9F50290FBC10BB4764091A4437D962966831E5B1924E3BD7B3AAD290FCAD5CB0"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\Classical\\\\feature_engineering_patterns.ipynb",
+    "size": 970,
+    "sha256": "1777DB54ED46D63E1985C274852CF3A2D67F61984F99BA4776322095475D16B6"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\Classical\\\\linear_logistic_regression.ipynb",
+    "size": 974,
+    "sha256": "CC29E0DBA8C8CFF651A303B972763960E03AAF6AF87FD8C4AD67C3C8CC42AF85"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\Classical\\\\README.md",
+    "size": 868,
+    "sha256": "03020A5438EE8C2D4C75C3789AE0E078A5C9C236080C29ED548968C289868B5D"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\Classical\\\\sklearn_pipeline_api.ipynb",
+    "size": 964,
+    "sha256": "1710ED24A798E21D4467593D64E3085083CB84562A906A919D35538CF4A1E260"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\Classical\\\\tree_ensemble_xgboost.ipynb",
+    "size": 990,
+    "sha256": "D8E888D042716040E093890BE9177912B64AE5BC25F7CB78B797809D7A28F40F"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\DeepLearning\\\\cnns_image_tabular.ipynb",
+    "size": 966,
+    "sha256": "57554DAE008E0EB8245E57D2DA11B71ACB8318785918EE2B13398DD4DEA832A0"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\DeepLearning\\\\embeddings_dense_vectors.ipynb",
+    "size": 970,
+    "sha256": "6794125BFE538C024845D7194ADB710D0B3AED6299AFF40A5EAD425FEA4F363D"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\DeepLearning\\\\neural_net_fundamentals.ipynb",
+    "size": 968,
+    "sha256": "B8BE3B23C3A61BF5EAC924F0D32B8F29B9528A4DE810513712A1E407043E3A3E"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\DeepLearning\\\\pytorch_basics.ipynb",
+    "size": 956,
+    "sha256": "1D08FD722441291C4088084873A01663C12BCEA602529738272A0DD8AC60A747"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\DeepLearning\\\\README.md",
+    "size": 854,
+    "sha256": "7E636689836E61D5457189505DAA49307999EE7C77DAC9C00A11F3E5FA8FC29E"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\DeepLearning\\\\rnns_lstms_sequence.ipynb",
+    "size": 986,
+    "sha256": "09D47258408588E1CF018BC976452FF81781F1F06C4B059AFB0D17547D838C4B"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\DeepLearning\\\\transfer_learning_finetuning.ipynb",
+    "size": 980,
+    "sha256": "D528505AAD7595370670A1B82B786D4AD58B685D67411E3DFBC0F33A25CF6747"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\DeepLearning\\\\transformers_attention_bert.ipynb",
+    "size": 984,
+    "sha256": "02A35A96BA82DEE4BF8B8A3975F27800116147E26E10F2667FDD2784BBD65F2D"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\GenAI_MLOps\\\\evaluation_ragas_benchmarks.ipynb",
+    "size": 984,
+    "sha256": "A8E8C063858AAF4A09C422C2D6AC97E415C8C7BF6E643B39BA38615B40645166"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\GenAI_MLOps\\\\feature_stores_feast_tecton.ipynb",
+    "size": 984,
+    "sha256": "572ABAAA6282FD25B4C0C88522C0CE1D851CEBA2C41A7E13EAE00779925868C3"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\GenAI_MLOps\\\\finetuning_lora_peft.ipynb",
+    "size": 972,
+    "sha256": "5AF80A1CE15EAFF18BD581D92040B696458C0010F88D9E2C039D982D4A01B341"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\GenAI_MLOps\\\\llm_internals_tokens_context.ipynb",
+    "size": 986,
+    "sha256": "9DB192639D033480CF90997464A09A9BBC03CAAB5F29C6678448E04F16E90B13"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\GenAI_MLOps\\\\mlflow_experiment_tracking.ipynb",
+    "size": 974,
+    "sha256": "8C67FA101C4964294138BFC757101AAD2950BFD4BEE506E57DF108B291ECCF11"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\GenAI_MLOps\\\\model_serving_ray_bentoml.ipynb",
+    "size": 980,
+    "sha256": "ADE40BF59622CD71B8D66D24E3E5B72038BCF5FED70E2E2488D4E8ADD27C1C9F"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\GenAI_MLOps\\\\prompt_engineering_patterns.ipynb",
+    "size": 968,
+    "sha256": "4D6DAAD43B5BE63F16D0068533483E64A48B9BC428022690DB4424E500DD6288"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\GenAI_MLOps\\\\rag_pipeline_design.ipynb",
+    "size": 952,
+    "sha256": "0B50D5CA0ED6792FEEAA54D9E02BE2D800A1ED542136264FD9ECE43929986F75"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\GenAI_MLOps\\\\README.md",
+    "size": 952,
+    "sha256": "993F343A96F6CC0EBD4D80EFDECCACCF6FD25D5EF008FBF792CF25D4C68C03F4"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\22_ml_platform\\ml_ai_pack\\README.md",
+    "size": 629,
+    "sha256": "546CE19292EF3E6982903BE7D4FDE05EE65AA5EBAD33CE158C29765E19E1C0E8"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\29_observability\\\\r1\\\\great_expectations_guide.ipynb",
+    "size": 28347,
+    "sha256": "C0969A3A521BB76B96FA92F3D6D9E8D82D8FBB7F5A506F43A62A62DF2B81597B"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\29_observability\\\\r1\\\\splunk_guide.ipynb",
+    "size": 26804,
+    "sha256": "D79D96DB9F03FCB74E147AF4F53CB1F62829BC4BF57430543F9A0113FCE3D8C8"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\29_observability\\\\r1\\\\splunk_intro.ipynb",
+    "size": 23339,
+    "sha256": "B54A89D89555CC336145D73B062754657182236EE57361C8AD24B29A354886D1"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\29_observability\\\\r2\\\\splunk_de_patterns.ipynb",
+    "size": 29604,
+    "sha256": "9E2E50400B34438B9A16A07EC61BA1F209C30DA7CE2B11D85D5A53F87E2E2038"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\29_observability\\\\r2\\\\splunk_vs_elk.ipynb",
+    "size": 23488,
+    "sha256": "1F5B788773C95D39CE71D28580CD0EBE87063A9F6BE154EA7C45DE5094B5FC8D"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r1\\\\aws_de_intro.ipynb",
+    "size": 29443,
+    "sha256": "D8375A7E293697BEF472AFF56D98DFBE8BC82BFD75B234618D9B022D0CB5A0A4"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r1\\\\azure_de_intro_recreated.ipynb",
+    "size": 16648,
+    "sha256": "D04943B89EB122F9D3FB7591E19945F2050B3AB3E44F3414A4AF589A8F0C5A67"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r1\\\\azure_de_intro.ipynb",
+    "size": 24416,
+    "sha256": "703081CE1A166300F171C0B29B944A6C0988E49DD32292EBBCB09901710EDE01"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r1\\\\cicd_data_intro.ipynb",
+    "size": 33479,
+    "sha256": "8D0C96265385C3355F02DD23EB0DBEB4B7B21D203FDEFFAA3C673331B5B4A5A0"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r1\\\\dbt_intro.ipynb",
+    "size": 28026,
+    "sha256": "89EFC14B4534EB6B2FF3946E2DB1F29087DA63184EB369B874AFED24C66BF8CD"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r1\\\\docker_k8s_intro.ipynb",
+    "size": 29519,
+    "sha256": "9477F639E53760D149DDE76307E797169F54D7F7993DB6D1AF6321E23DCCC567"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r1\\\\gcp_de_intro.ipynb",
+    "size": 23510,
+    "sha256": "4F558CBB3104AC4DC79EA506B81A99CDCCE806B10C47DEC198E56CBA46C8E9AC"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r1\\\\terraform_intro.ipynb",
+    "size": 25640,
+    "sha256": "B26ED0DF3BD56E3150D6E64502D78BB78E2448E0F3476DB23BA3A1705D933114"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\aws_glue_emr_athena.ipynb",
+    "size": 34006,
+    "sha256": "423DC36CC27961B5EEBF18842CB7D4E9FCB6FF82C9CCC815D91D1959EE93A48F"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\aws_kinesis_patterns.ipynb",
+    "size": 22399,
+    "sha256": "BAFD419601922865A829C43C38264C4DDD99ABC3ADAD54C923593DD874CCDD9E"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\aws_lake_formation.ipynb",
+    "size": 27994,
+    "sha256": "C900577B997A4AB0BF5235E8029AAA3DADB6C26BEF618D24683B8DE75732DEDF"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\azure_synapse_adf.ipynb",
+    "size": 32155,
+    "sha256": "7DC265C3DE1D21BF312F30FA9F7EF3ED90C384B23FD2D1CF243F6E4B89678053"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\dataops_patterns.ipynb",
+    "size": 25672,
+    "sha256": "6753EF90ACB4E5E283FE05D35875F4DCA74498A1CF5EC612A31996993359CAEE"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\dbt_advanced_patterns.ipynb",
+    "size": 18862,
+    "sha256": "FC9A04194C92E93F82A68B6600D0F3FAD88D474AB101B49D323A3C4660ED1F25"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\dbt_models_tests_lineage.ipynb",
+    "size": 22320,
+    "sha256": "C974218EC8B755F7A1C64A0DBCDA3CC08FC61C0F0506860DD0F9BADF206C70BE"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\docker_k8s_for_de.ipynb",
+    "size": 21742,
+    "sha256": "726B614648252563AA97B9D0162A4E8EA0A36CC6C16BD9BD46F8C8BC5CF576AF"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\gcp_dataflow_pubsub.ipynb",
+    "size": 20224,
+    "sha256": "0682A313E1F9CB5B414F94666AFFCB9EC32D447997488C28ABE9D5F84407E5C6"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\github_actions_de.ipynb",
+    "size": 27652,
+    "sha256": "9276E55A86E58F623A2EA3798FA24B50AFBDA88CE214479C54CA2D2A1517F7B5"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r2\\\\terraform_iac_basics.ipynb",
+    "size": 25243,
+    "sha256": "400551728C6A90095D7E48F2CAACC37F625CD5B2A6CE982F758EADC003FC7CE0"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r3\\\\modern_de_stack_2026.ipynb",
+    "size": 7447,
+    "sha256": "7440E1D9DE7D93EF636140C7B743E7F2C73DC304183CD692E4829FA3933D54F5"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r3\\\\platform_decision_matrix.ipynb",
+    "size": 7617,
+    "sha256": "F30692F1BA5D5F41C516E2D0D9070C5DDC16EEB679A4B0CDA6F2F5AA271589EF"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r3\\\\system_design_batch.ipynb",
+    "size": 8792,
+    "sha256": "FED175557077E9AD41FC83068345810B5BA05CACF876AB77EA0D3F6F45886422"
+  },
+  {
+    "path": "D:\\StudyBook\\tracks\\30_system_design\\\\r3\\\\system_design_streaming.ipynb",
+    "size": 7017,
+    "sha256": "4F37FDAA971190088667201491705B7E106B32C266C8B0DBDCECF5238D977DA8"
+  }
+]

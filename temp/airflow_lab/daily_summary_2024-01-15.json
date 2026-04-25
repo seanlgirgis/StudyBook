@@ -1,0 +1,15 @@
+{
+  "partition_date": "2024-01-15",
+  "total_orders": 4,
+  "total_revenue": 504.99,
+  "by_status": {
+    "delivered": {
+      "count": 3,
+      "avg": 153.33
+    },
+    "cancelled": {
+      "count": 1,
+      "avg": 45.0
+    }
+  }
+}

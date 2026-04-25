@@ -1,0 +1,37 @@
+[
+  {
+    "order_id": 1001,
+    "customer_id": 1,
+    "amount": 150.0,
+    "status": "delivered",
+    "date": "2024-01-15"
+  },
+  {
+    "order_id": 1002,
+    "customer_id": 2,
+    "amount": 89.99,
+    "status": "delivered",
+    "date": "2024-01-15"
+  },
+  {
+    "order_id": 1003,
+    "customer_id": 1,
+    "amount": null,
+    "status": "pending",
+    "date": "2024-01-15"
+  },
+  {
+    "order_id": 1004,
+    "customer_id": 3,
+    "amount": 220.0,
+    "status": "delivered",
+    "date": "2024-01-15"
+  },
+  {
+    "order_id": 1005,
+    "customer_id": 2,
+    "amount": 45.0,
+    "status": "cancelled",
+    "date": "2024-01-15"
+  }
+]
