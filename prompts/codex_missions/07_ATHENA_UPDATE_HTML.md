@@ -187,10 +187,12 @@ Also confirm:
 Encoding safety rule:
 - Save as UTF-8
 - Use HTML entities for non-ASCII display glyphs in page chrome text:
+  - back arrow in topnav: `&larr;` (do not use literal arrow glyph)
   - separator dot: `&middot;`
   - non-breaking space: `&nbsp;`
   - headphone emoji: `&#127911;`
   - clapper-board emoji: `&#127916;`
+- Use ASCII hyphen in read-time ranges (`25-35`) unless existing file intentionally uses a different style.
 
 ---
 

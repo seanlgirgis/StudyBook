@@ -68,7 +68,9 @@ Before HTML patch mission:
 When patching HTML:
 - Save as UTF-8.
 - Use entities for UI glyphs to avoid mojibake:
+  - topnav back arrow: `&larr;` (never literal arrow glyph)
   - `&middot;`, `&uarr;`, `&micro;`, `&#127911;`, `&#127916;`
+- Prefer ASCII hyphen for chrome text where possible (`25-35`, not en dash variants).
 - Verify corruption tokens are absent:
   - `�`, `Â`, `Ã`
 
@@ -97,4 +99,3 @@ For every new topic, follow this exact loop:
 4. Pause for your R2 upload confirmation.
 5. Execute mission 3.
 6. Report completion and wait for next topic.
-
