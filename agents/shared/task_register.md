@@ -234,3 +234,9 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260425-04 | Execute VPC audio pipeline from existing script and activate site link to aws-vpc.html | done | 2026-04-25 | Generated final_aws-vpc.mp3 in C:\temp\studybook_audio\aws-vpc and made VPC card clickable in learning-aws-security component |
 
 | TB-20260425-05 | Mark VPC card audio status as Live after R2 confirmation | done | 2026-04-25 | Updated learning-aws-security VPC card badge from Upload pending to Live |
+
+| TB-20260425-06 | Create provided-files master pipeline runbook for two-input execution mode | done | 2026-04-25 | Added Existing_work_pipeline_execution_provided_files_master.md for script+html pre-supplied flow |
+
+| TB-20260425-07 | Execute PostgreSQL provided-files pipeline and activate site linking | done | 2026-04-25 | Generated final_postgresql.mp3 and switched PostgreSQL card to clickable reference mode with upload-pending badge |
+
+| TB-20260425-08 | Mark PostgreSQL card audio status as Live after R2 confirmation | done | 2026-04-25 | Updated learning-databases PostgreSQL card badge from Upload pending to Live |

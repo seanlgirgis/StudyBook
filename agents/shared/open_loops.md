@@ -189,3 +189,9 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-124 | TB-20260425-04 | VPC audio generated and site card activated; waiting for R2 upload and live-audio status update | open | Upload final_aws-vpc.mp3 to R2 and then switch card status from Upload pending to Live | 2026-04-25 |
 
 | LOOP-124 | TB-20260425-04 | VPC audio generated and site card activated; waiting for R2 upload and live-audio status update | closed | none | 2026-04-25 |
+
+| LOOP-125 | TB-20260425-06 | Adopt provided-files execution master for future fast-path runs | open | Use new runbook when Sean provides both html and script files | 2026-04-25 |
+
+| LOOP-126 | TB-20260425-07 | PostgreSQL audio generated and page link activated; waiting for R2 upload confirmation | open | Upload final_postgresql.mp3 to R2 and then mark card badge Live | 2026-04-25 |
+
+| LOOP-126 | TB-20260425-07 | PostgreSQL audio generated and page link activated; waiting for R2 upload confirmation | closed | none | 2026-04-25 |
