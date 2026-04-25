@@ -215,3 +215,4 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-138 | TB-20260425-22 | Apache Kafka audio regenerated and card normalized to upload-pending active state | closed | none | 2026-04-25 |
 | LOOP-139 | TB-20260425-23 | Athena provided-files refresh executed and analytics card normalized to Live state | closed | none | 2026-04-25 |
 | LOOP-140 | TB-20260425-24 | EC2 provided-files refresh executed and compute card normalized to Live state | closed | none | 2026-04-25 |
+| LOOP-141 | TB-20260425-25 | ECS provided-files refresh executed and compute card normalized to Live state | closed | none | 2026-04-25 |
