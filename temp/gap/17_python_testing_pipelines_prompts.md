@@ -1,4 +1,4 @@
-﻿# Python Testing for Data Pipelines — ChatGPT Project Prompts
+# Python Testing for Data Pipelines — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — asked in every senior data engineering interview
 
@@ -11,28 +11,31 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: Python Testing for Data Pipelines
 Slug: python-testing-pipelines
-Extra coverage required: why testing data pipelines is harder than testing application code — non-determinism, external dependencies, large data volumes,
-pytest fundamentals — test discovery, assert statements, running with -v, -k, --tb=short,
-fixtures — what they are, scope (function/class/session), conftest.py, why they replace setUp/tearDown,
-parametrize — running the same test against multiple inputs, testing edge cases systematically,
-mocking — unittest.mock, patch, MagicMock — mocking database connections, S3 clients, API calls without hitting real services,
-testing ETL transformations — unit testing individual transform functions with small DataFrames,
-testing data quality logic — the validate_extract pattern, testing that bad data raises the right exception,
-testing enrichment joins — verifying coverage rates, testing fallback logic, asserting no silent nulls,
-integration tests vs unit tests — where the boundary sits for pipeline code,
-testing idempotency — running the same pipeline stage twice and asserting the output is identical,
-pytest-mock vs monkeypatch — when each is appropriate,
-fixtures for Pandas and PySpark — creating test DataFrames, SparkSession fixtures for PySpark tests,
-conftest.py patterns — shared fixtures for database connections, test data factories,
-coverage — pytest-cov, what 80% coverage means and what it doesn't mean,
-CI integration — running pytest in GitLab CI, failing the pipeline on test failure,
-real scenario: testing the hostname normalization logic and enrichment join coverage gate from the Citi pipeline.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- Why pipeline testing is harder than app testing — non-determinism in data, external dependencies (databases, S3, APIs), large volumes you can't load in a test
+- pytest fundamentals — test discovery (test_ prefix), plain assert statements, -v for verbose output, -k for filtering, --tb=short for readable failures
+- Fixtures — setup and teardown via @pytest.fixture; scope (function/class/module/session); conftest.py for sharing fixtures across test files
+- Parametrize — @pytest.mark.parametrize to run one test with multiple inputs; essential for covering edge cases without duplicating test code
+- Mocking — unittest.mock.patch to replace database connections, S3 clients, API calls with controlled fakes; MagicMock for return values
+- Testing ETL transformations — call the transform function directly with a small test DataFrame; assert output schema, row count, and specific cell values
+- Testing data quality logic — verify that bad input (nulls in join key, zero rows, wrong schema) raises the correct exception or returns the right flag
+- Testing enrichment joins — assert coverage rate is above threshold; assert no records are silently dropped; assert fallback logic fires correctly
+- Testing idempotency — run the same pipeline stage twice on the same input; assert output is identical both times; catches append-only bugs
+- Fixtures for PySpark — SparkSession fixture scoped to session; create test DataFrames with spark.createDataFrame; clean up after
+- pytest-mock and monkeypatch — monkeypatch for replacing env vars and file paths in tests; pytest-mock as a cleaner mock.patch interface
+- Coverage — pytest-cov; what 80% line coverage means and what it does not mean; branch coverage for conditional logic
+- CI integration — running pytest in GitLab CI as a required stage; failing the merge request if tests fail; coverage report as artifact
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug python-testing-pipelines -ChunkSize 750
 ```
@@ -51,10 +54,23 @@ Slug: python-testing-pipelines
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_python-testing-pipelines.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-Why Pipeline Testing Is Hard | pytest Fundamentals | Fixtures & Parametrize | Mocking External Dependencies | Testing ETL Transformations | Testing Data Quality Logic | Idempotency Tests | Coverage & CI Integration | PySpark Test Fixtures
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. Why Pipeline Testing Is Hard
+  2. pytest Fundamentals
+  3. Fixtures & Parametrize
+  4. Mocking — patch, MagicMock, monkeypatch
+  5. Testing ETL Transformations
+  6. Testing Data Quality & Enrichment Logic
+  7. Testing Idempotency
+  8. PySpark Test Fixtures
+  9. Coverage & CI Integration
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

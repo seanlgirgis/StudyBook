@@ -1,4 +1,4 @@
-﻿# Polars — ChatGPT Project Prompts
+# Polars — ChatGPT Project Prompts
 
 Priority: 🟠 Important — fast-growing Pandas alternative, used in HorizonScale Phase 1
 
@@ -11,28 +11,30 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: Polars for Data Engineers
 Slug: polars
-Extra coverage required: what Polars is — DataFrame library written in Rust, Apache Arrow memory model,
-why Polars is faster than Pandas — multi-threaded by default, lazy evaluation, SIMD, no Python GIL overhead,
-eager vs lazy API — DataFrame (eager, executes immediately) vs LazyFrame (lazy, builds a query plan),
-the lazy API pipeline — scan_parquet / scan_csv, filter, select, groupby, collect — why this pattern exists,
-query optimization — predicate pushdown, projection pushdown, slice pushdown — what Polars does automatically,
-Polars vs Pandas API differences — no index concept, method chaining is idiomatic, expressions instead of apply,
-expressions — pl.col(), pl.lit(), pl.when().then().otherwise() — the core building block,
-groupby and aggregations — group_by, agg, over (window expressions without groupby),
-joins — inner/left/outer, cross join, how to handle duplicate column names after join,
-reading and writing Parquet, CSV, JSON — scan_parquet for lazy, read_parquet for eager,
-string operations — the Polars str namespace, regex matching, splitting, replacing,
-datetime handling — the dt namespace, date_range, truncate, strftime,
-Polars and Arrow — to_arrow(), from_arrow(), zero-copy interop with DuckDB and PyArrow,
-Polars in a pipeline — replacing Pandas in an ETL script, what to rewrite vs keep,
-when Polars wins over Pandas — the scale and speed threshold,
-when to still use Pandas — ecosystem compatibility, libraries that expect Pandas DataFrames.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- What Polars is — a DataFrame library written in Rust using the Apache Arrow memory model; multi-threaded by default, no Python GIL overhead
+- Why it's faster than Pandas — parallel execution across all cores out of the box, lazy evaluation with query optimization, SIMD vectorized ops, zero-copy Arrow memory
+- Eager vs lazy API — DataFrame (eager, executes immediately) vs LazyFrame (lazy, builds a plan and optimizes before executing); always prefer lazy for pipelines
+- The lazy pipeline — scan_parquet / scan_csv, then chain filter/select/groupby, then .collect() to execute; what gets optimized automatically
+- Query optimization — predicate pushdown (filters applied before reading), projection pushdown (only requested columns read), slice pushdown; all automatic in lazy mode
+- Expressions — pl.col(), pl.lit(), pl.when().then().otherwise(); the building block of all transformations; replaces .apply() entirely
+- GroupBy and aggregations — group_by().agg(); over() for window expressions (like SQL window functions but without a separate window clause)
+- Joins — inner/left/outer/cross; how to handle duplicate column names with suffix parameter; join performance vs Pandas at scale
+- String and datetime namespaces — pl.col("x").str.contains(), .str.replace(), .dt.strftime(), .dt.truncate(); clean accessor syntax
+- Polars and Arrow — to_arrow() for zero-copy to PyArrow; from_arrow() back to Polars; direct DuckDB interop via Arrow
+- When Polars wins — single-machine workloads where Pandas is too slow; CSV/Parquet pipelines in the 1–50GB range
+- When to stay with Pandas — library ecosystem compatibility (sklearn, statsmodels expect Pandas); team familiarity; Pandas 2.0 with Arrow backend is competitive
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug polars -ChunkSize 750
 ```
@@ -51,10 +53,23 @@ Slug: polars
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_polars.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-What Polars Is & Why It's Fast | Eager vs Lazy API | Query Optimization | Expressions | GroupBy & Aggregations | Joins | String & Datetime Operations | Arrow Integration | Polars vs Pandas — When to Switch
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. What Polars Is & Why It's Faster Than Pandas
+  2. Eager vs Lazy API
+  3. Query Optimization — predicate, projection, slice pushdown
+  4. Expressions — the core building block
+  5. GroupBy, Aggregations & Window Functions
+  6. Joins & String / Datetime Operations
+  7. Arrow Integration & Interop
+  8. Polars vs Pandas — when to switch and when not to
+  9. Polars in a Data Pipeline
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

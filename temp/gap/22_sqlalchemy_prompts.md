@@ -1,4 +1,4 @@
-﻿# SQLAlchemy for Data Engineers — ChatGPT Project Prompts
+# SQLAlchemy for Data Engineers — ChatGPT Project Prompts
 
 Priority: 🟠 Important — the standard Python database abstraction layer, used in Citi pipeline
 
@@ -11,28 +11,31 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: SQLAlchemy for Data Engineers
 Slug: sqlalchemy
-Extra coverage required: what SQLAlchemy is — two layers: Core (SQL expression language) and ORM (object-relational mapper) — data engineers primarily use Core,
-engine and connection — create_engine, connection string formats for Oracle, SQL Server, PostgreSQL, SQLite,
-cx_Oracle and pyodbc — native drivers that SQLAlchemy wraps, when you need them installed separately,
-connection string patterns — dialect+driver://user:password@host:port/dbname — Oracle, SQL Server, PostgreSQL variants,
-connection pooling — why it matters for pipelines that run many queries, pool_size, max_overflow, pool_recycle,
-executing SQL — text(), conn.execute(), parameterized queries — never string-formatting SQL (SQL injection),
-reading results — fetchall, fetchmany, fetchone, CursorResult — mapping to dicts and DataFrames,
-pandas read_sql — using an engine directly with pd.read_sql_query() and pd.read_sql_table(),
-pandas to_sql — writing DataFrames to a database table, if_exists parameter (replace/append/fail), chunksize,
-transactions — conn.begin(), commit, rollback — when to use explicit transaction control in ETL,
-metadata and table reflection — Table, MetaData, autoload_with — inspecting existing database schemas,
-upsert patterns — INSERT OR REPLACE in SQLite, ON CONFLICT DO UPDATE in PostgreSQL, merge in Oracle,
-connection context manager — with engine.connect() as conn — ensuring connections are closed,
-environment variables for credentials — never hardcoding passwords, os.environ, .env files with python-dotenv,
-handling large result sets — server-side cursors, yield_per, streaming large Oracle query results,
-real scenario: extracting P95 telemetry from Oracle and enrichment data from SQL Server in the Citi pipeline.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- What SQLAlchemy is — two layers: Core (SQL expression language) and ORM (object-relational mapper); data engineers primarily use Core for query execution and connection management
+- Engine and connection — create_engine() is the entry point; connection string format: dialect+driver://user:password@host:port/dbname; engine is lazy, connection pool is managed automatically
+- Native drivers — cx_Oracle for Oracle, pyodbc for SQL Server, psycopg2 for PostgreSQL; SQLAlchemy wraps these; must be installed separately
+- Connection pooling — pool_size (persistent connections), max_overflow (burst connections), pool_recycle (prevents stale connections); critical for pipelines running many queries
+- Executing SQL safely — text() for parameterized queries; conn.execute(text("SELECT :val"), {"val": x}); never string-format SQL (SQL injection risk)
+- Reading results — fetchall(), fetchmany(n), fetchone(); CursorResult rows map to tuples or dicts; converting to DataFrames with pd.DataFrame(result)
+- pandas read_sql — pd.read_sql_query(sql, engine) reads directly into a DataFrame; pd.read_sql_table() for full table reads; engine is passed directly
+- pandas to_sql — df.to_sql(name, engine, if_exists='replace'|'append'|'fail', chunksize=1000); chunksize prevents OOM on large writes
+- Transactions — with conn.begin() as txn: groups multiple statements; explicit commit/rollback; essential for ETL stages that must succeed or fail atomically
+- Upsert patterns — INSERT ... ON CONFLICT DO UPDATE in PostgreSQL; MERGE in Oracle; SQLAlchemy Core dialect-specific constructs for each
+- Connection context manager — with engine.connect() as conn: ensures connection is always returned to pool; with engine.begin() also commits/rolls back automatically
+- Credentials from environment — never hardcode passwords; os.environ or python-dotenv; connection string assembled at runtime from env vars
+- Large result sets — server-side cursors with yield_per() for streaming Oracle queries without loading all rows into memory
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug sqlalchemy -ChunkSize 750
 ```
@@ -51,10 +54,23 @@ Slug: sqlalchemy
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_sqlalchemy.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-Engine & Connection | Connection Strings (Oracle / SQL Server / PostgreSQL) | Connection Pooling | Executing SQL Safely | Pandas Integration (read_sql & to_sql) | Transactions | Upsert Patterns | Secrets & Credentials | Large Result Sets
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. Core vs ORM — what data engineers actually use
+  2. Engine, Connection Strings & Native Drivers
+  3. Connection Pooling — sizing for pipelines
+  4. Executing SQL Safely — text() & parameterized queries
+  5. Reading Results & pandas read_sql
+  6. pandas to_sql — writing DataFrames to databases
+  7. Transactions & Context Managers
+  8. Upsert Patterns (PostgreSQL / Oracle / SQL Server)
+  9. Secrets, Credentials & Large Result Sets
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

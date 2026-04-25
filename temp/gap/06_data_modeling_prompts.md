@@ -1,4 +1,4 @@
-﻿# Data Modeling for Data Engineers — ChatGPT Project Prompts
+# Data Modeling for Data Engineers — ChatGPT Project Prompts
 
 Priority: 🟠 Important — Toyota gap #6
 
@@ -11,27 +11,30 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: Data Modeling for Data Engineers
 Slug: data-modeling
-Extra coverage required: why data modeling matters — how the wrong model makes every query slow and every report wrong,
-star schema — fact tables, dimension tables, foreign keys, denormalization for query performance,
-snowflake schema — normalized dimensions, when normalization helps vs hurts analytics,
-fact table types — transaction facts, periodic snapshot facts, accumulating snapshot facts,
-grain — what it means to define the grain of a fact table, and why getting it wrong is catastrophic,
-dimension table design — surrogate keys vs natural keys, conformed dimensions,
-Slowly Changing Dimensions — Type 1 overwrite, Type 2 full history with effective dates, Type 3 current+previous only,
-SCD Type 2 implementation — surrogate key pattern, is_current flag, valid_from and valid_to dates,
-One Big Table — when denormalizing everything into a single wide table is the right call,
-dimensional modeling for manufacturing — modeling production line events, machine telemetry, shift data,
-data vault — hubs, links, satellites — when it applies vs Kimball,
-wide vs narrow models — impact on query performance, storage, and downstream usability,
-data modeling for streaming — modeling events vs modeling state,
-common mistakes — fact-to-fact joins, missing grain definition, surrogate key misuse,
-dbt for data modeling — how dbt implements dimensional models in practice.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- Why data modeling matters — the wrong model makes every query slow and every report wrong; it is not a cosmetic choice
+- Star schema — fact tables, dimension tables, foreign keys; why denormalization exists and what it trades
+- Snowflake schema — normalized dimensions; when the extra joins are worth the storage savings
+- Fact table types — transaction facts (one row per event), periodic snapshot (one row per period), accumulating snapshot (one row per process lifecycle)
+- Grain — defining the grain of a fact table is the single most important decision; getting it wrong breaks downstream reports permanently
+- Dimension design — surrogate keys vs natural keys; conformed dimensions shared across fact tables
+- Slowly Changing Dimensions — Type 1 (overwrite, no history), Type 2 (new row per change with valid_from/valid_to), Type 3 (current and previous columns only)
+- SCD Type 2 implementation — surrogate key pattern, is_current flag, MERGE statement to detect changes
+- One Big Table — when fully denormalizing into a single wide table is the right call; the query performance vs flexibility tradeoff
+- Data vault — hubs (unique business keys), links (relationships), satellites (descriptive attributes); when it applies vs Kimball star schema
+- Modeling for streaming — events vs state; append-only event tables vs mutable state tables
+- Common mistakes — fact-to-fact joins (always wrong), missing grain definition, surrogate key misuse, late-arriving dimensions
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug data-modeling -ChunkSize 750
 ```
@@ -50,10 +53,23 @@ Slug: data-modeling
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_data-modeling.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-Why Modeling Matters | Star Schema | Snowflake Schema | Fact Table Types & Grain | Dimension Design & SCDs | One Big Table | Data Vault | Streaming & Event Modeling | Common Mistakes
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. Why Data Modeling Matters
+  2. Star Schema — facts, dimensions, grain
+  3. Snowflake Schema — when normalization helps
+  4. Fact Table Types — transaction, snapshot, accumulating
+  5. Dimension Design — surrogate keys, conformed dimensions
+  6. Slowly Changing Dimensions (Type 1, 2, 3)
+  7. One Big Table vs Normalized
+  8. Data Vault — hubs, links, satellites
+  9. Streaming & Event Modeling — events vs state
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

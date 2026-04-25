@@ -1,4 +1,4 @@
-﻿# Data Anonymization & PII Masking — ChatGPT Project Prompts
+# Data Anonymization & PII Masking — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — financial services, healthcare, and any regulated industry requires this
 
@@ -11,28 +11,31 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: Data Anonymization and PII Masking for Data Engineers
 Slug: data-anonymization-pii
-Extra coverage required: PII definition — what counts as personally identifiable information, direct identifiers vs quasi-identifiers,
-regulatory landscape — GDPR, CCPA, HIPAA, PCI-DSS — what each requires from a data engineering perspective,
-anonymization vs pseudonymization — the legal and technical distinction, why pseudonymization is not anonymization under GDPR,
-tokenization — replacing a sensitive value with a non-sensitive token, the token vault, reversible vs irreversible,
-masking strategies — full masking, partial masking (last 4 digits), format-preserving masking, consistent masking across tables,
-hashing for anonymization — SHA-256, salted hashing, why unsalted hashing of PII is not safe (rainbow tables),
-data generalization — reducing precision (exact age → age range, full ZIP → 3-digit ZIP) to reduce re-identification risk,
-k-anonymity — what it means for a record to be indistinguishable from k-1 others, the suppression trade-off,
-differential privacy — adding calibrated noise to aggregate queries, epsilon parameter, the trade-off between privacy and accuracy,
-PII in pipelines — detection (presidio, regex patterns), transformation at ingestion, not storing what you don't need,
-synthetic data as an alternative to anonymization — generating statistically realistic but entirely fake datasets,
-data classification — tagging columns as PII, sensitive, internal, public — the metadata governance layer,
-right to erasure (right to be forgotten) — the engineering challenge of deleting one person's data from a data lake,
-anonymization in dev and test environments — why you must never copy production PII to non-production, anonymized replicas,
-audit logging for PII access — who accessed what sensitive data when, compliance evidence,
-real scenario: handling server ownership and departmental data in the Citi pipeline — what's sensitive, what needs masking.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- PII definition — direct identifiers (name, SSN, email, phone) vs quasi-identifiers (age, ZIP, gender) that enable re-identification when combined
+- Regulatory landscape — GDPR (EU, right to erasure, explicit consent), CCPA (California consumer rights), HIPAA (PHI in healthcare), PCI-DSS (cardholder data); what each demands from pipelines
+- Anonymization vs pseudonymization — pseudonymization replaces identifiers with tokens but is reversible; anonymization is irreversible; GDPR treats them very differently
+- Tokenization — replace a sensitive value with a random token stored in a vault; reversible only with vault access; format-preserving tokenization keeps column format intact
+- Masking strategies — full masking (redact all), partial masking (show last 4 digits), format-preserving masking (fake SSN with valid format), consistent masking (same input → same output across tables)
+- Hashing for anonymization — SHA-256 of PII is not safe without a salt; rainbow table attacks; salted hashing with per-record salt makes reversal computationally infeasible
+- Data generalization — reduce precision to reduce re-identification risk: exact age → age range, full ZIP → 3-digit ZIP, timestamp → date; trades analytical value for privacy
+- k-anonymity — a record is k-anonymous if it is indistinguishable from at least k-1 other records on quasi-identifiers; suppression or generalization to achieve it
+- Differential privacy — add calibrated statistical noise to aggregate query results; epsilon controls privacy/accuracy trade-off; used in census data and ML training
+- PII detection in pipelines — Microsoft Presidio and regex patterns to scan incoming data; tag PII columns at ingestion; transform before storing, not after
+- Right to erasure — the engineering challenge: deleting one person's data from immutable Parquet partitions, Kafka topics, and backup snapshots; partition by user_id enables targeted deletes
+- Anonymization for dev/test environments — never copy production PII to non-production; generate anonymized replicas; synthetic data as an alternative
+- Audit logging for PII access — log who accessed which sensitive columns, when, and from which system; required for HIPAA and PCI compliance evidence
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug data-anonymization-pii -ChunkSize 750
 ```
@@ -51,10 +54,23 @@ Slug: data-anonymization-pii
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_data-anonymization-pii.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-PII Definition & Classification | Regulatory Landscape (GDPR / CCPA / HIPAA / PCI) | Anonymization vs Pseudonymization | Tokenization | Masking Strategies | Hashing for Anonymization | k-Anonymity & Differential Privacy | PII in Pipelines | Right to Erasure & Dev Environments
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. PII Definition — direct vs quasi-identifiers
+  2. Regulatory Landscape — GDPR, CCPA, HIPAA, PCI-DSS
+  3. Anonymization vs Pseudonymization
+  4. Tokenization & Masking Strategies
+  5. Hashing for Anonymization — salting & rainbow tables
+  6. Data Generalization & k-Anonymity
+  7. Differential Privacy
+  8. PII Detection & Transformation in Pipelines
+  9. Right to Erasure, Dev Environments & Audit Logging
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

@@ -1,4 +1,4 @@
-﻿# AWS Step Functions — ChatGPT Project Prompts
+# AWS Step Functions — ChatGPT Project Prompts
 
 Priority: 🟠 Important — Toyota gap #7
 
@@ -11,27 +11,31 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: AWS Step Functions
 Slug: aws-step-functions
-Extra coverage required: what Step Functions is — a serverless state machine orchestrator, not a scheduler,
-state machine concepts — states, transitions, input/output processing, state types,
-state types — Task, Choice, Parallel, Map, Wait, Pass, Succeed, Fail,
-Standard vs Express workflows — execution duration limits, pricing model, exactly-once vs at-least-once,
-Task state — integrating Lambda, ECS, Glue, EMR, DynamoDB, SQS, SNS, and 200+ AWS services,
-SDK integrations — optimistic vs pessimistic — calling AWS services directly without Lambda wrappers,
-error handling — Catch and Retry blocks, exponential backoff, ResultPath for error context,
-Map state — dynamic parallel processing of arrays — inline vs distributed mode for large datasets,
-Parallel state — fanning out to concurrent branches and waiting for all to complete,
-Choice state — branching logic based on input values without code,
-Step Functions for data pipelines — orchestrating Glue crawlers, Glue ETL jobs, EMR steps, ECS tasks,
-Step Functions vs Airflow — when to choose each for pipeline orchestration,
-Express Workflows for high-frequency event processing — IoT sensor pipelines,
-monitoring — execution history, CloudWatch metrics, X-Ray tracing,
-cost model — state transitions pricing, Standard vs Express math at scale.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- What Step Functions is — a serverless state machine orchestrator, not a scheduler; it coordinates services, not compute
+- State types — Task (calls a service), Choice (branching), Parallel (fan-out), Map (iterate over array), Wait, Pass, Succeed, Fail
+- Standard vs Express workflows — Standard: exactly-once, up to 1 year, audit history, priced per transition; Express: at-least-once, up to 5 min, high throughput, priced per execution duration
+- Task state integrations — Lambda, ECS, Glue, EMR, DynamoDB, SQS, SNS, and 200+ AWS services via SDK integrations
+- SDK integrations — optimistic (request-response) vs pessimistic (wait for task token) — how to call AWS services without a Lambda wrapper
+- Error handling — Catch and Retry blocks on every Task state; exponential backoff config; ResultPath to preserve original input alongside error context
+- Map state — dynamic parallel processing of an array input; inline mode vs distributed mode for datasets over 40MB
+- Parallel state — fan out to concurrent independent branches and wait for all to complete before continuing
+- Choice state — branching on input values using conditions; no code required, purely declarative
+- Data pipeline patterns — chaining Glue crawlers, Glue ETL jobs, EMR steps, ECS tasks in sequence with error handling
+- Step Functions vs Airflow — Step Functions wins for AWS-native event-driven workflows; Airflow wins for complex DAG dependencies and Python-heavy logic
+- Monitoring — execution history in console, CloudWatch metrics for execution counts and durations, X-Ray tracing for latency breakdown
+- Cost model — Standard: $0.025 per 1000 state transitions; Express: $1 per million executions plus duration; math matters at scale
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug aws-step-functions -ChunkSize 750
 ```
@@ -50,10 +54,23 @@ Slug: aws-step-functions
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-step-functions.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-What Step Functions Is | State Types | Standard vs Express Workflows | SDK Integrations | Error Handling | Map & Parallel States | Data Pipeline Patterns | Step Functions vs Airflow | Monitoring & Cost
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. What Step Functions Is — orchestrator, not scheduler
+  2. State Types — Task, Choice, Parallel, Map, Wait, Pass
+  3. Standard vs Express Workflows
+  4. SDK Integrations — calling AWS without Lambda
+  5. Error Handling — Catch, Retry, ResultPath
+  6. Map & Parallel States — fan-out patterns
+  7. Data Pipeline Orchestration Patterns
+  8. Step Functions vs Airflow — decision guide
+  9. Monitoring & Cost Model
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

@@ -1,4 +1,4 @@
-﻿# DuckDB — ChatGPT Project Prompts
+# DuckDB — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — hot in modern data stack, used in HorizonScale Phase 1
 
@@ -11,27 +11,31 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: DuckDB for Data Engineers
 Slug: duckdb
-Extra coverage required: what DuckDB is — in-process OLAP database, no server, runs inside Python or CLI,
-why DuckDB is fast — columnar execution, vectorized query engine, SIMD, parallel query within a process,
-DuckDB vs SQLite — both embedded, but SQLite is row-store OLTP, DuckDB is columnar OLAP — completely different use cases,
-DuckDB vs Pandas — SQL over DataFrames, reading Parquet directly from S3, zero-copy integration with Arrow,
-DuckDB vs Spark — when DuckDB on a single machine outperforms Spark on a cluster (sub-100GB datasets),
-reading Parquet files directly — SELECT * FROM read_parquet('path/*.parquet') with partition awareness,
-reading CSV and JSON — auto schema detection, handling malformed files,
-querying S3 directly — httpfs extension, AWS credential configuration, s3:// paths,
-Python API — duckdb.connect(), .execute(), .fetchdf(), .arrow(), .relation() API,
-window functions in DuckDB — LAG, LEAD, RANK, DENSE_RANK, ROW_NUMBER — the syntax and common patterns,
-writing results — COPY TO parquet, EXPORT DATABASE, writing to Pandas,
-in-memory vs persistent database — when to use each,
-DuckDB for data pipeline development — local development against S3 data, replacing a Spark dev environment,
-DuckDB in production — appropriate scale, limitations (single node, no distributed mode),
-real scenario: using DuckDB for risk detection queries across 8,000+ forecast series in HorizonScale.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- What DuckDB is — an in-process OLAP database; no server, no installation beyond pip install duckdb; runs inside Python or CLI
+- Why it's fast — columnar vectorized execution engine, SIMD instructions, parallel query within a single process, automatic predicate pushdown on Parquet
+- DuckDB vs SQLite — both embedded, zero server; SQLite is row-store OLTP (writes, small lookups), DuckDB is columnar OLAP (analytical aggregations); completely different use cases
+- DuckDB vs Pandas — DuckDB can query a Pandas DataFrame with SQL; avoids Python loops; zero-copy via Apache Arrow interchange
+- DuckDB vs Spark — on a single machine with <100GB, DuckDB is often faster than a local Spark cluster and requires zero infrastructure
+- Reading Parquet directly — SELECT * FROM read_parquet('path/*.parquet') with automatic schema detection and partition-aware filtering
+- Querying S3 — INSTALL httpfs; LOAD httpfs; SET s3_region; then read_parquet('s3://bucket/prefix/*.parquet') directly without downloading
+- Python API — duckdb.connect(), .execute(sql), .fetchdf() returns Pandas DataFrame, .arrow() returns PyArrow table, .relation() for lazy query building
+- Window functions — LAG, LEAD, RANK, DENSE_RANK, ROW_NUMBER with PARTITION BY and ORDER BY; identical syntax to PostgreSQL
+- Writing results — COPY (SELECT ...) TO 'output.parquet' (FORMAT PARQUET); INSERT INTO; EXPORT DATABASE for full database export
+- In-memory vs persistent — duckdb.connect() is in-memory (lost on exit); duckdb.connect('file.db') persists to disk
+- When DuckDB is the right tool — local development against S3 data, risk detection queries on forecast outputs, ad-hoc analytics on Parquet files
+- Limitations — single node only, no distributed mode; not a replacement for Spark at multi-TB scale or for concurrent write workloads
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug duckdb -ChunkSize 750
 ```
@@ -50,10 +54,23 @@ Slug: duckdb
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_duckdb.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-What DuckDB Is & Why It's Fast | DuckDB vs SQLite vs Pandas vs Spark | Reading Parquet & CSV | Querying S3 Directly | Python API | Window Functions | Writing Results | In-Memory vs Persistent | When to Use DuckDB
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. What DuckDB Is & Why It's Fast
+  2. DuckDB vs SQLite vs Pandas vs Spark
+  3. Reading Parquet & CSV Directly
+  4. Querying S3 with httpfs
+  5. Python API — connect, execute, fetchdf, arrow
+  6. Window Functions
+  7. Writing Results & In-Memory vs Persistent
+  8. When to Use DuckDB — and When Not To
+  9. Real-World Pipeline Patterns
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

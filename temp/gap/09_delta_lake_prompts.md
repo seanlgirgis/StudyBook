@@ -1,4 +1,4 @@
-﻿# Delta Lake — ChatGPT Project Prompts
+# Delta Lake — ChatGPT Project Prompts
 
 Priority: 🟡 Good to have — Toyota gap #9
 
@@ -11,27 +11,31 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: Delta Lake
 Slug: delta-lake
-Extra coverage required: what Delta Lake is — an open table format that adds ACID transactions to files on S3 or ADLS,
-the transaction log — _delta_log directory, JSON commit files, how it enables ACID on object storage,
-ACID on object storage — atomicity via log commits, isolation via snapshot reads, durability via S3,
-time travel — VERSION AS OF, TIMESTAMP AS OF — querying historical snapshots for audit and recovery,
-schema enforcement — Delta rejects writes that don't match the declared schema by default,
-schema evolution — mergeSchema option, column addition and renaming, evolving production tables safely,
-MERGE INTO — upsert pattern for CDC loads, matched vs not-matched clauses,
-OPTIMIZE — compacting small files into larger Parquet files for faster reads,
-Z-ORDER clustering — co-locating related data to improve filter pushdown on high-cardinality columns,
-VACUUM — removing old snapshot files, retention period, why you must keep retention >= time travel window,
-Delta vs Iceberg vs Hudi — the open table format comparison — ecosystem, features, AWS support,
-Delta Lake on AWS — using Delta with EMR, Glue, and Athena (via manifest or native support),
-Databricks and Delta — Delta Live Tables, Auto Loader for incremental S3 ingestion,
-Delta for manufacturing data — append-only sensor streams, merge for device state tables,
-cost and performance tradeoffs — small file problem, OPTIMIZE cadence, Z-ORDER column selection.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- What Delta Lake is — an open table format layered on Parquet files that adds ACID transactions to S3 or ADLS object storage
+- The transaction log — _delta_log directory of JSON commit files; every write appends a new entry; how this enables snapshot isolation
+- ACID on object storage — atomicity via atomic log commits, isolation via snapshot reads, durability via S3; what each means practically
+- Time travel — VERSION AS OF and TIMESTAMP AS OF; querying the table as it existed at any past commit; use cases: audit, rollback, debugging
+- Schema enforcement — Delta rejects writes that don't match the declared schema by default; prevents silent data corruption
+- Schema evolution — mergeSchema option to safely add new columns; column renaming and type changes and what's safe vs breaking
+- MERGE INTO — the primary pattern for CDC (change data capture) upserts; matched vs not-matched clauses; why idempotency matters here
+- OPTIMIZE — compacting many small Parquet files into fewer large ones; when to run it and how often
+- Z-ORDER clustering — co-locating rows with similar values on the same files; improves filter pushdown on high-cardinality columns; pick 1-2 columns max
+- VACUUM — removing old snapshot files beyond the retention threshold; why retention must be >= your time travel window; default 7 days
+- Delta vs Iceberg vs Hudi — ecosystem support, AWS native integration, Databricks vs open community; when each wins
+- Delta on AWS — using Delta with EMR, Glue 4.0 (native support), and Athena (via manifest files or native Delta support)
+- Databricks and Delta — Delta Live Tables for declarative pipeline authoring; Auto Loader for incremental S3 ingestion
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug delta-lake -ChunkSize 750
 ```
@@ -50,10 +54,23 @@ Slug: delta-lake
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_delta-lake.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-What Delta Lake Is | Transaction Log & ACID | Time Travel | Schema Enforcement & Evolution | MERGE INTO & CDC | OPTIMIZE & Z-ORDER | VACUUM | Delta vs Iceberg vs Hudi | Delta on AWS & Databricks
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. What Delta Lake Is — open table format on Parquet
+  2. The Transaction Log & ACID on Object Storage
+  3. Time Travel — VERSION AS OF, TIMESTAMP AS OF
+  4. Schema Enforcement & Evolution
+  5. MERGE INTO — CDC upsert pattern
+  6. OPTIMIZE & Z-ORDER
+  7. VACUUM — retention and time travel window
+  8. Delta vs Iceberg vs Hudi
+  9. Delta on AWS & Databricks
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

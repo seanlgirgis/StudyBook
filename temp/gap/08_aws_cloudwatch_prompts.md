@@ -1,4 +1,4 @@
-﻿# AWS CloudWatch & CloudTrail — ChatGPT Project Prompts
+# AWS CloudWatch & CloudTrail — ChatGPT Project Prompts
 
 Priority: 🟠 Important — Toyota gap #8
 
@@ -11,27 +11,32 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: AWS CloudWatch and CloudTrail
 Slug: aws-cloudwatch
-Extra coverage required: CloudWatch Metrics — namespaces, dimensions, standard vs high-resolution metrics, custom metrics,
-CloudWatch Alarms — static thresholds, anomaly detection, composite alarms, alarm actions,
-CloudWatch Logs — log groups, log streams, retention policies, structured logging best practices,
-CloudWatch Logs Insights — query syntax, common queries for pipeline debugging and error analysis,
-CloudWatch Dashboards — building operational views for pipeline health,
-metric math — creating derived metrics from raw CloudWatch data,
-EMF — Embedded Metric Format — logging metrics directly from Lambda and ECS without PutMetricData calls,
-CloudWatch Container Insights — task-level ECS and Kubernetes metrics,
-CloudWatch for data pipelines — monitoring Glue job duration, Kinesis iterator age, Lambda error rate, ECS CPU,
-setting meaningful SLO-based alarms — not just "CPU > 80%" but "consumer lag > 5 minutes",
-CloudTrail — what it records, management events vs data events vs Insights events,
-CloudTrail for security and compliance — who assumed which role, who deleted which S3 object,
-querying CloudTrail with Athena — finding specific API calls across a time window,
-CloudTrail Lake — managed CloudTrail query store without S3 and Athena setup,
-cost control — high-resolution metrics cost, data events cost, log ingestion pricing.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- CloudWatch Metrics — namespaces, dimensions, standard (1-min) vs high-resolution (1-sec) metrics, publishing custom metrics via PutMetricData
+- CloudWatch Alarms — static thresholds vs anomaly detection bands; composite alarms combining multiple conditions; alarm actions: SNS, Auto Scaling, EC2
+- CloudWatch Logs — log groups and log streams; retention policies (1 day to 10 years); why structured JSON logs are better than plain text
+- CloudWatch Logs Insights — query syntax: fields, filter, stats, sort, limit; common queries for finding pipeline errors and slow stages
+- CloudWatch Dashboards — building operational views for pipeline health; combining metrics from multiple services in one view
+- Metric math — creating derived metrics (e.g. error rate = errors / requests) from raw CloudWatch data without storing a new metric
+- EMF (Embedded Metric Format) — logging metrics as structured JSON from Lambda and ECS; avoids PutMetricData API calls and cost
+- Container Insights — task-level CPU, memory, and network metrics for ECS and Kubernetes; not enabled by default
+- Data pipeline monitoring patterns — Glue job duration and DPU usage, Kinesis IteratorAgeMilliseconds, Lambda error rate, ECS task failures
+- Meaningful alarm design — alarm on business-level SLOs ("consumer lag > 5 min") not just resource thresholds ("CPU > 80%")
+- CloudTrail — captures every AWS API call; management events (default) vs data events (S3 object access, Lambda invocations — extra cost)
+- CloudTrail for compliance — who assumed which IAM role, who deleted which S3 object, what changed in a security group
+- Querying CloudTrail with Athena — partition the trail logs in S3 by date; query with standard SQL for audit investigations
+- Cost control — high-resolution metrics cost 3x standard; data events in CloudTrail add up fast on busy S3 buckets; log ingestion pricing per GB
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug aws-cloudwatch -ChunkSize 750
 ```
@@ -50,10 +55,23 @@ Slug: aws-cloudwatch
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-cloudwatch.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-Metrics & Alarms | CloudWatch Logs | Logs Insights | Dashboards & Metric Math | EMF & Container Insights | Pipeline Monitoring Patterns | CloudTrail | Querying CloudTrail with Athena | Cost Control
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. Metrics — namespaces, dimensions, standard vs high-resolution
+  2. Alarms — static, anomaly detection, composite
+  3. CloudWatch Logs — groups, streams, retention
+  4. Logs Insights — query syntax and pipeline debugging patterns
+  5. Dashboards & Metric Math
+  6. EMF & Container Insights
+  7. Data Pipeline Monitoring Patterns
+  8. CloudTrail — API audit trail and compliance
+  9. Querying CloudTrail with Athena & Cost Control
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

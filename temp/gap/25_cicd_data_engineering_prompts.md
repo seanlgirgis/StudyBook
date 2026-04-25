@@ -1,4 +1,4 @@
-﻿# CI/CD for Data Engineering — ChatGPT Project Prompts
+# CI/CD for Data Engineering — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — every senior DE role expects CI/CD discipline on pipeline code
 
@@ -11,29 +11,32 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: CI/CD for Data Engineering
 Slug: cicd-data-engineering
-Extra coverage required: what CI/CD means for data pipelines — it's not just deploying code, it's validating data contracts, schemas, and logic before production,
-GitLab CI / GitHub Actions anatomy — .gitlab-ci.yml or .github/workflows, stages, jobs, runners,
-CI pipeline stages for a DE project — lint, unit test, integration test, schema validation, build artifact, deploy,
-linting Python pipeline code — flake8, black, ruff — enforcing style in CI so reviewers focus on logic not formatting,
-running pytest in CI — installing dependencies, running tests, failing the pipeline on test failure, coverage reports,
-environment variables and secrets in CI — CI/CD secret stores, never hardcoding credentials, injecting at runtime,
-testing database migrations in CI — running against a test database, validating schema changes don't break queries,
-dbt CI — dbt test, dbt compile, slim CI (running only modified models and their dependents), dbt docs generate,
-Airflow DAG validation in CI — checking DAGs load without errors, dag.test(), import validation before deploy,
-artifact management — building a Docker image in CI, pushing to ECR, tagging with git commit SHA,
-deployment strategies for data pipelines — blue/green, canary, rolling — what applies to scheduled pipelines vs streaming,
-environment promotion — dev → staging → production, what must pass in each environment before promotion,
-data pipeline versioning — semantic versioning for pipeline releases, pinning dependencies, reproducible builds,
-rollback strategy — what rolling back a pipeline means when data has already been written, idempotency enables rollback,
-infrastructure as code in the pipeline — Terraform plan in CI, Terraform apply gated on review approval,
-monitoring CI pipeline health — flaky tests, slow jobs, notification on pipeline failure to Slack or Teams,
-real scenario: GitLab CI/CD pipeline for the Citi ETL project — what runs on every merge request, what runs on merge to main.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- What CI/CD means for data pipelines — continuous integration validates code, schema, and data contracts on every commit; continuous delivery automates promotion to production
+- GitLab CI / GitHub Actions anatomy — .gitlab-ci.yml or .github/workflows; stages run sequentially; jobs within a stage run in parallel; runners execute on VMs or containers
+- CI stages for a DE project — lint → unit test → integration test → schema validation → build artifact → deploy; each stage gates the next
+- Linting Python pipeline code — flake8, black, ruff; enforcing style in CI so code review focuses on logic not formatting; fast to run, catches obvious errors early
+- Running pytest in CI — install dependencies from requirements.txt, run pytest --tb=short, fail the pipeline on any test failure, publish coverage report as artifact
+- Secrets in CI — CI/CD variable stores (GitLab CI variables, GitHub secrets); inject as environment variables at runtime; never appear in logs or artifacts
+- dbt CI — dbt test on modified models only (slim CI with --select state:modified+); dbt compile to validate SQL; dbt docs generate for updated lineage
+- Airflow DAG validation in CI — import each DAG file and check it loads without errors; dag.test() for logic validation; catches syntax errors before deployment
+- Docker image build in CI — docker build in CI, push tagged image (git SHA + branch) to ECR; downstream deploy step pulls the exact image SHA
+- Environment promotion — dev → staging → production; each environment requires all prior stage tests to pass; staging mirrors production data volume
+- Deployment strategies — blue/green (swap load balancer after validation), canary (route 5% of traffic to new version); rolling update for scheduled pipeline containers
+- Rollback strategy — idempotent pipelines enable safe reruns from any checkpoint; rollback means rerunning the previous pinned image version, not undoing data writes
+- Terraform in CI — terraform plan in CI produces a diff artifact for review; terraform apply runs only on merge to main with approval; prevents infrastructure drift
+- Monitoring CI health — alert on flaky tests (intermittent failures), slow jobs that block developers, pipeline failure notifications to Slack or Teams
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug cicd-data-engineering -ChunkSize 750
 ```
@@ -52,10 +55,23 @@ Slug: cicd-data-engineering
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_cicd-data-engineering.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-What CI/CD Means for Data Pipelines | GitLab CI Anatomy | Lint & Test Stage | dbt CI & Airflow DAG Validation | Artifact Management (Docker / ECR) | Deployment Strategies | Environment Promotion | Rollback Strategy | IaC in CI
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. What CI/CD Means for Data Pipelines
+  2. GitLab CI / GitHub Actions Anatomy
+  3. CI Stage Pipeline — lint, test, build, deploy
+  4. Secrets Management in CI
+  5. dbt CI & Airflow DAG Validation
+  6. Docker Build & ECR Artifact Management
+  7. Environment Promotion — dev → staging → production
+  8. Deployment Strategies & Rollback
+  9. Terraform in CI & Monitoring Pipeline Health
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

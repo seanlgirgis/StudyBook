@@ -1,4 +1,4 @@
-﻿# Encryption for Data Engineers — ChatGPT Project Prompts
+# Encryption for Data Engineers — ChatGPT Project Prompts
 
 Priority: 🔴 Critical — financial services, cloud storage, and compliance all require this knowledge
 
@@ -11,28 +11,32 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: Encryption for Data Engineers
 Slug: encryption-data-engineering
-Extra coverage required: encryption fundamentals — symmetric vs asymmetric encryption, the distinction and when each applies,
-encryption at rest vs encryption in transit — two separate concerns that must both be addressed,
-TLS — what it is, how it works for data in transit, why HTTP is never acceptable for data pipelines,
-S3 encryption — SSE-S3 (Amazon managed keys), SSE-KMS (customer managed keys via KMS), SSE-C (customer-provided keys) — which to choose and why,
-AWS KMS — Customer Master Keys, key policies, key rotation, envelope encryption pattern — how KMS encrypts the data key not the data directly,
-envelope encryption — the pattern: generate a data key from KMS, encrypt data with the data key locally, encrypt the data key with KMS, store both,
-database encryption at rest — Oracle TDE, SQL Server TDE, RDS encryption — what's covered and what isn't,
-field-level encryption — encrypting specific columns (SSN, account number) rather than the entire database, application-layer vs database-layer,
-Python cryptography library — Fernet symmetric encryption, generating keys, encrypting and decrypting bytes,
-hashing vs encryption — hashing is one-way (for passwords, deduplication, checksums), encryption is reversible (for data that must be retrieved),
-secrets management — AWS Secrets Manager vs Parameter Store vs environment variables vs .env files — the right tool for each use case,
-key rotation — rotating encryption keys without decrypting and re-encrypting all data, the data key vs master key pattern,
-data in motion — encrypting files before uploading to S3, PGP for file exchange with external partners,
-certificate management — TLS certificates for internal services, ACM, certificate renewal automation,
-compliance requirements — what PCI-DSS requires for cardholder data encryption, what HIPAA requires, what GDPR says about encryption,
-real scenario: encrypting sensitive endpoint ownership data in the Citi pipeline — field-level masking vs full dataset encryption.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- Symmetric vs asymmetric encryption — symmetric uses one key (AES-256) for bulk data; asymmetric uses a key pair (RSA/ECC) for key exchange and signatures; data engineers mostly deal with symmetric
+- Encryption at rest vs in transit — two separate concerns: at-rest protects stored data if storage is compromised; in-transit protects data moving over networks; both must be addressed
+- TLS — Transport Layer Security for data in transit; certificate-based handshake; TLS 1.2 minimum, TLS 1.3 preferred; HTTP is never acceptable for pipelines handling sensitive data
+- S3 encryption options — SSE-S3 (AWS manages keys, enabled by default), SSE-KMS (customer-managed keys via KMS, audit trail), SSE-C (you provide the key per request); when to choose each
+- AWS KMS — Customer Master Keys (CMKs) / KMS keys; key policies control access; automatic annual rotation; KMS encrypts data keys, not data directly
+- Envelope encryption — generate a data key from KMS, encrypt data locally with data key (fast AES), encrypt the data key with KMS master key, store both alongside the data; the standard cloud pattern
+- Database encryption at rest — Oracle TDE, SQL Server TDE, RDS storage encryption; covers data files and backups; does not protect against a compromised application with valid credentials
+- Field-level encryption — encrypt specific columns (SSN, account number) at application layer before writing to database; only the application with the decryption key can read plaintext
+- Python cryptography library — Fernet symmetric encryption (AES-128-CBC + HMAC); generate_key(), Fernet(key).encrypt(bytes), .decrypt(token); straightforward for pipeline use
+- Hashing vs encryption — hashing is one-way (SHA-256 for checksums, bcrypt for passwords); encryption is reversible with the correct key; never use hashing where you need to retrieve the original value
+- Secrets management — AWS Secrets Manager for credentials with automatic rotation; Parameter Store for config values; never store secrets in environment variable files committed to git
+- Key rotation — rotating master keys without re-encrypting all data: re-encrypt only the data keys; the envelope encryption pattern makes rotation cheap
+- PGP for file exchange — encrypting files before S3 upload for partner data exchange; gnupg library in Python; the standard for B2B file transfer with external organizations
+- Compliance requirements — PCI-DSS requires encryption of cardholder data at rest and in transit; HIPAA requires encryption of PHI; GDPR treats encrypted data as lower-risk for breach notification
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug encryption-data-engineering -ChunkSize 750
 ```
@@ -51,10 +55,23 @@ Slug: encryption-data-engineering
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_encryption-data-engineering.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-Symmetric vs Asymmetric | Encryption at Rest vs In Transit | S3 Encryption (SSE-S3 / SSE-KMS / SSE-C) | AWS KMS & Envelope Encryption | Field-Level Encryption | Python cryptography Library | Hashing vs Encryption | Secrets Management | Compliance Requirements
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. Symmetric vs Asymmetric — the decision rule
+  2. Encryption at Rest vs In Transit
+  3. S3 Encryption — SSE-S3, SSE-KMS, SSE-C
+  4. AWS KMS & Envelope Encryption
+  5. Database Encryption — TDE & RDS
+  6. Field-Level Encryption
+  7. Python cryptography Library — Fernet
+  8. Hashing vs Encryption
+  9. Secrets Management, Key Rotation & Compliance
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 

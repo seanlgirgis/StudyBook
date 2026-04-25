@@ -1,4 +1,4 @@
-﻿# AWS EMR — ChatGPT Project Prompts
+# AWS EMR — ChatGPT Project Prompts
 
 Priority: 🟡 Good to have — Toyota gap #10
 
@@ -11,27 +11,31 @@ Paste into ChatGPT Project 1 (Audio Script Writer).
 ```
 Topic: AWS EMR
 Slug: aws-emr
-Extra coverage required: what EMR is — managed Hadoop and Spark on EC2, the control plane for big data jobs,
-EMR cluster anatomy — master node, core nodes, task nodes — roles and failure behavior,
-EMR on EC2 vs EMR Serverless vs EMR on EKS — when to choose each and the cost model differences,
-EMR Serverless — no cluster management, auto-scaling, pay-per-vCPU-second, cold start tradeoff,
-instance fleet vs instance group — spot diversification strategy to reduce interruption risk,
-Spot instances on EMR — cost savings of 60-90%, handling spot interruption gracefully,
-bootstrap actions — installing Python packages, configuring Hadoop properties at cluster launch,
-EMR steps — submitting Spark jobs as steps, step concurrency, step failure handling,
-EMRFS — the S3-compatible filesystem layer, consistency view, how it differs from HDFS,
-EMR and the Glue Data Catalog — using Glue as the shared Hive metastore for EMR Spark jobs,
-performance tuning on EMR — instance type selection, dynamic allocation, YARN memory settings,
-EMR vs Glue — the real tradeoffs — control, flexibility, cost at scale, startup time,
-EMR for large-scale manufacturing data — processing terabytes of historical sensor data with PySpark,
-cost optimization — right-sizing clusters, auto-termination, reserved instances for persistent clusters,
-monitoring — CloudWatch EMR metrics, Spark History Server, YARN Resource Manager UI.
 
-SCOPE FENCE: Target 12-16 HOST/SEAN exchanges total. Each bullet above = at most
-one exchange. SEAN answers: 3-5 sentences maximum, no monologues. If the bullet list
-has more items than exchanges, merge the least distinct ones. Do not elaborate into
-a textbook - this feeds a reference audio script, not a lecture series.
-```\r\n\r\nRun pipeline after saving the script:
+Extra coverage required:
+- What EMR is — managed Hadoop and Spark on EC2; AWS handles cluster provisioning, Hadoop config, and patching
+- Cluster anatomy — primary node (driver, YARN ResourceManager), core nodes (HDFS + executors), task nodes (executors only, no HDFS, safe to lose)
+- EMR on EC2 vs EMR Serverless vs EMR on EKS — persistent cluster vs auto-scaling serverless vs Kubernetes-based; cost and control tradeoffs
+- EMR Serverless — no cluster management, auto-scaling vCPUs and memory, pay-per-second, cold start adds ~1 min to first job
+- Instance fleet vs instance group — fleet uses multiple instance types for Spot diversification; group locks to one type, simpler but higher interruption risk
+- Spot instances on EMR — 60–90% cost savings; task nodes are the safest Spot target; graceful decommission handles interruptions
+- Bootstrap actions — shell scripts that run on every node at launch; used to install Python packages, set Hadoop properties, configure logging
+- EMR steps — submitting Spark jobs as managed steps; step concurrency up to 256; step failure modes: CONTINUE vs TERMINATE_CLUSTER
+- EMRFS — the S3-compatible filesystem for EMR; replaces HDFS for persistent storage; consistent view handles S3 eventual consistency
+- EMR and Glue Data Catalog — using Glue as the shared Hive metastore; tables defined once, queryable from EMR, Athena, and Glue ETL jobs
+- Performance tuning — right-sizing instance types, YARN memory vs executor memory, dynamic allocation, spark.sql.shuffle.partitions
+- EMR vs Glue — EMR: full control, longer startup, lower cost at scale; Glue: managed, faster to start, higher cost per DPU, 2.5 DPU minimum
+- Cost optimization — auto-termination after idle time, Reserved Instances for persistent clusters, Spot for task nodes, S3 instead of HDFS
+
+SCOPE FENCE:
+- Target 12–16 HOST/SEAN exchanges total
+- Each bullet = at most one exchange
+- SEAN answers: 3–5 sentences max, no monologues
+- Merge the least distinct bullets if the list runs long
+- Do NOT elaborate into a textbook — this feeds a reference audio script
+```
+
+Run pipeline after saving the script:
 ```
 run_mission_audio.ps1 -Slug aws-emr -ChunkSize 750
 ```
@@ -50,10 +54,23 @@ Slug: aws-emr
 Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-emr.mp3
 Today's date: 2026-04-25
 
-Content sections — create exactly these, in this order:
-What EMR Is | Cluster Anatomy | EMR Variants (EC2 / Serverless / EKS) | Instance Fleets & Spot | Bootstrap Actions & Steps | EMRFS & Glue Catalog | Performance Tuning | EMR vs Glue | Cost Optimization
-Then add: Interview Q&A (6 pairs) | Quick Reference (12-15 rows)
-Size per section: 2-3 tight paragraphs, one code block max (20 lines). No tutorials.
+SCOPE FENCE:
+- Create exactly these sections, in this order:
+  1. What EMR Is — managed Hadoop/Spark on EC2
+  2. Cluster Anatomy — primary, core, task nodes
+  3. EMR Variants — EC2 vs Serverless vs EKS
+  4. Instance Fleets & Spot Strategy
+  5. Bootstrap Actions & EMR Steps
+  6. EMRFS & Glue Data Catalog Integration
+  7. Performance Tuning
+  8. EMR vs Glue — decision guide
+  9. Cost Optimization
+  10. Interview Q&A — 6 realistic senior-level pairs
+  11. Quick Reference — 12–15 rows
+- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- No step-by-step tutorials, no full worked examples
+- Cheat sheet rows must each earn their place — no padding
+
 Generate the complete HTML page.
 ```
 
