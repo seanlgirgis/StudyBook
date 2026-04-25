@@ -244,3 +244,7 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260425-09 | Execute DynamoDB provided-files pipeline and activate site linking | done | 2026-04-25 | Generated final_aws-dynamodb.mp3 and added clickable DynamoDB card in learning-aws-analytics with upload-pending badge |
 
 | TB-20260425-10 | Mark DynamoDB card audio status as Live after R2 confirmation | done | 2026-04-25 | Updated learning-aws-analytics DynamoDB badge from Upload pending to Live |
+
+| TB-20260425-11 | Execute Terraform provided-files pipeline and activate site linking | done | 2026-04-25 | Generated final_terraform.mp3 and switched Terraform card in learning-devops to clickable reference mode with upload-pending badge |
+
+| TB-20260425-12 | Mark Terraform card audio status as Live after R2 confirmation | done | 2026-04-25 | Updated learning-devops Terraform badge from Upload pending to Live |

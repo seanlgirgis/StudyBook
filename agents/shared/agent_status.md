@@ -2,37 +2,48 @@
 
 ## Current Run (2026-04-25)
 
-**Task ID:** TB-20260425-10  
-**Task Type:** FIX  
-**Goal:** Finalize DynamoDB publish state after user-confirmed live R2 audio URL.
+**Task ID:** TB-20260425-11  
+**Task Type:** ENHANCEMENT  
+**Goal:** Execute Terraform provided-files pipeline using existing script and activate site linking.
 
 ### Factual Summary
 
-- User provided live URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-dynamodb.mp3`.
-- Confirmed `learning/aws-dynamodb.html` points to `final_aws-dynamodb.mp3` with `audio/mpeg`.
-- Updated DynamoDB card status in:
-  - `temp/seanlgirgis.github.io/components/learning-aws-analytics.html`
-- Badge changed from:
-  - `🎧 ○ Upload pending`
-  to:
-  - `🎧 ● Live` (green live indicator)
+- Verified provided files exist:
+  - `temp/jobsearch/data/interview_prep/audio_prep/AWS_Terraform/audio_script_terraform.md`
+  - `temp/seanlgirgis.github.io/learning/terraform.html`
+- Ran audio pipeline from existing script:
+  - `.\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\AWS_Terraform\audio_script_terraform.md" -ChunkSize 750 -RequestTimeoutSeconds 120`
+- Pipeline output:
+  - clips: `C:\temp\studybook_audio\terraform\audio_clips` (57 files)
+  - final: `C:\temp\studybook_audio\terraform\final_terraform.mp3`
+  - size: `13,357,197` bytes
+  - duration: `1421.560` sec
+  - upload guide: `C:\temp\studybook_audio\terraform\UPLOAD_INSTRUCTIONS.md`
+- Activated Terraform card in:
+  - `temp/seanlgirgis.github.io/components/learning-devops.html`
+  - card is now clickable to `learning/terraform.html`
+  - added Open Reference CTA
+  - badge currently set to `🎧 ○ Upload pending`
 
 ### Files Modified
 
-- `temp/seanlgirgis.github.io/components/learning-aws-analytics.html`
+- `temp/seanlgirgis.github.io/components/learning-devops.html`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
 - `agents/shared/agent_status.md`
 
 ### Validation
 
-- DynamoDB card remains clickable to `learning/aws-dynamodb.html`.
-- No `Upload pending` remains on DynamoDB card.
-- Live badge is present.
+- `Test-Path C:\temp\studybook_audio\terraform\final_terraform.mp3` => True
+- `Get-Item` confirms final file metadata
+- repo cleanliness guard found no terraform mp3/m4a/filelist in repo audio_prep path
+- component contains active terraform link + onclick and upload-pending badge
+- page `learning/terraform.html` already references `final_terraform.mp3` with `audio/mpeg`
 
 ### Next Step
 
-- Hard refresh `/#learning-aws-analytics` to confirm live badge rendering.
+- Upload `C:\temp\studybook_audio\terraform\final_terraform.mp3` to R2.
+- Share live URL, then update Terraform card badge from Upload pending to Live.
 
 ---
 
