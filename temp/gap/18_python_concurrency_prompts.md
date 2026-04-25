@@ -66,7 +66,7 @@ SCOPE FENCE:
   9. When to Move to Spark
   10. Interview Q&A — 6 realistic senior-level pairs
   11. Quick Reference — 12–15 rows
-- Per section: 2–3 tight paragraphs, one code block max (20 lines)
+- Per section: 2–3 tight paragraphs; include a code block where it adds value (20 lines max)
 - No step-by-step tutorials, no full worked examples
 - Cheat sheet rows must each earn their place — no padding
 
