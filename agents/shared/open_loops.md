@@ -169,3 +169,4 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-114 | TB-20260424-07 | Execute AWS Glue existing-work pipeline (Mission 08/09/10) and lock in entity-safe HTML mission rules | closed | none | 2026-04-24 |
 | LOOP-115 | TB-20260424-08 | Execute Redshift existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
 | LOOP-116 | TB-20260424-09 | Execute Lambda existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
+| LOOP-117 | TB-20260424-10 | Execute S3 existing-work pipeline and publish mission triplet for reuse | closed | none | 2026-04-24 |
