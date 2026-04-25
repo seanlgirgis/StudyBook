@@ -213,3 +213,4 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-136 | TB-20260425-20 | AWS CloudFormation audio generated and card activated; waiting for R2 upload confirmation to mark badge Live | closed | none | 2026-04-25 |
 | LOOP-137 | TB-20260425-21 | AWS Bedrock audio generated and card activated; waiting for R2 upload confirmation to mark badge Live | closed | none | 2026-04-25 |
 | LOOP-138 | TB-20260425-22 | Apache Kafka audio regenerated and card normalized to upload-pending active state | closed | none | 2026-04-25 |
+| LOOP-139 | TB-20260425-23 | Athena provided-files refresh executed and analytics card normalized to Live state | closed | none | 2026-04-25 |
