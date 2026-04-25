@@ -208,3 +208,4 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-131 | TB-20260425-15 | Add machine-local OPENAI key fallback to avoid env bootstrap stalls when DPAPI decrypt fails | closed | none | 2026-04-25 |
 | LOOP-132 | TB-20260425-16 | Add deterministic OPENAI key fallback file loading in env bootstrap and runner skip logic | closed | none | 2026-04-25 |
 | LOOP-133 | TB-20260425-17 | FastAPI audio generated and card activated; waiting for R2 upload confirmation to mark badge Live | closed | none | 2026-04-25 |
+| LOOP-134 | TB-20260425-18 | CI/CD+ECS audio generated and card activated; waiting for R2 upload confirmation to mark badge Live | closed | none | 2026-04-25 |
