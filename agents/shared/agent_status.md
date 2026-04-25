@@ -2,21 +2,19 @@
 
 ## Current Run (2026-04-25)
 
-**Task ID:** TB-20260425-03  
+**Task ID:** TB-20260425-05  
 **Task Type:** FIX  
-**Goal:** Fix IAM card on Learning AWS Security page so it is clickable and opens IAM reference page.
+**Goal:** Finalize VPC publish state after user-confirmed live R2 audio URL.
 
 ### Factual Summary
 
-- Located source component for the rendered page card:
+- User provided live VPC URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-vpc.mp3`.
+- Verified `aws-vpc.html` already references the same live URL and `audio/mpeg`.
+- Updated VPC card status in:
   - `temp/seanlgirgis.github.io/components/learning-aws-security.html`
-- Root cause found: IAM card was still marked planned and had no link.
-- Applied fix:
-  - changed IAM title to anchor link: `learning/aws-iam.html`
-  - added "Open Reference" CTA link to `learning/aws-iam.html`
-  - added full-card click behavior:
-    - `onclick="window.location.href='learning/aws-iam.html'"`
-    - `style="cursor:pointer;"`
+- Change made:
+  - from `Upload pending`
+  - to `🎧 ● Live` (green live badge), preserving `🎬 ○ N/A`
 
 ### Files Modified
 
@@ -27,21 +25,13 @@
 
 ### Validation
 
-- Verified both href occurrences point to `learning/aws-iam.html`.
-- Verified planned marker removed from IAM card only; other planned cards unchanged.
-
-### Assumptions
-
-- User expected the full IAM card area to be clickable, not only text-level anchors.
-
-### Risks
-
-- Low: browser may show cached component until hard refresh.
+- Confirmed VPC card remains clickable to `learning/aws-vpc.html`.
+- Confirmed no `Upload pending` remains for VPC card.
+- Confirmed live badges present for both IAM and VPC cards.
 
 ### Next Step
 
-- Hard refresh `/#learning-aws-security` and click IAM card area.
-- If behavior is correct, proceed to next mission topic.
+- Hard refresh `/#learning-aws-security` and verify VPC card displays live status and opens `learning/aws-vpc.html`.
 
 ---
 

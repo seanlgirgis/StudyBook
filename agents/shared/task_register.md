@@ -230,3 +230,7 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260425-02 | Mission 27: generate new aws-iam.html page with live R2 audio URL | done | 2026-04-25 | Created aws-iam.html with EC2 CSS parity, IAM sections s1-s13, QA, cheat sheet, and encoding-safe entities |
 
 | TB-20260425-03 | Fix non-clickable IAM card in learning-aws-security component | done | 2026-04-25 | Updated IAM card to live link and full-card click navigation to learning/aws-iam.html |
+
+| TB-20260425-04 | Execute VPC audio pipeline from existing script and activate site link to aws-vpc.html | done | 2026-04-25 | Generated final_aws-vpc.mp3 in C:\temp\studybook_audio\aws-vpc and made VPC card clickable in learning-aws-security component |
+
+| TB-20260425-05 | Mark VPC card audio status as Live after R2 confirmation | done | 2026-04-25 | Updated learning-aws-security VPC card badge from Upload pending to Live |

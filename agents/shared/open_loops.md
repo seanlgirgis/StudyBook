@@ -185,3 +185,7 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-122 | TB-20260425-02 | AWS IAM page generated from Mission 27 and ready for browser QA | closed | none | 2026-04-25 |
 
 | LOOP-123 | TB-20260425-03 | Verify IAM card click-through behavior on Learning AWS Security page | open | Hard refresh the page and confirm click from card opens learning/aws-iam.html | 2026-04-25 |
+
+| LOOP-124 | TB-20260425-04 | VPC audio generated and site card activated; waiting for R2 upload and live-audio status update | open | Upload final_aws-vpc.mp3 to R2 and then switch card status from Upload pending to Live | 2026-04-25 |
+
+| LOOP-124 | TB-20260425-04 | VPC audio generated and site card activated; waiting for R2 upload and live-audio status update | closed | none | 2026-04-25 |
