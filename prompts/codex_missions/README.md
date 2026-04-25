@@ -37,6 +37,20 @@ One mission per Codex session where possible. Never combine missions.
 
 ---
 
+## AUDIO EXECUTION STANDARD (DO NOT DEVIATE)
+
+- Use `scripts\run_mission_audio.ps1` for mission audio generation and stitching.
+- Keep generated audio artifacts OUTSIDE repo under:
+  - `C:\temp\studybook_audio\<slug>\audio_clips\`
+  - `C:\temp\studybook_audio\<slug>\final_<slug>.mp3`
+  - `C:\temp\studybook_audio\<slug>\UPLOAD_INSTRUCTIONS.md`
+- Keep only source scripts in repo under:
+  - `temp\jobsearch\data\interview_prep\audio_prep\<slug>\audio_script_<slug>.md`
+- Runner behavior is fail-fast (non-zero exit on generation/stitch failures).
+- Default chunk target is `750` chars with natural sentence-boundary splits.
+
+---
+
 ## PHASE 0 — ONE-TIME SETUP
 
 | Mission | File | Action | Output |
@@ -63,15 +77,15 @@ Pattern per topic: **02-style** (generate script) → **03-style** (run pipeline
 
 ### Remaining Files (mission files created after EC2 test passes)
 
-| Topic | Script | Pipeline | HTML | Audio exists? |
-|-------|--------|----------|------|--------------|
-| aws-athena | 05 | 06 | 07 | YES — replace |
-| aws-glue | 08 | 09 | 10 | YES — replace |
-| aws-redshift | 11 | 12 | 13 | YES — replace |
-| aws-lambda | 14 | 15 | 16 | YES — replace |
-| aws-s3 | 17 | 18 | 19 | YES — replace |
-| apache-kafka | 20 | 21 | 22 | NO — add new |
-| aws-ecs | 23 | 24 | 25 | NO — add new |
+| Topic | Script | Pipeline | HTML | Audio exists? | Extra fix |
+|-------|--------|----------|------|--------------|-----------|
+| aws-athena | 05 | 06 | 07 | YES — replace | ⚠️ cheat-row 160→170px |
+| aws-glue | 08 | 09 | 10 | YES — replace | ⚠️ cheat-row 150→170px |
+| aws-redshift | 11 | 12 | 13 | YES — replace | none |
+| aws-lambda | 14 | 15 | 16 | YES — replace | none |
+| aws-s3 | 17 | 18 | 19 | YES — replace | ⚠️ cheat-row 150→170px |
+| apache-kafka | 20 | 21 | 22 | NO — add new | none |
+| aws-ecs | 23 | 24 | 25 | NO — add new | none |
 
 ---
 

@@ -1,6 +1,6 @@
 # MISSION 03 — Run Audio Pipeline: Amazon EC2
 # Working directory: D:\StudyBook\
-# Touches: temp\jobsearch\ (read script, write audio clips)
+# Touches: temp\jobsearch\ (read script), C:\temp\studybook_audio\ (write clips/final)
 # Prerequisite: Mission 02 complete — audio_script_aws-ec2.md must exist
 
 ---
@@ -24,13 +24,12 @@ D:\StudyBook\                                       ← ROOT (working directory)
             generate_audio_generic.py               ← TTS pipeline script
         data\interview_prep\audio_prep\aws-ec2\
             audio_script_aws-ec2.md                 ← INPUT (from Mission 02)
-            audio_clips\                            ← created by pipeline — clips go here
-                01_HOST.mp3
-                02_SEAN.mp3
-                ...
-                filelist.txt
-            final_aws-ec2.mp3                       ← OUTPUT — stitched final file
-            UPLOAD_INSTRUCTIONS.md                  ← OUTPUT — R2 upload guide for Sean
+        scripts\run_mission_audio.ps1               ← fail-fast mission runner
+
+C:\temp\studybook_audio\aws-ec2\                    ← OUTPUT ROOT (outside repo)
+    audio_clips\                                    ← generated clips
+    final_aws-ec2.mp3                               ← stitched final output
+    UPLOAD_INSTRUCTIONS.md                          ← R2 upload guide for Sean
 ```
 
 REPO 3 (temp\seanlgirgis.github.io\) is NOT touched in this mission.
@@ -72,129 +71,55 @@ If `False`: STOP — report "OPENAI_API_KEY not loaded. env_setter.ps1 may have 
 
 ---
 
-## STEP 3 — RUN AUDIO GENERATION
+## STEP 3 — RUN FAIL-FAST MISSION RUNNER (RECOMMENDED)
 
 ```powershell
-python temp\jobsearch\scripts\generate_audio_generic.py `
-  --script "temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\audio_script_aws-ec2.md" `
-  --output "temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\audio_clips"
+.\scripts\run_mission_audio.ps1 `
+  "temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\audio_script_aws-ec2.md" `
+  -ChunkSize 750 `
+  -RequestTimeoutSeconds 120
 ```
 
-The script:
-- Parses all `**[SPEAKER — voice: voice_name]**` blocks
-- Calls gpt-4o-mini-tts per block (auto-falls back to gpt-4o-mini-audio-preview)
-- Saves numbered MP3 clips: `01_HOST.mp3`, `02_SEAN.mp3`, `03_HOST.mp3`, ...
-- Skips existing files — safe to re-run if interrupted
+The runner:
+- Loads `env_setter.ps1 -NonInteractive` (no hanging prompt path)
+- Calls `generate_audio_generic.py` with fail-fast behavior
+- Uses chunking at natural sentence boundaries
+- Target chunk size is `750` chars, with slight over/under allowed to preserve sentence stops
+- Never cuts mid-sentence or across speaker blocks
+- Writes all generated artifacts to `C:\temp\studybook_audio\aws-ec2\...` (repo stays clean)
+- Exits non-zero immediately on generation or stitch failure
 
 Watch for these errors:
 - `OPENAI_API_KEY not found` → Step 2 failed — re-run env_setter.ps1
 - `No speaker blocks found` → Script format is wrong — return to Mission 02
-- `Both models failed for block N` → API error — note block number, retry once
-
-Expected terminal output:
-```
-Script: audio_script_aws-ec2.md
-Output: temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\audio_clips
-Blocks found: [N]
-
-[01/N] HOST (nova) — [X] chars
-         -> Saved: 01_HOST.mp3 (model: gpt-4o-mini-tts)
-[02/N] SEAN (onyx) — [X] chars
-         -> Saved: 02_SEAN.mp3 (model: gpt-4o-mini-tts)
-...
-Done. [N] MP3 files in ...audio_clips
-```
-
-After completion — list clips directory and confirm no numbering gaps:
-```powershell
-Get-ChildItem "temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\audio_clips" -Filter "*.mp3" | Select-Object Name
-```
+- `Both models failed for chunk XX` → API/model issue — run again after fixing key/model state
+- non-zero exit from runner → STOP and report exact error
 
 ---
 
-## STEP 4 — STITCH CLIPS INTO FINAL FILE
+## STEP 4 — VERIFY OUTPUTS (C:\temp LOCATION)
 
-Navigate to the clips folder:
 ```powershell
-cd "temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\audio_clips"
-```
-
-Create ordered filelist:
-```powershell
-(Get-ChildItem -Filter "*.mp3" | Sort-Object Name | ForEach-Object { "file '$($_.Name)'" }) | Out-File -Encoding utf8 filelist.txt
+Test-Path "C:\temp\studybook_audio\aws-ec2\final_aws-ec2.mp3"
+Get-Item "C:\temp\studybook_audio\aws-ec2\final_aws-ec2.mp3" | Select-Object Length
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\aws-ec2\final_aws-ec2.mp3"
 ```
 
-Verify the list is in correct ascending order:
-```powershell
-Get-Content filelist.txt
-```
-Expected (example):
-```
-file '01_HOST.mp3'
-file '02_SEAN.mp3'
-file '03_HOST.mp3'
-...
-```
-If order is wrong: do not proceed — re-run the Get-ChildItem command above.
-
-Stitch with ffmpeg:
-```powershell
-ffmpeg -f concat -safe 0 -i filelist.txt -c copy ..\final_aws-ec2.mp3
-```
-Expected: ffmpeg processes all clips and exits cleanly (no error — "muxing overhead" line is normal).
-
-Return to root:
-```powershell
-cd D:\StudyBook
-```
-
-Verify output file:
-```powershell
-Test-Path "temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\final_aws-ec2.mp3"
-Get-Item "temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\final_aws-ec2.mp3" | Select-Object Length
-```
-Expected: file exists, size > 5,000,000 bytes (5 MB minimum — a 10-min MP3 at 64kbps ≈ 5 MB).
-
-Get duration to confirm completeness:
-```powershell
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\final_aws-ec2.mp3"
-```
-Expected: between 600 and 900 (seconds). If under 300, blocks were dropped — investigate.
+Expected:
+- file exists
+- size > 5,000,000 bytes
+- duration between 600 and 900 seconds
 
 ---
 
-## STEP 5 — CREATE UPLOAD INSTRUCTIONS FOR SEAN
+## STEP 5 — CONFIRM UPLOAD INSTRUCTIONS EXISTS
 
-Create this file (Sean uploads manually — Codex cannot push to R2):
+Runner should create this file automatically:
 ```
-temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\UPLOAD_INSTRUCTIONS.md
+C:\temp\studybook_audio\aws-ec2\UPLOAD_INSTRUCTIONS.md
 ```
 
-Content:
-```markdown
-# R2 Upload Instructions — Amazon EC2 Audio
-
-## File to upload
-Relative path: temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\final_aws-ec2.mp3
-
-## Target filename on R2
-final_aws-ec2.mp3
-
-## Expected public URL after upload
-https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-ec2.mp3
-
-## Steps
-1. Open Cloudflare R2 dashboard
-2. Navigate to the learning hub media bucket
-3. Upload: final_aws-ec2.mp3
-4. Confirm the public URL returns audio (open in browser — should play)
-5. Tell Codex: "EC2 audio uploaded — run Mission 04"
-
-## What Mission 04 will do
-Update temp\seanlgirgis.github.io\learning\aws-ec2.html
-Replace old NotebookLM audio src with:
-https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-ec2.mp3
-```
+If missing, create it manually with the same content template from previous mission runs.
 
 ---
 
@@ -203,15 +128,16 @@ https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-ec2.mp3
 - [ ] Working directory is D:\StudyBook\ throughout
 - [ ] Input script verified — all format checks passed
 - [ ] OPENAI_API_KEY loaded (printed True)
-- [ ] All [N] MP3 clips generated — no numbering gaps
+- [ ] Runner command completed with zero exit code
+- [ ] All generated clips/final are in `C:\temp\studybook_audio\aws-ec2\`
+- [ ] Chunking used `--chunk-size 750`
+- [ ] Chunk splits happen only at natural sentence stops (no mid-sentence cuts)
+- [ ] No chunk crosses speaker boundaries
 - [ ] No block reported "Both models failed"
-- [ ] filelist.txt is in ascending order
-- [ ] ffmpeg ran cleanly
-- [ ] final_aws-ec2.mp3 exists at `temp\jobsearch\data\interview_prep\audio_prep\aws-ec2\`
+- [ ] final_aws-ec2.mp3 exists at `C:\temp\studybook_audio\aws-ec2\`
 - [ ] File size > 5 MB
 - [ ] Duration between 600–900 seconds
-- [ ] UPLOAD_INSTRUCTIONS.md created at correct path
-- [ ] Working directory returned to D:\StudyBook\ after cd
+- [ ] UPLOAD_INSTRUCTIONS.md created at `C:\temp\studybook_audio\aws-ec2\`
 
 Report: "MISSION 03 COMPLETE — final_aws-ec2.mp3 ready — [X]s duration — [size] MB — see UPLOAD_INSTRUCTIONS.md"
 Or:     "MISSION 03 BLOCKED at Step [N] — [exact error message]"

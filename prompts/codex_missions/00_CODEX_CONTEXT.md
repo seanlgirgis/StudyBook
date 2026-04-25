@@ -154,8 +154,11 @@ R2 bucket base URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/`
 
 ## AUDIO PIPELINE — OVERVIEW
 
-All audio scripts and output live under:
+Audio script source files live under:
 `temp\jobsearch\data\interview_prep\audio_prep\{topic-slug}\`
+
+Generated clips/final files live under:
+`C:\temp\studybook_audio\{topic-slug}\`
 
 ```
 Step 1  Codex writes HOST+SEAN dialogue script
@@ -164,17 +167,15 @@ Step 1  Codex writes HOST+SEAN dialogue script
 Step 2  Load environment
         → .\env_setter.ps1
 
-Step 3  Run TTS pipeline
-        → python temp\jobsearch\scripts\generate_audio_generic.py --script temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
-        → clips saved to: temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_clips\
+Step 3  Run fail-fast mission runner (preferred)
+        → .\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md" -ChunkSize 750
+        → clips: C:\temp\studybook_audio\{slug}\audio_clips\
+        → final: C:\temp\studybook_audio\{slug}\final_{slug}.mp3
+        → upload guide: C:\temp\studybook_audio\{slug}\UPLOAD_INSTRUCTIONS.md
 
-Step 4  Stitch clips
-        → cd temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_clips\
-        → ffmpeg -f concat -safe 0 -i filelist.txt -c copy ..\final_{slug}.mp3
+Step 4  Upload final_{slug}.mp3 to R2 (Sean does this manually)
 
-Step 5  Upload final_{slug}.mp3 to R2 (Sean does this manually)
-
-Step 6  Codex updates the HTML src in temp\seanlgirgis.github.io\learning\{file}.html
+Step 5  Codex updates the HTML src in temp\seanlgirgis.github.io\learning\{file}.html
 ```
 
 ---

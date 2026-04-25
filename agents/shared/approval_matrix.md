@@ -2,6 +2,18 @@
 
 Purpose: define which actions the agent may execute autonomously vs actions requiring user approval.
 
+## Active Run Override (User-Authorized)
+
+- Effective date: 2026-04-24
+- Authorized by owner in-session: yes
+- Scope:
+  - `D:\StudyBook\**` (all folders, including `playground\studyGuide`)
+  - `C:\temp\**`
+- Decision override for this effort:
+  - Treat all categories in this matrix as `Auto-Approved`.
+  - Do not pause for permission gates while operating inside the authorized scope.
+  - Keep normal safety behavior for clearly destructive or irreversible operations by announcing intent in status logs before execution.
+
 ## Decision Rule
 
 - If an action matches `Requires Approval`, stop and ask.

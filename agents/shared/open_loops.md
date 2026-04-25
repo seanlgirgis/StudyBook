@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-20 (jupyter markdown preview mount fix)
+Last reviewed: 2026-04-24 (permission override policy sync)
 
 ## Status Meanings
 
