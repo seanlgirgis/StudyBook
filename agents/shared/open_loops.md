@@ -195,3 +195,7 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-126 | TB-20260425-07 | PostgreSQL audio generated and page link activated; waiting for R2 upload confirmation | open | Upload final_postgresql.mp3 to R2 and then mark card badge Live | 2026-04-25 |
 
 | LOOP-126 | TB-20260425-07 | PostgreSQL audio generated and page link activated; waiting for R2 upload confirmation | closed | none | 2026-04-25 |
+
+| LOOP-127 | TB-20260425-09 | DynamoDB audio generated and page link activated; waiting for R2 upload confirmation | open | Upload final_aws-dynamodb.mp3 to R2 and then mark badge Live | 2026-04-25 |
+
+| LOOP-127 | TB-20260425-09 | DynamoDB audio generated and page link activated; waiting for R2 upload confirmation | closed | none | 2026-04-25 |

@@ -240,3 +240,7 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260425-07 | Execute PostgreSQL provided-files pipeline and activate site linking | done | 2026-04-25 | Generated final_postgresql.mp3 and switched PostgreSQL card to clickable reference mode with upload-pending badge |
 
 | TB-20260425-08 | Mark PostgreSQL card audio status as Live after R2 confirmation | done | 2026-04-25 | Updated learning-databases PostgreSQL card badge from Upload pending to Live |
+
+| TB-20260425-09 | Execute DynamoDB provided-files pipeline and activate site linking | done | 2026-04-25 | Generated final_aws-dynamodb.mp3 and added clickable DynamoDB card in learning-aws-analytics with upload-pending badge |
+
+| TB-20260425-10 | Mark DynamoDB card audio status as Live after R2 confirmation | done | 2026-04-25 | Updated learning-aws-analytics DynamoDB badge from Upload pending to Live |

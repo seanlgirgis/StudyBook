@@ -2,16 +2,16 @@
 
 ## Current Run (2026-04-25)
 
-**Task ID:** TB-20260425-08  
+**Task ID:** TB-20260425-10  
 **Task Type:** FIX  
-**Goal:** Finalize PostgreSQL publish state after user-confirmed live R2 audio URL.
+**Goal:** Finalize DynamoDB publish state after user-confirmed live R2 audio URL.
 
 ### Factual Summary
 
-- User provided live URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_postgresql.mp3`.
-- Confirmed `learning/postgresql.html` already points to `final_postgresql.mp3` with `audio/mpeg`.
-- Updated PostgreSQL card status in:
-  - `temp/seanlgirgis.github.io/components/learning-databases.html`
+- User provided live URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-dynamodb.mp3`.
+- Confirmed `learning/aws-dynamodb.html` points to `final_aws-dynamodb.mp3` with `audio/mpeg`.
+- Updated DynamoDB card status in:
+  - `temp/seanlgirgis.github.io/components/learning-aws-analytics.html`
 - Badge changed from:
   - `🎧 ○ Upload pending`
   to:
@@ -19,20 +19,20 @@
 
 ### Files Modified
 
-- `temp/seanlgirgis.github.io/components/learning-databases.html`
+- `temp/seanlgirgis.github.io/components/learning-aws-analytics.html`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
 - `agents/shared/agent_status.md`
 
 ### Validation
 
-- PostgreSQL card remains clickable to `learning/postgresql.html`.
-- No `Upload pending` remains on PostgreSQL card.
+- DynamoDB card remains clickable to `learning/aws-dynamodb.html`.
+- No `Upload pending` remains on DynamoDB card.
 - Live badge is present.
 
 ### Next Step
 
-- Hard refresh `/#learning-databases` to confirm live badge rendering.
+- Hard refresh `/#learning-aws-analytics` to confirm live badge rendering.
 
 ---
 
