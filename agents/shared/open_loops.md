@@ -211,3 +211,4 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-134 | TB-20260425-18 | CI/CD+ECS audio generated and card activated; waiting for R2 upload confirmation to mark badge Live | closed | none | 2026-04-25 |
 | LOOP-135 | TB-20260425-19 | AWS MSK Kafka audio generated and card activated; waiting for R2 upload confirmation to mark badge Live | closed | none | 2026-04-25 |
 | LOOP-136 | TB-20260425-20 | AWS CloudFormation audio generated and card activated; waiting for R2 upload confirmation to mark badge Live | closed | none | 2026-04-25 |
+| LOOP-137 | TB-20260425-21 | AWS Bedrock audio generated and card activated; waiting for R2 upload confirmation to mark badge Live | closed | none | 2026-04-25 |
