@@ -217,3 +217,4 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-140 | TB-20260425-24 | EC2 provided-files refresh executed and compute card normalized to Live state | closed | none | 2026-04-25 |
 | LOOP-141 | TB-20260425-25 | ECS provided-files refresh executed and compute card normalized to Live state | closed | none | 2026-04-25 |
 | LOOP-142 | TB-20260425-26 | Pipeline-design provided-files refresh executed and craft card normalized to Live state | closed | none | 2026-04-25 |
+| LOOP-143 | TB-20260425-27 | Glue provided-files refresh executed and analytics card normalized to Live state | closed | none | 2026-04-25 |
