@@ -3,7 +3,7 @@ param(
     [string]$Script,
     [string]$Slug,
     [int]$ChunkSize = 750,
-    [string]$TempRoot = "C:\temp\studybook_audio",
+    [string]$TempRoot = "D:\temp\studybook_audio",
     [switch]$SkipEnvSetter,
     [int]$RequestTimeoutSeconds = 120
 )
@@ -122,7 +122,10 @@ try {
     }
 
     $fileListPath = Join-Path $clipsDir "filelist.txt"
-    $mp3Files | ForEach-Object { "file '$($_.FullName)'" } | Out-File -Encoding utf8 $fileListPath
+    $fileListLines = $mp3Files | ForEach-Object { "file '$($_.FullName)'" }
+    # ffmpeg concat demuxer fails if filelist.txt starts with a UTF-8 BOM.
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllLines($fileListPath, $fileListLines, $utf8NoBom)
 
     $finalPath = Join-Path $runRoot ("final_{0}.mp3" -f $finalSlug)
     if (Test-Path -LiteralPath $finalPath) {
@@ -176,4 +179,6 @@ $url
 finally {
     Pop-Location
 }
+
+
 

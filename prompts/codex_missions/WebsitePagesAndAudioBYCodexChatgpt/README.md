@@ -107,7 +107,7 @@ Use when:
 ## Path + Safety Rules
 
 - Keep generated audio binaries **outside repo**:
-  `C:\temp\studybook_audio\{slug}\`
+  `D:\temp\studybook_audio\{slug}\`
 - Keep only text artifacts in repo:
   - script markdown
   - HTML/component files
@@ -116,6 +116,8 @@ Use when:
 
 ## Notes
 
-- Some older runbook text may mention `C:\temp\studybook_audio\...`.
-- Current active pipeline standard is `C:\temp\studybook_audio\...` for generated audio output.
+- Some older runbook text may mention `D:\temp\studybook_audio\...`.
+- Current active pipeline standard is `D:\temp\studybook_audio\...` for generated audio output.
+
+
 

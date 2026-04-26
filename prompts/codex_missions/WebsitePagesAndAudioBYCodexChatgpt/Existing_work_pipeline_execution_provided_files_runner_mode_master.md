@@ -62,12 +62,12 @@ Test-Path "<HTML_FILE_RELATIVE_OR_ABS>"; Test-Path "<AUDIO_SCRIPT_FILE_RELATIVE_
 
 ### 4. Verify Final MP3 Exists
 ```powershell
-Test-Path "C:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3"; Get-Item "C:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3" | Select-Object FullName,Length,LastWriteTime
+Test-Path "D:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3"; Get-Item "D:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3" | Select-Object FullName,Length,LastWriteTime
 ```
 
 ### 5. Verify Duration
 ```powershell
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3"
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3"
 ```
 
 ### 6. Repo Cleanliness Guard (PowerShell fallback)
@@ -113,7 +113,7 @@ Select-String -Path "<HTML_FILE_RELATIVE_OR_ABS>" -Pattern "https://pub-174bd653
 ## DEFINITION OF DONE (RUNNER MODE)
 
 - [ ] Sean ran pipeline successfully.
-- [ ] Final MP3 exists in `C:\temp\studybook_audio\<TOPIC_SLUG>\`.
+- [ ] Final MP3 exists in `D:\temp\studybook_audio\<TOPIC_SLUG>\`.
 - [ ] Duration and file size validated.
 - [ ] No generated binary artifacts in repo audio_prep path.
 - [ ] HTML points to final MP3 with `audio/mpeg`.
@@ -144,6 +144,8 @@ Allowed in repo:
 - html/component text files
 
 Generated binary output location:
-- `C:\temp\studybook_audio\<TOPIC_SLUG>\audio_clips\`
-- `C:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3`
+- `D:\temp\studybook_audio\<TOPIC_SLUG>\audio_clips\`
+- `D:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3`
+
+
 

@@ -175,7 +175,7 @@ File:             audio_script_{slug}.md
 Save to:          ..\jobsearch\data\interview_prep\audio_prep\{slug}\
 Full path:        ..\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
 Working dir:      D:\Workarea\StudyBook\
-Audio output:     C:\temp\studybook_audio\{slug}\  ← outside repo, never commit MP3s
+Audio output:     D:\temp\studybook_audio\{slug}\  ← outside repo, never commit MP3s
 ─────────────────────────────────────────────────
 
 4. Print this pipeline reminder:
@@ -188,7 +188,7 @@ After saving the script file, run the audio pipeline:
     -ChunkSize 750 -RequestTimeoutSeconds 120
 
 Pipeline output (outside repo):
-  C:\temp\studybook_audio\{slug}\final_{slug}.mp3
+  D:\temp\studybook_audio\{slug}\final_{slug}.mp3
 
 Upload final_{slug}.mp3 to R2. Confirm URL is live:
   https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_{slug}.mp3
@@ -207,3 +207,5 @@ that this script did NOT cover:
 
 Report at the very end:
 "SCRIPT COMPLETE — [N] blocks — est. [X] min audio — slug: {slug}"
+
+

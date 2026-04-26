@@ -38,9 +38,9 @@ cd D:\Workarea\StudyBook
 ```
 
 3. Validate output location (outside repo)
-- `C:\temp\studybook_audio\{topic_slug}\audio_clips\`
-- `C:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3`
-- `C:\temp\studybook_audio\{topic_slug}\UPLOAD_INSTRUCTIONS.md`
+- `D:\temp\studybook_audio\{topic_slug}\audio_clips\`
+- `D:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3`
+- `D:\temp\studybook_audio\{topic_slug}\UPLOAD_INSTRUCTIONS.md`
 
 4. Repo cleanliness guard
 - Ensure no generated MP3/M4A/filelist landed in repo paths
@@ -50,7 +50,7 @@ rg --files -g "*{topic_slug}*.mp3" -g "*{topic_slug}*.m4a" -g "*{topic_slug}*fil
 Expected: no matches
 
 5. Wait for R2 upload confirmation from Sean
-- Sean uploads: `C:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3`
+- Sean uploads: `D:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3`
 - Sean provides live URL:
   - `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_{topic_slug}.mp3`
 
@@ -83,8 +83,8 @@ In repo (text only):
 - HTML/component files under `..\seanlgirgis.github.io\...`
 
 Outside repo (binary):
-- `C:\temp\studybook_audio\{topic_slug}\audio_clips\`
-- `C:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3`
+- `D:\temp\studybook_audio\{topic_slug}\audio_clips\`
+- `D:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3`
 
 ---
 
@@ -101,8 +101,8 @@ Test-Path "..\jobsearch\data\interview_prep\audio_prep\{topic_slug}\audio_script
 .\scripts\run_mission_audio.ps1 "..\jobsearch\data\interview_prep\audio_prep\{topic_slug}\audio_script_{topic_slug}.md" -ChunkSize 750 -RequestTimeoutSeconds 120
 
 # 3) Validate output
-Test-Path "C:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3"
-Get-Item "C:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3" | Select-Object FullName,Length,LastWriteTime
+Test-Path "D:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3"
+Get-Item "D:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3" | Select-Object FullName,Length,LastWriteTime
 
 # 4) Guard repo cleanliness
 rg --files -g "*{topic_slug}*.mp3" -g "*{topic_slug}*.m4a" -g "*{topic_slug}*filelist.txt" ..\jobsearch\data\interview_prep\audio_prep
@@ -113,7 +113,7 @@ rg --files -g "*{topic_slug}*.mp3" -g "*{topic_slug}*.m4a" -g "*{topic_slug}*fil
 ## DEFINITION OF DONE (PROVIDED FILES MODE)
 
 - [ ] Existing script consumed successfully by runner
-- [ ] Final MP3 generated in `C:\temp\studybook_audio\{topic_slug}\`
+- [ ] Final MP3 generated in `D:\temp\studybook_audio\{topic_slug}\`
 - [ ] R2 live URL confirmed by Sean
 - [ ] HTML page points to live URL
 - [ ] Site card/link activated and clickable
@@ -129,11 +129,13 @@ Inputs:
 - Script: `..\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md`
 
 Pipeline result:
-- `C:\temp\studybook_audio\aws-vpc\final_aws-vpc.mp3`
+- `D:\temp\studybook_audio\aws-vpc\final_aws-vpc.mp3`
 
 Live URL:
 - `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-vpc.mp3`
 
 Link activation:
 - update `components\learning-aws-security.html` VPC card to clickable live state.
+
+
 
