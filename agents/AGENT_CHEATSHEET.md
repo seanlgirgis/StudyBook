@@ -5,7 +5,7 @@ Quick reference for daily Qwen Code sessions.
 ## Start of Session
 
 ```powershell
-cd D:\StudyBook
+cd D:\Workarea\StudyBook
 # If env not loaded:
 .\env_setter.ps1   # Uses seed + passphrase automatically
 ```
@@ -20,7 +20,7 @@ Do not ask for passphrase again; treat mismatch as a user-context issue.
 ## First Prompt to Qwen
 
 ```
-Operate under D:\StudyBook rules.
+Operate under D:\Workarea\StudyBook rules.
 Read: CONTROL_PROTOCOL.md → agents/shared/context_index.md → open_loops.md → approval_matrix.md → ADR-INDEX.md → pending_task.md (if any) → agent_status.md (if any).
 Execute one scoped task. Bounded autonomy. No commit/push. Use seed-backed secrets only. Update agent_status.md + task_register + open_loops at end.
 ```
@@ -54,9 +54,9 @@ Rule:
 
 ## Managed External Repos
 
-StudyBook is the launchpad for two separately versioned repos under `temp`:
-- `temp\jobsearch`
-- `temp\seanlgirgis.github.io`
+StudyBook is the launchpad for two separately versioned sibling repos:
+- `..\jobsearch`
+- `..\seanlgirgis.github.io`
 
 Restore on a new machine:
 `pwsh .\scripts\ops\restore_managed_repos.ps1`
@@ -65,7 +65,7 @@ Update existing clones:
 `pwsh .\scripts\ops\restore_managed_repos.ps1 -UpdateExisting`
 
 Rule:
-- Prefer `{PROJECT_ROOT}\temp\...` style paths in tracked files.
+- Prefer `{PROJECT_ROOT}\..\...` style paths in tracked files.
 - Avoid hardcoded absolute paths (for example `C:\jobsearch`) in repo-managed scripts/config.
 
 ## Command Safety
@@ -73,7 +73,7 @@ Rule:
 | Safe (no approval) | Needs Approval |
 |--------------------|----------------|
 | `rg`, `git status/diff/log` | `git commit/push/rebase/reset` |
-| Read/edit files in `D:\StudyBook` | Mass delete/move |
+| Read/edit files in `D:\Workarea\StudyBook` | Mass delete/move |
 | Build/test/lint | External writes (cloud/DB) |
 | | Anything outside repo |
 
@@ -104,6 +104,7 @@ If something fails:
 ---
 
 **Full protocol**: See `agents/QWEN_AGENT_HANDOFF.md`
+
 
 
 

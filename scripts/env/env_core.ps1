@@ -1,6 +1,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 try { Import-Module Microsoft.PowerShell.Security -ErrorAction SilentlyContinue } catch {}
+$script:StudyBookSecretSeedLastError = $null
 
 if (-not (Get-Command Import-PowerShellDataFile -ErrorAction SilentlyContinue)) {
     function Import-PowerShellDataFile {
@@ -399,11 +400,13 @@ function Unprotect-StudyBookSecretSeed {
                 Add-Type -AssemblyName "System.Security" -ErrorAction Stop
             }
             catch {
-                Write-Warning "DPAPI ProtectedData type is unavailable. Use Windows PowerShell 5.1 or install System.Security.Cryptography.ProtectedData."
+                $script:StudyBookSecretSeedLastError = "DPAPI ProtectedData type is unavailable. Use Windows PowerShell 5.1 or install System.Security.Cryptography.ProtectedData."
                 return $null
             }
         }
     }
+
+    $script:StudyBookSecretSeedLastError = $null
 
     if (-not (Test-Path -LiteralPath $SeedPath)) {
         return $null
@@ -417,7 +420,7 @@ function Unprotect-StudyBookSecretSeed {
 
         $payload = ConvertFrom-JsonToHashtable -Json $raw
         if (-not $payload.ContainsKey("ciphertext")) {
-            Write-Warning "Seed file exists but ciphertext is missing: $SeedPath"
+            $script:StudyBookSecretSeedLastError = "Seed file exists but ciphertext is missing: $SeedPath"
             return $null
         }
 
@@ -437,9 +440,13 @@ function Unprotect-StudyBookSecretSeed {
         return ConvertTo-SecureString -String $passphraseText -AsPlainText -Force
     }
     catch {
-        Write-Warning "Could not decrypt StudyBook seed file at ${SeedPath}: $($_.Exception.Message)"
+        $script:StudyBookSecretSeedLastError = "Could not decrypt StudyBook seed file at ${SeedPath}: $($_.Exception.Message)"
         return $null
     }
+}
+
+function Get-StudyBookSecretSeedLastError {
+    return $script:StudyBookSecretSeedLastError
 }
 
 function Get-SecretPassphrase {
@@ -570,6 +577,9 @@ function Invoke-StudyBookEnvBootstrap {
     }
 
     $passphrase = $null
+    $secretsLoaded = $false
+    $secretFilesLoadedCount = 0
+    $secretFilesFailedCount = 0
     $secretsRequired = $false
     if ($mergedConfig.ContainsKey("Secrets")) {
         if ($mergedConfig.Secrets.ContainsKey("Required")) {
@@ -590,8 +600,13 @@ function Invoke-StudyBookEnvBootstrap {
             if ($existingSecretFiles.Count -gt 0) {
                 $passphrase = Get-SecretPassphrase -NonInteractive:$NonInteractive -ProjectRoot $projectRootFull
                 if (-not $passphrase) {
+                    $seedError = Get-StudyBookSecretSeedLastError
                     if ($secretsRequired) {
                         throw "Secrets are required but no passphrase was provided. Set STUDYBOOK_SECRET_PASSPHRASE or run interactively."
+                    }
+                    if (-not [string]::IsNullOrWhiteSpace($seedError)) {
+                        Write-Warning "$seedError"
+                        Write-Warning "Seed is not usable in this Windows user context. Recovery: set STUDYBOOK_SECRET_PASSPHRASE once and run '.\scripts\env\register_secret_seed.ps1 -Force -NonInteractive'."
                     }
                     Write-Warning "Encrypted secrets exist but no passphrase is available. Skipping secret import."
                 }
@@ -603,6 +618,8 @@ function Invoke-StudyBookEnvBootstrap {
                             foreach ($secretKey in $secretData.Keys) {
                                 [Environment]::SetEnvironmentVariable($secretKey, [string]$secretData[$secretKey], "Process")
                             }
+                            $secretsLoaded = $true
+                            $secretFilesLoadedCount += 1
                             $seedPath = Get-StudyBookSecretSeedPath -ProjectRoot $projectRootFull
                             if (-not (Test-Path -LiteralPath $seedPath)) {
                                 Protect-StudyBookSecretSeed -Passphrase $passphrase -SeedPath $seedPath
@@ -618,6 +635,7 @@ function Invoke-StudyBookEnvBootstrap {
                                 throw $message
                             }
 
+                            $secretFilesFailedCount += 1
                             Write-Warning $message
                         }
                     }
@@ -653,7 +671,9 @@ function Invoke-StudyBookEnvBootstrap {
         MachineConfigPath = $machineConfigPath
         VenvPath = $venvPath
         PythonPath = $pythonPath
-        SecretsLoaded = [bool]($passphrase)
+        SecretsLoaded = $secretsLoaded
+        SecretFilesLoadedCount = $secretFilesLoadedCount
+        SecretFilesFailedCount = $secretFilesFailedCount
     }
 }
 

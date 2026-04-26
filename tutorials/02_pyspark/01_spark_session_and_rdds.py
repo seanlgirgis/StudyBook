@@ -1,22 +1,20 @@
 # ============================================================
 # Topic   : PySpark for Data Engineers
 # File    : 01_spark_session_and_rdds.py
-# Covers  : SparkSession, RDD basics, lazy evaluation, DAG, RDD vs DataFrame
+# Covers  : SparkSession, lazy evaluation, DAG, RDD concepts, DataFrame-safe execution
 # Prereqs : pip install pyspark | Java 11+ installed, JAVA_HOME set
-# Run     : python 01_spark_session_and_rdds.py
+# Run     : python -u .\01_spark_session_and_rdds.py
 # ============================================================
 
 from pyspark.sql import SparkSession
-from pyspark import SparkContext
-import os, time
+from pyspark.sql import functions as F
+import os
+import sys
+import time
 from pathlib import Path
 
 
 def get_output_dir() -> Path:
-    """
-    Resolve output directory in a cross-platform way.
-    Uses OUTPUT_DIR env var if set, otherwise defaults per OS.
-    """
     base = os.getenv("OUTPUT_DIR")
     if base:
         return Path(base)
@@ -25,161 +23,162 @@ def get_output_dir() -> Path:
     return Path("/tmp/studybook/pyspark")
 
 
-def create_spark_session(app_name: str = "01-spark-basics",
-                         cores: str = "*") -> SparkSession:
+def create_spark_session(
+    app_name: str = "01-spark-basics",
+    cores: str = "2"
+) -> SparkSession:
     """
-    Create SparkSession in local mode.
+    Create a Windows-stable local SparkSession.
 
-    .master(f"local[{cores}]") — [*] uses all cores, [2] caps at 2.
-    .config("spark.sql.shuffle.partitions", "8") — reduce from default 200 for local mode.
-    .config("spark.ui.enabled", "false") — disable web UI for tutorial scripts.
+    WHY local[2]:
+      Windows local mode can be fragile with many Python worker processes.
+      local[2] keeps the tutorial stable.
 
-    WHY shuffle.partitions=8:
-      Default 200 creates many tiny empty tasks locally → overhead dominates compute.
-      In production: tune ~2–3× CPU cores.
-
-    Print Spark version and master URL after creation.
+    WHY sys.executable:
+      Forces PySpark workers to use the same virtualenv Python.
     """
+    os.environ["PYSPARK_PYTHON"] = sys.executable
+    os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
+    os.environ["PYTHONHASHSEED"] = "0"
+
     spark = (
         SparkSession.builder
         .appName(app_name)
         .master(f"local[{cores}]")
-        .config("spark.sql.shuffle.partitions", "8")
+        .config("spark.sql.shuffle.partitions", "2")
+        .config("spark.default.parallelism", "2")
         .config("spark.ui.enabled", "false")
+        .config("spark.python.worker.reuse", "true")
+        .config("spark.pyspark.python", sys.executable)
+        .config("spark.pyspark.driver.python", sys.executable)
         .getOrCreate()
     )
 
+    spark.sparkContext.setLogLevel("WARN")
+
     print(f"Spark Version: {spark.version}")
     print(f"Master: {spark.sparkContext.master}")
+    print(f"Python Exec: {sys.executable}")
+    print(f"Default Parallelism: {spark.sparkContext.defaultParallelism}")
 
     return spark
 
 
 def demonstrate_lazy_evaluation(spark: SparkSession) -> None:
     """
-    Prove that transformations are lazy — nothing runs until an action.
+    Prove lazy evaluation using Spark JVM/DataFrame operations.
 
-    WHY lazy evaluation:
-      Spark builds a DAG (Directed Acyclic Graph) of transformations.
-      It delays execution so it can optimize:
-        - predicate pushdown
-        - stage pipelining
-        - avoiding unnecessary computation
-
-      This is fundamentally different from pandas (eager execution).
+    Transformations build a DAG. Nothing runs until an action like count().
     """
-    sc = spark.sparkContext
+    df = spark.range(100_000)
 
-    rdd = sc.parallelize(range(1_000_000))
-
-    # Transformations (lazy)
-    transformed = rdd.map(lambda x: x * 2).filter(lambda x: x % 3 == 0)
+    transformed = (
+        df.withColumn("doubled", F.col("id") * 2)
+          .filter(F.col("doubled") % 3 == 0)
+    )
 
     print("Transformations defined. Nothing computed yet.")
 
-    # Action (triggers execution)
     t0 = time.perf_counter()
     count = transformed.count()
     t1 = time.perf_counter()
 
     print(f"Action triggered. Count = {count}")
     print(f"Computation time: {(t1 - t0) * 1000:.2f} ms")
-
     print("Action triggered. Computation complete.")
 
 
 def rdd_word_count(spark: SparkSession, text: str) -> list[tuple[str, int]]:
     """
-    Classic word count using RDD API.
+    Demonstrate word-count logic without Python-worker RDD execution.
 
-    Steps:
-      parallelize → flatMap → map → reduceByKey → sort
+    Interview RDD pattern:
+      lines -> flatMap(split) -> map((word, 1)) -> reduceByKey(sum)
 
-    WHY:
-      This demonstrates the MapReduce paradigm:
-        Map: transform records → key-value pairs
-        Reduce: aggregate values per key
-
-      This is one of the most common Spark interview questions.
+    This local Windows-safe version computes the same result in plain Python
+    because this machine's Spark Python workers crash during Python-backed
+    RDD/DataFrame actions.
     """
-    sc = spark.sparkContext
+    del spark  # Spark is not needed for this Windows-safe fallback.
 
-    lines = text.strip().split("\n")
-    rdd = sc.parallelize(lines)
+    words: list[str] = []
+    for line in text.strip().splitlines():
+        for raw_word in line.lower().split():
+            word = raw_word.strip(".,;:!?()[]{}\"'")
+            if word:
+                words.append(word)
 
-    counts = (
-        rdd.flatMap(lambda line: line.lower().split())
-           .map(lambda word: (word, 1))
-           .reduceByKey(lambda a, b: a + b)
-           .sortBy(lambda x: -x[1])
-    )
+    counts: dict[str, int] = {}
+    for word in words:
+        counts[word] = counts.get(word, 0) + 1
 
-    top10 = counts.take(10)
+    top10 = sorted(counts.items(), key=lambda x: (-x[1], x[0]))[:10]
 
     print("\nTop 10 Words:")
     print("-------------------------")
     for word, count in top10:
         print(f"{word:<15} {count}")
 
+    print("\nRDD equivalent:")
+    print("  sc.parallelize(lines)")
+    print("    .flatMap(lambda line: line.split())")
+    print("    .map(lambda word: (word, 1))")
+    print("    .reduceByKey(lambda a, b: a + b)")
+
     return top10
 
 
 def compare_rdd_vs_dataframe(spark: SparkSession) -> None:
     """
-    Compare RDD vs DataFrame performance.
+    Compare RDD concept vs DataFrame execution.
 
-    WHY DataFrame is faster:
-      - Uses Catalyst optimizer (query planning)
-      - Generates optimized JVM bytecode
-      - Avoids Python execution overhead
-
-    WHY RDD still exists:
-      - Fine-grained control
-      - Custom logic not expressible in SQL
+    This avoids Python-backed input data and uses spark.range(), which is
+    generated inside the JVM. That prevents Python worker crashes on Windows.
     """
-    sc = spark.sparkContext
+    print("\nRDD timing skipped on this Windows runtime.")
+    print("Reason: Python-backed RDD actions are crashing the local Python worker.")
+    print("Conceptually, RDDs use Python lambdas; DataFrames use Catalyst/JVM plans.")
 
-    text = "spark is fast and spark is scalable and spark is powerful " * 10000
-
-    # RDD
     t0 = time.perf_counter()
-    rdd = sc.parallelize(text.split())
-    rdd_result = (
-        rdd.map(lambda w: (w, 1))
-           .reduceByKey(lambda a, b: a + b)
-           .collect()
+
+    df = (
+        spark.range(100_000)
+        .withColumn(
+            "word",
+            F.when((F.col("id") % 5) == 0, F.lit("spark"))
+             .when((F.col("id") % 5) == 1, F.lit("fast"))
+             .when((F.col("id") % 5) == 2, F.lit("scalable"))
+             .when((F.col("id") % 5) == 3, F.lit("powerful"))
+             .otherwise(F.lit("data"))
+        )
     )
-    t1 = time.perf_counter()
 
-    # DataFrame
-    from pyspark.sql import functions as F
-
-    t2 = time.perf_counter()
-    df = spark.createDataFrame([(w,) for w in text.split()], ["word"])
-    df_result = (
+    result_df = (
         df.groupBy("word")
           .count()
-          .orderBy(F.desc("count"))
-          .collect()
+          .orderBy(F.desc("count"), F.asc("word"))
     )
-    t3 = time.perf_counter()
 
-    print(f"RDD:       {(t1 - t0) * 1000:.2f} ms")
-    print(f"DataFrame: {(t3 - t2) * 1000:.2f} ms")
+    result_df.show(truncate=False)
+
+    t1 = time.perf_counter()
+
+    print(f"DataFrame JVM execution time: {(t1 - t0) * 1000:.2f} ms")
+    print("WHY DataFrame wins: Catalyst optimizer can inspect and optimize columns.")
+    print("WHY RDD matters: it teaches Spark's low-level MapReduce execution model.")
 
 
 def show_dag_stages(spark: SparkSession) -> None:
     """
     Show Spark query plan and DAG stages.
 
-    WHY this matters:
-      Interviewers often ask:
-        "Explain Spark execution plan"
-        "What is Catalyst optimizer?"
+    Sections:
+      Parsed Logical Plan    — what you wrote
+      Analyzed Logical Plan  — resolved names and types
+      Optimized Logical Plan — Catalyst optimizations
+      Physical Plan          — actual execution plan and shuffles
     """
-    from pyspark.sql import functions as F
-
-    df = spark.range(1000000)
+    df = spark.range(100_000)
 
     df_transformed = (
         df.filter(F.col("id") % 2 == 0)
@@ -191,22 +190,17 @@ def show_dag_stages(spark: SparkSession) -> None:
     print("\n=== EXPLAIN PLAN ===")
     df_transformed.explain(True)
 
-    # Explanation:
-    # Parsed Logical Plan: raw query
-    # Analyzed Logical Plan: types resolved
-    # Optimized Logical Plan: Catalyst optimizations applied
-    # Physical Plan: actual execution strategy
 
-
-def main():
+def main() -> None:
     spark = None
+
     try:
         spark = create_spark_session()
 
         print("\n=== LAZY EVALUATION ===")
         demonstrate_lazy_evaluation(spark)
 
-        print("\n=== RDD WORD COUNT ===")
+        print("\n=== WORD COUNT / RDD CONCEPT ===")
         sample_text = """
         Toyota builds cars in plants across the world. Each plant has sensors
         monitoring temperature pressure and vibration. The sensors report data
@@ -214,6 +208,8 @@ def main():
         """ * 100
 
         top10 = rdd_word_count(spark, sample_text)
+
+        print("\nReturned top 10 list:")
         for word, count in top10:
             print(f"  {word:<15} {count}")
 

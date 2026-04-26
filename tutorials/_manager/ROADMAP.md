@@ -1,6 +1,6 @@
 # StudyBook — Tutorial Roadmap
 # Last updated: 2026-04-26
-# 41 topics total | Priority: Toyota → Capital One → Fundamentals → Advanced
+# 47 topics total | Priority: Toyota → Capital One → Fundamentals → Advanced
 
 ---
 
@@ -10,6 +10,13 @@
 # 🔨 .py files generated (via ChatGPT)
 # ✔️  tested locally
 # ⬜ not started
+
+---
+
+## PRIORITY KEY
+# 🔴 MUST  — asked in every DE interview; production skill
+# 🟠 SHOULD — asked in senior/specialist interviews
+# 🟡 NICE  — differentiator; less common but impressive
 
 ---
 
@@ -52,33 +59,46 @@
 
 ## BATCH 3 — Data Engineering Fundamentals (24-30)
 
-| # | Topic | Slug | prompt.md | READY_TO_PASTE | .py files | Tested |
-|---|---|---|---|---|---|---|
-| 24 | Pandas | pandas | ⬜ | ⬜ | ⬜ | ⬜ |
-| 25 | NumPy | numpy | ⬜ | ⬜ | ⬜ | ⬜ |
-| 26 | Polars | polars | ⬜ | ⬜ | ⬜ | ⬜ |
-| 27 | DuckDB | duckdb | ⬜ | ⬜ | ⬜ | ⬜ |
-| 28 | Data Stubbing | data_stubbing | ⬜ | ⬜ | ⬜ | ⬜ |
-| 29 | Streamlit | streamlit | ⬜ | ⬜ | ⬜ | ⬜ |
-| 30 | FastAPI | fastapi | ⬜ | ⬜ | ⬜ | ⬜ |
+| # | Topic | Slug | Priority | prompt.md | READY_TO_PASTE | .py files | Tested |
+|---|---|---|---|---|---|---|---|
+| 24 | Pandas | pandas | 🔴 MUST | ✅ | 📋 | ⬜ | ⬜ |
+| 25 | NumPy | numpy | 🟡 NICE | ⬜ | ⬜ | ⬜ | ⬜ |
+| 26 | Polars | polars | 🔴 MUST | ✅ | 📋 | ⬜ | ⬜ |
+| 27 | DuckDB | duckdb | 🔴 MUST | ✅ | 📋 | ⬜ | ⬜ |
+| 28 | Data Stubbing (Faker) | data_stubbing | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
+| 29 | Streamlit | streamlit | 🟡 NICE | ⬜ | ⬜ | ⬜ | ⬜ |
+| 30 | FastAPI | fastapi | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
 
 ---
 
 ## BATCH 4 — Advanced / Cloud (31-41)
 
-| # | Topic | Slug | prompt.md | READY_TO_PASTE | .py files | Tested |
-|---|---|---|---|---|---|---|
-| 31 | AWS Lambda | aws_lambda | ⬜ | ⬜ | ⬜ | ⬜ |
-| 32 | AWS DynamoDB | aws_dynamodb | ⬜ | ⬜ | ⬜ | ⬜ |
-| 33 | AWS MSK / Kafka | aws_msk_kafka | ⬜ | ⬜ | ⬜ | ⬜ |
-| 34 | AWS Bedrock | aws_bedrock | ⬜ | ⬜ | ⬜ | ⬜ |
-| 35 | Terraform | terraform | ⬜ | ⬜ | ⬜ | ⬜ |
-| 36 | Docker | docker | ⬜ | ⬜ | ⬜ | ⬜ |
-| 37 | CI/CD | cicd | ⬜ | ⬜ | ⬜ | ⬜ |
-| 38 | AWS ECS | aws_ecs | ⬜ | ⬜ | ⬜ | ⬜ |
-| 39 | AWS CloudFormation | aws_cloudformation | ⬜ | ⬜ | ⬜ | ⬜ |
-| 40 | OpenSearch | opensearch | ⬜ | ⬜ | ⬜ | ⬜ |
-| 41 | Snowflake / PyIceberg | snowflake_pyiceberg | ⬜ | ⬜ | ⬜ | ⬜ |
+| # | Topic | Slug | Priority | prompt.md | READY_TO_PASTE | .py files | Tested |
+|---|---|---|---|---|---|---|---|
+| 31 | AWS Lambda | aws_lambda | 🔴 MUST | ⬜ | ⬜ | ⬜ | ⬜ |
+| 32 | AWS DynamoDB | aws_dynamodb | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
+| 33 | AWS MSK / Kafka | aws_msk_kafka | 🔴 MUST | ✅ | 📋 | ⬜ | ⬜ |
+| 34 | AWS Bedrock | aws_bedrock | 🟡 NICE | ⬜ | ⬜ | ⬜ | ⬜ |
+| 35 | Terraform | terraform | 🔴 MUST | ⬜ | ⬜ | ⬜ | ⬜ |
+| 36 | Docker | docker | 🔴 MUST | ✅ | 📋 | ⬜ | ⬜ |
+| 37 | CI/CD (GitHub Actions) | cicd | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
+| 38 | AWS ECS | aws_ecs | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
+| 39 | AWS CloudFormation | aws_cloudformation | 🟡 NICE | ⬜ | ⬜ | ⬜ | ⬜ |
+| 40 | OpenSearch | opensearch | 🟡 NICE | ⬜ | ⬜ | ⬜ | ⬜ |
+| 41 | Snowflake / PyIceberg | snowflake_pyiceberg | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
+
+---
+
+## BATCH 5 — Suggested Additions (42-47)
+
+| # | Topic | Slug | Priority | prompt.md | READY_TO_PASTE | .py files | Tested |
+|---|---|---|---|---|---|---|---|
+| 42 | AWS Lambda (DE patterns) | aws_lambda_de | 🔴 MUST | ⬜ | ⬜ | ⬜ | ⬜ |
+| 43 | Terraform for DE | terraform_de | 🔴 MUST | ⬜ | ⬜ | ⬜ | ⬜ |
+| 44 | Apache Iceberg (PyIceberg) | pyiceberg | 🔴 MUST | ⬜ | ⬜ | ⬜ | ⬜ |
+| 45 | Great Expectations | great_expectations | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
+| 46 | CI/CD for Data Pipelines | cicd_data | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
+| 47 | Redis for Data Engineers | redis_de | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
 
 ---
 

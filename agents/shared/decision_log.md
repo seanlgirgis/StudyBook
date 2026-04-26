@@ -228,3 +228,19 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: ensures runner scripts and docs resolve a single canonical layout and prevents accidental drift to empty legacy mirror folders
 - Alternatives considered: keep backward-compatibility fallback to `temp\jobsearch`; continue dual-layout support
 - Impacted files: scripts/run_mission_audio.ps1, config/env/base.psd1, config/machines/asuspc.psd1, config/machines/dell-laptop.psd1, scripts/ops/open_jobsearch.ps1, scripts/ops/restore_managed_repos.ps1, agents/shared/context_index.md, jobsearch/scripts/generate_audio_generic.py
+
+- Date: 2026-04-26
+- Decision ID: DEC-028
+- Task ID: TB-20260426-02
+- Decision: enforce `env_setter.ps1` as mandatory first command for every new StudyBook session
+- Rationale: guarantees consistent environment/bootstrap state across sessions and prevents avoidable drift from missing env initialization
+- Alternatives considered: rely on operator memory only; keep env bootstrap as optional guidance
+- Impacted files: AGENT_STARTUP_NOTE.md, agents/shared/context_index.md, agents/shared/open_loops.md, agents/shared/task_register.md, agents/shared/agent_status.md
+
+- Date: 2026-04-26
+- Decision ID: DEC-029
+- Task ID: TB-20260426-03
+- Decision: normalize active agent memory files to `D:\Workarea\StudyBook` and store a current StudyBook footprint snapshot in shared context memory
+- Rationale: preserves durable orientation after root migration and reduces startup drift from stale `D:\StudyBook` references
+- Alternatives considered: leave historical memory files unchanged; rely on ad-hoc chat summaries instead of repository memory updates
+- Impacted files: agents/AGENT_CHEATSHEET.md, agents/QWEN_AGENT_HANDOFF.md, agents/STUDYBOOK_FAST_GUIDE.md, agents/shared/context_index.md, agents/shared/user_profile.md, agents/shared/pending_task.md, agents/shared/open_loops.md, agents/shared/task_register.md, agents/shared/agent_status.md

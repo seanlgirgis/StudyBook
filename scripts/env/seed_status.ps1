@@ -38,7 +38,13 @@ if ($seedExists) {
             $seedDecryptable = $true
         }
         elseif (-not $seedError) {
-            $seedError = "Seed file found but decrypt returned null."
+            $seedLastError = Get-StudyBookSecretSeedLastError
+            if (-not [string]::IsNullOrWhiteSpace($seedLastError)) {
+                $seedError = $seedLastError
+            }
+            else {
+                $seedError = "Seed file found but decrypt returned null."
+            }
         }
     }
     catch {

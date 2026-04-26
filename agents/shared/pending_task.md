@@ -8,7 +8,7 @@
 
 ## Goal
 - Persist Thursday coding-test preparation context for LeetCode practice by:
-- familiarizing with `D:\StudyBook\playground`,
+- familiarizing with `D:\Workarea\StudyBook\playground`,
 - maintaining a single progress tracker file,
 - keeping shared memory artifacts current for session handoff.
 
@@ -57,3 +57,4 @@
 ## Notes
 - Test day target is Thursday early morning: 2026-04-23 (America/Chicago).
 - Keep tracker updates lightweight after each practice session.
+

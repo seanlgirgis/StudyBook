@@ -38,7 +38,7 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-020 | TB-20260402-32 | Execute coding assets shift/lift and decommission migrated D:\Workspace sources | closed | none | 2026-04-02 |
 | LOOP-021 | TB-20260402-33 | Produce first manuals/roadmaps-ready docs from coding_challenges manifests | closed | none | 2026-04-02 |
 | LOOP-022 | TB-20260402-34 | Complete Databases shift/lift from Workspace into tracks/08_databases and _prompts/legacy/databases | closed | none | 2026-04-02 |
-| LOOP-023 | TB-20260402-36 | Reconcile duplicate-suffixed Technologies legacy prompts produced during conflict-safe migration | open | Review `D:\StudyBook\temp\migration_meta\run_20260402_121903\conflicts_report.md` and decide keep-vs-dedupe policy for `__dupNNN` files | 2026-04-02 |
+| LOOP-023 | TB-20260402-36 | Reconcile duplicate-suffixed Technologies legacy prompts produced during conflict-safe migration | open | Review `D:\Workarea\StudyBook\temp\migration_meta\run_20260402_121903\conflicts_report.md` and decide keep-vs-dedupe policy for `__dupNNN` files | 2026-04-02 |
 | LOOP-024 | TB-20260402-37 | Decommission migrated Technologies + DE_Interview sources using move-map safe deletion | closed | none | 2026-04-02 |
 | LOOP-025 | TB-20260402-38 | Reconcile migration board statuses with completed source-deletion reality for M-003/M-012 and add residual-Technologies decommission plan | open | Decide whether to decommission remaining `D:\Workspace\Technologies` non-migrated assets or retain as legacy runtime island, then update board accordingly | 2026-04-02 |
 | LOOP-026 | TB-20260402-41 | Resolve GitHub large-file push rejection for StudyBook main branch | closed | none | 2026-04-02 |
@@ -221,4 +221,15 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-128 | TB-20260425-28 | Wire python-testing-pipelines cards in learning-craft and learning-python to live page | closed | none | 2026-04-25 |
 | LOOP-129 | TB-20260425-29 | Wire python-concurrency section card to live page | closed | none | 2026-04-25 |
 | LOOP-144 | TB-20260426-01 | Stabilize StudyBook/jobsearch/website sibling-repo layout under D:\\Workarea and remove legacy temp mirrors | closed | none | 2026-04-26 |
+| LOOP-145 | TB-20260426-02 | Persist startup memory requiring env_setter.ps1 as first command in StudyBook sessions | closed | none | 2026-04-26 |
+| LOOP-146 | TB-20260426-03 | Refresh StudyBook memory files with current repo footprint and Workarea root normalization | closed | none | 2026-04-26 |
+| LOOP-147 | TB-20260426-04 | Bootstrap `tutorials/02_PySpark_Docker` with educational collaboration docs and runnable Phase 1 lesson files | closed | none | 2026-04-26 |
+| LOOP-148 | TB-20260426-05 | Resolve Spark `InvalidClassException` by aligning local PySpark package version with Docker Spark master/worker image version | closed | none | 2026-04-26 |
+| LOOP-149 | TB-20260426-06 | Implement and validate `02_dataframe_operations.py` lesson in PySpark Docker tutorial track | closed | none | 2026-04-26 |
+| LOOP-150 | TB-20260426-07 | Implement and validate `04_joins_and_broadcast.py` including fix for Python worker version mismatch | closed | none | 2026-04-26 |
+| LOOP-151 | TB-20260426-08 | Implement and validate `05_shuffle_partitions_cache.py` including full skew-detection metric report | closed | none | 2026-04-26 |
+| LOOP-152 | TB-20260426-09 | Implement and validate `07_spark_ui_experiments.py` with UI guidance and 30-second inspection window | closed | none | 2026-04-26 |
+| LOOP-153 | TB-20260426-10 | Add lesson-by-lesson expected output checklist section in tutorial README for fast collaborator verification | closed | none | 2026-04-26 |
+| LOOP-154 | TB-20260426-11 | Create linked Docker teaching pack under tutorial folder with sample compose/dockerfile/env/run templates | closed | none | 2026-04-26 |
+
 

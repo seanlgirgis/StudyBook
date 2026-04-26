@@ -1,9 +1,9 @@
 # User Profile
 
-**Last Updated:** 2026-04-13  
+**Last Updated:** 2026-04-26  
 **Primary Sources:**  
-- `D:\StudyBook\temp\jobsearch\data\source_of_truth.json`  
-- `D:\StudyBook\temp\seanlgirgis.github.io` (repo structure and generators)
+- `D:\Workarea\jobsearch\data\source_of_truth.json`  
+- `D:\Workarea\seanlgirgis.github.io` (repo structure and generators)
 
 ## Core Career Identity
 
@@ -39,18 +39,19 @@
 
 ## Operational Anchors
 
+- StudyBook canonical root: `D:\Workarea\StudyBook`
 - StudyBook runtime venv: `C:\py_venv\proj_educate`
 - JobSearch runtime venv (project-owned): `C:\py_venv\JobSearch`
 - Website repo currently has its own env script pointing to: `C:\py_venv\resume_venv`
 
 ## JobSearch Source of Truth Rule
 
-- Treat `D:\StudyBook\temp\jobsearch\data\source_of_truth.json` as canonical career/resume data for JobSearch workflows.
+- Treat `D:\Workarea\jobsearch\data\source_of_truth.json` as canonical career/resume data for JobSearch workflows.
 - Any generated resume, tailoring, or job-fit logic should reconcile against this file first.
 
 ## Website Repo Map (High-Level)
 
-- `D:\StudyBook\temp\seanlgirgis.github.io\generate.py` is the central multi-format build orchestrator.
+- `D:\Workarea\seanlgirgis.github.io\generate.py` is the central multi-format build orchestrator.
 - Data/layout inputs are YAML-driven under `...\data\` with a `store.yaml` content model plus target layouts.
 - Renderers live under `...\renderers\` (`docx`, `html`, `pdf`, `md`).
 - Build outputs include `resume/cv` docx/pdf/md/html assets and site components.
@@ -97,11 +98,11 @@
 ## StudyBook Command Shortcuts
 
 - High-frequency index workflow commands to preserve in durable memory:
-  - `D:\StudyBook\refresh_index_and_push.ps1` (refreshes `coding_challenges/index.csv`, then git workflow)
-  - `D:\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]` (grep-like lookup over `coding_challenges/index.csv`)
-  - `D:\StudyBook\index_cli.ps1 <command> ...` (CLI add/update/delete/find/show/open for CSV index)
-  - `D:\StudyBook\run_index_ui.ps1` (local Streamlit UI)
-  - `D:\StudyBook\run_index_ui_docker.ps1 -Action up|down|logs|restart` (Dockerized Streamlit UI)
+  - `D:\Workarea\StudyBook\refresh_index_and_push.ps1` (refreshes `coding_challenges/index.csv`, then git workflow)
+  - `D:\Workarea\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]` (grep-like lookup over `coding_challenges/index.csv`)
+  - `D:\Workarea\StudyBook\index_cli.ps1 <command> ...` (CLI add/update/delete/find/show/open for CSV index)
+  - `D:\Workarea\StudyBook\run_index_ui.ps1` (local Streamlit UI)
+  - `D:\Workarea\StudyBook\run_index_ui_docker.ps1 -Action up|down|logs|restart` (Dockerized Streamlit UI)
 - Example:
   - `.\search_index.ps1 48`
 
@@ -110,6 +111,7 @@
 - Owner preference (2026-04-13): from any new machine/session, user may ask:
   - "create the docker in there and start it for me"
 - This specifically means bootstrap and run the index UI Docker stack in StudyBook:
-  - compose file: `D:\StudyBook\docker\index_ui\docker-compose.yml`
-  - runner: `D:\StudyBook\run_index_ui_docker.ps1`
+  - compose file: `D:\Workarea\StudyBook\docker\index_ui\docker-compose.yml`
+  - runner: `D:\Workarea\StudyBook\run_index_ui_docker.ps1`
   - target URL: `http://localhost:8501` (or next available mapped port if changed)
+

@@ -29,6 +29,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Use `Reasoning Depth: deep` for migration and architecture decisions.
 - Stop only for high-risk ambiguity, not for routine implementation details.
 - Canonical runtime target is `D:\Workarea\StudyBook` (deprecated path deleted).
+- **Session startup invariant (2026-04-26): for any work in `D:\Workarea\StudyBook`, run `.\env_setter.ps1 -NonInteractive` first (use `.\env_setter.ps1` only for interactive fallback).**
 - Standing owner directive (2026-04-02): treat encrypted StudyBook secrets as system of record for sensitive values; use seed-backed secret updates by default and avoid storing sensitive values in tracked files/chat.
 - **Seed-backed secrets (2026-04-02): Passphrase entered ONCE per machine during seed registration. NEVER ask user for passphrase again - env_setter.ps1 auto-loads from DPAPI-encrypted seed file.**
 - **Job-site credential canon (2026-04-04): use `JOBSITE_<SITEKEY>_{URL,USER,PASSWORD}` keys via `agents/skills/jobsite-login-secrets` scripts; avoid ad-hoc keys like `SAPSF_*` to prevent retrieval mismatches.**
@@ -180,9 +181,28 @@ Purpose: compact durable memory map for fast session bootstrap.
   - lane runner added: `run_all_mongodb_nuggets.py` (one-line PASS/FAIL per nugget + summary)
 - Known expected limitation:
   - Atlas Search requires `default` search index on `nugget_lab.search_demo` in Atlas UI.
+
+## StudyBook Footprint Snapshot (2026-04-26)
+
+- Canonical root:
+  - `D:\Workarea\StudyBook`
+- Top-level working areas:
+  - `agents`, `_infra`, `coding_challenges`, `tracks`, `tutorials`, `docs`, `scripts`, `playground`, `data`, `config`, `prompts`, `temp`
+- Current scale snapshot:
+  - `coding_challenges`: `~908` files / `~251` dirs
+  - `tracks`: `~665` files / `~203` dirs
+  - `tutorials`: `~150` files / `~42` dirs
+  - `docs`: `~112` files / `~14` dirs
+  - `playground`: `~214` files / `~5` dirs
+  - `data`: `~877` files / `~350` dirs
+- External sibling repos (separate git histories):
+  - `D:\Workarea\jobsearch`
+  - `D:\Workarea\seanlgirgis.github.io`
+- Infra runtime status memory:
+  - Docker stacks were rebuilt from `D:\Workarea\StudyBook` on 2026-04-26; bind mounts verified on this root.
 ## Last Updated
 
-- 2026-04-12
+- 2026-04-26
 
 ## StudyBook Command Memory
 

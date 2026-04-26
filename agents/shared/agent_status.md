@@ -2,58 +2,70 @@
 
 ## Current Run (2026-04-26)
 
-**Task ID:** TB-20260426-01  
-**Task Type:** MIGRATION  
-**Goal:** Stabilize StudyBook/JobSearch/Website operations after root move to `D:\Workarea`.
+**Task ID:** TB-20260426-11  
+**Task Type:** ENHANCEMENT  
+**Goal:** Create a `docker` teaching subfolder under `tutorials/02_PySpark_Docker` with linked markdown guidance and sample files for build/deploy/run workflows.
 
 ### Factual Summary
 
-- Finalized runtime/config contract to sibling-repo model:
-  - `D:\Workarea\StudyBook`
-  - `D:\Workarea\jobsearch`
-  - `D:\Workarea\seanlgirgis.github.io`
-- Hardened audio runner behavior:
-  - `scripts/run_mission_audio.ps1` now uses `C:\temp\studybook_audio` and fails fast if sibling `..\jobsearch` is missing instead of silently falling back to legacy temp path.
-- Cleaned stale path guidance in `jobsearch/scripts/generate_audio_generic.py` (removed legacy `temp\jobsearch` and old `D:\StudyBook` references in usage/help output).
-- Verified and kept sibling-repo defaults in:
-  - `config/env/base.psd1`
-  - `config/machines/asuspc.psd1`
-  - `config/machines/dell-laptop.psd1`
-  - `scripts/ops/open_jobsearch.ps1`
-  - `scripts/ops/restore_managed_repos.ps1`
-- Updated control-memory wording in `agents/shared/context_index.md` to describe sibling-managed repos.
-- Removed empty legacy directories:
-  - `D:\Workarea\StudyBook\temp\jobsearch`
-  - `D:\Workarea\StudyBook\temp\seanlgirgis.github.io`
+- Created `tutorials/02_PySpark_Docker/docker/` with a structured mini-course and linked navigation.
+- Added Docker teaching docs covering:
+  - why Docker for Spark
+  - how to build images/compose
+  - local deploy flow
+  - why master + worker (two containers)
+  - how to run tutorial with containers
+  - Docker Spark vs local Spark tradeoffs
+  - cloud deployment options (AWS + other clouds) and runtime differences
+- Added sample assets under `docker/samples/`:
+  - compose template
+  - client Dockerfile template
+  - env template
+  - local PowerShell runner
+  - client-container shell runner
+- Added discoverability link from tutorial root README to the new Docker pack.
+- Updated continuity artifacts (`task_register`, `open_loops`, `agent_status`).
+
+### Files Added
+
+- `tutorials/02_PySpark_Docker/docker/README.md`
+- `tutorials/02_PySpark_Docker/docker/01_why_docker_for_spark.md`
+- `tutorials/02_PySpark_Docker/docker/02_build_images.md`
+- `tutorials/02_PySpark_Docker/docker/03_deploy_local_compose.md`
+- `tutorials/02_PySpark_Docker/docker/04_why_two_containers.md`
+- `tutorials/02_PySpark_Docker/docker/05_run_tutorial_with_containers.md`
+- `tutorials/02_PySpark_Docker/docker/06_docker_vs_local.md`
+- `tutorials/02_PySpark_Docker/docker/07_deploy_on_cloud.md`
+- `tutorials/02_PySpark_Docker/docker/samples/docker-compose.spark-standalone.sample.yml`
+- `tutorials/02_PySpark_Docker/docker/samples/Dockerfile.pyspark-client.sample`
+- `tutorials/02_PySpark_Docker/docker/samples/.env.sample`
+- `tutorials/02_PySpark_Docker/docker/samples/run_tutorial_local.ps1`
+- `tutorials/02_PySpark_Docker/docker/samples/run_tutorial_in_client_container.sh`
 
 ### Files Modified
 
-- `scripts/run_mission_audio.ps1`
-- `agents/shared/context_index.md`
+- `tutorials/02_PySpark_Docker/README.md` (added link to Docker deep-dive pack)
+- `agents/shared/task_register.md`
+- `agents/shared/open_loops.md`
 - `agents/shared/agent_status.md`
-- `jobsearch/scripts/generate_audio_generic.py` (external managed repo)
 
 ### Validation
 
-- `Select-String` validation passed for:
-  - `C:\temp\studybook_audio` default in audio runner.
-  - Sibling `..\jobsearch` resolution across scripts/config.
-  - Removal of legacy `temp\jobsearch` fallback from runner logic.
-  - Removal of stale `D:\StudyBook` path text in audio generator helper.
-- Verified both legacy temp mirror dirs are deleted.
-- Verified all three canonical repos exist under `D:\Workarea`.
+- Verified generated file tree under `tutorials/02_PySpark_Docker/docker` via recursive listing.
+- Verified README cross-link entry added in tutorial root README.
 
 ### Assumptions
 
-- Historical/archive documents may still reference legacy paths intentionally; this run only normalized active operational surfaces.
+- User wanted educational documentation and templates (not immediate container replacement of existing working setup).
+- Sample files are intended as adaptable references and not enforced as authoritative infra baseline.
 
 ### Risks
 
-- Existing old root `D:\StudyBook` may still be used accidentally by manual shell sessions if launched from old shortcuts.
+- Low risk; additive documentation/templates only.
 
 ### Next Step
 
-- Prefer starting all sessions from `D:\Workarea\StudyBook` and run `pwsh .\env_setter.ps1` there before pipeline work.
+- Optional: add a "quickstart verification script" in `docker/samples` that checks container health + runs lesson 01 smoke test automatically.
 
 ---
 

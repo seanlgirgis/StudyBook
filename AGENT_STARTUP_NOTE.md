@@ -5,7 +5,7 @@ Read this file at the start of every new session in this repository.
 ## Required Basics
 
 1. Python environment setup:
-   - Run:
+   - First command for every new session in this repository (mandatory):
      - `.\env_setter.ps1 -NonInteractive`
    - If needed in interactive shells:
      - `.\env_setter.ps1`
@@ -15,8 +15,8 @@ Read this file at the start of every new session in this repository.
    - Do not use absolute paths unless explicitly requested.
 
 3. Mounted repositories currently in use:
-   - `temp/jobsearch`
-   - `temp/seanlgirgis.github.io`
+   - `..\jobsearch`
+   - `..\seanlgirgis.github.io`
 
 ## Session Kickoff Rule
 
@@ -34,5 +34,5 @@ then read this file, resolve the key, and ingest `JOBSEARCH_AGENT_CONTEXT.md` be
 ## User Authorization Note
 
 User authorization (recorded April 16, 2026):
-- The user grants the agent permission to read and modify files under the main project directory `D:\StudyBook` when needed for active tasks.
+- The user grants the agent permission to read and modify files under the main project directory `D:\Workarea\StudyBook` when needed for active tasks.
 - This note expresses user intent; platform sandbox/security controls still apply.
