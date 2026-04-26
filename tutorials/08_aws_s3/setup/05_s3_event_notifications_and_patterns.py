@@ -103,22 +103,28 @@ def query_object_with_s3_select(bucket, key, sql, input_format="CSV"):
     if input_format.upper() != "CSV":
         raise ValueError("This tutorial function currently supports CSV only")
 
-    response = s3.select_object_content(
-        Bucket=bucket,
-        Key=key,
-        ExpressionType="SQL",
-        Expression=sql,
-        InputSerialization={
-            "CSV": {
-                "FileHeaderInfo": "USE",
-                "RecordDelimiter": "\n",
-                "FieldDelimiter": ",",
-            }
-        },
-        OutputSerialization={
-            "CSV": {}
-        },
-    )
+    try:
+        response = s3.select_object_content(
+            Bucket=bucket,
+            Key=key,
+            ExpressionType="SQL",
+            Expression=sql,
+            InputSerialization={
+                "CSV": {
+                    "FileHeaderInfo": "USE",
+                    "RecordDelimiter": "\n",
+                    "FieldDelimiter": ",",
+                }
+            },
+            OutputSerialization={
+                "CSV": {}
+            },
+        )
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "MethodNotAllowed":
+            print("WARNING: S3 Select is disabled on this bucket (deprecated). Skipping Select query.")
+            return ""
+        raise
 
     records = []
 

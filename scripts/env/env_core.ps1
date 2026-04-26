@@ -1,5 +1,13 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+try { Import-Module Microsoft.PowerShell.Security -ErrorAction SilentlyContinue } catch {}
+
+if (-not (Get-Command Import-PowerShellDataFile -ErrorAction SilentlyContinue)) {
+    function Import-PowerShellDataFile {
+        param([Parameter(Mandatory=$true)][string]$Path)
+        return Invoke-Expression (Get-Content -LiteralPath $Path -Raw)
+    }
+}
 
 function ConvertTo-NormalizedMachineName {
     param(
@@ -557,7 +565,7 @@ function Invoke-StudyBookEnvBootstrap {
         if (-not (Test-Path -LiteralPath $activateScript)) {
             throw "Activation script not found at $activateScript"
         }
-        Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
+        try { Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force -ErrorAction SilentlyContinue } catch {}
         . $activateScript
     }
 
@@ -594,6 +602,10 @@ function Invoke-StudyBookEnvBootstrap {
                             $secretData = ConvertFrom-JsonToHashtable -Json $secretJson
                             foreach ($secretKey in $secretData.Keys) {
                                 [Environment]::SetEnvironmentVariable($secretKey, [string]$secretData[$secretKey], "Process")
+                            }
+                            $seedPath = Get-StudyBookSecretSeedPath -ProjectRoot $projectRootFull
+                            if (-not (Test-Path -LiteralPath $seedPath)) {
+                                Protect-StudyBookSecretSeed -Passphrase $passphrase -SeedPath $seedPath
                             }
                         }
                         catch {

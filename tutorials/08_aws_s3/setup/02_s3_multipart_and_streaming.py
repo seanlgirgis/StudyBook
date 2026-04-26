@@ -177,8 +177,8 @@ def upload_with_transfer_config(bucket, key, local_path):
     s3 = get_s3_client()
 
     config = TransferConfig(
-        multipart_threshold=100 * 1024 * 1024,
-        multipart_chunksize=100 * 1024 * 1024,
+        multipart_threshold=5 * 1024 * 1024,
+        multipart_chunksize=5 * 1024 * 1024,
         max_concurrency=4,
         use_threads=True,
     )
@@ -269,9 +269,9 @@ def main():
     manual_key = "tutorial/s3-multipart/manual-large-metrics.csv"
     auto_key = "tutorial/s3-multipart/auto-large-metrics.csv"
 
-    generate_synthetic_large_file(local_path, size_mb=150)
+    generate_synthetic_large_file(local_path, size_mb=15)
 
-    estimate = calculate_multipart_cost(file_size_gb=0.15, part_size_mb=100)
+    estimate = calculate_multipart_cost(file_size_gb=0.015, part_size_mb=5)
     print("\nMultipart estimate:")
     for key, value in estimate.items():
         print(f"{key}: {value}")
@@ -281,7 +281,7 @@ def main():
         bucket=bucket,
         key=manual_key,
         local_path=local_path,
-        part_size_mb=100,
+        part_size_mb=5,
     )
 
     print("\nTransferConfig upload:")

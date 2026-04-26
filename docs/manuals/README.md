@@ -9,6 +9,7 @@ While the `operations/` and `adr/` folders contain technical workflows, scripts,
 ## Current Contents
 
 * **[AWS Access & Configuration Manual](./AWS_ACCESS_GUIDE.md)**: A complete guide on how AWS is configured on your machine, how to verify your access using the canonical `study` profile, and how to securely restore your credentials when moving to a new laptop.
+* **[Secrets & Passphrase Guide](./PASSPHRASE_GUIDE.md)**: Details on how the encrypted secrets system works, the master passphrase, and how the automated local seed ensures you only have to authenticate once per machine.
 
 ## How to Use This Folder
 
