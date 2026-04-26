@@ -28,7 +28,7 @@
 | 09 | AWS CloudWatch | aws_cloudwatch | ✅ | 🔨 | ✔️ |
 | 10 | Python Logging | python_logging | ✅ | ⬜ | ⬜ |
 | 11 | dbt | dbt | ✅ | ⬜ | ⬜ |
-| 12 | Parquet | parquet | ✅ | ⬜ | ⬜ |
+| 12 | Parquet | parquet | ✅ | ⬜ | ⬜ |  ← prompt_READY_TO_PASTE.md written 2026-04-25
 | 13 | Python Concurrency | python_concurrency | ✅ | ⬜ | ⬜ |
 
 ---
