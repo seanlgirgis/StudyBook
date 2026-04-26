@@ -2,27 +2,23 @@
 
 ## Current Run (2026-04-25)
 
-**Task ID:** TB-20260425-28  
+**Task ID:** TB-20260425-29  
 **Task Type:** ENHANCEMENT  
-**Goal:** Wire `python-testing-pipelines` as live/clickable in all relevant learning sections after R2 audio publish.
+**Goal:** Wire `python-concurrency` learning page into the website section cards after R2 audio publication.
 
 ### Factual Summary
 
-- Confirmed page audio source is live and correct:
-  - `temp/seanlgirgis.github.io/learning/python-testing-pipelines.html`
-  - `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_python-testing-pipelines.mp3`
-  - `type="audio/mpeg"`
-- Updated two component cards from planned to live/clickable:
-  - `temp/seanlgirgis.github.io/components/learning-craft.html`
+- Verified page audio source points to live R2 MP3 with correct MIME in:
+  - `temp/seanlgirgis.github.io/learning/python-concurrency.html`
+- Updated Python section card from planned to live in:
   - `temp/seanlgirgis.github.io/components/learning-python.html`
-- Both cards now:
-  - open `learning/python-testing-pipelines.html`
-  - show `Open Reference →`
-  - show `🎧 Live` and `🎬 N/A`
+- Card now includes:
+  - clickable card + title link to `learning/python-concurrency.html`
+  - `Open Reference →`
+  - `🎧 Live` and `🎬 N/A`
 
 ### Files Modified
 
-- `temp/seanlgirgis.github.io/components/learning-craft.html`
 - `temp/seanlgirgis.github.io/components/learning-python.html`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
@@ -31,14 +27,12 @@
 ### Validation
 
 - `Select-String` checks passed for:
-  - card link target presence in both component files
-  - `Open Reference` row in both component files
-  - `🎧 Live` status in both component files
-  - final MP3 URL + MIME in `learning/python-testing-pipelines.html`
+  - `learning/python-concurrency.html` audio URL + `audio/mpeg`
+  - `learning-python.html` link target + live badge
 
 ### Assumptions
 
-- Section placement in both `learning-craft` and `learning-python` is intentional and should remain dual-listed.
+- `python-concurrency` is intentionally placed under `Python for Data Engineering` as primary section.
 
 ### Risks
 
@@ -46,7 +40,7 @@
 
 ### Next Step
 
-- User can hard-refresh website and verify both section cards open the same live page.
+- Hard refresh browser and confirm the new Python card opens `learning/python-concurrency.html`.
 
 ---
 
