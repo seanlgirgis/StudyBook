@@ -4,6 +4,31 @@
 
 ---
 
+## 2026-04-26 - State Sync Lessons
+
+### L7: Status labels must include verification source
+
+When marking a tutorial as "working", always tag the source:
+
+- `independently verified` (this session run output exists), or
+- `user-reported working` (owner confirmed, not re-run now).
+
+This prevents accidental over-claiming in manager docs.
+
+### L8: Two PySpark tracks are intentional and must stay distinct
+
+- `02_pyspark` is the canonical local `local[*]` track.
+- `02_PySpark_Docker` is a valid Docker/Spark-cluster variant.
+
+Do not mark `02_PySpark_Docker` as duplicate/archive candidate unless owner asks.
+
+### L9: Manager docs should be regenerated from repo scan, not old narrative
+
+`HANDOFF_REPORT.md`, `ROADMAP.md`, and `PROJECT_STATE.md` can drift quickly.
+Use folder/file scan outputs as first source of truth, then merge owner-provided run status.
+
+---
+
 ## CLEANUP POLICY — NON-NEGOTIABLE (2026-04-26)
 
 Runaway AWS costs are a real risk. The following rules apply to every AWS tutorial.

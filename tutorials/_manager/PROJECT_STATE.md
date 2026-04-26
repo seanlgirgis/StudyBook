@@ -1,162 +1,80 @@
-# StudyBook — Project State
-# Last updated: 2026-04-25
-# Update this file at the start/end of every working session.
+# Tutorials Project State
+Last updated: 2026-04-26
+Scope: `D:\Workarea\StudyBook\tutorials`
 
----
+## Current Reality Snapshot
 
-## WHO AND WHY
+- Existing tutorial topic folders: `20`
+- Tested/working topics: `9` (all marked as user-reported working in this sync)
+- READY_TO_PASTE only topics: `11`
+- Not-started planned topics (missing folders): `28`
+- Intentional variant track: `02_PySpark_Docker` (not an accidental duplicate)
 
-Owner: Sean Girgis — Senior Data Engineer
-Goal: Interview preparation + personal learning system
-Active targets: Toyota (IoT/streaming heavy) | Capital One (financial services/compliance heavy)
-Website: https://seanlgirgis.github.io/learning/
+## User-Reported Working Topics
 
----
+- `01_aws_kinesis`
+- `02_pyspark` (canonical local `local[*]`)
+- `02_PySpark_Docker` (Docker/Spark-cluster variant)
+- `08_aws_s3`
+- `09_aws_cloudwatch`
+- `10_python_logging`
+- `12_parquet`
+- `13_python_concurrency`
+- `14_encryption`
 
-## SYSTEM ARCHITECTURE
+## READY_TO_PASTE Only (Code Not Generated Yet)
 
-```
-D:\Workarea\
-├── StudyBook\                       ← main repo
-│   ├── prompts\codex_missions\      ← Claude Code / Codex task prompts
-│   │   └── WebsitePagesAndAudioBYCodexChatgpt\  ← ChatGPT P1 + P2 prompt files
-│   ├── scripts\                     ← PowerShell pipeline scripts
-│   ├── temp\
-│   │   ├── jobsearch\               ← job search data
-│   │   └── gap\done\                ← ChatGPT prompt files (01-28 topics, all done)
-│   └── tutorials\                   ← tutorial Python files (long-running project)
-│       └── _manager\                ← THIS folder — project memory
-└── seanlgirgis.github.io\           ← website repo (separate clone)
-    └── learning\*.html              ← all 49 learning pages
+- `03_apache_airflow`
+- `04_aws_step_functions`
+- `05_delta_lake`
+- `06_aws_emr`
+- `07_aws_glue`
+- `11_dbt`
+- `24_pandas`
+- `26_polars`
+- `27_duckdb`
+- `33_aws_msk_kafka`
+- `36_docker`
 
-D:\temp\studybook_audio\             ← MP3 files (OUTSIDE repo, never commit)
-C:\Users\shareuser\CrossDevice\
-  Pixel 8 Pro\storage\Music\
-  StudyBook\                         ← Phone music folder (54 MP3s + 12 playlists)
+## Not Started (Missing Topic Folders)
 
-R2 CDN: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/
-```
+- `15_data_anonymization_pii`
+- `16_aws_iam`
+- `17_postgresql`
+- `18_sql_patterns`
+- `19_python_testing`
+- `20_pydantic`
+- `21_aws_redshift`
+- `22_aws_athena`
+- `23_sqlalchemy`
+- `25_numpy`
+- `28_data_stubbing`
+- `29_streamlit`
+- `30_fastapi`
+- `31_aws_lambda`
+- `32_aws_dynamodb`
+- `34_aws_bedrock`
+- `35_terraform`
+- `37_cicd`
+- `38_aws_ecs`
+- `39_aws_cloudformation`
+- `40_opensearch`
+- `41_snowflake_pyiceberg`
+- `42_aws_lambda_de`
+- `43_terraform_de`
+- `44_pyiceberg`
+- `45_great_expectations`
+- `46_cicd_data`
+- `47_redis_de`
 
----
+## File-Pattern Gaps To Keep In Mind
 
-## ✅ COMPLETED
+- `08_aws_s3` has code/tests but no `prompt_READY_TO_PASTE.md`.
+- `14_encryption` has code/tests and READY_TO_PASTE but no `prompt.md`.
+- `24/26/27/33/36` have `prompt_READY_TO_PASTE.md` only (no `prompt.md` yet).
 
-### Learning Website (seanlgirgis.github.io/learning/)
-- 49 HTML reference pages — all live
-- 54 audio MP3s — all on R2 CDN
-- Audio wired into every HTML page
-- All pages committed and pushed to GitHub
+## Immediate Priority Order
 
-### Audio Files (D:\temp\studybook_audio\)
-- 54 final_*.mp3 files covering all topics
-- Copied to Pixel 8 Pro via CrossDevice sync
-
-### Phone Playlists (12 M3U files)
-- PL-01 Toyota Interview Prep (18 tracks)
-- PL-02 Capital One Interview Prep (18 tracks)
-- PL-03 AWS Foundations (9 tracks)
-- PL-04 AWS Data Stack (9 tracks)
-- PL-05 Streaming & Real-Time (6 tracks)
-- PL-06 Python Engineering (11 tracks)
-- PL-07 Data Engineering Fundamentals (10 tracks)
-- PL-08 Engineering Discipline (8 tracks)
-- PL-09 Security & Compliance (6 tracks)
-- PL-10 My Story (5 tracks)
-- PL-11 Commute Starter (10 tracks)
-- PL-12 Local Analytics Stack (5 tracks)
-- Sync script: .\scripts\sync_studybook_to_phone.ps1
-
-### Gap Prompts (D:\Workarea\StudyBook\temp\gap\)
-- 28 topic prompt files (01-28) — all in new format
-- Project 1 (audio script) + Project 2 (HTML page) per topic
-- Topics 01-03 already processed by user
-
-### ChatGPT Projects Configured
-- Project 1 — Audio Script Writer (Project-1-Audioscript-Maker.txt)
-- Project 2 — HTML Page Generator (Project2_HTML_MAKER.txt)
-- Both updated: no rotating bridge phrases, tighter chunk sizes
-
-### Tutorial Directory Structure
-- D:\Workarea\StudyBook\tutorials\ — full tree created (41 topics × setup + capstone)
-- _meta\TUTORIAL_STANDARDS.md — coding standards for all generated files
-- _meta\MASTER_PROMPT_TEMPLATE.md — reusable ChatGPT prompt skeleton
-- _shared\aws_session.py — shared boto3 session helper
-- _shared\logger.py — shared structured JSON logger
-- _shared\docker\ — existing stack documented (see DOCKER_INVENTORY.md)
-
-### Tutorial Prompt Files Written (prompt.md per topic)
-- ✅ 01_aws_kinesis
-- ✅ 02_pyspark
-- ✅ 03_apache_airflow
-- ✅ 04_aws_step_functions
-- ✅ 05_delta_lake
-- ✅ 06_aws_emr
-- ✅ 07_aws_glue
-- ✅ 08_aws_s3
-- ✅ 09_aws_cloudwatch
-- ✅ 10_python_logging
-- ✅ 11_dbt
-- ✅ 12_parquet
-- ✅ 13_python_concurrency
-- ⏸ 14-41 (Capital One + Fundamentals + Advanced — NOT STARTED)
-
-### _manager Folder (D:\Workarea\StudyBook\tutorials\_manager\)
-- PROJECT_STATE.md — this file
-- DOCKER_INVENTORY.md — all containers, ports, connection strings
-- ROADMAP.md — 41-topic status table
-- QUICK_REFERENCE.md — one-page cheat sheet
-- prompting_workflows/audio_pipeline.md
-- prompting_workflows/html_pages.md
-- prompting_workflows/tutorials.md
-- session_log/SESSION_TEMPLATE.md
-- session_log/2026-04-25.md
-
----
-
-## ⏳ IN PROGRESS
-
-### Tutorial Prompt Files — Capital One Batch (14-23)
-- 14_encryption, 15_data_anonymization_pii, 16_aws_iam
-- 17_postgresql, 18_sql_patterns, 19_python_testing
-- 20_pydantic, 21_aws_redshift, 22_aws_athena, 23_sqlalchemy
-
-### Tutorial Prompt Files — Fundamentals + Advanced (24-41)
-- 24-30: pandas, numpy, polars, duckdb, data_stubbing, streamlit, fastapi
-- 31-41: aws_lambda, aws_dynamodb, aws_msk_kafka, aws_bedrock, terraform,
-         docker, cicd, aws_ecs, aws_cloudformation, opensearch, snowflake_pyiceberg
-
----
-
-## 🔜 NEXT STEPS (priority order)
-
-1. **Write tutorial prompt files 14-41** (Capital One + rest)
-3. **Update tutorial prompts** to reference existing Docker stack (see DOCKER_INVENTORY.md)
-4. **Use ChatGPT to generate actual tutorial .py files** — paste prompt.md per topic
-5. **Test generated code** natively against AWS + existing Docker containers
-6. **Phase 1 audio regeneration** — 8 existing learning pages may need audio refresh
-   with new Project 1 prompt (no rotating bridge phrases)
-7. **Tutorials index page** on the website linking to all tutorial folders
-
----
-
-## KEY SCRIPTS
-
-| Script | Command | Purpose |
-|---|---|---|
-| Sync to phone | `.\scripts\sync_studybook_to_phone.ps1` | Copy new MP3s + playlists to Pixel |
-| Sync dry run | `.\scripts\sync_studybook_to_phone.ps1 -DryRun` | Preview what would sync |
-| Audio pipeline | `.\scripts\run_mission_audio.ps1 -Slug {slug} -ChunkSize 750` | Generate MP3 |
-
----
-
-## KEY PATHS
-
-| What | Path |
-|---|---|
-| Audio MP3s | `D:\temp\studybook_audio\{slug}\final_{slug}.mp3` |
-| Website source | `D:\Workarea\seanlgirgis.github.io\learning\` |
-| Gap prompts | `D:\Workarea\StudyBook\temp\gap\done\` |
-| Tutorials | `D:\Workarea\StudyBook\tutorials\` |
-| Phone music | `C:\Users\shareuser\CrossDevice\Pixel 8 Pro\storage\Music\StudyBook\` |
-| ChatGPT P1 prompt | `D:\Workarea\StudyBook\prompts\codex_missions\WebsitePagesAndAudioBYCodexChatgpt\Project-1-Audioscript-Maker.txt` |
-| ChatGPT P2 prompt | `D:\Workarea\StudyBook\prompts\codex_missions\WebsitePagesAndAudioBYCodexChatgpt\Project2_HTMl_Maker.txt` |
+1. Generate `.py` files from READY_TO_PASTE topics (`03,04,05,06,07,11,24,26,27,33,36`).
+2. Add missing folders/prompts for not-started topics.
+3. Capture independent test evidence for user-reported-working tutorials.

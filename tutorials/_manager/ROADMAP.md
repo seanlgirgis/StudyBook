@@ -1,149 +1,73 @@
-# StudyBook — Tutorial Roadmap
-# Last updated: 2026-04-26
-# 47 topics total | Priority: Toyota → Capital One → Fundamentals → Advanced
+# StudyBook Tutorials - Roadmap Status Matrix
+Last updated: 2026-04-26
+Source: direct repo scan + user-provided run status
 
----
+## Legend
 
-## STATUS KEY
-# ✅ prompt.md written
-# 📋 prompt_READY_TO_PASTE.md written (ready for ChatGPT)
-# 🔨 .py files generated (via ChatGPT)
-# ✔️  tested locally
-# ⬜ not started
+- `yes/no` in artifact columns reflects current files in repo.
+- `Status` values: `tested_working`, `ready_to_paste_only`, `not_started`.
+- Verification values: `user_reported_working`, `repo_evidence_only`, `not_available`.
 
----
+## Core Topics (01-47)
 
-## PRIORITY KEY
-# 🔴 MUST  — asked in every DE interview; production skill
-# 🟠 SHOULD — asked in senior/specialist interviews
-# 🟡 NICE  — differentiator; less common but impressive
+| # | Topic | Folder | Folder exists | prompt.md | prompt_READY_TO_PASTE.md | setup/tutorial .py exists | capstone files exist | tests exist | Status | Verification |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 01 | AWS Kinesis | `01_aws_kinesis` | yes | yes | yes | yes | yes | yes | tested_working | user_reported_working |
+| 02 | PySpark (canonical local[*]) | `02_pyspark` | yes | yes | yes | yes | no | no | tested_working | user_reported_working |
+| 03 | Apache Airflow | `03_apache_airflow` | yes | yes | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 04 | AWS Step Functions | `04_aws_step_functions` | yes | yes | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 05 | Delta Lake | `05_delta_lake` | yes | yes | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 06 | AWS EMR | `06_aws_emr` | yes | yes | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 07 | AWS Glue | `07_aws_glue` | yes | yes | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 08 | AWS S3 | `08_aws_s3` | yes | yes | no | yes | yes | yes | tested_working | user_reported_working |
+| 09 | AWS CloudWatch | `09_aws_cloudwatch` | yes | yes | yes | yes | yes | yes | tested_working | user_reported_working |
+| 10 | Python Logging | `10_python_logging` | yes | yes | yes | yes | yes | yes | tested_working | user_reported_working |
+| 11 | dbt | `11_dbt` | yes | yes | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 12 | Parquet | `12_parquet` | yes | yes | yes | yes | yes | yes | tested_working | user_reported_working |
+| 13 | Python Concurrency | `13_python_concurrency` | yes | yes | yes | yes | yes | yes | tested_working | user_reported_working |
+| 14 | Encryption | `14_encryption` | yes | no | yes | yes | yes | yes | tested_working | user_reported_working |
+| 15 | Data Anonymization / PII | `15_data_anonymization_pii` | no | no | no | no | no | no | not_started | not_available |
+| 16 | AWS IAM | `16_aws_iam` | no | no | no | no | no | no | not_started | not_available |
+| 17 | PostgreSQL | `17_postgresql` | no | no | no | no | no | no | not_started | not_available |
+| 18 | SQL Patterns | `18_sql_patterns` | no | no | no | no | no | no | not_started | not_available |
+| 19 | Python Testing | `19_python_testing` | no | no | no | no | no | no | not_started | not_available |
+| 20 | Pydantic | `20_pydantic` | no | no | no | no | no | no | not_started | not_available |
+| 21 | AWS Redshift | `21_aws_redshift` | no | no | no | no | no | no | not_started | not_available |
+| 22 | AWS Athena | `22_aws_athena` | no | no | no | no | no | no | not_started | not_available |
+| 23 | SQLAlchemy | `23_sqlalchemy` | no | no | no | no | no | no | not_started | not_available |
+| 24 | Pandas | `24_pandas` | yes | no | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 25 | NumPy | `25_numpy` | no | no | no | no | no | no | not_started | not_available |
+| 26 | Polars | `26_polars` | yes | no | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 27 | DuckDB | `27_duckdb` | yes | no | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 28 | Data Stubbing | `28_data_stubbing` | no | no | no | no | no | no | not_started | not_available |
+| 29 | Streamlit | `29_streamlit` | no | no | no | no | no | no | not_started | not_available |
+| 30 | FastAPI | `30_fastapi` | no | no | no | no | no | no | not_started | not_available |
+| 31 | AWS Lambda | `31_aws_lambda` | no | no | no | no | no | no | not_started | not_available |
+| 32 | AWS DynamoDB | `32_aws_dynamodb` | no | no | no | no | no | no | not_started | not_available |
+| 33 | AWS MSK / Kafka | `33_aws_msk_kafka` | yes | no | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 34 | AWS Bedrock | `34_aws_bedrock` | no | no | no | no | no | no | not_started | not_available |
+| 35 | Terraform | `35_terraform` | no | no | no | no | no | no | not_started | not_available |
+| 36 | Docker | `36_docker` | yes | no | yes | no | no | no | ready_to_paste_only | repo_evidence_only |
+| 37 | CI/CD | `37_cicd` | no | no | no | no | no | no | not_started | not_available |
+| 38 | AWS ECS | `38_aws_ecs` | no | no | no | no | no | no | not_started | not_available |
+| 39 | AWS CloudFormation | `39_aws_cloudformation` | no | no | no | no | no | no | not_started | not_available |
+| 40 | OpenSearch | `40_opensearch` | no | no | no | no | no | no | not_started | not_available |
+| 41 | Snowflake / PyIceberg | `41_snowflake_pyiceberg` | no | no | no | no | no | no | not_started | not_available |
+| 42 | AWS Lambda (DE patterns) | `42_aws_lambda_de` | no | no | no | no | no | no | not_started | not_available |
+| 43 | Terraform for DE | `43_terraform_de` | no | no | no | no | no | no | not_started | not_available |
+| 44 | Apache Iceberg (PyIceberg) | `44_pyiceberg` | no | no | no | no | no | no | not_started | not_available |
+| 45 | Great Expectations | `45_great_expectations` | no | no | no | no | no | no | not_started | not_available |
+| 46 | CI/CD for Data Pipelines | `46_cicd_data` | no | no | no | no | no | no | not_started | not_available |
+| 47 | Redis for Data Engineers | `47_redis_de` | no | no | no | no | no | no | not_started | not_available |
 
----
+## Additional Variant Track (Intentional)
 
-## BATCH 1 — Toyota Interview Prep (01-13)
+| Topic | Folder | Role | prompt.md | prompt_READY_TO_PASTE.md | code | tests | Status | Verification |
+|---|---|---|---|---|---|---|---|---|
+| PySpark Docker variant | `02_PySpark_Docker` | Docker/Spark-cluster variant of topic 02; keep alongside canonical local track | no | no | yes | no | tested_working | user_reported_working |
 
-| # | Topic | Slug | prompt.md | READY_TO_PASTE | .py files | Tested |
-|---|---|---|---|---|---|---|
-| 01 | AWS Kinesis | aws_kinesis | ✅ | 📋 | ⬜ | ⬜ |
-| 02 | PySpark | pyspark | ✅ | 📋 | ⬜ | ⬜ |
-| 03 | Apache Airflow | apache_airflow | ✅ | 📋 | ⬜ | ⬜ |
-| 04 | AWS Step Functions | aws_step_functions | ✅ | 📋 | ⬜ | ⬜ |
-| 05 | Delta Lake | delta_lake | ✅ | 📋 | ⬜ | ⬜ |
-| 06 | AWS EMR | aws_emr | ✅ | 📋 | ⬜ | ⬜ |
-| 07 | AWS Glue | aws_glue | ✅ | 📋 | ⬜ | ⬜ |
-| 08 | AWS S3 | aws_s3 | ✅ | ✅ | 🔨 | ✔️ |
-| 09 | AWS CloudWatch | aws_cloudwatch | ✅ | 📋 | 🔨 | ✔️ |
-| 10 | Python Logging | python_logging | ✅ | 📋 | 🔨 | ✔️ |
-| 11 | dbt | dbt | ✅ | 📋 | ⬜ | ⬜ |
-| 12 | Parquet | parquet | ✅ | 📋 | 🔨 | ✔️ |
-| 13 | Python Concurrency | python_concurrency | ✅ | 📋 | 🔨 | ✔️ |
+## Current Totals
 
----
-
-## BATCH 2 — Capital One Interview Prep (14-23)
-
-| # | Topic | Slug | prompt.md | READY_TO_PASTE | .py files | Tested |
-|---|---|---|---|---|---|---|
-| 14 | Encryption | encryption | ✅ | 📋 | ⬜ | ⬜ |
-| 15 | Data Anonymization / PII | data_anonymization_pii | ⬜ | ⬜ | ⬜ | ⬜ |
-| 16 | AWS IAM | aws_iam | ⬜ | ⬜ | ⬜ | ⬜ |
-| 17 | PostgreSQL | postgresql | ⬜ | ⬜ | ⬜ | ⬜ |
-| 18 | SQL Patterns | sql_patterns | ⬜ | ⬜ | ⬜ | ⬜ |
-| 19 | Python Testing | python_testing | ⬜ | ⬜ | ⬜ | ⬜ |
-| 20 | Pydantic | pydantic | ⬜ | ⬜ | ⬜ | ⬜ |
-| 21 | AWS Redshift | aws_redshift | ⬜ | ⬜ | ⬜ | ⬜ |
-| 22 | AWS Athena | aws_athena | ⬜ | ⬜ | ⬜ | ⬜ |
-| 23 | SQLAlchemy | sqlalchemy | ⬜ | ⬜ | ⬜ | ⬜ |
-
----
-
-## BATCH 3 — Data Engineering Fundamentals (24-30)
-
-| # | Topic | Slug | Priority | prompt.md | READY_TO_PASTE | .py files | Tested |
-|---|---|---|---|---|---|---|---|
-| 24 | Pandas | pandas | 🔴 MUST | ✅ | 📋 | ⬜ | ⬜ |
-| 25 | NumPy | numpy | 🟡 NICE | ⬜ | ⬜ | ⬜ | ⬜ |
-| 26 | Polars | polars | 🔴 MUST | ✅ | 📋 | ⬜ | ⬜ |
-| 27 | DuckDB | duckdb | 🔴 MUST | ✅ | 📋 | ⬜ | ⬜ |
-| 28 | Data Stubbing (Faker) | data_stubbing | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
-| 29 | Streamlit | streamlit | 🟡 NICE | ⬜ | ⬜ | ⬜ | ⬜ |
-| 30 | FastAPI | fastapi | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
-
----
-
-## BATCH 4 — Advanced / Cloud (31-41)
-
-| # | Topic | Slug | Priority | prompt.md | READY_TO_PASTE | .py files | Tested |
-|---|---|---|---|---|---|---|---|
-| 31 | AWS Lambda | aws_lambda | 🔴 MUST | ⬜ | ⬜ | ⬜ | ⬜ |
-| 32 | AWS DynamoDB | aws_dynamodb | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
-| 33 | AWS MSK / Kafka | aws_msk_kafka | 🔴 MUST | ✅ | 📋 | ⬜ | ⬜ |
-| 34 | AWS Bedrock | aws_bedrock | 🟡 NICE | ⬜ | ⬜ | ⬜ | ⬜ |
-| 35 | Terraform | terraform | 🔴 MUST | ⬜ | ⬜ | ⬜ | ⬜ |
-| 36 | Docker | docker | 🔴 MUST | ✅ | 📋 | ⬜ | ⬜ |
-| 37 | CI/CD (GitHub Actions) | cicd | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
-| 38 | AWS ECS | aws_ecs | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
-| 39 | AWS CloudFormation | aws_cloudformation | 🟡 NICE | ⬜ | ⬜ | ⬜ | ⬜ |
-| 40 | OpenSearch | opensearch | 🟡 NICE | ⬜ | ⬜ | ⬜ | ⬜ |
-| 41 | Snowflake / PyIceberg | snowflake_pyiceberg | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
-
----
-
-## BATCH 5 — Suggested Additions (42-47)
-
-| # | Topic | Slug | Priority | prompt.md | READY_TO_PASTE | .py files | Tested |
-|---|---|---|---|---|---|---|---|
-| 42 | AWS Lambda (DE patterns) | aws_lambda_de | 🔴 MUST | ⬜ | ⬜ | ⬜ | ⬜ |
-| 43 | Terraform for DE | terraform_de | 🔴 MUST | ⬜ | ⬜ | ⬜ | ⬜ |
-| 44 | Apache Iceberg (PyIceberg) | pyiceberg | 🔴 MUST | ⬜ | ⬜ | ⬜ | ⬜ |
-| 45 | Great Expectations | great_expectations | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
-| 46 | CI/CD for Data Pipelines | cicd_data | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
-| 47 | Redis for Data Engineers | redis_de | 🟠 SHOULD | ⬜ | ⬜ | ⬜ | ⬜ |
-
----
-
-## MILESTONES
-
-| Milestone | Description | Status |
-|---|---|---|
-| M1 | All Toyota prompt.md files written (01-13) | ✅ DONE |
-| M2 | All Capital One prompt.md files written (14-23) | ⬜ |
-| M3 | All Fundamentals + Advanced prompt.md files (24-41) | ⬜ |
-| M4 | Toyota READY_TO_PASTE files written (01-13) | ✅ DONE (01-07 written; 08-13 already had them) |
-| M5 | Toyota .py files generated via ChatGPT (01-13) | ⬜ in progress |
-| M6 | Toyota code tested against AWS + Docker | ⬜ |
-| M7 | Capital One .py files generated + tested | ⬜ |
-| M8 | All 41 topics complete | ⬜ |
-| M9 | Tutorial index page on website | ⬜ |
-
----
-
-## APPROACH — Generating .py Files
-
-1. Open ChatGPT (web)
-2. Paste full content of `tutorials/NN_topic/prompt_READY_TO_PASTE.md`
-3. ChatGPT acknowledges — say "generate file 01"
-4. Save output as `tutorials/NN_topic/01_filename.py`  (or setup/ subfolder)
-5. Continue: "generate file 02", "generate file 03", etc.
-6. Say "generate readme" then "generate capstone" files
-7. Run locally: `python 01_filename.py` — fix any issues before moving on
-8. Mark columns in this roadmap
-
----
-
-## APPROACH — Testing Tutorial Code
-
-### AWS topics (Kinesis, S3, Glue, EMR, Step Functions, CloudWatch, etc.)
-- Real AWS account required — use personal AWS account
-- Set env vars: . ..\env_setter.ps1 -NonInteractive && $env:AWS_PROFILE = "study"
-- All tutorials include cleanup() in try/finally — always runs even on crash
-
-### Docker topics (Airflow, PySpark, dbt, PostgreSQL, SQLAlchemy, etc.)
-- Use existing studybook_core stack (see DOCKER_INVENTORY.md)
-- `docker compose up -d` from compose root before running
-- Kafka bootstrap: localhost:29092  |  Postgres user: studybook
-
-### Pure Python topics (Delta Lake, Parquet, Pandas, Polars, Concurrency, Logging, etc.)
-- No infra needed
-- pip install dependencies per file header
-- Run directly: `python 01_filename.py`
+- `tested_working`: 9 folders (all user-reported working in this sync)
+- `ready_to_paste_only`: 11 folders
+- `not_started`: 28 topics (folders missing)
