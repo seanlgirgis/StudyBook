@@ -1,24 +1,24 @@
 # Codex Mission Queue — StudyBook Projects
-# Working directory for ALL missions: D:\StudyBook\
-# All paths in all mission files are relative to D:\StudyBook\
+# Working directory for ALL missions: D:\Workarea\StudyBook\
+# All paths in all mission files are relative to D:\Workarea\StudyBook\
 
 ---
 
 ## THREE REPOSITORIES
 
 ```
-D:\StudyBook\                              ← ROOT — always your working directory
+D:\Workarea\StudyBook\                              ← ROOT — always your working directory
 ├── env_setter.ps1                         ← loads OPENAI_API_KEY — run before any Python
 ├── playground\                            ← Jupyter notebooks
 ├── prompts\
 │   └── codex_missions\                   ← ALL Codex mission files live here
 │
-├── temp\jobsearch\                        ← REPO 2: Job search system
+├── ..\jobsearch\                        ← REPO 2: Job search system
 │   ├── scripts\                           ← Python tools (audio pipeline, etc.)
 │   ├── data\interview_prep\audio_prep\    ← Audio scripts (.md only — no MP3s in repo)
 │   └── prompts\                           ← Artifact templates, TTS rules
 │
-└── temp\seanlgirgis.github.io\           ← REPO 3: Personal website
+└── ..\seanlgirgis.github.io\           ← REPO 3: Personal website
     └── learning\                          ← HTML learning pages (target of Phase 1 & 2)
 ```
 
@@ -28,7 +28,7 @@ D:\StudyBook\                              ← ROOT — always your working dire
 
 1. Open a new Codex chat
 2. Paste `00_CODEX_CONTEXT.md` → "This is your project context. Confirm you understand."
-3. Set working directory: `cd D:\StudyBook`
+3. Set working directory: `cd D:\Workarea\StudyBook`
 4. Paste the next mission file
 5. Wait for COMPLETE or BLOCKED report
 6. Fix any BLOCKED issues before the next mission
@@ -43,15 +43,15 @@ Master reusable runbook:
 ## AUDIO EXECUTION STANDARD (DO NOT DEVIATE)
 
 ### ⚠️ BINARY FILE RULE — NON-NEGOTIABLE
-MP3 files and audio clips are binary. They NEVER go inside D:\StudyBook\ or any sub-repo.
-Only the text script (.md) is committed. Everything else lives under D:\temp\studybook_audio\.
+MP3 files and audio clips are binary. They NEVER go inside D:\Workarea\StudyBook\ or any sub-repo.
+Only the text script (.md) is committed. Everything else lives under C:\temp\studybook_audio\.
 
 | What | Where | In repo? |
 |------|-------|----------|
-| Audio script (.md) | `temp\jobsearch\data\interview_prep\audio_prep\<slug>\audio_script_<slug>.md` | ✅ YES |
-| Audio clips (.mp3) | `D:\temp\studybook_audio\<slug>\audio_clips\` | ❌ NO — outside repo |
-| Final MP3 | `D:\temp\studybook_audio\<slug>\final_<slug>.mp3` | ❌ NO — outside repo |
-| Upload guide | `D:\temp\studybook_audio\<slug>\UPLOAD_INSTRUCTIONS.md` | ❌ NO — outside repo |
+| Audio script (.md) | `..\jobsearch\data\interview_prep\audio_prep\<slug>\audio_script_<slug>.md` | ✅ YES |
+| Audio clips (.mp3) | `C:\temp\studybook_audio\<slug>\audio_clips\` | ❌ NO — outside repo |
+| Final MP3 | `C:\temp\studybook_audio\<slug>\final_<slug>.mp3` | ❌ NO — outside repo |
+| Upload guide | `C:\temp\studybook_audio\<slug>\UPLOAD_INSTRUCTIONS.md` | ❌ NO — outside repo |
 
 - Use `scripts\run_mission_audio.ps1` for mission audio generation and stitching.
 - Runner behavior is fail-fast (non-zero exit on generation/stitch failures).
@@ -126,7 +126,7 @@ Mission files created after Phase 2 begins.
 
 ## AUDIO FILE NAMING CONVENTION
 
-All audio output paths are relative to `temp\jobsearch\data\interview_prep\audio_prep\`
+All audio output paths are relative to `..\jobsearch\data\interview_prep\audio_prep\`
 
 | Topic | Slug folder | Script filename | Final MP3 |
 |-------|------------|-----------------|-----------|
@@ -171,3 +171,4 @@ R2 base URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/`
 | 6 | aws-s3.html | ⏳ | ⏳ | ⏳ | ⏳ |
 | 7 | apache-kafka.html | ⏳ | ⏳ | ⏳ | ⏳ |
 | 8 | aws-ecs.html | ⏳ | ⏳ | ⏳ | ⏳ |
+

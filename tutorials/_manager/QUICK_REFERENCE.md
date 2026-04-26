@@ -8,18 +8,18 @@
 
 | What | Path |
 |---|---|
-| Repo root | `D:\StudyBook\` |
-| Manager (this folder) | `D:\StudyBook\tutorials\_manager\` |
-| Tutorials | `D:\StudyBook\tutorials\` |
-| Tutorial standards | `D:\StudyBook\tutorials\_meta\TUTORIAL_STANDARDS.md` |
-| Shared helpers | `D:\StudyBook\tutorials\_shared\` |
-| Gap prompt files | `D:\StudyBook\temp\gap\` |
-| Website source | `D:\StudyBook\temp\seanlgirgis.github.io\learning\` |
+| Repo root | `D:\Workarea\StudyBook\` |
+| Manager (this folder) | `D:\Workarea\StudyBook\tutorials\_manager\` |
+| Tutorials | `D:\Workarea\StudyBook\tutorials\` |
+| Tutorial standards | `D:\Workarea\StudyBook\tutorials\_meta\TUTORIAL_STANDARDS.md` |
+| Shared helpers | `D:\Workarea\StudyBook\tutorials\_shared\` |
+| Gap prompt files | `D:\Workarea\StudyBook\temp\gap\done\` |
+| Website source | `D:\Workarea\seanlgirgis.github.io\learning\` |
 | Audio MP3s | `D:\temp\studybook_audio\{slug}\final_{slug}.mp3` |
 | Phone music | `C:\Users\shareuser\CrossDevice\Pixel 8 Pro\storage\Music\StudyBook\` |
-| Codex missions | `D:\StudyBook\prompts\codex_missions\` |
-| ChatGPT P1 prompt | `D:\users\shareuser\Downloads\Project-1-Audioscript-Maker.txt` |
-| ChatGPT P2 prompt | `D:\users\shareuser\Downloads\Project2_HTML_MAKER.txt` |
+| Codex missions | `D:\Workarea\StudyBook\prompts\codex_missions\` |
+| ChatGPT P1 prompt | `D:\Workarea\StudyBook\prompts\codex_missions\WebsitePagesAndAudioBYCodexChatgpt\Project-1-Audioscript-Maker.txt` |
+| ChatGPT P2 prompt | `D:\Workarea\StudyBook\prompts\codex_missions\WebsitePagesAndAudioBYCodexChatgpt\Project2_HTMl_Maker.txt` |
 
 ---
 
@@ -143,5 +143,5 @@ cicd | aws-ecs | aws-cloudformation | opensearch | snowflake-pyiceberg |
 ## WEBSITE — 49 Learning Pages
 
 All live at https://seanlgirgis.github.io/learning/
-Source: `D:\StudyBook\temp\seanlgirgis.github.io\learning\*.html`
-Push: `git add . && git commit -m "msg" && git push` (from website source dir)
+Source: `D:\Workarea\seanlgirgis.github.io\learning\*.html`
+Push: `git add . && git commit -m "msg" && git push` (from D:\Workarea\seanlgirgis.github.io)

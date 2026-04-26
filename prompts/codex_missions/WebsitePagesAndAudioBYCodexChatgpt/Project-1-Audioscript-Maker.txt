@@ -19,7 +19,7 @@ Process each [SPEAKER] block as a separate API call. Export as MP3. Merge in seq
 
 Topic: {TOPIC NAME}
 Output filename: final_{slug}.mp3
-Script path: temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
+Script path: ..\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
 
 ---
 
@@ -172,9 +172,9 @@ AFTER GENERATING — OUTPUT DELIVERY
 SAVE INSTRUCTIONS
 ─────────────────────────────────────────────────
 File:             audio_script_{slug}.md
-Save to:          temp\jobsearch\data\interview_prep\audio_prep\{slug}\
-Full path:        temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
-Working dir:      D:\StudyBook\
+Save to:          ..\jobsearch\data\interview_prep\audio_prep\{slug}\
+Full path:        ..\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
+Working dir:      D:\Workarea\StudyBook\
 Audio output:     C:\temp\studybook_audio\{slug}\  ← outside repo, never commit MP3s
 ─────────────────────────────────────────────────
 
@@ -184,7 +184,7 @@ NEXT STEPS
 ─────────────────────────────────────────────────
 After saving the script file, run the audio pipeline:
   .\scripts\run_mission_audio.ps1 ^
-    "temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md" ^
+    "..\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md" ^
     -ChunkSize 750 -RequestTimeoutSeconds 120
 
 Pipeline output (outside repo):

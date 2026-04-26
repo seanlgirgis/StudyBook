@@ -135,6 +135,13 @@ Use os.environ.get("AWS_REGION", "us-east-1") for region.
 When creating real resources (streams, Firehose), always include a cleanup() function.
 Prefer us-east-1 as default region — cheapest for testing.
 Kinesis stream costs ~$0.015/shard-hour — always delete test streams in cleanup.
+CLEANUP RULES — MANDATORY:
+- Every main() wraps demo code in try/finally — cleanup() is in the finally block
+- Every file that creates a resource has its own cleanup() — do not rely on a separate file
+- Cleanup functions catch "already deleted" errors and continue without crashing
+- Print ⚠️ COST WARNING immediately after creating any billable resource
+- Print ✅ Cleanup complete. No ongoing charges. at the end of every cleanup()
+- capstone/cleanup.py deletes EVERYTHING and ends with that confirmation line
 
 ===== START =====
 

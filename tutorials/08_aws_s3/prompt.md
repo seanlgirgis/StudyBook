@@ -123,6 +123,15 @@ AWS account required. S3 is nearly free at small scale but be careful with:
 - Versioning + delete markers accumulating — always cleanup with delete_bucket_contents()
 - us-east-1 quirk: CreateBucket does NOT take LocationConstraint for us-east-1
 
+CLEANUP RULES — MANDATORY:
+- Every main() wraps demo code in try/finally — cleanup() is in the finally block
+- Every file that creates a resource has its own cleanup() — do not rely on a separate file
+- Cleanup functions catch "already deleted" errors and continue without crashing
+- Versioned bucket cleanup MUST use object_versions.delete() before delete_bucket()
+- Print ⚠️ COST WARNING immediately after creating any billable resource
+- Print ✅ Cleanup complete. No ongoing charges. at the end of every cleanup()
+- capstone/cleanup.py deletes EVERYTHING and ends with that confirmation line
+
 ===== START =====
 
 Acknowledge these instructions, then wait for me to say "generate file 01".

@@ -110,6 +110,13 @@ AWS account required. EMR Serverless preferred — cheaper than clusters for tes
 Required: S3 bucket for scripts and output, IAM role with EMR Serverless permissions.
 EMR Serverless pricing: ~$0.052/vCPU-hour, ~$0.0057/GB-hour (us-east-1)
 Running clusters accidentally = significant cost. Always call cleanup() in finally blocks.
+CLEANUP RULES — MANDATORY:
+- Every main() wraps demo code in try/finally — cleanup() is in the finally block
+- Every file that creates a resource has its own cleanup() — do not rely on a separate file
+- Cleanup functions catch "already deleted" errors and continue without crashing
+- Print ⚠️ COST WARNING immediately after creating any billable resource
+- Print ✅ Cleanup complete. No ongoing charges. at the end of every cleanup()
+- capstone/cleanup.py deletes EVERYTHING and ends with that confirmation line
 
 ===== START =====
 

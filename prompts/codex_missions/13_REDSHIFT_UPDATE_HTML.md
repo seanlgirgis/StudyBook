@@ -1,6 +1,6 @@
 # MISSION 13 — Update HTML: Amazon Redshift
-# Working directory: D:\StudyBook\
-# Target: temp\seanlgirgis.github.io\learning\aws-redshift.html
+# Working directory: D:\Workarea\StudyBook\
+# Target: ..\seanlgirgis.github.io\learning\aws-redshift.html
 # Prerequisite: user confirms Redshift audio uploaded and live
 
 ---
@@ -33,14 +33,14 @@
 ## VERIFY
 
 ```powershell
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern 'final_aws-redshift.mp3'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern 'audio/mpeg'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern 'AWS_Redshift__Deep_Dive_small.mp4'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern '\.m4a'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern '170px'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern 'Last updated 2026-04-24'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern '&larr; Learning Hub'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern '�|Â|Ã|â|ï|ð'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern 'final_aws-redshift.mp3'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern 'audio/mpeg'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern 'AWS_Redshift__Deep_Dive_small.mp4'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern '\.m4a'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern '170px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern 'Last updated 2026-04-24'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern '&larr; Learning Hub'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-redshift.html" -Pattern '�|Â|Ã|â|ï|ð'
 ```
 
 Expected:
@@ -57,3 +57,4 @@ Expected:
 ## REPORT
 
 `MISSION 13 COMPLETE — aws-redshift.html updated — new audio src confirmed — video unchanged — encoding normalized`
+

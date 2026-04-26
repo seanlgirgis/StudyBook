@@ -1,9 +1,9 @@
 # Managed External Repositories
 
-StudyBook manages two external repos under `temp` so daily work stays in one launchpad:
+StudyBook manages two external repos as sibling repositories so daily work stays in one launchpad:
 
-- JobSearch: `temp\jobsearch` (`https://github.com/seanlgirgis/jobsearch`)
-- Website: `temp\seanlgirgis.github.io` (`https://github.com/seanlgirgis/seanlgirgis.github.io`)
+- JobSearch: `..\jobsearch` (`https://github.com/seanlgirgis/jobsearch`)
+- Website: `..\seanlgirgis.github.io` (`https://github.com/seanlgirgis/seanlgirgis.github.io`)
 
 ## Why This Pattern
 
@@ -16,13 +16,13 @@ StudyBook manages two external repos under `temp` so daily work stays in one lau
 
 Set by `config/env/base.psd1` (and can be overridden per machine):
 
-- `STUDYBOOK_JOBSEARCH_ROOT = "{PROJECT_ROOT}\temp\jobsearch"`
-- `STUDYBOOK_WEBSITE_ROOT = "{PROJECT_ROOT}\temp\seanlgirgis.github.io"`
+- `STUDYBOOK_JOBSEARCH_ROOT = "{PROJECT_ROOT}\..\jobsearch"`
+- `STUDYBOOK_WEBSITE_ROOT = "{PROJECT_ROOT}\..\seanlgirgis.github.io"`
 
 ## One-Command Restore On Any Machine
 
 ```powershell
-cd D:\StudyBook
+cd D:\Workarea\StudyBook
 pwsh .\scripts\ops\restore_managed_repos.ps1
 ```
 
@@ -42,6 +42,6 @@ This resolves `STUDYBOOK_JOBSEARCH_ROOT` and starts JobSearch from the managed p
 
 ## Relative-Path Rule
 
-- Repo scripts and machine profiles should use `{PROJECT_ROOT}` tokens and relative child paths.
+- Repo scripts and machine profiles should use `{PROJECT_ROOT}` tokens and sibling-relative paths.
 - Avoid hardcoded roots like `C:\jobsearch` or user-specific locations in tracked files.
 - If a local override is needed, use `config/machines/<machine>.local.psd1` and keep it untracked.

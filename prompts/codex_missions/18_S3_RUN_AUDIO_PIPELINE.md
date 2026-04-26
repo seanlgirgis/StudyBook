@@ -1,15 +1,15 @@
 # MISSION 18 — Run Audio Pipeline: Amazon S3
-# Working directory: D:\StudyBook\
+# Working directory: D:\Workarea\StudyBook\
 # Prerequisite: Mission 17 complete
-# Output root: D:\temp\studybook_audio\aws-s3\
+# Output root: C:\temp\studybook_audio\aws-s3\
 
 ---
 
 ## RUN
 
 ```powershell
-cd D:\StudyBook
-.\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\aws-s3\audio_script_aws-s3.md" -ChunkSize 750 -RequestTimeoutSeconds 120
+cd D:\Workarea\StudyBook
+.\scripts\run_mission_audio.ps1 "..\jobsearch\data\interview_prep\audio_prep\aws-s3\audio_script_aws-s3.md" -ChunkSize 750 -RequestTimeoutSeconds 120
 ```
 
 ---
@@ -17,9 +17,9 @@ cd D:\StudyBook
 ## VERIFY
 
 ```powershell
-Test-Path "D:\temp\studybook_audio\aws-s3\final_aws-s3.mp3"
-Get-Item "D:\temp\studybook_audio\aws-s3\final_aws-s3.mp3" | Select-Object Length
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\aws-s3\final_aws-s3.mp3"
+Test-Path "C:\temp\studybook_audio\aws-s3\final_aws-s3.mp3"
+Get-Item "C:\temp\studybook_audio\aws-s3\final_aws-s3.mp3" | Select-Object Length
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\aws-s3\final_aws-s3.mp3"
 ```
 
 Expected:
@@ -34,7 +34,7 @@ Expected:
 Confirm:
 
 ```powershell
-Test-Path "D:\temp\studybook_audio\aws-s3\UPLOAD_INSTRUCTIONS.md"
+Test-Path "C:\temp\studybook_audio\aws-s3\UPLOAD_INSTRUCTIONS.md"
 ```
 
 If missing, create it manually with slug `aws-s3` and filename `final_aws-s3.mp3`.
@@ -48,3 +48,4 @@ If missing, create it manually with slug `aws-s3` and filename `final_aws-s3.mp3
 Do not run Mission 19 until user confirms:
 
 `S3 audio uploaded — run Mission 19`
+

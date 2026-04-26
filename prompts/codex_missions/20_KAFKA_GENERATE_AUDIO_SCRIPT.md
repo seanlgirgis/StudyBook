@@ -1,7 +1,7 @@
 # MISSION 20 — Generate Audio Script: Apache Kafka
-# Working directory: D:\StudyBook\
-# Touches: temp\seanlgirgis.github.io\learning\apache-kafka.html (read only)
-# Output: temp\jobsearch\data\interview_prep\audio_prep\apache-kafka\audio_script_apache-kafka.md
+# Working directory: D:\Workarea\StudyBook\
+# Touches: ..\seanlgirgis.github.io\learning\apache-kafka.html (read only)
+# Output: ..\jobsearch\data\interview_prep\audio_prep\apache-kafka\audio_script_apache-kafka.md
 
 ---
 
@@ -9,7 +9,7 @@
 
 Write a complete HOST+SEAN dialogue script for Apache Kafka and save to:
 
-`temp\jobsearch\data\interview_prep\audio_prep\apache-kafka\audio_script_apache-kafka.md`
+`..\jobsearch\data\interview_prep\audio_prep\apache-kafka\audio_script_apache-kafka.md`
 
 Target runtime: ~9–12 minutes.
 
@@ -52,4 +52,5 @@ Target runtime: ~9–12 minutes.
 
 ## REPORT
 
-`MISSION 20 COMPLETE — script saved to temp\jobsearch\data\interview_prep\audio_prep\apache-kafka\audio_script_apache-kafka.md — [N] blocks — est. [X] min audio`
+`MISSION 20 COMPLETE — script saved to ..\jobsearch\data\interview_prep\audio_prep\apache-kafka\audio_script_apache-kafka.md — [N] blocks — est. [X] min audio`
+

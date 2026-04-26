@@ -1,7 +1,7 @@
 # MISSION 11 — Generate Audio Script: Amazon Redshift
-# Working directory: D:\StudyBook\
-# Touches: temp\seanlgirgis.github.io\learning\aws-redshift.html (read only)
-# Output: temp\jobsearch\data\interview_prep\audio_prep\aws-redshift\audio_script_aws-redshift.md
+# Working directory: D:\Workarea\StudyBook\
+# Touches: ..\seanlgirgis.github.io\learning\aws-redshift.html (read only)
+# Output: ..\jobsearch\data\interview_prep\audio_prep\aws-redshift\audio_script_aws-redshift.md
 
 ---
 
@@ -9,7 +9,7 @@
 
 Write a complete HOST+SEAN dialogue script for Amazon Redshift and save to:
 
-`temp\jobsearch\data\interview_prep\audio_prep\aws-redshift\audio_script_aws-redshift.md`
+`..\jobsearch\data\interview_prep\audio_prep\aws-redshift\audio_script_aws-redshift.md`
 
 Target runtime: ~9–12 minutes.
 
@@ -52,4 +52,5 @@ Target runtime: ~9–12 minutes.
 
 ## REPORT
 
-`MISSION 11 COMPLETE — script saved to temp\jobsearch\data\interview_prep\audio_prep\aws-redshift\audio_script_aws-redshift.md — [N] blocks — est. [X] min audio`
+`MISSION 11 COMPLETE — script saved to ..\jobsearch\data\interview_prep\audio_prep\aws-redshift\audio_script_aws-redshift.md — [N] blocks — est. [X] min audio`
+

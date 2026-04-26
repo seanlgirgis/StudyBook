@@ -143,6 +143,13 @@ AWS account required. CloudWatch free tier: 10 custom metrics, 5GB logs, 3 dashb
 High-resolution metrics (1s) cost 3× standard. Use standard (60s) for tutorial files.
 Logs Insights queries billed per GB scanned — keep query time windows short during testing.
 Always set log group retention — unretained logs cost indefinitely.
+CLEANUP RULES — MANDATORY:
+- Every main() wraps demo code in try/finally — cleanup() is in the finally block
+- Every file that creates a resource has its own cleanup() — do not rely on a separate file
+- Cleanup functions catch "already deleted" errors and continue without crashing
+- Print ⚠️ COST WARNING immediately after creating any billable resource
+- Print ✅ Cleanup complete. No ongoing charges. at the end of every cleanup()
+- capstone/cleanup.py deletes EVERYTHING and ends with that confirmation line
 
 ===== START =====
 

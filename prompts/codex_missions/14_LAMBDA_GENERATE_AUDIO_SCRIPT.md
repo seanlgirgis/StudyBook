@@ -1,7 +1,7 @@
 # MISSION 14 — Generate Audio Script: AWS Lambda
-# Working directory: D:\StudyBook\
-# Touches: temp\seanlgirgis.github.io\learning\aws-lambda.html (read only)
-# Output: temp\jobsearch\data\interview_prep\audio_prep\aws-lambda\audio_script_aws-lambda.md
+# Working directory: D:\Workarea\StudyBook\
+# Touches: ..\seanlgirgis.github.io\learning\aws-lambda.html (read only)
+# Output: ..\jobsearch\data\interview_prep\audio_prep\aws-lambda\audio_script_aws-lambda.md
 
 ---
 
@@ -9,7 +9,7 @@
 
 Write a complete HOST+SEAN dialogue script for AWS Lambda and save to:
 
-`temp\jobsearch\data\interview_prep\audio_prep\aws-lambda\audio_script_aws-lambda.md`
+`..\jobsearch\data\interview_prep\audio_prep\aws-lambda\audio_script_aws-lambda.md`
 
 Target runtime: ~9–12 minutes.
 
@@ -52,4 +52,5 @@ Target runtime: ~9–12 minutes.
 
 ## REPORT
 
-`MISSION 14 COMPLETE — script saved to temp\jobsearch\data\interview_prep\audio_prep\aws-lambda\audio_script_aws-lambda.md — [N] blocks — est. [X] min audio`
+`MISSION 14 COMPLETE — script saved to ..\jobsearch\data\interview_prep\audio_prep\aws-lambda\audio_script_aws-lambda.md — [N] blocks — est. [X] min audio`
+

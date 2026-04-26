@@ -3,7 +3,7 @@ param(
     [string]$Script,
     [string]$Slug,
     [int]$ChunkSize = 750,
-    [string]$TempRoot = "D:\temp\studybook_audio",
+    [string]$TempRoot = "C:\temp\studybook_audio",
     [switch]$SkipEnvSetter,
     [int]$RequestTimeoutSeconds = 120
 )
@@ -40,7 +40,27 @@ function Resolve-SlugFromScriptPath {
 
 $repoRoot = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 $envSetter = Join-Path $repoRoot "env_setter.ps1"
-$generator = Join-Path $repoRoot "temp\jobsearch\scripts\generate_audio_generic.py"
+function Resolve-JobSearchRoot {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$RepoRoot
+    )
+
+    $configuredRoot = [Environment]::GetEnvironmentVariable("STUDYBOOK_JOBSEARCH_ROOT", "Process")
+    if (-not [string]::IsNullOrWhiteSpace($configuredRoot)) {
+        return [System.IO.Path]::GetFullPath($configuredRoot)
+    }
+
+    $siblingRoot = [System.IO.Path]::GetFullPath((Join-Path -Path $RepoRoot -ChildPath "..\jobsearch"))
+    if (Test-Path -LiteralPath $siblingRoot) {
+        return $siblingRoot
+    }
+
+    throw "Could not resolve jobsearch root. Set STUDYBOOK_JOBSEARCH_ROOT or ensure sibling repo exists at $siblingRoot"
+}
+
+$jobsearchRoot = Resolve-JobSearchRoot -RepoRoot $repoRoot
+$generator = Join-Path $jobsearchRoot "scripts\generate_audio_generic.py"
 
 if (-not (Test-Path -LiteralPath $generator)) {
     throw "Missing generator script: $generator"
@@ -156,3 +176,4 @@ $url
 finally {
     Pop-Location
 }
+

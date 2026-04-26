@@ -1,15 +1,15 @@
 # MISSION 12 — Run Audio Pipeline: Amazon Redshift
-# Working directory: D:\StudyBook\
+# Working directory: D:\Workarea\StudyBook\
 # Prerequisite: Mission 11 complete
-# Output root: D:\temp\studybook_audio\aws-redshift\
+# Output root: C:\temp\studybook_audio\aws-redshift\
 
 ---
 
 ## RUN
 
 ```powershell
-cd D:\StudyBook
-.\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\aws-redshift\audio_script_aws-redshift.md" -ChunkSize 750 -RequestTimeoutSeconds 120
+cd D:\Workarea\StudyBook
+.\scripts\run_mission_audio.ps1 "..\jobsearch\data\interview_prep\audio_prep\aws-redshift\audio_script_aws-redshift.md" -ChunkSize 750 -RequestTimeoutSeconds 120
 ```
 
 ---
@@ -17,9 +17,9 @@ cd D:\StudyBook
 ## VERIFY
 
 ```powershell
-Test-Path "D:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3"
-Get-Item "D:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3" | Select-Object Length
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3"
+Test-Path "C:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3"
+Get-Item "C:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3" | Select-Object Length
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3"
 ```
 
 Expected:
@@ -34,7 +34,7 @@ Expected:
 Confirm:
 
 ```powershell
-Test-Path "D:\temp\studybook_audio\aws-redshift\UPLOAD_INSTRUCTIONS.md"
+Test-Path "C:\temp\studybook_audio\aws-redshift\UPLOAD_INSTRUCTIONS.md"
 ```
 
 If missing, create it manually with slug `aws-redshift` and filename `final_aws-redshift.mp3`.
@@ -48,3 +48,4 @@ If missing, create it manually with slug `aws-redshift` and filename `final_aws-
 Do not run Mission 13 until user confirms:
 
 `Redshift audio uploaded — run Mission 13`
+

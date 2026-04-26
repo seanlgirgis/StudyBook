@@ -1,7 +1,7 @@
 # MISSION 23 — Generate Audio Script: Amazon ECS
-# Working directory: D:\StudyBook\
-# Touches: temp\seanlgirgis.github.io\learning\aws-ecs.html (read only)
-# Output: temp\jobsearch\data\interview_prep\audio_prep\aws-ecs\audio_script_aws-ecs.md
+# Working directory: D:\Workarea\StudyBook\
+# Touches: ..\seanlgirgis.github.io\learning\aws-ecs.html (read only)
+# Output: ..\jobsearch\data\interview_prep\audio_prep\aws-ecs\audio_script_aws-ecs.md
 
 ---
 
@@ -9,7 +9,7 @@
 
 Write a complete HOST+SEAN dialogue script for Amazon ECS and save to:
 
-`temp\jobsearch\data\interview_prep\audio_prep\aws-ecs\audio_script_aws-ecs.md`
+`..\jobsearch\data\interview_prep\audio_prep\aws-ecs\audio_script_aws-ecs.md`
 
 Target runtime: ~9–12 minutes.
 
@@ -52,4 +52,5 @@ Target runtime: ~9–12 minutes.
 
 ## REPORT
 
-`MISSION 23 COMPLETE — script saved to temp\jobsearch\data\interview_prep\audio_prep\aws-ecs\audio_script_aws-ecs.md — [N] blocks — est. [X] min audio`
+`MISSION 23 COMPLETE — script saved to ..\jobsearch\data\interview_prep\audio_prep\aws-ecs\audio_script_aws-ecs.md — [N] blocks — est. [X] min audio`
+

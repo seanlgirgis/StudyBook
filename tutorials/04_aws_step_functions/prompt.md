@@ -110,6 +110,13 @@ STEP_FUNCTIONS_ROLE_ARN must be set in environment.
 Standard workflow pricing: $0.025 per 1000 state transitions.
 Express workflow pricing: $1.00 per 1M requests + duration.
 Always delete test state machines in cleanup() — no ongoing cost but clean hygiene.
+CLEANUP RULES — MANDATORY:
+- Every main() wraps demo code in try/finally — cleanup() is in the finally block
+- Every file that creates a resource has its own cleanup() — do not rely on a separate file
+- Cleanup functions catch "already deleted" errors and continue without crashing
+- Print ⚠️ COST WARNING immediately after creating any billable resource
+- Print ✅ Cleanup complete. No ongoing charges. at the end of every cleanup()
+- capstone/cleanup.py deletes EVERYTHING and ends with that confirmation line
 Use us-east-1 as default region.
 
 ===== START =====

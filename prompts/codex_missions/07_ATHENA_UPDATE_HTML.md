@@ -1,6 +1,6 @@
 # MISSION 07 — Update HTML: Amazon Athena
-# Working directory: D:\StudyBook\
-# Touches: temp\seanlgirgis.github.io\learning\aws-athena.html (read then write)
+# Working directory: D:\Workarea\StudyBook\
+# Touches: ..\seanlgirgis.github.io\learning\aws-athena.html (read then write)
 # Prerequisite: Mission 06 complete AND Sean has confirmed R2 upload is live
 
 ---
@@ -8,21 +8,21 @@
 ## WORKING DIRECTORY REMINDER
 
 ```powershell
-Get-Location   # must show D:\StudyBook
+Get-Location   # must show D:\Workarea\StudyBook
 ```
-All paths are relative to D:\StudyBook\. Use no absolute paths.
+All paths are relative to D:\Workarea\StudyBook\. Use no absolute paths.
 
 ---
 
 ## THREE REPOSITORIES INVOLVED IN THIS MISSION
 
 ```
-D:\StudyBook\                                       ← ROOT (working directory)
-└── temp\seanlgirgis.github.io\                    ← REPO 3 — HTML update happens here
+D:\Workarea\StudyBook\                                       ← ROOT (working directory)
+└── ..\seanlgirgis.github.io\                    ← REPO 3 — HTML update happens here
         learning\
             aws-athena.html                         ← TARGET FILE
 
-D:\temp\studybook_audio\aws-athena\                 ← Audio artifacts (outside repo)
+C:\temp\studybook_audio\aws-athena\                 ← Audio artifacts (outside repo)
     UPLOAD_INSTRUCTIONS.md                          ← confirm R2 URL from here
     final_aws-athena.mp3                            ← uploaded to R2 by Sean
 ```
@@ -33,7 +33,7 @@ D:\temp\studybook_audio\aws-athena\                 ← Audio artifacts (outside
 
 Read the upload instructions:
 ```
-D:\temp\studybook_audio\aws-athena\UPLOAD_INSTRUCTIONS.md
+C:\temp\studybook_audio\aws-athena\UPLOAD_INSTRUCTIONS.md
 ```
 
 The expected R2 URL is:
@@ -48,7 +48,7 @@ If not confirmed: STOP. Report "Waiting for R2 upload confirmation."
 
 Read the full file:
 ```
-temp\seanlgirgis.github.io\learning\aws-athena.html
+..\seanlgirgis.github.io\learning\aws-athena.html
 ```
 
 Locate and record the following before making any changes:
@@ -122,9 +122,9 @@ Do not touch any other part of the `.cheat-row` rule or any surrounding CSS.
 
 After the change, verify the fix:
 ```powershell
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-athena.html" -Pattern '160px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-athena.html" -Pattern '160px'
 # Expected: NO matches — 160px must not appear anywhere
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-athena.html" -Pattern '170px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-athena.html" -Pattern '170px'
 # Expected: found — the corrected cheat-row value
 ```
 
@@ -152,30 +152,30 @@ After making all changes, run these structural checks:
 
 ```powershell
 # Exactly one audio-box
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-athena.html" -Pattern 'audio-box' | Measure-Object
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-athena.html" -Pattern 'audio-box' | Measure-Object
 # Expected: Count = 1
 
 # New audio src present
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-athena.html" -Pattern 'final_aws-athena.mp3'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-athena.html" -Pattern 'final_aws-athena.mp3'
 # Expected: found
 
 # Audio type correct
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-athena.html" -Pattern 'audio/mpeg'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-athena.html" -Pattern 'audio/mpeg'
 # Expected: found
 
 # Video URL still present (Athena Deep Dive)
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-athena.html" -Pattern 'Amazon_Athena__Deep_Dive_small.mp4'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-athena.html" -Pattern 'Amazon_Athena__Deep_Dive_small.mp4'
 # Expected: found
 
 # Old .m4a URL gone
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-athena.html" -Pattern '\.m4a'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-athena.html" -Pattern '\.m4a'
 # Expected: NO matches
 
 # cheat-row fix confirmed
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-athena.html" -Pattern '160px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-athena.html" -Pattern '160px'
 # Expected: NO matches
 
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-athena.html" -Pattern '170px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-athena.html" -Pattern '170px'
 # Expected: found
 ```
 
@@ -200,7 +200,7 @@ Encoding safety rule:
 
 Produce a clean diff summary:
 ```
-CHANGES TO temp\seanlgirgis.github.io\learning\aws-athena.html:
+CHANGES TO ..\seanlgirgis.github.io\learning\aws-athena.html:
 
   audio-box:
     <audio> src:  [old .m4a URL]  →  https://...r2.dev/final_aws-athena.mp3
@@ -220,7 +220,7 @@ CHANGES TO temp\seanlgirgis.github.io\learning\aws-athena.html:
 
 ## VERIFICATION CHECKLIST
 
-- [ ] Working directory confirmed as D:\StudyBook\ throughout
+- [ ] Working directory confirmed as D:\Workarea\StudyBook\ throughout
 - [ ] R2 upload confirmed by Sean before any HTML changes
 - [ ] Existing audio-box read and copied verbatim before replacement
 - [ ] Existing video URL recorded before replacement
@@ -243,10 +243,11 @@ Or:     "MISSION 07 BLOCKED — [reason]"
 ## AFTER THIS MISSION — TEST BEFORE CONTINUING
 
 Before running Missions 08–10 (Glue), Sean should:
-1. Open `temp\seanlgirgis.github.io\learning\aws-athena.html` in a browser
+1. Open `..\seanlgirgis.github.io\learning\aws-athena.html` in a browser
 2. Confirm the audio player loads and plays (should hear HOST voice, on-topic Athena content)
 3. Confirm the video still plays (NotebookLM video)
 4. Confirm the cheat sheet layout looks correct (label column wider — 170px)
 5. If all pass: proceed to Mission 08
 
 The next topic is AWS Glue — missions 08 (script), 09 (pipeline), 10 (HTML + cheat-row fix 150→170px).
+

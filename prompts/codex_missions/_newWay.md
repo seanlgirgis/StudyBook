@@ -45,7 +45,7 @@ Process each [SPEAKER] block as a separate API call. Export as MP3. Merge in seq
 
 Topic: {TOPIC NAME}
 Output filename: final_{slug}.mp3
-Script path: temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
+Script path: ..\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
 
 ---
 

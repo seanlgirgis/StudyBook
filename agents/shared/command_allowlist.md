@@ -7,7 +7,7 @@ Purpose: define default-safe command families the agent can run without extra ap
 - Effective date: 2026-04-24
 - Authorized by owner in-session: yes
 - Scope:
-  - `D:\StudyBook\**` (all folders, including `playground\studyGuide`)
+  - `D:\Workarea\StudyBook\**` (all folders, including `playground\studyGuide`)
   - `C:\temp\**`
 - Command policy override for this effort:
   - Approval-gated command families are allowed without additional permission prompts when they are needed to complete the requested work inside the authorized scope.
@@ -40,9 +40,10 @@ Allowed only when the task explicitly requires it:
 ## Path Scope Rule
 
 - Prefer repo-relative paths.
-- Do not run write commands outside `D:\StudyBook` unless user approved.
+- Do not run write commands outside `D:\Workarea\StudyBook` unless user approved.
 - For the active run override, write commands are also approved under `C:\temp`.
 
 ## Logging Rule
 
 - Record meaningful commands run in `agents/shared/agent_status.md` under validation/work summary.
+

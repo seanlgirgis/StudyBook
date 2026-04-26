@@ -1,15 +1,15 @@
 # MISSION 15 — Run Audio Pipeline: AWS Lambda
-# Working directory: D:\StudyBook\
+# Working directory: D:\Workarea\StudyBook\
 # Prerequisite: Mission 14 complete
-# Output root: D:\temp\studybook_audio\aws-lambda\
+# Output root: C:\temp\studybook_audio\aws-lambda\
 
 ---
 
 ## RUN
 
 ```powershell
-cd D:\StudyBook
-.\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\aws-lambda\audio_script_aws-lambda.md" -ChunkSize 750 -RequestTimeoutSeconds 120
+cd D:\Workarea\StudyBook
+.\scripts\run_mission_audio.ps1 "..\jobsearch\data\interview_prep\audio_prep\aws-lambda\audio_script_aws-lambda.md" -ChunkSize 750 -RequestTimeoutSeconds 120
 ```
 
 ---
@@ -17,9 +17,9 @@ cd D:\StudyBook
 ## VERIFY
 
 ```powershell
-Test-Path "D:\temp\studybook_audio\aws-lambda\final_aws-lambda.mp3"
-Get-Item "D:\temp\studybook_audio\aws-lambda\final_aws-lambda.mp3" | Select-Object Length
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\aws-lambda\final_aws-lambda.mp3"
+Test-Path "C:\temp\studybook_audio\aws-lambda\final_aws-lambda.mp3"
+Get-Item "C:\temp\studybook_audio\aws-lambda\final_aws-lambda.mp3" | Select-Object Length
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\aws-lambda\final_aws-lambda.mp3"
 ```
 
 Expected:
@@ -34,7 +34,7 @@ Expected:
 Confirm:
 
 ```powershell
-Test-Path "D:\temp\studybook_audio\aws-lambda\UPLOAD_INSTRUCTIONS.md"
+Test-Path "C:\temp\studybook_audio\aws-lambda\UPLOAD_INSTRUCTIONS.md"
 ```
 
 If missing, create it manually with slug `aws-lambda` and filename `final_aws-lambda.mp3`.
@@ -48,3 +48,4 @@ If missing, create it manually with slug `aws-lambda` and filename `final_aws-la
 Do not run Mission 16 until user confirms:
 
 `Lambda audio uploaded — run Mission 16`
+

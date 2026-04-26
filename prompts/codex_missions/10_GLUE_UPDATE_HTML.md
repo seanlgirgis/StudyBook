@@ -1,6 +1,6 @@
 # MISSION 10 — Update HTML: AWS Glue
-# Working directory: D:\StudyBook\
-# Target: temp\seanlgirgis.github.io\learning\aws-glue.html
+# Working directory: D:\Workarea\StudyBook\
+# Target: ..\seanlgirgis.github.io\learning\aws-glue.html
 # Prerequisite: user confirms Glue audio uploaded and live
 
 ---
@@ -34,13 +34,13 @@
 ## VERIFY
 
 ```powershell
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-glue.html" -Pattern 'final_aws-glue.mp3'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-glue.html" -Pattern 'audio/mpeg'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-glue.html" -Pattern 'AWS_Glue__The_Deep_Dive_small.mp4'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-glue.html" -Pattern '\.m4a'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-glue.html" -Pattern '150px'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-glue.html" -Pattern '170px'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-glue.html" -Pattern 'Last updated 2026-04-24'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-glue.html" -Pattern 'final_aws-glue.mp3'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-glue.html" -Pattern 'audio/mpeg'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-glue.html" -Pattern 'AWS_Glue__The_Deep_Dive_small.mp4'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-glue.html" -Pattern '\.m4a'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-glue.html" -Pattern '150px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-glue.html" -Pattern '170px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-glue.html" -Pattern 'Last updated 2026-04-24'
 ```
 
 Expected:
@@ -56,3 +56,4 @@ Expected:
 ## REPORT
 
 `MISSION 10 COMPLETE — aws-glue.html updated — new audio src confirmed — cheat-row fixed — video unchanged`
+

@@ -5,7 +5,7 @@ This folder contains the prompt/runbook system for generating:
 - learning HTML pages,
 - audio pipeline execution + website wiring.
 
-Owner workflow target: `D:\StudyBook`
+Owner workflow target: `D:\Workarea\StudyBook`
 
 ## Files In This Folder
 
@@ -19,7 +19,7 @@ Purpose:
 Output expected:
 - `audio_script_{slug}.md`
 - Save under:
-  `temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md`
+  `..\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md`
 
 Use when:
 - You need a new script for a new topic (before running audio generation).
@@ -36,7 +36,7 @@ Purpose:
 Output expected:
 - `{slug}.html`
 - Save under:
-  `temp\seanlgirgis.github.io\learning\{slug}.html`
+  `..\seanlgirgis.github.io\learning\{slug}.html`
 
 Use when:
 - You need a brand-new learning page or complete page replacement.
@@ -88,7 +88,7 @@ Use when:
 1. Use `Project-1-Audioscript-Maker.txt` in ChatGPT Project 1.
 2. Generate and save `audio_script_{slug}.md`.
 3. Run audio pipeline:
-   `.\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md" -ChunkSize 750 -RequestTimeoutSeconds 120`
+   `.\scripts\run_mission_audio.ps1 "..\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md" -ChunkSize 750 -RequestTimeoutSeconds 120`
 4. Upload `final_{slug}.mp3` to R2.
 5. Use `Project2_HTMl_Maker.txt` in ChatGPT Project 2 to create/update `{slug}.html`.
 6. Wire section/component card to live status.
@@ -116,5 +116,6 @@ Use when:
 
 ## Notes
 
-- Some older runbook text may mention `D:\temp\studybook_audio\...`.
+- Some older runbook text may mention `C:\temp\studybook_audio\...`.
 - Current active pipeline standard is `C:\temp\studybook_audio\...` for generated audio output.
+

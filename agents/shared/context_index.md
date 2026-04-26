@@ -4,7 +4,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 
 ## Project North Star
 
-- Build `D:\StudyBook` as the canonical, reproducible DE/AI runtime repo.
+- Build `D:\Workarea\StudyBook` as the canonical, reproducible DE/AI runtime repo.
 - Execute migration as controlled shift/lift from `D:\Workspace`.
 - Keep autonomy high with explicit safety guardrails and durable run artifacts.
 
@@ -28,7 +28,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Use `Allowed Scope: bounded` by default for velocity.
 - Use `Reasoning Depth: deep` for migration and architecture decisions.
 - Stop only for high-risk ambiguity, not for routine implementation details.
-- Canonical runtime target is `D:\StudyBook` (deprecated path deleted).
+- Canonical runtime target is `D:\Workarea\StudyBook` (deprecated path deleted).
 - Standing owner directive (2026-04-02): treat encrypted StudyBook secrets as system of record for sensitive values; use seed-backed secret updates by default and avoid storing sensitive values in tracked files/chat.
 - **Seed-backed secrets (2026-04-02): Passphrase entered ONCE per machine during seed registration. NEVER ask user for passphrase again - env_setter.ps1 auto-loads from DPAPI-encrypted seed file.**
 - **Job-site credential canon (2026-04-04): use `JOBSITE_<SITEKEY>_{URL,USER,PASSWORD}` keys via `agents/skills/jobsite-login-secrets` scripts; avoid ad-hoc keys like `SAPSF_*` to prevent retrieval mismatches.**
@@ -81,9 +81,9 @@ Purpose: compact durable memory map for fast session bootstrap.
 - M-002/M-002b completed on 2026-04-02 via:
   - `scripts/migration/run_m002_coding_assets.ps1 -Execute -DeleteSource`
 - Canonical coding root:
-  - `D:\StudyBook\coding_challenges`
+  - `D:\Workarea\StudyBook\coding_challenges`
 - Migration evidence run:
-  - `D:\StudyBook\coding_challenges\_migration_meta\run_20260402_113935`
+  - `D:\Workarea\StudyBook\coding_challenges\_migration_meta\run_20260402_113935`
 - Emergency rollback snapshot:
   - `C:\Users\shareuser\migration_backups\m002_backup_20260402_113935`
 - Authoritative runbook:
@@ -97,7 +97,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Combined wave completed on 2026-04-02 via:
   - `scripts/migration/run_m011_m013_m008_mlai.ps1 -Execute -DeleteMlAiSource`
 - Evidence run:
-  - `D:\StudyBook\temp\migration_meta\run_20260402_121903`
+  - `D:\Workarea\StudyBook\temp\migration_meta\run_20260402_121903`
 - Coverage:
   - `M-011` Technologies notebooks (`54`)
   - `M-013` Technologies prompts R1/R2/R3 (`88`)
@@ -109,12 +109,12 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Backup snapshot for ML_AI cutover:
   - `C:\Users\shareuser\migration_backups\ml_ai_backup_20260402_121903`
 - Source decommission evidence for Technologies + DE interview migrated items:
-  - `D:\StudyBook\temp\migration_meta\run_20260402_121903\delete_tech_deinterview_report.json`
+  - `D:\Workarea\StudyBook\temp\migration_meta\run_20260402_121903\delete_tech_deinterview_report.json`
 
 ## Snowflake Micro-Nuggets Memory
 
 - Canonical lane created under:
-  - `D:\StudyBook\tracks\08_databases\micro_nuggets\snowflake`
+  - `D:\Workarea\StudyBook\tracks\08_databases\micro_nuggets\snowflake`
 - Current scaffold status (2026-04-02):
   - dirs: `00_setup`, `02_ddl_basics`, `03_dml_basics`
   - files: `_sf_connect.py`, `summary.md` + 9 nugget scripts
@@ -123,7 +123,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 ## Databricks Micro-Nuggets Memory
 
 - Canonical lane created under:
-  - `D:\StudyBook\tracks\08_databases\micro_nuggets\databricks`
+  - `D:\Workarea\StudyBook\tracks\08_databases\micro_nuggets\databricks`
 - Current scaffold status (2026-04-02):
   - dirs: `00_setup`, `01_workspace_and_catalog`, `02_tables_and_delta`, `03_queries_and_optimization`, `04_mini_capstone`
   - files: `_db_connect.py`, `summary.md`, `DATABRICKS_SPEEDY_STORY_AND_INTERVIEW.md` + 9 nugget scripts
@@ -138,14 +138,14 @@ Purpose: compact durable memory map for fast session bootstrap.
   - `03_queries_and_optimization/01_time_travel.py` — VERSION AS OF, RESTORE, VACUUM
   - `03_queries_and_optimization/02_optimize.py` — OPTIMIZE, Z-ORDER, data skipping
   - `04_mini_capstone/01_mini_capstone.py` — Bronze→Silver→Gold end-to-end pipeline
-- Connection proof: `D:\StudyBook\poc\connection_proofs\python\databricks_connection_proof.py`
+- Connection proof: `D:\Workarea\StudyBook\poc\connection_proofs\python\databricks_connection_proof.py`
 - Intent: short 5-10 minute runnable learning nuggets with inline teaching comments.
 - Depth: covers MERGE/CDC, Time Travel, OPTIMIZE/Z-ORDER, three-layer pipeline pattern.
 
 ## PostgreSQL Micro-Nuggets Memory
 
 - Canonical lane created under:
-  - `D:\StudyBook\tracks\08_databases\micro_nuggets\postgresql`
+  - `D:\Workarea\StudyBook\tracks\08_databases\micro_nuggets\postgresql`
 - Full validation: **16/16 PASS** (2026-04-02)
 - Structure:
   - `_pg_connect.py` — shared connection helper (reuses existing Docker PostgreSQL creds)
@@ -170,7 +170,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 ## MongoDB Micro-Nuggets Memory
 
 - Canonical lane validated under:
-  - `D:\StudyBook\tracks\08_databases\micro_nuggets\mongodb`
+  - `D:\Workarea\StudyBook\tracks\08_databases\micro_nuggets\mongodb`
 - Coverage review recorded:
   - `tracks/08_databases/micro_nuggets/mongodb/MONGODB_COVERAGE_REVIEW.md`
 - Verified on 2026-04-03:
@@ -187,29 +187,31 @@ Purpose: compact durable memory map for fast session bootstrap.
 ## StudyBook Command Memory
 
 - Frequently used coding-challenges index commands:
-  - `D:\StudyBook\refresh_index_and_push.ps1`
-  - `D:\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]`
+  - `D:\Workarea\StudyBook\refresh_index_and_push.ps1`
+  - `D:\Workarea\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]`
 
 ## Managed External Repos Memory
 
-- Managed under StudyBook launchpad `temp` (separate Git repos):
-  - `D:\StudyBook\temp\jobsearch`
-  - `D:\StudyBook\temp\seanlgirgis.github.io`
+- Managed as sibling repositories to StudyBook (separate Git repos):
+  - `D:\Workarea\jobsearch`
+  - `D:\Workarea\seanlgirgis.github.io`
 - Cross-machine restore command:
   - `pwsh .\scripts\ops\restore_managed_repos.ps1`
 - Rule:
-  - prefer `{PROJECT_ROOT}\temp\...` pathing in tracked files; avoid hardcoded machine-specific absolute paths.
+  - prefer `{PROJECT_ROOT}\..\...` pathing in tracked files; avoid hardcoded machine-specific absolute paths.
 
 ## Coding Test Prep Memory
 
 - Active prep objective:
   - LeetCode/coding-test rehearsal for Thursday early morning (`2026-04-23`, America/Chicago).
 - Canonical prep workspace:
-  - `D:\StudyBook\playground`
+  - `D:\Workarea\StudyBook\playground`
 - Quick progress tracker (session-to-session source of truth):
-  - `D:\StudyBook\playground\THURSDAY_CODING_TEST_PROGRESS.md`
+  - `D:\Workarea\StudyBook\playground\THURSDAY_CODING_TEST_PROGRESS.md`
 - Deep historical notes:
-  - `D:\StudyBook\playground\claude_progress.md`
+  - `D:\Workarea\StudyBook\playground\claude_progress.md`
+
+
 
 
 

@@ -2,8 +2,8 @@
     Environment = @{
         STUDYBOOK_DEVICE_LABEL = "AsusPC"
         STUDYBOOK_WORKSPACE_ROOT = "D:\workspace"
-        STUDYBOOK_JOBSEARCH_ROOT = "{PROJECT_ROOT}\temp\jobsearch"
-        STUDYBOOK_WEBSITE_ROOT = "{PROJECT_ROOT}\temp\seanlgirgis.github.io"
+        STUDYBOOK_JOBSEARCH_ROOT = "{PROJECT_ROOT}\..\jobsearch"
+        STUDYBOOK_WEBSITE_ROOT = "{PROJECT_ROOT}\..\seanlgirgis.github.io"
     }
     Venv = @{
         Path = "C:\py_venv\proj_educate"

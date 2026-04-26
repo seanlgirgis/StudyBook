@@ -1,5 +1,5 @@
 # PIPELINE EXECUTION MASTER — PROVIDED FILES (RUNNER MODE)
-# Working directory: D:\StudyBook\
+# Working directory: D:\Workarea\StudyBook\
 # Purpose: Token-efficient mode where Sean runs all commands manually and Codex only provides/validates commands.
 # Created: 2026-04-25
 
@@ -47,7 +47,7 @@ Sean will:
 
 ### 1. Load Environment
 ```powershell
-cd D:\StudyBook; .\env_setter.ps1
+cd D:\Workarea\StudyBook; .\env_setter.ps1
 ```
 
 ### 2. Preflight File Check
@@ -62,17 +62,17 @@ Test-Path "<HTML_FILE_RELATIVE_OR_ABS>"; Test-Path "<AUDIO_SCRIPT_FILE_RELATIVE_
 
 ### 4. Verify Final MP3 Exists
 ```powershell
-Test-Path "D:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3"; Get-Item "D:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3" | Select-Object FullName,Length,LastWriteTime
+Test-Path "C:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3"; Get-Item "C:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3" | Select-Object FullName,Length,LastWriteTime
 ```
 
 ### 5. Verify Duration
 ```powershell
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3"
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3"
 ```
 
 ### 6. Repo Cleanliness Guard (PowerShell fallback)
 ```powershell
-Get-ChildItem "temp\jobsearch\data\interview_prep\audio_prep" -Recurse -File | Where-Object { $_.Name -match '<TOPIC_SLUG>.*(\.mp3|\.m4a|filelist\.txt)$' } | Select-Object FullName
+Get-ChildItem "..\jobsearch\data\interview_prep\audio_prep" -Recurse -File | Where-Object { $_.Name -match '<TOPIC_SLUG>.*(\.mp3|\.m4a|filelist\.txt)$' } | Select-Object FullName
 ```
 
 ### 7. Verify HTML Audio Binding
@@ -87,7 +87,7 @@ Write-Host "Direct URL only: https://seanlgirgis.github.io/<PAGE_FILE_NAME>.html
 
 ### 9. Detect Existing Section/Card Wiring
 ```powershell
-Select-String -Path "temp\seanlgirgis.github.io\components\*.html" -Pattern "<TOPIC_SLUG>|<PAGE_FILE_NAME>.html|<TOPIC_KEYWORD_1>|<TOPIC_KEYWORD_2>" | ForEach-Object { "{0}:{1}:{2}" -f $_.Path, $_.LineNumber, $_.Line.Trim() }
+Select-String -Path "..\seanlgirgis.github.io\components\*.html" -Pattern "<TOPIC_SLUG>|<PAGE_FILE_NAME>.html|<TOPIC_KEYWORD_1>|<TOPIC_KEYWORD_2>" | ForEach-Object { "{0}:{1}:{2}" -f $_.Path, $_.LineNumber, $_.Line.Trim() }
 ```
 
 ### 10. Verify Section Wiring State
@@ -113,7 +113,7 @@ Select-String -Path "<HTML_FILE_RELATIVE_OR_ABS>" -Pattern "https://pub-174bd653
 ## DEFINITION OF DONE (RUNNER MODE)
 
 - [ ] Sean ran pipeline successfully.
-- [ ] Final MP3 exists in `D:\temp\studybook_audio\<TOPIC_SLUG>\`.
+- [ ] Final MP3 exists in `C:\temp\studybook_audio\<TOPIC_SLUG>\`.
 - [ ] Duration and file size validated.
 - [ ] No generated binary artifacts in repo audio_prep path.
 - [ ] HTML points to final MP3 with `audio/mpeg`.
@@ -137,12 +137,13 @@ Codex must end with this summary block:
 
 ## BINARY FILE RULE
 
-Never place generated MP3/M4A into `D:\StudyBook`.
+Never place generated MP3/M4A into `D:\Workarea\StudyBook`.
 
 Allowed in repo:
 - audio script markdown
 - html/component text files
 
 Generated binary output location:
-- `D:\temp\studybook_audio\<TOPIC_SLUG>\audio_clips\`
-- `D:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3`
+- `C:\temp\studybook_audio\<TOPIC_SLUG>\audio_clips\`
+- `C:\temp\studybook_audio\<TOPIC_SLUG>\final_<TOPIC_SLUG>.mp3`
+

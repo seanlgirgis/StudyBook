@@ -2,7 +2,7 @@
 
 ## 1. Goal
 
-Enable high-control, high-throughput agent execution in `D:\StudyBook` without micromanagement.
+Enable high-control, high-throughput agent execution in `D:\Workarea\StudyBook` without micromanagement.
 
 ## 2. Authority Order
 
@@ -127,3 +127,4 @@ When a run introduces or changes architecture-level behavior:
 - create or update an ADR in `docs/adr/`,
 - add or update the entry in `docs/adr/ADR-INDEX.md`,
 - add a linked summary entry in `agents/shared/decision_log.md`.
+

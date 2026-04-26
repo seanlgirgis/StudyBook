@@ -220,3 +220,11 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: gives fast session bootstrap for day-to-day drill status without losing long-form accumulated insights
 - Alternatives considered: continue using only `claude_progress.md`; keep prep status only in chat
 - Impacted files: playground/THURSDAY_CODING_TEST_PROGRESS.md, agents/shared/context_index.md, agents/shared/open_loops.md, agents/shared/task_register.md, agents/shared/pending_task.md
+
+- Date: 2026-04-26
+- Decision ID: DEC-027
+- Task ID: TB-20260426-01
+- Decision: standardize StudyBook managed-repo topology on sibling repositories under `D:\Workarea` and retire legacy `temp\jobsearch` runtime fallback behavior
+- Rationale: ensures runner scripts and docs resolve a single canonical layout and prevents accidental drift to empty legacy mirror folders
+- Alternatives considered: keep backward-compatibility fallback to `temp\jobsearch`; continue dual-layout support
+- Impacted files: scripts/run_mission_audio.ps1, config/env/base.psd1, config/machines/asuspc.psd1, config/machines/dell-laptop.psd1, scripts/ops/open_jobsearch.ps1, scripts/ops/restore_managed_repos.ps1, agents/shared/context_index.md, jobsearch/scripts/generate_audio_generic.py

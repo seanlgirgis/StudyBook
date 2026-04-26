@@ -7,7 +7,7 @@ Purpose: define which actions the agent may execute autonomously vs actions requ
 - Effective date: 2026-04-24
 - Authorized by owner in-session: yes
 - Scope:
-  - `D:\StudyBook\**` (all folders, including `playground\studyGuide`)
+  - `D:\Workarea\StudyBook\**` (all folders, including `playground\studyGuide`)
   - `C:\temp\**`
 - Decision override for this effort:
   - Treat all categories in this matrix as `Auto-Approved`.
@@ -44,3 +44,4 @@ Purpose: define which actions the agent may execute autonomously vs actions requ
 - Any operation that is irreversible or hard to recover.
 - Any operation outside repository boundaries.
 - Any operation touching secrets, credentials, or production systems.
+

@@ -1,16 +1,16 @@
 # MISSION 28 — Generate Audio Script: AWS VPC
-# Working directory: D:\StudyBook\
+# Working directory: D:\Workarea\StudyBook\
 # No existing HTML page to read — this is a new topic (Phase 2)
-# Output: temp\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md
+# Output: ..\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md
 
 ---
 
 ## WORKING DIRECTORY REMINDER
 
 ```powershell
-Get-Location   # must show D:\StudyBook
+Get-Location   # must show D:\Workarea\StudyBook
 ```
-All paths are relative to D:\StudyBook\. Use no absolute paths.
+All paths are relative to D:\Workarea\StudyBook\. Use no absolute paths.
 
 ---
 
@@ -23,7 +23,7 @@ All paths are relative to D:\StudyBook\. Use no absolute paths.
 
 2. Create output folder:
    ```powershell
-   New-Item -ItemType Directory -Force -Path "temp\jobsearch\data\interview_prep\audio_prep\aws-vpc"
+   New-Item -ItemType Directory -Force -Path "..\jobsearch\data\interview_prep\audio_prep\aws-vpc"
    ```
 
 ---
@@ -33,7 +33,7 @@ All paths are relative to D:\StudyBook\. Use no absolute paths.
 Write a complete HOST+SEAN dialogue script for AWS VPC.
 
 Save to:
-`temp\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md`
+`..\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md`
 
 Target: ~14-18 speaker blocks, ~10-13 minutes total audio.
 
@@ -42,12 +42,12 @@ Target: ~14-18 speaker blocks, ~10-13 minutes total audio.
 ## OUTPUT LOCATION RULE (MANDATORY)
 
 - Keep only the script in repo:
-  - `temp\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md`
+  - `..\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md`
 - All generated audio artifacts MUST be outside repo:
-  - `D:\temp\studybook_audio\aws-vpc\audio_clips\`
-  - `D:\temp\studybook_audio\aws-vpc\final_aws-vpc.mp3`
-  - `D:\temp\studybook_audio\aws-vpc\UPLOAD_INSTRUCTIONS.md`
-- Never keep `audio_clips`, `.mp3`, `.m4a`, or `filelist.txt` under `D:\StudyBook`.
+  - `C:\temp\studybook_audio\aws-vpc\audio_clips\`
+  - `C:\temp\studybook_audio\aws-vpc\final_aws-vpc.mp3`
+  - `C:\temp\studybook_audio\aws-vpc\UPLOAD_INSTRUCTIONS.md`
+- Never keep `audio_clips`, `.mp3`, `.m4a`, or `filelist.txt` under `D:\Workarea\StudyBook`.
 
 ---
 
@@ -64,7 +64,7 @@ Process each [SPEAKER] block as a separate API call. Export as MP3. Merge in seq
 
 Topic: AWS VPC
 Output filename: final_aws-vpc.mp3
-Script path: temp\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md
+Script path: ..\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md
 
 ---
 ```
@@ -171,20 +171,21 @@ Run master pipeline with topic slug `aws-vpc`:
 `prompts\codex_missions\Existing_work_pipeline_execution_master.md`
 
 Expected script input:
-`temp\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md`
+`..\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md`
 
 Canonical run command:
 ```powershell
-cd D:\StudyBook
-.\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md" -ChunkSize 750 -RequestTimeoutSeconds 120
+cd D:\Workarea\StudyBook
+.\scripts\run_mission_audio.ps1 "..\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md" -ChunkSize 750 -RequestTimeoutSeconds 120
 ```
 
 Post-run cleanliness check (must be empty):
 ```powershell
-rg --files -g "*.mp3" -g "*.m4a" -g "*filelist.txt" temp\jobsearch\data\interview_prep\audio_prep\aws-vpc
+rg --files -g "*.mp3" -g "*.m4a" -g "*filelist.txt" ..\jobsearch\data\interview_prep\audio_prep\aws-vpc
 ```
 
 After R2 upload confirm URL:
 `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-vpc.mp3`
 
 Then run Mission 29.
+

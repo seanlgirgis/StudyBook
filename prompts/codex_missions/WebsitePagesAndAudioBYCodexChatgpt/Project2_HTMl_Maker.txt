@@ -236,9 +236,9 @@ AFTER GENERATING — OUTPUT DELIVERY
 SAVE INSTRUCTIONS
 ─────────────────────────────────────────────────
 File:        {slug}.html
-Save to:     temp\seanlgirgis.github.io\learning\
-Full path:   temp\seanlgirgis.github.io\learning\{slug}.html
-Working dir: D:\StudyBook\
+Save to:     ..\seanlgirgis.github.io\learning\
+Full path:   ..\seanlgirgis.github.io\learning\{slug}.html
+Working dir: D:\Workarea\StudyBook\
 ─────────────────────────────────────────────────
 
 4. Print this verification block:
@@ -246,19 +246,19 @@ Working dir: D:\StudyBook\
 VERIFICATION — run these after saving
 ─────────────────────────────────────────────────
 # Audio src correct
-Select-String -Path "temp\seanlgirgis.github.io\learning\{slug}.html" -Pattern 'final_{slug}.mp3'
+Select-String -Path "..\seanlgirgis.github.io\learning\{slug}.html" -Pattern 'final_{slug}.mp3'
 
 # Audio type correct
-Select-String -Path "temp\seanlgirgis.github.io\learning\{slug}.html" -Pattern 'audio/mpeg'
+Select-String -Path "..\seanlgirgis.github.io\learning\{slug}.html" -Pattern 'audio/mpeg'
 
 # cheat-row at 170px
-Select-String -Path "temp\seanlgirgis.github.io\learning\{slug}.html" -Pattern '170px'
+Select-String -Path "..\seanlgirgis.github.io\learning\{slug}.html" -Pattern '170px'
 
 # No mojibake
-Select-String -Path "temp\seanlgirgis.github.io\learning\{slug}.html" -Pattern 'Ã|â|ï|Â'
+Select-String -Path "..\seanlgirgis.github.io\learning\{slug}.html" -Pattern 'Ã|â|ï|Â'
 
 # No video block (new pages have audio only)
-Select-String -Path "temp\seanlgirgis.github.io\learning\{slug}.html" -Pattern '<video'
+Select-String -Path "..\seanlgirgis.github.io\learning\{slug}.html" -Pattern '<video'
 ─────────────────────────────────────────────────
 
 5. Report at the end:

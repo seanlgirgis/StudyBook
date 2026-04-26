@@ -1,6 +1,6 @@
 # MISSION 01 — Audit Existing Learning Pages (One at a Time)
-# Working directory: D:\StudyBook\
-# Touches: temp\seanlgirgis.github.io\learning\ (READ ONLY — no changes)
+# Working directory: D:\Workarea\StudyBook\
+# Touches: ..\seanlgirgis.github.io\learning\ (READ ONLY — no changes)
 # Output: prompts\codex_missions\AUDIT_REPORT.md (built file by file)
 
 ---
@@ -8,7 +8,7 @@
 ## WORKING DIRECTORY
 
 ```powershell
-Get-Location   # must show D:\StudyBook
+Get-Location   # must show D:\Workarea\StudyBook
 ```
 
 ---
@@ -26,14 +26,14 @@ This protects tokens and catches problems early.
 ## FILE QUEUE (audit in this exact order, one at a time)
 
 ```
-1. temp\seanlgirgis.github.io\learning\aws-ec2.html        ← START HERE
-2. temp\seanlgirgis.github.io\learning\aws-athena.html
-3. temp\seanlgirgis.github.io\learning\aws-glue.html
-4. temp\seanlgirgis.github.io\learning\aws-redshift.html
-5. temp\seanlgirgis.github.io\learning\aws-lambda.html
-6. temp\seanlgirgis.github.io\learning\aws-s3.html
-7. temp\seanlgirgis.github.io\learning\apache-kafka.html
-8. temp\seanlgirgis.github.io\learning\aws-ecs.html
+1. ..\seanlgirgis.github.io\learning\aws-ec2.html        ← START HERE
+2. ..\seanlgirgis.github.io\learning\aws-athena.html
+3. ..\seanlgirgis.github.io\learning\aws-glue.html
+4. ..\seanlgirgis.github.io\learning\aws-redshift.html
+5. ..\seanlgirgis.github.io\learning\aws-lambda.html
+6. ..\seanlgirgis.github.io\learning\aws-s3.html
+7. ..\seanlgirgis.github.io\learning\apache-kafka.html
+8. ..\seanlgirgis.github.io\learning\aws-ecs.html
 ```
 
 ---
@@ -74,8 +74,8 @@ This protects tokens and catches problems early.
 If AUDIT_REPORT.md does not exist yet, create it with this header first:
 ```markdown
 # Audit Report — Learning Hub Existing Pages
-Working directory: D:\StudyBook\
-Pages location: temp\seanlgirgis.github.io\learning\
+Working directory: D:\Workarea\StudyBook\
+Pages location: ..\seanlgirgis.github.io\learning\
 Report location: prompts\codex_missions\AUDIT_REPORT.md
 ```
 
@@ -163,5 +163,6 @@ Then report: "MISSION 01 COMPLETE — all 8 files audited — AUDIT_REPORT.md fi
 
 ## START NOW
 
-Audit file 1 of 8: `temp\seanlgirgis.github.io\learning\aws-ec2.html`
+Audit file 1 of 8: `..\seanlgirgis.github.io\learning\aws-ec2.html`
 Write its section to AUDIT_REPORT.md. Stop. Wait for confirmation.
+

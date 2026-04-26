@@ -16,16 +16,18 @@ Website: https://seanlgirgis.github.io/learning/
 ## SYSTEM ARCHITECTURE
 
 ```
-D:\StudyBook\                        ← main repo
-├── prompts\codex_missions\          ← Claude Code / Codex task prompts
-├── scripts\                         ← PowerShell pipeline scripts
-├── temp\
-│   ├── seanlgirgis.github.io\       ← website source (committed + pushed)
-│   │   └── learning\*.html          ← all 49 learning pages
-│   ├── jobsearch\                   ← job search data
-│   └── gap\                         ← ChatGPT prompt files (01-28 topics)
-└── tutorials\                       ← tutorial Python files (long-running project)
-    └── _manager\                    ← THIS folder — project memory (lives with tutorials)
+D:\Workarea\
+├── StudyBook\                       ← main repo
+│   ├── prompts\codex_missions\      ← Claude Code / Codex task prompts
+│   │   └── WebsitePagesAndAudioBYCodexChatgpt\  ← ChatGPT P1 + P2 prompt files
+│   ├── scripts\                     ← PowerShell pipeline scripts
+│   ├── temp\
+│   │   ├── jobsearch\               ← job search data
+│   │   └── gap\done\                ← ChatGPT prompt files (01-28 topics, all done)
+│   └── tutorials\                   ← tutorial Python files (long-running project)
+│       └── _manager\                ← THIS folder — project memory
+└── seanlgirgis.github.io\           ← website repo (separate clone)
+    └── learning\*.html              ← all 49 learning pages
 
 D:\temp\studybook_audio\             ← MP3 files (OUTSIDE repo, never commit)
 C:\Users\shareuser\CrossDevice\
@@ -64,7 +66,7 @@ R2 CDN: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/
 - PL-12 Local Analytics Stack (5 tracks)
 - Sync script: .\scripts\sync_studybook_to_phone.ps1
 
-### Gap Prompts (D:\StudyBook\temp\gap\)
+### Gap Prompts (D:\Workarea\StudyBook\temp\gap\)
 - 28 topic prompt files (01-28) — all in new format
 - Project 1 (audio script) + Project 2 (HTML page) per topic
 - Topics 01-03 already processed by user
@@ -75,7 +77,7 @@ R2 CDN: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/
 - Both updated: no rotating bridge phrases, tighter chunk sizes
 
 ### Tutorial Directory Structure
-- D:\StudyBook\tutorials\ — full tree created (41 topics × setup + capstone)
+- D:\Workarea\StudyBook\tutorials\ — full tree created (41 topics × setup + capstone)
 - _meta\TUTORIAL_STANDARDS.md — coding standards for all generated files
 - _meta\MASTER_PROMPT_TEMPLATE.md — reusable ChatGPT prompt skeleton
 - _shared\aws_session.py — shared boto3 session helper
@@ -98,7 +100,7 @@ R2 CDN: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/
 - ✅ 13_python_concurrency
 - ⏸ 14-41 (Capital One + Fundamentals + Advanced — NOT STARTED)
 
-### _manager Folder (D:\StudyBook\tutorials\_manager\)
+### _manager Folder (D:\Workarea\StudyBook\tutorials\_manager\)
 - PROJECT_STATE.md — this file
 - DOCKER_INVENTORY.md — all containers, ports, connection strings
 - ROADMAP.md — 41-topic status table
@@ -152,9 +154,9 @@ R2 CDN: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/
 | What | Path |
 |---|---|
 | Audio MP3s | `D:\temp\studybook_audio\{slug}\final_{slug}.mp3` |
-| Website source | `D:\StudyBook\temp\seanlgirgis.github.io\learning\` |
-| Gap prompts | `D:\StudyBook\temp\gap\` |
-| Tutorials | `D:\StudyBook\tutorials\` |
+| Website source | `D:\Workarea\seanlgirgis.github.io\learning\` |
+| Gap prompts | `D:\Workarea\StudyBook\temp\gap\done\` |
+| Tutorials | `D:\Workarea\StudyBook\tutorials\` |
 | Phone music | `C:\Users\shareuser\CrossDevice\Pixel 8 Pro\storage\Music\StudyBook\` |
-| ChatGPT P1 prompt | `D:\users\shareuser\Downloads\Project-1-Audioscript-Maker.txt` |
-| ChatGPT P2 prompt | `D:\users\shareuser\Downloads\Project2_HTML_MAKER.txt` |
+| ChatGPT P1 prompt | `D:\Workarea\StudyBook\prompts\codex_missions\WebsitePagesAndAudioBYCodexChatgpt\Project-1-Audioscript-Maker.txt` |
+| ChatGPT P2 prompt | `D:\Workarea\StudyBook\prompts\codex_missions\WebsitePagesAndAudioBYCodexChatgpt\Project2_HTMl_Maker.txt` |

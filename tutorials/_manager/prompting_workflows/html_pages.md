@@ -11,7 +11,7 @@ Gap prompt file → ChatGPT Project 2 → HTML page → save → commit → push
 
 ## Step 1 — Prepare the Gap Prompt
 
-Gap files live in: `D:\StudyBook\temp\gap\NN_topic_prompts.md`
+Gap files live in: `D:\Workarea\StudyBook\temp\gap\NN_topic_prompts.md`
 The **Project 2 section** is the HTML page prompt.
 
 Format recap:
@@ -44,7 +44,7 @@ Format recap:
 
 ## Step 3 — Save HTML File
 
-Save to: `D:\StudyBook\temp\seanlgirgis.github.io\learning\{slug}.html`
+Save to: `D:\Workarea\StudyBook\temp\seanlgirgis.github.io\learning\{slug}.html`
 
 If the file already exists (update scenario):
 1. Read the existing file first
@@ -56,7 +56,7 @@ If the file already exists (update scenario):
 ## Step 4 — Commit and Push
 
 ```powershell
-cd D:\StudyBook\temp\seanlgirgis.github.io
+cd D:\Workarea\StudyBook\temp\seanlgirgis.github.io
 git add learning/{slug}.html
 git commit -m "Add/update {topic} learning page"
 git push
@@ -69,7 +69,7 @@ Verify live: `https://seanlgirgis.github.io/learning/{slug}.html`
 ## Step 5 — Update Index (if new page)
 
 If this is a brand new topic (not an update):
-1. Open `D:\StudyBook\temp\seanlgirgis.github.io\learning\index.html`
+1. Open `D:\Workarea\StudyBook\temp\seanlgirgis.github.io\learning\index.html`
 2. Add a link card for the new topic
 3. Commit and push index.html
 

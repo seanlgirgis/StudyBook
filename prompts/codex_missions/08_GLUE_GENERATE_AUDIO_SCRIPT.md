@@ -1,7 +1,7 @@
 # MISSION 08 — Generate Audio Script: AWS Glue
-# Working directory: D:\StudyBook\
-# Touches: temp\seanlgirgis.github.io\learning\aws-glue.html (read only)
-# Output: temp\jobsearch\data\interview_prep\audio_prep\aws-glue\audio_script_aws-glue.md
+# Working directory: D:\Workarea\StudyBook\
+# Touches: ..\seanlgirgis.github.io\learning\aws-glue.html (read only)
+# Output: ..\jobsearch\data\interview_prep\audio_prep\aws-glue\audio_script_aws-glue.md
 
 ---
 
@@ -9,7 +9,7 @@
 
 Write a complete HOST+SEAN dialogue script for AWS Glue and save to:
 
-`temp\jobsearch\data\interview_prep\audio_prep\aws-glue\audio_script_aws-glue.md`
+`..\jobsearch\data\interview_prep\audio_prep\aws-glue\audio_script_aws-glue.md`
 
 Target runtime: ~9–12 minutes.
 
@@ -51,5 +51,6 @@ Target runtime: ~9–12 minutes.
 
 ## REPORT
 
-`MISSION 08 COMPLETE — script saved to temp\jobsearch\data\interview_prep\audio_prep\aws-glue\audio_script_aws-glue.md — [N] blocks — est. [X] min audio`
+`MISSION 08 COMPLETE — script saved to ..\jobsearch\data\interview_prep\audio_prep\aws-glue\audio_script_aws-glue.md — [N] blocks — est. [X] min audio`
+
 

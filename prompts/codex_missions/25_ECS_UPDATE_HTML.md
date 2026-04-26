@@ -1,6 +1,6 @@
 # MISSION 25 — Update HTML: Amazon ECS
-# Working directory: D:\StudyBook\
-# Target: temp\seanlgirgis.github.io\learning\aws-ecs.html
+# Working directory: D:\Workarea\StudyBook\
+# Target: ..\seanlgirgis.github.io\learning\aws-ecs.html
 # Prerequisite: user confirms ECS audio uploaded and live
 
 ---
@@ -32,14 +32,14 @@
 ## VERIFY
 
 ```powershell
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern 'final_aws-ecs.mp3'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern 'audio/mpeg'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern '\.m4a'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern '170px'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern 'Last updated 2026-04-24'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern '&larr; Learning Hub'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern '&#127916; Video Overview \(coming soon\)'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern '�|Â|Ã|â|ï|ð'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern 'final_aws-ecs.mp3'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern 'audio/mpeg'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern '\.m4a'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern '170px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern 'Last updated 2026-04-24'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern '&larr; Learning Hub'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern '&#127916; Video Overview \(coming soon\)'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ecs.html" -Pattern '�|Â|Ã|â|ï|ð'
 ```
 
 Expected:
@@ -55,3 +55,4 @@ Expected:
 ## REPORT
 
 `MISSION 25 COMPLETE — aws-ecs.html updated — new audio src confirmed — video placeholder preserved — encoding normalized`
+

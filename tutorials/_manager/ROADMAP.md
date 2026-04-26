@@ -25,7 +25,7 @@
 | 06 | AWS EMR | aws_emr | ✅ | ⬜ | ⬜ |
 | 07 | AWS Glue | aws_glue | ✅ | ⬜ | ⬜ |
 | 08 | AWS S3 | aws_s3 | ✅ | 🔨 | ⬜ |
-| 09 | AWS CloudWatch | aws_cloudwatch | ✅ | ⬜ | ⬜ |
+| 09 | AWS CloudWatch | aws_cloudwatch | ✅ | 🔨 | ✔️ |
 | 10 | Python Logging | python_logging | ✅ | ⬜ | ⬜ |
 | 11 | dbt | dbt | ✅ | ⬜ | ⬜ |
 | 12 | Parquet | parquet | ✅ | ⬜ | ⬜ |

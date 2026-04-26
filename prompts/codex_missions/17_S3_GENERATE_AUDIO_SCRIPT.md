@@ -1,7 +1,7 @@
 # MISSION 17 — Generate Audio Script: Amazon S3
-# Working directory: D:\StudyBook\
-# Touches: temp\seanlgirgis.github.io\learning\aws-s3.html (read only)
-# Output: temp\jobsearch\data\interview_prep\audio_prep\aws-s3\audio_script_aws-s3.md
+# Working directory: D:\Workarea\StudyBook\
+# Touches: ..\seanlgirgis.github.io\learning\aws-s3.html (read only)
+# Output: ..\jobsearch\data\interview_prep\audio_prep\aws-s3\audio_script_aws-s3.md
 
 ---
 
@@ -9,7 +9,7 @@
 
 Write a complete HOST+SEAN dialogue script for Amazon S3 and save to:
 
-`temp\jobsearch\data\interview_prep\audio_prep\aws-s3\audio_script_aws-s3.md`
+`..\jobsearch\data\interview_prep\audio_prep\aws-s3\audio_script_aws-s3.md`
 
 Target runtime: ~9–12 minutes.
 
@@ -52,4 +52,5 @@ Target runtime: ~9–12 minutes.
 
 ## REPORT
 
-`MISSION 17 COMPLETE — script saved to temp\jobsearch\data\interview_prep\audio_prep\aws-s3\audio_script_aws-s3.md — [N] blocks — est. [X] min audio`
+`MISSION 17 COMPLETE — script saved to ..\jobsearch\data\interview_prep\audio_prep\aws-s3\audio_script_aws-s3.md — [N] blocks — est. [X] min audio`
+

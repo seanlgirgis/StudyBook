@@ -1,6 +1,6 @@
 # MISSION 29 — Generate HTML Page: AWS VPC
-# Working directory: D:\StudyBook\
-# Output: temp\seanlgirgis.github.io\learning\aws-vpc.html (new file)
+# Working directory: D:\Workarea\StudyBook\
+# Output: ..\seanlgirgis.github.io\learning\aws-vpc.html (new file)
 # Prerequisite: Mission 28 complete and audio uploaded/confirmed
 
 ---
@@ -8,9 +8,9 @@
 ## WORKING DIRECTORY REMINDER
 
 ```powershell
-Get-Location   # must show D:\StudyBook
+Get-Location   # must show D:\Workarea\StudyBook
 ```
-All paths are relative to D:\StudyBook\. Use no absolute paths.
+All paths are relative to D:\Workarea\StudyBook\. Use no absolute paths.
 
 ---
 
@@ -23,16 +23,16 @@ If upload is not confirmed live, STOP and report:
 `Waiting for R2 upload confirmation.`
 
 Source-of-truth generated file location:
-`D:\temp\studybook_audio\aws-vpc\final_aws-vpc.mp3`
+`C:\temp\studybook_audio\aws-vpc\final_aws-vpc.mp3`
 
 ---
 
 ## YOUR TASK
 
 Create a full new learning page:
-`temp\seanlgirgis.github.io\learning\aws-vpc.html`
+`..\seanlgirgis.github.io\learning\aws-vpc.html`
 
-Use `temp\seanlgirgis.github.io\learning\aws-ec2.html` as the structural + CSS reference.
+Use `..\seanlgirgis.github.io\learning\aws-ec2.html` as the structural + CSS reference.
 
 This is a NEW page, not a patch.
 
@@ -151,12 +151,12 @@ Include at minimum:
 Run:
 
 ```powershell
-Test-Path "temp\seanlgirgis.github.io\learning\aws-vpc.html"
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-vpc.html" -Pattern 'final_aws-vpc.mp3'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-vpc.html" -Pattern 'audio/mpeg'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-vpc.html" -Pattern '170px 1fr'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-vpc.html" -Pattern 'id="s' | Measure-Object
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-vpc.html" -Pattern 'Ã|â|ï|Â|ð|�'
+Test-Path "..\seanlgirgis.github.io\learning\aws-vpc.html"
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-vpc.html" -Pattern 'final_aws-vpc.mp3'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-vpc.html" -Pattern 'audio/mpeg'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-vpc.html" -Pattern '170px 1fr'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-vpc.html" -Pattern 'id="s' | Measure-Object
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-vpc.html" -Pattern 'Ã|â|ï|Â|ð|�'
 ```
 
 Expected:
@@ -169,9 +169,10 @@ Expected:
 
 Repo cleanliness guard (must be no matches):
 ```powershell
-rg --files -g "*.mp3" -g "*.m4a" -g "*filelist.txt" temp\jobsearch\data\interview_prep\audio_prep\aws-vpc
+rg --files -g "*.mp3" -g "*.m4a" -g "*filelist.txt" ..\jobsearch\data\interview_prep\audio_prep\aws-vpc
 ```
 
 Report:
 - `MISSION 29 COMPLETE — aws-vpc.html created — [N] sections — [N] QA pairs — [N] cheat rows`
 - or `MISSION 29 BLOCKED — [reason]`
+

@@ -20,7 +20,7 @@ $null = Invoke-StudyBookEnvBootstrap -ProjectRoot $projectRoot -MachineName $Mac
 
 $jobsearchRootRaw = $env:STUDYBOOK_JOBSEARCH_ROOT
 if ([string]::IsNullOrWhiteSpace($jobsearchRootRaw)) {
-    $jobsearchRootRaw = Join-Path -Path $projectRoot -ChildPath 'temp\jobsearch'
+    $jobsearchRootRaw = Join-Path -Path $projectRoot -ChildPath '..\jobsearch'
 }
 $jobsearchRoot = [System.IO.Path]::GetFullPath($jobsearchRootRaw)
 

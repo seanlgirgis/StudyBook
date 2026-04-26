@@ -220,3 +220,5 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-143 | TB-20260425-27 | Glue provided-files refresh executed and analytics card normalized to Live state | closed | none | 2026-04-25 |
 | LOOP-128 | TB-20260425-28 | Wire python-testing-pipelines cards in learning-craft and learning-python to live page | closed | none | 2026-04-25 |
 | LOOP-129 | TB-20260425-29 | Wire python-concurrency section card to live page | closed | none | 2026-04-25 |
+| LOOP-144 | TB-20260426-01 | Stabilize StudyBook/jobsearch/website sibling-repo layout under D:\\Workarea and remove legacy temp mirrors | closed | none | 2026-04-26 |
+

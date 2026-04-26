@@ -11,13 +11,13 @@ Set this key per machine in:
 Required key under `Environment`:
 
 ```powershell
-STUDYBOOK_JOBSEARCH_ROOT = "{PROJECT_ROOT}\temp\jobsearch"
+STUDYBOOK_JOBSEARCH_ROOT = "{PROJECT_ROOT}\..\jobsearch"
 ```
 
 Example for another machine:
 
 ```powershell
-STUDYBOOK_JOBSEARCH_ROOT = "{PROJECT_ROOT}\temp\jobsearch"
+STUDYBOOK_JOBSEARCH_ROOT = "{PROJECT_ROOT}\..\jobsearch"
 ```
 
 ## Launcher Scripts
@@ -67,4 +67,4 @@ Optional flags:
 
 - This design intentionally keeps JobSearch in its own operational repository.
 - StudyBook acts as the single launchpad and manager.
-- Default canonical path is `D:\StudyBook\temp\jobsearch` (resolved from `{PROJECT_ROOT}`).
+- Default canonical path is `D:\Workarea\jobsearch` (resolved from `{PROJECT_ROOT}\..\jobsearch`).

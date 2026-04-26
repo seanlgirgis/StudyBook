@@ -1,6 +1,6 @@
 # MISSION 04 — Update HTML: Amazon EC2
-# Working directory: D:\StudyBook\
-# Touches: temp\seanlgirgis.github.io\learning\aws-ec2.html (read then write)
+# Working directory: D:\Workarea\StudyBook\
+# Touches: ..\seanlgirgis.github.io\learning\aws-ec2.html (read then write)
 # Prerequisite: Mission 03 complete AND Sean has confirmed R2 upload is live
 
 ---
@@ -8,21 +8,21 @@
 ## WORKING DIRECTORY REMINDER
 
 ```powershell
-Get-Location   # must show D:\StudyBook
+Get-Location   # must show D:\Workarea\StudyBook
 ```
-All paths are relative to D:\StudyBook\. Use no absolute paths.
+All paths are relative to D:\Workarea\StudyBook\. Use no absolute paths.
 
 ---
 
 ## THREE REPOSITORIES INVOLVED IN THIS MISSION
 
 ```
-D:\StudyBook\                                       ← ROOT (working directory)
-└── temp\seanlgirgis.github.io\                    ← REPO 3 — HTML update happens here
+D:\Workarea\StudyBook\                                       ← ROOT (working directory)
+└── ..\seanlgirgis.github.io\                    ← REPO 3 — HTML update happens here
         learning\
             aws-ec2.html                            ← TARGET FILE
 
-D:\temp\studybook_audio\aws-ec2\                    ← Audio artifacts (outside repo)
+C:\temp\studybook_audio\aws-ec2\                    ← Audio artifacts (outside repo)
     UPLOAD_INSTRUCTIONS.md                          ← confirm R2 URL from here
     final_aws-ec2.mp3                               ← uploaded to R2 by Sean
 ```
@@ -33,7 +33,7 @@ D:\temp\studybook_audio\aws-ec2\                    ← Audio artifacts (outside
 
 Read the upload instructions:
 ```
-D:\temp\studybook_audio\aws-ec2\UPLOAD_INSTRUCTIONS.md
+C:\temp\studybook_audio\aws-ec2\UPLOAD_INSTRUCTIONS.md
 ```
 
 The expected R2 URL is:
@@ -48,7 +48,7 @@ If not confirmed: STOP. Report "Waiting for R2 upload confirmation."
 
 Read the full file:
 ```
-temp\seanlgirgis.github.io\learning\aws-ec2.html
+..\seanlgirgis.github.io\learning\aws-ec2.html
 ```
 
 Locate the `<div class="audio-box">` block.
@@ -118,16 +118,16 @@ After making changes, read the file again and confirm:
 
 ```powershell
 # Quick structural checks
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ec2.html" -Pattern 'audio-box' | Measure-Object
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ec2.html" -Pattern 'audio-box' | Measure-Object
 # Expected: Count = 1 (exactly one audio-box div — not two)
 
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ec2.html" -Pattern 'final_aws-ec2.mp3'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ec2.html" -Pattern 'final_aws-ec2.mp3'
 # Expected: found — shows the new audio src
 
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ec2.html" -Pattern 'audio/mpeg'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ec2.html" -Pattern 'audio/mpeg'
 # Expected: found
 
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-ec2.html" -Pattern 'EC2.*Deep_Dive.*mp4'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-ec2.html" -Pattern 'EC2.*Deep_Dive.*mp4'
 # Expected: found — video URL is still present
 ```
 
@@ -152,7 +152,7 @@ Encoding safety rule:
 
 Produce a clean diff summary:
 ```
-CHANGES TO temp\seanlgirgis.github.io\learning\aws-ec2.html:
+CHANGES TO ..\seanlgirgis.github.io\learning\aws-ec2.html:
 
   audio-box:
     <audio> src:  [old .m4a URL]  →  https://...r2.dev/final_aws-ec2.mp3
@@ -169,7 +169,7 @@ CHANGES TO temp\seanlgirgis.github.io\learning\aws-ec2.html:
 
 ## VERIFICATION CHECKLIST
 
-- [ ] Working directory confirmed as D:\StudyBook\ throughout
+- [ ] Working directory confirmed as D:\Workarea\StudyBook\ throughout
 - [ ] R2 upload confirmed by Sean before any HTML changes
 - [ ] Existing audio-box read and copied verbatim before replacement
 - [ ] Existing video URL recorded before replacement
@@ -189,10 +189,11 @@ Or:     "MISSION 04 BLOCKED — [reason]"
 ## AFTER THIS MISSION — TEST BEFORE CONTINUING
 
 Before running Missions 05–07 (Athena), Sean should:
-1. Open `temp\seanlgirgis.github.io\learning\aws-ec2.html` in a browser
+1. Open `..\seanlgirgis.github.io\learning\aws-ec2.html` in a browser
 2. Confirm the audio player loads and plays (should hear HOST voice, on-topic EC2 content)
 3. Confirm the video still plays (NotebookLM video)
 4. If both pass: proceed to Mission 05
 
 The remaining Phase 1 files follow the same 3-mission pattern (generate script → run pipeline → update HTML).
 Mission files 05–25 will be created after this test case is verified.
+

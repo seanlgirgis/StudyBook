@@ -1,6 +1,6 @@
 # MISSION 19 — Update HTML: Amazon S3
-# Working directory: D:\StudyBook\
-# Target: temp\seanlgirgis.github.io\learning\aws-s3.html
+# Working directory: D:\Workarea\StudyBook\
+# Target: ..\seanlgirgis.github.io\learning\aws-s3.html
 # Prerequisite: user confirms S3 audio uploaded and live
 
 ---
@@ -33,15 +33,15 @@
 ## VERIFY
 
 ```powershell
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-s3.html" -Pattern 'final_aws-s3.mp3'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-s3.html" -Pattern 'audio/mpeg'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-s3.html" -Pattern 'S3__Engine_of_Big_Data_small.mp4'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-s3.html" -Pattern '\.m4a'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-s3.html" -Pattern '150px'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-s3.html" -Pattern '170px'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-s3.html" -Pattern 'Last updated 2026-04-24'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-s3.html" -Pattern '&larr; Learning Hub'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-s3.html" -Pattern '�|Â|Ã|â|ï|ð'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-s3.html" -Pattern 'final_aws-s3.mp3'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-s3.html" -Pattern 'audio/mpeg'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-s3.html" -Pattern 'S3__Engine_of_Big_Data_small.mp4'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-s3.html" -Pattern '\.m4a'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-s3.html" -Pattern '150px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-s3.html" -Pattern '170px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-s3.html" -Pattern 'Last updated 2026-04-24'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-s3.html" -Pattern '&larr; Learning Hub'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-s3.html" -Pattern '�|Â|Ã|â|ï|ð'
 ```
 
 Expected:
@@ -58,3 +58,4 @@ Expected:
 ## REPORT
 
 `MISSION 19 COMPLETE — aws-s3.html updated — new audio src confirmed — cheat-row fixed — video unchanged — encoding normalized`
+

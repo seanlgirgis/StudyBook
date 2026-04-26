@@ -1,6 +1,6 @@
 # MISSION 22 — Update HTML: Apache Kafka
-# Working directory: D:\StudyBook\
-# Target: temp\seanlgirgis.github.io\learning\apache-kafka.html
+# Working directory: D:\Workarea\StudyBook\
+# Target: ..\seanlgirgis.github.io\learning\apache-kafka.html
 # Prerequisite: user confirms Kafka audio uploaded and live
 
 ---
@@ -32,13 +32,13 @@
 ## VERIFY
 
 ```powershell
-Select-String -Path "temp\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern 'final_apache-kafka.mp3'
-Select-String -Path "temp\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern 'audio/mpeg'
-Select-String -Path "temp\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern '\.m4a'
-Select-String -Path "temp\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern '170px'
-Select-String -Path "temp\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern 'Last updated 2026-04-24'
-Select-String -Path "temp\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern '&larr; Learning Hub'
-Select-String -Path "temp\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern '�|Â|Ã|â|ï|ð'
+Select-String -Path "..\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern 'final_apache-kafka.mp3'
+Select-String -Path "..\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern 'audio/mpeg'
+Select-String -Path "..\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern '\.m4a'
+Select-String -Path "..\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern '170px'
+Select-String -Path "..\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern 'Last updated 2026-04-24'
+Select-String -Path "..\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern '&larr; Learning Hub'
+Select-String -Path "..\seanlgirgis.github.io\learning\apache-kafka.html" -Pattern '�|Â|Ã|â|ï|ð'
 ```
 
 Expected:
@@ -54,3 +54,4 @@ Expected:
 ## REPORT
 
 `MISSION 22 COMPLETE — apache-kafka.html updated — new audio src confirmed — video placeholder preserved — encoding normalized`
+

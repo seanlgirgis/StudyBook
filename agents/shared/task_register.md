@@ -1,4 +1,4 @@
-﻿# Task Register
+# Task Register
 
 Track active and completed tasks to avoid losing continuity.
 
@@ -265,3 +265,5 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260425-27 | Execute Glue provided-files pipeline refresh and normalize analytics card state | done | 2026-04-25 | Re-ran runner for audio_script_aws-glue.md to C:\\temp\\studybook_audio\\aws-glue, verified live MP3 URL in aws-glue.html, and switched Glue card badge to Live |
 | TB-20260425-28 | Wire python-testing-pipelines as live in craft+python section cards after audio publish | done | 2026-04-25 | Updated component cards to clickable/live and verified page MP3 binding |
 | TB-20260425-29 | Wire python-concurrency page into learning-python card and mark live | done | 2026-04-25 | Updated planned Python card to clickable live reference |
+| TB-20260426-01 | Stabilize new Workarea sibling-repo layout and remove legacy temp fallback paths | done | 2026-04-26 | Updated runtime scripts/config/docs to D:\\Workarea model and removed empty legacy temp mirrors |
+

@@ -9,8 +9,8 @@ $scriptDir = Split-Path -Path $PSCommandPath -Parent
 $projectRoot = [System.IO.Path]::GetFullPath((Join-Path -Path $scriptDir -ChildPath "..\.."))
 
 $repos = @(
-    @{ Name = "jobsearch"; Remote = "https://github.com/seanlgirgis/jobsearch"; RelativePath = "temp\jobsearch" },
-    @{ Name = "seanlgirgis.github.io"; Remote = "https://github.com/seanlgirgis/seanlgirgis.github.io"; RelativePath = "temp\seanlgirgis.github.io" }
+    @{ Name = "jobsearch"; Remote = "https://github.com/seanlgirgis/jobsearch"; RelativePath = "..\jobsearch" },
+    @{ Name = "seanlgirgis.github.io"; Remote = "https://github.com/seanlgirgis/seanlgirgis.github.io"; RelativePath = "..\seanlgirgis.github.io" }
 )
 
 $results = @()

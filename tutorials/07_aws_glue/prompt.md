@@ -109,6 +109,13 @@ AWS account required. Glue needs an IAM role with S3 and Glue permissions.
 Glue 4.0 pricing: $0.44/DPU-hour (2 DPU minimum = $0.88/hour minimum).
 Job bookmarks require job to be run with --job-bookmark-option job-bookmark-enable.
 Glue scripts must be uploaded to S3 before job creation.
+CLEANUP RULES — MANDATORY:
+- Every main() wraps demo code in try/finally — cleanup() is in the finally block
+- Every file that creates a resource has its own cleanup() — do not rely on a separate file
+- Cleanup functions catch "already deleted" errors and continue without crashing
+- Print ⚠️ COST WARNING immediately after creating any billable resource
+- Print ✅ Cleanup complete. No ongoing charges. at the end of every cleanup()
+- capstone/cleanup.py deletes EVERYTHING and ends with that confirmation line
 
 ===== START =====
 

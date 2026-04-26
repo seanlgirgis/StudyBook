@@ -14,7 +14,7 @@ Each topic takes ~30-60 minutes (generation + review + local testing).
 
 ## Step 1 — Pick the Next Topic
 
-Open `D:\StudyBook\tutorials\_manager\ROADMAP.md`
+Open `D:\Workarea\StudyBook\tutorials\_manager\ROADMAP.md`
 Find the first topic where prompt.md = ✅ and .py files = ⬜
 That's your next topic.
 
@@ -24,7 +24,7 @@ If prompt.md is ⬜, write it first (see Step 0).
 
 ## Step 0 (if needed) — Write prompt.md
 
-Reference: `D:\StudyBook\tutorials\_meta\MASTER_PROMPT_TEMPLATE.md`
+Reference: `D:\Workarea\StudyBook\tutorials\_meta\MASTER_PROMPT_TEMPLATE.md`
 
 1. Copy the template
 2. Fill in: TOPIC, SLUG, PRIORITY, INFRASTRUCTURE
@@ -64,12 +64,18 @@ You: "generate file 01"
 ChatGPT: [generates 01_filename.py — full file, complete, runnable]
 You: "generate file 02"
 ... continue through 05 ...
+You: "generate readme"
+ChatGPT: [generates README.md with prereqs, phase 1 run guide, phase 2 capstone guide, cleanup note]
 You: "generate capstone"
 ChatGPT: [generates brief.md, then capstone.py, then test_capstone.py]
 ```
 
 **Do not say "next" — always say "generate file 02" etc.**
 Specific commands produce better output.
+
+**For AWS topics:** Also paste the contents of `tutorials/_meta/AWS_GOTCHAS.md`
+at the end of the prompt before sending. This prevents the four known failure modes
+(S3 Select crash, versioned bucket cleanup failure, large file hang, name collisions).
 
 ---
 
@@ -78,6 +84,8 @@ Specific commands produce better output.
 Tutorial directory structure:
 ```
 tutorials/NN_topic/
+  README.md           ← generated after file 05
+  prompt.md           ← the prompt you wrote
   setup/
     01_filename.py
     02_filename.py
@@ -88,6 +96,7 @@ tutorials/NN_topic/
     brief.md
     capstone.py
     test_capstone.py
+    chatgpt_response.md   ← optional: raw ChatGPT response for reference
 ```
 
 Save each file immediately after generation — don't wait until end.
@@ -151,7 +160,7 @@ Do NOT regenerate the whole file — just patch the function.
 ## Step 8 — Update ROADMAP.md
 
 Once all 5 .py files + capstone are saved and tested:
-1. Open `D:\StudyBook\tutorials\_manager\ROADMAP.md`
+1. Open `D:\Workarea\StudyBook\tutorials\_manager\ROADMAP.md`
 2. Change .py files column to 🔨
 3. Change Tested column to ✔️
 

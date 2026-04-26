@@ -1,6 +1,6 @@
 # MISSION 16 — Update HTML: AWS Lambda
-# Working directory: D:\StudyBook\
-# Target: temp\seanlgirgis.github.io\learning\aws-lambda.html
+# Working directory: D:\Workarea\StudyBook\
+# Target: ..\seanlgirgis.github.io\learning\aws-lambda.html
 # Prerequisite: user confirms Lambda audio uploaded and live
 
 ---
@@ -32,14 +32,14 @@
 ## VERIFY
 
 ```powershell
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern 'final_aws-lambda.mp3'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern 'audio/mpeg'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern 'AWS_Lambda__Deep_Dive_small.mp4'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern '\.m4a'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern '170px'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern 'Last updated 2026-04-24'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern '&larr; Learning Hub'
-Select-String -Path "temp\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern '�|Â|Ã|â|ï|ð'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern 'final_aws-lambda.mp3'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern 'audio/mpeg'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern 'AWS_Lambda__Deep_Dive_small.mp4'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern '\.m4a'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern '170px'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern 'Last updated 2026-04-24'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern '&larr; Learning Hub'
+Select-String -Path "..\seanlgirgis.github.io\learning\aws-lambda.html" -Pattern '�|Â|Ã|â|ï|ð'
 ```
 
 Expected:
@@ -56,3 +56,4 @@ Expected:
 ## REPORT
 
 `MISSION 16 COMPLETE — aws-lambda.html updated — new audio src confirmed — video unchanged — encoding normalized`
+

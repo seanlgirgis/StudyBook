@@ -1,5 +1,5 @@
 # PIPELINE EXECUTION MASTER — Audio + HTML Replacement
-# Working directory: D:\StudyBook\
+# Working directory: D:\Workarea\StudyBook\
 # Purpose: Reusable runbook for every learning topic (Athena, Glue, Redshift, etc.)
 
 ---
@@ -7,7 +7,7 @@
 ## INPUTS REQUIRED PER TOPIC
 
 - `topic_slug` (example: `aws-athena`)
-- `html_file` (example: `temp\seanlgirgis.github.io\learning\aws-athena.html`)
+- `html_file` (example: `..\seanlgirgis.github.io\learning\aws-athena.html`)
 - mission triplet:
   - script mission (generate dialogue)
   - pipeline mission (run audio generation + stitch)
@@ -30,19 +30,19 @@
 ## OUTPUT LOCATION STANDARD
 
 - Keep source script in repo:
-  - `temp\jobsearch\data\interview_prep\audio_prep\{topic_slug}\audio_script_{topic_slug}.md`
+  - `..\jobsearch\data\interview_prep\audio_prep\{topic_slug}\audio_script_{topic_slug}.md`
 - Keep generated clips/final outside repo:
-  - `D:\temp\studybook_audio\{topic_slug}\audio_clips\`
-  - `D:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3`
-  - `D:\temp\studybook_audio\{topic_slug}\UPLOAD_INSTRUCTIONS.md`
+  - `C:\temp\studybook_audio\{topic_slug}\audio_clips\`
+  - `C:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3`
+  - `C:\temp\studybook_audio\{topic_slug}\UPLOAD_INSTRUCTIONS.md`
 
 ---
 
 ## AUDIO RUNNER STANDARD (FAIL-FAST)
 
 ```powershell
-cd D:\StudyBook
-.\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\{topic_slug}\audio_script_{topic_slug}.md" -ChunkSize 750 -RequestTimeoutSeconds 120
+cd D:\Workarea\StudyBook
+.\scripts\run_mission_audio.ps1 "..\jobsearch\data\interview_prep\audio_prep\{topic_slug}\audio_script_{topic_slug}.md" -ChunkSize 750 -RequestTimeoutSeconds 120
 ```
 
 Expected:
@@ -55,7 +55,7 @@ Expected:
 ## R2 HANDOFF CHECKPOINT (HUMAN)
 
 Before HTML patch mission:
-- Upload `D:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3` to R2
+- Upload `C:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3` to R2
 - Confirm URL plays in browser:
   - `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_{topic_slug}.mp3`
 - Then tell Codex:
@@ -80,7 +80,7 @@ When patching HTML:
 
 - [ ] Script mission completed
 - [ ] Pipeline mission completed
-- [ ] final MP3 exists in `D:\temp\studybook_audio\{topic_slug}\`
+- [ ] final MP3 exists in `C:\temp\studybook_audio\{topic_slug}\`
 - [ ] Duration in expected range for topic
 - [ ] R2 URL confirmed live
 - [ ] HTML page updated to new `final_{topic_slug}.mp3`
@@ -99,3 +99,4 @@ For every new topic, follow this exact loop:
 4. Pause for your R2 upload confirmation.
 5. Execute mission 3.
 6. Report completion and wait for next topic.
+

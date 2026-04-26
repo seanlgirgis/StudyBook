@@ -1,7 +1,7 @@
 # MISSION 05 — Generate Audio Script: Amazon Athena
-# Working directory: D:\StudyBook\
-# Touches: temp\seanlgirgis.github.io\learning\aws-athena.html (read only)
-# Output:  temp\jobsearch\data\interview_prep\audio_prep\aws-athena\audio_script_aws-athena.md
+# Working directory: D:\Workarea\StudyBook\
+# Touches: ..\seanlgirgis.github.io\learning\aws-athena.html (read only)
+# Output:  ..\jobsearch\data\interview_prep\audio_prep\aws-athena\audio_script_aws-athena.md
 # Phase 1 — Topic 2 of 8
 
 ---
@@ -9,20 +9,20 @@
 ## WORKING DIRECTORY REMINDER
 
 ```powershell
-Get-Location   # must show D:\StudyBook
+Get-Location   # must show D:\Workarea\StudyBook
 ```
-All paths are relative to D:\StudyBook\. Use no absolute paths.
+All paths are relative to D:\Workarea\StudyBook\. Use no absolute paths.
 
 ---
 
 ## THREE REPOSITORIES INVOLVED IN THIS MISSION
 
 ```
-D:\StudyBook\                                         ← ROOT (working directory)
-├── temp\jobsearch\                                   ← REPO 2 — output goes here
+D:\Workarea\StudyBook\                                         ← ROOT (working directory)
+├── ..\jobsearch\                                   ← REPO 2 — output goes here
 │       data\interview_prep\audio_prep\aws-athena\    ← create this folder if missing
 │           audio_script_aws-athena.md               ← THIS MISSION'S OUTPUT
-└── temp\seanlgirgis.github.io\                      ← REPO 3 — read only
+└── ..\seanlgirgis.github.io\                      ← REPO 3 — read only
         learning\aws-athena.html                     ← read to understand page content
 ```
 
@@ -32,18 +32,18 @@ D:\StudyBook\                                         ← ROOT (working director
 
 1. Confirm working directory:
    ```powershell
-   Get-Location   # must show D:\StudyBook
+   Get-Location   # must show D:\Workarea\StudyBook
    ```
 
 2. Read the existing page to understand what the article covers (topics, sections, depth):
    ```
-   temp\seanlgirgis.github.io\learning\aws-athena.html
+   ..\seanlgirgis.github.io\learning\aws-athena.html
    ```
    Note the section headings. The audio should complement the written content — not contradict it.
 
 3. Create the output folder if it does not exist:
    ```powershell
-   New-Item -ItemType Directory -Force -Path "temp\jobsearch\data\interview_prep\audio_prep\aws-athena"
+   New-Item -ItemType Directory -Force -Path "..\jobsearch\data\interview_prep\audio_prep\aws-athena"
    ```
 
 ---
@@ -53,7 +53,7 @@ D:\StudyBook\                                         ← ROOT (working director
 Write a complete HOST+SEAN audio dialogue script about Amazon Athena.
 This script feeds directly into the GPT-4o TTS pipeline (Mission 06).
 
-Save to: `temp\jobsearch\data\interview_prep\audio_prep\aws-athena\audio_script_aws-athena.md`
+Save to: `..\jobsearch\data\interview_prep\audio_prep\aws-athena\audio_script_aws-athena.md`
 
 Target: ~14–18 speaker blocks | ~10–13 minutes of audio at natural speaking pace.
 
@@ -72,7 +72,7 @@ Process each [SPEAKER] block as a separate API call. Export as MP3. Merge in seq
 
 Topic: Amazon Athena
 Output filename: final_aws-athena.mp3
-Script path: temp\jobsearch\data\interview_prep\audio_prep\aws-athena\audio_script_aws-athena.md
+Script path: ..\jobsearch\data\interview_prep\audio_prep\aws-athena\audio_script_aws-athena.md
 
 ---
 ```
@@ -293,7 +293,8 @@ Before saving, verify every item:
 - [ ] All 9 sections present
 - [ ] Recap Q&A has exactly 5 HOST+SEAN pairs
 - [ ] `## END OF SCRIPT` at the bottom
-- [ ] File saved to correct relative path: `temp\jobsearch\data\interview_prep\audio_prep\aws-athena\audio_script_aws-athena.md`
+- [ ] File saved to correct relative path: `..\jobsearch\data\interview_prep\audio_prep\aws-athena\audio_script_aws-athena.md`
 
-Report: "MISSION 05 COMPLETE — script saved to temp\jobsearch\data\interview_prep\audio_prep\aws-athena\audio_script_aws-athena.md — [N] blocks — est. [X] min audio"
+Report: "MISSION 05 COMPLETE — script saved to ..\jobsearch\data\interview_prep\audio_prep\aws-athena\audio_script_aws-athena.md — [N] blocks — est. [X] min audio"
 Or:     "MISSION 05 BLOCKED — [specific problem]"
+

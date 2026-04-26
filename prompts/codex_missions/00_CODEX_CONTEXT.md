@@ -10,7 +10,7 @@ All commands in every mission file assume your working directory is the StudyBoo
 Set it once at the start of every Codex session and never change it:
 
 ```
-WORKING DIRECTORY: D:\StudyBook\
+WORKING DIRECTORY: D:\Workarea\StudyBook\
 ```
 
 All paths below are relative to that root. Never use absolute paths.
@@ -20,14 +20,14 @@ All paths below are relative to that root. Never use absolute paths.
 ## THREE REPOSITORIES UNDER THIS ROOT
 
 ```
-D:\StudyBook\                          ← ROOT (your working directory)
+D:\Workarea\StudyBook\                          ← ROOT (your working directory)
 │
 │   env_setter.ps1                     ← MUST run this before any Python/OpenAI script
 │   playground\                        ← Jupyter notebooks (CodeSignal practice, etc.)
 │   prompts\
 │       codex_missions\                ← THIS FOLDER — all Codex mission files live here
 │
-├── temp\jobsearch\                    ← REPO 2: Job search system
+├── ..\jobsearch\                    ← REPO 2: Job search system
 │       data\
 │           interview_prep\
 │               audio_prep\            ← Audio scripts and generated MP3 clips go here
@@ -43,7 +43,7 @@ D:\StudyBook\                          ← ROOT (your working directory)
 │               audio_script_master_rules_reliable_tts.md
 │           learning_artifact_prompt_template.md
 │
-└── temp\seanlgirgis.github.io\        ← REPO 3: Personal website
+└── ..\seanlgirgis.github.io\        ← REPO 3: Personal website
         learning\
             aws-ec2.html               ← Existing learning pages (8 total)
             aws-athena.html
@@ -74,17 +74,17 @@ Expected: `True`. If `False`: stop and report — do not call any OpenAI API.
 
 ---
 
-## RELATIVE PATH REFERENCE (from D:\StudyBook\)
+## RELATIVE PATH REFERENCE (from D:\Workarea\StudyBook\)
 
 | What | Relative Path |
 |------|--------------|
 | Env setter | `.\env_setter.ps1` |
-| Audio pipeline script | `temp\jobsearch\scripts\generate_audio_generic.py` |
-| Audio prep output folder | `temp\jobsearch\data\interview_prep\audio_prep\` |
-| Jobsearch prompts | `temp\jobsearch\prompts\` |
-| Master TTS rules | `temp\jobsearch\prompts\AudioPrepForIntrviews\audio_script_master_rules_reliable_tts.md` |
-| Artifact template | `temp\jobsearch\prompts\learning_artifact_prompt_template.md` |
-| Website learning pages | `temp\seanlgirgis.github.io\learning\` |
+| Audio pipeline script | `..\jobsearch\scripts\generate_audio_generic.py` |
+| Audio prep output folder | `..\jobsearch\data\interview_prep\audio_prep\` |
+| Jobsearch prompts | `..\jobsearch\prompts\` |
+| Master TTS rules | `..\jobsearch\prompts\AudioPrepForIntrviews\audio_script_master_rules_reliable_tts.md` |
+| Artifact template | `..\jobsearch\prompts\learning_artifact_prompt_template.md` |
+| Website learning pages | `..\seanlgirgis.github.io\learning\` |
 | Codex missions (here) | `prompts\codex_missions\` |
 | Playground notebooks | `playground\` |
 
@@ -94,14 +94,14 @@ Expected: `True`. If `False`: stop and report — do not call any OpenAI API.
 
 | File (relative path) | Audio | Video | Action |
 |----------------------|-------|-------|--------|
-| temp\seanlgirgis.github.io\learning\aws-ec2.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
-| temp\seanlgirgis.github.io\learning\aws-athena.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
-| temp\seanlgirgis.github.io\learning\aws-s3.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
-| temp\seanlgirgis.github.io\learning\aws-glue.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
-| temp\seanlgirgis.github.io\learning\aws-redshift.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
-| temp\seanlgirgis.github.io\learning\aws-lambda.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
-| temp\seanlgirgis.github.io\learning\apache-kafka.html | ❌ Placeholder | ❌ None | Add new audio |
-| temp\seanlgirgis.github.io\learning\aws-ecs.html | ❌ Placeholder | ❌ None | Add new audio |
+| ..\seanlgirgis.github.io\learning\aws-ec2.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
+| ..\seanlgirgis.github.io\learning\aws-athena.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
+| ..\seanlgirgis.github.io\learning\aws-s3.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
+| ..\seanlgirgis.github.io\learning\aws-glue.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
+| ..\seanlgirgis.github.io\learning\aws-redshift.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
+| ..\seanlgirgis.github.io\learning\aws-lambda.html | NotebookLM .m4a | NotebookLM .mp4 | Replace audio, keep video |
+| ..\seanlgirgis.github.io\learning\apache-kafka.html | ❌ Placeholder | ❌ None | Add new audio |
+| ..\seanlgirgis.github.io\learning\aws-ecs.html | ❌ Placeholder | ❌ None | Add new audio |
 
 ---
 
@@ -165,34 +165,34 @@ Encoding safety for HTML edits:
 
 ## ⚠️ BINARY FILE RULE — NON-NEGOTIABLE
 Generated audio clips and final MP3 files are binary artifacts.
-They MUST be stored at D:\temp\studybook_audio\ — OUTSIDE the repository.
-NEVER write .mp3 or audio clip files anywhere under D:\StudyBook\.
+They MUST be stored at C:\temp\studybook_audio\ — OUTSIDE the repository.
+NEVER write .mp3 or audio clip files anywhere under D:\Workarea\StudyBook\.
 Binary files do not belong in git repositories. This rule has no exceptions.
 
 What lives IN the repo (text only):
-  temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
+  ..\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
 
 What lives OUTSIDE the repo (binary — never committed):
-  D:\temp\studybook_audio\{slug}\audio_clips\     ← individual generated clips
-  D:\temp\studybook_audio\{slug}\final_{slug}.mp3 ← stitched final MP3
-  D:\temp\studybook_audio\{slug}\UPLOAD_INSTRUCTIONS.md
+  C:\temp\studybook_audio\{slug}\audio_clips\     ← individual generated clips
+  C:\temp\studybook_audio\{slug}\final_{slug}.mp3 ← stitched final MP3
+  C:\temp\studybook_audio\{slug}\UPLOAD_INSTRUCTIONS.md
 
 ```
 Step 1  Codex writes HOST+SEAN dialogue script
-        → saves to: temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
+        → saves to: ..\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md
 
 Step 2  Load environment
         → .\env_setter.ps1
 
 Step 3  Run fail-fast mission runner (preferred)
-        → .\scripts\run_mission_audio.ps1 "temp\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md" -ChunkSize 750
-        → clips: D:\temp\studybook_audio\{slug}\audio_clips\   (outside repo)
-        → final: D:\temp\studybook_audio\{slug}\final_{slug}.mp3  (outside repo)
-        → upload guide: D:\temp\studybook_audio\{slug}\UPLOAD_INSTRUCTIONS.md
+        → .\scripts\run_mission_audio.ps1 "..\jobsearch\data\interview_prep\audio_prep\{slug}\audio_script_{slug}.md" -ChunkSize 750
+        → clips: C:\temp\studybook_audio\{slug}\audio_clips\   (outside repo)
+        → final: C:\temp\studybook_audio\{slug}\final_{slug}.mp3  (outside repo)
+        → upload guide: C:\temp\studybook_audio\{slug}\UPLOAD_INSTRUCTIONS.md
 
 Step 4  Upload final_{slug}.mp3 to R2 (Sean does this manually)
 
-Step 5  Codex updates the HTML src in temp\seanlgirgis.github.io\learning\{file}.html
+Step 5  Codex updates the HTML src in ..\seanlgirgis.github.io\learning\{file}.html
         (only the .html text file is touched — no audio files in the repo)
 ```
 
@@ -249,3 +249,4 @@ PHASE 2 — Create new learning pages: Terraform, FastAPI, CI/CD, CloudFormation
 PHASE 3 — Tutorials + Capstone projects per topic
 
 Full queue: see prompts\codex_missions\README.md
+

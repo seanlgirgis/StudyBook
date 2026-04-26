@@ -11,7 +11,7 @@ Gap prompt file → ChatGPT Project 1 → audio script → run_mission_audio.ps1
 
 ## Step 1 — Write the Gap Prompt (if not done)
 
-Gap files live in: `D:\StudyBook\temp\gap\NN_topic_prompts.md`
+Gap files live in: `D:\Workarea\StudyBook\temp\gap\NN_topic_prompts.md`
 Format: Project 1 section uses `- ` bullet list with rich detail + SCOPE FENCE bullets.
 Reference any completed file (e.g., 04_aws_kinesis_prompts.md) for format.
 
@@ -20,7 +20,7 @@ Reference any completed file (e.g., 04_aws_kinesis_prompts.md) for format.
 ## Step 2 — Generate Audio Script in ChatGPT Project 1
 
 **Project:** "Project 1 — Audio Script Writer"
-**Prompt file:** `D:\users\shareuser\Downloads\Project-1-Audioscript-Maker.txt`
+**Prompt file:** `D:\Workarea\StudyBook\prompts\codex_missions\WebsitePagesAndAudioBYCodexChatgpt\Project-1-Audioscript-Maker.txt`
 
 1. Open ChatGPT → switch to Project 1
 2. Start a new conversation
@@ -41,7 +41,7 @@ Reference any completed file (e.g., 04_aws_kinesis_prompts.md) for format.
 ## Step 3 — Save Script to Codex Mission Prompt
 
 Save the generated script into the appropriate codex_missions file.
-Pattern: `D:\StudyBook\prompts\codex_missions\NN_topic_RUN_AUDIO_PIPELINE.md`
+Pattern: `D:\Workarea\StudyBook\prompts\codex_missions\NN_topic_RUN_AUDIO_PIPELINE.md`
 
 If that file doesn't exist yet, create it following the pattern of an existing one.
 
@@ -50,7 +50,7 @@ If that file doesn't exist yet, create it following the pattern of an existing o
 ## Step 4 — Run Audio Pipeline
 
 ```powershell
-cd D:\StudyBook
+cd D:\Workarea\StudyBook
 .\scripts\run_mission_audio.ps1 -Slug {slug} -ChunkSize 750
 ```
 
@@ -74,7 +74,7 @@ The script:
 
 ## Step 6 — Wire Audio into HTML Page
 
-Open: `D:\StudyBook\temp\seanlgirgis.github.io\learning\{slug}.html`
+Open: `D:\Workarea\StudyBook\temp\seanlgirgis.github.io\learning\{slug}.html`
 
 Find the audio section and update the `src`:
 ```html
@@ -88,7 +88,7 @@ Find the audio section and update the `src`:
 ## Step 7 — Commit and Push
 
 ```powershell
-cd D:\StudyBook\temp\seanlgirgis.github.io
+cd D:\Workarea\StudyBook\temp\seanlgirgis.github.io
 git add learning/{slug}.html
 git commit -m "Wire {slug} audio"
 git push
@@ -99,7 +99,7 @@ git push
 ## Step 8 — Sync to Phone
 
 ```powershell
-cd D:\StudyBook
+cd D:\Workarea\StudyBook
 .\scripts\sync_studybook_to_phone.ps1
 ```
 
