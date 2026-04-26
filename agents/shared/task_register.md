@@ -279,3 +279,4 @@ Track active and completed tasks to avoid losing continuity.
 
 | TB-20260426-12 | Bootstrap Apache Airflow Docker tutorial pack from scratch with deploy docs and smoke tests | done | 2026-04-26 | Added tutorials/03_apache_airflow_docker/docker with compose stack, scripts, linked docs, sample DAG, and smoke test script |
 | TB-20260426-13 | Rename tutorial Airflow Docker project to docker_airflow and decommission legacy citi_airflow artifacts | done | 2026-04-26 | Set COMPOSE_PROJECT_NAME=docker_airflow, restarted stack, removed citi_airflow container/volumes, smoke test passed |
+| TB-20260426-14 | Build beginner zero-to-hero Airflow Docker tutorial pack with grouped compose examples, helper scripts, and tool handoff card | done | 2026-04-26 | Added story-style tutorial folder, compose_groups files, deploy/newbie scripts, TOOL_INFO_CARD, and README links |

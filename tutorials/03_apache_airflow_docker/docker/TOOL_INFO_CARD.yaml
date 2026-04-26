@@ -1,0 +1,51 @@
+name: studybook-airflow-docker-card
+version: 1
+purpose: Give any tool enough context to write DAGs/scripts against this local Airflow Docker stack.
+
+stack:
+  project_name: docker_airflow
+  folder: D:/Workarea/StudyBook/tutorials/03_apache_airflow_docker/docker
+  compose_file: docker-compose.yml
+  grouped_compose_files:
+    - compose_groups/00_infra.yml
+    - compose_groups/10_airflow.yml
+
+services:
+  webserver:
+    host_url: http://localhost:8088
+    container_port: 8080
+  scheduler: airflow-scheduler
+  worker: airflow-worker
+  triggerer: airflow-triggerer
+  postgres: postgres:16
+  redis: redis:7.2-bookworm
+
+credentials:
+  airflow_ui_username: admin
+  airflow_ui_password: admin
+
+paths:
+  dags_host_path: D:/Workarea/StudyBook/tutorials/03_apache_airflow_docker/docker/dags
+  logs_host_path: D:/Workarea/StudyBook/tutorials/03_apache_airflow_docker/docker/logs
+  plugins_host_path: D:/Workarea/StudyBook/tutorials/03_apache_airflow_docker/docker/plugins
+
+defaults_for_new_dags:
+  start_date: "2024-01-01"
+  catchup: false
+  tags:
+    - studybook
+    - docker
+
+run_commands:
+  init: ./scripts/manage.ps1 init
+  up: ./scripts/manage.ps1 up
+  down: ./scripts/manage.ps1 down
+  grouped_up: ./scripts/deploy_groups.ps1 up
+  smoke_test: ./tests/smoke_test.ps1
+  list_dags: ./scripts/newbie_dag.ps1 list
+  trigger_sample: ./scripts/newbie_dag.ps1 trigger
+
+notes:
+  - CeleryExecutor is used, so Postgres + Redis are required.
+  - Keep DAG files under dags/ and avoid writing secrets in DAG code.
+  - Prefer Variables/Connections in Airflow UI for runtime config and credentials.

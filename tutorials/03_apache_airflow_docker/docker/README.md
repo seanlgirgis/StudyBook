@@ -7,6 +7,8 @@ It is designed to work even if no prior Airflow Docker stack exists.
 
 - [01_setup_and_config.md](./01_setup_and_config.md)
 - [02_deploy_use_and_test.md](./02_deploy_use_and_test.md)
+- [zero_to_hero/00_START_HERE.md](./zero_to_hero/00_START_HERE.md)
+- [TOOL_INFO_CARD.yaml](./TOOL_INFO_CARD.yaml)
 
 ## Quick Start
 
