@@ -43,6 +43,17 @@ Use when:
 
 ---
 
+### 2b) `Project2_ShortPrompt_Template.md`
+Use this as the **short per-topic prompt** when reusable rules are persisted in:
+- `..\..\..\seanlgirgis.github.io\AGENTS.md`
+- `..\..\..\seanlgirgis.github.io\learning\_page-template.html`
+
+Purpose:
+- Faster Project 2 runs with smaller prompt payload.
+- Keep topic-specific details only (topic, slug, audio URL, emphasis).
+
+---
+
 ### 3) `Existing_work_pipeline_execution_master.md`
 Main runbook for **full triplet mission flow**:
 1. Generate script mission

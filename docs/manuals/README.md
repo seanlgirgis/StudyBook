@@ -12,6 +12,7 @@ While the `operations/` and `adr/` folders contain technical workflows, scripts,
 * **[Secrets & Passphrase Guide](./PASSPHRASE_GUIDE.md)**: Details on how the encrypted secrets system works, the master passphrase, and how the automated local seed ensures you only have to authenticate once per machine.
 * **[Interview Audio + HTML Master Guide](./INTERVIEW_AUDIO_HTML_MASTER_GUIDE.md)**: End-to-end SOP for topic selection, ChatGPT Project 1/2 generation, audio pipeline execution, R2 upload, website card wiring, and final verification.
 * **[Website Remaining Work Tracker](./WEBSITE_REMAINING_WORK_TRACKER.md)**: Living backlog of unfinished website learning topics grouped by category with tier/status and suggested slugs.
+* **[Audio Playlist + Phone Sync Method](./AUDIO_PLAYLIST_SYNC_METHOD.md)**: Persisted playlist location rules, topic-to-playlist assignment method, and exact phone sync workflow.
 
 ## How to Use This Folder
 

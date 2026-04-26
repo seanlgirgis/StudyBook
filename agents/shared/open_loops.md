@@ -233,3 +233,5 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-154 | TB-20260426-11 | Create linked Docker teaching pack under tutorial folder with sample compose/dockerfile/env/run templates | closed | none | 2026-04-26 |
 
 
+| LOOP-155 | TB-20260426-12 | Build fresh Airflow Docker tutorial pack under tutorials/03_apache_airflow_docker/docker | closed | none | 2026-04-26 |
+| LOOP-156 | TB-20260426-13 | Rename tutorial Airflow Docker stack to docker_airflow and remove legacy citi_airflow resources | closed | none | 2026-04-26 |

@@ -5,6 +5,7 @@ Primary owner workflow: Sean Girgis
 
 Related tracker:
 - [Website Remaining Work Tracker](./WEBSITE_REMAINING_WORK_TRACKER.md)
+- [Audio Playlist + Phone Sync Method](./AUDIO_PLAYLIST_SYNC_METHOD.md)
 
 ## 1) Mission
 
@@ -158,6 +159,7 @@ Faster HTML generation pattern (persisted):
 
 - Website rules file: `..\..\..\seanlgirgis.github.io\AGENTS.md`
 - Reusable HTML shell: `..\..\..\seanlgirgis.github.io\learning\_page-template.html`
+- Short prompt template: `..\prompts\codex_missions\WebsitePagesAndAudioBYCodexChatgpt\Project2_ShortPrompt_Template.md`
 
 Use a short per-topic prompt that references those two files instead of pasting the full CSS/rules each run.
 

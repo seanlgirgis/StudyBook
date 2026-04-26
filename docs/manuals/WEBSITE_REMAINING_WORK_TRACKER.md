@@ -1,6 +1,7 @@
 # Website Remaining Work Tracker
 
 Last survey date: 2026-04-26
+Last update: 2026-04-26
 
 Linked guide: [Interview Audio + HTML Master Guide](./INTERVIEW_AUDIO_HTML_MASTER_GUIDE.md)
 
@@ -12,9 +13,9 @@ Linked guide: [Interview Audio + HTML Master Guide](./INTERVIEW_AUDIO_HTML_MASTE
 
 ## Snapshot
 
-- Total remaining items: **50**
+- Total remaining items: **49**
 - Tier 1 items: **4**
-- Tier 2 items: **11**
+- Tier 2 items: **10**
 - Tier 3 items: **13**
 - Tier 4 items: **22**
 
@@ -26,7 +27,7 @@ Linked guide: [Interview Audio + HTML Master Guide](./INTERVIEW_AUDIO_HTML_MASTE
 | Big Data & Processing | learning-bigdata.html | 7 | 3 | 4 |
 | Cloud — AWS / Analytics & Storage | learning-aws-analytics.html | 6 | 5 | 1 |
 | Cloud — AWS / Compute & Containers | learning-aws-compute.html | 6 | 4 | 2 |
-| Cloud — AWS / Orchestration & Events | learning-aws-events.html | 4 | 2 | 2 |
+| Cloud — AWS / Orchestration & Events | learning-aws-events.html | 4 | 3 | 1 |
 | Cloud — AWS / Security & Networking | learning-aws-security.html | 4 | 3 | 1 |
 | Cloud — Other Platforms | learning-cloud-other.html | 5 | 3 | 2 |
 | Data Architecture Patterns | learning-data-architecture.html | 4 | 0 | 4 |
@@ -41,6 +42,17 @@ Linked guide: [Interview Audio + HTML Master Guide](./INTERVIEW_AUDIO_HTML_MASTE
 | Streaming & Messaging | learning-streaming.html | 4 | 3 | 1 |
 | System Design for Data Engineers / Architecture · Open-ended design scenarios | learning-design.html | 12 | 0 | 12 |
 | Visualization & Reporting | learning-visualization.html | 3 | 1 | 2 |
+
+## Completed Since Baseline
+
+- [x] **Apache Flink — Engineering Reference**
+  - Page: `../../../seanlgirgis.github.io/learning/apache-flink.html`
+  - Audio URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_apache-flink.mp3`
+  - Component wiring: `../../../seanlgirgis.github.io/components/learning-streaming.html`
+- [x] **AWS EventBridge — Engineering Reference**
+  - Page: `../../../seanlgirgis.github.io/learning/aws-eventbridge.html`
+  - Audio URL: `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-eventbridge.mp3`
+  - Component wiring: `../../../seanlgirgis.github.io/components/learning-aws-events.html`
 
 ## Remaining Backlog
 
@@ -108,10 +120,13 @@ Update rule per item when complete:
 
 ### Cloud — AWS / Orchestration & Events
 
-- [ ] **AWS EventBridge — Engineering Reference**
+- [x] **AWS EventBridge — Engineering Reference**
   - Status: Planned — Tier 2
   - Category component: ../../../seanlgirgis.github.io/components/learning-aws-events.html
   - Suggested slug: aws-eventbridge
+  - Page: ../../../seanlgirgis.github.io/learning/aws-eventbridge.html
+  - Audio URL: https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_aws-eventbridge.mp3
+  - Wiring: card set to live in learning-aws-events.html
 - [ ] **AWS SQS & SNS — Engineering Reference**
   - Status: Tier 1 — Build Next
   - Category component: ../../../seanlgirgis.github.io/components/learning-aws-events.html
@@ -301,3 +316,5 @@ Update rule per item when complete:
 ## Update Log
 
 - 2026-04-26: Initial survey created from component backlog states.
+- 2026-04-26: Marked Apache Flink as completed (streaming card live + page/audio verified).
+- 2026-04-26: Marked AWS EventBridge as completed (AWS events card live + page/audio verified).

@@ -277,3 +277,5 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260426-10 | Add concise lesson-by-lesson expected output verification section to PySpark Docker README | done | 2026-04-26 | Added quick-check output expectations for lessons 01-07 and removed stale planned-files subsection |
 | TB-20260426-11 | Create Docker teaching subfolder with linked markdown lessons and sample deployment/run files | done | 2026-04-26 | Added `tutorials/02_PySpark_Docker/docker` pack with 7 topic files, index links, compose/dockerfile/env samples, and runner scripts |
 
+| TB-20260426-12 | Bootstrap Apache Airflow Docker tutorial pack from scratch with deploy docs and smoke tests | done | 2026-04-26 | Added tutorials/03_apache_airflow_docker/docker with compose stack, scripts, linked docs, sample DAG, and smoke test script |
+| TB-20260426-13 | Rename tutorial Airflow Docker project to docker_airflow and decommission legacy citi_airflow artifacts | done | 2026-04-26 | Set COMPOSE_PROJECT_NAME=docker_airflow, restarted stack, removed citi_airflow container/volumes, smoke test passed |

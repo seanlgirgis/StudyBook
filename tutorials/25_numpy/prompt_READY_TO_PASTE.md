@@ -1,0 +1,268 @@
+You are generating a self-directed Data Engineering interview-prep tutorial.
+
+The output must be COMPLETE, FULLY RUNNABLE, and TEACHABLE. Do not create placeholders, TODOs, ellipses, `pass`, or intentionally incomplete code. Generate one file at a time and wait for the user to say "next".
+
+All files must be written as if they will be saved under:
+D:\Workarea\StudyBook\tutorials\25_numpy\
+
+TOPIC: NumPy for Data Engineering
+SLUG: 25_numpy
+PRIORITY: DE Fundamentals SHOULD
+INFRASTRUCTURE: Pure Python: numpy
+
+============================================================
+CODING STANDARDS — MANDATORY
+============================================================
+
+- Python 3.11+ compatible.
+- Use type hints on every function.
+- Use f-strings.
+- Prefer small, testable functions.
+- Avoid hidden global state except clear constants.
+- No notebooks.
+- No TODO, no pass, no placeholder implementation.
+- Every generated file must be complete and runnable.
+- Keep examples realistic for Data Engineering interviews.
+- Use deterministic seeds for generated data.
+- Do not require paid/cloud resources in unit tests unless explicitly called out.
+
+
+============================================================
+README REQUIREMENTS — MANDATORY
+============================================================
+
+Generate TWO README files for every topic.
+
+1. Main `README.md` at the topic root.
+
+The main README must be professional, interview-oriented, and include:
+
+- `# <Topic Name>`
+- `## What This Covers`
+- `## Why This Matters in Interviews`
+- `## Key Concepts`
+- `## Hands-On Walkthrough`
+  - Explain each generated tutorial file in order.
+  - Explain what the learner should run and what output means.
+- `## Common Interview Questions`
+  - Include 8 to 12 practical interview questions.
+  - Include strong answer guidance after each question.
+- `## Deep Dive Talking Points`
+  - Senior-level details, tradeoffs, edge cases, and production concerns.
+- `## How This Shows Up in Production`
+- `## Commands`
+  - Include exact PowerShell commands to install dependencies and run tests.
+- `## What To Say In An Interview`
+  - Include a 60-90 second spoken explanation.
+
+2. Capstone `capstone/README.md`.
+
+The capstone README must be system-design and interview-story oriented, and include:
+
+- `# Capstone: <Name>`
+- `## Scenario`
+- `## Architecture Overview`
+  - Describe the architecture in words.
+- `## Data Flow`
+- `## Design Decisions`
+- `## Tradeoffs`
+- `## Scaling Considerations`
+- `## Failure Modes`
+- `## Security / Governance Notes`
+- `## Interview Questions`
+  - Include 8 to 12 scenario-based questions with answer guidance.
+- `## How To Explain This Capstone In An Interview`
+  - Include a step-by-step narrative.
+
+The README files are not optional. Generate them before the capstone code if requested.
+
+
+============================================================
+TEACHING CODE REQUIREMENTS — MANDATORY
+============================================================
+
+Every Python file must include:
+
+1. A file header docstring:
+
+```
+"""
+FILE: <filename>
+TOPIC: <topic>
+PURPOSE: <what this file teaches>
+COVERS: <concept list>
+INTERVIEW FOCUS: <what to say in an interview>
+"""
+```
+
+2. Teachable comments.
+
+Comments must explain WHY, not just WHAT. Include comments like:
+
+```
+# INTERVIEW TIP:
+# In an interview, emphasize that this step protects downstream consumers
+# from schema drift and silent data quality failures.
+```
+
+3. Learning-oriented print statements.
+
+Each script should print:
+- What it is doing
+- Why the step matters
+- What interview concept the learner should remember
+
+4. `main()` function.
+
+Every tutorial file must have a runnable `main()` and:
+
+```
+if __name__ == "__main__":
+    main()
+```
+
+5. Tests must validate business behavior, not just file existence.
+
+Use deterministic sample data and exact assertions where possible.
+
+============================================================
+TUTORIAL FILES TO GENERATE
+============================================================
+Generate these files in order. For each file, include the exact functions listed. You may add helper functions only if they are useful and fully implemented.
+
+===== FILE 01: 01_arrays_vectorization.py =====
+PURPOSE: Teach arrays, dtypes, broadcasting, vectorization.
+COVERS: ndarray, dtype, shape, vectorized operations
+
+EXACT FUNCTION SIGNATURES:
+    def create_metric_array(values: list[float]) -> np.ndarray:
+    def normalize_metrics(values: np.ndarray) -> np.ndarray:
+    def calculate_weighted_score(values: np.ndarray, weights: np.ndarray) -> float:
+
+REQUIREMENTS:
+- Include the mandatory file header.
+- Include teachable comments and at least two `INTERVIEW TIP` comments.
+- Include deterministic demo data or safe local defaults.
+- Include a `main()` that demonstrates the functions and prints learning output.
+- The script must run directly from the topic folder.
+
+===== FILE 02: 02_missing_outliers.py =====
+PURPOSE: Handle missing values and outliers in numeric arrays.
+COVERS: nan, masks, percentiles, clipping
+
+EXACT FUNCTION SIGNATURES:
+    def replace_nan_with_mean(values: np.ndarray) -> np.ndarray:
+    def clip_outliers_iqr(values: np.ndarray) -> np.ndarray:
+    def outlier_report(values: np.ndarray) -> dict[str, float]:
+
+REQUIREMENTS:
+- Include the mandatory file header.
+- Include teachable comments and at least two `INTERVIEW TIP` comments.
+- Include deterministic demo data or safe local defaults.
+- Include a `main()` that demonstrates the functions and prints learning output.
+- The script must run directly from the topic folder.
+
+===== FILE 03: 03_aggregation_windows.py =====
+PURPOSE: Perform aggregation and rolling-window features.
+COVERS: group-style aggregation, rolling windows, cumulative operations
+
+EXACT FUNCTION SIGNATURES:
+    def rolling_mean(values: np.ndarray, window: int) -> np.ndarray:
+    def cumulative_conversion_rate(successes: np.ndarray, attempts: np.ndarray) -> np.ndarray:
+    def aggregate_by_key(keys: np.ndarray, values: np.ndarray) -> dict[str, float]:
+
+REQUIREMENTS:
+- Include the mandatory file header.
+- Include teachable comments and at least two `INTERVIEW TIP` comments.
+- Include deterministic demo data or safe local defaults.
+- Include a `main()` that demonstrates the functions and prints learning output.
+- The script must run directly from the topic folder.
+
+===== FILE 04: 04_memory_performance.py =====
+PURPOSE: Show memory and performance tradeoffs.
+COVERS: dtypes, memory footprint, vectorized vs loops
+
+EXACT FUNCTION SIGNATURES:
+    def memory_usage_mb(array: np.ndarray) -> float:
+    def downcast_float_array(values: np.ndarray) -> np.ndarray:
+    def benchmark_vectorized_vs_loop(values: np.ndarray) -> dict[str, float]:
+
+REQUIREMENTS:
+- Include the mandatory file header.
+- Include teachable comments and at least two `INTERVIEW TIP` comments.
+- Include deterministic demo data or safe local defaults.
+- Include a `main()` that demonstrates the functions and prints learning output.
+- The script must run directly from the topic folder.
+
+===== FILE 05: 05_feature_engineering.py =====
+PURPOSE: Build feature arrays for ML/data pipelines.
+COVERS: standardization, one-hot concept, train-ready matrices
+
+EXACT FUNCTION SIGNATURES:
+    def standardize_features(matrix: np.ndarray) -> np.ndarray:
+    def min_max_scale(values: np.ndarray) -> np.ndarray:
+    def build_feature_matrix(amounts: np.ndarray, counts: np.ndarray, ages: np.ndarray) -> np.ndarray:
+
+REQUIREMENTS:
+- Include the mandatory file header.
+- Include teachable comments and at least two `INTERVIEW TIP` comments.
+- Include deterministic demo data or safe local defaults.
+- Include a `main()` that demonstrates the functions and prints learning output.
+- The script must run directly from the topic folder.
+
+===== FILE 06: README.md =====
+Generate the main tutorial README using the mandatory README requirements above.
+
+============================================================
+CAPSTONE REQUIREMENTS
+============================================================
+CAPSTONE SCENARIO: Use vectorized numerical operations to clean, transform, and analyze large arrays efficiently.
+
+--- capstone/brief.md ---
+Write a concise business scenario, learner tasks, expected deliverables, and success criteria.
+
+--- capstone/README.md ---
+Generate the capstone README using the mandatory capstone README requirements above.
+
+--- capstone/numpy_feature_pipeline.py ---
+EXACT FUNCTION SIGNATURES:
+    def generate_sensor_matrix(sensor_count: int, reading_count: int, seed: int = 42) -> np.ndarray:
+    def clean_sensor_matrix(matrix: np.ndarray) -> np.ndarray:
+    def engineer_sensor_features(matrix: np.ndarray) -> np.ndarray:
+    def score_anomalies(features: np.ndarray) -> np.ndarray:
+REQUIREMENTS:
+- Must be runnable and importable.
+- Must include interview-focused comments.
+- Must use deterministic inputs for local testing.
+
+--- capstone/test_capstone.py ---
+Create pytest tests with these exact business expectations:
+- assert normalized values have mean close to 0
+- assert NaNs are removed
+- assert rolling mean has expected length
+- assert downcast reduces memory
+- assert anomaly scores are between 0 and 1
+
+Additional testing requirements:
+- Use deterministic fixtures.
+- Assert exact values where possible.
+- Test edge cases and failure modes.
+- Tests must run with `pytest capstone/test_capstone.py -v` from the topic folder unless the topic README specifies otherwise.
+
+============================================================
+GENERATION INSTRUCTIONS
+============================================================
+
+Generate ONE file at a time.
+
+When first given this prompt, acknowledge the topic and wait.
+When the user says `generate file 01`, generate only FILE 01.
+When the user says `next`, generate the next file.
+After tutorial files, generate README.md.
+Then generate capstone/brief.md, capstone/README.md, capstone code files, and capstone/test_capstone.py.
+
+Do not skip README files.
+Do not combine multiple files unless explicitly asked.
+Do not use placeholders.
+Do not say "left as an exercise".
+Do not omit imports.
