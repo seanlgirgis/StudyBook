@@ -1,7 +1,7 @@
 # MISSION 21 — Run Audio Pipeline: Apache Kafka
 # Working directory: D:\StudyBook\
 # Prerequisite: Mission 20 complete
-# Output root: C:\temp\studybook_audio\apache-kafka\
+# Output root: D:\temp\studybook_audio\apache-kafka\
 
 ---
 
@@ -17,9 +17,9 @@ cd D:\StudyBook
 ## VERIFY
 
 ```powershell
-Test-Path "C:\temp\studybook_audio\apache-kafka\final_apache-kafka.mp3"
-Get-Item "C:\temp\studybook_audio\apache-kafka\final_apache-kafka.mp3" | Select-Object Length
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\apache-kafka\final_apache-kafka.mp3"
+Test-Path "D:\temp\studybook_audio\apache-kafka\final_apache-kafka.mp3"
+Get-Item "D:\temp\studybook_audio\apache-kafka\final_apache-kafka.mp3" | Select-Object Length
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\apache-kafka\final_apache-kafka.mp3"
 ```
 
 Expected:
@@ -34,7 +34,7 @@ Expected:
 Confirm:
 
 ```powershell
-Test-Path "C:\temp\studybook_audio\apache-kafka\UPLOAD_INSTRUCTIONS.md"
+Test-Path "D:\temp\studybook_audio\apache-kafka\UPLOAD_INSTRUCTIONS.md"
 ```
 
 If missing, create it manually with slug `apache-kafka` and filename `final_apache-kafka.mp3`.

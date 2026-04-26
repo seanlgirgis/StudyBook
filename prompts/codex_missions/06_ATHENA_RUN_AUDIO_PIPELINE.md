@@ -1,6 +1,6 @@
 # MISSION 06 — Run Audio Pipeline: Amazon Athena
 # Working directory: D:\StudyBook\
-# Touches: temp\jobsearch\ (read script), C:\temp\studybook_audio\ (write clips/final)
+# Touches: temp\jobsearch\ (read script), D:\temp\studybook_audio\ (write clips/final)
 # Prerequisite: Mission 05 complete — audio_script_aws-athena.md must exist
 
 ---
@@ -26,7 +26,7 @@ D:\StudyBook\                                         ← ROOT (working director
             audio_script_aws-athena.md               ← INPUT (from Mission 05)
         scripts\run_mission_audio.ps1                 ← fail-fast mission runner
 
-C:\temp\studybook_audio\aws-athena\                   ← OUTPUT ROOT (outside repo)
+D:\temp\studybook_audio\aws-athena\                   ← OUTPUT ROOT (outside repo)
     audio_clips\                                      ← generated clips
     final_aws-athena.mp3                              ← stitched final output
     UPLOAD_INSTRUCTIONS.md                            ← R2 upload guide for Sean
@@ -86,7 +86,7 @@ The runner:
 - Uses chunking at natural sentence boundaries
 - Target chunk size is `750` chars, with slight over/under allowed to preserve sentence stops
 - Never cuts mid-sentence or across speaker blocks
-- Writes all generated artifacts to `C:\temp\studybook_audio\aws-athena\...` (repo stays clean)
+- Writes all generated artifacts to `D:\temp\studybook_audio\aws-athena\...` (repo stays clean)
 - Exits non-zero immediately on generation or stitch failure
 
 Watch for these errors:
@@ -100,9 +100,9 @@ Watch for these errors:
 ## STEP 4 — VERIFY OUTPUTS
 
 ```powershell
-Test-Path "C:\temp\studybook_audio\aws-athena\final_aws-athena.mp3"
-Get-Item "C:\temp\studybook_audio\aws-athena\final_aws-athena.mp3" | Select-Object Length
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\aws-athena\final_aws-athena.mp3"
+Test-Path "D:\temp\studybook_audio\aws-athena\final_aws-athena.mp3"
+Get-Item "D:\temp\studybook_audio\aws-athena\final_aws-athena.mp3" | Select-Object Length
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\aws-athena\final_aws-athena.mp3"
 ```
 
 Expected:
@@ -116,24 +116,24 @@ Expected:
 
 Check if the runner created an upload instructions file:
 ```powershell
-Test-Path "C:\temp\studybook_audio\aws-athena\UPLOAD_INSTRUCTIONS.md"
+Test-Path "D:\temp\studybook_audio\aws-athena\UPLOAD_INSTRUCTIONS.md"
 ```
 
 If it exists, read and confirm the content is correct.
 
 If it does NOT exist, create it manually:
 ```powershell
-New-Item -ItemType Directory -Force -Path "C:\temp\studybook_audio\aws-athena"
+New-Item -ItemType Directory -Force -Path "D:\temp\studybook_audio\aws-athena"
 ```
 
-Then write `C:\temp\studybook_audio\aws-athena\UPLOAD_INSTRUCTIONS.md` with this content
+Then write `D:\temp\studybook_audio\aws-athena\UPLOAD_INSTRUCTIONS.md` with this content
 (fill in actual size and duration from Step 4):
 
 ```markdown
 # R2 Upload Instructions — Amazon Athena Audio
 
 ## File to upload
-C:\temp\studybook_audio\aws-athena\final_aws-athena.mp3
+D:\temp\studybook_audio\aws-athena\final_aws-athena.mp3
 
 ## Validated stats
 - Size:     [actual bytes] bytes (~[X] MB)
@@ -170,15 +170,15 @@ Keep:    Existing <video> src UNCHANGED
 - [ ] Input script verified — all format checks passed
 - [ ] OPENAI_API_KEY loaded (printed True)
 - [ ] Runner command completed with zero exit code
-- [ ] All generated clips/final are in `C:\temp\studybook_audio\aws-athena\`
+- [ ] All generated clips/final are in `D:\temp\studybook_audio\aws-athena\`
 - [ ] Chunking used `--chunk-size 750`
 - [ ] Chunk splits happen only at natural sentence stops (no mid-sentence cuts)
 - [ ] No chunk crosses speaker boundaries
 - [ ] No block reported "Both models failed"
-- [ ] final_aws-athena.mp3 exists at `C:\temp\studybook_audio\aws-athena\`
+- [ ] final_aws-athena.mp3 exists at `D:\temp\studybook_audio\aws-athena\`
 - [ ] File size > 5 MB
 - [ ] Duration between 500–900 seconds
-- [ ] UPLOAD_INSTRUCTIONS.md created at `C:\temp\studybook_audio\aws-athena\`
+- [ ] UPLOAD_INSTRUCTIONS.md created at `D:\temp\studybook_audio\aws-athena\`
 
 Report: "MISSION 06 COMPLETE — final_aws-athena.mp3 ready — [X]s duration — [size] MB — see UPLOAD_INSTRUCTIONS.md"
 Or:     "MISSION 06 BLOCKED at Step [N] — [exact error message]"

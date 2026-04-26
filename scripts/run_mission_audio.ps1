@@ -3,7 +3,7 @@ param(
     [string]$Script,
     [string]$Slug,
     [int]$ChunkSize = 750,
-    [string]$TempRoot = "C:\temp\studybook_audio",
+    [string]$TempRoot = "D:\temp\studybook_audio",
     [switch]$SkipEnvSetter,
     [int]$RequestTimeoutSeconds = 120
 )

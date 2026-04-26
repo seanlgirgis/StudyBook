@@ -1,7 +1,7 @@
 # MISSION 09 — Run Audio Pipeline: AWS Glue
 # Working directory: D:\StudyBook\
 # Prerequisite: Mission 08 complete
-# Output root: C:\temp\studybook_audio\aws-glue\
+# Output root: D:\temp\studybook_audio\aws-glue\
 
 ---
 
@@ -17,9 +17,9 @@ cd D:\StudyBook
 ## VERIFY
 
 ```powershell
-Test-Path "C:\temp\studybook_audio\aws-glue\final_aws-glue.mp3"
-Get-Item "C:\temp\studybook_audio\aws-glue\final_aws-glue.mp3" | Select-Object Length
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\aws-glue\final_aws-glue.mp3"
+Test-Path "D:\temp\studybook_audio\aws-glue\final_aws-glue.mp3"
+Get-Item "D:\temp\studybook_audio\aws-glue\final_aws-glue.mp3" | Select-Object Length
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\aws-glue\final_aws-glue.mp3"
 ```
 
 Expected:
@@ -34,7 +34,7 @@ Expected:
 Confirm:
 
 ```powershell
-Test-Path "C:\temp\studybook_audio\aws-glue\UPLOAD_INSTRUCTIONS.md"
+Test-Path "D:\temp\studybook_audio\aws-glue\UPLOAD_INSTRUCTIONS.md"
 ```
 
 If missing, create it manually (same template as Athena, slug = `aws-glue`, filename = `final_aws-glue.mp3`).

@@ -1,6 +1,6 @@
 # MISSION 03 — Run Audio Pipeline: Amazon EC2
 # Working directory: D:\StudyBook\
-# Touches: temp\jobsearch\ (read script), C:\temp\studybook_audio\ (write clips/final)
+# Touches: temp\jobsearch\ (read script), D:\temp\studybook_audio\ (write clips/final)
 # Prerequisite: Mission 02 complete — audio_script_aws-ec2.md must exist
 
 ---
@@ -26,7 +26,7 @@ D:\StudyBook\                                       ← ROOT (working directory)
             audio_script_aws-ec2.md                 ← INPUT (from Mission 02)
         scripts\run_mission_audio.ps1               ← fail-fast mission runner
 
-C:\temp\studybook_audio\aws-ec2\                    ← OUTPUT ROOT (outside repo)
+D:\temp\studybook_audio\aws-ec2\                    ← OUTPUT ROOT (outside repo)
     audio_clips\                                    ← generated clips
     final_aws-ec2.mp3                               ← stitched final output
     UPLOAD_INSTRUCTIONS.md                          ← R2 upload guide for Sean
@@ -86,7 +86,7 @@ The runner:
 - Uses chunking at natural sentence boundaries
 - Target chunk size is `750` chars, with slight over/under allowed to preserve sentence stops
 - Never cuts mid-sentence or across speaker blocks
-- Writes all generated artifacts to `C:\temp\studybook_audio\aws-ec2\...` (repo stays clean)
+- Writes all generated artifacts to `D:\temp\studybook_audio\aws-ec2\...` (repo stays clean)
 - Exits non-zero immediately on generation or stitch failure
 
 Watch for these errors:
@@ -100,9 +100,9 @@ Watch for these errors:
 ## STEP 4 — VERIFY OUTPUTS (C:\temp LOCATION)
 
 ```powershell
-Test-Path "C:\temp\studybook_audio\aws-ec2\final_aws-ec2.mp3"
-Get-Item "C:\temp\studybook_audio\aws-ec2\final_aws-ec2.mp3" | Select-Object Length
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\aws-ec2\final_aws-ec2.mp3"
+Test-Path "D:\temp\studybook_audio\aws-ec2\final_aws-ec2.mp3"
+Get-Item "D:\temp\studybook_audio\aws-ec2\final_aws-ec2.mp3" | Select-Object Length
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\aws-ec2\final_aws-ec2.mp3"
 ```
 
 Expected:
@@ -116,7 +116,7 @@ Expected:
 
 Runner should create this file automatically:
 ```
-C:\temp\studybook_audio\aws-ec2\UPLOAD_INSTRUCTIONS.md
+D:\temp\studybook_audio\aws-ec2\UPLOAD_INSTRUCTIONS.md
 ```
 
 If missing, create it manually with the same content template from previous mission runs.
@@ -129,15 +129,15 @@ If missing, create it manually with the same content template from previous miss
 - [ ] Input script verified — all format checks passed
 - [ ] OPENAI_API_KEY loaded (printed True)
 - [ ] Runner command completed with zero exit code
-- [ ] All generated clips/final are in `C:\temp\studybook_audio\aws-ec2\`
+- [ ] All generated clips/final are in `D:\temp\studybook_audio\aws-ec2\`
 - [ ] Chunking used `--chunk-size 750`
 - [ ] Chunk splits happen only at natural sentence stops (no mid-sentence cuts)
 - [ ] No chunk crosses speaker boundaries
 - [ ] No block reported "Both models failed"
-- [ ] final_aws-ec2.mp3 exists at `C:\temp\studybook_audio\aws-ec2\`
+- [ ] final_aws-ec2.mp3 exists at `D:\temp\studybook_audio\aws-ec2\`
 - [ ] File size > 5 MB
 - [ ] Duration between 600–900 seconds
-- [ ] UPLOAD_INSTRUCTIONS.md created at `C:\temp\studybook_audio\aws-ec2\`
+- [ ] UPLOAD_INSTRUCTIONS.md created at `D:\temp\studybook_audio\aws-ec2\`
 
 Report: "MISSION 03 COMPLETE — final_aws-ec2.mp3 ready — [X]s duration — [size] MB — see UPLOAD_INSTRUCTIONS.md"
 Or:     "MISSION 03 BLOCKED at Step [N] — [exact error message]"

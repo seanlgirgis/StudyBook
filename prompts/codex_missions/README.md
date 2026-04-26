@@ -44,14 +44,14 @@ Master reusable runbook:
 
 ### ⚠️ BINARY FILE RULE — NON-NEGOTIABLE
 MP3 files and audio clips are binary. They NEVER go inside D:\StudyBook\ or any sub-repo.
-Only the text script (.md) is committed. Everything else lives under C:\temp\studybook_audio\.
+Only the text script (.md) is committed. Everything else lives under D:\temp\studybook_audio\.
 
 | What | Where | In repo? |
 |------|-------|----------|
 | Audio script (.md) | `temp\jobsearch\data\interview_prep\audio_prep\<slug>\audio_script_<slug>.md` | ✅ YES |
-| Audio clips (.mp3) | `C:\temp\studybook_audio\<slug>\audio_clips\` | ❌ NO — outside repo |
-| Final MP3 | `C:\temp\studybook_audio\<slug>\final_<slug>.mp3` | ❌ NO — outside repo |
-| Upload guide | `C:\temp\studybook_audio\<slug>\UPLOAD_INSTRUCTIONS.md` | ❌ NO — outside repo |
+| Audio clips (.mp3) | `D:\temp\studybook_audio\<slug>\audio_clips\` | ❌ NO — outside repo |
+| Final MP3 | `D:\temp\studybook_audio\<slug>\final_<slug>.mp3` | ❌ NO — outside repo |
+| Upload guide | `D:\temp\studybook_audio\<slug>\UPLOAD_INSTRUCTIONS.md` | ❌ NO — outside repo |
 
 - Use `scripts\run_mission_audio.ps1` for mission audio generation and stitching.
 - Runner behavior is fail-fast (non-zero exit on generation/stitch failures).

@@ -22,7 +22,7 @@ D:\StudyBook\                                       ← ROOT (working directory)
         learning\
             aws-athena.html                         ← TARGET FILE
 
-C:\temp\studybook_audio\aws-athena\                 ← Audio artifacts (outside repo)
+D:\temp\studybook_audio\aws-athena\                 ← Audio artifacts (outside repo)
     UPLOAD_INSTRUCTIONS.md                          ← confirm R2 URL from here
     final_aws-athena.mp3                            ← uploaded to R2 by Sean
 ```
@@ -33,7 +33,7 @@ C:\temp\studybook_audio\aws-athena\                 ← Audio artifacts (outside
 
 Read the upload instructions:
 ```
-C:\temp\studybook_audio\aws-athena\UPLOAD_INSTRUCTIONS.md
+D:\temp\studybook_audio\aws-athena\UPLOAD_INSTRUCTIONS.md
 ```
 
 The expected R2 URL is:

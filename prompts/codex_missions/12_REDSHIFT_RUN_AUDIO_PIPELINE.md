@@ -1,7 +1,7 @@
 # MISSION 12 — Run Audio Pipeline: Amazon Redshift
 # Working directory: D:\StudyBook\
 # Prerequisite: Mission 11 complete
-# Output root: C:\temp\studybook_audio\aws-redshift\
+# Output root: D:\temp\studybook_audio\aws-redshift\
 
 ---
 
@@ -17,9 +17,9 @@ cd D:\StudyBook
 ## VERIFY
 
 ```powershell
-Test-Path "C:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3"
-Get-Item "C:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3" | Select-Object Length
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3"
+Test-Path "D:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3"
+Get-Item "D:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3" | Select-Object Length
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\aws-redshift\final_aws-redshift.mp3"
 ```
 
 Expected:
@@ -34,7 +34,7 @@ Expected:
 Confirm:
 
 ```powershell
-Test-Path "C:\temp\studybook_audio\aws-redshift\UPLOAD_INSTRUCTIONS.md"
+Test-Path "D:\temp\studybook_audio\aws-redshift\UPLOAD_INSTRUCTIONS.md"
 ```
 
 If missing, create it manually with slug `aws-redshift` and filename `final_aws-redshift.mp3`.

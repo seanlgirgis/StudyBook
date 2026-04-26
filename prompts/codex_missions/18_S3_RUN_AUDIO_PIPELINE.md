@@ -1,7 +1,7 @@
 # MISSION 18 — Run Audio Pipeline: Amazon S3
 # Working directory: D:\StudyBook\
 # Prerequisite: Mission 17 complete
-# Output root: C:\temp\studybook_audio\aws-s3\
+# Output root: D:\temp\studybook_audio\aws-s3\
 
 ---
 
@@ -17,9 +17,9 @@ cd D:\StudyBook
 ## VERIFY
 
 ```powershell
-Test-Path "C:\temp\studybook_audio\aws-s3\final_aws-s3.mp3"
-Get-Item "C:\temp\studybook_audio\aws-s3\final_aws-s3.mp3" | Select-Object Length
-ffprobe -v quiet -show_entries format=duration -of csv=p=0 "C:\temp\studybook_audio\aws-s3\final_aws-s3.mp3"
+Test-Path "D:\temp\studybook_audio\aws-s3\final_aws-s3.mp3"
+Get-Item "D:\temp\studybook_audio\aws-s3\final_aws-s3.mp3" | Select-Object Length
+ffprobe -v quiet -show_entries format=duration -of csv=p=0 "D:\temp\studybook_audio\aws-s3\final_aws-s3.mp3"
 ```
 
 Expected:
@@ -34,7 +34,7 @@ Expected:
 Confirm:
 
 ```powershell
-Test-Path "C:\temp\studybook_audio\aws-s3\UPLOAD_INSTRUCTIONS.md"
+Test-Path "D:\temp\studybook_audio\aws-s3\UPLOAD_INSTRUCTIONS.md"
 ```
 
 If missing, create it manually with slug `aws-s3` and filename `final_aws-s3.mp3`.

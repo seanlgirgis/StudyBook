@@ -23,14 +23,14 @@ D:\StudyBook\                                         ← ROOT (working director
         data\interview_prep\audio_prep\aws-iam\        ← create if missing
             audio_script_aws-iam.md                   ← THIS MISSION'S OUTPUT (text — in repo)
 
-C:\temp\studybook_audio\aws-iam\                      ← AUDIO OUTPUT (outside repo — NOT committed)
+D:\temp\studybook_audio\aws-iam\                      ← AUDIO OUTPUT (outside repo — NOT committed)
     audio_clips\                                      ← generated MP3 clips (binary — never in repo)
     final_aws-iam.mp3                                 ← stitched final (binary — never in repo)
     UPLOAD_INSTRUCTIONS.md                            ← R2 upload guide
 ```
 
 IMPORTANT: Audio clips and MP3 files are binary artifacts stored OUTSIDE the repository under
-C:\temp\studybook_audio\. They are NEVER written into D:\StudyBook\ or any subdirectory of it.
+D:\temp\studybook_audio\. They are NEVER written into D:\StudyBook\ or any subdirectory of it.
 Only the text script (audio_script_aws-iam.md) lives in the repo.
 
 No existing HTML page to read. Write the script from the content outline below.
@@ -321,10 +321,10 @@ Run the audio pipeline using the master runbook:
 Topic slug: `aws-iam`
 Script path: `temp\jobsearch\data\interview_prep\audio_prep\aws-iam\audio_script_aws-iam.md`
 
-The pipeline will write ALL audio artifacts to C:\temp\studybook_audio\aws-iam\ (outside the repo):
-  C:\temp\studybook_audio\aws-iam\audio_clips\    ← individual MP3 clips (binary — never commit)
-  C:\temp\studybook_audio\aws-iam\final_aws-iam.mp3  ← stitched final (binary — never commit)
-  C:\temp\studybook_audio\aws-iam\UPLOAD_INSTRUCTIONS.md
+The pipeline will write ALL audio artifacts to D:\temp\studybook_audio\aws-iam\ (outside the repo):
+  D:\temp\studybook_audio\aws-iam\audio_clips\    ← individual MP3 clips (binary — never commit)
+  D:\temp\studybook_audio\aws-iam\final_aws-iam.mp3  ← stitched final (binary — never commit)
+  D:\temp\studybook_audio\aws-iam\UPLOAD_INSTRUCTIONS.md
 
 DO NOT copy or move any .mp3 files into D:\StudyBook\ or any subdirectory.
 Binary audio files do not belong in the repository.

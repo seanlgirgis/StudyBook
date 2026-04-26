@@ -32,9 +32,9 @@
 - Keep source script in repo:
   - `temp\jobsearch\data\interview_prep\audio_prep\{topic_slug}\audio_script_{topic_slug}.md`
 - Keep generated clips/final outside repo:
-  - `C:\temp\studybook_audio\{topic_slug}\audio_clips\`
-  - `C:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3`
-  - `C:\temp\studybook_audio\{topic_slug}\UPLOAD_INSTRUCTIONS.md`
+  - `D:\temp\studybook_audio\{topic_slug}\audio_clips\`
+  - `D:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3`
+  - `D:\temp\studybook_audio\{topic_slug}\UPLOAD_INSTRUCTIONS.md`
 
 ---
 
@@ -55,7 +55,7 @@ Expected:
 ## R2 HANDOFF CHECKPOINT (HUMAN)
 
 Before HTML patch mission:
-- Upload `C:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3` to R2
+- Upload `D:\temp\studybook_audio\{topic_slug}\final_{topic_slug}.mp3` to R2
 - Confirm URL plays in browser:
   - `https://pub-174bd65326be4562b4618ccf6a4a8864.r2.dev/final_{topic_slug}.mp3`
 - Then tell Codex:
@@ -80,7 +80,7 @@ When patching HTML:
 
 - [ ] Script mission completed
 - [ ] Pipeline mission completed
-- [ ] final MP3 exists in `C:\temp\studybook_audio\{topic_slug}\`
+- [ ] final MP3 exists in `D:\temp\studybook_audio\{topic_slug}\`
 - [ ] Duration in expected range for topic
 - [ ] R2 URL confirmed live
 - [ ] HTML page updated to new `final_{topic_slug}.mp3`

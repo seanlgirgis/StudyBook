@@ -23,7 +23,7 @@ If upload is not confirmed live, STOP and report:
 `Waiting for R2 upload confirmation.`
 
 Source-of-truth generated file location:
-`C:\temp\studybook_audio\aws-vpc\final_aws-vpc.mp3`
+`D:\temp\studybook_audio\aws-vpc\final_aws-vpc.mp3`
 
 ---
 

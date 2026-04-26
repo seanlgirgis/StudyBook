@@ -44,9 +44,9 @@ Target: ~14-18 speaker blocks, ~10-13 minutes total audio.
 - Keep only the script in repo:
   - `temp\jobsearch\data\interview_prep\audio_prep\aws-vpc\audio_script_aws-vpc.md`
 - All generated audio artifacts MUST be outside repo:
-  - `C:\temp\studybook_audio\aws-vpc\audio_clips\`
-  - `C:\temp\studybook_audio\aws-vpc\final_aws-vpc.mp3`
-  - `C:\temp\studybook_audio\aws-vpc\UPLOAD_INSTRUCTIONS.md`
+  - `D:\temp\studybook_audio\aws-vpc\audio_clips\`
+  - `D:\temp\studybook_audio\aws-vpc\final_aws-vpc.mp3`
+  - `D:\temp\studybook_audio\aws-vpc\UPLOAD_INSTRUCTIONS.md`
 - Never keep `audio_clips`, `.mp3`, `.m4a`, or `filelist.txt` under `D:\StudyBook`.
 
 ---
