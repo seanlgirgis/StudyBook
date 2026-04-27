@@ -21,6 +21,12 @@ Purpose:
 Definition of success:
 - Weekly income target met
 
+Weekly Target:
+- $____ (DEFINE based on real needs)
+
+Daily Minimum:
+- $____ (stop when reached unless behind)
+
 Rules:
 - This track is non-negotiable
 - Stop daily effort once target is reached

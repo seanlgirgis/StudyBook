@@ -5,16 +5,26 @@ I build a simple AI system that lets your team search, ask questions, and get an
 
 ---
 
+## Initial Focus (First 2 Weeks)
+
+Target ONE segment only:
+
+- Small consulting firms
+
+Why:
+- Document-heavy
+- Clear pain (reports, client docs, knowledge scattered)
+- Easier to explain value
+
+Rule:
+- Do NOT target multiple industries until first client is closed
+
+---
+
 ## Who This Is For (Initial Target)
-- Small businesses with lots of documents (PDFs, reports, notes)
+- Small consulting firms with lots of documents (PDFs, reports, notes)
 - Teams that waste time searching for information
 - Non-technical users who want simple answers, not dashboards
-
-Examples:
-- Real estate teams
-- Small consulting firms
-- Operations teams
-- Solo professionals
 
 ---
 
@@ -93,11 +103,11 @@ Pricing is flexible until first 2–3 clients are closed.
 Use one clear example:
 
 Example demo:
-- Upload sample documents (reports, PDFs)
+- Upload sample consulting reports or PDFs
 - Ask:
   - “Summarize this”
-  - “What are the key points?”
-  - “Find X information”
+  - “What are the key insights?”
+  - “Find specific information”
 
 Show:
 - Speed
@@ -112,13 +122,13 @@ Do NOT wait for perfection.
 
 Start with:
 
-- LinkedIn outreach
+- LinkedIn outreach (consultants / small firms)
 - Small business contacts
 - Upwork (target higher-quality jobs)
 
 Simple pitch:
 
-“I help teams turn their documents into something they can search and ask questions using AI. I can set up a working version for you in a few days.”
+“I help consulting teams turn their documents into something they can search and ask questions using AI. I can set up a working version for you in a few days.”
 
 ---
 
