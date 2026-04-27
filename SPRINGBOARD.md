@@ -26,7 +26,7 @@ playground/                 ← active scratch space + session notes
 
 ### Learn a technology (deep-dive tutorial)
 ```
-tutorials/                  ← 48 runnable tutorial folders
+tutorials/                  ← 49 runnable tutorial folders
 ```
 | I want to learn... | Go to |
 |--------------------|-------|
@@ -71,6 +71,7 @@ tutorials/                  ← 48 runnable tutorial folders
 | Snowflake + PyIceberg | `tutorials/41_snowflake_pyiceberg/` |
 | Redis | `tutorials/47_redis_de/` |
 | Scala (patterns, case classes, Spark) | `tutorials/49_scala/` |
+| Splunk (concepts, guide, DE patterns, vs ELK, Citi narrative) | `tutorials/50_splunk/` |
 | Encryption | `tutorials/14_encryption/` |
 | PII anonymization | `tutorials/15_data_anonymization_pii/` |
 | Data stubbing | `tutorials/28_data_stubbing/` |
