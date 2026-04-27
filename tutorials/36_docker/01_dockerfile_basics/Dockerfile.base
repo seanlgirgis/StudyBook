@@ -1,0 +1,17 @@
+# ============================================================
+# Topic   : Docker for Data Engineers
+# File    : Dockerfile.base
+# Covers  : Unoptimized Dockerfile for comparison
+# Prereqs : Docker Desktop installed and running
+# Run     : docker build -f Dockerfile.base -t tutorial36-pipeline:base-1.0.0 .
+# ============================================================
+
+FROM python:3.11.9-bookworm
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install --no-cache-dir pandas==2.2.2 pyarrow==15.0.2 psycopg2-binary==2.9.9
+
+CMD ["python", "app/pipeline.py"]

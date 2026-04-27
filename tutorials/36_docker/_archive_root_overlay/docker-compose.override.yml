@@ -1,0 +1,15 @@
+# Dev overrides — applied automatically when running docker compose up in dev.
+services:
+  pipeline:
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./app:/app/app:ro
+    environment:
+      - LOG_LEVEL=DEBUG
+    ports:
+      - "5678:5678"
+
+  postgres:
+    ports:
+      - "5432:5432"

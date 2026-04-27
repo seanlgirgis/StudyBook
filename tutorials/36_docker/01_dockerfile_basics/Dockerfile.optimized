@@ -1,0 +1,36 @@
+# ============================================================
+# Topic   : Docker for Data Engineers
+# File    : Dockerfile.optimized
+# Covers  : Optimized production Dockerfile
+# Prereqs : Docker Desktop installed and running
+# Run     : docker build -f Dockerfile.optimized -t tutorial36-pipeline:optimized-1.0.0 .
+# ============================================================
+
+FROM python:3.11.9-slim-bookworm AS base
+
+ARG APP_VERSION=1.0.0
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    APP_VERSION=${APP_VERSION}
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app/ ./app/
+
+RUN groupadd --gid 1001 appgroup && \
+    useradd --uid 1001 --gid appgroup --shell /bin/bash --create-home appuser && \
+    chown -R appuser:appgroup /app
+
+USER appuser
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import sys; sys.exit(0)"
+
+ENTRYPOINT ["python"]
+CMD ["app/pipeline.py"]

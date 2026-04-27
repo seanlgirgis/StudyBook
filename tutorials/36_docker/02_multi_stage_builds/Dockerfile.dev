@@ -1,0 +1,25 @@
+# ============================================================
+# Topic   : Docker for Data Engineers
+# File    : Dockerfile.dev
+# Covers  : Development image with test/debug tools
+# Prereqs : Docker Desktop installed and running
+# Run     : docker build -f Dockerfile.dev -t tutorial36-pipeline:dev-1.0.0 .
+# ============================================================
+
+FROM python:3.11.9-slim-bookworm AS dev
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+COPY requirements.txt requirements-dev.txt ./
+RUN pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt
+
+RUN groupadd --gid 1001 appgroup && \
+    useradd --uid 1001 --gid appgroup --shell /bin/bash --create-home appuser && \
+    chown -R appuser:appgroup /app
+
+USER appuser
+
+CMD ["python", "-m", "pytest", "-xvs"]
