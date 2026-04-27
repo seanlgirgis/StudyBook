@@ -7,17 +7,21 @@
 
 ## Summary
 
-| Category | Count | Risk | Action |
-|----------|-------|------|--------|
-| Binary files tracked in git | 2 | Medium | Remove from tracking |
-| `__dupNNN` files in legacy prompts | 88 | Low | Review and delete confirmed dups |
-| `prompt_READY_TO_PASTE.md` copies | 46 | Low | Keep (intentional per-tutorial) |
-| `.docx` binaries in `data/jobs/` | 217 | Medium | Archive old jobs off-repo |
-| Windows shortcut files in git | 2 | Low | Remove from tracking |
-| Temp migration artifacts | ~3 runs | Low | Delete after verification |
-| Duplicate-numbered tutorial folders | 1 pair | Low | Renumber one folder |
-| Stale `index.xlsx` | 1 | Low | Remove from tracking |
-| `coding_challenges/_archive/` | unknown | Low | Review and purge or keep |
+**Pruning performed: 2026-04-27 — committed to main**
+
+| Category | Count | Status | Action Taken |
+|----------|-------|--------|-------------|
+| Binary files tracked in git (`index.xlsx`) | 1 | ✅ Done | `git rm --cached` — gitignore already present |
+| Windows shortcut files (`StudyBook.lnk`, `temp.lnk`) | 2 | ✅ Done | `git rm --cached`, added `*.lnk` to .gitignore |
+| `__dupNNN` files in legacy prompts | 88 | ✅ Done | All 88 verified had originals — deleted, LOOP-023 closed |
+| Temp migration artifact run folders | 3 | ✅ Done | Deleted `run_20260402_*` folders from `temp/migration_meta/` |
+| `coding_challenges/_archive/` | 2 folders | ✅ Done | Deleted (workspace_legacy + cleaning_gc superseded) |
+| Tutorial `02_pyspark` number collision | 1 | ✅ Done | Renamed → `48_pyspark_local`, refs updated in `_manager/` |
+| `.docx` binaries in `data/jobs/` | 217 | ✅ Done | `git rm --cached` all, added `data/jobs/**/*.docx` to .gitignore |
+| `prompt_READY_TO_PASTE.md` copies | 46 | ✅ Keep | Intentional per-tutorial — topic-specific content |
+| MongoDB credential in `.env.local` (LOOP-007) | 1 | ⏳ Open | Requires passphrase + Atlas rotation — owner action needed |
+| `HorizonScale/` scope clarification | — | ⏳ Open | Decide: own repo vs keep in StudyBook |
+| `jobdatabrain-tagger/` scope clarification | — | ⏳ Open | Decide: own repo vs keep in StudyBook |
 
 ---
 

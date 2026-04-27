@@ -38,7 +38,7 @@ Last reviewed: 2026-04-27 (EMR IAM role automation follow-up)
 | LOOP-020 | TB-20260402-32 | Execute coding assets shift/lift and decommission migrated D:\Workspace sources | closed | none | 2026-04-02 |
 | LOOP-021 | TB-20260402-33 | Produce first manuals/roadmaps-ready docs from coding_challenges manifests | closed | none | 2026-04-02 |
 | LOOP-022 | TB-20260402-34 | Complete Databases shift/lift from Workspace into tracks/08_databases and _prompts/legacy/databases | closed | none | 2026-04-02 |
-| LOOP-023 | TB-20260402-36 | Reconcile duplicate-suffixed Technologies legacy prompts produced during conflict-safe migration | open | Review `D:\Workarea\StudyBook\temp\migration_meta\run_20260402_121903\conflicts_report.md` and decide keep-vs-dedupe policy for `__dupNNN` files | 2026-04-02 |
+| LOOP-023 | TB-20260402-36 | Reconcile duplicate-suffixed Technologies legacy prompts produced during conflict-safe migration | closed | All 88 __dupNNN files verified to have originals and deleted — committed 2026-04-27 | 2026-04-27 |
 | LOOP-024 | TB-20260402-37 | Decommission migrated Technologies + DE_Interview sources using move-map safe deletion | closed | none | 2026-04-02 |
 | LOOP-025 | TB-20260402-38 | Reconcile migration board statuses with completed source-deletion reality for M-003/M-012 and add residual-Technologies decommission plan | open | Decide whether to decommission remaining `D:\Workspace\Technologies` non-migrated assets or retain as legacy runtime island, then update board accordingly | 2026-04-02 |
 | LOOP-026 | TB-20260402-41 | Resolve GitHub large-file push rejection for StudyBook main branch | closed | none | 2026-04-02 |
