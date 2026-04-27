@@ -1,0 +1,9 @@
+FROM python:3.11.9-bookworm
+
+WORKDIR /app
+
+# Intentionally unoptimized order for teaching cache behavior.
+COPY . .
+RUN pip install --no-cache-dir pandas==2.2.2 pyarrow==15.0.2
+
+CMD ["python", "app/pipeline.py"]

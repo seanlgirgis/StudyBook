@@ -1,55 +1,65 @@
 # Agent Status
 
-## Current Run (2026-04-26)
+## Run Metadata
 
-**Task ID:** TB-20260426-16  
-**Task Type:** ENHANCEMENT  
-**Goal:** Create a root tutorials markdown handoff file for ChatGPT describing project context, Codex machine capabilities, referenced session IDs, active tutorial lanes, and Docker runtime state.
+- Date: 2026-04-26
+- Task ID: TB-20260426-17
+- Task Type: ENHANCEMENT
+- Status: DONE
 
-### Factual Summary
+## Factual Summary
 
-- Created new handoff file:
-  - `tutorials/Tutorials_project_on_ChatGPT.md`
-- File includes:
-  - explicit statement that Codex runs on the dev machine with full local + Docker access,
-  - referenced session IDs:
-    - `019dcb22-f172-75a2-bc85-eaa204234111`
-    - `019dcaf1-7f8d-7503-9ecc-431b03412b7b`
-    - `019dcab5-4000-77f3-b147-a26eee867019`
-  - summary of completed Airflow Docker tutorial workstream,
-  - currently running Docker containers,
-  - collaboration protocol for ChatGPT to leverage Codex and save tokens,
-  - command reference for grouped deploy/init/down/destroy/smoke-test,
-  - key file paths for reuse.
+- Generated bundle 01 files in `tutorials/36_docker` from `prompt_READY_TO_PASTE.md`:
+  - `01_dockerfile_basics.py`
+  - `Dockerfile.base`
+  - `Dockerfile.optimized`
+  - `.dockerignore`
+  - `app/pipeline.py`
+  - `requirements.txt`
+- Implemented exact requested function signatures in `01_dockerfile_basics.py` and used `subprocess.run(..., text=True, capture_output=True)` for Docker CLI execution.
+- Enforced production-oriented Docker practices in optimized Dockerfile: explicit base tag, non-root user, and HEALTHCHECK.
+- Executed `python 01_dockerfile_basics.py` and validated successful image builds, image-size comparison, layer inspection, and container run output with generated summary JSON.
+- Resolved two runtime encoding failures (decode + console encode) by adding UTF-8-safe subprocess decoding and safe console output handling in the Python script.
 
-### Files Added
+## Files Created
 
-- `tutorials/Tutorials_project_on_ChatGPT.md`
+- `tutorials/36_docker/01_dockerfile_basics.py`
+- `tutorials/36_docker/Dockerfile.base`
+- `tutorials/36_docker/Dockerfile.optimized`
+- `tutorials/36_docker/.dockerignore`
+- `tutorials/36_docker/app/pipeline.py`
+- `tutorials/36_docker/requirements.txt`
 
-### Files Modified
+## Files Modified
 
 - `agents/shared/task_register.md`
-- `agents/shared/open_loops.md`
 - `agents/shared/agent_status.md`
 
-### Validation
+## Validation Commands
 
-- Confirmed tutorial root exists and file created in requested location.
-- Collected live Docker container state via `docker ps` and included factual names.
+- `python 01_dockerfile_basics.py`
 
-### Assumptions
+## Validation Outcomes
 
-- Filename `Tutorials_project_on_ChatGPT.md` satisfies the requested naming intent (meaningful and close to suggested phrase).
+- Build success:
+  - `tutorial36-pipeline:base-1.0.0` -> SUCCESS
+  - `tutorial36-pipeline:optimized-1.0.0` -> SUCCESS
+- Image sizes:
+  - `tutorial36-pipeline:base-1.0.0` -> `1.87GB`
+  - `tutorial36-pipeline:optimized-1.0.0` -> `586MB`
+- Container run output:
+  - `Processed 1,000 rows -> /data/output/summary.json`
+- Summary file written:
+  - `tutorials/36_docker/runtime_data/output/summary.json`
 
-### Risks
+## Assumptions
 
-- Low risk; additive documentation only.
+- "Generate bundle 01 exactly" was interpreted as generating only the first bundle file set and not the later bundle steps from the prompt.
 
-### Next Step
+## Risks
 
-- If desired, add a short pointer to this new file from `tutorials/_meta` or tutorial root index docs for discoverability.
+- Low risk. Changes are isolated to tutorial assets and run bookkeeping.
 
----
+## Next Step
 
-**Run completed:** 2026-04-26  
-**Status:** DONE
+- Wait for user instruction to generate bundle 02 or adjust bundle 01 content.

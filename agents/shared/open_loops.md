@@ -238,3 +238,4 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-157 | TB-20260426-14 | Create beginner zero-to-hero tutorial pack for airflow docker with grouped compose and handoff card | closed | none | 2026-04-26 |
 | LOOP-158 | TB-20260426-15 | Add safe destroy action for grouped Airflow compose helper | closed | none | 2026-04-26 |
 | LOOP-159 | TB-20260426-16 | Add ChatGPT handoff source file for tutorials project context and Codex collaboration flow | closed | none | 2026-04-26 |
+| LOOP-160 | TB-20260426-17 | Generate Docker tutorial bundle 01 files and validate build/run workflow in tutorials/36_docker | closed | none | 2026-04-26 |

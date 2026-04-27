@@ -1,0 +1,21 @@
+# Never send these to the build context (slows build, security risk)
+.git/
+.gitignore
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.env
+.env.*
+*.duckdb
+*.parquet
+data/
+*.log
+node_modules/
+.DS_Store
