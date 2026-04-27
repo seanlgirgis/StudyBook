@@ -1,0 +1,122 @@
+[
+  {
+    "sensor": "sensor_00",
+    "row_count": 25,
+    "avg_value": 45.67,
+    "alert_count": 4
+  },
+  {
+    "sensor": "sensor_01",
+    "row_count": 25,
+    "avg_value": 45.02,
+    "alert_count": 4
+  },
+  {
+    "sensor": "sensor_02",
+    "row_count": 25,
+    "avg_value": 55.53,
+    "alert_count": 5
+  },
+  {
+    "sensor": "sensor_03",
+    "row_count": 25,
+    "avg_value": 45.24,
+    "alert_count": 4
+  },
+  {
+    "sensor": "sensor_04",
+    "row_count": 25,
+    "avg_value": 53.39,
+    "alert_count": 5
+  },
+  {
+    "sensor": "sensor_05",
+    "row_count": 25,
+    "avg_value": 40.54,
+    "alert_count": 3
+  },
+  {
+    "sensor": "sensor_06",
+    "row_count": 25,
+    "avg_value": 44.73,
+    "alert_count": 6
+  },
+  {
+    "sensor": "sensor_07",
+    "row_count": 25,
+    "avg_value": 51.54,
+    "alert_count": 4
+  },
+  {
+    "sensor": "sensor_08",
+    "row_count": 25,
+    "avg_value": 51.51,
+    "alert_count": 3
+  },
+  {
+    "sensor": "sensor_09",
+    "row_count": 25,
+    "avg_value": 49.84,
+    "alert_count": 6
+  },
+  {
+    "sensor": "sensor_10",
+    "row_count": 25,
+    "avg_value": 47.5,
+    "alert_count": 4
+  },
+  {
+    "sensor": "sensor_11",
+    "row_count": 25,
+    "avg_value": 51.71,
+    "alert_count": 8
+  },
+  {
+    "sensor": "sensor_12",
+    "row_count": 25,
+    "avg_value": 54.77,
+    "alert_count": 5
+  },
+  {
+    "sensor": "sensor_13",
+    "row_count": 25,
+    "avg_value": 55.36,
+    "alert_count": 8
+  },
+  {
+    "sensor": "sensor_14",
+    "row_count": 25,
+    "avg_value": 50.04,
+    "alert_count": 6
+  },
+  {
+    "sensor": "sensor_15",
+    "row_count": 25,
+    "avg_value": 38.31,
+    "alert_count": 3
+  },
+  {
+    "sensor": "sensor_16",
+    "row_count": 25,
+    "avg_value": 46.22,
+    "alert_count": 4
+  },
+  {
+    "sensor": "sensor_17",
+    "row_count": 25,
+    "avg_value": 47.88,
+    "alert_count": 7
+  },
+  {
+    "sensor": "sensor_18",
+    "row_count": 25,
+    "avg_value": 45.71,
+    "alert_count": 1
+  },
+  {
+    "sensor": "sensor_19",
+    "row_count": 25,
+    "avg_value": 61.33,
+    "alert_count": 9
+  }
+]

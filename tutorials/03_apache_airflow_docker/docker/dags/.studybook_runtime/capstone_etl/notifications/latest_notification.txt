@@ -1,0 +1,4 @@
+Capstone ETL complete
+extracted=500
+loaded=500
+target=simulated_warehouse

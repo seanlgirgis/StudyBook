@@ -1,0 +1,210 @@
+# ============================================================
+# Topic   : Apache Airflow (Docker) for Data Engineers
+# File    : studybook_03_xcom_variables_connections.py
+# Covers  : XCom, Variables, Connections, metadata vs data
+# Prereqs : Airflow Docker stack running at http://localhost:8088
+# Deploy  : Place in docker/dags/ so it mounts to /opt/airflow/dags/
+# Trigger : Use Airflow UI or trigger manually
+# ============================================================
+
+"""
+DAG demonstrating XCom, Variables, and Connections in Docker Airflow.
+
+DAG ID: studybook_03_xcom_variables_connections
+
+Core ideas:
+- XCom is for small metadata, not large datasets.
+- Variables are environment-level config.
+- Connections store credentials/config outside DAG code.
+"""
+
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.models import Variable
+from airflow.hooks.base import BaseHook
+from airflow.exceptions import AirflowNotFoundException, AirflowException
+from datetime import datetime, timedelta
+from pathlib import Path
+import json
+import logging
+
+OUTPUT_DIR = Path("/opt/airflow/dags/.studybook_runtime/03_xcom_variables_connections")
+
+log = logging.getLogger("airflow.task")
+
+
+def extract_and_push(**context) -> None:
+    """
+    Generate a small metadata payload and push it to XCom.
+
+    WHY:
+    XCom is stored in Airflow's metadata database.
+    Use it for counts, paths, statuses, IDs — not dataframes or big JSON.
+    """
+
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    records = [
+        {"id": i, "sensor": f"s{i % 10}", "value": i * 1.25}
+        for i in range(500)
+    ]
+
+    data_path = OUTPUT_DIR / f"extract_{context['ds']}.json"
+    data_path.write_text(json.dumps(records, indent=2))
+
+    ti = context["ti"]
+    ti.xcom_push(key="record_count", value=len(records))
+    ti.xcom_push(key="source", value="simulated_sensor_api")
+    ti.xcom_push(key="file_path", value=str(data_path))
+
+    log.info("Extract complete.")
+    log.info(f"Record count pushed to XCom: {len(records)}")
+    log.info(f"File path pushed to XCom: {data_path}")
+
+
+def validate_counts(**context) -> None:
+    """
+    Pull metadata from XCom and validate it.
+
+    WHY specify task_ids:
+    XCom values are keyed by dag_id, task_id, run_id, and key.
+    In real DAGs, many tasks may push the same key name.
+    """
+
+    ti = context["ti"]
+
+    count = ti.xcom_pull(
+        task_ids="extract_and_push",
+        key="record_count",
+    )
+
+    source = ti.xcom_pull(
+        task_ids="extract_and_push",
+        key="source",
+    )
+
+    file_path = ti.xcom_pull(
+        task_ids="extract_and_push",
+        key="file_path",
+    )
+
+    if count is None:
+        raise AirflowException("Missing record_count from XCom")
+
+    if int(count) < 100:
+        raise AirflowException(f"Too few records: {count}")
+
+    log.info(f"Validation passed. count={count}, source={source}")
+    log.info(f"Downstream tasks should read data from file path: {file_path}")
+
+
+def read_variable_config(**context) -> None:
+    """
+    Read Airflow Variables.
+
+    Variables are useful for config that changes by environment:
+    dev, test, prod, Docker, cloud, etc.
+
+    This DAG uses default_var so it runs even if the variable does not exist yet.
+    """
+
+    min_records = Variable.get(
+        "studybook_min_records",
+        default_var="100",
+    )
+
+    pipeline_config = Variable.get(
+        "studybook_pipeline_config",
+        default_var='{"mode": "tutorial", "owner": "studybook"}',
+        deserialize_json=True,
+    )
+
+    log.info(f"Variable studybook_min_records={min_records}")
+    log.info(f"Variable studybook_pipeline_config={pipeline_config}")
+
+
+def demonstrate_connection(**context) -> None:
+    """
+    Demonstrate reading a Connection safely.
+
+    This does not require the connection to exist.
+    If missing, we log a teaching message and continue.
+    """
+
+    conn_id = "studybook_postgres"
+
+    try:
+        conn = BaseHook.get_connection(conn_id)
+        log.info("Connection found.")
+        log.info(f"conn_id={conn.conn_id}")
+        log.info(f"conn_type={conn.conn_type}")
+        log.info(f"host={conn.host}")
+        log.info(f"schema={conn.schema}")
+        log.info("Password is intentionally not logged.")
+    except AirflowNotFoundException:
+        log.warning(f"Connection {conn_id!r} is not configured.")
+        log.info("That is OK for this tutorial.")
+        log.info("In production, credentials belong in Connections, not DAG code.")
+
+
+def summarize(**context) -> None:
+    """
+    Final summary.
+
+    Pull the same metadata again to reinforce how XCom works across tasks.
+    """
+
+    ti = context["ti"]
+
+    count = ti.xcom_pull(task_ids="extract_and_push", key="record_count")
+    source = ti.xcom_pull(task_ids="extract_and_push", key="source")
+    file_path = ti.xcom_pull(task_ids="extract_and_push", key="file_path")
+
+    log.info("XCom / Variables / Connections tutorial complete.")
+    log.info(f"Summary: count={count}, source={source}, file_path={file_path}")
+
+
+default_args = {
+    "owner": "studybook",
+    "retries": 1,
+    "retry_delay": timedelta(seconds=30),
+    "email_on_failure": False,
+}
+
+
+with DAG(
+    dag_id="studybook_03_xcom_variables_connections",
+    description="XCom, Variables, and Connections in Docker Airflow",
+    default_args=default_args,
+    start_date=datetime(2024, 1, 1),
+    schedule=None,
+    catchup=False,
+    tags=["studybook", "docker", "xcom", "variables", "connections"],
+) as dag:
+
+    t_extract = PythonOperator(
+        task_id="extract_and_push",
+        python_callable=extract_and_push,
+    )
+
+    t_validate = PythonOperator(
+        task_id="validate_counts",
+        python_callable=validate_counts,
+    )
+
+    t_read_config = PythonOperator(
+        task_id="read_variable_config",
+        python_callable=read_variable_config,
+    )
+
+    t_demo_connection = PythonOperator(
+        task_id="demonstrate_connection",
+        python_callable=demonstrate_connection,
+    )
+
+    t_summarize = PythonOperator(
+        task_id="summarize",
+        python_callable=summarize,
+    )
+
+    t_extract >> t_validate >> t_read_config >> t_demo_connection >> t_summarize

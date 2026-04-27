@@ -1,0 +1,254 @@
+# ============================================================
+# Topic   : Apache Airflow (Docker) for Data Engineers
+# File    : studybook_capstone_etl.py
+# Covers  : End-to-end ETL orchestration capstone
+# Prereqs : Airflow Docker stack running at http://localhost:8088
+# Deploy  : Place in docker/dags/ so it mounts to /opt/airflow/dags/
+# Trigger : Use Airflow UI or trigger manually
+# ============================================================
+
+"""
+Airflow Docker Capstone DAG.
+
+DAG ID: studybook_capstone_etl
+
+Pipeline:
+  extract  → generate source records
+  validate → enforce data quality rules
+  transform → clean + enrich + aggregate
+  load → write final target output
+  notify → always report status
+
+This capstone combines:
+- TaskFlow API
+- XCom metadata passing
+- shared Docker-mounted runtime paths
+- validation failures
+- trigger rules
+- production-style logging
+"""
+
+from airflow.decorators import dag, task
+from airflow.utils.trigger_rule import TriggerRule
+from datetime import datetime, timedelta
+from pathlib import Path
+import csv
+import json
+import logging
+import random
+
+OUTPUT_DIR = Path("/opt/airflow/dags/.studybook_runtime/capstone_etl")
+
+log = logging.getLogger("airflow.task")
+
+
+def failure_callback(context: dict) -> None:
+    exc = context.get("exception")
+    log.error("CAPSTONE FAILURE CALLBACK")
+    log.error(f"DAG: {context['dag'].dag_id}")
+    log.error(f"Task: {context['task'].task_id}")
+    log.error(f"Run: {context['dag_run'].run_id}")
+    log.error(f"Exception: {exc!r}")
+
+
+@dag(
+    dag_id="studybook_capstone_etl",
+    description="Capstone ETL pipeline using Airflow Docker",
+    start_date=datetime(2024, 1, 1),
+    schedule=None,
+    catchup=False,
+    default_args={
+        "owner": "studybook",
+        "retries": 1,
+        "retry_delay": timedelta(seconds=30),
+        "on_failure_callback": failure_callback,
+    },
+    tags=["studybook", "docker", "capstone", "etl"],
+)
+def capstone_etl():
+
+    @task
+    def extract(ds: str = None) -> dict:
+        raw_dir = OUTPUT_DIR / "raw"
+        raw_dir.mkdir(parents=True, exist_ok=True)
+
+        path = raw_dir / f"extract_{ds}.csv"
+
+        rows = []
+        for i in range(500):
+            rows.append(
+                {
+                    "id": i,
+                    "sensor": f"sensor_{i % 20:02d}",
+                    "value": "" if i % 50 == 0 else round(random.uniform(0, 100), 2),
+                    "event_date": ds,
+                }
+            )
+
+        with open(path, "w", newline="") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=["id", "sensor", "value", "event_date"],
+            )
+            writer.writeheader()
+            writer.writerows(rows)
+
+        null_count = sum(1 for row in rows if row["value"] == "")
+        null_rate = null_count / len(rows)
+
+        log.info(f"Extracted {len(rows)} records to {path}")
+        log.info(f"Null count={null_count}, null_rate={null_rate:.2%}")
+
+        return {
+            "record_count": len(rows),
+            "null_rate": null_rate,
+            "raw_path": str(path),
+            "ds": ds,
+        }
+
+    @task
+    def validate(extract_result: dict) -> dict:
+        record_count = extract_result["record_count"]
+        null_rate = extract_result["null_rate"]
+
+        if record_count < 100:
+            raise ValueError(f"Validation failed: record_count too low: {record_count}")
+
+        if null_rate > 0.05:
+            raise ValueError(f"Validation failed: null_rate too high: {null_rate:.2%}")
+
+        log.info("Validation passed.")
+        log.info(f"record_count={record_count}, null_rate={null_rate:.2%}")
+
+        return extract_result
+
+    @task
+    def transform(validated: dict) -> dict:
+        raw_path = Path(validated["raw_path"])
+
+        cleaned_dir = OUTPUT_DIR / "cleaned"
+        aggregate_dir = OUTPUT_DIR / "aggregate"
+        cleaned_dir.mkdir(parents=True, exist_ok=True)
+        aggregate_dir.mkdir(parents=True, exist_ok=True)
+
+        cleaned_path = cleaned_dir / f"cleaned_{validated['ds']}.csv"
+        aggregate_path = aggregate_dir / f"sensor_summary_{validated['ds']}.json"
+
+        with open(raw_path, "r") as f:
+            rows = list(csv.DictReader(f))
+
+        numeric_values = [
+            float(row["value"])
+            for row in rows
+            if row["value"] not in ("", None)
+        ]
+
+        median_value = sorted(numeric_values)[len(numeric_values) // 2]
+
+        cleaned_rows = []
+        sensor_totals = {}
+
+        for row in rows:
+            value = float(row["value"]) if row["value"] not in ("", None) else median_value
+            status = "ALERT" if value >= 80 else "NORMAL"
+
+            cleaned_row = {
+                "id": row["id"],
+                "sensor": row["sensor"],
+                "value": round(value, 2),
+                "status": status,
+                "event_date": row["event_date"],
+            }
+
+            cleaned_rows.append(cleaned_row)
+
+            sensor = row["sensor"]
+            sensor_totals.setdefault(sensor, {"count": 0, "total": 0.0, "alerts": 0})
+            sensor_totals[sensor]["count"] += 1
+            sensor_totals[sensor]["total"] += value
+            sensor_totals[sensor]["alerts"] += 1 if status == "ALERT" else 0
+
+        with open(cleaned_path, "w", newline="") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=["id", "sensor", "value", "status", "event_date"],
+            )
+            writer.writeheader()
+            writer.writerows(cleaned_rows)
+
+        summary = []
+        for sensor, stats in sorted(sensor_totals.items()):
+            summary.append(
+                {
+                    "sensor": sensor,
+                    "row_count": stats["count"],
+                    "avg_value": round(stats["total"] / stats["count"], 2),
+                    "alert_count": stats["alerts"],
+                }
+            )
+
+        aggregate_path.write_text(json.dumps(summary, indent=2))
+
+        log.info(f"Cleaned file written: {cleaned_path}")
+        log.info(f"Aggregate file written: {aggregate_path}")
+
+        return {
+            "cleaned_path": str(cleaned_path),
+            "aggregate_path": str(aggregate_path),
+            "record_count": len(cleaned_rows),
+            "sensor_count": len(summary),
+        }
+
+    @task
+    def load(transform_result: dict) -> dict:
+        target_dir = OUTPUT_DIR / "loaded"
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        target_manifest = target_dir / "load_manifest.json"
+
+        manifest = {
+            "loaded_rows": transform_result["record_count"],
+            "sensor_count": transform_result["sensor_count"],
+            "cleaned_source": transform_result["cleaned_path"],
+            "aggregate_source": transform_result["aggregate_path"],
+            "target": "simulated_warehouse",
+        }
+
+        target_manifest.write_text(json.dumps(manifest, indent=2))
+
+        log.info(f"Loaded {manifest['loaded_rows']} rows.")
+        log.info(f"Manifest written: {target_manifest}")
+
+        return {
+            "loaded_rows": manifest["loaded_rows"],
+            "target_manifest": str(target_manifest),
+            "target": manifest["target"],
+        }
+
+    @task(trigger_rule=TriggerRule.ALL_DONE)
+    def notify(extract_result: dict, load_result: dict | None = None) -> None:
+        log.info("CAPSTONE PIPELINE NOTIFICATION")
+        log.info(f"Extract result: {extract_result}")
+        log.info(f"Load result: {load_result}")
+
+        notify_dir = OUTPUT_DIR / "notifications"
+        notify_dir.mkdir(parents=True, exist_ok=True)
+
+        notification_file = notify_dir / "latest_notification.txt"
+        notification_file.write_text(
+            "Capstone ETL complete\n"
+            f"extracted={extract_result.get('record_count', 'N/A')}\n"
+            f"loaded={(load_result or {}).get('loaded_rows', 'N/A')}\n"
+            f"target={(load_result or {}).get('target', 'N/A')}\n"
+        )
+
+        log.info(f"Notification written: {notification_file}")
+
+    raw = extract()
+    valid = validate(raw)
+    transformed = transform(valid)
+    loaded = load(transformed)
+    notify(raw, loaded)
+
+
+capstone_dag = capstone_etl()

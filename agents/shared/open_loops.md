@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-24 (permission override policy sync)
+Last reviewed: 2026-04-27 (EMR IAM role automation follow-up)
 
 ## Status Meanings
 
@@ -239,3 +239,6 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-158 | TB-20260426-15 | Add safe destroy action for grouped Airflow compose helper | closed | none | 2026-04-26 |
 | LOOP-159 | TB-20260426-16 | Add ChatGPT handoff source file for tutorials project context and Codex collaboration flow | closed | none | 2026-04-26 |
 | LOOP-160 | TB-20260426-17 | Generate Docker tutorial bundle 01 files and validate build/run workflow in tutorials/36_docker | closed | none | 2026-04-26 |
+| LOOP-161 | TB-20260427-01 | Complete missing EMR capstone support files (`cleanup.py`, `test_capstone.py`) to match brief contract | open | Add both files under `tutorials/06_aws_emr/capstone` and validate with local pytest run | 2026-04-27 |
+| LOOP-162 | TB-20260427-02 | Add AWS assistant setup script for EMR capstone env/profile discovery | closed | none | 2026-04-27 |
+| LOOP-163 | TB-20260427-03 | Resolve EMR Serverless cross-account pass-role failure by provisioning same-account execution role | closed | none | 2026-04-27 |

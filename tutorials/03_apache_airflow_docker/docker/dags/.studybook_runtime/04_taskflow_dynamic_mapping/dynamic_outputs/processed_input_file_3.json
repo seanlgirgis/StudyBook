@@ -1,0 +1,6 @@
+{
+  "source_file": "/opt/airflow/dags/.studybook_runtime/04_taskflow_dynamic_mapping/dynamic_inputs/input_file_3.json",
+  "row_count": 100,
+  "total_value": 15150,
+  "status": "ok"
+}

@@ -1,0 +1,7 @@
+{
+  "loaded_rows": 500,
+  "sensor_count": 20,
+  "cleaned_source": "/opt/airflow/dags/.studybook_runtime/capstone_etl/cleaned/cleaned_2026-04-27.csv",
+  "aggregate_source": "/opt/airflow/dags/.studybook_runtime/capstone_etl/aggregate/sensor_summary_2026-04-27.json",
+  "target": "simulated_warehouse"
+}

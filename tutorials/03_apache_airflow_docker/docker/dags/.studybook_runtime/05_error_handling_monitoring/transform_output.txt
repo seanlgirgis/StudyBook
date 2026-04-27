@@ -1,0 +1,3 @@
+transform complete
+warning_count=2
+bad_rows=3

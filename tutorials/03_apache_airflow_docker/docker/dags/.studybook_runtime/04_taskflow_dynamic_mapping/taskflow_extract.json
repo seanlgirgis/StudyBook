@@ -1,0 +1,1002 @@
+[
+  {
+    "id": 0,
+    "sensor": "s0",
+    "value": 0.0
+  },
+  {
+    "id": 1,
+    "sensor": "s1",
+    "value": 1.5
+  },
+  {
+    "id": 2,
+    "sensor": "s2",
+    "value": 3.0
+  },
+  {
+    "id": 3,
+    "sensor": "s3",
+    "value": 4.5
+  },
+  {
+    "id": 4,
+    "sensor": "s4",
+    "value": 6.0
+  },
+  {
+    "id": 5,
+    "sensor": "s0",
+    "value": 7.5
+  },
+  {
+    "id": 6,
+    "sensor": "s1",
+    "value": 9.0
+  },
+  {
+    "id": 7,
+    "sensor": "s2",
+    "value": 10.5
+  },
+  {
+    "id": 8,
+    "sensor": "s3",
+    "value": 12.0
+  },
+  {
+    "id": 9,
+    "sensor": "s4",
+    "value": 13.5
+  },
+  {
+    "id": 10,
+    "sensor": "s0",
+    "value": 15.0
+  },
+  {
+    "id": 11,
+    "sensor": "s1",
+    "value": 16.5
+  },
+  {
+    "id": 12,
+    "sensor": "s2",
+    "value": 18.0
+  },
+  {
+    "id": 13,
+    "sensor": "s3",
+    "value": 19.5
+  },
+  {
+    "id": 14,
+    "sensor": "s4",
+    "value": 21.0
+  },
+  {
+    "id": 15,
+    "sensor": "s0",
+    "value": 22.5
+  },
+  {
+    "id": 16,
+    "sensor": "s1",
+    "value": 24.0
+  },
+  {
+    "id": 17,
+    "sensor": "s2",
+    "value": 25.5
+  },
+  {
+    "id": 18,
+    "sensor": "s3",
+    "value": 27.0
+  },
+  {
+    "id": 19,
+    "sensor": "s4",
+    "value": 28.5
+  },
+  {
+    "id": 20,
+    "sensor": "s0",
+    "value": 30.0
+  },
+  {
+    "id": 21,
+    "sensor": "s1",
+    "value": 31.5
+  },
+  {
+    "id": 22,
+    "sensor": "s2",
+    "value": 33.0
+  },
+  {
+    "id": 23,
+    "sensor": "s3",
+    "value": 34.5
+  },
+  {
+    "id": 24,
+    "sensor": "s4",
+    "value": 36.0
+  },
+  {
+    "id": 25,
+    "sensor": "s0",
+    "value": 37.5
+  },
+  {
+    "id": 26,
+    "sensor": "s1",
+    "value": 39.0
+  },
+  {
+    "id": 27,
+    "sensor": "s2",
+    "value": 40.5
+  },
+  {
+    "id": 28,
+    "sensor": "s3",
+    "value": 42.0
+  },
+  {
+    "id": 29,
+    "sensor": "s4",
+    "value": 43.5
+  },
+  {
+    "id": 30,
+    "sensor": "s0",
+    "value": 45.0
+  },
+  {
+    "id": 31,
+    "sensor": "s1",
+    "value": 46.5
+  },
+  {
+    "id": 32,
+    "sensor": "s2",
+    "value": 48.0
+  },
+  {
+    "id": 33,
+    "sensor": "s3",
+    "value": 49.5
+  },
+  {
+    "id": 34,
+    "sensor": "s4",
+    "value": 51.0
+  },
+  {
+    "id": 35,
+    "sensor": "s0",
+    "value": 52.5
+  },
+  {
+    "id": 36,
+    "sensor": "s1",
+    "value": 54.0
+  },
+  {
+    "id": 37,
+    "sensor": "s2",
+    "value": 55.5
+  },
+  {
+    "id": 38,
+    "sensor": "s3",
+    "value": 57.0
+  },
+  {
+    "id": 39,
+    "sensor": "s4",
+    "value": 58.5
+  },
+  {
+    "id": 40,
+    "sensor": "s0",
+    "value": 60.0
+  },
+  {
+    "id": 41,
+    "sensor": "s1",
+    "value": 61.5
+  },
+  {
+    "id": 42,
+    "sensor": "s2",
+    "value": 63.0
+  },
+  {
+    "id": 43,
+    "sensor": "s3",
+    "value": 64.5
+  },
+  {
+    "id": 44,
+    "sensor": "s4",
+    "value": 66.0
+  },
+  {
+    "id": 45,
+    "sensor": "s0",
+    "value": 67.5
+  },
+  {
+    "id": 46,
+    "sensor": "s1",
+    "value": 69.0
+  },
+  {
+    "id": 47,
+    "sensor": "s2",
+    "value": 70.5
+  },
+  {
+    "id": 48,
+    "sensor": "s3",
+    "value": 72.0
+  },
+  {
+    "id": 49,
+    "sensor": "s4",
+    "value": 73.5
+  },
+  {
+    "id": 50,
+    "sensor": "s0",
+    "value": 75.0
+  },
+  {
+    "id": 51,
+    "sensor": "s1",
+    "value": 76.5
+  },
+  {
+    "id": 52,
+    "sensor": "s2",
+    "value": 78.0
+  },
+  {
+    "id": 53,
+    "sensor": "s3",
+    "value": 79.5
+  },
+  {
+    "id": 54,
+    "sensor": "s4",
+    "value": 81.0
+  },
+  {
+    "id": 55,
+    "sensor": "s0",
+    "value": 82.5
+  },
+  {
+    "id": 56,
+    "sensor": "s1",
+    "value": 84.0
+  },
+  {
+    "id": 57,
+    "sensor": "s2",
+    "value": 85.5
+  },
+  {
+    "id": 58,
+    "sensor": "s3",
+    "value": 87.0
+  },
+  {
+    "id": 59,
+    "sensor": "s4",
+    "value": 88.5
+  },
+  {
+    "id": 60,
+    "sensor": "s0",
+    "value": 90.0
+  },
+  {
+    "id": 61,
+    "sensor": "s1",
+    "value": 91.5
+  },
+  {
+    "id": 62,
+    "sensor": "s2",
+    "value": 93.0
+  },
+  {
+    "id": 63,
+    "sensor": "s3",
+    "value": 94.5
+  },
+  {
+    "id": 64,
+    "sensor": "s4",
+    "value": 96.0
+  },
+  {
+    "id": 65,
+    "sensor": "s0",
+    "value": 97.5
+  },
+  {
+    "id": 66,
+    "sensor": "s1",
+    "value": 99.0
+  },
+  {
+    "id": 67,
+    "sensor": "s2",
+    "value": 100.5
+  },
+  {
+    "id": 68,
+    "sensor": "s3",
+    "value": 102.0
+  },
+  {
+    "id": 69,
+    "sensor": "s4",
+    "value": 103.5
+  },
+  {
+    "id": 70,
+    "sensor": "s0",
+    "value": 105.0
+  },
+  {
+    "id": 71,
+    "sensor": "s1",
+    "value": 106.5
+  },
+  {
+    "id": 72,
+    "sensor": "s2",
+    "value": 108.0
+  },
+  {
+    "id": 73,
+    "sensor": "s3",
+    "value": 109.5
+  },
+  {
+    "id": 74,
+    "sensor": "s4",
+    "value": 111.0
+  },
+  {
+    "id": 75,
+    "sensor": "s0",
+    "value": 112.5
+  },
+  {
+    "id": 76,
+    "sensor": "s1",
+    "value": 114.0
+  },
+  {
+    "id": 77,
+    "sensor": "s2",
+    "value": 115.5
+  },
+  {
+    "id": 78,
+    "sensor": "s3",
+    "value": 117.0
+  },
+  {
+    "id": 79,
+    "sensor": "s4",
+    "value": 118.5
+  },
+  {
+    "id": 80,
+    "sensor": "s0",
+    "value": 120.0
+  },
+  {
+    "id": 81,
+    "sensor": "s1",
+    "value": 121.5
+  },
+  {
+    "id": 82,
+    "sensor": "s2",
+    "value": 123.0
+  },
+  {
+    "id": 83,
+    "sensor": "s3",
+    "value": 124.5
+  },
+  {
+    "id": 84,
+    "sensor": "s4",
+    "value": 126.0
+  },
+  {
+    "id": 85,
+    "sensor": "s0",
+    "value": 127.5
+  },
+  {
+    "id": 86,
+    "sensor": "s1",
+    "value": 129.0
+  },
+  {
+    "id": 87,
+    "sensor": "s2",
+    "value": 130.5
+  },
+  {
+    "id": 88,
+    "sensor": "s3",
+    "value": 132.0
+  },
+  {
+    "id": 89,
+    "sensor": "s4",
+    "value": 133.5
+  },
+  {
+    "id": 90,
+    "sensor": "s0",
+    "value": 135.0
+  },
+  {
+    "id": 91,
+    "sensor": "s1",
+    "value": 136.5
+  },
+  {
+    "id": 92,
+    "sensor": "s2",
+    "value": 138.0
+  },
+  {
+    "id": 93,
+    "sensor": "s3",
+    "value": 139.5
+  },
+  {
+    "id": 94,
+    "sensor": "s4",
+    "value": 141.0
+  },
+  {
+    "id": 95,
+    "sensor": "s0",
+    "value": 142.5
+  },
+  {
+    "id": 96,
+    "sensor": "s1",
+    "value": 144.0
+  },
+  {
+    "id": 97,
+    "sensor": "s2",
+    "value": 145.5
+  },
+  {
+    "id": 98,
+    "sensor": "s3",
+    "value": 147.0
+  },
+  {
+    "id": 99,
+    "sensor": "s4",
+    "value": 148.5
+  },
+  {
+    "id": 100,
+    "sensor": "s0",
+    "value": 150.0
+  },
+  {
+    "id": 101,
+    "sensor": "s1",
+    "value": 151.5
+  },
+  {
+    "id": 102,
+    "sensor": "s2",
+    "value": 153.0
+  },
+  {
+    "id": 103,
+    "sensor": "s3",
+    "value": 154.5
+  },
+  {
+    "id": 104,
+    "sensor": "s4",
+    "value": 156.0
+  },
+  {
+    "id": 105,
+    "sensor": "s0",
+    "value": 157.5
+  },
+  {
+    "id": 106,
+    "sensor": "s1",
+    "value": 159.0
+  },
+  {
+    "id": 107,
+    "sensor": "s2",
+    "value": 160.5
+  },
+  {
+    "id": 108,
+    "sensor": "s3",
+    "value": 162.0
+  },
+  {
+    "id": 109,
+    "sensor": "s4",
+    "value": 163.5
+  },
+  {
+    "id": 110,
+    "sensor": "s0",
+    "value": 165.0
+  },
+  {
+    "id": 111,
+    "sensor": "s1",
+    "value": 166.5
+  },
+  {
+    "id": 112,
+    "sensor": "s2",
+    "value": 168.0
+  },
+  {
+    "id": 113,
+    "sensor": "s3",
+    "value": 169.5
+  },
+  {
+    "id": 114,
+    "sensor": "s4",
+    "value": 171.0
+  },
+  {
+    "id": 115,
+    "sensor": "s0",
+    "value": 172.5
+  },
+  {
+    "id": 116,
+    "sensor": "s1",
+    "value": 174.0
+  },
+  {
+    "id": 117,
+    "sensor": "s2",
+    "value": 175.5
+  },
+  {
+    "id": 118,
+    "sensor": "s3",
+    "value": 177.0
+  },
+  {
+    "id": 119,
+    "sensor": "s4",
+    "value": 178.5
+  },
+  {
+    "id": 120,
+    "sensor": "s0",
+    "value": 180.0
+  },
+  {
+    "id": 121,
+    "sensor": "s1",
+    "value": 181.5
+  },
+  {
+    "id": 122,
+    "sensor": "s2",
+    "value": 183.0
+  },
+  {
+    "id": 123,
+    "sensor": "s3",
+    "value": 184.5
+  },
+  {
+    "id": 124,
+    "sensor": "s4",
+    "value": 186.0
+  },
+  {
+    "id": 125,
+    "sensor": "s0",
+    "value": 187.5
+  },
+  {
+    "id": 126,
+    "sensor": "s1",
+    "value": 189.0
+  },
+  {
+    "id": 127,
+    "sensor": "s2",
+    "value": 190.5
+  },
+  {
+    "id": 128,
+    "sensor": "s3",
+    "value": 192.0
+  },
+  {
+    "id": 129,
+    "sensor": "s4",
+    "value": 193.5
+  },
+  {
+    "id": 130,
+    "sensor": "s0",
+    "value": 195.0
+  },
+  {
+    "id": 131,
+    "sensor": "s1",
+    "value": 196.5
+  },
+  {
+    "id": 132,
+    "sensor": "s2",
+    "value": 198.0
+  },
+  {
+    "id": 133,
+    "sensor": "s3",
+    "value": 199.5
+  },
+  {
+    "id": 134,
+    "sensor": "s4",
+    "value": 201.0
+  },
+  {
+    "id": 135,
+    "sensor": "s0",
+    "value": 202.5
+  },
+  {
+    "id": 136,
+    "sensor": "s1",
+    "value": 204.0
+  },
+  {
+    "id": 137,
+    "sensor": "s2",
+    "value": 205.5
+  },
+  {
+    "id": 138,
+    "sensor": "s3",
+    "value": 207.0
+  },
+  {
+    "id": 139,
+    "sensor": "s4",
+    "value": 208.5
+  },
+  {
+    "id": 140,
+    "sensor": "s0",
+    "value": 210.0
+  },
+  {
+    "id": 141,
+    "sensor": "s1",
+    "value": 211.5
+  },
+  {
+    "id": 142,
+    "sensor": "s2",
+    "value": 213.0
+  },
+  {
+    "id": 143,
+    "sensor": "s3",
+    "value": 214.5
+  },
+  {
+    "id": 144,
+    "sensor": "s4",
+    "value": 216.0
+  },
+  {
+    "id": 145,
+    "sensor": "s0",
+    "value": 217.5
+  },
+  {
+    "id": 146,
+    "sensor": "s1",
+    "value": 219.0
+  },
+  {
+    "id": 147,
+    "sensor": "s2",
+    "value": 220.5
+  },
+  {
+    "id": 148,
+    "sensor": "s3",
+    "value": 222.0
+  },
+  {
+    "id": 149,
+    "sensor": "s4",
+    "value": 223.5
+  },
+  {
+    "id": 150,
+    "sensor": "s0",
+    "value": 225.0
+  },
+  {
+    "id": 151,
+    "sensor": "s1",
+    "value": 226.5
+  },
+  {
+    "id": 152,
+    "sensor": "s2",
+    "value": 228.0
+  },
+  {
+    "id": 153,
+    "sensor": "s3",
+    "value": 229.5
+  },
+  {
+    "id": 154,
+    "sensor": "s4",
+    "value": 231.0
+  },
+  {
+    "id": 155,
+    "sensor": "s0",
+    "value": 232.5
+  },
+  {
+    "id": 156,
+    "sensor": "s1",
+    "value": 234.0
+  },
+  {
+    "id": 157,
+    "sensor": "s2",
+    "value": 235.5
+  },
+  {
+    "id": 158,
+    "sensor": "s3",
+    "value": 237.0
+  },
+  {
+    "id": 159,
+    "sensor": "s4",
+    "value": 238.5
+  },
+  {
+    "id": 160,
+    "sensor": "s0",
+    "value": 240.0
+  },
+  {
+    "id": 161,
+    "sensor": "s1",
+    "value": 241.5
+  },
+  {
+    "id": 162,
+    "sensor": "s2",
+    "value": 243.0
+  },
+  {
+    "id": 163,
+    "sensor": "s3",
+    "value": 244.5
+  },
+  {
+    "id": 164,
+    "sensor": "s4",
+    "value": 246.0
+  },
+  {
+    "id": 165,
+    "sensor": "s0",
+    "value": 247.5
+  },
+  {
+    "id": 166,
+    "sensor": "s1",
+    "value": 249.0
+  },
+  {
+    "id": 167,
+    "sensor": "s2",
+    "value": 250.5
+  },
+  {
+    "id": 168,
+    "sensor": "s3",
+    "value": 252.0
+  },
+  {
+    "id": 169,
+    "sensor": "s4",
+    "value": 253.5
+  },
+  {
+    "id": 170,
+    "sensor": "s0",
+    "value": 255.0
+  },
+  {
+    "id": 171,
+    "sensor": "s1",
+    "value": 256.5
+  },
+  {
+    "id": 172,
+    "sensor": "s2",
+    "value": 258.0
+  },
+  {
+    "id": 173,
+    "sensor": "s3",
+    "value": 259.5
+  },
+  {
+    "id": 174,
+    "sensor": "s4",
+    "value": 261.0
+  },
+  {
+    "id": 175,
+    "sensor": "s0",
+    "value": 262.5
+  },
+  {
+    "id": 176,
+    "sensor": "s1",
+    "value": 264.0
+  },
+  {
+    "id": 177,
+    "sensor": "s2",
+    "value": 265.5
+  },
+  {
+    "id": 178,
+    "sensor": "s3",
+    "value": 267.0
+  },
+  {
+    "id": 179,
+    "sensor": "s4",
+    "value": 268.5
+  },
+  {
+    "id": 180,
+    "sensor": "s0",
+    "value": 270.0
+  },
+  {
+    "id": 181,
+    "sensor": "s1",
+    "value": 271.5
+  },
+  {
+    "id": 182,
+    "sensor": "s2",
+    "value": 273.0
+  },
+  {
+    "id": 183,
+    "sensor": "s3",
+    "value": 274.5
+  },
+  {
+    "id": 184,
+    "sensor": "s4",
+    "value": 276.0
+  },
+  {
+    "id": 185,
+    "sensor": "s0",
+    "value": 277.5
+  },
+  {
+    "id": 186,
+    "sensor": "s1",
+    "value": 279.0
+  },
+  {
+    "id": 187,
+    "sensor": "s2",
+    "value": 280.5
+  },
+  {
+    "id": 188,
+    "sensor": "s3",
+    "value": 282.0
+  },
+  {
+    "id": 189,
+    "sensor": "s4",
+    "value": 283.5
+  },
+  {
+    "id": 190,
+    "sensor": "s0",
+    "value": 285.0
+  },
+  {
+    "id": 191,
+    "sensor": "s1",
+    "value": 286.5
+  },
+  {
+    "id": 192,
+    "sensor": "s2",
+    "value": 288.0
+  },
+  {
+    "id": 193,
+    "sensor": "s3",
+    "value": 289.5
+  },
+  {
+    "id": 194,
+    "sensor": "s4",
+    "value": 291.0
+  },
+  {
+    "id": 195,
+    "sensor": "s0",
+    "value": 292.5
+  },
+  {
+    "id": 196,
+    "sensor": "s1",
+    "value": 294.0
+  },
+  {
+    "id": 197,
+    "sensor": "s2",
+    "value": 295.5
+  },
+  {
+    "id": 198,
+    "sensor": "s3",
+    "value": 297.0
+  },
+  {
+    "id": 199,
+    "sensor": "s4",
+    "value": 298.5
+  }
+]

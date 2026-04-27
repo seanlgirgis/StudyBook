@@ -1,0 +1,1402 @@
+[
+  {
+    "id": 0,
+    "sensor": "s0",
+    "value": 0.0,
+    "value_doubled": 0.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 1,
+    "sensor": "s1",
+    "value": 1.5,
+    "value_doubled": 3.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 2,
+    "sensor": "s2",
+    "value": 3.0,
+    "value_doubled": 6.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 3,
+    "sensor": "s3",
+    "value": 4.5,
+    "value_doubled": 9.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 4,
+    "sensor": "s4",
+    "value": 6.0,
+    "value_doubled": 12.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 5,
+    "sensor": "s0",
+    "value": 7.5,
+    "value_doubled": 15.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 6,
+    "sensor": "s1",
+    "value": 9.0,
+    "value_doubled": 18.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 7,
+    "sensor": "s2",
+    "value": 10.5,
+    "value_doubled": 21.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 8,
+    "sensor": "s3",
+    "value": 12.0,
+    "value_doubled": 24.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 9,
+    "sensor": "s4",
+    "value": 13.5,
+    "value_doubled": 27.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 10,
+    "sensor": "s0",
+    "value": 15.0,
+    "value_doubled": 30.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 11,
+    "sensor": "s1",
+    "value": 16.5,
+    "value_doubled": 33.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 12,
+    "sensor": "s2",
+    "value": 18.0,
+    "value_doubled": 36.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 13,
+    "sensor": "s3",
+    "value": 19.5,
+    "value_doubled": 39.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 14,
+    "sensor": "s4",
+    "value": 21.0,
+    "value_doubled": 42.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 15,
+    "sensor": "s0",
+    "value": 22.5,
+    "value_doubled": 45.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 16,
+    "sensor": "s1",
+    "value": 24.0,
+    "value_doubled": 48.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 17,
+    "sensor": "s2",
+    "value": 25.5,
+    "value_doubled": 51.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 18,
+    "sensor": "s3",
+    "value": 27.0,
+    "value_doubled": 54.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 19,
+    "sensor": "s4",
+    "value": 28.5,
+    "value_doubled": 57.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 20,
+    "sensor": "s0",
+    "value": 30.0,
+    "value_doubled": 60.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 21,
+    "sensor": "s1",
+    "value": 31.5,
+    "value_doubled": 63.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 22,
+    "sensor": "s2",
+    "value": 33.0,
+    "value_doubled": 66.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 23,
+    "sensor": "s3",
+    "value": 34.5,
+    "value_doubled": 69.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 24,
+    "sensor": "s4",
+    "value": 36.0,
+    "value_doubled": 72.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 25,
+    "sensor": "s0",
+    "value": 37.5,
+    "value_doubled": 75.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 26,
+    "sensor": "s1",
+    "value": 39.0,
+    "value_doubled": 78.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 27,
+    "sensor": "s2",
+    "value": 40.5,
+    "value_doubled": 81.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 28,
+    "sensor": "s3",
+    "value": 42.0,
+    "value_doubled": 84.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 29,
+    "sensor": "s4",
+    "value": 43.5,
+    "value_doubled": 87.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 30,
+    "sensor": "s0",
+    "value": 45.0,
+    "value_doubled": 90.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 31,
+    "sensor": "s1",
+    "value": 46.5,
+    "value_doubled": 93.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 32,
+    "sensor": "s2",
+    "value": 48.0,
+    "value_doubled": 96.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 33,
+    "sensor": "s3",
+    "value": 49.5,
+    "value_doubled": 99.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 34,
+    "sensor": "s4",
+    "value": 51.0,
+    "value_doubled": 102.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 35,
+    "sensor": "s0",
+    "value": 52.5,
+    "value_doubled": 105.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 36,
+    "sensor": "s1",
+    "value": 54.0,
+    "value_doubled": 108.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 37,
+    "sensor": "s2",
+    "value": 55.5,
+    "value_doubled": 111.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 38,
+    "sensor": "s3",
+    "value": 57.0,
+    "value_doubled": 114.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 39,
+    "sensor": "s4",
+    "value": 58.5,
+    "value_doubled": 117.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 40,
+    "sensor": "s0",
+    "value": 60.0,
+    "value_doubled": 120.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 41,
+    "sensor": "s1",
+    "value": 61.5,
+    "value_doubled": 123.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 42,
+    "sensor": "s2",
+    "value": 63.0,
+    "value_doubled": 126.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 43,
+    "sensor": "s3",
+    "value": 64.5,
+    "value_doubled": 129.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 44,
+    "sensor": "s4",
+    "value": 66.0,
+    "value_doubled": 132.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 45,
+    "sensor": "s0",
+    "value": 67.5,
+    "value_doubled": 135.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 46,
+    "sensor": "s1",
+    "value": 69.0,
+    "value_doubled": 138.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 47,
+    "sensor": "s2",
+    "value": 70.5,
+    "value_doubled": 141.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 48,
+    "sensor": "s3",
+    "value": 72.0,
+    "value_doubled": 144.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 49,
+    "sensor": "s4",
+    "value": 73.5,
+    "value_doubled": 147.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 50,
+    "sensor": "s0",
+    "value": 75.0,
+    "value_doubled": 150.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 51,
+    "sensor": "s1",
+    "value": 76.5,
+    "value_doubled": 153.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 52,
+    "sensor": "s2",
+    "value": 78.0,
+    "value_doubled": 156.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 53,
+    "sensor": "s3",
+    "value": 79.5,
+    "value_doubled": 159.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 54,
+    "sensor": "s4",
+    "value": 81.0,
+    "value_doubled": 162.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 55,
+    "sensor": "s0",
+    "value": 82.5,
+    "value_doubled": 165.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 56,
+    "sensor": "s1",
+    "value": 84.0,
+    "value_doubled": 168.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 57,
+    "sensor": "s2",
+    "value": 85.5,
+    "value_doubled": 171.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 58,
+    "sensor": "s3",
+    "value": 87.0,
+    "value_doubled": 174.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 59,
+    "sensor": "s4",
+    "value": 88.5,
+    "value_doubled": 177.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 60,
+    "sensor": "s0",
+    "value": 90.0,
+    "value_doubled": 180.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 61,
+    "sensor": "s1",
+    "value": 91.5,
+    "value_doubled": 183.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 62,
+    "sensor": "s2",
+    "value": 93.0,
+    "value_doubled": 186.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 63,
+    "sensor": "s3",
+    "value": 94.5,
+    "value_doubled": 189.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 64,
+    "sensor": "s4",
+    "value": 96.0,
+    "value_doubled": 192.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 65,
+    "sensor": "s0",
+    "value": 97.5,
+    "value_doubled": 195.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 66,
+    "sensor": "s1",
+    "value": 99.0,
+    "value_doubled": 198.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 67,
+    "sensor": "s2",
+    "value": 100.5,
+    "value_doubled": 201.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 68,
+    "sensor": "s3",
+    "value": 102.0,
+    "value_doubled": 204.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 69,
+    "sensor": "s4",
+    "value": 103.5,
+    "value_doubled": 207.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 70,
+    "sensor": "s0",
+    "value": 105.0,
+    "value_doubled": 210.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 71,
+    "sensor": "s1",
+    "value": 106.5,
+    "value_doubled": 213.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 72,
+    "sensor": "s2",
+    "value": 108.0,
+    "value_doubled": 216.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 73,
+    "sensor": "s3",
+    "value": 109.5,
+    "value_doubled": 219.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 74,
+    "sensor": "s4",
+    "value": 111.0,
+    "value_doubled": 222.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 75,
+    "sensor": "s0",
+    "value": 112.5,
+    "value_doubled": 225.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 76,
+    "sensor": "s1",
+    "value": 114.0,
+    "value_doubled": 228.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 77,
+    "sensor": "s2",
+    "value": 115.5,
+    "value_doubled": 231.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 78,
+    "sensor": "s3",
+    "value": 117.0,
+    "value_doubled": 234.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 79,
+    "sensor": "s4",
+    "value": 118.5,
+    "value_doubled": 237.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 80,
+    "sensor": "s0",
+    "value": 120.0,
+    "value_doubled": 240.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 81,
+    "sensor": "s1",
+    "value": 121.5,
+    "value_doubled": 243.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 82,
+    "sensor": "s2",
+    "value": 123.0,
+    "value_doubled": 246.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 83,
+    "sensor": "s3",
+    "value": 124.5,
+    "value_doubled": 249.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 84,
+    "sensor": "s4",
+    "value": 126.0,
+    "value_doubled": 252.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 85,
+    "sensor": "s0",
+    "value": 127.5,
+    "value_doubled": 255.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 86,
+    "sensor": "s1",
+    "value": 129.0,
+    "value_doubled": 258.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 87,
+    "sensor": "s2",
+    "value": 130.5,
+    "value_doubled": 261.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 88,
+    "sensor": "s3",
+    "value": 132.0,
+    "value_doubled": 264.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 89,
+    "sensor": "s4",
+    "value": 133.5,
+    "value_doubled": 267.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 90,
+    "sensor": "s0",
+    "value": 135.0,
+    "value_doubled": 270.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 91,
+    "sensor": "s1",
+    "value": 136.5,
+    "value_doubled": 273.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 92,
+    "sensor": "s2",
+    "value": 138.0,
+    "value_doubled": 276.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 93,
+    "sensor": "s3",
+    "value": 139.5,
+    "value_doubled": 279.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 94,
+    "sensor": "s4",
+    "value": 141.0,
+    "value_doubled": 282.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 95,
+    "sensor": "s0",
+    "value": 142.5,
+    "value_doubled": 285.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 96,
+    "sensor": "s1",
+    "value": 144.0,
+    "value_doubled": 288.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 97,
+    "sensor": "s2",
+    "value": 145.5,
+    "value_doubled": 291.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 98,
+    "sensor": "s3",
+    "value": 147.0,
+    "value_doubled": 294.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 99,
+    "sensor": "s4",
+    "value": 148.5,
+    "value_doubled": 297.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 100,
+    "sensor": "s0",
+    "value": 150.0,
+    "value_doubled": 300.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 101,
+    "sensor": "s1",
+    "value": 151.5,
+    "value_doubled": 303.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 102,
+    "sensor": "s2",
+    "value": 153.0,
+    "value_doubled": 306.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 103,
+    "sensor": "s3",
+    "value": 154.5,
+    "value_doubled": 309.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 104,
+    "sensor": "s4",
+    "value": 156.0,
+    "value_doubled": 312.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 105,
+    "sensor": "s0",
+    "value": 157.5,
+    "value_doubled": 315.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 106,
+    "sensor": "s1",
+    "value": 159.0,
+    "value_doubled": 318.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 107,
+    "sensor": "s2",
+    "value": 160.5,
+    "value_doubled": 321.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 108,
+    "sensor": "s3",
+    "value": 162.0,
+    "value_doubled": 324.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 109,
+    "sensor": "s4",
+    "value": 163.5,
+    "value_doubled": 327.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 110,
+    "sensor": "s0",
+    "value": 165.0,
+    "value_doubled": 330.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 111,
+    "sensor": "s1",
+    "value": 166.5,
+    "value_doubled": 333.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 112,
+    "sensor": "s2",
+    "value": 168.0,
+    "value_doubled": 336.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 113,
+    "sensor": "s3",
+    "value": 169.5,
+    "value_doubled": 339.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 114,
+    "sensor": "s4",
+    "value": 171.0,
+    "value_doubled": 342.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 115,
+    "sensor": "s0",
+    "value": 172.5,
+    "value_doubled": 345.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 116,
+    "sensor": "s1",
+    "value": 174.0,
+    "value_doubled": 348.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 117,
+    "sensor": "s2",
+    "value": 175.5,
+    "value_doubled": 351.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 118,
+    "sensor": "s3",
+    "value": 177.0,
+    "value_doubled": 354.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 119,
+    "sensor": "s4",
+    "value": 178.5,
+    "value_doubled": 357.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 120,
+    "sensor": "s0",
+    "value": 180.0,
+    "value_doubled": 360.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 121,
+    "sensor": "s1",
+    "value": 181.5,
+    "value_doubled": 363.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 122,
+    "sensor": "s2",
+    "value": 183.0,
+    "value_doubled": 366.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 123,
+    "sensor": "s3",
+    "value": 184.5,
+    "value_doubled": 369.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 124,
+    "sensor": "s4",
+    "value": 186.0,
+    "value_doubled": 372.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 125,
+    "sensor": "s0",
+    "value": 187.5,
+    "value_doubled": 375.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 126,
+    "sensor": "s1",
+    "value": 189.0,
+    "value_doubled": 378.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 127,
+    "sensor": "s2",
+    "value": 190.5,
+    "value_doubled": 381.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 128,
+    "sensor": "s3",
+    "value": 192.0,
+    "value_doubled": 384.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 129,
+    "sensor": "s4",
+    "value": 193.5,
+    "value_doubled": 387.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 130,
+    "sensor": "s0",
+    "value": 195.0,
+    "value_doubled": 390.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 131,
+    "sensor": "s1",
+    "value": 196.5,
+    "value_doubled": 393.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 132,
+    "sensor": "s2",
+    "value": 198.0,
+    "value_doubled": 396.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 133,
+    "sensor": "s3",
+    "value": 199.5,
+    "value_doubled": 399.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 134,
+    "sensor": "s4",
+    "value": 201.0,
+    "value_doubled": 402.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 135,
+    "sensor": "s0",
+    "value": 202.5,
+    "value_doubled": 405.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 136,
+    "sensor": "s1",
+    "value": 204.0,
+    "value_doubled": 408.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 137,
+    "sensor": "s2",
+    "value": 205.5,
+    "value_doubled": 411.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 138,
+    "sensor": "s3",
+    "value": 207.0,
+    "value_doubled": 414.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 139,
+    "sensor": "s4",
+    "value": 208.5,
+    "value_doubled": 417.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 140,
+    "sensor": "s0",
+    "value": 210.0,
+    "value_doubled": 420.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 141,
+    "sensor": "s1",
+    "value": 211.5,
+    "value_doubled": 423.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 142,
+    "sensor": "s2",
+    "value": 213.0,
+    "value_doubled": 426.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 143,
+    "sensor": "s3",
+    "value": 214.5,
+    "value_doubled": 429.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 144,
+    "sensor": "s4",
+    "value": 216.0,
+    "value_doubled": 432.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 145,
+    "sensor": "s0",
+    "value": 217.5,
+    "value_doubled": 435.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 146,
+    "sensor": "s1",
+    "value": 219.0,
+    "value_doubled": 438.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 147,
+    "sensor": "s2",
+    "value": 220.5,
+    "value_doubled": 441.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 148,
+    "sensor": "s3",
+    "value": 222.0,
+    "value_doubled": 444.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 149,
+    "sensor": "s4",
+    "value": 223.5,
+    "value_doubled": 447.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 150,
+    "sensor": "s0",
+    "value": 225.0,
+    "value_doubled": 450.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 151,
+    "sensor": "s1",
+    "value": 226.5,
+    "value_doubled": 453.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 152,
+    "sensor": "s2",
+    "value": 228.0,
+    "value_doubled": 456.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 153,
+    "sensor": "s3",
+    "value": 229.5,
+    "value_doubled": 459.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 154,
+    "sensor": "s4",
+    "value": 231.0,
+    "value_doubled": 462.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 155,
+    "sensor": "s0",
+    "value": 232.5,
+    "value_doubled": 465.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 156,
+    "sensor": "s1",
+    "value": 234.0,
+    "value_doubled": 468.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 157,
+    "sensor": "s2",
+    "value": 235.5,
+    "value_doubled": 471.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 158,
+    "sensor": "s3",
+    "value": 237.0,
+    "value_doubled": 474.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 159,
+    "sensor": "s4",
+    "value": 238.5,
+    "value_doubled": 477.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 160,
+    "sensor": "s0",
+    "value": 240.0,
+    "value_doubled": 480.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 161,
+    "sensor": "s1",
+    "value": 241.5,
+    "value_doubled": 483.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 162,
+    "sensor": "s2",
+    "value": 243.0,
+    "value_doubled": 486.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 163,
+    "sensor": "s3",
+    "value": 244.5,
+    "value_doubled": 489.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 164,
+    "sensor": "s4",
+    "value": 246.0,
+    "value_doubled": 492.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 165,
+    "sensor": "s0",
+    "value": 247.5,
+    "value_doubled": 495.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 166,
+    "sensor": "s1",
+    "value": 249.0,
+    "value_doubled": 498.0,
+    "status": "NORMAL"
+  },
+  {
+    "id": 167,
+    "sensor": "s2",
+    "value": 250.5,
+    "value_doubled": 501.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 168,
+    "sensor": "s3",
+    "value": 252.0,
+    "value_doubled": 504.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 169,
+    "sensor": "s4",
+    "value": 253.5,
+    "value_doubled": 507.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 170,
+    "sensor": "s0",
+    "value": 255.0,
+    "value_doubled": 510.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 171,
+    "sensor": "s1",
+    "value": 256.5,
+    "value_doubled": 513.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 172,
+    "sensor": "s2",
+    "value": 258.0,
+    "value_doubled": 516.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 173,
+    "sensor": "s3",
+    "value": 259.5,
+    "value_doubled": 519.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 174,
+    "sensor": "s4",
+    "value": 261.0,
+    "value_doubled": 522.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 175,
+    "sensor": "s0",
+    "value": 262.5,
+    "value_doubled": 525.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 176,
+    "sensor": "s1",
+    "value": 264.0,
+    "value_doubled": 528.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 177,
+    "sensor": "s2",
+    "value": 265.5,
+    "value_doubled": 531.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 178,
+    "sensor": "s3",
+    "value": 267.0,
+    "value_doubled": 534.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 179,
+    "sensor": "s4",
+    "value": 268.5,
+    "value_doubled": 537.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 180,
+    "sensor": "s0",
+    "value": 270.0,
+    "value_doubled": 540.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 181,
+    "sensor": "s1",
+    "value": 271.5,
+    "value_doubled": 543.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 182,
+    "sensor": "s2",
+    "value": 273.0,
+    "value_doubled": 546.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 183,
+    "sensor": "s3",
+    "value": 274.5,
+    "value_doubled": 549.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 184,
+    "sensor": "s4",
+    "value": 276.0,
+    "value_doubled": 552.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 185,
+    "sensor": "s0",
+    "value": 277.5,
+    "value_doubled": 555.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 186,
+    "sensor": "s1",
+    "value": 279.0,
+    "value_doubled": 558.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 187,
+    "sensor": "s2",
+    "value": 280.5,
+    "value_doubled": 561.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 188,
+    "sensor": "s3",
+    "value": 282.0,
+    "value_doubled": 564.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 189,
+    "sensor": "s4",
+    "value": 283.5,
+    "value_doubled": 567.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 190,
+    "sensor": "s0",
+    "value": 285.0,
+    "value_doubled": 570.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 191,
+    "sensor": "s1",
+    "value": 286.5,
+    "value_doubled": 573.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 192,
+    "sensor": "s2",
+    "value": 288.0,
+    "value_doubled": 576.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 193,
+    "sensor": "s3",
+    "value": 289.5,
+    "value_doubled": 579.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 194,
+    "sensor": "s4",
+    "value": 291.0,
+    "value_doubled": 582.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 195,
+    "sensor": "s0",
+    "value": 292.5,
+    "value_doubled": 585.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 196,
+    "sensor": "s1",
+    "value": 294.0,
+    "value_doubled": 588.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 197,
+    "sensor": "s2",
+    "value": 295.5,
+    "value_doubled": 591.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 198,
+    "sensor": "s3",
+    "value": 297.0,
+    "value_doubled": 594.0,
+    "status": "ALERT"
+  },
+  {
+    "id": 199,
+    "sensor": "s4",
+    "value": 298.5,
+    "value_doubled": 597.0,
+    "status": "ALERT"
+  }
+]
