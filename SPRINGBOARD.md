@@ -226,7 +226,8 @@ Proj_development/   ← small personal utilities, no separate repos
 cd D:\Workarea\StudyBook\Proj_development\UniversalClipboardManager
 .\launch_clipboard.bat
 ```
-Hotkeys: `Ctrl+Shift+S` toggle window · `Ctrl+Alt+A` capture clipboard
+Hotkeys: `Ctrl+Shift+S` toggle window · `F11` capture clipboard (fallbacks: `Ctrl+Alt+S` / `Ctrl+Alt+A`)
+Remap: edit `settings.json` → restart app
 
 **Install/reinstall Windows startup shortcut** (run once after any move):
 ```powershell
