@@ -1,0 +1,59 @@
+services:
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile.optimized
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-studybook}
+      - DB_USER=${DB_USER:-pipeline}
+      - DB_PASSWORD=${DB_PASSWORD:?DB_PASSWORD must be set}
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - pipeline_data:/data
+    networks:
+      - internal
+    restart: on-failure:3
+
+  postgres:
+    image: postgres:16.2-alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME:-studybook}
+      POSTGRES_USER: ${DB_USER:-pipeline}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-pipeline} -d ${DB_NAME:-studybook}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - internal
+
+  redis:
+    image: redis:7.2.4-alpine
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - internal
+
+volumes:
+  postgres_data:
+  pipeline_data:
+
+networks:
+  internal:
+    driver: bridge
