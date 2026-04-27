@@ -229,6 +229,12 @@ tracks/08_databases/_setup/volumes/
 tracks/08_databases/practice/**/_artifacts/
 coding_challenges/index.xlsx
 
+# Windows shortcut files — machine-specific, meaningless in git
+*.lnk
+
+# Job application generated docx binaries — large, grow unboundedly
+data/jobs/**/*.docx
+
 # Ignore local Claude worktrees (can contain nested git repos)
 .claude/worktrees/
 .claude/worktrees/*
