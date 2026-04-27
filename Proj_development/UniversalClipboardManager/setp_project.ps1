@@ -1,28 +1,50 @@
 param (
-    [string]$ProjectName = "UniversalClipboardManager"
+    [string]$ProjectName = "UniversalClipboardManager",
+    [string]$InstallRoot = "C:\scripts"
 )
 
 # --- Define Paths ---
-$pythonBaseDir = "C:\pyver\py312"
-$baseDir = $PSScriptRoot
-$projectDir = $PSScriptRoot
-$venvPath = "C:\py_venv\commonEnv"
-$pythonExecutable = Join-Path -Path $pythonBaseDir -ChildPath "python.exe"
+$sourceDir = $PSScriptRoot
+$projectDir = Join-Path -Path $InstallRoot -ChildPath $ProjectName
+$venvPath = Join-Path -Path $projectDir -ChildPath ".venv"
+$pythonExecutable = "python"
 $venvPythonExecutable = Join-Path -Path $venvPath -ChildPath "Scripts\python.exe"
 $pipExecutable = Join-Path -Path $venvPath -ChildPath "Scripts\pip.exe"
+$requirementsFile = Join-Path -Path $sourceDir -ChildPath "requirements.txt"
+
+$filesToCopy = @(
+    "clipboard_app.py",
+    "clipboard_data.json",
+    "env_setter.ps1",
+    "launch_clipboard.bat",
+    "run_app.bat",
+    "install_startup.ps1",
+    "cleanup_legacy_install.ps1",
+    "requirements.txt"
+)
 
 # --- Check for existing directory and create if not found ---
 if (-not (Test-Path $projectDir)) {
     Write-Host "Creating project directory: $projectDir"
-    New-Item -Path $projectDir -ItemType Directory | Out-Null
+    New-Item -Path $projectDir -ItemType Directory -Force | Out-Null
 }
 else {
     Write-Host "Project directory already exists: $projectDir"
 }
 
+# --- Copy project runtime files into install directory ---
+Write-Host "Copying project files to $projectDir..."
+foreach ($file in $filesToCopy) {
+    $src = Join-Path $sourceDir $file
+    if (Test-Path $src) {
+        Copy-Item -Path $src -Destination $projectDir -Force
+    }
+}
+Write-Host "Project files synchronized."
+
 # --- Create virtual environment using the specified Python version ---
 if (-not (Test-Path $venvPath)) {
-    Write-Host "Creating virtual environment using Python at $pythonBaseDir..."
+    Write-Host "Creating virtual environment in project directory ($venvPath)..."
     & $pythonExecutable -m venv $venvPath
     Write-Host "Virtual environment created."
 }
@@ -32,13 +54,16 @@ else {
 
 # --- Install required packages ---
 Write-Host "Installing required packages..."
-& $pipExecutable install pyperclip pynput PyQt6
+if (Test-Path $requirementsFile) {
+    & $pipExecutable install -r $requirementsFile
+}
+else {
+    & $pipExecutable install pyperclip pynput PyQt6
+}
 Write-Host "Installation completed. The project is ready!"
 
 # --- Instructions for the user ---
 Write-Host "Project setup complete!"
-Write-Host "1. Copy your clipboard_app.py and clipboard_data.json files to $projectDir"
-Write-Host "2. Create a batch file to run the app at startup. Example: start_app.bat"
-Write-Host "   @echo off"
-Write-Host "   start /b $venvPythonExecutable $projectDir\clipboard_app.py"
-Write-Host "3. Place the batch file in the Windows Startup folder."
+Write-Host "Install directory: $projectDir"
+Write-Host "Run the app with: $projectDir\\launch_clipboard.bat"
+Write-Host "Configure auto-start with: $projectDir\\install_startup.ps1"

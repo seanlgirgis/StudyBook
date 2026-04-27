@@ -1,8 +1,19 @@
 # deploy.ps1
-# Deploys the Universal Clipboard Manager to C:\Scripts\UniversalClipboardManager
+# Deploys the Universal Clipboard Manager to C:\scripts\UniversalClipboardManager
 
-$TargetDir = "C:\Scripts\UniversalClipboardManager"
 $SourceDir = $PSScriptRoot
+$TargetDir = "C:\scripts\UniversalClipboardManager"
+$FilesToCopy = @(
+    "clipboard_app.py",
+    "clipboard_data.json",
+    "settings.json",
+    "env_setter.ps1",
+    "launch_clipboard.bat",
+    "run_app.bat",
+    "install_startup.ps1",
+    "cleanup_legacy_install.ps1",
+    "requirements.txt"
+)
 
 Write-Host "Deploying Universal Clipboard Manager..." -ForegroundColor Cyan
 Write-Host "Source: $SourceDir"
@@ -18,10 +29,13 @@ else {
 }
 
 # 2. Copy Application Files
-Copy-Item -Path "$SourceDir\clipboard_app.py" -Destination $TargetDir -Force
-Copy-Item -Path "$SourceDir\launch_clipboard.bat" -Destination $TargetDir -Force
-Copy-Item -Path "$SourceDir\env_setter.ps1" -Destination $TargetDir -Force
-Write-Host "Copied application files (including environment setter)." -ForegroundColor Green
+foreach ($file in $FilesToCopy) {
+    $sourcePath = Join-Path $SourceDir $file
+    if (Test-Path $sourcePath) {
+        Copy-Item -Path $sourcePath -Destination $TargetDir -Force
+    }
+}
+Write-Host "Copied application files." -ForegroundColor Green
 
 # 3. Handle Data File (Preserve existing data in target if present, else copy from source, else init)
 $TargetDataFile = "$TargetDir\clipboard_data.json"

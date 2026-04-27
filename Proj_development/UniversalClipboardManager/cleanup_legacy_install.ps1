@@ -2,6 +2,7 @@
 # Detects and removes older/conflicting installations of Universal Clipboard Manager
 
 Write-Host "Checking for legacy installations..." -ForegroundColor Cyan
+$projectRootPattern = [regex]::Escape($PSScriptRoot)
 
 # 1. Identify Running Processes
 $processes = Get-WmiObject Win32_Process | Where-Object { $_.CommandLine -match "clipboard_app.py" }
@@ -11,8 +12,8 @@ if ($processes) {
         $cmd = $proc.CommandLine
         $pid_ = $proc.ProcessId
         
-        # Check if this is the "official" one (using commonEnv) or a rogue one
-        if ($cmd -match "commonEnv") {
+        # Check if this is the "official" one (running from this project) or a rogue one
+        if ($cmd -match $projectRootPattern) {
             Write-Host "Found likely CURRENT process (PID: $pid_): $cmd" -ForegroundColor Green
             # We can choose to leave it or kill it. Let's kill it to ensure restart.
             Stop-Process -Id $pid_ -Force

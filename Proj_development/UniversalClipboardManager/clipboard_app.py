@@ -20,6 +20,74 @@ from PyQt6.QtWidgets import (
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Define the absolute path to the data file
 DATABASE_PATH = os.path.join(SCRIPT_DIR, 'clipboard_data.json')
+SETTINGS_PATH = os.path.join(SCRIPT_DIR, 'settings.json')
+
+# Hotkey presets. Keep a fallback for each action in case a shortcut is already
+# reserved by another app on the system.
+DEFAULT_SHOW_WINDOW_HOTKEYS = [
+    '<ctrl>+<shift>+s',  # Primary: Show/hide picker window
+    '<ctrl>+<alt>+s',    # Fallback
+]
+
+DEFAULT_CAPTURE_CLIPBOARD_HOTKEYS = [
+    '<f11>',             # Primary: Save current clipboard text into manager
+    '<ctrl>+<alt>+a',    # Fallback
+]
+
+
+def load_settings():
+    """
+    Loads hotkey settings from settings.json.
+    Falls back to defaults if the file is missing or malformed.
+    """
+    defaults = {
+        "show_window_hotkeys": list(DEFAULT_SHOW_WINDOW_HOTKEYS),
+        "capture_clipboard_hotkeys": list(DEFAULT_CAPTURE_CLIPBOARD_HOTKEYS),
+    }
+    try:
+        with open(SETTINGS_PATH, 'r') as f:
+            raw_settings = json.load(f)
+            if not isinstance(raw_settings, dict):
+                return defaults
+    except (FileNotFoundError, json.JSONDecodeError):
+        return defaults
+
+    def normalize_hotkeys(value, fallback):
+        if isinstance(value, str):
+            value = [value]
+        if not isinstance(value, list):
+            return list(fallback)
+
+        cleaned = []
+        for item in value:
+            if isinstance(item, str):
+                hotkey = item.strip().lower()
+                if hotkey:
+                    cleaned.append(hotkey)
+        return cleaned if cleaned else list(fallback)
+
+    return {
+        "show_window_hotkeys": normalize_hotkeys(
+            raw_settings.get("show_window_hotkeys"),
+            DEFAULT_SHOW_WINDOW_HOTKEYS
+        ),
+        "capture_clipboard_hotkeys": normalize_hotkeys(
+            raw_settings.get("capture_clipboard_hotkeys"),
+            DEFAULT_CAPTURE_CLIPBOARD_HOTKEYS
+        ),
+    }
+
+
+def ensure_settings_file():
+    """Create settings.json with defaults if it does not exist yet."""
+    if os.path.exists(SETTINGS_PATH):
+        return
+    default_settings = {
+        "show_window_hotkeys": DEFAULT_SHOW_WINDOW_HOTKEYS,
+        "capture_clipboard_hotkeys": DEFAULT_CAPTURE_CLIPBOARD_HOTKEYS,
+    }
+    with open(SETTINGS_PATH, 'w') as f:
+        json.dump(default_settings, f, indent=4)
 
 def load_clipboard_data():
     """
@@ -58,17 +126,20 @@ class HotkeyThread(QThread):
     This runs in the 'background' of the app, constantly watching the keyboard
     without freezing the window you see on screen.
     """
-    def __init__(self, signals):
+    def __init__(self, signals, show_hotkeys, capture_hotkeys):
         super().__init__()
         self.signals = signals
         self.listener = None
+        self.show_hotkeys = show_hotkeys
+        self.capture_hotkeys = capture_hotkeys
 
     def run(self):
         # We define which keys do what here
-        hotkeys = {
-            '<ctrl>+<shift>+s': self.signals.toggle_visibility.emit, # Ctrl+Shift+S -> Toggle
-            '<ctrl>+<alt>+a': self.signals.add_from_clipboard.emit,   # Ctrl+Alt+A   -> Capture
-        }
+        hotkeys = {}
+        for hk in self.show_hotkeys:
+            hotkeys[hk] = self.signals.toggle_visibility.emit
+        for hk in self.capture_hotkeys:
+            hotkeys[hk] = self.signals.add_from_clipboard.emit
         # Start listening to the keyboard globally
         with keyboard.GlobalHotKeys(hotkeys) as listener:
             self.listener = listener
@@ -211,6 +282,10 @@ class ClipboardManagerApp(QMainWindow):
     """
     def __init__(self):
         super().__init__()
+        ensure_settings_file()
+        self.settings = load_settings()
+        self.show_hotkeys = self.settings["show_window_hotkeys"]
+        self.capture_hotkeys = self.settings["capture_clipboard_hotkeys"]
         self.setWindowTitle("Universal Clipboard Manager")
         self.setGeometry(100, 100, 450, 600) # (X, Y, Width, Height)
 
@@ -249,13 +324,25 @@ class ClipboardManagerApp(QMainWindow):
         
         self.main_layout.addLayout(self.bottom_bar)
 
+        # Quick shortcut reminder so it's clear which action each hotkey runs.
+        self.shortcuts_hint = QLabel(
+            "Show/Hide: " + ", ".join(self.show_hotkeys) + "  |  "
+            "Capture Clipboard: " + ", ".join(self.capture_hotkeys)
+        )
+        self.shortcuts_hint.setStyleSheet("color: #666; font-size: 11px;")
+        self.main_layout.addWidget(self.shortcuts_hint)
+
         # 3. INITIAL DATA: Load snippets from the file and show them.
         self.items = load_clipboard_data()
         self.refresh_snippets()
 
         # 4. HOTKEYS SETUP: Start the background listener.
         self.hotkey_signals = HotkeySignals()
-        self.hotkey_thread = HotkeyThread(self.hotkey_signals)
+        self.hotkey_thread = HotkeyThread(
+            self.hotkey_signals,
+            self.show_hotkeys,
+            self.capture_hotkeys
+        )
         # Connect signals (messages) to our functions
         self.hotkey_signals.toggle_visibility.connect(self.toggle_visibility)
         self.hotkey_signals.add_from_clipboard.connect(self.add_from_clipboard)

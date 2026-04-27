@@ -1,0 +1,10 @@
+{
+  "show_window_hotkeys": [
+    "<ctrl>+<shift>+s",
+    "<ctrl>+<alt>+s"
+  ],
+  "capture_clipboard_hotkeys": [
+    "<f11>",
+    "<ctrl>+<alt>+a"
+  ]
+}
