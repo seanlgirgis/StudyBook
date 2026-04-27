@@ -3,59 +3,45 @@
 ## Run Metadata
 
 - Date: 2026-04-27
-- Task ID: TB-20260427-03
-- Task Type: FIX
+- Task ID: TB-20260427-04
+- Task Type: SYNC
 - Status: DONE
 
 ## Factual Summary
 
-- Added `tutorials/06_aws_emr/capstone/fix_emr_serverless_role.ps1` to automate EMR Serverless pass-role fix in the `study` account:
-  - validates active account and target S3 bucket,
-  - creates (or updates) execution role trust for `emr-serverless.amazonaws.com`,
-  - applies inline S3 policy for capstone prefixes (`raw/weblogs`, `processed/weblogs`, `emr-scripts`, `emr-serverless-logs`),
-  - sets shell env vars (`AWS_PROFILE`, `AWS_REGION`, `EMR_S3_BUCKET`, `EMR_SERVERLESS_ROLE_ARN`).
-- Executed the script successfully for:
-  - profile: `study`
-  - region: `us-east-1`
-  - bucket: `citi-telemetry-data-lake-dev`
-- Provisioned role:
-  - `arn:aws:iam::357811130281:role/StudyBookEMRServerlessExecutionRole`
-- Verified role and policy exist in account.
-
-## Files Created
-
-- `tutorials/06_aws_emr/capstone/fix_emr_serverless_role.ps1`
+- Read required startup/control files in mandated order from `AGENTS.md`/`CONTROL_PROTOCOL.md`.
+- Confirmed `SPRINGBOARD.md` already exists and matches an intent-first single-entry launchpad model.
+- Persisted Springboard memory in durable shared artifacts so future sessions recover this behavior from repo files (not chat):
+  - added Springboard-first guidance in `agents/shared/context_index.md`,
+  - logged durable decision `DEC-030` in `agents/shared/decision_log.md`,
+  - registered this run in `agents/shared/task_register.md`,
+  - updated review stamp in `agents/shared/open_loops.md`.
+- Executed session bootstrap command `env_setter.ps1 -NonInteractive` and verified environment loaded.
 
 ## Files Modified
 
+- `agents/shared/context_index.md`
+- `agents/shared/decision_log.md`
 - `agents/shared/task_register.md`
 - `agents/shared/open_loops.md`
 - `agents/shared/agent_status.md`
 
 ## Validation Commands
 
-- `powershell -NoProfile -ExecutionPolicy Bypass -File .\\capstone\\fix_emr_serverless_role.ps1 -Profile study -Region us-east-1 -Bucket citi-telemetry-data-lake-dev`
-- `aws iam get-role --profile study --role-name StudyBookEMRServerlessExecutionRole --query "Role.Arn" --output text`
-- `aws iam get-role-policy --profile study --role-name StudyBookEMRServerlessExecutionRole --policy-name StudyBookEMRServerlessS3Policy --output json`
+- `. .\\env_setter.ps1 -NonInteractive`
 
 ## Validation Outcomes
 
-- Fix script: PASS.
-- Execution role exists with expected same-account ARN.
-- Inline S3 policy attached with expected bucket/prefix scope.
+- PASS: environment initialized successfully (`Secrets Loaded: True`, expected StudyBook root and venv resolved).
 
 ## Assumptions
 
-- User intends to run capstone orchestration using `study` as canonical profile and `citi-telemetry-data-lake-dev` as capstone bucket.
+- User request "persist the idea of the springboard in agent memory" means updating shared durable memory/control artifacts, not changing Springboard content itself.
 
 ## Risks
 
-- Low: IAM role propagation can take short time; if immediate `StartJobRun` retry fails, rerun once after ~30-60 seconds.
-- Local agent runtime lacked `boto3`, so end-to-end `orchestrate.py` was not executed from this agent shell (user shell already has working boto3).
+- Low: startup-order documents now include both Springboard-first intent navigation and protocol-first control sequencing; collaborators should continue following explicit startup order in `AGENTS.md` while using Springboard as primary navigation launchpad.
 
 ## Next Step
 
-- In user shell, set:
-  - `$env:EMR_SERVERLESS_ROLE_ARN="arn:aws:iam::357811130281:role/StudyBookEMRServerlessExecutionRole"`
-- Then rerun:
-  - `python .\\capstone\\orchestrate.py`
+- Future runs should open `SPRINGBOARD.md` first for intent-based routing, then continue normal control-file startup sequence.

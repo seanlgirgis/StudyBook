@@ -11,6 +11,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 ## Canonical Control Files
 
 - `AGENTS.md`
+- `SPRINGBOARD.md` ← **Intent-first launchpad (read first for navigation)**
 - `CONTROL_PROTOCOL.md`
 - `agents/shared/pending_task.md`
 - `agents/shared/agent_status.md`
@@ -28,6 +29,7 @@ Purpose: compact durable memory map for fast session bootstrap.
 - Use `Allowed Scope: bounded` by default for velocity.
 - Use `Reasoning Depth: deep` for migration and architecture decisions.
 - Stop only for high-risk ambiguity, not for routine implementation details.
+- **Springboard-first navigation invariant (2026-04-27): open `SPRINGBOARD.md` first to navigate StudyBook by intent ("I want to...") before deeper protocol/docs.**
 - Canonical runtime target is `D:\Workarea\StudyBook` (deprecated path deleted).
 - **Session startup invariant (2026-04-26): for any work in `D:\Workarea\StudyBook`, run `.\env_setter.ps1 -NonInteractive` first (use `.\env_setter.ps1` only for interactive fallback).**
 - Standing owner directive (2026-04-02): treat encrypted StudyBook secrets as system of record for sensitive values; use seed-backed secret updates by default and avoid storing sensitive values in tracked files/chat.

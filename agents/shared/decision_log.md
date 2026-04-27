@@ -244,3 +244,11 @@ Use this file for durable technical decisions that affect future runs.
 - Rationale: preserves durable orientation after root migration and reduces startup drift from stale `D:\StudyBook` references
 - Alternatives considered: leave historical memory files unchanged; rely on ad-hoc chat summaries instead of repository memory updates
 - Impacted files: agents/AGENT_CHEATSHEET.md, agents/QWEN_AGENT_HANDOFF.md, agents/STUDYBOOK_FAST_GUIDE.md, agents/shared/context_index.md, agents/shared/user_profile.md, agents/shared/pending_task.md, agents/shared/open_loops.md, agents/shared/task_register.md, agents/shared/agent_status.md
+
+- Date: 2026-04-27
+- Decision ID: DEC-030
+- Task ID: TB-20260427-04
+- Decision: persist `SPRINGBOARD.md` as the primary StudyBook session launchpad and intent-first navigation index for all future runs
+- Rationale: reduces startup latency and path/command recall burden by making a single scannable "I want to..." entrypoint the default first read
+- Alternatives considered: keep navigation split across multiple docs only; rely on chat/session memory for startup orientation
+- Impacted files: SPRINGBOARD.md, agents/shared/context_index.md, agents/shared/decision_log.md, agents/shared/task_register.md, agents/shared/open_loops.md, agents/shared/agent_status.md

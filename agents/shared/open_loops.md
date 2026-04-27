@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-27 (EMR IAM role automation follow-up)
+Last reviewed: 2026-04-27 (Springboard memory persistence update)
 
 ## Status Meanings
 
