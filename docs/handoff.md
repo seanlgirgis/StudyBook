@@ -323,6 +323,7 @@ New content to add?
 
 | File | Why It Matters |
 |------|---------------|
+| `SPRINGBOARD.md` | **Start here** — purpose-driven navigation hub ("I want to...") |
 | `CONTROL_PROTOCOL.md` | Agent operating rules — 15 clauses |
 | `env_setter.ps1` | Mandatory session bootstrap — Java, venv, secrets |
 | `agents/shared/context_index.md` | Fast session orientation — read first |
