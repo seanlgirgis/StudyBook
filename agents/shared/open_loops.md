@@ -236,3 +236,4 @@ Last reviewed: 2026-04-24 (permission override policy sync)
 | LOOP-155 | TB-20260426-12 | Build fresh Airflow Docker tutorial pack under tutorials/03_apache_airflow_docker/docker | closed | none | 2026-04-26 |
 | LOOP-156 | TB-20260426-13 | Rename tutorial Airflow Docker stack to docker_airflow and remove legacy citi_airflow resources | closed | none | 2026-04-26 |
 | LOOP-157 | TB-20260426-14 | Create beginner zero-to-hero tutorial pack for airflow docker with grouped compose and handoff card | closed | none | 2026-04-26 |
+| LOOP-158 | TB-20260426-15 | Add safe destroy action for grouped Airflow compose helper | closed | none | 2026-04-26 |

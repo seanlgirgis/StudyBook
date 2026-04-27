@@ -13,6 +13,8 @@ Commands:
 - `./scripts/deploy_groups.ps1 up`
 - `./scripts/deploy_groups.ps1 down`
 - `./scripts/deploy_groups.ps1 ps`
+- `./scripts/deploy_groups.ps1 destroy` (safe prompt before deleting volumes/data)
+- `./scripts/deploy_groups.ps1 destroy -Force` (no prompt; automation use)
 
 ## Script B: `scripts/newbie_dag.ps1`
 

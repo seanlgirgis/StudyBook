@@ -1,7 +1,8 @@
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet("init", "up", "down", "ps")]
-    [string]$Action
+    [ValidateSet("init", "up", "down", "ps", "destroy")]
+    [string]$Action,
+    [switch]$Force
 )
 
 $ErrorActionPreference = "Stop"
@@ -33,6 +34,16 @@ switch ($Action) {
     }
     "down" {
         docker compose @files down
+    }
+    "destroy" {
+        if (-not $Force) {
+            $answer = Read-Host "This will remove containers, network, and named volumes (database data). Type DESTROY to continue"
+            if ($answer -ne "DESTROY") {
+                Write-Host "[cancelled] Destroy aborted."
+                exit 1
+            }
+        }
+        docker compose @files down -v --remove-orphans
     }
     "ps" {
         docker compose @files ps
