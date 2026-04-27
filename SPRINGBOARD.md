@@ -215,7 +215,6 @@ Cross-machine restore: `pwsh .\scripts\ops\restore_managed_repos.ps1`
 ```
 scripts/generate_audio.py       ← generate MP3 audio for learning pages
 scripts/run_mission_audio.ps1   ← full audio mission runner
-scripts/render_job_artifacts.ps1
 ```
 See `WEBSITE_AGENT_CONTEXT.md` at repo root for the full website agent context.
 
