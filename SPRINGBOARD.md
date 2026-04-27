@@ -212,6 +212,28 @@ Cross-machine restore: `pwsh .\scripts\ops\restore_managed_repos.ps1`
 
 ---
 
+### Run or work on an internal tool (Proj_development)
+```
+Proj_development/   ← small personal utilities, no separate repos
+```
+| Tool | Path | What it does |
+|------|------|--------------|
+| UniversalClipboardManager | `Proj_development/UniversalClipboardManager/` | PyQt6 global hotkey clipboard manager — auto-paste, JSON persistence, Windows startup |
+
+**Launch clipboard manager:**
+```powershell
+cd D:\Workarea\StudyBook\Proj_development\UniversalClipboardManager
+.\launch_clipboard.bat
+```
+Hotkeys: `Ctrl+Shift+S` toggle window · `Ctrl+Alt+A` capture clipboard
+
+**Install/reinstall Windows startup shortcut** (run once after any move):
+```powershell
+.\install_startup.ps1
+```
+
+---
+
 ### Work on learning content for the website
 ```
 scripts/generate_audio.py       ← generate MP3 audio for learning pages
