@@ -26,7 +26,7 @@ playground/                 ← active scratch space + session notes
 
 ### Learn a technology (deep-dive tutorial)
 ```
-tutorials/                  ← 47 runnable tutorial folders
+tutorials/                  ← 48 runnable tutorial folders
 ```
 | I want to learn... | Go to |
 |--------------------|-------|
@@ -70,6 +70,7 @@ tutorials/                  ← 47 runnable tutorial folders
 | OpenSearch | `tutorials/40_opensearch/` |
 | Snowflake + PyIceberg | `tutorials/41_snowflake_pyiceberg/` |
 | Redis | `tutorials/47_redis_de/` |
+| Scala (patterns, case classes, Spark) | `tutorials/49_scala/` |
 | Encryption | `tutorials/14_encryption/` |
 | PII anonymization | `tutorials/15_data_anonymization_pii/` |
 | Data stubbing | `tutorials/28_data_stubbing/` |
@@ -220,11 +221,37 @@ See `WEBSITE_AGENT_CONTEXT.md` at repo root for the full website agent context.
 
 ---
 
+### Read a concept guide (explanation + interview Q&A)
+```
+docs/concepts/data_engineering_guides/   ← 35 first-swipe guides migrated from Capital One prep
+```
+| I want to understand... | Go to |
+|------------------------|-------|
+| Scala fundamentals + Spark | `00001.Scala.FS.md` + `00002.Scala.Q.md` |
+| Kafka / real-time streaming | `00003.KafkaAndRealTimeStreaming.md` + `.Q.md` |
+| MongoDB / NoSQL patterns | `00005.mongo.nosql.md` + `.Q.md` |
+| Cassandra / wide-column NoSQL | `00007.Cassandra.nosql.md` + `.Q.md` |
+| Distributed systems / microservices | `00009.Distributed_MicroServices.md` + `.Q.md` |
+| Kubernetes | `00011.Kubernetes.md` + `.Q.md` |
+| Apache Flink | `00014.Flink.md` + `.Q.md` |
+| AWS EMR (concept) | `00016.EMR.md` + `.Q.md` |
+| PySpark (concept) | `00020.PySpark.md` + `.Q.md` |
+| Scala + Spark together | `00022.Scala_Spark.md` + `.Q.md` |
+| Data Warehouses | `00026.DataWarehouses.md` + `.Q.md` |
+| Data Lakes | `00028.DataLakes.md` + `.Q.md` |
+| Data Lakehouses | `00030.DataLakehouses.md` + `.Q.md` |
+| Hadoop ecosystem | `00032.Hadoop.md` + `.Q.md` |
+
+Each guide pairs a `.md` (concept) with a `.Q.md` (interview Q&A).
+
+---
+
 ## Key Docs
 
 | Doc | Purpose |
 |-----|---------|
 | `docs/handoff.md` | Full operational reference — architecture, all areas, agent protocol |
+| `docs/concepts/data_engineering_guides/` | 35 DE concept guides + Q&A (Scala, Kafka, NoSQL, distributed systems, lakes) |
 | `docs/pruning_and_duplicates.md` | Cleanup tracker — what's been pruned, what's still open |
 | `docs/PORTABLE_ENV.md` | Machine setup guide |
 | `docs/operations/secrets_workflow.md` | DPAPI secrets system |
