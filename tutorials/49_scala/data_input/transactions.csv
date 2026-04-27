@@ -1,0 +1,4 @@
+id,amount,category,country,status
+T001,5000.0,retail,US,approved
+T002,75000.0,wire,UK,approved
+T003,200.0,gambling,US,approved
