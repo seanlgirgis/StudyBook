@@ -243,3 +243,4 @@ Last reviewed: 2026-04-28 (high-volume event ingestion topic run)
 | LOOP-162 | TB-20260427-02 | Add AWS assistant setup script for EMR capstone env/profile discovery | closed | none | 2026-04-27 |
 | LOOP-163 | TB-20260427-03 | Resolve EMR Serverless cross-account pass-role failure by provisioning same-account execution role | closed | none | 2026-04-27 |
 | LOOP-164 | TB-20260428-01 | High-volume event ingestion topic page/audio generated; waiting for R2 upload confirmation to switch card/audio state to Live | open | Upload `final_high-volume-event-ingestion.mp3` to R2, confirm playback URL, then update `components/learning-design.html` badge from Upload pending to Live | 2026-04-28 |
+| LOOP-165 | TB-20260428-02 | Refresh selected StudyBook audio to phone and publish new `Tayota` local playlist | closed | none | 2026-04-28 |
