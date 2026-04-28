@@ -212,6 +212,14 @@ Purpose: compact durable memory map for fast session bootstrap.
   - `D:\Workarea\StudyBook\refresh_index_and_push.ps1`
   - `D:\Workarea\StudyBook\search_index.ps1 <needle> [-Limit <n>] [-CaseSensitive] [-h]`
 
+## Audio Repair Memory
+
+- Active run contract: `SB-AUDIO-CURE-V1`.
+- Voice lock for repair runs: HOST=`nova`, SEAN=`echo` (never `onyx`), no pitch-lowering.
+- Optional SEAN correction: approved `softC` profile only when needed.
+- Tracker source of truth: `D:\Workarea\StudyBook\agents\shared\audio_cure_tracker.md`.
+- Source scripts root: `D:\Workarea\jobsearch\data\interview_prep\audio_prep`.
+- Publication invariant: keep same production filename/key and URL to avoid link breakage.
 ## Managed External Repos Memory
 
 - Managed as sibling repositories to StudyBook (separate Git repos):
@@ -232,6 +240,7 @@ Purpose: compact durable memory map for fast session bootstrap.
   - `D:\Workarea\StudyBook\playground\THURSDAY_CODING_TEST_PROGRESS.md`
 - Deep historical notes:
   - `D:\Workarea\StudyBook\playground\claude_progress.md`
+
 
 
 

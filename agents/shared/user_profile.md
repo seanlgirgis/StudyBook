@@ -114,4 +114,22 @@
   - compose file: `D:\Workarea\StudyBook\docker\index_ui\docker-compose.yml`
   - runner: `D:\Workarea\StudyBook\run_index_ui_docker.ps1`
   - target URL: `http://localhost:8501` (or next available mapped port if changed)
+## Audio Pipeline Directive (SB-AUDIO-CURE-V1)
+
+- Active repair mode: `SB-AUDIO-CURE-V1` (topic-by-topic audio repair, not full-system rewrite).
+- Workspace tracking root: `D:\Workarea\StudyBook`.
+- Source script root: `D:\Workarea\jobsearch\data\interview_prep\audio_prep`.
+- Tracker file: `D:\Workarea\StudyBook\agents\shared\audio_cure_tracker.md`.
+- Locked voice standard:
+  - HOST voice = `nova`
+  - SEAN voice = `echo`
+  - never use `onyx` for SEAN
+  - do not lower pitch
+  - if needed for harsh/rattle SEAN clips, apply approved `softC` post-process only (keep natural tone)
+- Execution priority/order:
+  - urgent topics first, then normal/backlog in free cycles
+  - for each topic: regenerate (HOST=nova, SEAN=echo) -> soften SEAN only if needed -> stitch final -> upload to exact existing production filename/key -> verify playback -> update tracker status/date/notes
+- Stability rule:
+  - keep filenames/URLs stable to avoid breaking site links
+  - keep changes minimal and surgical; preserve existing pipeline structure
 
