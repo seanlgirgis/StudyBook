@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-27 (Springboard memory persistence update)
+Last reviewed: 2026-04-28 (high-volume event ingestion topic run)
 
 ## Status Meanings
 
@@ -242,3 +242,4 @@ Last reviewed: 2026-04-27 (Springboard memory persistence update)
 | LOOP-161 | TB-20260427-01 | Complete missing EMR capstone support files (`cleanup.py`, `test_capstone.py`) to match brief contract | open | Add both files under `tutorials/06_aws_emr/capstone` and validate with local pytest run | 2026-04-27 |
 | LOOP-162 | TB-20260427-02 | Add AWS assistant setup script for EMR capstone env/profile discovery | closed | none | 2026-04-27 |
 | LOOP-163 | TB-20260427-03 | Resolve EMR Serverless cross-account pass-role failure by provisioning same-account execution role | closed | none | 2026-04-27 |
+| LOOP-164 | TB-20260428-01 | High-volume event ingestion topic page/audio generated; waiting for R2 upload confirmation to switch card/audio state to Live | open | Upload `final_high-volume-event-ingestion.mp3` to R2, confirm playback URL, then update `components/learning-design.html` badge from Upload pending to Live | 2026-04-28 |
