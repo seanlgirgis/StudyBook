@@ -71,6 +71,11 @@ foreach ($file in $files) {
             Write-Host "  [COPY]  $($file.Name)  ($sizeMB MB)" -ForegroundColor Yellow
         } else {
             try {
+                # On MTP/CrossDevice targets, overwrite can create duplicate-suffixed files.
+                # Delete first, then copy to enforce a clean refresh of the same filename.
+                if (Test-Path -LiteralPath $dest) {
+                    Remove-Item -LiteralPath $dest -Force -ErrorAction Stop
+                }
                 Copy-Item -LiteralPath $file.FullName -Destination $dest -Force
                 Write-Host "  COPIED  $($file.Name)  ($sizeMB MB)" -ForegroundColor Green
                 $copied++
@@ -94,6 +99,9 @@ foreach ($pl in $playlists) {
         Write-Host "  [M3U]   $($pl.Name)" -ForegroundColor Yellow
     } else {
         try {
+            if (Test-Path -LiteralPath $destPl) {
+                Remove-Item -LiteralPath $destPl -Force -ErrorAction Stop
+            }
             Copy-Item -LiteralPath $pl.FullName -Destination $destPl -Force
             Write-Host "  M3U     $($pl.Name)" -ForegroundColor Cyan
         } catch {
