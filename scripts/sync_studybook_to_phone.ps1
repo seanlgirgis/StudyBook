@@ -66,6 +66,9 @@ function Normalize-M3UContent {
         }
         if ($trim.StartsWith("#")) { continue }
 
+        # Android players are more reliable with forward slashes in M3U relative paths.
+        $trim = $trim.Replace("\", "/")
+
         if ($pendingTitle) {
             $out.Add($pendingTitle)
         } else {
@@ -279,7 +282,7 @@ if ($SyncPlaylists) {
             try {
                 $raw = Get-Content -Raw -LiteralPath $pl.FullName
                 $normalized = Normalize-M3UContent -RawText $raw
-                Set-Content -LiteralPath $pl.FullName -Value $normalized
+                Set-Content -LiteralPath $pl.FullName -Value $normalized -Encoding UTF8
                 if (Test-Path -LiteralPath $destPl) {
                     Remove-Item -LiteralPath $destPl -Force -ErrorAction Stop
                 }
