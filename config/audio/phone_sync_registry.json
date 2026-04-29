@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "tayota1": {
+      "files": [
+        "final_pipeline-design.mp3",
+        "final_data-architecture.mp3",
+        "final_system-design-for-data-engineers.mp3",
+        "final_fastapi.mp3"
+      ],
+      "playlists": [
+        "tayota1.m3u"
+      ]
+    }
+  }
+}

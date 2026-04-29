@@ -167,11 +167,13 @@ D:\Workarea\StudyBook\scripts\sync_studybook_to_phone.ps1
 ```
 
 ### What It Does
-1. Scans `D:\temp\studybook_audio\` **recursively** for all `final_*.mp3` files
-2. Copies them **flat** (all in one folder) to the Pixel 8 Pro Music path
-3. Copies all `.m3u` playlists from the audio root
-4. Smart mode: skips files where destination already has same byte size
-5. Prints a summary: copied / skipped / failed counts + total MB transferred
+1. Supports targeted sync (recommended) for only requested `final_*.mp3` files
+2. Can load named file sets from `config/audio/phone_sync_registry.json` (`-RegistryProfile`)
+3. Can prune phone destination to exactly the selected set (`-PruneDestination`)
+4. Can sync selected playlists to `Music\pl` (`-SyncPlaylists`)
+5. Auto-normalizes synced playlists to `#EXTM3U + #EXTINF + relative path` format
+6. Smart mode: skips files where destination already has same byte size
+7. Prints a summary: copied / skipped / failed counts + total MB transferred
 
 ### Destination Path (phone must be connected via USB/MTP)
 ```
@@ -180,7 +182,15 @@ C:\Users\shareuser\CrossDevice\Pixel 8 Pro\storage\Music\StudyBook\
 
 ### How to Run
 
-**Normal sync (smart — only copies new/changed files):**
+**Targeted sync from registry profile (recommended):**
+```powershell
+cd D:\Workarea\StudyBook
+.\scripts\sync_studybook_to_phone.ps1 -RegistryProfile tayota1 -PruneDestination -SyncPlaylists
+```
+
+Playlist rule (always): playlists live under `Music\pl`, not `Music\StudyBook`.
+
+**Normal full-library sync (opt-in only):**
 ```powershell
 cd D:\Workarea\StudyBook
 .\scripts\sync_studybook_to_phone.ps1
