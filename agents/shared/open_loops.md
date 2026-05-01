@@ -245,3 +245,6 @@ Last reviewed: 2026-04-28 (high-volume event ingestion topic run)
 | LOOP-164 | TB-20260428-01 | High-volume event ingestion topic page/audio generated; waiting for R2 upload confirmation to switch card/audio state to Live | open | Upload `final_high-volume-event-ingestion.mp3` to R2, confirm playback URL, then update `components/learning-design.html` badge from Upload pending to Live | 2026-04-28 |
 | LOOP-165 | TB-20260428-02 | Refresh selected StudyBook audio to phone and publish new `Tayota` local playlist | closed | none | 2026-04-28 |
 | LOOP-166 | TB-20260429-01 | Sync FastAPI audio to phone and ensure it is included in local `tayota1` playlist | closed | none | 2026-04-29 |
+| LOOP-167 | TB-20260430-01 | Create canonical stand-in thread markdown for recovered CreatingAudioTopicsWebsite chat | closed | none | 2026-04-30 |
+| LOOP-168 | TB-20260430-02 | Create canonical stand-in thread markdown for recovered Generate_study_prep_for_Interviews chat | closed | none | 2026-04-30 |
+| LOOP-169 | TB-20260430-03 | Create canonical stand-in thread markdown for recovered Audio Generation chat | closed | none | 2026-04-30 |
