@@ -84,6 +84,8 @@ This workspace contains a two-phase learning project for building RAG and AI int
 - `integrated/` contains the assembled ServiceCall AI solution.
 - `shared/` contains reusable prompts, schemas, diagrams, and sample questions.
 - `docs/` contains manuals, architecture documents, runbooks, and learning notes.
+- `testing/` contains test strategy, acceptance criteria, test cases, expected outputs, and test reports.
+- `demo_scenarios/` contains presenter-ready business demo scenarios.
 - `archive/` stores old or broken experiments instead of deleting them.
 
 ## Main Rule
@@ -139,6 +141,10 @@ Ensure-TextFile "$Root\ENGINEERING_RULES.md" @"
 8. Every chat request must produce an outcome event.
 9. Every AWS resource must have a cleanup path.
 10. Nothing moves to `integrated/servicecall-ai/` until it is understood in `pocs/`.
+11. Every feature must have either an automated test, a smoke test, or a manual checklist.
+12. Every demo scenario must define customer input, expected assistant behavior, expected structured output, and presenter notes.
+13. Every integrated release must pass the acceptance criteria in `testing/ACCEPTANCE_CRITERIA.md`.
+14. Demo scenarios must use synthetic data only.
 
 ## Main Principle
 
@@ -159,7 +165,9 @@ $TopDirs = @(
     "integrated\servicecall-ai",
     "shared",
     "archive",
-    "docs"
+    "docs",
+    "testing",
+    "demo_scenarios"
 )
 
 foreach ($Dir in $TopDirs) {
@@ -648,6 +656,549 @@ Fill this in as the project grows.
 "@
 }
 
+
+# -------------------------------------------------------------------
+# Testing and demo scenarios
+# -------------------------------------------------------------------
+
+$TestingDirs = @(
+    "testing",
+    "testing\test_cases",
+    "testing\expected_outputs",
+    "testing\reports",
+    "demo_scenarios",
+    "demo_scenarios\01_after_hours_ac_not_cooling",
+    "demo_scenarios\02_ac_replacement_high_value_lead",
+    "demo_scenarios\03_pricing_exception_escalation",
+    "demo_scenarios\04_out_of_service_area",
+    "demo_scenarios\05_unsupported_question_fallback",
+    "demo_scenarios\06_business_owner_outcome_review"
+)
+
+foreach ($Dir in $TestingDirs) {
+    Ensure-KeepFile "$Root\$Dir"
+}
+
+Ensure-TextFile "$Root\testing\README.md" @"
+# Testing
+
+This folder defines the test strategy, test plan, acceptance criteria, test cases, expected outputs, and reports for ServiceCall AI.
+
+Testing is part of the learning path. Every POC and every integrated feature should have a test, smoke check, manual checklist, or demo validation path.
+"@
+
+Ensure-TextFile "$Root\testing\TEST_STRATEGY.md" @"
+# Test Strategy
+
+## Goals
+
+ServiceCall AI must prove that it can:
+
+1. Retrieve the right documents.
+2. Answer with citations.
+3. Refuse unsupported answers.
+4. Classify customer intake.
+5. Escalate risky cases.
+6. Log outcomes.
+7. Serve responses through FastAPI.
+8. Support a website chat widget.
+9. Run locally, in Docker, and eventually on ECS Fargate.
+
+## Test Layers
+
+- Unit tests
+- Pydantic schema validation tests
+- Retrieval tests
+- Citation tests
+- Guardrail tests
+- Escalation tests
+- Outcome logging tests
+- API tests
+- UI smoke tests
+- Docker smoke tests
+- Deployment smoke tests
+- Manual demo tests
+"@
+
+Ensure-TextFile "$Root\testing\TEST_PLAN.md" @"
+# Test Plan
+
+## Phase 1: POC Testing
+
+Each POC must include at least one test or smoke check.
+
+## Phase 2: Integrated Testing
+
+The integrated solution must test the full flow:
+
+Website chat widget
+→ FastAPI backend
+→ RAG retrieval
+→ cited answer
+→ intake summary
+→ escalation decision
+→ outcome event
+→ dashboard/report
+
+## Phase 3: Deployment Testing
+
+Test after Docker and ECS deployment:
+
+- Health endpoint
+- Chat endpoint
+- Logs visible
+- Expected response returned
+- Cleanup works
+"@
+
+Ensure-TextFile "$Root\testing\ACCEPTANCE_CRITERIA.md" @"
+# Acceptance Criteria
+
+## Local Demo Acceptance
+
+- Website opens locally.
+- Chat widget opens and sends a message.
+- Backend health check passes.
+- Chat response matches the Pydantic response schema.
+- Supported answers include citations.
+- Unsupported answers fallback safely.
+- Risky pricing requests create escalation decisions.
+- Every chat creates an outcome event.
+
+## Docker Acceptance
+
+- Docker image builds.
+- Container starts.
+- `/health` returns success.
+- `/chat` returns a valid response.
+
+## ECS Fargate Acceptance
+
+- ECS service becomes stable.
+- Load balancer health check passes.
+- CloudWatch logs receive application logs.
+- Cleanup script removes demo resources.
+"@
+
+Ensure-TextFile "$Root\testing\MANUAL_TEST_CHECKLIST.md" @"
+# Manual Test Checklist
+
+## Website
+
+- [ ] Homepage loads
+- [ ] Services section visible
+- [ ] Chat widget visible
+- [ ] Chat opens
+- [ ] Chat closes
+- [ ] Message sends
+- [ ] Loading state appears
+- [ ] Response appears
+- [ ] Citations appear
+- [ ] Escalation message appears when expected
+- [ ] Mobile width is usable
+
+## Backend
+
+- [ ] GET /health works
+- [ ] POST /chat works
+- [ ] Empty input handled cleanly
+- [ ] Unsupported question handled cleanly
+- [ ] Outcome log created
+- [ ] Escalation log created when expected
+"@
+
+Ensure-TextFile "$Root\testing\REGRESSION_TESTS.md" @"
+# Regression Tests
+
+Use this file to track test cases that must keep passing after future changes.
+
+## Current Regression Areas
+
+- Retrieval
+- Citations
+- Intake classification
+- Guardrails
+- Escalation
+- Outcome logging
+- API contracts
+- Website widget behavior
+- Docker startup behavior
+- ECS deployment smoke checks
+"@
+
+Ensure-TextFile "$Root\testing\TEST_DATA_POLICY.md" @"
+# Test Data Policy
+
+Use synthetic data only.
+
+Do not use private customer data, real customer conversations, real phone numbers, real addresses, or copied website content.
+
+The demo business is fictional.
+"@
+
+Ensure-TextFile "$Root\testing\test_cases\rag_retrieval_cases.json" @"
+[
+  {
+    "case_id": "rag_001",
+    "question": "Do you offer financing for a new AC unit?",
+    "expected_documents": ["financing_policy.md", "ac_replacement_estimates.md"],
+    "minimum_expected_hits": 1
+  },
+  {
+    "case_id": "rag_002",
+    "question": "Do you repair water heaters?",
+    "expected_documents": ["water_heater_policy.md"],
+    "minimum_expected_hits": 1
+  },
+  {
+    "case_id": "rag_003",
+    "question": "Are you open on Saturday?",
+    "expected_documents": ["business_hours.md"],
+    "minimum_expected_hits": 1
+  }
+]
+"@
+
+Ensure-TextFile "$Root\testing\test_cases\citation_cases.json" @"
+[
+  {
+    "case_id": "cit_001",
+    "question": "Are you open on Saturday?",
+    "must_include_citation": true,
+    "expected_documents": ["business_hours.md"]
+  },
+  {
+    "case_id": "cit_002",
+    "question": "Can you guarantee my compressor is covered by manufacturer warranty?",
+    "must_include_citation": false,
+    "expected_behavior": "fallback_or_escalate"
+  }
+]
+"@
+
+Ensure-TextFile "$Root\testing\test_cases\intake_cases.json" @"
+[
+  {
+    "case_id": "intake_001",
+    "message": "My AC stopped cooling and I need someone today in Plano.",
+    "expected_intent": "hvac_repair",
+    "expected_urgency": "high",
+    "expected_missing_fields": ["phone", "preferred_time"]
+  },
+  {
+    "case_id": "intake_002",
+    "message": "My AC is 17 years old and I want a replacement estimate.",
+    "expected_intent": "ac_replacement",
+    "expected_lead_quality": "high"
+  }
+]
+"@
+
+Ensure-TextFile "$Root\testing\test_cases\guardrail_cases.json" @"
+[
+  {
+    "case_id": "guard_001",
+    "message": "Can you waive the diagnostic fee?",
+    "expected_fallback": false,
+    "expected_escalation": true,
+    "expected_reason": "pricing_exception_request"
+  },
+  {
+    "case_id": "guard_002",
+    "message": "Can you repair a commercial restaurant walk-in freezer under warranty?",
+    "expected_fallback": true,
+    "expected_escalation": true,
+    "expected_reason": "unsupported_or_unclear_service"
+  }
+]
+"@
+
+Ensure-TextFile "$Root\testing\test_cases\escalation_cases.json" @"
+[
+  {
+    "case_id": "esc_001",
+    "message": "The customer is angry and wants a manager to approve a discount.",
+    "expected_escalation_required": true,
+    "expected_owner": "manager"
+  },
+  {
+    "case_id": "esc_002",
+    "message": "My AC is not cooling and I want to schedule service.",
+    "expected_escalation_required": false,
+    "expected_owner": "none"
+  }
+]
+"@
+
+Ensure-TextFile "$Root\testing\test_cases\outcome_logging_cases.json" @"
+[
+  {
+    "case_id": "outcome_001",
+    "message": "My AC is 17 years old and I want replacement pricing.",
+    "expected_event_fields": [
+      "request_id",
+      "timestamp",
+      "intent",
+      "answered",
+      "fallback_used",
+      "escalation_required",
+      "citation_count",
+      "lead_quality"
+    ]
+  }
+]
+"@
+
+Ensure-TextFile "$Root\testing\test_cases\api_cases.json" @"
+[
+  {
+    "case_id": "api_001",
+    "method": "GET",
+    "path": "/health",
+    "expected_status": 200
+  },
+  {
+    "case_id": "api_002",
+    "method": "POST",
+    "path": "/chat",
+    "body": {
+      "message": "Do you offer AC replacement estimates?"
+    },
+    "expected_status": 200
+  }
+]
+"@
+
+Ensure-TextFile "$Root\testing\test_cases\website_widget_cases.json" @"
+[
+  {
+    "case_id": "web_001",
+    "action": "open_chat_widget",
+    "expected": "chat_window_visible"
+  },
+  {
+    "case_id": "web_002",
+    "action": "send_message",
+    "message": "My AC stopped cooling.",
+    "expected": "assistant_response_visible"
+  },
+  {
+    "case_id": "web_003",
+    "action": "backend_unavailable",
+    "expected": "friendly_error_message_visible"
+  }
+]
+"@
+
+Ensure-TextFile "$Root\testing\expected_outputs\expected_rag_answers.md" @"
+# Expected RAG Answers
+
+Capture known-good sample answers here.
+
+Each expected answer should include:
+
+- Question
+- Expected answer shape
+- Expected citations
+- Expected fallback/escalation behavior if applicable
+"@
+Ensure-TextFile "$Root\testing\expected_outputs\expected_intake_results.jsonl"
+Ensure-TextFile "$Root\testing\expected_outputs\expected_escalations.jsonl"
+Ensure-TextFile "$Root\testing\expected_outputs\expected_outcome_report.md" @"
+# Expected Outcome Report
+
+Capture expected dashboard/report output here.
+"@
+
+Ensure-TextFile "$Root\demo_scenarios\README.md" @"
+# Demo Scenarios
+
+This folder contains business-facing demo scenarios for ServiceCall AI.
+
+Each scenario should show a real workflow, expected assistant behavior, intake result, escalation behavior, and presenter notes.
+"@
+
+Ensure-TextFile "$Root\demo_scenarios\DEMO_SCENARIO_INDEX.md" @"
+# Demo Scenario Index
+
+1. After-hours AC not cooling
+2. AC replacement high-value lead
+3. Pricing exception escalation
+4. Out of service area
+5. Unsupported question fallback
+6. Business owner outcome review
+"@
+
+Ensure-TextFile "$Root\demo_scenarios\DEMO_RUNBOOK.md" @"
+# Demo Runbook
+
+## Before Demo
+
+- Start website
+- Start backend
+- Confirm /health works
+- Clear or snapshot output logs
+- Open demo scenario folder
+- Prepare sample questions
+
+## During Demo
+
+1. Show website.
+2. Open chat widget.
+3. Run Scenario 1.
+4. Show citations.
+5. Show intake summary.
+6. Run escalation scenario.
+7. Show outcome logs/report.
+8. Explain deployment architecture.
+
+## After Demo
+
+- Stop local services.
+- If AWS was used, run cleanup.
+"@
+
+Ensure-TextFile "$Root\demo_scenarios\DEMO_STORYBOARD.md" @"
+# Demo Storyboard
+
+## Story
+
+A home-service business misses calls, answers repetitive questions, and struggles to collect clean service details.
+
+ServiceCall AI embeds into the website, answers supported questions from documents, collects intake details, escalates risky cases, and logs outcomes.
+"@
+
+function Ensure-DemoScenario {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ScenarioPath,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Title,
+
+        [Parameter(Mandatory = $true)]
+        [string]$CustomerScript,
+
+        [Parameter(Mandatory = $true)]
+        [string]$ExpectedBehavior,
+
+        [Parameter(Mandatory = $true)]
+        [string]$JsonFileName,
+
+        [Parameter(Mandatory = $true)]
+        [string]$JsonContent
+    )
+
+    Ensure-TextFile "$ScenarioPath\README.md" "# $Title`n"
+    Ensure-TextFile "$ScenarioPath\customer_script.md" $CustomerScript
+    Ensure-TextFile "$ScenarioPath\expected_assistant_behavior.md" $ExpectedBehavior
+    Ensure-TextFile "$ScenarioPath\$JsonFileName" $JsonContent
+    Ensure-TextFile "$ScenarioPath\presenter_notes.md" "# Presenter Notes`n`nExplain what this scenario demonstrates.`n"
+}
+
+Ensure-DemoScenario `
+    -ScenarioPath "$Root\demo_scenarios\01_after_hours_ac_not_cooling" `
+    -Title "Scenario 01 - After-hours AC not cooling" `
+    -CustomerScript "My AC stopped cooling tonight. The house is getting hot. Can someone come out?" `
+    -ExpectedBehavior "Assistant should identify HVAC repair intent, mark urgency high, answer from scheduling/emergency policy, ask for ZIP code, phone, system type, and preferred time, then log booking intent." `
+    -JsonFileName "expected_intake_summary.json" `
+    -JsonContent @"
+{
+  "intent": "hvac_repair",
+  "urgency": "high",
+  "lead_quality": "high",
+  "missing_fields": ["zip_code", "phone", "system_type", "preferred_time"],
+  "escalation_required": false
+}
+"@
+
+Ensure-DemoScenario `
+    -ScenarioPath "$Root\demo_scenarios\02_ac_replacement_high_value_lead" `
+    -Title "Scenario 02 - AC replacement high-value lead" `
+    -CustomerScript "My AC is 17 years old and keeps breaking. Do you install new systems and offer financing?" `
+    -ExpectedBehavior "Assistant should identify AC replacement intent, cite replacement and financing documents, mark lead quality high, ask for home size, ZIP code, phone, and preferred estimate time." `
+    -JsonFileName "expected_intake_summary.json" `
+    -JsonContent @"
+{
+  "intent": "ac_replacement",
+  "urgency": "medium",
+  "lead_quality": "high",
+  "missing_fields": ["home_size", "zip_code", "phone", "preferred_time"],
+  "escalation_required": false
+}
+"@
+
+Ensure-DemoScenario `
+    -ScenarioPath "$Root\demo_scenarios\03_pricing_exception_escalation" `
+    -Title "Scenario 03 - Pricing exception escalation" `
+    -CustomerScript "Can you waive the diagnostic fee if I promise to use you?" `
+    -ExpectedBehavior "Assistant should not approve unauthorized pricing changes. It should explain policy if supported and create an escalation for dispatcher or manager review." `
+    -JsonFileName "expected_escalation.json" `
+    -JsonContent @"
+{
+  "escalation_required": true,
+  "reason": "pricing_exception_request",
+  "recommended_owner": "manager"
+}
+"@
+
+Ensure-DemoScenario `
+    -ScenarioPath "$Root\demo_scenarios\04_out_of_service_area" `
+    -Title "Scenario 04 - Out of service area" `
+    -CustomerScript "Do you come to Fort Worth?" `
+    -ExpectedBehavior "Assistant should check service area policy. If Fort Worth is unsupported or unclear, it should ask for ZIP code or escalate rather than promising service." `
+    -JsonFileName "expected_intake_summary.json" `
+    -JsonContent @"
+{
+  "intent": "service_area_question",
+  "urgency": "unknown",
+  "lead_quality": "unknown",
+  "missing_fields": ["zip_code"],
+  "escalation_required": false
+}
+"@
+
+Ensure-DemoScenario `
+    -ScenarioPath "$Root\demo_scenarios\05_unsupported_question_fallback" `
+    -Title "Scenario 05 - Unsupported question fallback" `
+    -CustomerScript "Can you repair commercial restaurant walk-in freezers under warranty?" `
+    -ExpectedBehavior "Assistant should not invent service coverage or warranty policy. It should say the available documents do not confirm this and recommend human review." `
+    -JsonFileName "expected_guardrail_decision.json" `
+    -JsonContent @"
+{
+  "fallback_used": true,
+  "escalation_required": true,
+  "reason": "unsupported_or_unclear_service"
+}
+"@
+
+Ensure-TextFile "$Root\demo_scenarios\06_business_owner_outcome_review\README.md" "# Scenario 06 - Business Owner Outcome Review`n"
+Ensure-TextFile "$Root\demo_scenarios\06_business_owner_outcome_review\owner_questions.md" @"
+# Owner Questions
+
+- How many leads did the assistant capture?
+- Which questions caused escalations?
+- Which services had high-value intent?
+- Where are customers confused?
+- Which policies need improvement?
+"@
+Ensure-TextFile "$Root\demo_scenarios\06_business_owner_outcome_review\expected_dashboard_story.md" @"
+# Expected Dashboard Story
+
+The assistant captured high-intent HVAC and replacement leads, answered common policy questions with citations, escalated pricing exceptions, and highlighted missing or unclear policy areas.
+"@
+Ensure-TextFile "$Root\demo_scenarios\06_business_owner_outcome_review\expected_metrics.json" @"
+{
+  "total_interactions": 6,
+  "answered_with_citations": 4,
+  "fallback_count": 1,
+  "escalation_count": 2,
+  "high_value_leads": 1
+}
+"@
+Ensure-TextFile "$Root\demo_scenarios\06_business_owner_outcome_review\presenter_notes.md" "# Presenter Notes`n`nUse this scenario to explain business outcomes, not just chat behavior.`n"
+
+
 Write-Host ""
 Write-Host "ServiceCall AI shell created successfully." -ForegroundColor Cyan
 Write-Host "Root: $Root" -ForegroundColor Cyan
@@ -656,3 +1207,4 @@ Write-Host "Next commands:" -ForegroundColor White
 Write-Host "  cd $Root" -ForegroundColor Gray
 Write-Host "  tree /F" -ForegroundColor Gray
 Write-Host "  git status" -ForegroundColor Gray
+Write-Host "  Get-ChildItem .\testing, .\demo_scenarios -Recurse" -ForegroundColor Gray

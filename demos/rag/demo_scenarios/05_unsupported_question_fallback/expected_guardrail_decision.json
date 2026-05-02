@@ -1,0 +1,5 @@
+{
+  "fallback_used": true,
+  "escalation_required": true,
+  "reason": "unsupported_or_unclear_service"
+}

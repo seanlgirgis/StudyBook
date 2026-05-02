@@ -1,0 +1,20 @@
+[
+  {
+    "case_id": "rag_001",
+    "question": "Do you offer financing for a new AC unit?",
+    "expected_documents": ["financing_policy.md", "ac_replacement_estimates.md"],
+    "minimum_expected_hits": 1
+  },
+  {
+    "case_id": "rag_002",
+    "question": "Do you repair water heaters?",
+    "expected_documents": ["water_heater_policy.md"],
+    "minimum_expected_hits": 1
+  },
+  {
+    "case_id": "rag_003",
+    "question": "Are you open on Saturday?",
+    "expected_documents": ["business_hours.md"],
+    "minimum_expected_hits": 1
+  }
+]

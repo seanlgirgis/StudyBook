@@ -1,0 +1,17 @@
+[
+  {
+    "case_id": "api_001",
+    "method": "GET",
+    "path": "/health",
+    "expected_status": 200
+  },
+  {
+    "case_id": "api_002",
+    "method": "POST",
+    "path": "/chat",
+    "body": {
+      "message": "Do you offer AC replacement estimates?"
+    },
+    "expected_status": 200
+  }
+]

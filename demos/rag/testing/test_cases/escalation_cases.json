@@ -1,0 +1,14 @@
+[
+  {
+    "case_id": "esc_001",
+    "message": "The customer is angry and wants a manager to approve a discount.",
+    "expected_escalation_required": true,
+    "expected_owner": "manager"
+  },
+  {
+    "case_id": "esc_002",
+    "message": "My AC is not cooling and I want to schedule service.",
+    "expected_escalation_required": false,
+    "expected_owner": "none"
+  }
+]

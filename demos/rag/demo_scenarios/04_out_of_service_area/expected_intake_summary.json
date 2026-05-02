@@ -1,0 +1,7 @@
+{
+  "intent": "service_area_question",
+  "urgency": "unknown",
+  "lead_quality": "unknown",
+  "missing_fields": ["zip_code"],
+  "escalation_required": false
+}

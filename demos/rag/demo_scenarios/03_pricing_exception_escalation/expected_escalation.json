@@ -1,0 +1,5 @@
+{
+  "escalation_required": true,
+  "reason": "pricing_exception_request",
+  "recommended_owner": "manager"
+}

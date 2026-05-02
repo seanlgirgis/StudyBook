@@ -1,0 +1,14 @@
+[
+  {
+    "case_id": "cit_001",
+    "question": "Are you open on Saturday?",
+    "must_include_citation": true,
+    "expected_documents": ["business_hours.md"]
+  },
+  {
+    "case_id": "cit_002",
+    "question": "Can you guarantee my compressor is covered by manufacturer warranty?",
+    "must_include_citation": false,
+    "expected_behavior": "fallback_or_escalate"
+  }
+]

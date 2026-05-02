@@ -1,0 +1,7 @@
+{
+  "intent": "hvac_repair",
+  "urgency": "high",
+  "lead_quality": "high",
+  "missing_fields": ["zip_code", "phone", "system_type", "preferred_time"],
+  "escalation_required": false
+}

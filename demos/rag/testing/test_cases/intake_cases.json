@@ -1,0 +1,15 @@
+[
+  {
+    "case_id": "intake_001",
+    "message": "My AC stopped cooling and I need someone today in Plano.",
+    "expected_intent": "hvac_repair",
+    "expected_urgency": "high",
+    "expected_missing_fields": ["phone", "preferred_time"]
+  },
+  {
+    "case_id": "intake_002",
+    "message": "My AC is 17 years old and I want a replacement estimate.",
+    "expected_intent": "ac_replacement",
+    "expected_lead_quality": "high"
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "case_id": "guard_001",
+    "message": "Can you waive the diagnostic fee?",
+    "expected_fallback": false,
+    "expected_escalation": true,
+    "expected_reason": "pricing_exception_request"
+  },
+  {
+    "case_id": "guard_002",
+    "message": "Can you repair a commercial restaurant walk-in freezer under warranty?",
+    "expected_fallback": true,
+    "expected_escalation": true,
+    "expected_reason": "unsupported_or_unclear_service"
+  }
+]

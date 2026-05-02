@@ -1,0 +1,7 @@
+{
+  "intent": "ac_replacement",
+  "urgency": "medium",
+  "lead_quality": "high",
+  "missing_fields": ["home_size", "zip_code", "phone", "preferred_time"],
+  "escalation_required": false
+}

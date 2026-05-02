@@ -1,0 +1,18 @@
+[
+  {
+    "case_id": "web_001",
+    "action": "open_chat_widget",
+    "expected": "chat_window_visible"
+  },
+  {
+    "case_id": "web_002",
+    "action": "send_message",
+    "message": "My AC stopped cooling.",
+    "expected": "assistant_response_visible"
+  },
+  {
+    "case_id": "web_003",
+    "action": "backend_unavailable",
+    "expected": "friendly_error_message_visible"
+  }
+]

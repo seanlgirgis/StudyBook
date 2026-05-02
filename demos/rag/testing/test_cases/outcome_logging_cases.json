@@ -1,0 +1,16 @@
+[
+  {
+    "case_id": "outcome_001",
+    "message": "My AC is 17 years old and I want replacement pricing.",
+    "expected_event_fields": [
+      "request_id",
+      "timestamp",
+      "intent",
+      "answered",
+      "fallback_used",
+      "escalation_required",
+      "citation_count",
+      "lead_quality"
+    ]
+  }
+]
