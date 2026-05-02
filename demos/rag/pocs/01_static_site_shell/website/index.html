@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>North Texas Comfort & Home Services</title>
+  <meta name="description" content="Synthetic static shell for ServiceCall AI Milestone 1.">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">NT</span>
+        <div>
+          <p class="brand-name">North Texas Comfort & Home Services</p>
+          <p class="brand-sub">Synthetic demo company for ServiceCall AI</p>
+        </div>
+      </div>
+      <a class="cta-link" href="#contact">Schedule Service</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Fast help for home comfort emergencies</p>
+        <h1>Comfort and repair support across North Texas</h1>
+        <p class="hero-copy">
+          This is a synthetic demo website shell for Milestone 1. Future versions will connect this chat entry point
+          to a FastAPI and RAG backend for assisted scheduling and troubleshooting.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#services">View Services</a>
+          <a class="button secondary" href="#contact">Call 817-555-0119</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section">
+      <div class="wrap">
+        <h2>Services</h2>
+        <div class="grid cards">
+          <article class="card">
+            <h3>A/C Repair</h3>
+            <p>Quick diagnostics for no-cool calls, airflow problems, and thermostat issues.</p>
+          </article>
+          <article class="card">
+            <h3>A/C Replacement Estimates</h3>
+            <p>Simple in-home estimate options with synthetic sample pricing tiers.</p>
+          </article>
+          <article class="card">
+            <h3>Heating Repair</h3>
+            <p>Seasonal tune-up and emergency heater fixes for common winter failures.</p>
+          </article>
+          <article class="card">
+            <h3>Plumbing</h3>
+            <p>Drain clearing, leak detection, fixture swaps, and pressure troubleshooting.</p>
+          </article>
+          <article class="card">
+            <h3>Water Heaters</h3>
+            <p>Gas and electric unit checks, replacement planning, and maintenance support.</p>
+          </article>
+          <article class="card">
+            <h3>Appliance Repair</h3>
+            <p>Service calls for refrigerators, dishwashers, and laundry appliance issues.</p>
+          </article>
+          <article class="card">
+            <h3>Maintenance Plans</h3>
+            <p>Twice-yearly HVAC service plus priority response windows for active members.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="why-us" class="section section-alt">
+      <div class="wrap">
+        <h2>Why Choose Us</h2>
+        <ul class="checklist">
+          <li>Same-day synthetic scheduling slots for urgent comfort calls.</li>
+          <li>Upfront estimate summaries before any major repair decision.</li>
+          <li>Friendly communication designed for first-time homeowners.</li>
+          <li>Service coverage across key North Texas suburban corridors.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="plan" class="section">
+      <div class="wrap">
+        <h2>Maintenance Plan</h2>
+        <p>
+          The Comfort Care Plan includes spring A/C prep, fall heating prep, discounted diagnostics, and priority
+          queue placement for urgent calls.
+        </p>
+      </div>
+    </section>
+
+    <section id="offers" class="section section-alt">
+      <div class="wrap">
+        <h2>Coupons / Offers</h2>
+        <div class="grid offers">
+          <article class="offer">
+            <h3>$39 Diagnostic Visit</h3>
+            <p>Valid for first-time synthetic customers in the demo coverage area.</p>
+          </article>
+          <article class="offer">
+            <h3>$250 Off Water Heater Install</h3>
+            <p>Applies to standard tank replacement packages in this sample site.</p>
+          </article>
+          <article class="offer">
+            <h3>Free Maintenance Plan Month</h3>
+            <p>Included with qualifying A/C replacement estimate acceptance.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="area" class="section">
+      <div class="wrap">
+        <h2>Service Area</h2>
+        <p>
+          We serve synthetic routes across Fort Worth, Arlington, Mansfield, Burleson, Keller, and nearby North Texas
+          neighborhoods.
+        </p>
+      </div>
+    </section>
+
+    <section id="contact" class="section section-alt">
+      <div class="wrap">
+        <h2>Contact / Schedule</h2>
+        <p>Phone: 817-555-0119</p>
+        <p>Email: hello@northtexascomfort.demo</p>
+        <p>Hours: Mon-Sat, 7:00 AM - 8:00 PM</p>
+        <p class="note">This site uses synthetic data only and does not submit to any backend service.</p>
+      </div>
+    </section>
+  </main>
+
+  <button id="chat-toggle" class="chat-toggle" type="button" aria-expanded="false" aria-controls="chat-panel">
+    Chat With Us
+  </button>
+
+  <aside id="chat-panel" class="chat-panel" aria-hidden="true">
+    <header class="chat-head">
+      <h2>ServiceCall AI Chat</h2>
+      <button id="chat-close" class="chat-close" type="button" aria-label="Close chat">x</button>
+    </header>
+    <p class="chat-status">Demo mode: future version will connect to FastAPI + RAG backend.</p>
+    <div id="chat-messages" class="chat-messages" aria-live="polite"></div>
+    <form id="chat-form" class="chat-form">
+      <label for="chat-input" class="sr-only">Type your message</label>
+      <input id="chat-input" name="message" type="text" placeholder="Type a question..." autocomplete="off" required>
+      <button type="submit">Send</button>
+    </form>
+  </aside>
+
+  <script src="assets/chat-widget.js"></script>
+</body>
+</html>
