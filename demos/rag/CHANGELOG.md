@@ -64,8 +64,16 @@
   - `pocs/03g_retrieval_decision/`
   - `pocs/03h_retrieval_evaluation/`
   - `pocs/03_RETRIEVAL_LADDER.md`
+  - `pocs/03a_load_documents/src/schemas.py`
+  - `pocs/03a_load_documents/src/load_documents.py`
+  - `pocs/03a_load_documents/tests/test_load_documents.py`
+  - `pocs/03a_load_documents/outputs/loaded_documents.json`
+  - `pocs/03a_load_documents/notes/what_this_teaches.md`
+  - `pocs/03a_load_documents/notes/common_failures.md`
 
 ### Changed
 - `pocs/02_fake_business_docs/README.md` now defines purpose, file map, synthetic warning, and next milestone.
 - `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect Milestone 2 completion and next-step retrieval POC direction.
 - `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect Milestone 3 retrieval-learning structure staging (no implementation yet).
+- `pocs/03a_load_documents/README.md` and `requirements.txt` now reflect actual load-documents implementation and test commands.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect Milestone 3 step `03a_load_documents` completion.

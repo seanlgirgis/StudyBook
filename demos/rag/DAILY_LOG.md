@@ -90,3 +90,29 @@
 - Confirmed `pocs/03_RETRIEVAL_LADDER.md` exists.
 - Confirmed no integrated/servicecall-ai files changed in this task scope.
 - Confirmed no backend/FastAPI/AWS/Docker work added in this task scope.
+
+## 2026-05-02 (Milestone 3 Step 03a - Load Documents)
+- Implemented `pocs/03a_load_documents` loader POC only.
+- Added `SourceDocument` Pydantic model with field validation in `src/schemas.py`.
+- Added loader script in `src/load_documents.py`:
+  - markdown discovery
+  - title extraction
+  - file-to-model conversion
+  - batch load
+  - JSON output writing
+  - CLI summary output
+- Added tests in `tests/test_load_documents.py`.
+- Added learning notes:
+  - `notes/what_this_teaches.md`
+  - `notes/common_failures.md`
+- Generated `outputs/loaded_documents.json` from synthetic business docs corpus.
+
+## Validation (Milestone 3 Step 03a - Load Documents)
+- Ran bootstrap before Python commands:
+  - `. D:\Workarea\StudyBook\env_setter.ps1`
+- Ran:
+  - `python .\src\load_documents.py` (PASS, loaded 16 markdown files)
+  - `pytest -v` (PASS, 3 tests passed)
+- Confirmed output JSON exists and contains 16 documents.
+- Confirmed no integrated/servicecall-ai paths were touched.
+- Confirmed no TF-IDF/search/chunking/AI/backend logic was added.

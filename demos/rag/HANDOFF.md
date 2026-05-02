@@ -1,7 +1,7 @@
 # HANDOFF.md
 
 ## Resume Point
-Milestone 1 static website shell is implemented and smoke-tested, Milestone 2 synthetic business documents are populated, and Milestone 3 retrieval ladder scaffolding is staged.
+Milestone 1 static website shell is implemented and smoke-tested, Milestone 2 synthetic business documents are populated, and Milestone 3 step `03a_load_documents` is implemented and validated.
 
 ## Read First
 1. AGENTS.md
@@ -11,7 +11,7 @@ Milestone 1 static website shell is implemented and smoke-tested, Milestone 2 sy
 5. KNOWN_ISSUES.md
 
 ## Next Task
-Review and approve Milestone 3 scaffolding, then implement `pocs/03a_load_documents` only as the first retrieval baby step.
+Review and approve `pocs/03a_load_documents`, then implement `pocs/03b_chunk_documents` only.
 Do not start backend, RAG, integrated, AWS, or real-data work yet.
 
 ## Constraints

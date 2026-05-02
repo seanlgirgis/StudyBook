@@ -1,0 +1,5 @@
+{
+  "app_name": "NuggetsApp",
+  "port": 8080,
+  "debug": false
+}

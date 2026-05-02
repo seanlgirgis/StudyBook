@@ -1,10 +1,10 @@
 # PROJECT_STATE.md
 
 ## Current Milestone
-Milestone 3 (Staged) — Retrieval learning ladder scaffolding (`pocs/03a_*` to `pocs/03h_*`)
+Milestone 3 (Step 03a) — Document loading POC implemented (`pocs/03a_load_documents`)
 
 ## Current Focus
-Stage a baby-step retrieval learning ladder with folder structure and starter documentation only (no retrieval logic implementation yet).
+Implement and validate `03a_load_documents` to convert synthetic markdown files into validated Pydantic `SourceDocument` records and structured JSON output.
 
 ## Control Protocol Status
 A closed-loop project-control protocol is now in place via `AGENTS.md` + permanent memory files:
@@ -35,9 +35,14 @@ A closed-loop project-control protocol is now in place via `AGENTS.md` + permane
   - `pocs/03g_retrieval_decision`
   - `pocs/03h_retrieval_evaluation`
   - `pocs/03_RETRIEVAL_LADDER.md`
+- `pocs/03a_load_documents` implementation:
+  - Pydantic schema for `SourceDocument`
+  - markdown discovery/loading script
+  - loader tests
+  - structured JSON output (`outputs/loaded_documents.json`)
 
 ## What Is Not Yet Implemented
-- retrieval logic
+- chunking logic
 - TF-IDF indexing and search implementation
 - hybrid retrieval implementation
 - retrieval decision logic implementation
@@ -62,4 +67,4 @@ A closed-loop project-control protocol is now in place via `AGENTS.md` + permane
 - follow closed-loop reporting and project-memory updates each task
 
 ## Next Recommended Task
-After approval, begin Milestone 3 implementation in order, starting with `pocs/03a_load_documents` only.
+After approval, implement `pocs/03b_chunk_documents` only.
