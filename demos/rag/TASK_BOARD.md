@@ -29,3 +29,4 @@
 - Create aux_scripts helper utilities
 - Record Milestone 1 Cloudflare static hosting smoke test
 - Create synthetic business docs
+- Stage Milestone 3 retrieval-learning structure

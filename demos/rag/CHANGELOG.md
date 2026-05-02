@@ -54,7 +54,18 @@
   - `notes/retrieval_questions.md`
   - `notes/what_good_answers_should_include.md`
   - `notes/document_design_notes.md`
+- Milestone 3 retrieval ladder scaffolding:
+  - `pocs/03a_load_documents/`
+  - `pocs/03b_chunk_documents/`
+  - `pocs/03c_text_normalization/`
+  - `pocs/03d_word_tfidf_index/`
+  - `pocs/03e_char_tfidf_typo_search/`
+  - `pocs/03f_hybrid_retrieval/`
+  - `pocs/03g_retrieval_decision/`
+  - `pocs/03h_retrieval_evaluation/`
+  - `pocs/03_RETRIEVAL_LADDER.md`
 
 ### Changed
 - `pocs/02_fake_business_docs/README.md` now defines purpose, file map, synthetic warning, and next milestone.
 - `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect Milestone 2 completion and next-step retrieval POC direction.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect Milestone 3 retrieval-learning structure staging (no implementation yet).

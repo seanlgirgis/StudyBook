@@ -1,7 +1,7 @@
 # HANDOFF.md
 
 ## Resume Point
-Milestone 1 static website shell is implemented and smoke-tested, and Milestone 2 synthetic business documents are now populated in `pocs/02_fake_business_docs`.
+Milestone 1 static website shell is implemented and smoke-tested, Milestone 2 synthetic business documents are populated, and Milestone 3 retrieval ladder scaffolding is staged.
 
 ## Read First
 1. AGENTS.md
@@ -11,7 +11,7 @@ Milestone 1 static website shell is implemented and smoke-tested, and Milestone 
 5. KNOWN_ISSUES.md
 
 ## Next Task
-Review and approve `pocs/02_fake_business_docs`, then implement the basic retrieval POC using these documents as source corpus.
+Review and approve Milestone 3 scaffolding, then implement `pocs/03a_load_documents` only as the first retrieval baby step.
 Do not start backend, RAG, integrated, AWS, or real-data work yet.
 
 ## Constraints

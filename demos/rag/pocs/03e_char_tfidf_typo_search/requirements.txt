@@ -1,0 +1,6 @@
+# Starter dependencies for 03e_char_tfidf_typo_search
+# Implementation intentionally deferred.
+
+pydantic>=2.0
+scikit-learn>=1.4
+

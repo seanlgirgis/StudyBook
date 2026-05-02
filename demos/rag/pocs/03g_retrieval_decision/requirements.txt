@@ -1,0 +1,4 @@
+# Starter dependencies for 03g_retrieval_decision
+# Implementation intentionally deferred.
+
+pydantic>=2.0

@@ -68,3 +68,25 @@
 - Confirmed synthetic-demo labeling is present in business documents.
 - Confirmed no integrated/servicecall-ai files were changed in this task scope.
 - Confirmed no backend/FastAPI/RAG/API implementation files were changed in this task scope.
+
+## 2026-05-02 (Milestone 3 Retrieval Ladder Scaffolding)
+- Created staged retrieval-learning folder shells:
+  - `pocs/03a_load_documents`
+  - `pocs/03b_chunk_documents`
+  - `pocs/03c_text_normalization`
+  - `pocs/03d_word_tfidf_index`
+  - `pocs/03e_char_tfidf_typo_search`
+  - `pocs/03f_hybrid_retrieval`
+  - `pocs/03g_retrieval_decision`
+  - `pocs/03h_retrieval_evaluation`
+- Added starter `README.md` and `requirements.txt` in each stage.
+- Added empty subfolders (`src/`, `tests/`, `outputs/`, `notes/`) with `keepIt.keep` placeholders.
+- Added overview document `pocs/03_RETRIEVAL_LADDER.md`.
+- Kept this task structure-only; no retrieval implementation code added.
+
+## Validation (Milestone 3 Retrieval Ladder Scaffolding)
+- Confirmed all 8 POC stage folders exist.
+- Confirmed each stage has `README.md`, `requirements.txt`, `src/`, `tests/`, `outputs/`, `notes/`.
+- Confirmed `pocs/03_RETRIEVAL_LADDER.md` exists.
+- Confirmed no integrated/servicecall-ai files changed in this task scope.
+- Confirmed no backend/FastAPI/AWS/Docker work added in this task scope.
