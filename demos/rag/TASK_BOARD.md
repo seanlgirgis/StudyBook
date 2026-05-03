@@ -31,3 +31,5 @@
 - Create synthetic business docs
 - Stage Milestone 3 retrieval-learning structure
 - Implement 03a_load_documents
+- Add educational comments to 03a_load_documents source
+- Implement 03b_chunk_documents

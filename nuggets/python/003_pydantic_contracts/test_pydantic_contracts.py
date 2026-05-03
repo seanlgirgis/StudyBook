@@ -51,3 +51,28 @@ def test_json_contract_loader_rejects_invalid_file() -> None:
     mod = load_module("04_json_file_contract.py", "lesson04")
     with pytest.raises(ValidationError):
         mod.load_config_from_file("sample_invalid.json")
+
+
+def test_nested_order_valid_file_loads_successfully() -> None:
+    mod = load_module("10_nested_json_file_contract.py", "lesson10_valid")
+    order = mod.load_order(mod.SCRIPT_DIR / "sample_order_valid.json")
+    assert order.order_id == 5001
+    assert len(order.items) == 2
+    assert order.shipping_address.postal_code == "78701"
+
+
+def test_nested_order_invalid_file_raises_validation_error() -> None:
+    mod = load_module("10_nested_json_file_contract.py", "lesson10_invalid")
+    with pytest.raises(ValidationError):
+        mod.load_order(mod.SCRIPT_DIR / "sample_order_invalid.json")
+
+
+def test_nested_order_error_locations_include_nested_paths() -> None:
+    mod = load_module("10_nested_json_file_contract.py", "lesson10_errors")
+    with pytest.raises(ValidationError) as exc_info:
+        mod.load_order(mod.SCRIPT_DIR / "sample_order_invalid.json")
+
+    locs = {err["loc"] for err in exc_info.value.errors()}
+    assert ("customer", "email") in locs
+    assert ("items", 0, "quantity") in locs
+    assert ("shipping_address", "postal_code") in locs

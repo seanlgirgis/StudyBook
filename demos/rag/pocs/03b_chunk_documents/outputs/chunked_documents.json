@@ -1,0 +1,242 @@
+[
+  {
+    "chunk_id": "ac_replacement_estimates__chunk_000",
+    "document_id": "ac_replacement_estimates",
+    "source_file": "ac_replacement_estimates.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/ac_replacement_estimates.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## A/C Replacement Estimate Policy\n\n## When To Recommend Estimate Discussion\nRecommend replacement estimate review when one or more are true:\n- unit age is 15+ years\n- major component failure with high repair cost\n- repeated breakdowns in a single cooling season\n- utility costs rising with weak cooling performance\n\n## Repair vs Replace Guidance\n- If estimated repair is below 30% of replacement and no repeat-history: repair-first recommendation.\n- If estimated repair exceeds 40% of replacement on 15+ year unit: replacement-first recommendation.\n- Between 30-40%: present both options with pros/cons and no pressure language.",
+    "character_count": 656
+  },
+  {
+    "chunk_id": "ac_replacement_estimates__chunk_001",
+    "document_id": "ac_replacement_estimates",
+    "source_file": "ac_replacement_estimates.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/ac_replacement_estimates.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 1,
+    "text": "irst recommendation.\n- Between 30-40%: present both options with pros/cons and no pressure language.\n\n## Estimate Process\n- Provide on-site inspection window.\n- Gather equipment tonnage, duct condition, and comfort goals.\n- Present at least two equipment options.\n\n## Customer Communication Rule\nDo not promise exact pricing in chat.\nUse estimate range language and schedule on-site confirmation.",
+    "character_count": 396
+  },
+  {
+    "chunk_id": "appliance_repair_policy__chunk_000",
+    "document_id": "appliance_repair_policy",
+    "source_file": "appliance_repair_policy.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/appliance_repair_policy.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Appliance Repair Policy\n\n## Supported Appliances\n- Refrigerators\n- Dishwashers\n- Washers and dryers\n- Ovens and ranges (non-commercial)\n\n## Exclusions\n- Commercial kitchen equipment\n- Small countertop appliances\n- Units with unavailable replacement parts\n\n## Diagnostic Rule\nDiagnostic visit is required before quoting most appliance repairs.\nSame-day appliance service is lower priority than HVAC emergencies.\n\n## Refrigerator Question Handling\nIf asked \"Do you repair refrigerators?\" answer yes, then collect model, symptom, and cooling status.",
+    "character_count": 576
+  },
+  {
+    "chunk_id": "business_hours__chunk_000",
+    "document_id": "business_hours",
+    "source_file": "business_hours.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/business_hours.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Business Hours\n\n## Standard Hours\n- Monday-Friday: 7:00 AM - 8:00 PM\n- Saturday: 8:00 AM - 6:00 PM\n- Sunday: Closed for standard appointments\n\n## Emergency HVAC Hours\n- 24/7 emergency phone triage for no-cooling/no-heating safety-impact cases.\n- Night dispatch is limited to urgent HVAC failures only.\n\n## Holiday Policy\n- Reduced scheduling windows on major holidays.\n- Emergency HVAC support remains available with premium dispatch fee.\n\n## Customer-Facing Rule\nIf asked \"Are you open Sunday?\" the assistant should answer:\n- standard service: no\n- emergency HVAC triage: yes, limited dispatch",
+    "character_count": 624
+  },
+  {
+    "chunk_id": "company_profile__chunk_000",
+    "document_id": "company_profile",
+    "source_file": "company_profile.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/company_profile.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Company Profile: North Texas Comfort & Home Services\n\n## Overview\nNorth Texas Comfort & Home Services is a synthetic HVAC-first home-services company used for demo and testing.\nPrimary focus is residential comfort restoration with expandable secondary services.\n\n## Primary Service Lines\n- A/C repair\n- A/C replacement estimates\n- Heating repair\n- Maintenance plans\n- Emergency HVAC response\n\n## Secondary Service Lines\n- Plumbing\n- Water heater service\n- Appliance repair\n\n## Service Philosophy\n- Safety first for electrical, gas, and water-risk issues.\n- Repair-first guidance when a safe repair is likely to last.\n- Clear replacement guidance when age, cost, and reliability indicate replacement.\n- Transparent fallback when a request is out of scope.",
+    "character_count": 784
+  },
+  {
+    "chunk_id": "company_profile__chunk_001",
+    "document_id": "company_profile",
+    "source_file": "company_profile.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/company_profile.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 1,
+    "text": ", cost, and reliability indicate replacement.\n- Transparent fallback when a request is out of scope.\n\n## Demo Constraints\n- Synthetic data only.\n- No real customer records.\n- No real addresses, phone numbers, or email identities.",
+    "character_count": 229
+  },
+  {
+    "chunk_id": "coupon_policy__chunk_000",
+    "document_id": "coupon_policy",
+    "source_file": "coupon_policy.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/coupon_policy.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Coupon and Offer Policy\n\n## Standard Rules\n- One coupon per paid invoice unless explicitly stated.\n- Coupons cannot be combined with emergency dispatch premiums.\n- Coupon eligibility must be confirmed during booking.\n\n## Diagnostic Fee Waiver Rule\nDiagnostic fee may be waived only when:\n- customer approves same-visit repair above minimum spend threshold, or\n- active maintenance plan benefit applies.\n\n## Exception Handling\nIf customer requests special pricing exception:\n- assistant should not approve directly\n- escalate to pricing supervisor queue\n- log outcome as `pricing_exception_requested`",
+    "character_count": 629
+  },
+  {
+    "chunk_id": "escalation_rules__chunk_000",
+    "document_id": "escalation_rules",
+    "source_file": "escalation_rules.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/escalation_rules.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Escalation Rules\n\n## Escalate Immediately\n- Gas odor reports\n- Electrical burning smell near HVAC or water heater\n- Flooding risk from active leaks\n- Vulnerable occupants in extreme indoor temperatures\n- Requests for legal, insurance, or code-enforcement advice\n\n## Escalate To Pricing Supervisor\n- Diagnostic fee waiver outside policy\n- Coupon stacking requests\n- Custom discount demands tied to complaints\n\n## Escalate To Dispatch Review\n- Borderline service-area addresses\n- Sunday non-emergency appointment demands\n- Unclear service category with safety implications\n\n## Fallback Instead of Escalate\n- Out-of-scope appliance types\n- Requests for unsupported installation work",
+    "character_count": 709
+  },
+  {
+    "chunk_id": "escalation_rules__chunk_001",
+    "document_id": "escalation_rules",
+    "source_file": "escalation_rules.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/escalation_rules.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 1,
+    "text": "back Instead of Escalate\n- Out-of-scope appliance types\n- Requests for unsupported installation work\n\n## Outcome Logging Tags\n- `escalated_safety`\n- `escalated_pricing`\n- `escalated_dispatch`\n- `fallback_out_of_scope`",
+    "character_count": 217
+  },
+  {
+    "chunk_id": "faq__chunk_000",
+    "document_id": "faq",
+    "source_file": "faq.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/faq.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## FAQ\n\n## Do you offer same-day A/C repair?\nSame-day requests are prioritized for severe no-cooling cases, but not guaranteed.\n\n## Do you service Plano?\nYes, Plano is in the standard core coverage zone.\n\n## Are you open on Sunday?\nStandard appointments are closed Sunday; emergency HVAC triage is still available.\n\n## Do you offer financing for a new A/C system?\nYes, financing is available for qualifying replacement projects.\n\n## Can diagnostic fees be waived?\nOnly under policy conditions, such as same-visit repair approval or maintenance-plan eligibility.\n\n## Do you repair water heaters?\nYes, supported tank and limited tankless systems are serviced.\n\n## Do you repair refrigerators?\nYes, refrigerator diagnostics and repairs are supported.",
+    "character_count": 774
+  },
+  {
+    "chunk_id": "faq__chunk_001",
+    "document_id": "faq",
+    "source_file": "faq.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/faq.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 1,
+    "text": "serviced.\n\n## Do you repair refrigerators?\nYes, refrigerator diagnostics and repairs are supported.\n\n## What if I am outside your service area?\nWe cannot promise dispatch; we can offer a waitlist callback option.",
+    "character_count": 212
+  },
+  {
+    "chunk_id": "financing_policy__chunk_000",
+    "document_id": "financing_policy",
+    "source_file": "financing_policy.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/financing_policy.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Financing Policy\n\n## Eligible Work\n- A/C system replacement\n- Heating system replacement\n- Water heater replacement above minimum project amount\n\n## Basic Terms (Demo)\n- Deferred-interest options for qualified customers\n- Fixed-term installment options\n- Prequalification through partner portal at estimate stage\n\n## Not Eligible\n- Diagnostic-only visits\n- Small repairs below financing threshold\n\n## Assistant Rule\nIf asked \"Do you offer financing?\" answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling.",
+    "character_count": 605
+  },
+  {
+    "chunk_id": "hvac_repair_policy__chunk_000",
+    "document_id": "hvac_repair_policy",
+    "source_file": "hvac_repair_policy.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/hvac_repair_policy.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## HVAC Repair Policy\n\n## Repair Eligibility\nHVAC repair is offered when:\n- the system can be safely restored,\n- parts are available within 1-3 business days, and\n- estimated repair cost is below replacement-threshold guidance.\n\n## Same-Day Service Target\n- Same-day appointments are prioritized for no-cooling above 88F outdoor temperature.\n- Same-day is not guaranteed; dispatch depends on slot availability and location.\n\n## Not-Cooling Triage Steps\n1. Confirm thermostat mode and setpoint.\n2. Confirm power status and breaker state.\n3. Check airflow at main vents.\n4. Ask for unusual sounds, odors, or water around indoor unit.",
+    "character_count": 658
+  },
+  {
+    "chunk_id": "hvac_repair_policy__chunk_001",
+    "document_id": "hvac_repair_policy",
+    "source_file": "hvac_repair_policy.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/hvac_repair_policy.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 1,
+    "text": "tate.\n3. Check airflow at main vents.\n4. Ask for unusual sounds, odors, or water around indoor unit.\n\n## Urgency Detection Rules\nEscalate to urgent scheduling when:\n- elderly or medically sensitive occupants report extreme indoor heat/cold\n- complete system outage in severe weather\n- burning odor or electrical hazard indicators\n\n## Repair Deferral Rule\nIf unsafe electrical, gas, or refrigerant concerns are suspected, skip DIY advice and escalate to dispatcher immediately.",
+    "character_count": 476
+  },
+  {
+    "chunk_id": "intake_script__chunk_000",
+    "document_id": "intake_script",
+    "source_file": "intake_script.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/intake_script.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Intake Script (Demo)\n\n## Step 1: Identify Need\nAsk:\n1. \"What issue are you experiencing right now?\"\n2. \"Is this HVAC, plumbing, water heater, or appliance related?\"\n\n## Step 2: Detect Urgency\nAsk:\n1. \"Is there a safety concern such as gas smell, burning odor, or active water leak?\"\n2. \"Is anyone in the home medically sensitive to temperature extremes?\"\n\nIf yes to safety concern, escalate immediately.\n\n## Step 3: Confirm Serviceability\nAsk:\n1. \"What city and zip code is the service location?\"\n2. \"Are you the homeowner, tenant, or property manager?\"",
+    "character_count": 583
+  },
+  {
+    "chunk_id": "intake_script__chunk_001",
+    "document_id": "intake_script",
+    "source_file": "intake_script.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/intake_script.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 1,
+    "text": "city and zip code is the service location?\"\n2. \"Are you the homeowner, tenant, or property manager?\"\n\n## Step 4: Collect Equipment Context\nAsk category-specific details:\n- HVAC: system age, cooling/heating status, unusual noise\n- Water heater: leak location, hot-water availability\n- Appliance: appliance type, brand/model, symptom\n\n## Step 5: Route Outcome\n- If serviceable and safe: offer booking window.\n- If outside area: fallback and offer waitlist callback.\n- If unsupported: fallback with supported-service summary.\n- If policy exception requested: escalate pricing.\n\n## Lead Quality Scoring Inputs (Demo)\n- `service_in_area` (yes/no)\n- `urgency_level` (low/medium/high)\n- `service_type_supported` (yes/no)\n- `replacement_intent` (yes/no/unknown)\n- `schedule_readiness` (ready/not_ready)",
+    "character_count": 794
+  },
+  {
+    "chunk_id": "intake_script__chunk_002",
+    "document_id": "intake_script",
+    "source_file": "intake_script.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/intake_script.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 2,
+    "text": "supported` (yes/no)\n- `replacement_intent` (yes/no/unknown)\n- `schedule_readiness` (ready/not_ready)\n\n## Outcome Event Template\n- `event_type`: `intake_completed`\n- `classification`: hvac_repair|hvac_replace|plumbing|water_heater|appliance|unsupported\n- `action`: answer|fallback|escalate|book",
+    "character_count": 293
+  },
+  {
+    "chunk_id": "maintenance_plan__chunk_000",
+    "document_id": "maintenance_plan",
+    "source_file": "maintenance_plan.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/maintenance_plan.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Maintenance Plan Policy\n\n## Plan Name\nComfort Care Plan (demo)\n\n## Included Benefits\n- Two HVAC tune-ups per year (spring and fall)\n- Priority scheduling for HVAC calls\n- Reduced diagnostic fee on covered equipment\n- Filter and thermostat optimization checklist\n\n## Enrollment Notes\n- Membership starts after first paid visit.\n- Plans are household-based and non-transferable.\n- Cancel any time before next renewal cycle.\n\n## Edge Cases\n- Missed tune-up windows can be rescheduled within same season based on capacity.\n- Plan discount does not combine with all coupons.",
+    "character_count": 599
+  },
+  {
+    "chunk_id": "plumbing_services__chunk_000",
+    "document_id": "plumbing_services",
+    "source_file": "plumbing_services.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/plumbing_services.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Plumbing Services Policy\n\n## Included Plumbing Work\n- Drain clearing\n- Leak checks and minor line repair\n- Fixture replacement (faucets, toilets, disposals)\n- Shutoff valve and pressure diagnostics\n\n## Not Included\n- Slab re-piping projects\n- City-permit-only sewer reconstruction\n- Specialty well-system service\n\n## Scheduling Priority\n- Active leak with property-damage risk: urgent queue.\n- Non-urgent fixture issue: first available standard slot.\n\n## Handoff Rule\nIf request is outside plumbing scope, fallback with out-of-scope message and offer referral list callback.",
+    "character_count": 604
+  },
+  {
+    "chunk_id": "scheduling_policy__chunk_000",
+    "document_id": "scheduling_policy",
+    "source_file": "scheduling_policy.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/scheduling_policy.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Scheduling Policy\n\n## Required Intake Details Before Booking\n- Customer first name (initials allowed in demo)\n- Service city and zip code\n- Service category (HVAC/plumbing/water heater/appliance)\n- Symptom summary\n- Preferred time window\n- Occupancy status (owner, tenant, manager)\n\n## Optional But Helpful\n- System age\n- Equipment brand/model\n- Photos or short symptom video note\n\n## Booking Outcomes\n- `booked_standard`\n- `booked_urgent`\n- `needs_dispatch_review`\n- `outside_service_area`\n- `unsupported_request`\n\n## Outside-Area and Unsupported Rules\n- Outside area: do not book, offer waitlist callback.\n- Unsupported request: fallback politely and offer referral callback.",
+    "character_count": 707
+  },
+  {
+    "chunk_id": "scheduling_policy__chunk_001",
+    "document_id": "scheduling_policy",
+    "source_file": "scheduling_policy.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/scheduling_policy.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 1,
+    "text": "book, offer waitlist callback.\n- Unsupported request: fallback politely and offer referral callback.\n\n## Sunday Scheduling Rule\n- Standard appointments are not booked on Sunday.\n- Emergency HVAC cases can be routed to limited dispatch review.",
+    "character_count": 242
+  },
+  {
+    "chunk_id": "service_area__chunk_000",
+    "document_id": "service_area",
+    "source_file": "service_area.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/service_area.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Service Area Policy\n\n## Core Coverage Zone\nThe standard coverage zone includes the following North Texas cities:\n- Fort Worth\n- Arlington\n- Mansfield\n- Burleson\n- Keller\n- Plano\n- Frisco\n- McKinney\n\n## Limited Coverage Zone\nRequests in nearby communities outside the core list may be accepted only when:\n- the job is HVAC emergency service, and\n- dispatch load is below 80%.\n\n## Outside-Service-Area Rule\n- If outside all coverage zones, the assistant must fallback with: \"We are currently out of your area.\"\n- Offer waitlist callback only; do not promise dispatch.\n- Log outcome as `outside_service_area`.\n\n## Edge Cases\n- Borderline zip codes require dispatcher confirmation.\n- Multi-property managers with 3+ addresses can request manual service-area review.",
+    "character_count": 791
+  },
+  {
+    "chunk_id": "warranty_policy__chunk_000",
+    "document_id": "warranty_policy",
+    "source_file": "warranty_policy.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/warranty_policy.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Warranty Policy\n\n## Repair Warranty\n- Standard labor warranty on repairs: 30 days.\n- Installed replacement part warranty follows manufacturer terms.\n\n## Replacement Warranty\n- Installation labor warranty on full system replacement: 1 year.\n- Extended coverage options discussed during estimate appointment.\n\n## Exclusions\n- Customer-supplied parts\n- Damage from neglected maintenance\n- Pre-existing non-serviced system defects\n\n## Claim Intake Rule\nWarranty claim requires invoice reference and symptom summary.\nIf proof details are missing, mark as `needs_dispatch_review`.",
+    "character_count": 604
+  },
+  {
+    "chunk_id": "water_heater_policy__chunk_000",
+    "document_id": "water_heater_policy",
+    "source_file": "water_heater_policy.md",
+    "source_path": "pocs/02_fake_business_docs/data/home_services_demo/water_heater_policy.md",
+    "title": "Synthetic Demo Document",
+    "chunk_index": 0,
+    "text": "# Synthetic Demo Document\n\n## Water Heater Service Policy\n\n## Supported Systems\n- Standard tank water heaters (gas and electric)\n- Tankless diagnostics (limited by model support list)\n\n## Repair vs Replace Rule\n- Repair-first if leak is not from tank body and cost is reasonable.\n- Replace-first if tank is leaking from body seam or shows severe corrosion.\n\n## Safety Escalation\nEscalate immediately when customer reports:\n- gas smell\n- active water pooling near gas/electrical connections\n- pressure relief valve discharge with hissing\n\n## Customer Questions\nIf asked \"Do you repair water heaters?\" answer yes for supported systems, then clarify model details are needed before scheduling.",
+    "character_count": 690
+  }
+]

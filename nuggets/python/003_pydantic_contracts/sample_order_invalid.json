@@ -1,0 +1,27 @@
+{
+  "order_id": 5002,
+  "customer": {
+    "customer_id": 43,
+    "name": "Bad Data",
+    "email": "not-an-email"
+  },
+  "items": [
+    {
+      "sku": "BOOK-002",
+      "quantity": 0,
+      "unit_price": 20.5
+    },
+    {
+      "sku": "PEN-010",
+      "quantity": 1,
+      "unit_price": -1
+    }
+  ],
+  "shipping_address": {
+    "line1": "999 Broken Ave",
+    "city": "Nowhere",
+    "state": "TEX",
+    "postal_code": "78A01"
+  },
+  "status": "PROCESSING"
+}

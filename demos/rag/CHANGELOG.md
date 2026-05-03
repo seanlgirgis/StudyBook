@@ -77,3 +77,19 @@
 - `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect Milestone 3 retrieval-learning structure staging (no implementation yet).
 - `pocs/03a_load_documents/README.md` and `requirements.txt` now reflect actual load-documents implementation and test commands.
 - `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect Milestone 3 step `03a_load_documents` completion.
+- `pocs/03a_load_documents/src/schemas.py` and `pocs/03a_load_documents/src/load_documents.py` now include educational docstrings/comments without behavior changes.
+
+## 2026-05-03
+### Added
+- Milestone 3 step `03b_chunk_documents` implementation files:
+  - `pocs/03b_chunk_documents/src/schemas.py`
+  - `pocs/03b_chunk_documents/src/chunk_documents.py`
+  - `pocs/03b_chunk_documents/tests/test_chunk_documents.py`
+  - `pocs/03b_chunk_documents/notes/what_this_teaches.md`
+  - `pocs/03b_chunk_documents/notes/common_failures.md`
+  - `pocs/03b_chunk_documents/outputs/chunk_documents.json`
+
+### Changed
+- `pocs/03b_chunk_documents/README.md` now documents real commands, expected output, and stage boundaries.
+- `pocs/03b_chunk_documents/requirements.txt` now includes `pytest>=8.0`.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect Milestone 3 step `03b_chunk_documents` completion and next-step gating to `03c_text_normalization` after approval.

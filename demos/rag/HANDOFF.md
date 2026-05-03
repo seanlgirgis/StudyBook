@@ -1,7 +1,7 @@
 # HANDOFF.md
 
 ## Resume Point
-Milestone 1 static website shell is implemented and smoke-tested, Milestone 2 synthetic business documents are populated, and Milestone 3 step `03a_load_documents` is implemented and validated.
+Milestone 1 static website shell is implemented and smoke-tested, Milestone 2 synthetic business documents are populated, and Milestone 3 steps `03a_load_documents` and `03b_chunk_documents` are implemented and validated.
 
 ## Read First
 1. AGENTS.md
@@ -11,7 +11,7 @@ Milestone 1 static website shell is implemented and smoke-tested, Milestone 2 sy
 5. KNOWN_ISSUES.md
 
 ## Next Task
-Review and approve `pocs/03a_load_documents`, then implement `pocs/03b_chunk_documents` only.
+Review and approve `pocs/03b_chunk_documents`, then implement `pocs/03c_text_normalization` only.
 Do not start backend, RAG, integrated, AWS, or real-data work yet.
 
 ## Constraints

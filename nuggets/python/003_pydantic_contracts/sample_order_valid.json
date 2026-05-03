@@ -1,0 +1,27 @@
+{
+  "order_id": 5001,
+  "customer": {
+    "customer_id": 42,
+    "name": "Sean Parker",
+    "email": "sean.parker@example.com"
+  },
+  "items": [
+    {
+      "sku": "BOOK-001",
+      "quantity": 2,
+      "unit_price": 19.99
+    },
+    {
+      "sku": "PEN-009",
+      "quantity": 5,
+      "unit_price": 1.75
+    }
+  ],
+  "shipping_address": {
+    "line1": "123 Main St",
+    "city": "Austin",
+    "state": "TX",
+    "postal_code": "78701"
+  },
+  "status": "PAID"
+}

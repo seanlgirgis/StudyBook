@@ -116,3 +116,47 @@
 - Confirmed output JSON exists and contains 16 documents.
 - Confirmed no integrated/servicecall-ai paths were touched.
 - Confirmed no TF-IDF/search/chunking/AI/backend logic was added.
+
+## 2026-05-02 (Milestone 3 Step 03a - Educational Comments)
+- Added educational module docstrings and targeted inline comments to:
+  - `pocs/03a_load_documents/src/schemas.py`
+  - `pocs/03a_load_documents/src/load_documents.py`
+- Clarified Pydantic contract purpose, field meanings, plain-English validation rules, and 03a flow:
+  - markdown files -> `SourceDocument` objects -> `outputs/loaded_documents.json`
+- Explicitly documented that 03a does not chunk, search, retrieve, or call AI, and that output feeds `03b_chunk_documents`.
+- Kept runtime behavior unchanged.
+
+## Validation (Milestone 3 Step 03a - Educational Comments)
+- Ran bootstrap before Python commands:
+  - `. D:\Workarea\StudyBook\env_setter.ps1`
+- Ran:
+  - `python .\src\load_documents.py` (PASS, loaded 16 markdown files, wrote output JSON)
+  - `pytest -v` (PASS, 3 tests passed)
+- Confirmed `outputs/loaded_documents.json` exists and contains 16 documents.
+- Confirmed no forbidden scope areas were touched.
+
+## 2026-05-03 (Milestone 3 Step 03b - Chunk Documents)
+- Implemented `pocs/03b_chunk_documents` only.
+- Added Pydantic schemas in `src/schemas.py`:
+  - `SourceDocument` input contract validation
+  - `ChunkingConfig` validation for safe overlap settings
+  - `ChunkDocument` output contract with offset integrity checks
+- Added chunking pipeline script in `src/chunk_documents.py`:
+  - loads `03a` output JSON
+  - validates source documents
+  - creates overlapping character-window chunks with deterministic ids
+  - writes `outputs/chunk_documents.json`
+- Added tests in `tests/test_chunk_documents.py`.
+- Updated `README.md` with runnable commands and output expectations.
+- Added learning notes:
+  - `notes/what_this_teaches.md`
+  - `notes/common_failures.md`
+
+## Validation (Milestone 3 Step 03b - Chunk Documents)
+- Ran bootstrap before Python commands:
+  - `. D:\Workarea\StudyBook\env_setter.ps1`
+- Ran:
+  - `python .\src\chunk_documents.py` (PASS, loaded 16 documents and generated 42 chunks)
+  - `pytest -v` (PASS, 3 tests passed)
+- Confirmed `outputs/chunk_documents.json` exists and is populated with validated chunk records.
+- Confirmed no forbidden scope areas were touched (`integrated/servicecall-ai`, backend/FastAPI, Docker/AWS/CI-CD, or 03c+ implementation).

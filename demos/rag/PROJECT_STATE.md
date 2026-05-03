@@ -1,10 +1,10 @@
 # PROJECT_STATE.md
 
 ## Current Milestone
-Milestone 3 (Step 03a) — Document loading POC implemented (`pocs/03a_load_documents`)
+Milestone 3 (Step 03b) — Document chunking POC implemented (`pocs/03b_chunk_documents`)
 
 ## Current Focus
-Implement and validate `03a_load_documents` to convert synthetic markdown files into validated Pydantic `SourceDocument` records and structured JSON output.
+Review and approve `03b_chunk_documents`, then implement `03c_text_normalization` only.
 
 ## Control Protocol Status
 A closed-loop project-control protocol is now in place via `AGENTS.md` + permanent memory files:
@@ -40,9 +40,15 @@ A closed-loop project-control protocol is now in place via `AGENTS.md` + permane
   - markdown discovery/loading script
   - loader tests
   - structured JSON output (`outputs/loaded_documents.json`)
+  - educational module/function comments and docstrings for onboarding
+- `pocs/03b_chunk_documents` implementation:
+  - Pydantic schemas for `SourceDocument`, `ChunkingConfig`, and `ChunkDocument`
+  - chunking script to transform 03a output into overlapping character-window chunks
+  - chunking tests
+  - structured JSON output (`outputs/chunk_documents.json`)
+  - learning notes (`notes/what_this_teaches.md`, `notes/common_failures.md`)
 
 ## What Is Not Yet Implemented
-- chunking logic
 - TF-IDF indexing and search implementation
 - hybrid retrieval implementation
 - retrieval decision logic implementation
@@ -67,4 +73,4 @@ A closed-loop project-control protocol is now in place via `AGENTS.md` + permane
 - follow closed-loop reporting and project-memory updates each task
 
 ## Next Recommended Task
-After approval, implement `pocs/03b_chunk_documents` only.
+After approval, implement `pocs/03c_text_normalization` only.
