@@ -131,3 +131,29 @@
 - `PROJECT_STATE.md` and `HANDOFF.md` now include a closure snapshot section summarizing PASS status for the completed 03a->03e ladder and preserved learning points.
 - `TASK_BOARD.md` now includes explicit `03f_hybrid_retrieval` discussion-only planning before any implementation.
 - `DAILY_LOG.md` now records a closure/update-only pass confirming no POC code changes and no 03f implementation.
+- `pocs/03f_hybrid_retrieval/README.md` now standardizes the planned runner name to `src/run_hybrid_search.py` (documentation only; no implementation).
+- `AGENTS.md`, `PROJECT_STATE.md`, and `HANDOFF.md` now include a standing POC documentation structure rule requiring `README.md`, `docs/DESIGN.md`, `docs/CONTRACT.md`, `docs/TEST_PLAN.md`, `src/`, `tests/`, and `outputs/`.
+- `AGENTS.md`, `PROJECT_STATE.md`, and `HANDOFF.md` now include a standing POC acceptance gate requiring working code, passing tests, sample output, and complete usage/design/contract/test-plan documentation.
+- `pocs/03f_hybrid_retrieval/README.md` now records that schema/contracts are implemented while retrieval/search logic remains pending.
+- `pocs/03f_hybrid_retrieval/docs/CONTRACT.md` now aligns with implemented schema names: `HybridRetrievalConfig`, `HybridSearchQuery`, `HybridSearchResult`, `HybridSearchResponse`, and `retrieval_sources` values `word`/`char`.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `HANDOFF.md`, and `DAILY_LOG.md` now reflect 03f schema/contracts completion and that full retrieval logic is still not implemented.
+
+### Added
+- `pocs/03f_hybrid_retrieval/src/schemas.py`
+- `pocs/03f_hybrid_retrieval/tests/test_schemas.py`
+- `pocs/03f_hybrid_retrieval/outputs/.gitkeep`
+- `pocs/03f_hybrid_retrieval/src/hybrid_retrieval.py`
+- `pocs/03f_hybrid_retrieval/tests/test_hybrid_retrieval.py`
+- `pocs/03f_hybrid_retrieval/src/run_hybrid_search.py`
+
+### Changed
+- `pocs/03f_hybrid_retrieval/requirements.txt` now includes `scikit-learn` and `joblib` for reusable hybrid retrieval core execution.
+- `pocs/03f_hybrid_retrieval/README.md` now marks core retrieval module and tests implemented, with runner/output generation still pending.
+- `pocs/03f_hybrid_retrieval/docs/DESIGN.md` now documents implemented core functions and reuse of 03c normalization behavior.
+- `pocs/03f_hybrid_retrieval/docs/CONTRACT.md` now includes required artifact keys and top-k/normalization contract notes.
+- `pocs/03f_hybrid_retrieval/docs/TEST_PLAN.md` now records implemented unit coverage for core retrieval behavior.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `HANDOFF.md`, and `DAILY_LOG.md` now reflect completion of the 03f reusable core retrieval step and remaining runner/output work.
+- `pocs/03f_hybrid_retrieval/README.md`, `docs/DESIGN.md`, `docs/CONTRACT.md`, and `docs/TEST_PLAN.md` now reflect runner implementation and sample-output generation behavior.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `HANDOFF.md`, and `DAILY_LOG.md` now reflect 03f runner completion and sample output generation status.
+- 03f documentation wording is now present-tense for implemented behavior (inputs read, output written, current commands).
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `HANDOFF.md`, and `DAILY_LOG.md` now mark `03f_hybrid_retrieval` as PASS/completed and set next step to `03g_retrieval_decision` planning only.

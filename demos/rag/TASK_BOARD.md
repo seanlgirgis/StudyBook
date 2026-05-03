@@ -1,8 +1,8 @@
 # TASK_BOARD.md
 
 ## TODO
-- Discuss `03f_hybrid_retrieval` design only (no implementation yet)
 - Build basic retrieval POC
+- Discuss `03g_retrieval_decision` design only (no implementation yet)
 - Product Direction Add-On: Guided Customer Input (future UX layer before retrieval; no implementation in current 03e scope)
 - Build answer-with-citations POC
 - Build intake classifier POC
@@ -38,3 +38,9 @@
 - Implement 03c_text_normalization
 - Implement 03d_word_tfidf_index
 - Implement 03e_char_tfidf_typo_search
+- Standardize `03f_hybrid_retrieval` planned runner naming to `src/run_hybrid_search.py` (documentation only)
+- Record standing POC doc/acceptance rule in project control files
+- Implement `03f_hybrid_retrieval` schema/contracts + tests (no retrieval/search logic yet)
+- Implement `03f_hybrid_retrieval` reusable core retrieval module + tests (no runner/output file yet)
+- Implement `03f_hybrid_retrieval` runner script + sample output generation
+- Close `03f_hybrid_retrieval` as PASS (tests passed, runner passed, sample output written)

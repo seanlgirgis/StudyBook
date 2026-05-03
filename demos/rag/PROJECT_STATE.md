@@ -1,10 +1,12 @@
 # PROJECT_STATE.md
 
 ## Current Milestone
-Milestone 3 (Step 03e) — Character TF-IDF typo-search POC completed and closed (`pocs/03e_char_tfidf_typo_search`)
+Milestone 3 (Step 03f) — Hybrid retrieval POC completed and PASS (`pocs/03f_hybrid_retrieval`)
 
 ## Current Focus
-`03e_char_tfidf_typo_search` is closed. Next suggested step is discussion/planning for `03f_hybrid_retrieval` only (not implemented).
+`03e_char_tfidf_typo_search` is closed.
+`03f_hybrid_retrieval` schema/contracts, reusable core retrieval module, runner, and sample output generation are implemented and validated.
+Next suggested step is `03g_retrieval_decision` planning and scope review.
 
 ## Closure Snapshot (03a-03e)
 - `03a_load_documents` PASS
@@ -172,7 +174,6 @@ A closed-loop project-control protocol is now in place via `AGENTS.md` + permane
 
 ## What Is Not Yet Implemented
 - customer-facing TF-IDF search flow (word and char indexes exist; retrieval interface not yet built)
-- hybrid retrieval implementation
 - retrieval decision logic implementation
 - retrieval evaluation harness implementation
 - answer with citations implementation
@@ -193,13 +194,8 @@ A closed-loop project-control protocol is now in place via `AGENTS.md` + permane
 - use Pydantic everywhere
 - synthetic data only
 - follow closed-loop reporting and project-memory updates each task
+- every meaningful POC should include: `README.md`, `docs/DESIGN.md`, `docs/CONTRACT.md`, `docs/TEST_PLAN.md`, `src/`, `tests/`, `outputs/`
+- POC completion gate: code works, tests pass, sample output exists, and docs (`README`, `DESIGN`, `CONTRACT`, `TEST_PLAN`) are complete
 
 ## Next Recommended Task
-Discuss and scope `pocs/03f_hybrid_retrieval` next. Do not implement `03f` until approved.
-Discussion should cover only:
-- what hybrid retrieval means
-- why it comes after `03d` and `03e`
-- what it should combine
-- how scoring might work
-- what it should read/write
-- what it should not do
+Discuss and scope `pocs/03g_retrieval_decision` next. Do not implement `03g` until approved.

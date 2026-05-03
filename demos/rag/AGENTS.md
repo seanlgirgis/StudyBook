@@ -40,6 +40,26 @@ Codex should not:
 9. Every AWS resource must have cleanup notes or script.
 10. Nothing moves into `integrated/servicecall-ai/` until understood in `pocs/`.
 
+## POC Documentation Standard (Standing Rule)
+Every meaningful POC should include:
+- `README.md`
+- `docs/DESIGN.md`
+- `docs/CONTRACT.md`
+- `docs/TEST_PLAN.md`
+- `src/`
+- `tests/`
+- `outputs/`
+
+## POC Acceptance Rule (Standing Rule)
+A POC is not complete until:
+- code works
+- tests pass
+- sample output exists
+- `README.md` explains usage
+- `docs/DESIGN.md` explains architecture
+- `docs/CONTRACT.md` defines inputs/outputs
+- `docs/TEST_PLAN.md` defines validation
+
 ## Environment Bootstrap
 Before running Python, pytest, pip, FastAPI, or project scripts, Codex must run:
 

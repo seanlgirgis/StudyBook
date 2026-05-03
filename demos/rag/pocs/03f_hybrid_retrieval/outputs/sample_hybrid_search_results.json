@@ -1,0 +1,578 @@
+{
+  "poc": "03f_hybrid_retrieval",
+  "description": "Hybrid retrieval sample output combining word TF-IDF and char TF-IDF results.",
+  "word_index_path": "pocs/03d_word_tfidf_index/outputs/tfidf_index.joblib",
+  "char_index_path": "pocs/03e_char_tfidf_typo_search/outputs/char_tfidf_index.joblib",
+  "config": {
+    "word_weight": 0.65,
+    "char_weight": 0.35,
+    "top_k": 5
+  },
+  "queries": [
+    {
+      "query": "ac blowing warm air",
+      "normalized_query": "ac blowing warm air",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "faq__chunk_000",
+          "hybrid_score": 0.08499077537439621,
+          "word_score": 0.10219625693660388,
+          "char_score": 0.053037738187439114,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "faq.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## FAQ\n\n## Do you offer same-day A/C repair?\nSame-day requests are prioritized for severe no-cooling cases, but not guaranteed.\n\n## Do you service Plano?\nYes, Plano is in the standard core coverage zone.\n\n## Are you open on Sunday?\nStandard appointments are closed Sunday; emergency HVAC triage is still available.\n\n## Do you offer financing for a new A/C system?\nYes, financing is available for qualifying replacement projects.\n\n## Can diagnostic fees be waived?\nOnly under policy conditions, such as same-visit repair approval or maintenance-plan eligibility.\n\n## Do you repair water heaters?\nYes, supported tank and limited tankless systems are serviced.\n\n## Do you repair refrigerators?\nYes, refrigerator diagnostics and repairs are supported.",
+          "normalized_text": "synthetic demo document faq do you offer same day ac repair same day requests are prioritized for severe no cooling cases but not guaranteed do you service plano yes plano is in the standard core coverage zone are you open on sunday standard appointments are closed sunday emergency hvac triage is still available do you offer financing for a new ac system yes financing is available for qualifying replacement projects can diagnostic fees be waived only under policy conditions such as same visit repair approval or maintenance plan eligibility do you repair water heaters yes supported tank and limited tankless systems are serviced do you repair refrigerators yes refrigerator diagnostics and repairs are supported"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "company_profile__chunk_000",
+          "hybrid_score": 0.0816557243658819,
+          "word_score": 0.10001161511482749,
+          "char_score": 0.04756621297498294,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "company_profile.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Company Profile: North Texas Comfort & Home Services\n\n## Overview\nNorth Texas Comfort & Home Services is a synthetic HVAC-first home-services company used for demo and testing.\nPrimary focus is residential comfort restoration with expandable secondary services.\n\n## Primary Service Lines\n- A/C repair\n- A/C replacement estimates\n- Heating repair\n- Maintenance plans\n- Emergency HVAC response\n\n## Secondary Service Lines\n- Plumbing\n- Water heater service\n- Appliance repair\n\n## Service Philosophy\n- Safety first for electrical, gas, and water-risk issues.\n- Repair-first guidance when a safe repair is likely to last.\n- Clear replacement guidance when age, cost, and reliability indicate replacement.\n- Transparent fallback when a request is out of scope.",
+          "normalized_text": "synthetic demo document company profile north texas comfort home services overview north texas comfort home services is a synthetic hvac first home services company used for demo and testing primary focus is residential comfort restoration with expandable secondary services primary service lines ac repair ac replacement estimates heating repair maintenance plans emergency hvac response secondary service lines plumbing water heater service appliance repair service philosophy safety first for electrical gas and water risk issues repair first guidance when a safe repair is likely to last clear replacement guidance when age cost and reliability indicate replacement transparent fallback when a request is out of scope"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "financing_policy__chunk_000",
+          "hybrid_score": 0.042025582624480466,
+          "word_score": 0.06465474249920071,
+          "char_score": 0.0,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word"
+          ],
+          "source_file": "financing_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Financing Policy\n\n## Eligible Work\n- A/C system replacement\n- Heating system replacement\n- Water heater replacement above minimum project amount\n\n## Basic Terms (Demo)\n- Deferred-interest options for qualified customers\n- Fixed-term installment options\n- Prequalification through partner portal at estimate stage\n\n## Not Eligible\n- Diagnostic-only visits\n- Small repairs below financing threshold\n\n## Assistant Rule\nIf asked \"Do you offer financing?\" answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling.",
+          "normalized_text": "synthetic demo document financing policy eligible work ac system replacement heating system replacement water heater replacement above minimum project amount basic terms demo deferred interest options for qualified customers fixed term installment options prequalification through partner portal at estimate stage not eligible diagnostic only visits small repairs below financing threshold assistant rule if asked do you offer financing answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "warranty_policy__chunk_000",
+          "hybrid_score": 0.04115563276357783,
+          "word_score": 0.0,
+          "char_score": 0.11758752218165094,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "char"
+          ],
+          "source_file": "warranty_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Warranty Policy\n\n## Repair Warranty\n- Standard labor warranty on repairs: 30 days.\n- Installed replacement part warranty follows manufacturer terms.\n\n## Replacement Warranty\n- Installation labor warranty on full system replacement: 1 year.\n- Extended coverage options discussed during estimate appointment.\n\n## Exclusions\n- Customer-supplied parts\n- Damage from neglected maintenance\n- Pre-existing non-serviced system defects\n\n## Claim Intake Rule\nWarranty claim requires invoice reference and symptom summary.\nIf proof details are missing, mark as `needs_dispatch_review`.",
+          "normalized_text": "synthetic demo document warranty policy repair warranty standard labor warranty on repairs 30 days installed replacement part warranty follows manufacturer terms replacement warranty installation labor warranty on full system replacement 1 year extended coverage options discussed during estimate appointment exclusions customer supplied parts damage from neglected maintenance pre existing non serviced system defects claim intake rule warranty claim requires invoice reference and symptom summary if proof details are missing mark as needs_dispatch_review"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "ac_replacement_estimates__chunk_000",
+          "hybrid_score": 0.03170849759006051,
+          "word_score": 0.048782303984708474,
+          "char_score": 0.0,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word"
+          ],
+          "source_file": "ac_replacement_estimates.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## A/C Replacement Estimate Policy\n\n## When To Recommend Estimate Discussion\nRecommend replacement estimate review when one or more are true:\n- unit age is 15+ years\n- major component failure with high repair cost\n- repeated breakdowns in a single cooling season\n- utility costs rising with weak cooling performance\n\n## Repair vs Replace Guidance\n- If estimated repair is below 30% of replacement and no repeat-history: repair-first recommendation.\n- If estimated repair exceeds 40% of replacement on 15+ year unit: replacement-first recommendation.\n- Between 30-40%: present both options with pros/cons and no pressure language.\n\n## Estimate Process\n- Provide on-site inspection window.\n- Gather equipment tonnage, duct condition, and comfort goals.\n- Present at least two equipment options.",
+          "normalized_text": "synthetic demo document ac replacement estimate policy when to recommend estimate discussion recommend replacement estimate review when one or more are true unit age is 15 years major component failure with high repair cost repeated breakdowns in a single cooling season utility costs rising with weak cooling performance repair vs replace guidance if estimated repair is below 30 of replacement and no repeat history repair first recommendation if estimated repair exceeds 40 of replacement on 15 year unit replacement first recommendation between 30 40 present both options with pros cons and no pressure language estimate process provide on site inspection window gather equipment tonnage duct condition and comfort goals present at least two equipment options"
+        }
+      ]
+    },
+    {
+      "query": "ac blwoing warm air",
+      "normalized_query": "ac blwoing warm air",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "faq__chunk_000",
+          "hybrid_score": 0.0944975986382402,
+          "word_score": 0.10219625693660388,
+          "char_score": 0.08020009036985047,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "faq.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## FAQ\n\n## Do you offer same-day A/C repair?\nSame-day requests are prioritized for severe no-cooling cases, but not guaranteed.\n\n## Do you service Plano?\nYes, Plano is in the standard core coverage zone.\n\n## Are you open on Sunday?\nStandard appointments are closed Sunday; emergency HVAC triage is still available.\n\n## Do you offer financing for a new A/C system?\nYes, financing is available for qualifying replacement projects.\n\n## Can diagnostic fees be waived?\nOnly under policy conditions, such as same-visit repair approval or maintenance-plan eligibility.\n\n## Do you repair water heaters?\nYes, supported tank and limited tankless systems are serviced.\n\n## Do you repair refrigerators?\nYes, refrigerator diagnostics and repairs are supported.",
+          "normalized_text": "synthetic demo document faq do you offer same day ac repair same day requests are prioritized for severe no cooling cases but not guaranteed do you service plano yes plano is in the standard core coverage zone are you open on sunday standard appointments are closed sunday emergency hvac triage is still available do you offer financing for a new ac system yes financing is available for qualifying replacement projects can diagnostic fees be waived only under policy conditions such as same visit repair approval or maintenance plan eligibility do you repair water heaters yes supported tank and limited tankless systems are serviced do you repair refrigerators yes refrigerator diagnostics and repairs are supported"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "company_profile__chunk_000",
+          "hybrid_score": 0.08867142826477792,
+          "word_score": 0.10001161511482749,
+          "char_score": 0.06761108125754302,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "company_profile.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Company Profile: North Texas Comfort & Home Services\n\n## Overview\nNorth Texas Comfort & Home Services is a synthetic HVAC-first home-services company used for demo and testing.\nPrimary focus is residential comfort restoration with expandable secondary services.\n\n## Primary Service Lines\n- A/C repair\n- A/C replacement estimates\n- Heating repair\n- Maintenance plans\n- Emergency HVAC response\n\n## Secondary Service Lines\n- Plumbing\n- Water heater service\n- Appliance repair\n\n## Service Philosophy\n- Safety first for electrical, gas, and water-risk issues.\n- Repair-first guidance when a safe repair is likely to last.\n- Clear replacement guidance when age, cost, and reliability indicate replacement.\n- Transparent fallback when a request is out of scope.",
+          "normalized_text": "synthetic demo document company profile north texas comfort home services overview north texas comfort home services is a synthetic hvac first home services company used for demo and testing primary focus is residential comfort restoration with expandable secondary services primary service lines ac repair ac replacement estimates heating repair maintenance plans emergency hvac response secondary service lines plumbing water heater service appliance repair service philosophy safety first for electrical gas and water risk issues repair first guidance when a safe repair is likely to last clear replacement guidance when age cost and reliability indicate replacement transparent fallback when a request is out of scope"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "financing_policy__chunk_000",
+          "hybrid_score": 0.06090173563295539,
+          "word_score": 0.06465474249920071,
+          "char_score": 0.053931865738499785,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "financing_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Financing Policy\n\n## Eligible Work\n- A/C system replacement\n- Heating system replacement\n- Water heater replacement above minimum project amount\n\n## Basic Terms (Demo)\n- Deferred-interest options for qualified customers\n- Fixed-term installment options\n- Prequalification through partner portal at estimate stage\n\n## Not Eligible\n- Diagnostic-only visits\n- Small repairs below financing threshold\n\n## Assistant Rule\nIf asked \"Do you offer financing?\" answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling.",
+          "normalized_text": "synthetic demo document financing policy eligible work ac system replacement heating system replacement water heater replacement above minimum project amount basic terms demo deferred interest options for qualified customers fixed term installment options prequalification through partner portal at estimate stage not eligible diagnostic only visits small repairs below financing threshold assistant rule if asked do you offer financing answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "warranty_policy__chunk_000",
+          "hybrid_score": 0.05879497513197288,
+          "word_score": 0.0,
+          "char_score": 0.16798564323420825,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "char"
+          ],
+          "source_file": "warranty_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Warranty Policy\n\n## Repair Warranty\n- Standard labor warranty on repairs: 30 days.\n- Installed replacement part warranty follows manufacturer terms.\n\n## Replacement Warranty\n- Installation labor warranty on full system replacement: 1 year.\n- Extended coverage options discussed during estimate appointment.\n\n## Exclusions\n- Customer-supplied parts\n- Damage from neglected maintenance\n- Pre-existing non-serviced system defects\n\n## Claim Intake Rule\nWarranty claim requires invoice reference and symptom summary.\nIf proof details are missing, mark as `needs_dispatch_review`.",
+          "normalized_text": "synthetic demo document warranty policy repair warranty standard labor warranty on repairs 30 days installed replacement part warranty follows manufacturer terms replacement warranty installation labor warranty on full system replacement 1 year extended coverage options discussed during estimate appointment exclusions customer supplied parts damage from neglected maintenance pre existing non serviced system defects claim intake rule warranty claim requires invoice reference and symptom summary if proof details are missing mark as needs_dispatch_review"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "hvac_repair_policy__chunk_000",
+          "hybrid_score": 0.03311302524520289,
+          "word_score": 0.0,
+          "char_score": 0.09460864355772254,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "char"
+          ],
+          "source_file": "hvac_repair_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## HVAC Repair Policy\n\n## Repair Eligibility\nHVAC repair is offered when:\n- the system can be safely restored,\n- parts are available within 1-3 business days, and\n- estimated repair cost is below replacement-threshold guidance.\n\n## Same-Day Service Target\n- Same-day appointments are prioritized for no-cooling above 88F outdoor temperature.\n- Same-day is not guaranteed; dispatch depends on slot availability and location.\n\n## Not-Cooling Triage Steps\n1. Confirm thermostat mode and setpoint.\n2. Confirm power status and breaker state.\n3. Check airflow at main vents.\n4. Ask for unusual sounds, odors, or water around indoor unit.\n\n## Urgency Detection Rules\nEscalate to urgent scheduling when:\n- elderly or medically sensitive occupants report extreme indoor heat/cold\n- complete system outage in severe weather\n- burning odor or electrical hazard indicators",
+          "normalized_text": "synthetic demo document hvac repair policy repair eligibility hvac repair is offered when the system can be safely restored parts are available within 1 3 business days and estimated repair cost is below replacement threshold guidance same day service target same day appointments are prioritized for no cooling above 88f outdoor temperature same day is not guaranteed dispatch depends on slot availability and location not cooling triage steps 1 confirm thermostat mode and setpoint 2 confirm power status and breaker state 3 check airflow at main vents 4 ask for unusual sounds odors or water around indoor unit urgency detection rules escalate to urgent scheduling when elderly or medically sensitive occupants report extreme indoor heat cold complete system outage in severe weather burning odor or electrical hazard indicators"
+        }
+      ]
+    },
+    {
+      "query": "maintenance plan pricing",
+      "normalized_query": "maintenance plan pricing",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "maintenance_plan__chunk_000",
+          "hybrid_score": 0.21234120932461076,
+          "word_score": 0.19718296680293806,
+          "char_score": 0.2404922311505744,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "maintenance_plan.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Maintenance Plan Policy\n\n## Plan Name\nComfort Care Plan (demo)\n\n## Included Benefits\n- Two HVAC tune-ups per year (spring and fall)\n- Priority scheduling for HVAC calls\n- Reduced diagnostic fee on covered equipment\n- Filter and thermostat optimization checklist\n\n## Enrollment Notes\n- Membership starts after first paid visit.\n- Plans are household-based and non-transferable.\n- Cancel any time before next renewal cycle.\n\n## Edge Cases\n- Missed tune-up windows can be rescheduled within same season based on capacity.\n- Plan discount does not combine with all coupons.",
+          "normalized_text": "synthetic demo document maintenance plan policy plan name comfort care plan demo included benefits two hvac tune ups per year spring and fall priority scheduling for hvac calls reduced diagnostic fee on covered equipment filter and thermostat optimization checklist enrollment notes membership starts after first paid visit plans are household based and non transferable cancel any time before next renewal cycle edge cases missed tune up windows can be rescheduled within same season based on capacity plan discount does not combine with all coupons"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "coupon_policy__chunk_000",
+          "hybrid_score": 0.19172921383599761,
+          "word_score": 0.16217471722824206,
+          "char_score": 0.24661613610754365,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "coupon_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Coupon and Offer Policy\n\n## Standard Rules\n- One coupon per paid invoice unless explicitly stated.\n- Coupons cannot be combined with emergency dispatch premiums.\n- Coupon eligibility must be confirmed during booking.\n\n## Diagnostic Fee Waiver Rule\nDiagnostic fee may be waived only when:\n- customer approves same-visit repair above minimum spend threshold, or\n- active maintenance plan benefit applies.\n\n## Exception Handling\nIf customer requests special pricing exception:\n- assistant should not approve directly\n- escalate to pricing supervisor queue\n- log outcome as `pricing_exception_requested`",
+          "normalized_text": "synthetic demo document coupon and offer policy standard rules one coupon per paid invoice unless explicitly stated coupons cannot be combined with emergency dispatch premiums coupon eligibility must be confirmed during booking diagnostic fee waiver rule diagnostic fee may be waived only when customer approves same visit repair above minimum spend threshold or active maintenance plan benefit applies exception handling if customer requests special pricing exception assistant should not approve directly escalate to pricing supervisor queue log outcome as pricing_exception_requested"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "faq__chunk_000",
+          "hybrid_score": 0.113498363651238,
+          "word_score": 0.08018194619962431,
+          "char_score": 0.175371710347092,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "faq.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## FAQ\n\n## Do you offer same-day A/C repair?\nSame-day requests are prioritized for severe no-cooling cases, but not guaranteed.\n\n## Do you service Plano?\nYes, Plano is in the standard core coverage zone.\n\n## Are you open on Sunday?\nStandard appointments are closed Sunday; emergency HVAC triage is still available.\n\n## Do you offer financing for a new A/C system?\nYes, financing is available for qualifying replacement projects.\n\n## Can diagnostic fees be waived?\nOnly under policy conditions, such as same-visit repair approval or maintenance-plan eligibility.\n\n## Do you repair water heaters?\nYes, supported tank and limited tankless systems are serviced.\n\n## Do you repair refrigerators?\nYes, refrigerator diagnostics and repairs are supported.",
+          "normalized_text": "synthetic demo document faq do you offer same day ac repair same day requests are prioritized for severe no cooling cases but not guaranteed do you service plano yes plano is in the standard core coverage zone are you open on sunday standard appointments are closed sunday emergency hvac triage is still available do you offer financing for a new ac system yes financing is available for qualifying replacement projects can diagnostic fees be waived only under policy conditions such as same visit repair approval or maintenance plan eligibility do you repair water heaters yes supported tank and limited tankless systems are serviced do you repair refrigerators yes refrigerator diagnostics and repairs are supported"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "company_profile__chunk_000",
+          "hybrid_score": 0.04056646620985767,
+          "word_score": 0.0,
+          "char_score": 0.11590418917102191,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "char"
+          ],
+          "source_file": "company_profile.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Company Profile: North Texas Comfort & Home Services\n\n## Overview\nNorth Texas Comfort & Home Services is a synthetic HVAC-first home-services company used for demo and testing.\nPrimary focus is residential comfort restoration with expandable secondary services.\n\n## Primary Service Lines\n- A/C repair\n- A/C replacement estimates\n- Heating repair\n- Maintenance plans\n- Emergency HVAC response\n\n## Secondary Service Lines\n- Plumbing\n- Water heater service\n- Appliance repair\n\n## Service Philosophy\n- Safety first for electrical, gas, and water-risk issues.\n- Repair-first guidance when a safe repair is likely to last.\n- Clear replacement guidance when age, cost, and reliability indicate replacement.\n- Transparent fallback when a request is out of scope.",
+          "normalized_text": "synthetic demo document company profile north texas comfort home services overview north texas comfort home services is a synthetic hvac first home services company used for demo and testing primary focus is residential comfort restoration with expandable secondary services primary service lines ac repair ac replacement estimates heating repair maintenance plans emergency hvac response secondary service lines plumbing water heater service appliance repair service philosophy safety first for electrical gas and water risk issues repair first guidance when a safe repair is likely to last clear replacement guidance when age cost and reliability indicate replacement transparent fallback when a request is out of scope"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "financing_policy__chunk_000",
+          "hybrid_score": 0.029018679238159817,
+          "word_score": 0.0,
+          "char_score": 0.08291051210902806,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "char"
+          ],
+          "source_file": "financing_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Financing Policy\n\n## Eligible Work\n- A/C system replacement\n- Heating system replacement\n- Water heater replacement above minimum project amount\n\n## Basic Terms (Demo)\n- Deferred-interest options for qualified customers\n- Fixed-term installment options\n- Prequalification through partner portal at estimate stage\n\n## Not Eligible\n- Diagnostic-only visits\n- Small repairs below financing threshold\n\n## Assistant Rule\nIf asked \"Do you offer financing?\" answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling.",
+          "normalized_text": "synthetic demo document financing policy eligible work ac system replacement heating system replacement water heater replacement above minimum project amount basic terms demo deferred interest options for qualified customers fixed term installment options prequalification through partner portal at estimate stage not eligible diagnostic only visits small repairs below financing threshold assistant rule if asked do you offer financing answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling"
+        }
+      ]
+    },
+    {
+      "query": "maintenence plan prising",
+      "normalized_query": "maintenence plan prising",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "maintenance_plan__chunk_000",
+          "hybrid_score": 0.24341042747255237,
+          "word_score": 0.2603132889945148,
+          "char_score": 0.21201939893176508,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "maintenance_plan.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Maintenance Plan Policy\n\n## Plan Name\nComfort Care Plan (demo)\n\n## Included Benefits\n- Two HVAC tune-ups per year (spring and fall)\n- Priority scheduling for HVAC calls\n- Reduced diagnostic fee on covered equipment\n- Filter and thermostat optimization checklist\n\n## Enrollment Notes\n- Membership starts after first paid visit.\n- Plans are household-based and non-transferable.\n- Cancel any time before next renewal cycle.\n\n## Edge Cases\n- Missed tune-up windows can be rescheduled within same season based on capacity.\n- Plan discount does not combine with all coupons.",
+          "normalized_text": "synthetic demo document maintenance plan policy plan name comfort care plan demo included benefits two hvac tune ups per year spring and fall priority scheduling for hvac calls reduced diagnostic fee on covered equipment filter and thermostat optimization checklist enrollment notes membership starts after first paid visit plans are household based and non transferable cancel any time before next renewal cycle edge cases missed tune up windows can be rescheduled within same season based on capacity plan discount does not combine with all coupons"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "coupon_policy__chunk_000",
+          "hybrid_score": 0.08300809068791021,
+          "word_score": 0.0693374705349105,
+          "char_score": 0.10839638525776682,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "coupon_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Coupon and Offer Policy\n\n## Standard Rules\n- One coupon per paid invoice unless explicitly stated.\n- Coupons cannot be combined with emergency dispatch premiums.\n- Coupon eligibility must be confirmed during booking.\n\n## Diagnostic Fee Waiver Rule\nDiagnostic fee may be waived only when:\n- customer approves same-visit repair above minimum spend threshold, or\n- active maintenance plan benefit applies.\n\n## Exception Handling\nIf customer requests special pricing exception:\n- assistant should not approve directly\n- escalate to pricing supervisor queue\n- log outcome as `pricing_exception_requested`",
+          "normalized_text": "synthetic demo document coupon and offer policy standard rules one coupon per paid invoice unless explicitly stated coupons cannot be combined with emergency dispatch premiums coupon eligibility must be confirmed during booking diagnostic fee waiver rule diagnostic fee may be waived only when customer approves same visit repair above minimum spend threshold or active maintenance plan benefit applies exception handling if customer requests special pricing exception assistant should not approve directly escalate to pricing supervisor queue log outcome as pricing_exception_requested"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "faq__chunk_000",
+          "hybrid_score": 0.0783710497365277,
+          "word_score": 0.05553717977698774,
+          "char_score": 0.12077680823281622,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "faq.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## FAQ\n\n## Do you offer same-day A/C repair?\nSame-day requests are prioritized for severe no-cooling cases, but not guaranteed.\n\n## Do you service Plano?\nYes, Plano is in the standard core coverage zone.\n\n## Are you open on Sunday?\nStandard appointments are closed Sunday; emergency HVAC triage is still available.\n\n## Do you offer financing for a new A/C system?\nYes, financing is available for qualifying replacement projects.\n\n## Can diagnostic fees be waived?\nOnly under policy conditions, such as same-visit repair approval or maintenance-plan eligibility.\n\n## Do you repair water heaters?\nYes, supported tank and limited tankless systems are serviced.\n\n## Do you repair refrigerators?\nYes, refrigerator diagnostics and repairs are supported.",
+          "normalized_text": "synthetic demo document faq do you offer same day ac repair same day requests are prioritized for severe no cooling cases but not guaranteed do you service plano yes plano is in the standard core coverage zone are you open on sunday standard appointments are closed sunday emergency hvac triage is still available do you offer financing for a new ac system yes financing is available for qualifying replacement projects can diagnostic fees be waived only under policy conditions such as same visit repair approval or maintenance plan eligibility do you repair water heaters yes supported tank and limited tankless systems are serviced do you repair refrigerators yes refrigerator diagnostics and repairs are supported"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "company_profile__chunk_000",
+          "hybrid_score": 0.027954145091747495,
+          "word_score": 0.0,
+          "char_score": 0.07986898597642142,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "char"
+          ],
+          "source_file": "company_profile.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Company Profile: North Texas Comfort & Home Services\n\n## Overview\nNorth Texas Comfort & Home Services is a synthetic HVAC-first home-services company used for demo and testing.\nPrimary focus is residential comfort restoration with expandable secondary services.\n\n## Primary Service Lines\n- A/C repair\n- A/C replacement estimates\n- Heating repair\n- Maintenance plans\n- Emergency HVAC response\n\n## Secondary Service Lines\n- Plumbing\n- Water heater service\n- Appliance repair\n\n## Service Philosophy\n- Safety first for electrical, gas, and water-risk issues.\n- Repair-first guidance when a safe repair is likely to last.\n- Clear replacement guidance when age, cost, and reliability indicate replacement.\n- Transparent fallback when a request is out of scope.",
+          "normalized_text": "synthetic demo document company profile north texas comfort home services overview north texas comfort home services is a synthetic hvac first home services company used for demo and testing primary focus is residential comfort restoration with expandable secondary services primary service lines ac repair ac replacement estimates heating repair maintenance plans emergency hvac response secondary service lines plumbing water heater service appliance repair service philosophy safety first for electrical gas and water risk issues repair first guidance when a safe repair is likely to last clear replacement guidance when age cost and reliability indicate replacement transparent fallback when a request is out of scope"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "warranty_policy__chunk_000",
+          "hybrid_score": 0.025974398318799646,
+          "word_score": 0.0,
+          "char_score": 0.07421256662514185,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "char"
+          ],
+          "source_file": "warranty_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Warranty Policy\n\n## Repair Warranty\n- Standard labor warranty on repairs: 30 days.\n- Installed replacement part warranty follows manufacturer terms.\n\n## Replacement Warranty\n- Installation labor warranty on full system replacement: 1 year.\n- Extended coverage options discussed during estimate appointment.\n\n## Exclusions\n- Customer-supplied parts\n- Damage from neglected maintenance\n- Pre-existing non-serviced system defects\n\n## Claim Intake Rule\nWarranty claim requires invoice reference and symptom summary.\nIf proof details are missing, mark as `needs_dispatch_review`.",
+          "normalized_text": "synthetic demo document warranty policy repair warranty standard labor warranty on repairs 30 days installed replacement part warranty follows manufacturer terms replacement warranty installation labor warranty on full system replacement 1 year extended coverage options discussed during estimate appointment exclusions customer supplied parts damage from neglected maintenance pre existing non serviced system defects claim intake rule warranty claim requires invoice reference and symptom summary if proof details are missing mark as needs_dispatch_review"
+        }
+      ]
+    },
+    {
+      "query": "water heater leaking",
+      "normalized_query": "water heater leaking",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "water_heater_policy__chunk_000",
+          "hybrid_score": 0.22062367312208098,
+          "word_score": 0.16119097199409663,
+          "char_score": 0.3309986895026234,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "water_heater_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Water Heater Service Policy\n\n## Supported Systems\n- Standard tank water heaters (gas and electric)\n- Tankless diagnostics (limited by model support list)\n\n## Repair vs Replace Rule\n- Repair-first if leak is not from tank body and cost is reasonable.\n- Replace-first if tank is leaking from body seam or shows severe corrosion.\n\n## Safety Escalation\nEscalate immediately when customer reports:\n- gas smell\n- active water pooling near gas/electrical connections\n- pressure relief valve discharge with hissing\n\n## Customer Questions\nIf asked \"Do you repair water heaters?\" answer yes for supported systems, then clarify model details are needed before scheduling.",
+          "normalized_text": "synthetic demo document water heater service policy supported systems standard tank water heaters gas and electric tankless diagnostics limited by model support list repair vs replace rule repair first if leak is not from tank body and cost is reasonable replace first if tank is leaking from body seam or shows severe corrosion safety escalation escalate immediately when customer reports gas smell active water pooling near gas electrical connections pressure relief valve discharge with hissing customer questions if asked do you repair water heaters answer yes for supported systems then clarify model details are needed before scheduling"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "intake_script__chunk_000",
+          "hybrid_score": 0.17492008414742527,
+          "word_score": 0.13572632832667306,
+          "char_score": 0.24770848781453658,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "intake_script.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Intake Script (Demo)\n\n## Step 1: Identify Need\nAsk:\n1. \"What issue are you experiencing right now?\"\n2. \"Is this HVAC, plumbing, water heater, or appliance related?\"\n\n## Step 2: Detect Urgency\nAsk:\n1. \"Is there a safety concern such as gas smell, burning odor, or active water leak?\"\n2. \"Is anyone in the home medically sensitive to temperature extremes?\"\n\nIf yes to safety concern, escalate immediately.\n\n## Step 3: Confirm Serviceability\nAsk:\n1. \"What city and zip code is the service location?\"\n2. \"Are you the homeowner, tenant, or property manager?\"\n\n## Step 4: Collect Equipment Context\nAsk category-specific details:\n- HVAC: system age, cooling/heating status, unusual noise\n- Water heater: leak location, hot-water availability\n- Appliance: appliance type, brand/model, symptom",
+          "normalized_text": "synthetic demo document intake script demo step 1 identify need ask 1 what issue are you experiencing right now 2 is this hvac plumbing water heater or appliance related step 2 detect urgency ask 1 is there a safety concern such as gas smell burning odor or active water leak 2 is anyone in the home medically sensitive to temperature extremes if yes to safety concern escalate immediately step 3 confirm serviceability ask 1 what city and zip code is the service location 2 are you the homeowner tenant or property manager step 4 collect equipment context ask category specific details hvac system age cooling heating status unusual noise water heater leak location hot water availability appliance appliance type brand model symptom"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "financing_policy__chunk_000",
+          "hybrid_score": 0.0854380210307209,
+          "word_score": 0.06851670597187991,
+          "char_score": 0.11686332042571129,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "financing_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Financing Policy\n\n## Eligible Work\n- A/C system replacement\n- Heating system replacement\n- Water heater replacement above minimum project amount\n\n## Basic Terms (Demo)\n- Deferred-interest options for qualified customers\n- Fixed-term installment options\n- Prequalification through partner portal at estimate stage\n\n## Not Eligible\n- Diagnostic-only visits\n- Small repairs below financing threshold\n\n## Assistant Rule\nIf asked \"Do you offer financing?\" answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling.",
+          "normalized_text": "synthetic demo document financing policy eligible work ac system replacement heating system replacement water heater replacement above minimum project amount basic terms demo deferred interest options for qualified customers fixed term installment options prequalification through partner portal at estimate stage not eligible diagnostic only visits small repairs below financing threshold assistant rule if asked do you offer financing answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "scheduling_policy__chunk_000",
+          "hybrid_score": 0.08485066238228307,
+          "word_score": 0.07020345454305901,
+          "char_score": 0.11205261979798492,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "scheduling_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Scheduling Policy\n\n## Required Intake Details Before Booking\n- Customer first name (initials allowed in demo)\n- Service city and zip code\n- Service category (HVAC/plumbing/water heater/appliance)\n- Symptom summary\n- Preferred time window\n- Occupancy status (owner, tenant, manager)\n\n## Optional But Helpful\n- System age\n- Equipment brand/model\n- Photos or short symptom video note\n\n## Booking Outcomes\n- `booked_standard`\n- `booked_urgent`\n- `needs_dispatch_review`\n- `outside_service_area`\n- `unsupported_request`\n\n## Outside-Area and Unsupported Rules\n- Outside area: do not book, offer waitlist callback.\n- Unsupported request: fallback politely and offer referral callback.",
+          "normalized_text": "synthetic demo document scheduling policy required intake details before booking customer first name initials allowed in demo service city and zip code service category hvac plumbing water heater appliance symptom summary preferred time window occupancy status owner tenant manager optional but helpful system age equipment brand model photos or short symptom video note booking outcomes booked_standard booked_urgent needs_dispatch_review outside_service_area unsupported_request outside area and unsupported rules outside area do not book offer waitlist callback unsupported request fallback politely and offer referral callback"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "escalation_rules__chunk_000",
+          "hybrid_score": 0.046149464237147275,
+          "word_score": 0.0,
+          "char_score": 0.13185561210613508,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "char"
+          ],
+          "source_file": "escalation_rules.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Escalation Rules\n\n## Escalate Immediately\n- Gas odor reports\n- Electrical burning smell near HVAC or water heater\n- Flooding risk from active leaks\n- Vulnerable occupants in extreme indoor temperatures\n- Requests for legal, insurance, or code-enforcement advice\n\n## Escalate To Pricing Supervisor\n- Diagnostic fee waiver outside policy\n- Coupon stacking requests\n- Custom discount demands tied to complaints\n\n## Escalate To Dispatch Review\n- Borderline service-area addresses\n- Sunday non-emergency appointment demands\n- Unclear service category with safety implications\n\n## Fallback Instead of Escalate\n- Out-of-scope appliance types\n- Requests for unsupported installation work",
+          "normalized_text": "synthetic demo document escalation rules escalate immediately gas odor reports electrical burning smell near hvac or water heater flooding risk from active leaks vulnerable occupants in extreme indoor temperatures requests for legal insurance or code enforcement advice escalate to pricing supervisor diagnostic fee waiver outside policy coupon stacking requests custom discount demands tied to complaints escalate to dispatch review borderline service area addresses sunday non emergency appointment demands unclear service category with safety implications fallback instead of escalate out of scope appliance types requests for unsupported installation work"
+        }
+      ]
+    },
+    {
+      "query": "watter heater leakng",
+      "normalized_query": "watter heater leakng",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "intake_script__chunk_000",
+          "hybrid_score": 0.15147800445328405,
+          "word_score": 0.08678205707773834,
+          "char_score": 0.27162762100786897,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "intake_script.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Intake Script (Demo)\n\n## Step 1: Identify Need\nAsk:\n1. \"What issue are you experiencing right now?\"\n2. \"Is this HVAC, plumbing, water heater, or appliance related?\"\n\n## Step 2: Detect Urgency\nAsk:\n1. \"Is there a safety concern such as gas smell, burning odor, or active water leak?\"\n2. \"Is anyone in the home medically sensitive to temperature extremes?\"\n\nIf yes to safety concern, escalate immediately.\n\n## Step 3: Confirm Serviceability\nAsk:\n1. \"What city and zip code is the service location?\"\n2. \"Are you the homeowner, tenant, or property manager?\"\n\n## Step 4: Collect Equipment Context\nAsk category-specific details:\n- HVAC: system age, cooling/heating status, unusual noise\n- Water heater: leak location, hot-water availability\n- Appliance: appliance type, brand/model, symptom",
+          "normalized_text": "synthetic demo document intake script demo step 1 identify need ask 1 what issue are you experiencing right now 2 is this hvac plumbing water heater or appliance related step 2 detect urgency ask 1 is there a safety concern such as gas smell burning odor or active water leak 2 is anyone in the home medically sensitive to temperature extremes if yes to safety concern escalate immediately step 3 confirm serviceability ask 1 what city and zip code is the service location 2 are you the homeowner tenant or property manager step 4 collect equipment context ask category specific details hvac system age cooling heating status unusual noise water heater leak location hot water availability appliance appliance type brand model symptom"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "water_heater_policy__chunk_000",
+          "hybrid_score": 0.13937661814389707,
+          "word_score": 0.048560818982296854,
+          "char_score": 0.3080345308725832,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "water_heater_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Water Heater Service Policy\n\n## Supported Systems\n- Standard tank water heaters (gas and electric)\n- Tankless diagnostics (limited by model support list)\n\n## Repair vs Replace Rule\n- Repair-first if leak is not from tank body and cost is reasonable.\n- Replace-first if tank is leaking from body seam or shows severe corrosion.\n\n## Safety Escalation\nEscalate immediately when customer reports:\n- gas smell\n- active water pooling near gas/electrical connections\n- pressure relief valve discharge with hissing\n\n## Customer Questions\nIf asked \"Do you repair water heaters?\" answer yes for supported systems, then clarify model details are needed before scheduling.",
+          "normalized_text": "synthetic demo document water heater service policy supported systems standard tank water heaters gas and electric tankless diagnostics limited by model support list repair vs replace rule repair first if leak is not from tank body and cost is reasonable replace first if tank is leaking from body seam or shows severe corrosion safety escalation escalate immediately when customer reports gas smell active water pooling near gas electrical connections pressure relief valve discharge with hissing customer questions if asked do you repair water heaters answer yes for supported systems then clarify model details are needed before scheduling"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "escalation_rules__chunk_000",
+          "hybrid_score": 0.08160108316124634,
+          "word_score": 0.05355858045890239,
+          "char_score": 0.13368001675131366,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "escalation_rules.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Escalation Rules\n\n## Escalate Immediately\n- Gas odor reports\n- Electrical burning smell near HVAC or water heater\n- Flooding risk from active leaks\n- Vulnerable occupants in extreme indoor temperatures\n- Requests for legal, insurance, or code-enforcement advice\n\n## Escalate To Pricing Supervisor\n- Diagnostic fee waiver outside policy\n- Coupon stacking requests\n- Custom discount demands tied to complaints\n\n## Escalate To Dispatch Review\n- Borderline service-area addresses\n- Sunday non-emergency appointment demands\n- Unclear service category with safety implications\n\n## Fallback Instead of Escalate\n- Out-of-scope appliance types\n- Requests for unsupported installation work",
+          "normalized_text": "synthetic demo document escalation rules escalate immediately gas odor reports electrical burning smell near hvac or water heater flooding risk from active leaks vulnerable occupants in extreme indoor temperatures requests for legal insurance or code enforcement advice escalate to pricing supervisor diagnostic fee waiver outside policy coupon stacking requests custom discount demands tied to complaints escalate to dispatch review borderline service area addresses sunday non emergency appointment demands unclear service category with safety implications fallback instead of escalate out of scope appliance types requests for unsupported installation work"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "financing_policy__chunk_000",
+          "hybrid_score": 0.08073316697432424,
+          "word_score": 0.05618538526087017,
+          "char_score": 0.12632190444216754,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "word",
+            "char"
+          ],
+          "source_file": "financing_policy.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Financing Policy\n\n## Eligible Work\n- A/C system replacement\n- Heating system replacement\n- Water heater replacement above minimum project amount\n\n## Basic Terms (Demo)\n- Deferred-interest options for qualified customers\n- Fixed-term installment options\n- Prequalification through partner portal at estimate stage\n\n## Not Eligible\n- Diagnostic-only visits\n- Small repairs below financing threshold\n\n## Assistant Rule\nIf asked \"Do you offer financing?\" answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling.",
+          "normalized_text": "synthetic demo document financing policy eligible work ac system replacement heating system replacement water heater replacement above minimum project amount basic terms demo deferred interest options for qualified customers fixed term installment options prequalification through partner portal at estimate stage not eligible diagnostic only visits small repairs below financing threshold assistant rule if asked do you offer financing answer yes for qualifying replacement projects and instruct customer to request financing review during estimate scheduling"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "company_profile__chunk_000",
+          "hybrid_score": 0.03841797319760279,
+          "word_score": 0.0,
+          "char_score": 0.10976563770743655,
+          "word_weight": 0.65,
+          "char_weight": 0.35,
+          "retrieval_sources": [
+            "char"
+          ],
+          "source_file": "company_profile.md",
+          "title": "Synthetic Demo Document",
+          "section": null,
+          "text": "# Synthetic Demo Document\n\n## Company Profile: North Texas Comfort & Home Services\n\n## Overview\nNorth Texas Comfort & Home Services is a synthetic HVAC-first home-services company used for demo and testing.\nPrimary focus is residential comfort restoration with expandable secondary services.\n\n## Primary Service Lines\n- A/C repair\n- A/C replacement estimates\n- Heating repair\n- Maintenance plans\n- Emergency HVAC response\n\n## Secondary Service Lines\n- Plumbing\n- Water heater service\n- Appliance repair\n\n## Service Philosophy\n- Safety first for electrical, gas, and water-risk issues.\n- Repair-first guidance when a safe repair is likely to last.\n- Clear replacement guidance when age, cost, and reliability indicate replacement.\n- Transparent fallback when a request is out of scope.",
+          "normalized_text": "synthetic demo document company profile north texas comfort home services overview north texas comfort home services is a synthetic hvac first home services company used for demo and testing primary focus is residential comfort restoration with expandable secondary services primary service lines ac repair ac replacement estimates heating repair maintenance plans emergency hvac response secondary service lines plumbing water heater service appliance repair service philosophy safety first for electrical gas and water risk issues repair first guidance when a safe repair is likely to last clear replacement guidance when age cost and reliability indicate replacement transparent fallback when a request is out of scope"
+        }
+      ]
+    }
+  ]
+}

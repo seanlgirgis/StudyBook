@@ -67,17 +67,33 @@ This belongs to future product direction, not current `03e` implementation.
 - Design law to preserve: every POC should be standalone, configurable, reusable, and chainable
 
 ## Next Task
-Next suggested step is discussion/scoping for `pocs/03f_hybrid_retrieval` only.
-Do not implement `03f` until explicit approval.
-Do not start backend, RAG, integrated, AWS, or real-data work yet.
+`03f_hybrid_retrieval` reusable core retrieval step is complete:
+- `src/schemas.py`
+- `src/hybrid_retrieval.py`
+- `tests/test_schemas.py`
+- `tests/test_hybrid_retrieval.py`
 
-## 03f Discussion Starter (No Implementation Yet)
-- What hybrid retrieval means in this project.
-- Why hybrid retrieval comes after `03d` word TF-IDF and `03e` char TF-IDF.
-- What `03f` should combine from prior artifacts.
-- How scoring might work at a high level.
-- What `03f` should read/write.
-- What `03f` should explicitly not do.
+Next suggested step is runner/output wiring only:
+- complete. `src/run_hybrid_search.py` now exists.
+- complete. sample output written to `outputs/sample_hybrid_search_results.json`.
+
+Next suggested step:
+- discuss/scope `03g_retrieval_decision` (confidence and fallback rules only)
+
+## 03f Closure Status
+`03f_hybrid_retrieval` is marked PASS:
+- `pytest -v .\pocs\03f_hybrid_retrieval\tests` -> PASS (`16 passed`)
+- `python .\pocs\03f_hybrid_retrieval\src\run_hybrid_search.py` -> PASS
+- sample output confirmed at `pocs/03f_hybrid_retrieval/outputs/sample_hybrid_search_results.json`
+- no customer answers generated
+- no final intent decisions made
+
+Still out of scope:
+- answer generation
+- intent decision
+- clarification flows
+- LLM calls
+- integrated lane work
 
 ## Constraints
 - no backend logic yet
@@ -85,3 +101,22 @@ Do not start backend, RAG, integrated, AWS, or real-data work yet.
 - no AI calls yet
 - keep it simple and runnable locally
 - no TF-IDF, no search, no embeddings, no FastAPI, no Docker, no AWS, no integrated app
+
+## Standing POC Rule
+Every meaningful POC should include:
+- `README.md`
+- `docs/DESIGN.md`
+- `docs/CONTRACT.md`
+- `docs/TEST_PLAN.md`
+- `src/`
+- `tests/`
+- `outputs/`
+
+POC acceptance gate:
+- code works
+- tests pass
+- sample output exists
+- `README.md` explains usage
+- `docs/DESIGN.md` explains architecture
+- `docs/CONTRACT.md` defines inputs/outputs
+- `docs/TEST_PLAN.md` defines validation

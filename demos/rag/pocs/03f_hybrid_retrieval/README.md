@@ -1,24 +1,67 @@
 # 03f_hybrid_retrieval
 
+## POC Name
+`03f_hybrid_retrieval`
+
 ## Purpose
-Combine word TF-IDF and character TF-IDF scores into one local hybrid retrieval baseline.
+Create a hybrid retrieval layer that combines:
+- clean word-level TF-IDF signal from `03d_word_tfidf_index`
+- typo-tolerant character-level TF-IDF signal from `03e_char_tfidf_typo_search`
 
-## What This Tiny POC Teaches
-How score blending can outperform either retriever alone.
+This POC is retrieval-only and candidate-ranking-only.
 
-## Input Files
-Word-level and char-level score outputs for same query/chunk set.
+## Current Implementation Status
+- implemented:
+  - `src/schemas.py` data contracts
+  - `tests/test_schemas.py` contract validation tests
+  - `src/hybrid_retrieval.py` reusable core retrieval module
+  - `tests/test_hybrid_retrieval.py` core retrieval unit tests
+  - `src/run_hybrid_search.py` thin runner script
+  - sample hybrid output generation to `outputs/sample_hybrid_search_results.json`
+- not implemented yet:
+  - retrieval decision logic (`03g_retrieval_decision`)
+  - answer generation / intent decision / clarification flows
 
-## Expected Outputs
-Merged ranking with component scores and final blended score.
+## Retrieval Ladder Position
+- `03d_word_tfidf_index`: builds clean word retrieval artifact
+- `03e_char_tfidf_typo_search`: builds typo-tolerant retrieval artifact
+- `03f_hybrid_retrieval`: combines both retrieval signals into one ranked candidate list
+- next handoff: `03g_retrieval_decision`
 
-## Command (Planned)
-`powershell
-python -m src.hybrid_retrieval
-`
+## Inputs It Reads
+- `pocs/03d_word_tfidf_index/outputs/tfidf_index.joblib`
+- `pocs/03e_char_tfidf_typo_search/outputs/char_tfidf_index.joblib`
 
-## What Is Intentionally Not Included Yet
-No answer generation and no production API integration.
+## Output It Writes
+- `pocs/03f_hybrid_retrieval/outputs/sample_hybrid_search_results.json`
 
-## Retrieval Ladder Fit
-Stage 6: creates practical local retrieval baseline for later RAG wiring.
+## What 03f Does
+- loads existing `03d` and `03e` index artifacts
+- accepts customer-style query text
+- runs word and character retrieval in parallel flow
+- merges candidates by `chunk_id`
+- computes weighted `hybrid_score`
+- returns ranked candidate chunks with component scores and source metadata
+
+## What 03f Does Not Do
+- does not generate customer answers
+- does not decide final service intent
+- does not ask clarification questions
+- does not call an LLM
+- does not rebuild indexes
+- does not move anything into `integrated/servicecall-ai`
+
+## Default Scoring Design
+`hybrid_score = (0.65 * word_score) + (0.35 * char_score)`
+
+Weights are configurable via runner arguments and config.
+
+## Commands
+
+```powershell
+# run unit tests
+pytest -v .\pocs\03f_hybrid_retrieval\tests
+
+# generate sample hybrid retrieval output
+python .\pocs\03f_hybrid_retrieval\src\run_hybrid_search.py
+```

@@ -1,5 +1,59 @@
 # DAILY_LOG.md
 
+## 2026-05-03 (Milestone 3 Step 03f - Final Acceptance Cleanup)
+- Updated 03f docs to present tense where runner/sample output now exist.
+- Verified expected 03f files exist:
+  - requirements, README, docs (`DESIGN`, `CONTRACT`, `TEST_PLAN`)
+  - source (`schemas.py`, `hybrid_retrieval.py`, `run_hybrid_search.py`)
+  - tests (`test_schemas.py`, `test_hybrid_retrieval.py`)
+  - output (`outputs/sample_hybrid_search_results.json`)
+- Validated sample output structure:
+  - `poc = 03f_hybrid_retrieval`
+  - config `word_weight=0.65`, `char_weight=0.35`, `top_k=5`
+  - `6` sample queries
+  - every query has results with required `HybridSearchResult` fields
+- Validation commands:
+  - `. D:\Workarea\StudyBook\env_setter.ps1`
+  - `pytest -v .\pocs\03f_hybrid_retrieval\tests` -> PASS (`16 passed`)
+  - `python .\pocs\03f_hybrid_retrieval\src\run_hybrid_search.py` -> PASS
+- Marked `03f_hybrid_retrieval` as PASS/completed in tracking files.
+- Confirmed no customer answers or final intent decisions were generated.
+
+## 2026-05-03 (Milestone 3 Step 03f - Runner and Sample Output)
+- Added thin runner: `pocs/03f_hybrid_retrieval/src/run_hybrid_search.py`.
+- Runner reuses existing `HybridRetrievalConfig` and `hybrid_search` (no duplicated core logic).
+- Runner executes sample queries and writes:
+  - `pocs/03f_hybrid_retrieval/outputs/sample_hybrid_search_results.json`
+- Updated `03f` docs (`README`, `DESIGN`, `CONTRACT`, `TEST_PLAN`) and project tracking files to reflect runner completion.
+
+## 2026-05-03 (Milestone 3 Step 03f - Reusable Core Retrieval Module)
+- Implemented `pocs/03f_hybrid_retrieval/src/hybrid_retrieval.py` with reusable functions:
+  - `load_index_artifact`
+  - `search_index_artifact`
+  - `merge_retrieval_results`
+  - `hybrid_search`
+- Reused query normalization behavior from `03c_text_normalization` via imported normalization function.
+- Added core module tests in `pocs/03f_hybrid_retrieval/tests/test_hybrid_retrieval.py`.
+- Updated `03f` README and docs (`DESIGN`, `CONTRACT`, `TEST_PLAN`) for current implementation status.
+- Updated tracking files to reflect that 03f core logic is implemented while runner/output writing is still pending.
+
+## 2026-05-03 (Milestone 3 Step 03f - Schemas and Contract Tests)
+- Implemented `pocs/03f_hybrid_retrieval/src/schemas.py` with Pydantic models:
+  - `HybridRetrievalConfig`
+  - `HybridSearchQuery`
+  - `HybridSearchResult`
+  - `HybridSearchResponse`
+- Added validation coverage in `pocs/03f_hybrid_retrieval/tests/test_schemas.py`.
+- Updated `pocs/03f_hybrid_retrieval/docs/CONTRACT.md` to align with exact model names and `retrieval_sources` values (`word` / `char`).
+- Updated `pocs/03f_hybrid_retrieval/README.md` implementation status to show schema/contracts now implemented.
+- Updated tracking files to reflect: `03f` schema/contracts complete, full retrieval logic not implemented yet.
+
+## 2026-05-03 (03f Documentation Cleanup and Rule Standardization)
+- Standardized planned `03f_hybrid_retrieval` runner script naming in docs to `src/run_hybrid_search.py`.
+- Added standing POC documentation structure rule to control/tracking docs.
+- Added standing POC acceptance gate to control/tracking docs.
+- Kept this task documentation/tracking only with no Python implementation changes.
+
 ## 2026-05-01
 - Established permanent project memory files: `DAILY_LOG.md`, `DECISIONS.md`, `KNOWN_ISSUES.md`, `CHANGELOG.md`.
 - Strengthened `AGENTS.md` with explicit environment bootstrap, closed-loop reporting, read/update file obligations, and stop rule examples.
