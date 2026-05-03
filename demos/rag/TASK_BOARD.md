@@ -2,6 +2,7 @@
 
 ## TODO
 - Build basic retrieval POC
+- Product Direction Add-On: Guided Customer Input (future UX layer before retrieval; no implementation in current 03e scope)
 - Build answer-with-citations POC
 - Build intake classifier POC
 - Build guardrails/escalation POC
@@ -33,3 +34,6 @@
 - Implement 03a_load_documents
 - Add educational comments to 03a_load_documents source
 - Implement 03b_chunk_documents
+- Implement 03c_text_normalization
+- Implement 03d_word_tfidf_index
+- Implement 03e_char_tfidf_typo_search

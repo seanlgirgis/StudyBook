@@ -1,0 +1,164 @@
+[
+  {
+    "query": "ac repiar",
+    "normalized_query": "ac repiar",
+    "top_matches": [
+      {
+        "rank": 1,
+        "chunk_id": "ac_replacement_estimates__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.137062,
+        "source_file": "ac_replacement_estimates.md"
+      },
+      {
+        "rank": 2,
+        "chunk_id": "company_profile__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.13396,
+        "source_file": "company_profile.md"
+      },
+      {
+        "rank": 3,
+        "chunk_id": "faq__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.117707,
+        "source_file": "faq.md"
+      }
+    ]
+  },
+  {
+    "query": "watr heater leaking",
+    "normalized_query": "watr heater leaking",
+    "top_matches": [
+      {
+        "rank": 1,
+        "chunk_id": "water_heater_policy__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.279206,
+        "source_file": "water_heater_policy.md"
+      },
+      {
+        "rank": 2,
+        "chunk_id": "intake_script__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.191934,
+        "source_file": "intake_script.md"
+      },
+      {
+        "rank": 3,
+        "chunk_id": "escalation_rules__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.11235,
+        "source_file": "escalation_rules.md"
+      }
+    ]
+  },
+  {
+    "query": "maintenence plan",
+    "normalized_query": "maintenence plan",
+    "top_matches": [
+      {
+        "rank": 1,
+        "chunk_id": "maintenance_plan__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.246211,
+        "source_file": "maintenance_plan.md"
+      },
+      {
+        "rank": 2,
+        "chunk_id": "faq__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.130244,
+        "source_file": "faq.md"
+      },
+      {
+        "rank": 3,
+        "chunk_id": "coupon_policy__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.09865,
+        "source_file": "coupon_policy.md"
+      }
+    ]
+  },
+  {
+    "query": "air condishner not cooling",
+    "normalized_query": "air condishner not cooling",
+    "top_matches": [
+      {
+        "rank": 1,
+        "chunk_id": "hvac_repair_policy__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.159811,
+        "source_file": "hvac_repair_policy.md"
+      },
+      {
+        "rank": 2,
+        "chunk_id": "ac_replacement_estimates__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.121959,
+        "source_file": "ac_replacement_estimates.md"
+      },
+      {
+        "rank": 3,
+        "chunk_id": "faq__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.117402,
+        "source_file": "faq.md"
+      }
+    ]
+  },
+  {
+    "query": "heater repaid",
+    "normalized_query": "heater repaid",
+    "top_matches": [
+      {
+        "rank": 1,
+        "chunk_id": "water_heater_policy__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.240614,
+        "source_file": "water_heater_policy.md"
+      },
+      {
+        "rank": 2,
+        "chunk_id": "company_profile__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.160153,
+        "source_file": "company_profile.md"
+      },
+      {
+        "rank": 3,
+        "chunk_id": "intake_script__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.149207,
+        "source_file": "intake_script.md"
+      }
+    ]
+  },
+  {
+    "query": "emergncy service",
+    "normalized_query": "emergncy service",
+    "top_matches": [
+      {
+        "rank": 1,
+        "chunk_id": "company_profile__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.291143,
+        "source_file": "company_profile.md"
+      },
+      {
+        "rank": 2,
+        "chunk_id": "business_hours__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.211746,
+        "source_file": "business_hours.md"
+      },
+      {
+        "rank": 3,
+        "chunk_id": "service_area__chunk_000",
+        "title": "Synthetic Demo Document",
+        "score": 0.196435,
+        "source_file": "service_area.md"
+      }
+    ]
+  }
+]

@@ -85,11 +85,46 @@
   - `pocs/03b_chunk_documents/src/schemas.py`
   - `pocs/03b_chunk_documents/src/chunk_documents.py`
   - `pocs/03b_chunk_documents/tests/test_chunk_documents.py`
-  - `pocs/03b_chunk_documents/notes/what_this_teaches.md`
-  - `pocs/03b_chunk_documents/notes/common_failures.md`
-  - `pocs/03b_chunk_documents/outputs/chunk_documents.json`
+  - `pocs/03b_chunk_documents/NOTES.md`
+  - `pocs/03b_chunk_documents/outputs/chunked_documents.json`
+- Milestone 3 step `03c_text_normalization` implementation files:
+  - `pocs/03c_text_normalization/src/schemas.py`
+  - `pocs/03c_text_normalization/src/normalize_text.py`
+  - `pocs/03c_text_normalization/tests/test_normalize_text.py`
+  - `pocs/03c_text_normalization/outputs/normalized_chunks.json`
+- Milestone 3 step `03d_word_tfidf_index` implementation files:
+  - `pocs/03d_word_tfidf_index/src/schemas.py`
+  - `pocs/03d_word_tfidf_index/src/build_tfidf_index.py`
+  - `pocs/03d_word_tfidf_index/tests/test_build_tfidf_index.py`
+  - `pocs/03d_word_tfidf_index/outputs/tfidf_index.joblib`
+  - `pocs/03d_word_tfidf_index/outputs/index_metadata.json`
+- Milestone 3 step `03e_char_tfidf_typo_search` implementation files:
+  - `pocs/03e_char_tfidf_typo_search/src/schemas.py`
+  - `pocs/03e_char_tfidf_typo_search/src/build_char_tfidf_index.py`
+  - `pocs/03e_char_tfidf_typo_search/tests/test_build_char_tfidf_index.py`
+  - `pocs/03e_char_tfidf_typo_search/outputs/char_tfidf_index.joblib`
+  - `pocs/03e_char_tfidf_typo_search/outputs/char_index_metadata.json`
+  - `pocs/03e_char_tfidf_typo_search/outputs/sample_typo_search_results.json`
 
 ### Changed
 - `pocs/03b_chunk_documents/README.md` now documents real commands, expected output, and stage boundaries.
 - `pocs/03b_chunk_documents/requirements.txt` now includes `pytest>=8.0`.
 - `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect Milestone 3 step `03b_chunk_documents` completion and next-step gating to `03c_text_normalization` after approval.
+- `pocs/03b_chunk_documents/src/chunk_documents.py` now uses boundary-aware chunking with fallback order: section heading -> paragraph -> newline -> sentence -> word -> hard split.
+- `pocs/03b_chunk_documents/tests/test_chunk_documents.py` now includes boundary-quality checks for no mid-word chunk starts/ends.
+- `pocs/03b_chunk_documents/README.md` and `pocs/03b_chunk_documents/NOTES.md` now document the refinement from size-first chunking to clean boundary-aware chunking.
+- `PROJECT_STATE.md`, `HANDOFF.md`, and `DAILY_LOG.md` now record final 03b closure status and validation results: `python .\pocs\03b_chunk_documents\src\chunk_documents.py` PASS, `pytest -v` PASS (8 passed in 0.15s), 16 input documents, 23 chunks.
+- `pocs/03c_text_normalization/README.md` now documents actual 03c behavior, I/O paths, normalization rules, and run commands.
+- `pocs/03c_text_normalization/requirements.txt` now includes `pytest>=8.0` with `pydantic>=2.0`.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect 03c completion and next-step gating to discussion of `03d_word_tfidf_index` only.
+- `pocs/03c_text_normalization` now preserves original chunk fields and adds normalized fields with rules: Unicode normalization (`NFKC`), smart punctuation handling, dash cleanup, lowercasing, punctuation-to-space cleanup, whitespace collapse, and AC term normalization (`A/C`/`a/c` -> `ac`, `air-conditioning` -> `air conditioning`).
+- `pocs/03d_word_tfidf_index/README.md` now documents actual 03d behavior, I/O paths, vectorizer configuration, and out-of-scope boundaries.
+- `pocs/03d_word_tfidf_index/requirements.txt` now includes runtime/test dependencies: `pydantic`, `scikit-learn`, `joblib`, and `pytest`.
+- `pocs/03d_word_tfidf_index` now builds/saves a reusable TF-IDF artifact (`vectorizer`, `matrix`, `chunk_ids`, `metadata`) from 03c normalized chunks with guaranteed row-order alignment.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect 03d completion and next-step gating to discussion of `03e_char_tfidf_typo_search` only.
+- `PROJECT_STATE.md` and `HANDOFF.md` now include a product-direction note titled `Product Direction Add-On: Guided Customer Input` covering autocomplete, autocorrect-style typo assistance, intent buttons, and ambiguity-clarification choices.
+- `TASK_BOARD.md` now includes Guided Customer Input as a future backlog item, explicitly outside current 03e implementation scope.
+- `pocs/03e_char_tfidf_typo_search/README.md` now documents the full 03e learning model: word-vs-char TF-IDF, typo-rescue scope, candidate-match boundaries, and next-step guidance.
+- `pocs/03e_char_tfidf_typo_search/requirements.txt` now includes runtime/test dependencies: `pydantic`, `scikit-learn`, `joblib`, and `pytest`.
+- `pocs/03e_char_tfidf_typo_search` now builds/saves a reusable character TF-IDF artifact (`vectorizer`, `matrix`, `chunk_ids`, `metadata`) from 03c normalized chunks with guaranteed row-order alignment and writes sample typo candidate matches.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect 03e completion and next-step gating to discussion of `03f_hybrid_retrieval` only.

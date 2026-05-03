@@ -21,6 +21,35 @@ from chunk_documents import (  # noqa: E402
 from schemas import DocumentChunk  # noqa: E402
 
 
+def _chunks_grouped_by_document(chunks: list[DocumentChunk]) -> dict[str, list[DocumentChunk]]:
+    grouped: dict[str, list[DocumentChunk]] = {}
+    for chunk in chunks:
+        grouped.setdefault(chunk.document_id, []).append(chunk)
+    for key in grouped:
+        grouped[key] = sorted(grouped[key], key=lambda item: item.chunk_index)
+    return grouped
+
+
+def _source_text_by_document() -> dict[str, str]:
+    input_path, _ = get_default_paths()
+    documents = load_documents(input_path)
+    return {document.document_id: document.text for document in documents}
+
+
+def _located_chunk_spans(document_text: str, chunks: list[DocumentChunk]) -> list[tuple[int, int]]:
+    spans: list[tuple[int, int]] = []
+    cursor = 0
+    for chunk in chunks:
+        start = document_text.find(chunk.text, max(0, cursor - 300))
+        if start == -1:
+            start = document_text.find(chunk.text, 0)
+        assert start >= 0
+        end = start + len(chunk.text)
+        spans.append((start, end))
+        cursor = start
+    return spans
+
+
 def test_script_default_input_path_points_to_03a_output() -> None:
     input_path, _ = get_default_paths()
     normalized = input_path.as_posix()
@@ -65,16 +94,48 @@ def test_chunk_index_starts_at_zero_and_increments_per_document() -> None:
     input_path, _ = get_default_paths()
     documents = load_documents(input_path)
     chunks = chunk_all_documents(documents, target_chunk_size=TARGET_CHUNK_SIZE, overlap_size=OVERLAP_SIZE)
-    chunks_by_document: dict[str, list[DocumentChunk]] = {}
-    for chunk in chunks:
-        chunks_by_document.setdefault(chunk.document_id, []).append(chunk)
+    chunks_by_document = _chunks_grouped_by_document(chunks)
 
     for document_chunks in chunks_by_document.values():
-        sorted_chunks = sorted(document_chunks, key=lambda item: item.chunk_index)
-        assert sorted_chunks[0].chunk_index == 0
-        expected = list(range(len(sorted_chunks)))
-        actual = [chunk.chunk_index for chunk in sorted_chunks]
+        assert document_chunks[0].chunk_index == 0
+        expected = list(range(len(document_chunks)))
+        actual = [chunk.chunk_index for chunk in document_chunks]
         assert actual == expected
+
+
+def test_no_chunk_starts_in_middle_of_alphabetic_word() -> None:
+    input_path, _ = get_default_paths()
+    documents = load_documents(input_path)
+    chunks = chunk_all_documents(documents, target_chunk_size=TARGET_CHUNK_SIZE, overlap_size=OVERLAP_SIZE)
+    chunks_by_document = _chunks_grouped_by_document(chunks)
+    source_map = _source_text_by_document()
+
+    for document_id, document_chunks in chunks_by_document.items():
+        spans = _located_chunk_spans(source_map[document_id], document_chunks)
+        for start, _ in spans:
+            if start == 0:
+                continue
+            prev_char = source_map[document_id][start - 1]
+            first_char = source_map[document_id][start]
+            assert not (prev_char.isalpha() and first_char.isalpha())
+
+
+def test_no_chunk_ends_in_middle_of_alphabetic_word() -> None:
+    input_path, _ = get_default_paths()
+    documents = load_documents(input_path)
+    chunks = chunk_all_documents(documents, target_chunk_size=TARGET_CHUNK_SIZE, overlap_size=OVERLAP_SIZE)
+    chunks_by_document = _chunks_grouped_by_document(chunks)
+    source_map = _source_text_by_document()
+
+    for document_id, document_chunks in chunks_by_document.items():
+        source_text = source_map[document_id]
+        spans = _located_chunk_spans(source_text, document_chunks)
+        for _, end in spans:
+            if end >= len(source_text):
+                continue
+            left_char = source_text[end - 1]
+            right_char = source_text[end]
+            assert not (left_char.isalpha() and right_char.isalpha())
 
 
 def test_running_pipeline_writes_output_file() -> None:

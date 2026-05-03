@@ -1,4 +1,4 @@
-# 03b_chunk_documents
+a# 03b_chunk_documents
 
 ## What This POC Does
 This POC reads loaded source documents from `03a_load_documents`, splits each document into smaller text chunks, validates each chunk with Pydantic, and writes a structured chunk output JSON file.
@@ -32,11 +32,24 @@ Chunking is that preparation layer: it creates the retrieval units that TF-IDF, 
 ## Chunking Strategy In This POC
 - Target chunk size: `800` characters
 - Overlap: `100` characters
-- Paragraph-aware split preference:
-  - prefer splitting at paragraph boundaries (`\n\n`) when possible
-  - fall back to a hard character split when needed
+- The chunker is now boundary-aware, not only size-aware.
+- Fallback order when selecting chunk end:
+  - section boundary (markdown heading)
+  - paragraph boundary (`\n\n`)
+  - newline boundary
+  - sentence boundary (`.`, `?`, `!`)
+  - word/whitespace boundary
+  - hard split only as last resort
+- Overlap is approximate by design: the next chunk start is cleaned so chunks do not start in the middle of a word.
 
-Overlap helps preserve context across chunk boundaries for later retrieval quality.
+Why this is better than blind size splitting:
+- Pure character windows can cut words and make chunks harder to read/debug.
+- Boundary-aware chunking keeps headings, related paragraphs, and bullet groups more coherent for business-policy docs.
+- Clean overlap preserves retrieval continuity without broken-word artifacts.
+
+Why not sentence-only chunking:
+- Sentence-only chunks are often too small and can fragment related policy details across many tiny chunks.
+- Section/paragraph-aware chunks preserve richer context while still staying retrieval-friendly.
 
 ## Metadata Preserved On Each Chunk
 Each `DocumentChunk` preserves:

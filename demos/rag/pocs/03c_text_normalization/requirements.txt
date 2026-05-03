@@ -1,4 +1,2 @@
-# Starter dependencies for 03c_text_normalization
-# Implementation intentionally deferred.
-
 pydantic>=2.0
+pytest>=8.0

@@ -137,26 +137,218 @@
 
 ## 2026-05-03 (Milestone 3 Step 03b - Chunk Documents)
 - Implemented `pocs/03b_chunk_documents` only.
-- Added Pydantic schemas in `src/schemas.py`:
-  - `SourceDocument` input contract validation
-  - `ChunkingConfig` validation for safe overlap settings
-  - `ChunkDocument` output contract with offset integrity checks
+- Added Pydantic chunking contracts in `src/schemas.py`:
+  - `LoadedDocument` input validation for 03a records
+  - `DocumentChunk` output validation with required metadata fields
+  - `character_count == len(text)` validation on chunks
 - Added chunking pipeline script in `src/chunk_documents.py`:
-  - loads `03a` output JSON
-  - validates source documents
-  - creates overlapping character-window chunks with deterministic ids
-  - writes `outputs/chunk_documents.json`
-- Added tests in `tests/test_chunk_documents.py`.
-- Updated `README.md` with runnable commands and output expectations.
-- Added learning notes:
-  - `notes/what_this_teaches.md`
-  - `notes/common_failures.md`
+  - reads `..\03a_load_documents\outputs\loaded_documents.json`
+  - performs paragraph-aware chunking
+  - uses target chunk size `800` characters with overlap `100`
+  - emits stable chunk ids: `{document_id}__chunk_{chunk_index:03d}`
+  - writes `outputs/chunked_documents.json`
+- Added readable tests in `tests/test_chunk_documents.py`.
+- Updated `README.md` with learning-first documentation and explicit out-of-scope boundaries.
+- Added `NOTES.md` for concise implementation notes.
 
 ## Validation (Milestone 3 Step 03b - Chunk Documents)
 - Ran bootstrap before Python commands:
   - `. D:\Workarea\StudyBook\env_setter.ps1`
 - Ran:
-  - `python .\src\chunk_documents.py` (PASS, loaded 16 documents and generated 42 chunks)
-  - `pytest -v` (PASS, 3 tests passed)
-- Confirmed `outputs/chunk_documents.json` exists and is populated with validated chunk records.
+  - `python .\src\chunk_documents.py` (PASS, loaded 16 documents and generated 24 chunks)
+  - `pytest -v` (PASS, 6 tests passed)
+- Confirmed `outputs/chunked_documents.json` exists and is populated with validated chunk records.
 - Confirmed no forbidden scope areas were touched (`integrated/servicecall-ai`, backend/FastAPI, Docker/AWS/CI-CD, or 03c+ implementation).
+
+## 2026-05-03 (Milestone 3 Step 03b - Boundary-Aware Refinement)
+- Refined `03b_chunk_documents` from mostly size-based splitting to boundary-aware splitting.
+- Implemented chunk-end fallback order:
+  - section heading -> paragraph -> newline -> sentence -> word -> hard split
+- Improved overlap start alignment so chunks do not start in the middle of words.
+- Preserved:
+  - `TARGET_CHUNK_SIZE=800`
+  - `OVERLAP_SIZE=100`
+  - stable chunk IDs
+  - metadata on every chunk
+  - output file path `outputs/chunked_documents.json`
+- Confirmed previously observed bad split in `ac_replacement_estimates` is resolved:
+  - no chunk ends with `ex`
+  - no chunk starts with `irst recommendation.`
+
+## Validation (Milestone 3 Step 03b - Boundary-Aware Refinement)
+- Ran bootstrap before Python commands:
+  - `. D:\Workarea\StudyBook\env_setter.ps1`
+- Ran:
+  - `python .\src\chunk_documents.py` (PASS, loaded 16 documents and generated 23 chunks)
+  - `pytest -v` (PASS, 8 tests passed in 0.15s)
+- Confirmed no forbidden scope areas were touched (`integrated/servicecall-ai`, backend/FastAPI, Docker/AWS/CI-CD, or 03c+ implementation).
+
+## 2026-05-03 (Milestone 3 Step 03b - Final Closure)
+- Closed `pocs/03b_chunk_documents` as complete with final verified status.
+- Final verified state:
+  - input: `pocs/03a_load_documents/outputs/loaded_documents.json`
+  - input documents: 16
+  - output: `pocs/03b_chunk_documents/outputs/chunked_documents.json`
+  - output chunks: 23
+  - script command PASS: `python .\pocs\03b_chunk_documents\src\chunk_documents.py`
+  - test command PASS: `pytest -v` (`8 passed in 0.15s`)
+- Final algorithm record:
+  - boundary-aware chunking (not blind size-only)
+  - target chunk size `800`, approximate overlap `100`
+  - fallback order: section heading -> paragraph -> newline -> sentence -> word -> hard split
+  - cleaned overlap starts to avoid mid-word chunk starts
+  - stable chunk IDs and full metadata preserved on every chunk
+
+## 2026-05-03 (Milestone 3 Step 03c - Text Normalization)
+- Implemented `pocs/03c_text_normalization` only.
+- Added Pydantic schema contracts in `pocs/03c_text_normalization/src/schemas.py`:
+  - `DocumentChunk` input validation for 03b records
+  - `NormalizedChunk` output validation with `normalized_text` and `normalized_character_count`
+  - validation rules for non-empty text fields and count consistency
+- Added normalization pipeline script in `pocs/03c_text_normalization/src/normalize_text.py`:
+  - reads `pocs/03b_chunk_documents/outputs/chunked_documents.json`
+  - preserves original fields (`chunk_id`, `document_id`, `source_file`, `source_path`, `title`, `chunk_index`, `text`, `character_count`)
+  - adds `normalized_text` and `normalized_character_count`
+  - applies normalization rules:
+    - Unicode normalization (`NFKC`)
+    - smart quotes/apostrophes to plain quotes/apostrophes
+    - long dash cleanup
+    - lowercasing
+    - punctuation replacement with spaces
+    - whitespace collapse and trim
+    - business-term handling (`A/C`/`a/c` -> `ac`, `air-conditioning` -> `air conditioning`)
+  - writes `pocs/03c_text_normalization/outputs/normalized_chunks.json`
+  - prints input path, output path, chunk counts, and before/after sample
+- Added tests in `pocs/03c_text_normalization/tests/test_normalize_text.py`.
+- Updated `pocs/03c_text_normalization/README.md` and `requirements.txt` for real implementation and usage.
+- Updated project memory files for 03c completion and next-step suggestion (03d discussion only).
+
+## Validation (Milestone 3 Step 03c - Text Normalization)
+- Ran bootstrap before Python commands:
+  - `. D:\Workarea\StudyBook\env_setter.ps1`
+- Ran:
+  - `python .\pocs\03c_text_normalization\src\normalize_text.py` (PASS, read 23 chunks and wrote 23 normalized chunks)
+  - `pytest -v .\pocs\03c_text_normalization\tests` (PASS, 6 tests passed in 0.18s)
+- Confirmed `outputs/normalized_chunks.json` exists and is populated with validated normalized records.
+- Confirmed no forbidden scope areas were touched (`integrated/servicecall-ai`, backend/FastAPI, TF-IDF/search/embeddings, Docker/AWS/CI-CD).
+
+## 2026-05-03 (Milestone 3 Step 03d - Word TF-IDF Index)
+- Implemented `pocs/03d_word_tfidf_index` only.
+- Added Pydantic schema contract in `pocs/03d_word_tfidf_index/src/schemas.py` for required normalized chunk fields:
+  - `chunk_id`, `document_id`, `source_file`, `source_path`, `title`, `chunk_index`
+  - `text`, `character_count`
+  - `normalized_text`, `normalized_character_count`
+- Added standalone, chainable builder script in `pocs/03d_word_tfidf_index/src/build_tfidf_index.py`:
+  - relative default paths + argparse overrides (`--input`, `--index-output`, `--metadata-output`)
+  - clear missing-file and invalid-record failures
+  - TF-IDF build with `TfidfVectorizer`:
+    - `analyzer=\"word\"`
+    - `ngram_range=(1, 2)`
+    - `lowercase=False`
+    - `min_df=1`
+    - `max_df=1.0`
+  - artifact save to `outputs/tfidf_index.joblib` with:
+    - `vectorizer`
+    - `matrix`
+    - `chunk_ids`
+    - `metadata`
+  - human-readable metadata save to `outputs/index_metadata.json`
+  - row-order contract preserved: matrix row `i` aligns with `chunk_ids[i]` and `metadata[i]`
+- Added tests in `pocs/03d_word_tfidf_index/tests/test_build_tfidf_index.py`:
+  - record loading
+  - missing-field validation failure
+  - row-count correctness
+  - chunk ID order preservation
+  - expected vocabulary terms
+  - joblib artifact persistence
+  - metadata JSON persistence
+  - preservation of original + normalized text in artifact metadata
+  - tiny TF-IDF ranking smoke test
+- Updated `pocs/03d_word_tfidf_index/README.md` and `requirements.txt` for real implementation behavior and commands.
+- Updated project memory files to mark 03d complete and set next suggested step to 03e discussion only.
+
+## Validation (Milestone 3 Step 03d - Word TF-IDF Index)
+- Ran bootstrap before Python commands:
+  - `. D:\Workarea\StudyBook\env_setter.ps1`
+- Ran:
+  - `python .\pocs\03d_word_tfidf_index\src\build_tfidf_index.py` (PASS)
+    - input chunks: `23`
+    - matrix shape: `(23, 2002)`
+    - vocabulary size: `2002`
+    - outputs:
+      - `pocs/03d_word_tfidf_index/outputs/tfidf_index.joblib`
+      - `pocs/03d_word_tfidf_index/outputs/index_metadata.json`
+  - `pytest -v .\pocs\03d_word_tfidf_index\tests` (PASS, 9 tests passed in 1.08s)
+- Confirmed no forbidden scope areas were touched (`integrated/servicecall-ai`, chatbot/LLM/embeddings/BM25/hybrid retrieval, FastAPI, Docker, AWS, CI-CD).
+
+## 2026-05-03 (Project Direction Note - Guided Customer Input)
+- Updated project tracking/state documentation to add a future product direction note:
+  - `Product Direction Add-On: Guided Customer Input`
+- Added the section to `PROJECT_STATE.md` and `HANDOFF.md` with scope notes:
+  - autocomplete suggestions while typing
+  - autocorrect-style typo assistance
+  - service-intent suggestion buttons
+  - clarification choices for ambiguous input
+  - example disambiguation for `heater repaid`
+- Recorded that this direction:
+  - does not replace retrieval
+  - supports retrieval by improving input quality
+  - still depends on robust backend retrieval for messy input (word TF-IDF, character TF-IDF, hybrid retrieval, later semantic search)
+  - is future product direction only, not current 03e implementation
+- Updated `TASK_BOARD.md` backlog and `CHANGELOG.md` to reflect the added direction note.
+
+## Validation (Project Direction Note - Guided Customer Input)
+- Confirmed this task changed documentation/tracking files only.
+- Confirmed no POC code files under `pocs/*/src` or `pocs/*/tests` were modified by this task.
+
+## 2026-05-03 (Milestone 3 Step 03e - Character TF-IDF Typo Search)
+- Implemented `pocs/03e_char_tfidf_typo_search` only.
+- Added Pydantic schema contract in `pocs/03e_char_tfidf_typo_search/src/schemas.py` for required normalized chunk fields:
+  - `chunk_id`, `document_id`, `source_file`, `source_path`, `title`, `chunk_index`
+  - `text`, `character_count`
+  - `normalized_text`, `normalized_character_count`
+- Added standalone, chainable builder script in `pocs/03e_char_tfidf_typo_search/src/build_char_tfidf_index.py`:
+  - relative default paths + argparse overrides (`--input`, `--index-output`, `--metadata-output`, `--sample-results-output`)
+  - clear missing-file and invalid-record failures
+  - character TF-IDF build with `TfidfVectorizer`:
+    - `analyzer=\"char_wb\"`
+    - `ngram_range=(3, 5)`
+    - `lowercase=False`
+    - `min_df=1`
+    - `max_df=1.0`
+  - artifact save to `outputs/char_tfidf_index.joblib` with:
+    - `vectorizer`
+    - `matrix`
+    - `chunk_ids`
+    - `metadata`
+  - metadata save to `outputs/char_index_metadata.json`
+  - sample typo-search candidate results save to `outputs/sample_typo_search_results.json`
+  - row-order contract preserved: matrix row `i` aligns with `chunk_ids[i]` and `metadata[i]`
+- Added tests in `pocs/03e_char_tfidf_typo_search/tests/test_build_char_tfidf_index.py`:
+  - record loading
+  - missing-field validation failure
+  - row-count correctness
+  - chunk ID order preservation
+  - vectorizer analyzer/params verification
+  - joblib artifact persistence
+  - metadata JSON persistence
+  - preservation of original + normalized text in artifact metadata
+  - typo query ranking smoke tests (`ac repiar`, `watr heater`)
+  - sample typo results generation structure
+- Updated `pocs/03e_char_tfidf_typo_search/README.md` and `requirements.txt` for implementation behavior and learning guidance.
+- Updated project memory files to mark 03e complete and set next suggested step to 03f discussion only.
+
+## Validation (Milestone 3 Step 03e - Character TF-IDF Typo Search)
+- Ran bootstrap before Python commands:
+  - `. D:\Workarea\StudyBook\env_setter.ps1`
+- Ran:
+  - `python .\pocs\03e_char_tfidf_typo_search\src\build_char_tfidf_index.py` (PASS)
+    - input chunks: `23`
+    - matrix shape: `(23, 5779)`
+    - vocabulary size: `5779`
+    - outputs:
+      - `pocs/03e_char_tfidf_typo_search/outputs/char_tfidf_index.joblib`
+      - `pocs/03e_char_tfidf_typo_search/outputs/char_index_metadata.json`
+      - `pocs/03e_char_tfidf_typo_search/outputs/sample_typo_search_results.json`
+  - `pytest -v .\pocs\03e_char_tfidf_typo_search\tests` (PASS, 11 tests passed in 1.03s)
+- Confirmed no forbidden scope areas were touched (`integrated/servicecall-ai`, LLM/embeddings/FAISS/BM25/hybrid retrieval implementation, frontend autocomplete/autocorrect UI, FastAPI, Docker, AWS, CI-CD).

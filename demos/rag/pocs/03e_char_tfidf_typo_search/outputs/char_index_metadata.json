@@ -1,0 +1,69 @@
+{
+  "poc": "03e_char_tfidf_typo_search",
+  "input_path": "pocs/03c_text_normalization/outputs/normalized_chunks.json",
+  "index_path": "pocs/03e_char_tfidf_typo_search/outputs/char_tfidf_index.joblib",
+  "sample_results_path": "pocs/03e_char_tfidf_typo_search/outputs/sample_typo_search_results.json",
+  "chunk_count": 23,
+  "matrix_shape": [
+    23,
+    5779
+  ],
+  "vocabulary_size": 5779,
+  "chunk_ids": [
+    "ac_replacement_estimates__chunk_000",
+    "ac_replacement_estimates__chunk_001",
+    "appliance_repair_policy__chunk_000",
+    "business_hours__chunk_000",
+    "company_profile__chunk_000",
+    "company_profile__chunk_001",
+    "coupon_policy__chunk_000",
+    "escalation_rules__chunk_000",
+    "escalation_rules__chunk_001",
+    "faq__chunk_000",
+    "faq__chunk_001",
+    "financing_policy__chunk_000",
+    "hvac_repair_policy__chunk_000",
+    "hvac_repair_policy__chunk_001",
+    "intake_script__chunk_000",
+    "intake_script__chunk_001",
+    "maintenance_plan__chunk_000",
+    "plumbing_services__chunk_000",
+    "scheduling_policy__chunk_000",
+    "scheduling_policy__chunk_001",
+    "service_area__chunk_000",
+    "warranty_policy__chunk_000",
+    "water_heater_policy__chunk_000"
+  ],
+  "sample_vocabulary": [
+    " 00",
+    " 00 ",
+    " 1 ",
+    " 15",
+    " 15 ",
+    " 2 ",
+    " 24",
+    " 24 ",
+    " 3 ",
+    " 30",
+    " 30 ",
+    " 4 ",
+    " 40",
+    " 40 ",
+    " 5 ",
+    " 6 ",
+    " 7 ",
+    " 8 ",
+    " 80",
+    " 80 "
+  ],
+  "vectorizer_config": {
+    "analyzer": "char_wb",
+    "ngram_range": [
+      3,
+      5
+    ],
+    "lowercase": false,
+    "min_df": 1,
+    "max_df": 1.0
+  }
+}

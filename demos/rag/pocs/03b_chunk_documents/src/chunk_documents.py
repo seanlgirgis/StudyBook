@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from schemas import DocumentChunk, LoadedDocument
@@ -34,22 +35,105 @@ def load_documents(input_path: Path) -> list[LoadedDocument]:
     return documents
 
 
-def _find_preferred_split(text: str, start: int, target_size: int) -> int:
-    """Prefer paragraph boundaries so chunks preserve coherent sections."""
+def _is_mid_word(text: str, index: int) -> bool:
+    """True when index lands between alphabetic characters."""
+
+    if index <= 0 or index >= len(text):
+        return False
+    return text[index - 1].isalpha() and text[index].isalpha()
+
+
+def _adjust_start_to_clean_boundary(text: str, approx_start: int, floor: int) -> int:
+    """Choose a clean chunk start near overlap point using boundary preference.
+
+    Start preference order:
+    heading -> paragraph -> bullet -> sentence -> word
+    """
+
+    if approx_start <= floor:
+        approx_start = floor
+    approx_start = max(0, min(approx_start, len(text)))
+
+    window_start = max(floor, approx_start - 140)
+    window_end = min(len(text), approx_start + 200)
+
+    def nearest_index(candidates: list[int]) -> int | None:
+        valid = [idx for idx in candidates if floor <= idx < len(text)]
+        if not valid:
+            return None
+        # Prefer starts close to the overlap target and slightly prefer earlier
+        # starts so overlap context is preserved.
+        return min(valid, key=lambda idx: (abs(idx - approx_start), 0 if idx <= approx_start else 1))
+
+    heading_starts = [match.start() for match in re.finditer(r"(?m)^#{1,6}\s", text)]
+    paragraph_starts = [match.end() for match in re.finditer(r"\n\s*\n\s*", text)]
+    bullet_starts = [match.start() for match in re.finditer(r"(?m)^(?:[-*]\s+|\d+\.\s+)", text)]
+    sentence_starts = [match.end() for match in re.finditer(r"[.!?][\"')\]]*\s+", text)]
+    word_starts = [match.start() for match in re.finditer(r"\b\w", text)]
+
+    for collection in [heading_starts, paragraph_starts, bullet_starts, sentence_starts, word_starts]:
+        nearby = [idx for idx in collection if window_start <= idx <= window_end]
+        selected = nearest_index(nearby)
+        if selected is not None:
+            return selected
+
+    # Last fallback: move forward until we stop splitting an alphabetic word.
+    candidate = max(floor, approx_start)
+    while candidate < len(text) and _is_mid_word(text, candidate):
+        candidate += 1
+    return candidate
+
+
+def _find_preferred_end(text: str, start: int, target_size: int) -> int:
+    """Choose a chunk end with boundary-aware fallback order.
+
+    End preference order:
+    section heading boundary -> paragraph -> newline -> sentence -> word -> hard split
+    """
+
+    if start >= len(text):
+        return len(text)
 
     hard_end = min(start + target_size, len(text))
     if hard_end >= len(text):
         return len(text)
-    split_at = text.rfind("\n\n", start + 1, hard_end + 1)
-    if split_at == -1 or split_at <= start:
+
+    min_end = min(len(text), start + max(220, int(target_size * 0.55)))
+    max_end = min(len(text), hard_end + 220)
+    if min_end >= max_end:
+        min_end = min(len(text), start + 1)
+
+    def rightmost_in_window(positions: list[int]) -> int | None:
+        valid = [pos for pos in positions if min_end <= pos <= max_end]
+        if not valid:
+            return None
+        return max(valid)
+
+    # Split before markdown heading lines to keep section blocks coherent.
+    heading_positions = [match.start() for match in re.finditer(r"(?m)^#{1,6}\s", text)]
+    paragraph_positions = [match.start() for match in re.finditer(r"\n\s*\n", text)]
+    newline_positions = [match.start() for match in re.finditer(r"\n", text)]
+    sentence_positions = [match.end() for match in re.finditer(r"[.!?][\"')\]]*\s+", text)]
+    word_positions = [match.start() for match in re.finditer(r"\s+", text)]
+
+    for collection in [
+        heading_positions,
+        paragraph_positions,
+        newline_positions,
+        sentence_positions,
+        word_positions,
+    ]:
+        selected = rightmost_in_window(collection)
+        if selected is not None and selected > start:
+            return selected
+
+    # Last resort: hard split, but still avoid cutting through a word when we can.
+    candidate = hard_end
+    while candidate > start + 1 and _is_mid_word(text, candidate):
+        candidate -= 1
+    if candidate <= start:
         return hard_end
-    return split_at
-
-
-def _next_start(end: int, overlap_size: int) -> int:
-    """Apply overlap to keep context continuity across adjacent chunks."""
-
-    return max(0, end - overlap_size)
+    return candidate
 
 
 def chunk_document(
@@ -68,7 +152,7 @@ def chunk_document(
     chunk_index = 0
 
     while start < len(text):
-        end = _find_preferred_split(text, start=start, target_size=target_chunk_size)
+        end = _find_preferred_end(text, start=start, target_size=target_chunk_size)
         if end <= start:
             end = min(len(text), start + target_chunk_size)
 
@@ -95,7 +179,10 @@ def chunk_document(
         if end >= len(text):
             break
 
-        next_start = _next_start(end, overlap_size=overlap_size)
+        # Overlap preserves context for later retrieval, but we still realign
+        # starts to clean boundaries so chunks do not begin mid-word.
+        overlap_anchor = max(0, end - overlap_size)
+        next_start = _adjust_start_to_clean_boundary(text, approx_start=overlap_anchor, floor=start + 1)
         if next_start <= start:
             next_start = end
         start = next_start

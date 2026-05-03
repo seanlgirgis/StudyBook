@@ -1,0 +1,68 @@
+{
+  "poc": "03d_word_tfidf_index",
+  "input_path": "pocs/03c_text_normalization/outputs/normalized_chunks.json",
+  "index_path": "pocs/03d_word_tfidf_index/outputs/tfidf_index.joblib",
+  "chunk_count": 23,
+  "matrix_shape": [
+    23,
+    2002
+  ],
+  "vocabulary_size": 2002,
+  "chunk_ids": [
+    "ac_replacement_estimates__chunk_000",
+    "ac_replacement_estimates__chunk_001",
+    "appliance_repair_policy__chunk_000",
+    "business_hours__chunk_000",
+    "company_profile__chunk_000",
+    "company_profile__chunk_001",
+    "coupon_policy__chunk_000",
+    "escalation_rules__chunk_000",
+    "escalation_rules__chunk_001",
+    "faq__chunk_000",
+    "faq__chunk_001",
+    "financing_policy__chunk_000",
+    "hvac_repair_policy__chunk_000",
+    "hvac_repair_policy__chunk_001",
+    "intake_script__chunk_000",
+    "intake_script__chunk_001",
+    "maintenance_plan__chunk_000",
+    "plumbing_services__chunk_000",
+    "scheduling_policy__chunk_000",
+    "scheduling_policy__chunk_001",
+    "service_area__chunk_000",
+    "warranty_policy__chunk_000",
+    "water_heater_policy__chunk_000"
+  ],
+  "sample_vocabulary": [
+    "00",
+    "00 am",
+    "00 pm",
+    "15",
+    "15 year",
+    "15 years",
+    "24",
+    "24 emergency",
+    "30",
+    "30 40",
+    "30 days",
+    "30 of",
+    "40",
+    "40 of",
+    "40 present",
+    "80",
+    "80 outside",
+    "88f",
+    "88f outdoor",
+    "above"
+  ],
+  "vectorizer_config": {
+    "analyzer": "word",
+    "ngram_range": [
+      1,
+      2
+    ],
+    "lowercase": false,
+    "min_df": 1,
+    "max_df": 1.0
+  }
+}
