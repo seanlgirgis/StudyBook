@@ -128,3 +128,6 @@
 - `pocs/03e_char_tfidf_typo_search/requirements.txt` now includes runtime/test dependencies: `pydantic`, `scikit-learn`, `joblib`, and `pytest`.
 - `pocs/03e_char_tfidf_typo_search` now builds/saves a reusable character TF-IDF artifact (`vectorizer`, `matrix`, `chunk_ids`, `metadata`) from 03c normalized chunks with guaranteed row-order alignment and writes sample typo candidate matches.
 - `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now reflect 03e completion and next-step gating to discussion of `03f_hybrid_retrieval` only.
+- `PROJECT_STATE.md` and `HANDOFF.md` now include a closure snapshot section summarizing PASS status for the completed 03a->03e ladder and preserved learning points.
+- `TASK_BOARD.md` now includes explicit `03f_hybrid_retrieval` discussion-only planning before any implementation.
+- `DAILY_LOG.md` now records a closure/update-only pass confirming no POC code changes and no 03f implementation.

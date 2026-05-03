@@ -1,6 +1,7 @@
 # TASK_BOARD.md
 
 ## TODO
+- Discuss `03f_hybrid_retrieval` design only (no implementation yet)
 - Build basic retrieval POC
 - Product Direction Add-On: Guided Customer Input (future UX layer before retrieval; no implementation in current 03e scope)
 - Build answer-with-citations POC

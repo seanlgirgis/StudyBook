@@ -55,10 +55,29 @@ This does not replace retrieval. This supports retrieval by improving input qual
 Backend retrieval should still handle messy input using word TF-IDF, character TF-IDF, hybrid retrieval, and later semantic search.
 This belongs to future product direction, not current `03e` implementation.
 
+## Closure Snapshot (03a-03e)
+- `03a_load_documents` PASS (16 docs loaded; output JSON written)
+- `03b_chunk_documents` PASS (boundary-aware chunking; 23 chunks; 8 tests passed)
+- `03c_text_normalization` PASS (`normalized_text` + `normalized_character_count`; 6 tests passed)
+- `03d_word_tfidf_index` PASS (word TF-IDF; matrix `23 x 2002`; 9 tests passed)
+- `03e_char_tfidf_typo_search` PASS (character typo-tolerant TF-IDF; matrix `23 x 5779`; 11 tests passed)
+- Learning lock-in: word TF-IDF (`03d`) is the clean-word baseline.
+- Learning lock-in: character TF-IDF (`03e`) is typo-tolerant candidate matching.
+- Learning lock-in: `03e` returns candidates only and does not decide final intent.
+- Design law to preserve: every POC should be standalone, configurable, reusable, and chainable
+
 ## Next Task
 Next suggested step is discussion/scoping for `pocs/03f_hybrid_retrieval` only.
 Do not implement `03f` until explicit approval.
 Do not start backend, RAG, integrated, AWS, or real-data work yet.
+
+## 03f Discussion Starter (No Implementation Yet)
+- What hybrid retrieval means in this project.
+- Why hybrid retrieval comes after `03d` word TF-IDF and `03e` char TF-IDF.
+- What `03f` should combine from prior artifacts.
+- How scoring might work at a high level.
+- What `03f` should read/write.
+- What `03f` should explicitly not do.
 
 ## Constraints
 - no backend logic yet

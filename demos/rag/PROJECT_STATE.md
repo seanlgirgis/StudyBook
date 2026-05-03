@@ -6,6 +6,41 @@ Milestone 3 (Step 03e) — Character TF-IDF typo-search POC completed and closed
 ## Current Focus
 `03e_char_tfidf_typo_search` is closed. Next suggested step is discussion/planning for `03f_hybrid_retrieval` only (not implemented).
 
+## Closure Snapshot (03a-03e)
+- `03a_load_documents` PASS
+- loaded 16 synthetic markdown business documents
+- wrote `pocs/03a_load_documents/outputs/loaded_documents.json`
+- `03b_chunk_documents` PASS
+- boundary-aware chunking
+- wrote `pocs/03b_chunk_documents/outputs/chunked_documents.json`
+- final chunk result: 23
+- tests: 8 passed
+- `03c_text_normalization` PASS
+- wrote `pocs/03c_text_normalization/outputs/normalized_chunks.json`
+- preserved original text and added `normalized_text` + `normalized_character_count`
+- tests: 6 passed
+- `03d_word_tfidf_index` PASS
+- built word-level TF-IDF index
+- wrote `pocs/03d_word_tfidf_index/outputs/tfidf_index.joblib`
+- wrote `pocs/03d_word_tfidf_index/outputs/index_metadata.json`
+- matrix shape: `23 x 2002`
+- tests: 9 passed
+- `03e_char_tfidf_typo_search` PASS
+- built character-level typo-tolerant TF-IDF index
+- wrote `pocs/03e_char_tfidf_typo_search/outputs/char_tfidf_index.joblib`
+- wrote `pocs/03e_char_tfidf_typo_search/outputs/char_index_metadata.json`
+- wrote `pocs/03e_char_tfidf_typo_search/outputs/sample_typo_search_results.json`
+- matrix shape: `23 x 5779`
+- tests: 11 passed
+
+## Key Learnings Preserved
+- `03d` word TF-IDF handles clean wording and exact business terms.
+- `03e` character TF-IDF helps with misspellings and messy customer typing.
+- `03e` returns candidate matches only; it does not decide final intent.
+- Guided Customer Input is future direction: autocomplete, autocorrect-style help, service-intent buttons, and clarification choices.
+- Guided input supports retrieval and does not replace backend retrieval.
+- Design law to preserve: every POC should be standalone, configurable, reusable, and chainable.
+
 ## Product Direction Add-On: Guided Customer Input
 ServiceCall AI should eventually help customers express their service need clearly before retrieval and answer generation.
 
@@ -161,3 +196,10 @@ A closed-loop project-control protocol is now in place via `AGENTS.md` + permane
 
 ## Next Recommended Task
 Discuss and scope `pocs/03f_hybrid_retrieval` next. Do not implement `03f` until approved.
+Discussion should cover only:
+- what hybrid retrieval means
+- why it comes after `03d` and `03e`
+- what it should combine
+- how scoring might work
+- what it should read/write
+- what it should not do

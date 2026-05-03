@@ -352,3 +352,26 @@
       - `pocs/03e_char_tfidf_typo_search/outputs/sample_typo_search_results.json`
   - `pytest -v .\pocs\03e_char_tfidf_typo_search\tests` (PASS, 11 tests passed in 1.03s)
 - Confirmed no forbidden scope areas were touched (`integrated/servicecall-ai`, LLM/embeddings/FAISS/BM25/hybrid retrieval implementation, frontend autocomplete/autocorrect UI, FastAPI, Docker, AWS, CI-CD).
+
+## 2026-05-03 (Closure Pass After 03e)
+- Ran a closure/update-only pass on project memory files after completing `03e_char_tfidf_typo_search`.
+- Captured completed ladder summary (`03a` to `03e`) with PASS status and final artifact outputs:
+  - `03a`: 16 docs loaded -> `loaded_documents.json`
+  - `03b`: boundary-aware chunking -> `chunked_documents.json` (23 chunks, 8 tests passed)
+  - `03c`: normalization -> `normalized_chunks.json` (6 tests passed)
+  - `03d`: word TF-IDF -> `tfidf_index.joblib` + `index_metadata.json` (matrix `23 x 2002`, 9 tests passed)
+  - `03e`: char TF-IDF typo search -> `char_tfidf_index.joblib` + `char_index_metadata.json` + `sample_typo_search_results.json` (matrix `23 x 5779`, 11 tests passed)
+- Re-affirmed key learning:
+  - word TF-IDF handles clean wording and exact business terms
+  - character TF-IDF helps with misspellings/messy typing
+  - `03e` returns candidate matches only, not final intent decisions
+- Re-affirmed product direction:
+  - Guided Customer Input supports retrieval (autocomplete, autocorrect-style help, intent buttons, clarifications) and does not replace backend retrieval.
+- Re-affirmed design law:
+  - every POC should be standalone, configurable, reusable, and chainable.
+- Set next recommended step to `03f_hybrid_retrieval` discussion only (no implementation).
+
+## Validation (Closure Pass After 03e)
+- Confirmed this pass updated tracking/state files only.
+- Confirmed no POC source/test implementation changes were made in this pass.
+- Confirmed `03f_hybrid_retrieval` was not implemented.
