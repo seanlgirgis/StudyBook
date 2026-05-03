@@ -50,15 +50,38 @@ Every meaningful POC should include:
 - `tests/`
 - `outputs/`
 
+## Design-First POC Rule (Standing Rule)
+Every meaningful POC, feature, or project step must start with documentation before implementation.
+
+Required documentation deliverables:
+- `README.md`
+- `docs/DESIGN.md`
+- `docs/CONTRACT.md`
+- `docs/TEST_PLAN.md`
+
+Required implementation deliverables when code is approved:
+- `src/`
+- `tests/`
+- `outputs/`
+
+Important behavior rules:
+- Do not implement code before design docs unless explicitly approved.
+- Do not skip documentation for small but meaningful POCs.
+- Keep documentation teaching-friendly and industry-style.
+- Explain why the design exists, not only what files changed.
+- Keep each POC standalone, configurable, reusable, and chainable.
+- Do not jump ahead to `integrated/servicecall-ai` until the POC ladder supports it.
+
 ## POC Acceptance Rule (Standing Rule)
 A POC is not complete until:
-- code works
+- `README.md` explains purpose, usage, inputs, outputs, and non-goals
+- `docs/DESIGN.md` explains problem, architecture, design decisions, boundaries, and future handoff
+- `docs/CONTRACT.md` defines input artifacts, output artifacts, data models, schemas, and required fields
+- `docs/TEST_PLAN.md` defines validation strategy, unit tests, integration checks, and acceptance checks
+- code exists only after design approval
 - tests pass
-- sample output exists
-- `README.md` explains usage
-- `docs/DESIGN.md` explains architecture
-- `docs/CONTRACT.md` defines inputs/outputs
-- `docs/TEST_PLAN.md` defines validation
+- sample output exists when the POC produces artifacts
+- project tracking/control files are updated
 
 ## Environment Bootstrap
 Before running Python, pytest, pip, FastAPI, or project scripts, Codex must run:

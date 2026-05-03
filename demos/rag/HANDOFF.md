@@ -79,6 +79,12 @@ Next suggested step is runner/output wiring only:
 
 Next suggested step:
 - discuss/scope `03g_retrieval_decision` (confidence and fallback rules only)
+- `03g_retrieval_decision` has not started yet.
+- start `03g` with design docs first (`README`, `docs/DESIGN.md`, `docs/CONTRACT.md`, `docs/TEST_PLAN.md`) before code.
+- `03g` scope is retrieval quality/confidence decision only.
+- `03g` must not generate customer answers.
+- `03g` must not call an LLM.
+- `03g` must not move into `integrated/servicecall-ai`.
 
 ## 03f Closure Status
 `03f_hybrid_retrieval` is marked PASS:
@@ -120,3 +126,6 @@ POC acceptance gate:
 - `docs/DESIGN.md` explains architecture
 - `docs/CONTRACT.md` defines inputs/outputs
 - `docs/TEST_PLAN.md` defines validation
+
+Design-first requirement:
+- start every meaningful POC/feature/step with `README`, `DESIGN`, `CONTRACT`, and `TEST_PLAN` before code unless explicitly approved otherwise.

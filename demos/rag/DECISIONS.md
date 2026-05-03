@@ -32,3 +32,16 @@ This preserves consistency across POCs, improves handoff quality, and prevents i
 
 ### Scope
 Applies to all current and future meaningful POCs in this repository unless explicitly superseded.
+
+## 2026-05-03 - Adopt Design-First POC Rule
+### Decision
+Adopt a standing design-first rule for every meaningful POC, feature, or project step:
+- documentation must come before implementation (`README`, `docs/DESIGN.md`, `docs/CONTRACT.md`, `docs/TEST_PLAN.md`)
+- implementation deliverables are required only after code approval (`src/`, `tests/`, `outputs/`)
+- POC acceptance requires complete docs, passing tests, sample output (when applicable), and updated tracking files
+
+### Why
+This improves architecture clarity, teaching quality, reviewability, and implementation discipline while preventing rushed code-first drift.
+
+### Scope
+Applies to all meaningful POCs/features/steps in this repository unless explicitly superseded.

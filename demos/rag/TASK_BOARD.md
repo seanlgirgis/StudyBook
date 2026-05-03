@@ -40,6 +40,7 @@
 - Implement 03e_char_tfidf_typo_search
 - Standardize `03f_hybrid_retrieval` planned runner naming to `src/run_hybrid_search.py` (documentation only)
 - Record standing POC doc/acceptance rule in project control files
+- Record standing Design-First POC rule in project control files
 - Implement `03f_hybrid_retrieval` schema/contracts + tests (no retrieval/search logic yet)
 - Implement `03f_hybrid_retrieval` reusable core retrieval module + tests (no runner/output file yet)
 - Implement `03f_hybrid_retrieval` runner script + sample output generation

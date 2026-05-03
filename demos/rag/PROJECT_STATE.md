@@ -196,6 +196,10 @@ A closed-loop project-control protocol is now in place via `AGENTS.md` + permane
 - follow closed-loop reporting and project-memory updates each task
 - every meaningful POC should include: `README.md`, `docs/DESIGN.md`, `docs/CONTRACT.md`, `docs/TEST_PLAN.md`, `src/`, `tests/`, `outputs/`
 - POC completion gate: code works, tests pass, sample output exists, and docs (`README`, `DESIGN`, `CONTRACT`, `TEST_PLAN`) are complete
+- design-first rule: start with `README`, `DESIGN`, `CONTRACT`, and `TEST_PLAN` before implementation unless explicitly approved otherwise
 
 ## Next Recommended Task
 Discuss and scope `pocs/03g_retrieval_decision` next. Do not implement `03g` until approved.
+Start `03g` with design docs before code.
+`03g` scope is retrieval quality/confidence decision only.
+`03g` must not generate customer answers, must not call an LLM, and must not move into `integrated/servicecall-ai`.
