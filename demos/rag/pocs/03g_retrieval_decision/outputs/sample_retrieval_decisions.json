@@ -1,0 +1,211 @@
+{
+  "poc": "03g_retrieval_decision",
+  "input_source": "pocs/03f_hybrid_retrieval/outputs/sample_hybrid_search_results.json",
+  "decision_config": {
+    "strong_match_min_score": 0.15,
+    "weak_match_min_score": 0.05,
+    "no_match_max_score": 0.01,
+    "min_score_gap_for_strong": 0.03,
+    "close_score_delta": 0.015,
+    "max_close_candidates_before_ambiguous": 2,
+    "top_k_window": 5,
+    "source_diversity_ambiguity_threshold": 3,
+    "enable_needs_clarification": true,
+    "min_query_tokens_for_specificity": 3,
+    "clarification_min_service_areas": 2
+  },
+  "query_decisions": [
+    {
+      "query": "ac blowing warm air",
+      "normalized_query": "ac blowing warm air",
+      "decision_label": "ambiguous_match",
+      "recommended_route": "clarification_path",
+      "confidence_score": 0.08499077537439621,
+      "confidence_band": "medium",
+      "selected_candidate_ids": [
+        "faq__chunk_000",
+        "company_profile__chunk_000"
+      ],
+      "reason_codes": [
+        "SMALL_TOP_GAP",
+        "HIGH_SOURCE_DIVERSITY_IN_TOP_K"
+      ],
+      "precedence_rule_applied": "AMBIGUOUS_MATCH_PRECEDENCE",
+      "decision_signals": {
+        "top_score": 0.08499077537439621,
+        "second_score": 0.0816557243658819,
+        "score_gap": 0.00333505100851432,
+        "close_candidate_count": 2,
+        "top_k_considered": 5,
+        "distinct_source_count": 5,
+        "distinct_service_area_count": 3,
+        "query_token_count": 4,
+        "query_has_service_keyword": true,
+        "query_is_underspecified": false,
+        "ambiguity_triggered": true,
+        "clarification_triggered": false
+      },
+      "deterministic": true
+    },
+    {
+      "query": "ac blwoing warm air",
+      "normalized_query": "ac blwoing warm air",
+      "decision_label": "ambiguous_match",
+      "recommended_route": "clarification_path",
+      "confidence_score": 0.0944975986382402,
+      "confidence_band": "medium",
+      "selected_candidate_ids": [
+        "faq__chunk_000",
+        "company_profile__chunk_000"
+      ],
+      "reason_codes": [
+        "SMALL_TOP_GAP",
+        "HIGH_SOURCE_DIVERSITY_IN_TOP_K"
+      ],
+      "precedence_rule_applied": "AMBIGUOUS_MATCH_PRECEDENCE",
+      "decision_signals": {
+        "top_score": 0.0944975986382402,
+        "second_score": 0.08867142826477792,
+        "score_gap": 0.0058261703734622805,
+        "close_candidate_count": 2,
+        "top_k_considered": 5,
+        "distinct_source_count": 5,
+        "distinct_service_area_count": 3,
+        "query_token_count": 4,
+        "query_has_service_keyword": true,
+        "query_is_underspecified": false,
+        "ambiguity_triggered": true,
+        "clarification_triggered": false
+      },
+      "deterministic": true
+    },
+    {
+      "query": "maintenance plan pricing",
+      "normalized_query": "maintenance plan pricing",
+      "decision_label": "needs_clarification",
+      "recommended_route": "clarification_path",
+      "confidence_score": 0.21234120932461076,
+      "confidence_band": "high",
+      "selected_candidate_ids": [
+        "maintenance_plan__chunk_000"
+      ],
+      "reason_codes": [
+        "CLARIFICATION_POLICY_TRIGGERED",
+        "QUERY_UNDERSPECIFIED_MULTI_SERVICE",
+        "AMBIGUITY_REQUIRES_CLARIFICATION"
+      ],
+      "precedence_rule_applied": "CLARIFICATION_BEATS_AMBIGUOUS_OR_WEAK",
+      "decision_signals": {
+        "top_score": 0.21234120932461076,
+        "second_score": 0.19172921383599761,
+        "score_gap": 0.020611995488613144,
+        "close_candidate_count": 1,
+        "top_k_considered": 5,
+        "distinct_source_count": 5,
+        "distinct_service_area_count": 3,
+        "query_token_count": 3,
+        "query_has_service_keyword": false,
+        "query_is_underspecified": true,
+        "ambiguity_triggered": true,
+        "clarification_triggered": true
+      },
+      "deterministic": true
+    },
+    {
+      "query": "maintenence plan prising",
+      "normalized_query": "maintenence plan prising",
+      "decision_label": "strong_match",
+      "recommended_route": "answer_candidate_path",
+      "confidence_score": 0.24341042747255237,
+      "confidence_band": "high",
+      "selected_candidate_ids": [
+        "maintenance_plan__chunk_000"
+      ],
+      "reason_codes": [
+        "TOP_SCORE_STRONG",
+        "CLEAR_SCORE_GAP",
+        "LOW_CLOSE_CANDIDATE_COUNT"
+      ],
+      "precedence_rule_applied": "STRONG_MATCH_PRECEDENCE",
+      "decision_signals": {
+        "top_score": 0.24341042747255237,
+        "second_score": 0.08300809068791021,
+        "score_gap": 0.16040233678464216,
+        "close_candidate_count": 1,
+        "top_k_considered": 5,
+        "distinct_source_count": 5,
+        "distinct_service_area_count": 4,
+        "query_token_count": 3,
+        "query_has_service_keyword": false,
+        "query_is_underspecified": true,
+        "ambiguity_triggered": true,
+        "clarification_triggered": true
+      },
+      "deterministic": true
+    },
+    {
+      "query": "water heater leaking",
+      "normalized_query": "water heater leaking",
+      "decision_label": "strong_match",
+      "recommended_route": "answer_candidate_path",
+      "confidence_score": 0.22062367312208098,
+      "confidence_band": "high",
+      "selected_candidate_ids": [
+        "water_heater_policy__chunk_000"
+      ],
+      "reason_codes": [
+        "TOP_SCORE_STRONG",
+        "CLEAR_SCORE_GAP",
+        "LOW_CLOSE_CANDIDATE_COUNT"
+      ],
+      "precedence_rule_applied": "STRONG_MATCH_PRECEDENCE",
+      "decision_signals": {
+        "top_score": 0.22062367312208098,
+        "second_score": 0.17492008414742527,
+        "score_gap": 0.04570358897465571,
+        "close_candidate_count": 1,
+        "top_k_considered": 5,
+        "distinct_source_count": 5,
+        "distinct_service_area_count": 1,
+        "query_token_count": 3,
+        "query_has_service_keyword": true,
+        "query_is_underspecified": false,
+        "ambiguity_triggered": true,
+        "clarification_triggered": false
+      },
+      "deterministic": true
+    },
+    {
+      "query": "watter heater leakng",
+      "normalized_query": "watter heater leakng",
+      "decision_label": "ambiguous_match",
+      "recommended_route": "clarification_path",
+      "confidence_score": 0.15147800445328405,
+      "confidence_band": "high",
+      "selected_candidate_ids": [
+        "intake_script__chunk_000",
+        "water_heater_policy__chunk_000"
+      ],
+      "reason_codes": [
+        "SMALL_TOP_GAP",
+        "HIGH_SOURCE_DIVERSITY_IN_TOP_K"
+      ],
+      "precedence_rule_applied": "AMBIGUOUS_MATCH_PRECEDENCE",
+      "decision_signals": {
+        "top_score": 0.15147800445328405,
+        "second_score": 0.13937661814389707,
+        "score_gap": 0.01210138630938698,
+        "close_candidate_count": 2,
+        "top_k_considered": 5,
+        "distinct_source_count": 5,
+        "distinct_service_area_count": 1,
+        "query_token_count": 3,
+        "query_has_service_keyword": true,
+        "query_is_underspecified": false,
+        "ambiguity_triggered": true,
+        "clarification_triggered": false
+      },
+      "deterministic": true
+    }
+  ]
+}

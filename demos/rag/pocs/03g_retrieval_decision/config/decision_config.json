@@ -1,0 +1,13 @@
+{
+  "strong_match_min_score": 0.15,
+  "weak_match_min_score": 0.05,
+  "no_match_max_score": 0.01,
+  "min_score_gap_for_strong": 0.03,
+  "close_score_delta": 0.015,
+  "max_close_candidates_before_ambiguous": 2,
+  "top_k_window": 5,
+  "source_diversity_ambiguity_threshold": 3,
+  "enable_needs_clarification": true,
+  "min_query_tokens_for_specificity": 3,
+  "clarification_min_service_areas": 2
+}

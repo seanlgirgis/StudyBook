@@ -1,0 +1,27 @@
+{
+  "snapshot_date": "2026-05-04",
+  "deterministic_contract": {
+    "health": {
+      "status": 200,
+      "body": {"ok": true}
+    },
+    "ping": {
+      "status": 200,
+      "body": {"ok": true}
+    },
+    "unknown_endpoint": {
+      "status": 404,
+      "body": "framework default not-found payload"
+    }
+  },
+  "smoke_test_summary": {
+    "ok": true,
+    "checks_passed": 2,
+    "startup_wait_seconds": 0
+  },
+  "pytest_summary": {
+    "collected": 3,
+    "passed": 3,
+    "failed": 0
+  }
+}

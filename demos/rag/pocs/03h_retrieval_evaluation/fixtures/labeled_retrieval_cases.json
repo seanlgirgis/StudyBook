@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "cases": [
+    {
+      "case_id": "case_001",
+      "query": "ac blowing warm air",
+      "normalized_query": "ac blowing warm air",
+      "expected_chunk_id": "faq__chunk_000",
+      "expected_decision_label": "ambiguous_match",
+      "expected_recommended_route": "clarification_path"
+    },
+    {
+      "case_id": "case_002",
+      "query": "maintenance plan pricing",
+      "normalized_query": "maintenance plan pricing",
+      "expected_chunk_id": "maintenance_plan__chunk_000",
+      "expected_decision_label": "needs_clarification",
+      "expected_recommended_route": "clarification_path"
+    },
+    {
+      "case_id": "case_003",
+      "query": "water heater leaking",
+      "normalized_query": "water heater leaking",
+      "expected_chunk_id": "water_heater_policy__chunk_000",
+      "expected_decision_label": "strong_match",
+      "expected_recommended_route": "answer_candidate_path"
+    }
+  ]
+}

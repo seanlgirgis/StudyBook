@@ -20,11 +20,22 @@ This test plan is design-only and defines future implementation checks.
 - weak case: moderate evidence below confidence policy -> `weak_match`
 - no match case: zero/near-zero evidence -> `no_match`
 - clarification case: policy trigger on ambiguity/weakness -> `needs_clarification`
+- strong case must also include explicit strong reason codes:
+  - `TOP_SCORE_STRONG`
+  - `CLEAR_SCORE_GAP`
+  - `LOW_CLOSE_CANDIDATE_COUNT`
 
 ## Threshold Boundary Tests
 - exact equality at each threshold boundary
 - just below and just above each threshold
 - ordering precedence when multiple rule conditions apply
+
+## Precedence-Specific Tests
+- ambiguous-looking result that should become `needs_clarification` because clarification trigger is on
+- weak-looking result that should become `needs_clarification` because clarification trigger is on
+- ambiguous result that should remain `ambiguous_match` when query is specific enough and no clarification trigger applies
+- `no_match` should still beat clarification when scores are below no-match floor
+- strong-like candidate with one conflicting signal should still follow precedence order (no accidental downgrade if strong branch is satisfied)
 
 ## Score-Gap and Close-Candidate Tests
 - large top gap with medium score should not be treated like tie plateau
@@ -40,7 +51,10 @@ This test plan is design-only and defines future implementation checks.
 - missing required input fields fail with clear validation error
 - malformed numeric types fail validation
 - unknown decision label is rejected
+- unknown recommended route is rejected
 - `selected_chunk_ids` contract behavior for `no_match` is enforced
+- reason codes are required for all labels, including `strong_match`
+- precedence override marker is present when clarification beats ambiguous/weak
 
 ## Determinism Tests
 - repeated runs with same input/config produce identical output
@@ -75,6 +89,8 @@ Each test failure should identify:
 - query fixture id
 - config version id
 - expected label vs actual label
+- expected route vs actual route
 - evidence values that drove mismatch
+- precedence branch expected vs branch executed
 
 This makes threshold tuning transparent during ladder progression.

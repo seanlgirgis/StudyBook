@@ -1,0 +1,53 @@
+{
+  "run_id": "poc-04d-sample-run",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "scenario_id": "std-answer-ready",
+      "category": "standard",
+      "expected_success": true,
+      "actual_success": true,
+      "status": "pass",
+      "execution_time_ms": 0.075,
+      "error": null
+    },
+    {
+      "scenario_id": "edge-clarification",
+      "category": "edge",
+      "expected_success": true,
+      "actual_success": true,
+      "status": "pass",
+      "execution_time_ms": 0.023,
+      "error": null
+    },
+    {
+      "scenario_id": "negative-bad-citation",
+      "category": "failure",
+      "expected_success": false,
+      "actual_success": false,
+      "status": "pass",
+      "execution_time_ms": 0.03,
+      "error": "citation quoted_text must match resolved span in normalized-exact mode"
+    },
+    {
+      "scenario_id": "failure-insufficient-evidence",
+      "category": "failure",
+      "expected_success": true,
+      "actual_success": true,
+      "status": "pass",
+      "execution_time_ms": 0.015,
+      "error": null
+    },
+    {
+      "scenario_id": "failure-escalation-required",
+      "category": "failure",
+      "expected_success": true,
+      "actual_success": true,
+      "status": "pass",
+      "execution_time_ms": 0.017,
+      "error": null
+    }
+  ]
+}

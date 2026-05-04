@@ -1,5 +1,67 @@
 # CHANGELOG.md
 
+## 2026-05-04
+### Added
+- Milestone 4 step `04b_answer_contract_schemas` implementation files:
+  - `pocs/04b_answer_contract_schemas/src/__init__.py`
+  - `pocs/04b_answer_contract_schemas/src/schemas.py`
+  - `pocs/04b_answer_contract_schemas/tests/conftest.py`
+  - `pocs/04b_answer_contract_schemas/tests/test_schemas.py`
+
+### Changed
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now mark `pocs/04b_answer_contract_schemas` as PASS.
+- 04b closure now records contract scope:
+  - strict Pydantic enums/models
+  - full branch validation and strict route/outcome mapping
+  - citation cross-validation with normalized-exact matching
+  - evidence gating using `evidence_attempted`
+  - claim/support-status and escalation safety validation
+  - clarification requirements and insufficient-evidence anti-answer guard
+- 04b validation evidence recorded:
+  - `. 'D:\Workarea\StudyBook\env_setter.ps1'; pytest -v .\pocs\04b_answer_contract_schemas\tests` -> PASS (`31 passed`)
+- 04b non-goal boundaries recorded as preserved:
+  - no LLM calls
+  - no customer-facing answer generation
+  - no threshold tuning
+  - no changes to `03d`/`03e`/`03f`/`03g`/`03h`
+- no movement into `integrated/servicecall-ai`
+
+## 2026-05-04 (04d Expansion Pack Closure)
+### Changed
+- `pocs/04d/src/pipeline_test_harness.py` now records per-scenario execution timing.
+- `pocs/04d/src/mock_evidence_sets.py` now includes expanded scenarios:
+  - `failure-insufficient-evidence`
+  - `failure-escalation-required`
+  - `negative-bad-citation` (expected failure)
+- Added lightweight batch generator support for performance-oriented runs.
+- `pocs/04d/src/schemas.py`, `pocs/04d/tests/test_harness.py`, and `pocs/04d/tests/test_runner.py` updated for expanded scenario and timing validation.
+- `pocs/04d/outputs/sample_pipeline_runs.json` refreshed with timing and expanded scenario results.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now mark `04d` expansion pack as PASS with validation evidence.
+
+### Validation
+- `. D:\Workarea\StudyBook\env_setter.ps1; pytest -v .\pocs\04d\tests` -> PASS (`6 passed`)
+
+## 2026-05-04 (04e Live Service Integration)
+### Added
+- `pocs/04e/src/app.py`
+- `pocs/04e/src/routes.py`
+- `pocs/04e/src/service.py`
+- `pocs/04e/tests/test_api.py`
+- `pocs/04e/docs/CONTRACT.md`
+- `pocs/04e/docs/TEST_PLAN.md`
+- `pocs/04e/outputs/sample_api_responses.json`
+
+### Changed
+- Integrated validated 04d pipeline into a live FastAPI service layer.
+- Added endpoint contracts for:
+  - query submission with context/documents
+  - structured RAG answer retrieval with evidence citations
+  - timing metrics in responses
+- Added service-level validation/error handling behavior and timing traceability.
+
+### Validation
+- `. D:\Workarea\StudyBook\env_setter.ps1; pytest -v .\pocs\04e\tests` -> PASS (`5 passed`)
+
 ## 2026-05-01
 ### Added
 - Permanent project memory files: `DAILY_LOG.md`, `DECISIONS.md`, `KNOWN_ISSUES.md`, `CHANGELOG.md`.
@@ -145,6 +207,12 @@
 - `pocs/03f_hybrid_retrieval/src/hybrid_retrieval.py`
 - `pocs/03f_hybrid_retrieval/tests/test_hybrid_retrieval.py`
 - `pocs/03f_hybrid_retrieval/src/run_hybrid_search.py`
+- `pocs/03g_retrieval_decision/config/decision_config.json`
+- `pocs/03g_retrieval_decision/src/schemas.py`
+- `pocs/03g_retrieval_decision/src/retrieval_decision.py`
+- `pocs/03g_retrieval_decision/src/run_retrieval_decision.py`
+- `pocs/03g_retrieval_decision/tests/test_retrieval_decision.py`
+- `pocs/03g_retrieval_decision/outputs/sample_retrieval_decisions.json`
 
 ### Changed
 - `pocs/03f_hybrid_retrieval/requirements.txt` now includes `scikit-learn` and `joblib` for reusable hybrid retrieval core execution.
@@ -157,3 +225,105 @@
 - `PROJECT_STATE.md`, `TASK_BOARD.md`, `HANDOFF.md`, and `DAILY_LOG.md` now reflect 03f runner completion and sample output generation status.
 - 03f documentation wording is now present-tense for implemented behavior (inputs read, output written, current commands).
 - `PROJECT_STATE.md`, `TASK_BOARD.md`, `HANDOFF.md`, and `DAILY_LOG.md` now mark `03f_hybrid_retrieval` as PASS/completed and set next step to `03g_retrieval_decision` planning only.
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `HANDOFF.md`, `DAILY_LOG.md`, and `CHANGELOG.md` now mark `03g_retrieval_decision` as PASS/completed and set next step to `03h_retrieval_evaluation` discussion/scope only.
+- `PROJECT_STATE.md` and `HANDOFF.md` now record 03g validation results:
+  - `pytest -v .\pocs\03g_retrieval_decision\tests` -> PASS (`14 passed`)
+  - `python .\pocs\03g_retrieval_decision\src\run_retrieval_decision.py` -> PASS (`6` queries processed)
+
+## 2026-05-03 (03h Closure)
+### Added
+- `pocs/03h_retrieval_evaluation/fixtures/labeled_retrieval_cases.json`
+- `pocs/03h_retrieval_evaluation/src/schemas.py`
+- `pocs/03h_retrieval_evaluation/src/load_fixtures.py`
+- `pocs/03h_retrieval_evaluation/src/load_upstream_outputs.py`
+- `pocs/03h_retrieval_evaluation/src/align_cases.py`
+- `pocs/03h_retrieval_evaluation/src/evaluate_cases.py`
+- `pocs/03h_retrieval_evaluation/src/summarize_evaluation.py`
+- `pocs/03h_retrieval_evaluation/src/run_evaluation.py`
+- `pocs/03h_retrieval_evaluation/src/write_outputs.py`
+- `pocs/03h_retrieval_evaluation/src/run_retrieval_evaluation.py`
+- `pocs/03h_retrieval_evaluation/tests/test_load_fixtures.py`
+- `pocs/03h_retrieval_evaluation/tests/test_align_cases.py`
+- `pocs/03h_retrieval_evaluation/tests/test_evaluate_cases.py`
+- `pocs/03h_retrieval_evaluation/tests/test_summarize_evaluation.py`
+- `pocs/03h_retrieval_evaluation/tests/test_run_evaluation.py`
+- `pocs/03h_retrieval_evaluation/tests/test_write_outputs.py`
+- `pocs/03h_retrieval_evaluation/tests/test_runner_smoke.py`
+- `pocs/03h_retrieval_evaluation/outputs/evaluation_report.json`
+- `pocs/03h_retrieval_evaluation/outputs/evaluation_summary.md`
+
+### Changed
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now mark `03h_retrieval_evaluation` as PASS with final evidence:
+  - `. D:\Workarea\StudyBook\env_setter.ps1; pytest -v .\pocs\03h_retrieval_evaluation\tests` -> PASS (`49 passed in 0.66s`)
+  - `python .\pocs\03h_retrieval_evaluation\src\run_retrieval_evaluation.py` -> PASS (`3` cases processed, `3 passed / 0 failed / 0 warning)
+- Retrieval ladder through `03h` is now recorded as complete, with next-step selection deferred to deliberate planning (`03i`, `04`, `04a`, or retrospective).
+
+## 2026-05-03 (04a Closure)
+### Added
+- `pocs/04a_answer_contract_design/README.md`
+- `pocs/04a_answer_contract_design/docs/DESIGN.md`
+- `pocs/04a_answer_contract_design/docs/CONTRACT.md`
+- `pocs/04a_answer_contract_design/docs/TEST_PLAN.md`
+
+### Changed
+- `pocs/04a_answer_contract_design/docs/CONTRACT.md` now requires full top-level `AnswerAssemblyOutcome` shape across all outcome examples (`answer_ready`, `insufficient_evidence`, `clarification_needed`, `escalation_required`).
+- `pocs/04a_answer_contract_design/docs/CONTRACT.md` now requires `SelectedEvidenceItem.selected_text` and clarifies citation span traceability against `selected_text` or original retrieved evidence text by `chunk_id`.
+- `pocs/04a_answer_contract_design/docs/CONTRACT.md` now requires citations for document-derived `factual`, `instructional`, and `policy` claims and explicitly exempts conversational glue text.
+- `pocs/04a_answer_contract_design/docs/CONTRACT.md` now defines planned escalation enums:
+  - `severity`: `low`, `medium`, `high`, `critical`
+  - `handoff_target`: `dispatch_review`, `supervisor_review`, `emergency_instruction_template`, `human_reviewer`
+- `pocs/04a_answer_contract_design/docs/TEST_PLAN.md` now includes planned validation coverage for:
+  - full top-level outcome shape on every branch
+  - `selected_text`/citation span traceability
+  - instructional-claim citation requirements when document-derived
+  - escalation enum validation
+- `PROJECT_STATE.md`, `TASK_BOARD.md`, `DAILY_LOG.md`, and `HANDOFF.md` now mark `04a_answer_contract_design` as PASS and update the next-step recommendation to deliberate `04b` scope selection before implementation.
+
+## 2026-05-04
+- Added new POC docs structure: pocs/04c_schema_validation_integration/ with README.md and docs/{DESIGN,CONTRACT,TEST_PLAN}.md.
+- Updated pocs/04d_full_rag_pipeline_testing/README.md and docs/{DESIGN,CONTRACT,TEST_PLAN}.md with thread-approved design artifacts.
+- Updated project control memory files for handoff continuity.
+
+
+## 2026-05-04 - 04d Expansion Pack
+- Expanded POC  4d full pipeline testing with explicit schema-validated scenarios:
+  - ailure-insufficient-evidence`n  - ailure-escalation-required`n  - 
+egative-bad-citation (expected-failure guard)
+- Added per-scenario timing capture (xecution_time_ms) in harness output.
+- Added lightweight performance batch generation (uild_performance_batch) for multi-evidence-set runs.
+- Updated pocs/04d/src/schemas.py and pocs/04d/tests/{test_harness.py,test_runner.py} to validate timing and expanded coverage.
+- Refreshed output artifact pocs/04d/outputs/sample_pipeline_runs.json with expanded scenario results + timings.
+- Validation run completed with required environment bootstrap: 6 passed.
+
+
+## 2026-05-04 - POC 04f Kickoff Structure Added
+### Added
+- pocs/04f/README.md
+- pocs/04f/docs/DESIGN.md
+- pocs/04f/docs/CONTRACT.md
+- pocs/04f/docs/TEST_PLAN.md
+- pocs/04f/outputs/POC_04f_kickoff_prompt.md
+- Directory baseline: pocs/04f/src, pocs/04f/tests, pocs/04f/docs, pocs/04f/outputs
+
+### Notes
+- This change initializes 04f tracking/persistence only; containerization implementation is pending.
+
+## 2026-05-04 - 04f deterministic Docker-first teaching thread initialization
+### Added
+- `pocs/04f/outputs/POC_04f_THREAD_INIT.md`
+  - New teaching-focused thread initialization doc for deterministic Docker-first workflow.
+
+### Changed
+- `pocs/04f/outputs/POC_04f_SUMMARY.md`
+  - Updated title to `POC 04f Summary Snapshot (Teaching Reference)`.
+
+## 2026-05-04 - Add 04f workflow diagram teaching artifact
+### Added
+- `pocs/04f/outputs/POC_04f_WORKFLOW_DIAGRAM.md`
+  - Mermaid visual summary of deterministic Docker-first workflow for POC 04f.
+
+### Updated
+- `PROJECT_STATE.md`
+- `TASK_BOARD.md`
+- `DAILY_LOG.md`
+- `HANDOFF.md`

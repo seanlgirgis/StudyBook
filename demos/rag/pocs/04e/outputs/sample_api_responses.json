@@ -1,0 +1,26 @@
+{
+  "sample_query_request": {
+    "query": "Do you offer AC repair?",
+    "context_documents": [
+      "services.md"
+    ]
+  },
+  "sample_answer_response_shape": {
+    "query": "Do you offer AC repair?",
+    "answer_text": "Yes, A/C repair is available.",
+    "citations": [
+      {
+        "chunk_id": "chunk-1",
+        "start_char": 0,
+        "end_char": 10,
+        "quoted_text": "A/C repair"
+      }
+    ],
+    "decision": "answer_ready",
+    "route_applied": "answer_from_retrieval",
+    "timing": {
+      "request_duration_ms": 1.23,
+      "scenario_count": 5
+    }
+  }
+}

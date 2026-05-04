@@ -55,6 +55,16 @@ Config input includes deterministic decision rules such as:
 Note:
 `needs_clarification` is a decision output label in this POC, not a live prompt action.
 
+## decision_label vs recommended_route
+- `decision_label` is the core retrieval-quality classification and must remain in the five-label enum.
+- `recommended_route` is a downstream orchestration hint and does not redefine retrieval quality.
+
+Planned route examples:
+- `answer_candidate_path`
+- `clarification_path`
+- `fallback_path`
+- `no_answer_path`
+
 ## Likely Evidence Signals
 Core deterministic signals to inspect:
 - top score: `rank_1.hybrid_score`
@@ -70,14 +80,33 @@ Supporting signals (optional):
 ## Deterministic Rule Style (Planned)
 Rules are threshold-based and ordered.
 
-Example ordering pattern:
-1. if no candidates or top score below minimum no-match floor -> `no_match`
-2. if top score meets strong floor and gap meets dominance floor and tie count low -> `strong_match`
-3. if top score moderate but tie count high or gap low -> `ambiguous_match`
-4. if evidence exists but below confidence floor -> `weak_match`
-5. if ambiguity or weakness crosses clarification policy threshold -> `needs_clarification`
+Precedence order (explicit):
+1. `no_match` wins first:
+   - no candidates, or top score below no-match floor.
+2. `strong_match` next:
+   - strong top score + clear score gap + low close-candidate count.
+3. `needs_clarification` next:
+   - query is vague or underspecified for multiple plausible service areas, or evidence pattern indicates clarification policy trigger.
+4. `ambiguous_match` next:
+   - close competing candidates remain, but query specificity is sufficient to keep this as ambiguity rather than clarification-forced.
+5. `weak_match` last:
+   - low but nonzero evidence that does not satisfy higher-precedence branches.
+
+Why this order matters:
+- `no_match` should not be converted into clarification when evidence is too weak.
+- `needs_clarification` should beat `ambiguous_match` and `weak_match` when clarification policy is triggered.
+- `ambiguous_match` remains available for specific-but-close competitions.
 
 Final threshold values are configuration, not hard-coded constants in design.
+Threshold numbers shown in examples are initial placeholders and must be tuned later using retrieval-evaluation fixtures.
+
+## Clarification Trigger Guidance (Planned)
+`needs_clarification` is expected to win when one or more clarification triggers are true, such as:
+- query ambiguity signal indicates underspecified intent across multiple service families
+- high close-candidate cluster across different plausible service areas
+- policy flag requires clarification for risk-sensitive or multi-intent phrasing
+
+This does not mean a live clarification question is asked in this POC; it only produces a deterministic label and route hint.
 
 ## Edge Cases
 - empty candidate list

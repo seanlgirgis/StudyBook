@@ -1,0 +1,23 @@
+[
+  {
+    "name": "health_check",
+    "method": "GET",
+    "path": "/health",
+    "url": "http://127.0.0.1:8000/health",
+    "notes": "Deterministic readiness endpoint"
+  },
+  {
+    "name": "ping_check",
+    "method": "GET",
+    "path": "/ping",
+    "url": "http://127.0.0.1:8000/ping",
+    "notes": "Deterministic liveliness endpoint"
+  },
+  {
+    "name": "unknown_route_validation",
+    "method": "GET",
+    "path": "/unknown-endpoint",
+    "url": "http://127.0.0.1:8000/unknown-endpoint",
+    "notes": "Validation test expects HTTP 404"
+  }
+]

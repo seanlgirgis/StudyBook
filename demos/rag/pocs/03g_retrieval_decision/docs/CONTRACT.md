@@ -52,6 +52,7 @@ Model name (planned): `RetrievalDecisionConfig`
 Notes:
 - Numeric values are placeholders for design discussion and tuning.
 - Final implementation should validate ranges with Pydantic.
+- Placeholder thresholds must be tuned with later retrieval-evaluation fixtures and are not permanent truth values.
 
 ## Expected 03g Output Shape
 Model name (planned): `RetrievalDecisionResult`
@@ -61,6 +62,7 @@ Model name (planned): `RetrievalDecisionResult`
   "query": "heater repaid",
   "normalized_query": "heater repaid",
   "decision_label": "ambiguous_match",
+  "recommended_route": "clarification_path",
   "confidence_score": 0.47,
   "reason_codes": [
     "TOP_SCORE_MID",
@@ -79,7 +81,7 @@ Model name (planned): `RetrievalDecisionResult`
     "heating_repair_overview__chunk_000",
     "water_heater_repairs__chunk_001"
   ],
-  "recommended_route": "clarification_path",
+  "precedence_rule_applied": "CLARIFICATION_BEATS_AMBIGUOUS",
   "deterministic": true
 }
 ```
@@ -92,17 +94,51 @@ Expected allowed values:
 - `no_match`
 - `needs_clarification`
 
+## Recommended Route Enum (Downstream Hint Only)
+Expected allowed values:
+- `answer_candidate_path`
+- `clarification_path`
+- `fallback_path`
+- `no_answer_path`
+
+Semantics:
+- `decision_label` is the retrieval-quality classification output.
+- `recommended_route` is a routing hint for later POCs and does not override the label.
+
+## Precedence Contract
+Planned precedence order:
+1. `no_match`
+2. `strong_match`
+3. `needs_clarification`
+4. `ambiguous_match`
+5. `weak_match`
+
+Expected behavior:
+- `needs_clarification` may override states that otherwise look `ambiguous_match` or `weak_match` when clarification policy triggers.
+- `no_match` must still beat clarification when evidence is below no-match floor.
+
 ## Reason Code Contract
 Reason codes should be machine-readable constants for traceability.
 
-Examples:
-- `NO_CANDIDATES`
-- `TOP_SCORE_BELOW_NO_MATCH_THRESHOLD`
-- `TOP_SCORE_STRONG`
-- `SMALL_TOP_GAP`
-- `MULTIPLE_CLOSE_CANDIDATES`
-- `HIGH_SOURCE_DIVERSITY_IN_TOP_K`
-- `LOW_CONFIDENCE_REQUIRES_CLARIFICATION`
+Examples by label:
+- `strong_match`:
+  - `TOP_SCORE_STRONG`
+  - `CLEAR_SCORE_GAP`
+  - `LOW_CLOSE_CANDIDATE_COUNT`
+- `ambiguous_match`:
+  - `SMALL_TOP_GAP`
+  - `MULTIPLE_CLOSE_CANDIDATES`
+  - `TOP_SCORE_MID`
+- `weak_match`:
+  - `TOP_SCORE_LOW_NONZERO`
+  - `BELOW_WEAK_CONFIDENCE_TARGET`
+- `no_match`:
+  - `NO_CANDIDATES`
+  - `TOP_SCORE_BELOW_NO_MATCH_THRESHOLD`
+- `needs_clarification`:
+  - `QUERY_UNDERSPECIFIED_MULTI_SERVICE`
+  - `CLARIFICATION_POLICY_TRIGGERED`
+  - `AMBIGUITY_REQUIRES_CLARIFICATION`
 
 ## Output Collection Shape
 Model name (planned): `RetrievalDecisionBatch`
@@ -118,9 +154,11 @@ Model name (planned): `RetrievalDecisionBatch`
 
 ## Validation Expectations
 - all labels must be in enum
+- all recommended routes must be in route enum
 - score fields must be numeric and bounded
-- reason codes must be non-empty when decision is not `strong_match` (policy can be tightened later)
+- reason codes must be non-empty for every label, including `strong_match`
 - `selected_chunk_ids` should be empty for `no_match`
+- `precedence_rule_applied` should be present when precedence override behavior occurs
 - `deterministic` must be `true` for this POC
 
 ## Non-Goals In Contract

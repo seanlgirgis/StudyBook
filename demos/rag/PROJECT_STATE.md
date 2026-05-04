@@ -1,12 +1,118 @@
 # PROJECT_STATE.md
 
 ## Current Milestone
-Milestone 3 (Step 03f) — Hybrid retrieval POC completed and PASS (`pocs/03f_hybrid_retrieval`)
+Milestone 4 (Step 04e) — Live service integration layer completed and PASS (`pocs/04e`)
 
 ## Current Focus
-`03e_char_tfidf_typo_search` is closed.
-`03f_hybrid_retrieval` schema/contracts, reusable core retrieval module, runner, and sample output generation are implemented and validated.
-Next suggested step is `03g_retrieval_decision` planning and scope review.
+`04e` integration is implemented and closed as PASS.
+The validated 04d deterministic evidence pipeline is now exposed behind a FastAPI service layer with schema-validated request handling, structured answer responses, and timing metrics in live endpoint responses.
+Validation for 04e API integration: `. D:\Workarea\StudyBook\env_setter.ps1; pytest -v .\pocs\04e\tests` -> `5 passed`.
+
+## 04e Closure Status
+`04e` is marked PASS:
+- implementation files:
+  - `pocs/04e/src/app.py`
+  - `pocs/04e/src/routes.py`
+  - `pocs/04e/src/service.py`
+- tests:
+  - `pocs/04e/tests/test_api.py`
+- API docs:
+  - `pocs/04e/docs/CONTRACT.md`
+  - `pocs/04e/docs/TEST_PLAN.md`
+- sample output:
+  - `pocs/04e/outputs/sample_api_responses.json`
+- implemented behavior:
+  - endpoint layer for submitting query/context and receiving structured RAG responses
+  - pipeline integration using existing 04d harness/mock evidence/scenario timing
+  - timing metrics returned in API response payloads
+  - schema validation at request boundary and deterministic pipeline validation in service flow
+  - basic logging and HTTP error handling (`400` known service validation errors, `422` request validation errors, `500` fallback)
+- validation evidence:
+  - command: `. D:\Workarea\StudyBook\env_setter.ps1; pytest -v .\pocs\04e\tests`
+  - result: `5 passed`
+- non-goals preserved:
+  - no threshold tuning
+  - no LLM calls
+  - no customer answer generation
+  - no modifications to 03f/03g artifacts
+  - no movement into `integrated/servicecall-ai`
+
+## 04d Closure Status
+`04d` expansion pack is marked PASS:
+- implementation updates:
+  - `pocs/04d/src/pipeline_test_harness.py` (per-scenario execution timing)
+  - `pocs/04d/src/mock_evidence_sets.py` (scenario expansion + lightweight performance batch generator)
+  - `pocs/04d/src/schemas.py`
+  - `pocs/04d/tests/test_harness.py`
+  - `pocs/04d/tests/test_runner.py`
+  - `pocs/04d/outputs/sample_pipeline_runs.json` (timing + expanded scenario results)
+- expanded scenarios:
+  - `failure-insufficient-evidence`
+  - `failure-escalation-required`
+  - `negative-bad-citation` (expected failure path)
+  - lightweight batch generator for performance testing
+- validation evidence:
+  - command: `. D:\Workarea\StudyBook\env_setter.ps1; pytest -v .\pocs\04d\tests`
+  - result: `6 passed`
+- non-goals preserved:
+  - no threshold tuning
+  - no LLM calls
+  - no customer answer generation
+  - no move into `integrated/servicecall-ai`
+  - no rebuild/modification of `03d`/`03e`/`03f`/`03g` artifacts
+
+## 04b Closure Status
+`04b_answer_contract_schemas` is marked PASS:
+- implementation files:
+  - `pocs/04b_answer_contract_schemas/src/__init__.py`
+  - `pocs/04b_answer_contract_schemas/src/schemas.py`
+  - `pocs/04b_answer_contract_schemas/tests/conftest.py`
+  - `pocs/04b_answer_contract_schemas/tests/test_schemas.py`
+- design files (unchanged authority set):
+  - `pocs/04b_answer_contract_schemas/README.md`
+  - `pocs/04b_answer_contract_schemas/docs/DESIGN.md`
+  - `pocs/04b_answer_contract_schemas/docs/CONTRACT.md`
+  - `pocs/04b_answer_contract_schemas/docs/TEST_PLAN.md`
+- implemented behavior:
+  - strict Pydantic enums/models for answer assembly contract
+  - full top-level branch validation with strict `outcome_type` <-> `route_applied` mapping
+  - citation cross-validation by `chunk_id` with selected-text-first and retrieved-text fallback
+  - normalized-exact citation matching rules
+  - evidence gating with `evidence_attempted`
+  - claim/support-status validation, clarification requirements, escalation safety validation, and insufficient-evidence anti-answer guard
+- validation evidence:
+  - command: `. 'D:\Workarea\StudyBook\env_setter.ps1'; pytest -v .\pocs\04b_answer_contract_schemas\tests`
+  - result: `31 passed`
+- non-goals preserved:
+  - no LLM calls
+  - no customer-facing answer generation
+  - no threshold tuning
+  - no modifications to `03d`/`03e`/`03f`/`03g`/`03h`
+  - no movement into `integrated/servicecall-ai`
+
+## 04a Closure Status
+`04a_answer_contract_design` is marked PASS:
+- design docs complete:
+  - `pocs/04a_answer_contract_design/README.md`
+  - `pocs/04a_answer_contract_design/docs/DESIGN.md`
+  - `pocs/04a_answer_contract_design/docs/CONTRACT.md`
+  - `pocs/04a_answer_contract_design/docs/TEST_PLAN.md`
+- design patch completed:
+  - all outcome examples use full top-level `AnswerAssemblyOutcome` shape
+  - `SelectedEvidenceItem` includes `selected_text`
+  - citation spans must resolve against `selected_text` or original retrieved evidence `text` by `chunk_id`
+  - document-derived `factual`, `instructional`, and `policy` claims require citations
+  - conversational glue text does not require citations
+  - escalation enums added for `severity` and `handoff_target`
+  - `TEST_PLAN` updated for these validation rules
+- non-goals preserved:
+  - no Python code
+  - no `src/`, `tests/`, or `outputs/`
+  - no LLM calls
+  - no customer-facing answer generation
+  - no threshold tuning
+  - no modifications to `03d`/`03e`/`03f`/`03g`/`03h`
+  - no movement into `integrated/servicecall-ai`
 
 ## Closure Snapshot (03a-03e)
 - `03a_load_documents` PASS
@@ -174,8 +280,6 @@ A closed-loop project-control protocol is now in place via `AGENTS.md` + permane
 
 ## What Is Not Yet Implemented
 - customer-facing TF-IDF search flow (word and char indexes exist; retrieval interface not yet built)
-- retrieval decision logic implementation
-- retrieval evaluation harness implementation
 - answer with citations implementation
 - intake classification implementation
 - lead scoring implementation
@@ -199,7 +303,125 @@ A closed-loop project-control protocol is now in place via `AGENTS.md` + permane
 - design-first rule: start with `README`, `DESIGN`, `CONTRACT`, and `TEST_PLAN` before implementation unless explicitly approved otherwise
 
 ## Next Recommended Task
-Discuss and scope `pocs/03g_retrieval_decision` next. Do not implement `03g` until approved.
-Start `03g` with design docs before code.
-`03g` scope is retrieval quality/confidence decision only.
-`03g` must not generate customer answers, must not call an LLM, and must not move into `integrated/servicecall-ai`.
+`04d` expansion pack is complete.
+Next discussion should deliberately choose the next scoped step before implementation.
+Possible next directions:
+- `03i` threshold review / tuning analysis (still no auto tuning)
+- `04` answer assembly with citations
+- `04a`/`04b`/`04d` retrospective and hardening pass before moving on
+
+## 03h Closure Status
+`03h_retrieval_evaluation` is marked PASS:
+- design docs complete:
+  - `pocs/03h_retrieval_evaluation/README.md`
+  - `pocs/03h_retrieval_evaluation/docs/DESIGN.md`
+  - `pocs/03h_retrieval_evaluation/docs/CONTRACT.md`
+  - `pocs/03h_retrieval_evaluation/docs/TEST_PLAN.md`
+- implementation complete:
+  - fixture schema + fixture loader
+  - upstream `03f`/`03g` loaders
+  - case alignment helper (`normalized_query` with `query` fallback)
+  - per-case evaluator
+  - aggregate summary calculator
+  - output writers
+  - minimal runner
+  - runner smoke test
+- validation:
+  - `. D:\Workarea\StudyBook\env_setter.ps1; pytest -v .\pocs\03h_retrieval_evaluation\tests` -> PASS (`49 passed in 0.66s`)
+  - `python .\pocs\03h_retrieval_evaluation\src\run_retrieval_evaluation.py` -> PASS
+  - processed `3` cases: `3 passed / 0 failed / 0 warning`
+- outputs:
+  - `pocs/03h_retrieval_evaluation/outputs/evaluation_report.json`
+  - `pocs/03h_retrieval_evaluation/outputs/evaluation_summary.md`
+
+## 03g Closure Status
+`03g_retrieval_decision` is marked PASS:
+- design docs complete:
+  - `pocs/03g_retrieval_decision/README.md`
+  - `pocs/03g_retrieval_decision/docs/DESIGN.md`
+  - `pocs/03g_retrieval_decision/docs/CONTRACT.md`
+  - `pocs/03g_retrieval_decision/docs/TEST_PLAN.md`
+- implementation complete:
+  - `pocs/03g_retrieval_decision/src/schemas.py`
+  - `pocs/03g_retrieval_decision/src/retrieval_decision.py`
+  - `pocs/03g_retrieval_decision/src/run_retrieval_decision.py`
+  - `pocs/03g_retrieval_decision/config/decision_config.json`
+  - `pocs/03g_retrieval_decision/tests/test_retrieval_decision.py`
+  - `pocs/03g_retrieval_decision/outputs/sample_retrieval_decisions.json`
+- validation:
+  - `pytest -v .\pocs\03g_retrieval_decision\tests` -> PASS (`14 passed`)
+  - `python .\pocs\03g_retrieval_decision\src\run_retrieval_decision.py` -> PASS (`6` queries processed)
+
+## 2026-05-04 Update - 04c/04d Design Artifact Persistence
+- Persisted design artifacts for \'04c_schema_validation_integration\' and \'04d_full_rag_pipeline_testing\'.
+- Created/updated README + DESIGN/CONTRACT/TEST_PLAN for both POCs from thread-approved content.
+- Implementation for 04d harness remains in progress and should continue in next execution slice.
+
+
+## 2026-05-04 Update - 04d Expansion Pack PASS
+-  4d remains PASS and is expanded with timing + scenario-depth coverage.
+- Implemented: per-scenario execution timing in pocs/04d/src/pipeline_test_harness.py.
+- Implemented scenario expansion in pocs/04d/src/mock_evidence_sets.py:
+  - ailure-insufficient-evidence`n  - ailure-escalation-required`n  - 
+egative-bad-citation (expected failure path)
+  - uild_performance_batch(...) lightweight batch generator
+- Updated pocs/04d/src/schemas.py and tests:
+  - pocs/04d/tests/test_harness.py`n  - pocs/04d/tests/test_runner.py`n- Output refreshed: pocs/04d/outputs/sample_pipeline_runs.json with per-scenario xecution_time_ms.
+- Validation: . D:\Workarea\StudyBook\env_setter.ps1; pytest -q .\pocs\04d\tests; python .\pocs\04d\src\run_pipeline_tests.py -> PASS (6 passed).
+
+
+## 2026-05-04 Update - 04f Kickoff Initialized
+- Milestone 4 next step  4f is now initialized as a design-first POC for deployment-ready service integration.
+- Created POC structure: pocs/04f/src, pocs/04f/tests, pocs/04f/docs, pocs/04f/outputs.
+- Persisted kickoff prompt at pocs/04f/outputs/POC_04f_kickoff_prompt.md.
+- Seeded initial docs for design-first progression:
+  - pocs/04f/README.md
+  - pocs/04f/docs/DESIGN.md
+  - pocs/04f/docs/CONTRACT.md
+  - pocs/04f/docs/TEST_PLAN.md
+- Implementation and closure validation for 04f remain pending.
+
+## 2026-05-04 Update - 04f Thread Initialization (Deterministic Docker-First Teaching)
+- Initialized a dedicated 04f thread teaching artifact at `pocs/04f/outputs/POC_04f_THREAD_INIT.md`.
+- Captured step-by-step deterministic Docker-first workflow:
+  - build image
+  - run container
+  - run in-container pytest
+  - run `/health` and `/ping` smoke checks
+  - persist logs and outputs
+- Explicitly documented teaching scope across `src/`, `tests/`, `docs/`, and `outputs/`.
+- Marked `pocs/04f/outputs/POC_04f_SUMMARY.md` as the snapshot teaching reference.
+- Emphasized reproducibility and deterministic behavior preservation for repeatable onboarding.
+
+## 2026-05-04 Update - 04f Teaching Memory (Docker-First Deterministic Reference)
+Purpose: persistent reference for future teaching, extension, and debugging of POC 04f.
+
+Persisted reference points:
+- Fully implemented Docker-first automation script: `pocs/04f/integrate_04f_docker.ps1`
+- Deterministic FastAPI endpoints: `GET /health`, `GET /ping`
+- In-container pytest integration currently includes placeholder test coverage
+- Docker runtime identifiers:
+  - image: `poc_04f_service`
+  - container: `poc_04f_service_run`
+- Smoke tests verified and reproducible evidence persisted under `pocs/04f/outputs/`
+- Teaching folder structure anchor:
+  - `pocs/04f/src/`
+  - `pocs/04f/tests/`
+  - `pocs/04f/docs/`
+  - `pocs/04f/outputs/`
+- Snapshot documentation source of truth:
+  - `pocs/04f/outputs/POC_04f_SUMMARY.md`
+- Teaching/extension guidance source:
+  - `pocs/04f/outputs/POC_04f_THREAD_INIT.md`
+
+## 2026-05-04 Update - 04f Workflow Diagram Artifact Added
+- Added teaching-first visual workflow artifact: `pocs/04f/outputs/POC_04f_WORKFLOW_DIAGRAM.md`.
+- Diagram captures verified deterministic Docker-first flow:
+  - `src/app.py` -> `integrate_04f_docker.ps1` -> Docker build (`poc_04f_service`) -> container run (`poc_04f_service_run`) -> in-container pytest + smoke checks -> output/log artifacts -> summary snapshot.
+- Explicit deterministic endpoint labels included:
+  - `/health` -> `{"ok": true}`
+  - `/ping` -> `{"ok": true}`
+- References included for completeness:
+  - `POC_04f_SUMMARY.md`
+  - `POC_04f_THREAD_INIT.md`
+  - `POC_04f_kickoff_prompt.md`
