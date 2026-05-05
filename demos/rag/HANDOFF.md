@@ -335,3 +335,22 @@ Scope guardrails preserved:
   - occasional over-generation tail
 - Next recommended step:
   - tighten generation stop behavior first, then add KB retrieval wiring in a separate scoped step.
+
+## 2026-05-05 Handoff - 04h Local RAG Orchestrator Started
+- Initialized `pocs/04h_local_rag_orchestrator` and completed design-first artifacts before implementation.
+- 04h now runs as local Python/FastAPI orchestrator (no Docker yet):
+  - `GET /health`
+  - `POST /ask`
+- 04h responsibilities implemented separately from LLM container:
+  - KB load/validation
+  - deterministic retrieval
+  - intent cleanup orchestration with robust JSON parse + deterministic fallback
+  - grounded prompt assembly
+  - local provider routing to 8-bit LLM (`http://localhost:8002`)
+- Added synthetic North Texas Comfort & Home Services KB covering AC, heating, plumbing, water-heater, maintenance, emergency, and appliance categories.
+- Validation evidence:
+  - `python -m pytest -q pocs/04h_local_rag_orchestrator/tests` -> PASS (`7 passed`)
+  - local uvicorn + smoke test -> PASS; output written to `pocs/04h_local_rag_orchestrator/outputs/SMOKE_TEST_RESULT.md`
+- Scope preserved:
+  - no Docker for 04h in this step
+  - no move to `integrated/servicecall-ai`

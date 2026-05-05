@@ -647,3 +647,31 @@ egative-bad-citation as expected-failure validation.
   - no behavior refactor
   - no integrated-lane move
   - no production-readiness claim
+
+## 2026-05-05 - 04h Local RAG Orchestrator Kickoff (Local Python/FastAPI)
+- Created new POC: `pocs/04h_local_rag_orchestrator`.
+- Added design-first docs:
+  - `README.md`
+  - `docs/DESIGN.md`
+  - `docs/CONTRACT.md`
+  - `docs/TEST_PLAN.md`
+- Added synthetic KB and orchestrator modules:
+  - `data/knowledge_base.json`
+  - `src/kb_loader.py`
+  - `src/retriever.py`
+  - `src/llm_gateway.py`
+  - `src/service.py`
+  - `src/app.py`
+- Added tests and smoke:
+  - `tests/test_kb_loader.py`
+  - `tests/test_retriever.py`
+  - `tests/test_service.py`
+  - `smoke_test_04h.py`
+  - `outputs/SMOKE_TEST_RESULT.md`
+- Validation:
+  - `. D:\Workarea\StudyBook\env_setter.ps1; python -m pytest -q pocs/04h_local_rag_orchestrator/tests` -> PASS (`7 passed`)
+  - local `uvicorn src.app:app --host 127.0.0.1 --port 8010` + `python .\smoke_test_04h.py` -> PASS
+- Scope guardrails preserved:
+  - no Docker for 04h
+  - no changes to `pocs/04f`, `pocs/04g`, runtime behavior in `pocs/04g-quantized`
+  - no integrated-lane changes

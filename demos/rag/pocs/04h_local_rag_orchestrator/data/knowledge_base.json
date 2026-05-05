@@ -1,0 +1,72 @@
+[
+  {
+    "id": "kb_ac_repair_001",
+    "title": "AC repair service",
+    "service_type": "AC",
+    "symptoms": ["not cooling", "warm air", "ac not working", "unit running but warm"],
+    "text": "AC repair includes diagnosing low refrigerant, airflow restrictions, electrical faults, and failed components. Technicians inspect filters, coils, capacitor, contactor, and thermostat operation to restore cooling safely."
+  },
+  {
+    "id": "kb_ac_replacement_001",
+    "title": "AC replacement options",
+    "service_type": "AC",
+    "symptoms": ["old system", "frequent breakdown", "high repair cost", "inefficient cooling"],
+    "text": "AC replacement is recommended when repair costs are high, systems are aging, or efficiency is poor. A comfort advisor can size a replacement system, explain options, and provide estimate details."
+  },
+  {
+    "id": "kb_heating_repair_001",
+    "title": "Heating repair",
+    "service_type": "heating",
+    "symptoms": ["no heat", "heater not working", "cold air from vents", "furnace issue"],
+    "text": "Heating repair service addresses ignition problems, airflow issues, thermostat faults, and safety control failures. Emergency support may be needed during cold weather when no heat is available."
+  },
+  {
+    "id": "kb_plumbing_leak_001",
+    "title": "Plumbing leak repair",
+    "service_type": "plumbing",
+    "symptoms": ["leak", "pipe", "sink", "water under sink"],
+    "text": "Plumbing leak repair focuses on locating leak points, isolating damaged fittings or lines, and completing safe repairs. Quick response helps limit cabinet, wall, and floor water damage."
+  },
+  {
+    "id": "kb_clogged_drain_001",
+    "title": "Clogged drain service",
+    "service_type": "plumbing",
+    "symptoms": ["clogged drain", "slow drain", "backup", "standing water"],
+    "text": "Drain service clears blockages in sinks, tubs, and main lines. Technicians inspect blockage severity and apply appropriate clearing methods to restore normal drainage."
+  },
+  {
+    "id": "kb_water_heater_no_hot_001",
+    "title": "Water heater no hot water",
+    "service_type": "water_heater",
+    "symptoms": ["no hot water", "cold shower", "water heater not heating", "lukewarm water"],
+    "text": "No-hot-water diagnostics include checking power or gas supply, heating elements or burner operation, thermostat settings, and safety controls. Repairs depend on model type and failure mode."
+  },
+  {
+    "id": "kb_water_heater_pilot_001",
+    "title": "Water heater pilot light issues",
+    "service_type": "water_heater",
+    "symptoms": ["pilot light out", "won't stay lit", "gas water heater", "ignition issue"],
+    "text": "Pilot light service checks thermocouple condition, gas flow, and ignition components. Repeated pilot outages may indicate safety-part failure requiring professional repair."
+  },
+  {
+    "id": "kb_maintenance_plan_001",
+    "title": "Home maintenance plans",
+    "service_type": "maintenance",
+    "symptoms": ["maintenance", "tune-up", "seasonal check", "preventive service"],
+    "text": "Maintenance plans provide scheduled inspections, priority service benefits, and system tune-ups to reduce breakdown risk and improve comfort-system reliability."
+  },
+  {
+    "id": "kb_emergency_service_001",
+    "title": "Emergency service availability",
+    "service_type": "unknown",
+    "symptoms": ["emergency", "urgent", "flood", "after hours"],
+    "text": "Emergency service is intended for urgent situations such as active leaks, flooding risk, or severe comfort outages. Dispatch prioritizes safety and fastest available response windows."
+  },
+  {
+    "id": "kb_appliance_repair_001",
+    "title": "Appliance repair support",
+    "service_type": "appliance",
+    "symptoms": ["appliance not working", "washer issue", "dryer issue", "dishwasher issue"],
+    "text": "Appliance repair service covers diagnostic visits and targeted repairs for supported household equipment. Service availability may vary by appliance type and parts access."
+  }
+]

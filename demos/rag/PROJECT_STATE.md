@@ -461,3 +461,17 @@ Persisted reference points:
 - Documented scripted smoke validation: `pocs/04g/llm/smoke_test_llm.py` PASS.
 - Captured current limitations: latency and occasional over-generation.
 - Next recommended step: tighten generation stop behavior, then mount/connect KB for retrieval in a later scoped step.
+
+## 2026-05-05 Update - 04h Local RAG Orchestrator Started
+- Started `pocs/04h_local_rag_orchestrator` as a design-first local Python/FastAPI POC.
+- Architecture boundary preserved: local 8-bit LLM remains independent reusable inference service (`http://localhost:8002`).
+- Added separate orchestrator responsibilities for:
+  - business KB loading
+  - deterministic retrieval
+  - intent cleanup orchestration
+  - grounded prompt assembly
+  - provider routing
+  - `/ask` API contract
+- Implemented and validated local modules/tests/smoke for 04h.
+- No Docker setup added for 04h in this step.
+- No move to `integrated/servicecall-ai`.

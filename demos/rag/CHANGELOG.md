@@ -360,3 +360,27 @@ egative-bad-citation (expected-failure guard)
 ### Notes
 - Documentation captures a successful standalone local Docker + GPU LLM proof for 04g.
 - No application behavior changes were made in this task.
+
+## 2026-05-05 - Start POC 04h Local RAG Orchestrator
+### Added
+- `pocs/04h_local_rag_orchestrator/README.md`
+- `pocs/04h_local_rag_orchestrator/docs/DESIGN.md`
+- `pocs/04h_local_rag_orchestrator/docs/CONTRACT.md`
+- `pocs/04h_local_rag_orchestrator/docs/TEST_PLAN.md`
+- `pocs/04h_local_rag_orchestrator/data/knowledge_base.json`
+- `pocs/04h_local_rag_orchestrator/src/__init__.py`
+- `pocs/04h_local_rag_orchestrator/src/kb_loader.py`
+- `pocs/04h_local_rag_orchestrator/src/retriever.py`
+- `pocs/04h_local_rag_orchestrator/src/llm_gateway.py`
+- `pocs/04h_local_rag_orchestrator/src/service.py`
+- `pocs/04h_local_rag_orchestrator/src/app.py`
+- `pocs/04h_local_rag_orchestrator/tests/conftest.py`
+- `pocs/04h_local_rag_orchestrator/tests/test_kb_loader.py`
+- `pocs/04h_local_rag_orchestrator/tests/test_retriever.py`
+- `pocs/04h_local_rag_orchestrator/tests/test_service.py`
+- `pocs/04h_local_rag_orchestrator/smoke_test_04h.py`
+- `pocs/04h_local_rag_orchestrator/outputs/SMOKE_TEST_RESULT.md`
+
+### Notes
+- 04h started as local Python/FastAPI orchestrator using the already-running 8-bit LLM container as independent inference service.
+- No Docker/containerization added for 04h in this step.
