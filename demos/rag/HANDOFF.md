@@ -288,3 +288,31 @@ Use this as persistent context for future teaching/extension/debugging of POC 04
   - `pocs/04f/outputs/POC_04f_SUMMARY.md`
   - `pocs/04f/outputs/POC_04f_THREAD_INIT.md`
   - `pocs/04f/outputs/POC_04f_kickoff_prompt.md`
+
+## 2026-05-05 Handoff - 04f Phase 1 Multi-Sentence Query Slice
+Completed scope (standalone local only):
+- `pocs/04f/src/service.py`
+  - Added structured `IntentParseResult` (Pydantic)
+  - Added multi-sentence parsing with greeting/small-talk suppression
+  - Added service-keyword signal scoring to retain the core problem sentence(s)
+- `pocs/04f/src/app.py`
+  - Retriever now explicitly loads `config/stopwords.json`
+- `pocs/04f/src/retriever.py`
+  - Added dependency-safe fuzzy/stemming fallbacks for local execution
+- `pocs/04f/interactive_grok_test.py`
+  - Reworked to test parse -> retrieve -> response flow for multi-sentence queries
+  - Persists logs to `pocs/04f/outputs/ask_logs.json`
+- Added tests:
+  - `pocs/04f/tests/test_phase1_multisentence.py`
+
+Validation performed:
+- `. D:\Workarea\StudyBook\env_setter.ps1; pytest -q pocs/04f/tests/test_phase1_multisentence.py` -> PASS (`2 passed`)
+- Scripted interactive run verified:
+  - greetings/small-talk removed from intent text
+  - irrelevant context de-prioritized
+  - AC/water-heater queries retrieved correct sections
+
+Scope guardrails preserved:
+- No website work
+- No Docker changes
+- No integrated lane changes

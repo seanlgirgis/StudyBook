@@ -327,3 +327,24 @@ egative-bad-citation (expected-failure guard)
 - `TASK_BOARD.md`
 - `DAILY_LOG.md`
 - `HANDOFF.md`
+
+## 2026-05-05 - 04f Phase 1 Multi-Sentence Retrieval Update
+### Changed
+- `pocs/04f/src/service.py`
+  - Replaced minimal wrapper parser with structured Pydantic intent parsing (`IntentParseResult`).
+  - Added multi-sentence extraction and greeting/small-talk filtering.
+  - Added service-keyword scoring to keep the main problem statement for retrieval.
+- `pocs/04f/src/app.py`
+  - Retriever now explicitly loads `pocs/04f/config/stopwords.json`.
+- `pocs/04f/src/retriever.py`
+  - Added fallback similarity and stemming behavior for environments without `python-Levenshtein` and/or `nltk`.
+- `pocs/04f/interactive_grok_test.py`
+  - Reworked CLI to run parse -> retrieve -> answer pipeline and append logs to `pocs/04f/outputs/ask_logs.json`.
+
+### Added
+- `pocs/04f/tests/test_phase1_multisentence.py`
+  - Covers multi-sentence intent extraction and retrieval behavior with irrelevant context.
+
+### Validation
+- `. D:\Workarea\StudyBook\env_setter.ps1; pytest -q pocs/04f/tests/test_phase1_multisentence.py` -> PASS (`2 passed`).
+- Interactive CLI scenario run succeeded for AC and water-heater multi-sentence queries.

@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  poc_04f_service:
+    build:
+      context: .
+      dockerfile: src/Dockerfile
+    container_name: poc_04f_service_run
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./outputs:/app/outputs
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped

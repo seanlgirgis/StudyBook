@@ -1,0 +1,5 @@
+Phase 1 run proof (2026-05-05)
+- Env bootstrap: . D:\Workarea\StudyBook\env_setter.ps1
+- Test command: pytest -q pocs/04f/tests/test_phase1_multisentence.py
+- Result: 2 passed
+- Interactive CLI scenario run: PASS (AC + water heater multi-sentence queries with irrelevant context)

@@ -1,5 +1,8 @@
 (function () {
   "use strict";
+  
+  // ---- UPDATED LINE: API URL points to local Docker RAG ----
+  const ASK_API_URL = "http://localhost:8000/ask";  // <--- Changed
 
   var toggleButton = document.getElementById("chat-toggle");
   var closeButton = document.getElementById("chat-close");
@@ -25,11 +28,19 @@
     messages.scrollTop = messages.scrollHeight;
   }
 
-  function appendAssistantPlaceholder(userText) {
-    var response = "Placeholder response: thanks for your message about \"" + userText +
-      "\". In a later milestone this will route to the FastAPI and RAG backend.";
-    appendMessage("assistant", response);
+  // ---- UPDATED FUNCTION: Call /ask endpoint instead of placeholder ----
+  function appendAssistantResponse(userText) {  // <--- Added
+    fetch(`${ASK_API_URL}?query=${encodeURIComponent(userText)}`)  // <--- Added
+      .then(response => response.json())  // <--- Added
+      .then(data => {  // <--- Added
+        appendMessage("assistant", data.answer);  // <--- Added
+      })  // <--- Added
+      .catch(err => {  // <--- Added
+        console.error("Error calling /ask:", err);  // <--- Added
+        appendMessage("assistant", "Sorry, there was an error contacting the backend.");  // <--- Added
+      });  // <--- Added
   }
+  // ----------------------------------------------
 
   function setOpenState(isOpen) {
     panel.classList.toggle("open", isOpen);
@@ -72,8 +83,11 @@
       return;
     }
     appendMessage("user", text);
-    appendAssistantPlaceholder(text);
+
+    // ---- UPDATED LINE: Call the RAG backend instead of placeholder ----
+    appendAssistantResponse(text);  // <--- Changed
+
     input.value = "";
-    recordOutcomeEvent("chat_message_submitted", "placeholder_response_appended");
+    recordOutcomeEvent("chat_message_submitted", "backend_response_requested");  // <--- Updated
   });
 })();

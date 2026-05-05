@@ -1,0 +1,102 @@
+[
+  {
+    "id": "kb-001",
+    "title": "AC Cooling Failure Repair",
+    "text": "We repair air conditioning systems with cooling failures, weak airflow, frozen evaporator coils, and warm air from vents. Technicians check refrigerant levels, condenser performance, and filter blockage to restore consistent cooling."
+  },
+  {
+    "id": "kb-002",
+    "title": "AC Thermostat and Control Issues",
+    "text": "We diagnose thermostat misreads, short cycling, frequent on-off behavior, and systems that do not respond to temperature settings. Service includes thermostat calibration checks, wiring inspection, and control board troubleshooting."
+  },
+  {
+    "id": "kb-003",
+    "title": "AC Strange Noise and Vibration Service",
+    "text": "If your AC makes rattling, buzzing, grinding, or squealing noises, we inspect fan motors, blower assemblies, compressor mounts, and loose panels. We address root causes to reduce noise and prevent additional component wear."
+  },
+  {
+    "id": "kb-004",
+    "title": "Heating Furnace No-Start Repair",
+    "text": "We service furnaces that fail to start, shut off unexpectedly, or blow cold air. Diagnostics include igniter checks, flame sensor cleaning, gas valve verification, and airflow safety checks to restore safe heating operation."
+  },
+  {
+    "id": "kb-005",
+    "title": "Heating Uneven Temperature Solutions",
+    "text": "For rooms that heat unevenly, we evaluate duct airflow balance, thermostat placement, and system output. We provide tuning and repair recommendations to improve whole-home comfort and reduce hot and cold spots."
+  },
+  {
+    "id": "kb-006",
+    "title": "Plumbing Leak Detection and Repair",
+    "text": "We handle visible and hidden plumbing leaks in fixtures, supply lines, shutoff valves, and under-slab connections. Service includes leak isolation, targeted repair, and follow-up checks to confirm pressure stability."
+  },
+  {
+    "id": "kb-007",
+    "title": "Clogged Drain and Backup Service",
+    "text": "We clear clogged sinks, tubs, showers, and main drain lines causing slow drainage or backups. Our process includes blockage diagnosis, mechanical clearing, and prevention guidance to reduce repeat clogs."
+  },
+  {
+    "id": "kb-008",
+    "title": "Pipe Replacement and Plumbing Upgrades",
+    "text": "We replace damaged, corroded, or repeatedly leaking pipes and can upgrade sections of older plumbing systems. Projects are scoped to minimize disruption while improving reliability and long-term water flow performance."
+  },
+  {
+    "id": "kb-009",
+    "title": "Water Heater Pilot Light and Ignition Repair",
+    "text": "We troubleshoot water heaters with pilot light outages, ignition failures, and intermittent startup problems. Service includes thermocouple checks, gas control evaluation, and safety verification before system restart."
+  },
+  {
+    "id": "kb-010",
+    "title": "No Hot Water and Recovery Diagnostics",
+    "text": "For homes with no hot water or rapid temperature drop-off, we inspect heating elements, burners, thermostats, and sediment buildup. We identify capacity and performance issues to restore dependable hot water."
+  },
+  {
+    "id": "kb-011",
+    "title": "Inconsistent Water Temperature Repair",
+    "text": "We address fluctuating hot water temperatures, sudden cold bursts, and unstable shower temperatures. Diagnostics focus on thermostat settings, mixing behavior, and component wear affecting temperature consistency."
+  },
+  {
+    "id": "kb-012",
+    "title": "Maintenance Plan Seasonal Checkups",
+    "text": "Our maintenance plans include seasonal AC and heating checkups, filter and airflow reviews, and early detection of wear-prone components. Planned tune-ups help reduce emergency breakdown risk during peak weather months."
+  },
+  {
+    "id": "kb-013",
+    "title": "Maintenance Plan Priority Scheduling",
+    "text": "Members receive priority scheduling for service appointments, including peak-demand periods. Priority access helps shorten wait times when urgent HVAC, plumbing, or water heater issues occur."
+  },
+  {
+    "id": "kb-014",
+    "title": "Maintenance Plan Repair Discounts",
+    "text": "Maintenance plan members receive discounts on eligible repairs and approved replacement work. The plan is designed to lower ongoing ownership costs while keeping core home service systems in reliable condition."
+  },
+  {
+    "id": "kb-015",
+    "title": "AC Filter Replacement and Cleaning",
+    "text": "Regular AC filter replacement and cleaning improves airflow and efficiency. We provide guidance for filter types, schedules, and perform onsite replacements as needed."
+  },
+  {
+    "id": "kb-016",
+    "title": "Heating Filter and Furnace Cleaning",
+    "text": "We clean furnace filters and inspect blower assemblies to prevent uneven heating, improve air quality, and extend system lifespan."
+  },
+  {
+    "id": "kb-017",
+    "title": "Plumbing Faucet and Fixture Repairs",
+    "text": "We repair dripping faucets, broken valves, and damaged fixtures. Technicians ensure proper sealing and long-term reliability."
+  },
+  {
+    "id": "kb-018",
+    "title": "Water Heater Thermostat Calibration",
+    "text": "We calibrate water heater thermostats to ensure consistent hot water output and optimal energy usage."
+  },
+  {
+    "id": "kb-019",
+    "title": "AC Refrigerant Recharge Service",
+    "text": "We check refrigerant levels and recharge AC systems as needed, restoring cooling efficiency and preventing compressor damage."
+  },
+  {
+    "id": "kb-020",
+    "title": "Plumbing Pipe Inspection and Preventive Maintenance",
+    "text": "We perform comprehensive inspections of plumbing pipes, joints, and connections to prevent future leaks and failures."
+  }
+]

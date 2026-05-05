@@ -425,3 +425,30 @@ Persisted reference points:
   - `POC_04f_SUMMARY.md`
   - `POC_04f_THREAD_INIT.md`
   - `POC_04f_kickoff_prompt.md`
+
+## 2026-05-05 Update - 04f Phase 1 Multi-Sentence Query Handling
+- Implemented Phase 1 local logic update for complex multi-sentence customer queries in `pocs/04f`.
+- `parse_intent` now:
+  - splits multi-sentence input,
+  - drops greeting/small-talk segments,
+  - scores remaining segments for service-domain keywords,
+  - returns focused `intent_text` for retrieval.
+- Added Pydantic model `IntentParseResult` for structured intent output.
+- Retrieval path now explicitly uses stopwords config in app initialization:
+  - `pocs/04f/src/app.py` loads `config/stopwords.json`.
+- Retriever reliability improved for local environments:
+  - Levenshtein fallback to `SequenceMatcher` when `python-Levenshtein` is unavailable.
+  - Porter stemmer fallback when `nltk` is unavailable.
+- Updated standalone interactive CLI `pocs/04f/interactive_grok_test.py`:
+  - uses `parse_intent` -> `SimpleRetriever` -> `generate_response`,
+  - logs entries to `pocs/04f/outputs/ask_logs.json`,
+  - prints extracted `intent_text` and discarded segments for visibility.
+- Added tests:
+  - `pocs/04f/tests/test_phase1_multisentence.py`
+- Validation:
+  - `. D:\Workarea\StudyBook\env_setter.ps1; pytest -q pocs/04f/tests/test_phase1_multisentence.py` -> PASS (`2 passed`).
+  - Interactive CLI multi-sentence run verified with irrelevant context and correct retrieval behavior.
+- Scope preserved:
+  - no website implementation,
+  - no Docker changes,
+  - standalone local logic only.

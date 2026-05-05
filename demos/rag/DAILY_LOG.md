@@ -613,3 +613,19 @@ egative-bad-citation as expected-failure validation.
 - Added Mermaid onboarding diagram covering source/tests, Docker build+run, in-container pytest, deterministic `/health` and `/ping` smoke checks, and evidence outputs.
 - Included concise teaching explanation and extension guidance.
 - Referenced summary/thread-init/kickoff artifacts for full documentation continuity.
+
+## 2026-05-05 - 04f Phase 1 multi-sentence query handling
+- Updated `pocs/04f/src/service.py` with Pydantic `IntentParseResult` and deterministic multi-sentence intent extraction.
+- Added greeting/small-talk suppression and service-keyword segment scoring to keep retrieval focused on the main problem statement.
+- Updated `pocs/04f/src/app.py` to initialize `SimpleRetriever` with explicit stopwords file (`config/stopwords.json`).
+- Updated `pocs/04f/src/retriever.py` with runtime fallbacks:
+  - Levenshtein -> `difflib.SequenceMatcher` when dependency is unavailable.
+  - Porter stemmer -> lightweight fallback stemmer when `nltk` is unavailable.
+- Rebuilt `pocs/04f/interactive_grok_test.py` for standalone local flow:
+  - query -> parse_intent -> retriever -> generate_response,
+  - appends logs to `pocs/04f/outputs/ask_logs.json`.
+- Added tests: `pocs/04f/tests/test_phase1_multisentence.py`.
+- Validation:
+  - `. D:\Workarea\StudyBook\env_setter.ps1; pytest -q pocs/04f/tests/test_phase1_multisentence.py` -> PASS (`2 passed`).
+  - Scripted CLI run with irrelevant-context multi-sentence queries showed expected intent extraction and relevant retrieval.
+- Out-of-scope maintained: no website changes, no Docker changes.

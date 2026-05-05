@@ -1,0 +1,6 @@
+{"original_query": "plumbing", "preprocessed": "plumbing", "normalized": "plumbing repair", "source": "GROK"}
+{"original_query": "plumping", "preprocessed": "plumbing", "normalized": "plumbing repair", "source": "GROK"}
+{"original_query": "plumbing issue", "preprocessed": "plumbing issue", "normalized": "plumbing repair", "source": "GROK"}
+{"original_query": "pipe leak", "preprocessed": "pipe leak", "normalized": "plumbing repair", "source": "GROK"}
+{"original_query": "roof leak", "preprocessed": "roof leak", "normalized": "NO_MATCH", "source": "NO_MATCH"}
+{"original_query": "car engine repair", "preprocessed": "car engine repair", "normalized": "NO_MATCH", "source": "NO_MATCH"}
