@@ -675,3 +675,61 @@ egative-bad-citation as expected-failure validation.
   - no Docker for 04h
   - no changes to `pocs/04f`, `pocs/04g`, runtime behavior in `pocs/04g-quantized`
   - no integrated-lane changes
+
+## 2026-05-05 - 04h Design-Only Documentation Refresh
+- Updated `pocs/04h_local_rag_orchestrator` design-first docs only:
+  - `README.md`
+  - `docs/DESIGN.md`
+  - `docs/CONTRACT.md`
+  - `docs/TEST_PLAN.md`
+- Purpose documented: keep RAG/business orchestration separate from reusable 8-bit LLM container.
+- Explicitly documented no Docker for 04h yet, no vector DB yet, no integrated-lane move.
+- Implementation status in this update: pending explicit approval.
+
+## 2026-05-05 - 04h Draft Answer Cutoff Fix
+- Updated `pocs/04h_local_rag_orchestrator/src/service.py`:
+  - added `trim_to_complete_sentence(text: str) -> str`
+  - applied trimming to final local LLM draft answer before response
+  - strengthened answer prompt to request 2 complete sentences and explicit stop behavior
+- Updated tests in `pocs/04h_local_rag_orchestrator/tests/test_service.py`:
+  - trims unfinished fragment
+  - preserves complete answer
+  - preserves no-punctuation text
+- Validation:
+  - `python -m pytest -q pocs/04h_local_rag_orchestrator/tests` -> PASS (`10 passed`)
+  - smoke test rerun -> PASS, output refreshed at `pocs/04h_local_rag_orchestrator/outputs/SMOKE_TEST_RESULT.md`
+
+## 2026-05-05 - 04h Interactive Hybrid Tester
+- Added:
+  - `pocs/04h_local_rag_orchestrator/interactive_hybrid_test.py`
+  - `pocs/04h_local_rag_orchestrator/src/grok_gateway.py`
+  - `pocs/04h_local_rag_orchestrator/tests/test_interactive_hybrid.py`
+- Updated docs:
+  - `README.md`
+  - `docs/DESIGN.md`
+  - `docs/TEST_PLAN.md`
+- Behavior:
+  - calls existing `service.answer_query`
+  - attempts Grok final-answer polishing only when key exists
+  - falls back to local draft answer otherwise
+  - appends JSON records to `outputs/hybrid_ask_logs.jsonl`
+- Validation:
+  - `python -m pytest -q pocs/04h_local_rag_orchestrator/tests` -> PASS (`12 passed`)
+  - interactive run with 3 prompts + exit executed successfully (fallback mode due to missing key)
+
+## 2026-05-05 - 04h Hybrid Intent/Final Provider Realignment
+- Updated `pocs/04h_local_rag_orchestrator/src/service.py` to enforce two-stage flow:
+  - Stage A: local 8-bit intent clarification only
+  - Stage B: Grok final-answer provider only
+- Added strict intent prompt rules and robust JSON extraction handling.
+- Added clarification gate outputs:
+  - `clarification_needed`
+  - `clarifying_questions`
+  - `confidence`
+- Added unavailable final-provider response behavior with blank `final_answer`.
+- Updated interactive hybrid script logging schema and printed fields.
+- Added/updated tests for prompt rules, JSON extraction wrapper parsing, clarification flow, and final-provider-unavailable behavior.
+- Added KB safety guidance records for plumbing, HVAC cooling issues, and water-heater gas safety.
+- Validation:
+  - `python -m pytest -q pocs/04h_local_rag_orchestrator/tests` -> PASS (`12 passed`)
+  - interactive run with required 3 prompts + `exit` completed with expected statuses.

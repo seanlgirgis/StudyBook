@@ -10,6 +10,10 @@ def test_load_kb_valid() -> None:
     records = load_kb(kb_path)
     assert records
     assert all("id" in r for r in records)
+    ids = {r["id"] for r in records}
+    assert "kb_plumbing_leak_safety_001" in ids
+    assert "kb_ac_no_cooling_safety_001" in ids
+    assert "kb_water_heater_gas_safety_001" in ids
 
 
 def test_load_kb_missing_required_field(tmp_path: Path) -> None:

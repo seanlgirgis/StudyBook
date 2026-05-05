@@ -16,8 +16,8 @@ app = FastAPI(title="POC 04h Local RAG Orchestrator")
 
 
 @app.get("/health")
-def health() -> dict[str, bool]:
-    return {"ok": True}
+def health() -> dict[str, bool | str]:
+    return {"ok": True, "service": "04h_local_rag_orchestrator"}
 
 
 @app.post("/ask")

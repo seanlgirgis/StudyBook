@@ -354,3 +354,51 @@ Scope guardrails preserved:
 - Scope preserved:
   - no Docker for 04h in this step
   - no move to `integrated/servicecall-ai`
+
+## 2026-05-05 Handoff - 04h Design-Only Package Prepared
+- 04h documentation package is now aligned to design-first expectations.
+- Updated docs:
+  - `pocs/04h_local_rag_orchestrator/README.md`
+  - `pocs/04h_local_rag_orchestrator/docs/DESIGN.md`
+  - `pocs/04h_local_rag_orchestrator/docs/CONTRACT.md`
+  - `pocs/04h_local_rag_orchestrator/docs/TEST_PLAN.md`
+- Design captures architecture split:
+  - reusable independent LLM inference service (`04g-quantized`)
+  - separate 04h orchestrator for KB/retrieval/intent/prompt/routing
+- Implementation is intentionally pending explicit approval in this design-only framing.
+
+## 2026-05-05 Handoff - 04h Draft Answer Cleanup Patch
+- Applied minimal response-quality patch for 04h draft answer cutoff issue.
+- Added `trim_to_complete_sentence` and applied it only to final draft answer output.
+- Prompt instructions tightened for cleaner stopping behavior.
+- Tests and smoke revalidated:
+  - tests PASS (`10 passed`)
+  - smoke PASS and `outputs/SMOKE_TEST_RESULT.md` refreshed
+- Scope preserved:
+  - no provider expansion
+  - no Docker changes
+  - no 04g/04g-quantized runtime edits
+
+## 2026-05-05 Handoff - 04h Interactive Hybrid Script
+- Added local hybrid terminal runner to prove next flow before 04h containerization.
+- Script chain:
+  - existing 04h orchestration (`service.answer_query`)
+  - optional Grok final answer route via env-based gateway
+  - local 8-bit fallback on missing key or Grok error
+  - JSONL log append per interaction
+- Scope preserved:
+  - no Docker changes for 04h
+  - no changes to 04g/04g-quantized
+  - no integrated lane move
+- Validation complete: tests PASS and manual interactive sample run completed.
+
+## 2026-05-05 Handoff - 04h Intent-First Hybrid Realignment
+- 04h now treats local 8-bit as intent clarification engine only.
+- Final answer generation is reserved for final provider (Grok path) only.
+- If final provider unavailable, response is intentionally non-final:
+  - blank final answer
+  - status `final_provider_unavailable`
+  - note that intent/retrieval is ready.
+- Clarification-first behavior added for ambiguous requests.
+- Interactive tester now prints and logs clarification state and final-provider status fields.
+- KB includes explicit safety guidance entries to ground practical advice.

@@ -1,87 +1,90 @@
-# POC 04h - Local RAG Orchestrator (Python/FastAPI, No Docker Yet)
+# POC 04h - Local RAG Orchestrator (Design-First)
 
-## Purpose
-POC 04h builds a local orchestrator service that is separate from the local LLM container.
+## What 04h Is
+`04h_local_rag_orchestrator` is the planned business-orchestration layer for ServiceCall AI in the `pocs/` lane.
 
-The 04h orchestrator owns:
-- business knowledge base files
-- deterministic retrieval
+It is responsible for:
+- business knowledge handling
+- retrieval
 - intent cleanup orchestration
 - prompt assembly
 - provider routing
-- `/ask` API
+- `/ask` API behavior
 
-## Architecture Boundary
-The 8-bit LLM container remains an independent reusable inference service:
-- health: `http://localhost:8002/health`
-- infer: `http://localhost:8002/infer`
+## Why 04h Exists After 04g-quantized
+`04g-quantized` proved that a standalone local 8-bit LLM container can run reliably and quickly enough for local helper workloads.
 
-04h must not embed business KB/retrieval inside the LLM container.
+04h exists to add business orchestration around that reusable model service, without embedding business logic into the model container.
 
-## Scope In This Step
-- local Python/FastAPI only
-- no Docker for 04h
-- no vector database
-- no external LLM providers (Grok/OpenAI)
+## How 04h Differs From 04g-quantized
+`04g-quantized`:
+- generic inference runtime only
+- containerized local LLM endpoint (`/health`, `/infer`)
 
-## Folder Layout
-```text
-pocs/04h_local_rag_orchestrator/
-  README.md
-  docs/
-    DESIGN.md
-    CONTRACT.md
-    TEST_PLAN.md
-  data/
-    knowledge_base.json
-  src/
-    kb_loader.py
-    retriever.py
-    llm_gateway.py
-    service.py
-    app.py
-  tests/
-    test_kb_loader.py
-    test_retriever.py
-    test_service.py
-  outputs/
-  smoke_test_04h.py
-```
+`04h`:
+- business KB + retrieval + orchestration layer
+- decides what context is retrieved
+- builds grounded prompts
+- calls provider through a gateway
+- returns structured `/ask` response contract
 
-## Quick Start
-1. Run tests:
-```powershell
-cd D:\Workarea\StudyBook\demos\rag
-. D:\Workarea\StudyBook\env_setter.ps1
-python -m pytest -q pocs/04h_local_rag_orchestrator/tests
-```
+## Intended Flow
+User request -> orchestrator -> intent cleanup -> retrieve KB sections -> prompt assembly -> LLM provider -> structured response
 
-2. Run API locally:
+## Current Preferred Provider
+Local 8-bit provider (validated):
+- `http://localhost:8002/health`
+- `http://localhost:8002/infer`
+
+Runtime notes from prior validation:
+- image: `llm_7b_8bit`
+- container: `llm_7b_8bit_run`
+- model mount: `C:\LLM_models\Mistral7B -> /app/llm_model`
+- active runtime uses safetensors + tokenizer/config
+- duplicate `.bin` files archived at `D:\LLM_models\Mistral7B_unused_bin`
+
+## Provider Roles (Realigned)
+- `local_8bit` role: intent clarification engine only.
+  - cleans noisy input
+  - extracts service_type/symptoms/urgency
+  - decides `clarification_needed` and asks concise follow-up questions
+- `grok_3` (or configured final provider) role: final customer-facing answer generation only.
+
+Important:
+- local 8-bit is not treated as the final customer-answer model.
+- if final provider is unavailable, 04h returns structured intent and retrieved sections with:
+  - `final_answer = ""`
+  - `final_provider_used = "unavailable"`
+  - `status = "final_provider_unavailable"`
+  - note explaining final provider is unavailable.
+
+## Interactive Hybrid Tester
+`interactive_hybrid_test.py` is a local terminal script to validate a hybrid answer flow before orchestrator containerization.
+
+Hybrid behavior:
+- uses `service.answer_query(...)` for two-stage orchestration output
+- Stage A: local 8-bit intent clarification
+- Stage B: Grok final answer (when key exists)
+- if Grok unavailable, no final answer is generated locally
+- appends logs to `outputs/hybrid_ask_logs.jsonl`
+
+Run:
 ```powershell
 cd D:\Workarea\StudyBook\demos\rag\pocs\04h_local_rag_orchestrator
-. D:\Workarea\StudyBook\env_setter.ps1
-uvicorn src.app:app --host 127.0.0.1 --port 8010
+python .\interactive_hybrid_test.py
 ```
 
-3. Run smoke test (in a second terminal):
-```powershell
-cd D:\Workarea\StudyBook\demos\rag\pocs\04h_local_rag_orchestrator
-. D:\Workarea\StudyBook\env_setter.ps1
-python .\smoke_test_04h.py
-```
+## Scope Clarifications
+This POC is not:
+- full integrated ServiceCall AI
+- website integration
+- Docker Compose orchestration yet
+- vector database retrieval yet
 
-## Expected Result
-- `GET /health` responds with `{"ok": true}`
-- `POST /ask` returns orchestrated response payload including:
-  - cleaned intent
-  - service type
-  - symptoms
-  - urgency
-  - retrieved KB sections
-  - draft answer
-  - provider/status fields
+## Project Lane Guardrail
+Work remains in `pocs/`.
+Nothing moves into `integrated/servicecall-ai` during this step.
 
-## Non-Goals
-- no containerization of 04h yet
-- no move to `integrated/servicecall-ai`
-- no full production RAG claims
+## Implementation Status
+This step is design-only.
+Implementation begins only after explicit design approval.

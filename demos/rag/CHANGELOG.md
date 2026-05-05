@@ -384,3 +384,59 @@ egative-bad-citation (expected-failure guard)
 ### Notes
 - 04h started as local Python/FastAPI orchestrator using the already-running 8-bit LLM container as independent inference service.
 - No Docker/containerization added for 04h in this step.
+
+## 2026-05-05 - 04h Design-Only Documentation Package Refresh
+### Updated
+- `pocs/04h_local_rag_orchestrator/README.md`
+- `pocs/04h_local_rag_orchestrator/docs/DESIGN.md`
+- `pocs/04h_local_rag_orchestrator/docs/CONTRACT.md`
+- `pocs/04h_local_rag_orchestrator/docs/TEST_PLAN.md`
+
+### Notes
+- Documentation-only update.
+- Implementation remains pending explicit approval in this design-first step.
+
+## 2026-05-05 - 04h Draft Answer Cleanup Fix
+### Updated
+- `pocs/04h_local_rag_orchestrator/src/service.py`
+- `pocs/04h_local_rag_orchestrator/tests/test_service.py`
+- `pocs/04h_local_rag_orchestrator/outputs/SMOKE_TEST_RESULT.md`
+
+### Notes
+- Added sentence-completion trimming for local LLM draft answers.
+- Prompt updated slightly to reduce unfinished trailing fragments.
+- Validation passed: unit tests + smoke rerun.
+
+## 2026-05-05 - Add 04h Interactive Hybrid Tester
+### Added
+- `pocs/04h_local_rag_orchestrator/interactive_hybrid_test.py`
+- `pocs/04h_local_rag_orchestrator/src/grok_gateway.py`
+- `pocs/04h_local_rag_orchestrator/tests/test_interactive_hybrid.py`
+
+### Updated
+- `pocs/04h_local_rag_orchestrator/README.md`
+- `pocs/04h_local_rag_orchestrator/docs/DESIGN.md`
+- `pocs/04h_local_rag_orchestrator/docs/TEST_PLAN.md`
+
+### Notes
+- Optional Grok final-answer route added with safe fallback to local 8-bit draft answer.
+- Hybrid interactions logged to `outputs/hybrid_ask_logs.jsonl`.
+
+## 2026-05-05 - 04h Hybrid Architecture Realignment
+### Updated
+- `pocs/04h_local_rag_orchestrator/src/service.py`
+- `pocs/04h_local_rag_orchestrator/src/grok_gateway.py`
+- `pocs/04h_local_rag_orchestrator/src/app.py`
+- `pocs/04h_local_rag_orchestrator/interactive_hybrid_test.py`
+- `pocs/04h_local_rag_orchestrator/data/knowledge_base.json`
+- `pocs/04h_local_rag_orchestrator/tests/test_service.py`
+- `pocs/04h_local_rag_orchestrator/tests/test_interactive_hybrid.py`
+- `pocs/04h_local_rag_orchestrator/tests/test_kb_loader.py`
+- `pocs/04h_local_rag_orchestrator/README.md`
+- `pocs/04h_local_rag_orchestrator/docs/DESIGN.md`
+- `pocs/04h_local_rag_orchestrator/docs/CONTRACT.md`
+- `pocs/04h_local_rag_orchestrator/docs/TEST_PLAN.md`
+
+### Notes
+- Local 8-bit output is no longer treated as final customer answer.
+- Final-provider-unavailable mode now returns structured non-final output by design.

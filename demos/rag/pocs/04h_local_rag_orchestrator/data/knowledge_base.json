@@ -68,5 +68,26 @@
     "service_type": "appliance",
     "symptoms": ["appliance not working", "washer issue", "dryer issue", "dishwasher issue"],
     "text": "Appliance repair service covers diagnostic visits and targeted repairs for supported household equipment. Service availability may vary by appliance type and parts access."
+  },
+  {
+    "id": "kb_plumbing_leak_safety_001",
+    "title": "Plumbing leak temporary safety guidance",
+    "service_type": "plumbing",
+    "symptoms": ["active leak", "water leak", "shutoff valve", "main water supply"],
+    "text": "If water is actively leaking and it is safe to do so, the customer may shut off the nearby fixture shutoff valve or main water supply while waiting for a technician. Do not attempt pipe disassembly or electrical work."
+  },
+  {
+    "id": "kb_ac_no_cooling_safety_001",
+    "title": "HVAC no cooling temporary guidance",
+    "service_type": "AC",
+    "symptoms": ["no cooling", "ac not cooling", "unusual noise", "breaker tripping"],
+    "text": "Customers may check that the thermostat is set to cool and that the air filter is not severely clogged. If the system is making unusual noises, leaking water, or repeatedly tripping breakers, service should be requested."
+  },
+  {
+    "id": "kb_water_heater_gas_safety_001",
+    "title": "Water heater gas safety guidance",
+    "service_type": "water_heater",
+    "symptoms": ["gas smell", "pilot light issue", "water heater safety", "gas odor"],
+    "text": "If there is a gas smell, the customer should leave the area and contact the gas utility or emergency services. Do not attempt to relight or repair a gas water heater when gas odor is present."
   }
 ]

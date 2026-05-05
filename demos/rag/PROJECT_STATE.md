@@ -475,3 +475,38 @@ Persisted reference points:
 - Implemented and validated local modules/tests/smoke for 04h.
 - No Docker setup added for 04h in this step.
 - No move to `integrated/servicecall-ai`.
+
+## 2026-05-05 Update - 04h Design-Only Package Refresh
+- Started `04h_local_rag_orchestrator` as a design-only step.
+- Purpose: separate RAG/business orchestrator responsibilities from reusable 8-bit local LLM inference container.
+- Documentation package refreshed:
+  - `pocs/04h_local_rag_orchestrator/README.md`
+  - `pocs/04h_local_rag_orchestrator/docs/DESIGN.md`
+  - `pocs/04h_local_rag_orchestrator/docs/CONTRACT.md`
+  - `pocs/04h_local_rag_orchestrator/docs/TEST_PLAN.md`
+- Implementation remains pending explicit approval.
+
+## 2026-05-05 Update - 04h Draft Answer Cleanup Improvement
+- Improved 04h draft-answer cleanup to avoid mid-sentence and mid-word endings.
+- Added `trim_to_complete_sentence(...)` on local LLM draft output before response return.
+- Prompt guidance tightened to request complete stopping behavior.
+- Validation: 04h tests PASS and smoke output refreshed.
+
+## 2026-05-05 Update - 04h Interactive Hybrid Tester Added
+- Added `interactive_hybrid_test.py` for local terminal hybrid validation before 04h containerization.
+- Added optional `src/grok_gateway.py` for Grok final-answer route when API key exists.
+- Fallback behavior implemented: local 8-bit draft answer is used when Grok key/call is unavailable.
+- Added lightweight tests for Grok prompt assembly and fallback behavior.
+- Validation: `pytest` PASS and manual interactive run completed with fallback logging to `outputs/hybrid_ask_logs.jsonl`.
+
+## 2026-05-05 Update - 04h Hybrid Architecture Realignment
+- Realigned 04h so local 8-bit is intent clarification only (`local_8bit_intent`).
+- Final customer-facing answer is now reserved for Grok final provider path only.
+- When final provider is unavailable, 04h now returns:
+  - blank `final_answer`
+  - `final_provider_used = unavailable`
+  - `status = final_provider_unavailable`
+  - note that intent + retrieved sections are ready.
+- Added clarification gating with `clarification_needed` and `clarifying_questions`.
+- Added KB safety-guidance records for plumbing leak, HVAC no cooling, and water-heater gas odor scenarios.
+- Tests and interactive run validated successfully.
