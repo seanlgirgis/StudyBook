@@ -629,3 +629,21 @@ egative-bad-citation as expected-failure validation.
   - `. D:\Workarea\StudyBook\env_setter.ps1; pytest -q pocs/04f/tests/test_phase1_multisentence.py` -> PASS (`2 passed`).
   - Scripted CLI run with irrelevant-context multi-sentence queries showed expected intent extraction and relevant retrieval.
 - Out-of-scope maintained: no website changes, no Docker changes.
+
+## 2026-05-05 - POC 04g Local LLM Container Documentation
+- Added complete design-first documentation set for `pocs/04g`:
+  - `README.md`
+  - `docs/DESIGN.md`
+  - `docs/CONTRACT.md`
+  - `docs/TEST_PLAN.md`
+- Added smoke-test evidence artifact:
+  - `pocs/04g/outputs/SMOKE_TEST_RESULT.md`
+- Captured factual status only:
+  - standalone Mistral 7B container build/run succeeded
+  - model files mounted from `C:\LLM_models\Mistral7B`
+  - `/health` and `/infer` passed
+  - smoke script passed
+- Preserved scope guardrails:
+  - no behavior refactor
+  - no integrated-lane move
+  - no production-readiness claim

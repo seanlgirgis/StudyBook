@@ -452,3 +452,12 @@ Persisted reference points:
   - no website implementation,
   - no Docker changes,
   - standalone local logic only.
+
+## 2026-05-05 Update - 04g Local LLM Container POC Documentation
+- 04g started as a standalone local LLM container POC (separate from 04f RAG/fuzzy/intent lane).
+- Documented successful Docker build/run path for Mistral 7B-class local container service.
+- Documented model mount path: `C:\LLM_models\Mistral7B` -> `/app/llm_model`.
+- Documented successful endpoint validation: `/health` and `/infer` responded.
+- Documented scripted smoke validation: `pocs/04g/llm/smoke_test_llm.py` PASS.
+- Captured current limitations: latency and occasional over-generation.
+- Next recommended step: tighten generation stop behavior, then mount/connect KB for retrieval in a later scoped step.

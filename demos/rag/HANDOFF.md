@@ -316,3 +316,22 @@ Scope guardrails preserved:
 - No website work
 - No Docker changes
 - No integrated lane changes
+
+## 2026-05-05 Handoff - 04g Standalone Local LLM Container Documentation
+- 04g is now documented as a distinct POC lane from 04f.
+- Created:
+  - `pocs/04g/README.md`
+  - `pocs/04g/docs/DESIGN.md`
+  - `pocs/04g/docs/CONTRACT.md`
+  - `pocs/04g/docs/TEST_PLAN.md`
+  - `pocs/04g/outputs/SMOKE_TEST_RESULT.md`
+- Documented verified outcome:
+  - standalone Dockerized local Mistral service is runnable on Windows with GPU support
+  - model mount path: `C:\LLM_models\Mistral7B` -> `/app/llm_model`
+  - `/health` and `/infer` success confirmed
+  - `python .\smoke_test_llm.py` PASS confirmed
+- Known limitations recorded:
+  - slower response latency due to partial CPU offload
+  - occasional over-generation tail
+- Next recommended step:
+  - tighten generation stop behavior first, then add KB retrieval wiring in a separate scoped step.

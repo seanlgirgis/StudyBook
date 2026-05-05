@@ -348,3 +348,15 @@ egative-bad-citation (expected-failure guard)
 ### Validation
 - `. D:\Workarea\StudyBook\env_setter.ps1; pytest -q pocs/04f/tests/test_phase1_multisentence.py` -> PASS (`2 passed`).
 - Interactive CLI scenario run succeeded for AC and water-heater multi-sentence queries.
+
+## 2026-05-05 - Document POC 04g Standalone Local LLM Container Setup
+### Added
+- `pocs/04g/README.md`
+- `pocs/04g/docs/DESIGN.md`
+- `pocs/04g/docs/CONTRACT.md`
+- `pocs/04g/docs/TEST_PLAN.md`
+- `pocs/04g/outputs/SMOKE_TEST_RESULT.md`
+
+### Notes
+- Documentation captures a successful standalone local Docker + GPU LLM proof for 04g.
+- No application behavior changes were made in this task.
