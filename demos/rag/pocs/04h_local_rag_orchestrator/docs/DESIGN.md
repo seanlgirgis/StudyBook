@@ -23,6 +23,9 @@ Design rule:
   - `clarification_needed`
   - `clarifying_questions`
   - `confidence`
+  - `classification`
+  - `matched_capability`
+  - `unsupported_reason`
 
 ### LLM Gateway
 - Abstracts provider call mechanics from orchestration logic.
@@ -33,6 +36,8 @@ Design rule:
 - Coordinates end-to-end flow:
   - intent cleanup
   - clarification gate
+  - unsupported-service gate
+  - max clarification retry gate
   - KB retrieval
   - Grok-only final answer call
   - structured response formatting
@@ -78,6 +83,32 @@ An interactive script validates hybrid orchestration without changing the API co
 - final answer comes from configured Grok provider only
 - if Grok is unavailable, status becomes `final_provider_unavailable` and final answer remains blank
 - writes one JSON record per interaction to `outputs/hybrid_ask_logs.jsonl`
+
+## Bounded Intake Policy
+Intent classification classes:
+- `supported`
+- `clarification_needed`
+- `unsupported`
+- `human_escalation_required`
+- `multi_intent`
+
+Local deterministic code owns:
+- clarification retry policy (`MAX_CLARIFICATION_ATTEMPTS = 3`)
+- escalation decision and handoff payload shape
+- retrieval and provider call gating
+
+Policy enforcement:
+- no Grok call for `unsupported`, `clarification_needed`, `human_escalation_required`, `no_context`
+- no Grok call for `multi_intent` until customer picks one issue
+- no local-8bit final-answer fallback
+
+## Multi-Intent Policy
+If a single customer message contains multiple distinct requests:
+- classify as `multi_intent`
+- include per-intent entries in `intents`
+- ask which issue to handle first
+- do not retrieve combined final context yet
+- do not call Grok yet
 
 Environment variables used for optional Grok route:
 - `XAI_API_KEY` or `GROK_API_KEY`

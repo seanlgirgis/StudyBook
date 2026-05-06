@@ -24,6 +24,20 @@ def _print_sections(sections: list[dict[str, Any]]) -> None:
         )
 
 
+def _print_intents(intents: list[dict[str, Any]]) -> None:
+    if not intents:
+        print("Intents: (none)")
+        return
+    print("Intents:")
+    for intent in intents:
+        print(
+            f"- class={intent.get('classification')} | "
+            f"service={intent.get('service_type')} | "
+            f"capability={intent.get('matched_capability')} | "
+            f"unsupported_reason={intent.get('unsupported_reason')}"
+        )
+
+
 def _append_log(record: dict[str, Any]) -> None:
     LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
     with LOG_PATH.open("a", encoding="utf-8") as handle:
@@ -69,11 +83,23 @@ def main() -> None:
         print(f"Original Query: {result.get('original_query', '')}")
         print(f"Cleaned Intent: {result.get('cleaned_intent', '')}")
         print(f"Service Type: {result.get('service_type', '')}")
+        print(f"Classification: {result.get('classification', '')}")
+        print(f"Matched Capability: {result.get('matched_capability', '')}")
+        print(f"Unsupported Reason: {result.get('unsupported_reason', '')}")
         print(f"Symptoms: {result.get('symptoms', [])}")
         print(f"Urgency: {result.get('urgency', '')}")
+        _print_intents(result.get("intents", []))
         print(f"Clarification Needed: {result.get('clarification_needed', False)}")
+        print(
+            f"Clarification Attempt / Max: "
+            f"{result.get('clarification_attempt', 0)} / {result.get('max_clarification_attempts', 3)}"
+        )
         print(f"Clarifying Questions: {result.get('clarifying_questions', [])}")
         _print_sections(result.get("retrieved_sections", []))
+        if result.get("handoff_summary"):
+            print(f"Human Escalation Summary: {result.get('handoff_summary')}")
+        if result.get("recommended_next_message"):
+            print(f"Recommended Next Message: {result.get('recommended_next_message')}")
         print(f"Final Answer: {result.get('final_answer', '')}")
         print(f"Final Provider Used: {result.get('final_provider_used', '')}")
         print(f"Status: {result.get('status', '')}")
@@ -85,6 +111,7 @@ def main() -> None:
             "timestamp_utc": datetime.now(timezone.utc).isoformat(),
             "original_query": result.get("original_query", ""),
             "cleaned_intent": result.get("cleaned_intent", ""),
+            "classification": result.get("classification", ""),
             "service_type": result.get("service_type", ""),
             "symptoms": result.get("symptoms", []),
             "urgency": result.get("urgency", ""),
@@ -103,4 +130,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

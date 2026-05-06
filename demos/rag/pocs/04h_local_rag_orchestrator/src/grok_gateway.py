@@ -52,10 +52,11 @@ def call_grok_final_answer(result: dict[str, Any], timeout: int = 90) -> str:
                 "role": "system",
                 "content": (
                     "You are a customer-facing assistant for North Texas Comfort & Home Services. "
-                    "Answer using only the provided knowledge base sections. "
+                    "Use only the provided knowledge base sections. "
                     "Do not invent safety instructions or service claims. "
                     "Be concise, practical, and friendly. "
                     "If the context is insufficient, ask one clarifying question."
+                    "Return only the final customer-facing answer."
                 ),
             },
             {"role": "user", "content": build_grok_user_prompt(result)},

@@ -15,12 +15,29 @@ Output:
 {
   "original_query": "string",
   "cleaned_intent": "string",
-  "service_type": "AC|heating|plumbing|water_heater|appliance|maintenance|unknown",
+  "classification": "supported|clarification_needed|unsupported|human_escalation_required|multi_intent",
+  "service_type": "AC|heating|plumbing|water_heater|appliance|maintenance|emergency|unknown",
+  "matched_capability": "string",
   "symptoms": ["string"],
   "urgency": "low|normal|urgent|unknown",
   "clarification_needed": true,
   "clarifying_questions": ["string"],
+  "unsupported_reason": "string",
   "confidence": 0.0,
+  "intents": [
+    {
+      "classification": "supported|unsupported|clarification_needed",
+      "cleaned_intent": "string",
+      "service_type": "AC|heating|plumbing|water_heater|appliance|maintenance|emergency|unknown",
+      "matched_capability": "string",
+      "symptoms": ["string"],
+      "unsupported_reason": "string",
+      "confidence": 0.0
+    }
+  ],
+  "clarification_attempt": 0,
+  "clarification_attempt_next": 1,
+  "max_clarification_attempts": 3,
   "retrieved_sections": [
     {
       "id": "string",
@@ -34,8 +51,19 @@ Output:
   "draft_answer": "string",
   "provider_used": "local_8bit_intent",
   "final_provider_used": "grok-3|grok_mini|unavailable|none",
-  "status": "answered|clarification_needed|final_provider_unavailable|no_context|error",
-  "note": "string"
+  "status": "answered|clarification_needed|final_provider_unavailable|no_context|unsupported_service|human_escalation_required|error",
+  "note": "string",
+  "reason": "string",
+  "handoff_summary": {
+    "original_query": "string",
+    "conversation_history": ["string"],
+    "known_details": ["string"],
+    "missing_details": ["string"],
+    "last_classification": "string",
+    "last_service_type": "string",
+    "last_symptoms": ["string"]
+  },
+  "recommended_next_message": "string"
 }
 ```
 
@@ -65,6 +93,9 @@ Output:
 - local intent provider unavailable -> deterministic intent fallback
 - final provider unavailable -> `status = "final_provider_unavailable"` with blank `final_answer`
 - no retrieval match -> `status = "no_context"`
+- unsupported request -> `status = "unsupported_service"`
+- unclear after max retries -> `status = "human_escalation_required"`
+- multi-intent request -> `status = "clarification_needed"` with `classification = "multi_intent"` and `intents` list
 
 ## Notes
 - Two-stage provider model:

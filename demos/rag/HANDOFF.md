@@ -402,3 +402,29 @@ Scope guardrails preserved:
 - Clarification-first behavior added for ambiguous requests.
 - Interactive tester now prints and logs clarification state and final-provider status fields.
 - KB includes explicit safety guidance entries to ground practical advice.
+
+## 2026-05-05 Handoff - 04h Strict Intake Policy Extension
+- 04h now enforces strict capability-bounded intake classification and escalation policy.
+- Local 8-bit remains intent clarification only.
+- Grok/final provider remains final customer-answer provider only.
+- Unsupported and ambiguous requests now have explicit non-answer handling paths.
+- Clarification retry escalation contract implemented with max attempts and handoff summary package.
+
+## 2026-05-05 Handoff - 04h Multi-Intent Clarification Extension
+- 04h now supports multi-intent detection in a single customer message.
+- Multi-intent requests are intentionally clarification-first and do not trigger retrieval/final-answer generation until customer chooses priority issue.
+- Supported+unsupported mixed messages now produce boundary-aware clarifying prompts.
+- Tests and interactive runs confirm expected behavior.
+
+## 2026-05-05 Handoff - 04h Pause Snapshot Ready
+- Resume source of truth:
+  - `pocs/04h_local_rag_orchestrator/outputs/PHASE_2_STATUS.md`
+- Snapshot includes:
+  - validated 04g-quantized runtime details
+  - 04h architecture/policy boundaries
+  - classification + escalation + multi-intent status
+  - test status (`21 passed`)
+  - pending manual validation items
+  - known limitations
+  - recommended next options after interview prep
+- Scope preserved: no runtime logic changes in this pass.

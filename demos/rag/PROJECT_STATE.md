@@ -510,3 +510,30 @@ Persisted reference points:
 - Added clarification gating with `clarification_needed` and `clarifying_questions`.
 - Added KB safety-guidance records for plumbing leak, HVAC no cooling, and water-heater gas odor scenarios.
 - Tests and interactive run validated successfully.
+
+## 2026-05-05 Update - 04h Bounded Capability + Escalation Extension
+- Extended 04h from basic intent/final-provider split to bounded intake policy control.
+- Added strict classification outputs:
+  - supported
+  - clarification_needed
+  - unsupported
+  - human_escalation_required
+- Added clarification retry contract with `MAX_CLARIFICATION_ATTEMPTS=3` and escalation package after max retries.
+- Added unsupported-service handling for out-of-scope categories (car AC, carpet cleaning, etc.).
+- Kept local 8-bit as intent clarification only.
+- Final answer remains Grok/final-provider only; no local final-answer fallback.
+
+## 2026-05-05 Update - 04h Multi-Intent Detection Extension
+- Extended 04h with `multi_intent` classification for messages containing multiple service intents.
+- Multi-intent path is clarification-first by design:
+  - returns `intents` list
+  - asks which issue to handle first
+  - skips retrieval and skips Grok final answer
+- Added mixed supported+unsupported multi-intent handling with boundary-aware clarification prompts.
+- Preserved architecture rule: local 8-bit intent only, Grok/final-provider only for final customer answer.
+
+## 2026-05-05 Update - 04h Pause/Resume State Persisted
+- Persisted 04h Phase 2 pause snapshot for resume continuity at:
+  - `pocs/04h_local_rag_orchestrator/outputs/PHASE_2_STATUS.md`
+- Captured validated runtime dependency (`04g-quantized` local 8-bit), architecture boundaries, classification/escalation/multi-intent behaviors, latest tests (`21 passed`), pending manual checks, known limitations, and next-step options.
+- Scope note: no runtime logic changes in this pass; state persistence only.

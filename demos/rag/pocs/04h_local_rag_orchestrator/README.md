@@ -45,10 +45,11 @@ Runtime notes from prior validation:
 
 ## Provider Roles (Realigned)
 - `local_8bit` role: intent clarification engine only.
+  - classifies as `supported|clarification_needed|unsupported|human_escalation_required`
   - cleans noisy input
-  - extracts service_type/symptoms/urgency
-  - decides `clarification_needed` and asks concise follow-up questions
-- `grok_3` (or configured final provider) role: final customer-facing answer generation only.
+  - extracts `service_type`, `matched_capability`, `symptoms`, `urgency`
+  - decides `clarification_needed` and asks 1-3 concise follow-up questions
+- `grok_3` (or configured final provider) role: final customer-facing answer generation only for `classification=supported`.
 
 Important:
 - local 8-bit is not treated as the final customer-answer model.
@@ -57,6 +58,47 @@ Important:
   - `final_provider_used = "unavailable"`
   - `status = "final_provider_unavailable"`
   - note explaining final provider is unavailable.
+
+## Supported Capability Policy
+Supported capabilities:
+- AC repair
+- AC replacement
+- heating repair
+- plumbing leak repair
+- clogged drains
+- water heater no hot water
+- water heater pilot light
+- maintenance plans
+- emergency service
+- appliance repair
+
+Unsupported examples (policy-bounded):
+- car/vehicle AC
+- carpet cleaning
+- pest control
+- roofing
+- remodeling
+- electrical panel work
+- medical/legal/insurance questions
+
+## Clarification Retry and Escalation
+- `max_clarification_attempts` defaults to `3`.
+- if intent remains unclear after max attempts:
+  - `status = human_escalation_required`
+  - `handoff_summary` is returned
+  - `recommended_next_message` asks for callback details
+
+## Multi-Intent Detection (Phase 2)
+04h now detects when one message contains multiple service intents.
+
+Behavior:
+- classification becomes `multi_intent`
+- system returns an `intents` list and asks which issue to handle first
+- retrieval is skipped
+- Grok final provider is not called
+- final answer remains blank until the customer chooses a priority issue
+
+This is intentionally clarification-first for safer intake and scheduling handoff.
 
 ## Interactive Hybrid Tester
 `interactive_hybrid_test.py` is a local terminal script to validate a hybrid answer flow before orchestrator containerization.

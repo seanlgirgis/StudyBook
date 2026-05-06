@@ -733,3 +733,45 @@ egative-bad-citation as expected-failure validation.
 - Validation:
   - `python -m pytest -q pocs/04h_local_rag_orchestrator/tests` -> PASS (`12 passed`)
   - interactive run with required 3 prompts + `exit` completed with expected statuses.
+
+## 2026-05-05 - 04h Capability Classification and Escalation Extension
+- Updated 04h policy controller behavior in `src/service.py`:
+  - strict intent prompt with supported/unsupported capability bounds
+  - classification outputs (`supported|clarification_needed|unsupported|human_escalation_required`)
+  - deterministic fallback rules for unsupported and ambiguous inputs
+  - clarification retry handling with max attempts=3
+  - human escalation package (`handoff_summary`, `recommended_next_message`)
+- Updated `src/app.py` to accept optional `clarification_attempt` and `conversation_history` with backward compatibility.
+- Updated interactive tester output + JSONL schema for new classification/escalation fields.
+- Added/updated tests for policy prompt, classification paths, unsupported handling, retry escalation, and no local final-answer fallback.
+- Validation:
+  - `python -m pytest -q pocs/04h_local_rag_orchestrator/tests` -> PASS (`15 passed`)
+  - interactive manual scenarios verified supported/clarification/unsupported outputs
+  - direct clarification_attempt=3 check verified `human_escalation_required`
+
+## 2026-05-05 - 04h Multi-Intent Detection
+- Added `multi_intent` capability in `src/service.py` with deterministic segment splitting and per-intent classification.
+- Added `intents` output list and multi-intent clarifying-question generation.
+- Ensured `answer_query` multi-intent branch returns:
+  - `status=clarification_needed`
+  - no retrieval
+  - no Grok call
+  - blank final answer
+- Updated interactive tester to print per-intent breakdown.
+- Updated docs for phase-2 multi-intent clarification-first behavior.
+- Validation:
+  - `python -m pytest -q pocs/04h_local_rag_orchestrator/tests` -> PASS (`21 passed`)
+  - manual interactive multi-intent scenarios validated.
+
+## 2026-05-05 - 04h Pause/Resume State Persistence
+- Added `pocs/04h_local_rag_orchestrator/outputs/PHASE_2_STATUS.md` as a resume-ready snapshot.
+- Recorded:
+  - 04g-quantized dependency and mount/runtime details
+  - 04h architecture boundary (local 8-bit intent only, Grok final-answer only)
+  - supported/unsupported lists
+  - retry/escalation policy and multi-intent behavior
+  - latest validation (`21 passed`)
+  - pending manual checks
+  - known limitations and resume choices
+  - interview framing summary
+- This was a closure/state persistence pass only; no feature/runtime logic changes.

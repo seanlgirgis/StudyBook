@@ -440,3 +440,50 @@ egative-bad-citation (expected-failure guard)
 ### Notes
 - Local 8-bit output is no longer treated as final customer answer.
 - Final-provider-unavailable mode now returns structured non-final output by design.
+
+## 2026-05-05 - Extend 04h with Bounded Classification + Escalation
+### Updated
+- `pocs/04h_local_rag_orchestrator/src/service.py`
+- `pocs/04h_local_rag_orchestrator/src/app.py`
+- `pocs/04h_local_rag_orchestrator/src/grok_gateway.py`
+- `pocs/04h_local_rag_orchestrator/interactive_hybrid_test.py`
+- `pocs/04h_local_rag_orchestrator/data/knowledge_base.json`
+- `pocs/04h_local_rag_orchestrator/tests/test_service.py`
+- `pocs/04h_local_rag_orchestrator/tests/test_interactive_hybrid.py`
+- `pocs/04h_local_rag_orchestrator/tests/test_kb_loader.py`
+- `pocs/04h_local_rag_orchestrator/README.md`
+- `pocs/04h_local_rag_orchestrator/docs/DESIGN.md`
+- `pocs/04h_local_rag_orchestrator/docs/CONTRACT.md`
+- `pocs/04h_local_rag_orchestrator/docs/TEST_PLAN.md`
+
+### Notes
+- Added supported/unsupported classification, clarification retry policy, and human escalation contract.
+- Preserved architecture rule: local 8-bit intent only, final answer provider remains Grok/final-model route.
+
+## 2026-05-05 - Extend 04h with Multi-Intent Detection
+### Updated
+- `pocs/04h_local_rag_orchestrator/src/service.py`
+- `pocs/04h_local_rag_orchestrator/interactive_hybrid_test.py`
+- `pocs/04h_local_rag_orchestrator/tests/test_service.py`
+- `pocs/04h_local_rag_orchestrator/README.md`
+- `pocs/04h_local_rag_orchestrator/docs/DESIGN.md`
+- `pocs/04h_local_rag_orchestrator/docs/CONTRACT.md`
+- `pocs/04h_local_rag_orchestrator/docs/TEST_PLAN.md`
+
+### Notes
+- Added `multi_intent` classification and per-intent output contract.
+- Multi-intent branch remains clarification-first and suppresses retrieval/final-answer calls.
+
+## 2026-05-05 - Persist 04h Phase 2 Pause State
+### Added
+- `pocs/04h_local_rag_orchestrator/outputs/PHASE_2_STATUS.md`
+
+### Updated
+- `PROJECT_STATE.md`
+- `TASK_BOARD.md`
+- `DAILY_LOG.md`
+- `HANDOFF.md`
+
+### Notes
+- Closure/state-persistence update only.
+- No runtime logic or feature behavior changes.
