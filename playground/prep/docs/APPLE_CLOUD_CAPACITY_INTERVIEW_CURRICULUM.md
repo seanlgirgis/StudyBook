@@ -19,6 +19,127 @@
 - [15. Final 60-Second Close](#15-final-60-second-close)
 
 
+# First Interview Debrief — Ilia Vsemenov
+
+Date:
+2026-05-08
+
+Interviewer:
+Ilia Vsemenov
+
+LinkedIn:
+https://www.linkedin.com/in/iliavsemenov/
+
+Tone:
+Friendly.
+
+Outcome:
+First interview completed. Second interview remains scheduled later the same day.
+
+## Topics Discussed
+
+### AI Adoption
+
+Ilia stressed AI adoption.
+
+Notes:
+- I explained that personally I have adopted AI heavily for learning, coding acceleration, documentation, testing ideas, and structured workflows.
+- At Citi, official enterprise AI tooling was more limited.
+- Citi allowed Copilot for coding.
+- Safe positioning: I am comfortable adopting AI where policy allows, but I respect enterprise governance, security, and data-handling rules.
+
+Better answer for future interviews:
+
+At Citi, official AI adoption was governed, and Copilot was the approved coding assistant. Personally, I have adopted AI much more broadly for learning, coding acceleration, documentation, testing ideas, and building structured workflows. I am comfortable using AI, but in an enterprise I would always follow security, data-handling, and tool-approval policies.
+
+### FinOps Relationship
+
+Ilia pressed on my relationship with the FinOps team.
+
+Notes:
+- I did not work deeply inside a FinOps team.
+- My work was more directly with development teams, application teams, service owners, capacity stakeholders, and infrastructure telemetry.
+- The work was FinOps-adjacent because it identified waste, underutilization, over-allocation, forecasted capacity needs, and cost-impact opportunities.
+
+Better answer for future interviews:
+
+I was not embedded directly inside a FinOps team, so I do not want to overstate that. My work was more capacity engineering and telemetry analytics with development and application teams. But the output was FinOps-adjacent: identifying underutilized resources, over-allocation, forecasted capacity needs, and cost-impact opportunities. I would partner with FinOps by providing the telemetry evidence, ownership mapping, risk classification, and recommended actions they need for cost governance.
+
+### Capacity Reporting Process
+
+Ilia asked about the capacity process.
+
+Notes:
+- I explained the process as:
+  collect telemetry → clean/validate → calculate utilization/headroom/forecast/risk → report → review with stakeholders → recommend action.
+- This maps well to the study-doc framing:
+  telemetry → normalization → P95/headroom/forecast variance → risk/waste classification → action list.
+
+Better answer for future interviews:
+
+The process starts with telemetry collection and validation. Then I clean and normalize the data, join ownership or service metadata, calculate capacity signals like P95, headroom, growth, forecast variance, and cost impact, then turn the output into a stakeholder review package. The goal is that the review meeting is about decisions, not data cleaning.
+
+### Documentation and Design-Level Documents
+
+Ilia asked about documentation and design-level documents.
+
+Notes:
+- I explained requirements tracking, Markdown documentation, and code comments.
+- Future answer should be stronger around repeatability and design clarity.
+
+Better answer for future interviews:
+
+For documentation, I focus on making the work repeatable. I document the data sources, assumptions, formulas, thresholds, pipeline steps, ownership mapping, and how to interpret the output. I use Markdown for design notes and runbooks, code comments for local logic, and requirements or task tracking for change history. The goal is that someone else can understand not just what the report says, but how it was produced and why the recommendations are safe.
+
+### Questions Asked At The End
+
+I asked the three prepared questions:
+
+1. What automation exists today, and where is the manual pain?
+2. How do you measure success for this role in the first 90 days?
+3. What would a great first few months look like for someone in this role?
+
+I also asked for a moment to speak near the end and expressed enthusiasm for the role.
+
+Better closing language for future interviews:
+
+Before we wrap up, I just want to say one thing. I have had success in roles where the team needed someone to take ownership, learn the environment, work through messy data, and turn it into useful decisions. That is the kind of role I enjoy. If I join this team, I will be committed, dependable, and focused on helping the team succeed.
+
+## Signals For Second Interview
+
+The second interview may go deeper into:
+
+- AI adoption
+- FinOps / cost governance
+- capacity process maturity
+- documentation and design
+- coding patterns
+- SQL/Python telemetry analysis
+- automation implementation details
+
+## Second Interview Adjustment
+
+Use this bridge if relevant:
+
+One thing that came up in the first conversation was automation and process maturity. That is really where I fit: I can take raw telemetry, clean it, calculate capacity and cost signals, document the logic, and turn it into a repeatable review package so engineering, capacity, and FinOps-style stakeholders can make decisions from the same evidence.
+
+## Things To Be Careful About
+
+- Do not claim direct ownership inside a FinOps team.
+- Do not overstate enterprise AI adoption at Citi.
+- Do not imply unsupported internal AI tooling was used with Citi data.
+- Do not sound desperate.
+- Replace “soldier for the team” with “committed, dependable, and focused on helping the team succeed.”
+- Keep answers calm, practical, and evidence-based.
+
+## Updated Anchor Lines
+
+- FinOps-adjacent, not directly embedded in FinOps.
+- AI-positive, but governance-aware.
+- Documentation means repeatability: sources, assumptions, formulas, thresholds, run steps, and interpretation.
+- The meeting should be about decisions, not data cleaning.
+- I turn telemetry into capacity, cost, and planning decisions.
+
 ## 1. Interview Target
 
 [Back to TOC](#toc)
@@ -708,3 +829,4 @@ platform ownership from transferable capacity principles. What I bring is the
 ability to automate the decision loop: collect telemetry, calculate utilization
 and headroom, identify risk or waste, and produce recommendations that
 engineering and leadership can act on.
+
