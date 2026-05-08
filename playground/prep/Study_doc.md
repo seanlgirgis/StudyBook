@@ -135,9 +135,7 @@
     - [Redshift](#redshift)
     - [One-liner mental model](#one-liner-mental-model)
 
-[Back to TOC](#toc)
 
-[Back to TOC](#toc)
 
 ## 1. Interview Target
 
@@ -2151,26 +2149,32 @@ The goal is not just a dashboard. The goal is a forecast-driven capacity action 
 [Back to TOC](#toc)
 
 ## AWS Services One Liners?
+[Back to TOC](#toc)
 ### EKS (Elastic Kubernetes Service)
 
 A managed service that makes it easy to run Kubernetes on AWS, providing the flexibility of open-source orchestration with the security and reliability of a managed infrastructure.
+[Back to TOC](#toc)
 ### EC2 (Elastic Compute Cloud)
 
 This service provides scalable virtual servers, giving you full control over the operating system and networking for your applications.
+[Back to TOC](#toc)
 ### ECS (Elastic Container Service)
 
 A highly scalable, high-performance container management service that allows you to run and scale Docker applications without managing a complex orchestration control plane.
+[Back to TOC](#toc)
 ### RDS (Relational Database Service)
 
 This service simplifies the setup, operation, and scaling of relational databases like MySQL, PostgreSQL, or SQL Server by automating administrative tasks like backups and patching.
+[Back to TOC](#toc)
 ### S3 (Simple Storage Service)
 
 An object storage service built to store and retrieve any amount of data from anywhere on the web, offering industry-leading durability, availability, and scalability.
-
+[Back to TOC](#toc)
 ### Glue
 Serverless ETL. Crawls S3 to infer schema, runs Spark jobs to transform/load data. Key use: raw telemetry → clean Parquet → Redshift or Athena. Capacity concern: DPU hours (cost scales with job size and runtime).
-
+[Back to TOC](#toc)
 ### Redshift
 Columnar data warehouse. SQL at scale on structured/semi-structured data. Runs on provisioned nodes or Serverless. Key capacity concerns: node utilization, storage per node, WLM queue pressure, and query concurrency limits.
+[Back to TOC](#toc)
 ### One-liner mental model
 > S3 stores it → Glue moves it → Redshift queries it → EC2/ECS/EKS runs the workloads that generate it.
