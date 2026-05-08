@@ -152,27 +152,6 @@ LIMIT {limit};
 """
 
 
-def sql_service_capacity_detail() -> str:
-    """
-    Return service-level telemetry detail used for Pandas capacity analysis.
-
-    This query keeps one row per telemetry sample, but adds service_name
-    so downstream Pandas code can group by service.
-    """
-    return """
-SELECT
-    s.service_name,
-    t.cpu_utilization_pct,
-    t.memory_utilization_pct,
-    t.p95_latency_ms,
-    t.error_rate_pct,
-    t.cloud_cost_usd
-FROM telemetry_samples t
-JOIN services s
-    ON s.service_id = t.service_id
-ORDER BY t.sampled_at;
-"""
-
 def sql_service_capacity_detail(limit: int | None = 500) -> str:
     """
     Return service-level telemetry rows used for Pandas capacity analysis.

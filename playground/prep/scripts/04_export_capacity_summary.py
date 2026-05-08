@@ -5,13 +5,9 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from pathlib import Path
-
 from src.db import run_sql
 from src.capacity_analysis import add_capacity_flags, add_capacity_status, summarize_by_service
-from src.reporting import ensure_output_dirs, export_dataframe, write_text_report
 from src.telemetry_queries import sql_service_capacity_detail
-
 from src.reporting import (
     build_output_path,
     ensure_output_dirs,

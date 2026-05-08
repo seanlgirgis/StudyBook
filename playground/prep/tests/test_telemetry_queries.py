@@ -17,6 +17,7 @@ def test_query_builders_return_select_only_sql():
         tq.sql_threshold_risk_samples(10),
         tq.sql_hourly_service_rollup(),
         tq.sql_jsonb_tag_preview(10),
+        tq.sql_service_capacity_detail(10),
     ]
     for q in queries:
         _assert_select_only(q)
