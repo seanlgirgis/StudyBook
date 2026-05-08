@@ -4,8 +4,7 @@
 - [Module 1 Interview Question](#module-1-interview-question)
   - [1. Interview Target](#1-interview-target)
   - [2. Core Identity Statement](#2-core-identity-statement)
-  - [3. Automation — What Carla May Mean](#3-automation-what-carla-may-mean)
-  - [Automation in Cloud Capacity Work](#automation-in-cloud-capacity-work)
+  - [3. Automation in Cloud Capacity Work](#3-automation-in-cloud-capacity-work)
   - [Cloud Telemetry Collection — Batch First](#cloud-telemetry-collection-batch-first)
   - [4. HorizonScale — Code Walkthrough](#4-horizonscale-code-walkthrough)
   - [5. SQL Coverage](#5-sql-coverage)
@@ -113,45 +112,7 @@ to Kubernetes, EKS, S3, and multi-cloud environments.
 
 [Back to TOC](#toc)
 
-## 3. Automation — What Carla May Mean
-
-1. Data automation
-- ingest telemetry
-- clean data
-- normalize schema
-- aggregate by service/team/workload
-
-2. Capacity automation
-- P95/headroom calculation
-- threshold breach detection
-- forecast variance
-- risk classification
-- rightsizing candidates
-
-3. Cloud/platform automation
-- EKS/Kubernetes requests/limits/utilization checks
-- S3 storage growth/lifecycle opportunity
-- cost and allocation reporting
-- tagging/ownership metadata
-
-4. Operational automation
-- repeatable scripts
-- scheduled reports
-- runbooks
-- validation checks
-- reducing manual spreadsheet work
-
-When I say automation, I mean reducing manual capacity analysis. Instead of
-manually pulling telemetry and building one-off reports, I build repeatable
-pipelines and scripts that collect metrics, clean them, calculate P95,
-headroom, forecast variance, classify risk, and export stakeholder-ready
-reports. That same pattern can apply to EC2, ECS, EKS, S3, or Kubernetes
-capacity data.
-
-[Back to TOC](#toc)
-
-## Automation in Cloud Capacity Work
-
+## 3. Automation in Cloud Capacity Work
 Automation in this role does not mean only one thing. It can mean data
 automation, capacity-risk automation, cloud/platform collection automation, and
 reporting/operational automation. The common goal is reducing manual capacity
