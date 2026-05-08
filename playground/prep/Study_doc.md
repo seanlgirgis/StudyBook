@@ -117,6 +117,7 @@
   - [HorizonScale validation](#horizonscale-validation)
 - [Module 6 Odds and repeats](#module-6-odds-and-repeats)
   - [Opener](#opener)
+  - [Tell me about a Python automation workflow you built for capacity planning.](#tell-me-about-a-python-automation-workflow-you-built-for-capacity-planning)
   - [ML Forecasting for Business Impact](#ml-forecasting-for-business-impact)
   - [What is the Job:](#what-is-the-job)
   - [Master Diagram in Words](#master-diagram-in-words)
@@ -2028,7 +2029,7 @@ My focus is turning infrastructure data into clear capacity recommendations,
 
 efficiency opportunities, and leadership-ready reporting.
 
-Tell me about a Python automation workflow you built for capacity planning.
+## Tell me about a Python automation workflow you built for capacity planning.
 
 At Citi, I built Python automation around infrastructure capacity telemetry.
 
