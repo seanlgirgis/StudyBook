@@ -1,86 +1,55 @@
+# Module 1 Interview Question
+
 ## TOC
 - [Module 1 Interview Question](#module-1-interview-question)
   - [1. Interview Target](#1-interview-target)
   - [2. Core Identity Statement](#2-core-identity-statement)
-  - [3. Automation — What Carla May Mean](#3-automation--what-carla-may-mean)
+  - [3. Automation — What Carla May Mean](#3-automation-what-carla-may-mean)
   - [Automation in Cloud Capacity Work](#automation-in-cloud-capacity-work)
-    - [1. Data Automation](#1-data-automation)
-    - [2. Capacity-Risk Automation](#2-capacity-risk-automation)
-    - [3. Cloud / Platform Collection Automation](#3-cloud--platform-collection-automation)
-    - [4. Reporting / Operational Automation](#4-reporting--operational-automation)
-    - [5. Batch First, Streaming Only If Needed](#5-batch-first-streaming-only-if-needed)
-    - [6. Lambda vs Container vs Orchestrator](#6-lambda-vs-container-vs-orchestrator)
-    - [7. How Automation Maps to Current Code Lab](#7-how-automation-maps-to-current-code-lab)
-    - [8. Fire Drill Q\&A](#8-fire-drill-qa)
-  - [Cloud Telemetry Collection — Batch First](#cloud-telemetry-collection--batch-first)
-    - [AWS Native Sources](#aws-native-sources)
-    - [Collector Patterns](#collector-patterns)
-    - [Frequency Guidance](#frequency-guidance)
-    - [Code Impact](#code-impact)
-    - [Interview Answer](#interview-answer)
-    - [Fire Drill Questions To Add](#fire-drill-questions-to-add)
-  - [4. HorizonScale — Code Walkthrough](#4-horizonscale--code-walkthrough)
+  - [Cloud Telemetry Collection — Batch First](#cloud-telemetry-collection-batch-first)
+  - [4. HorizonScale — Code Walkthrough](#4-horizonscale-code-walkthrough)
   - [5. SQL Coverage](#5-sql-coverage)
   - [6. Python Coverage](#6-python-coverage)
-  - [7. Kubernetes / EKS Capacity Concepts](#7-kubernetes--eks-capacity-concepts)
-    - [Kubernetes Capacity Granularity](#kubernetes-capacity-granularity)
-  - [8. S3 Capacity / Cost Concepts](#8-s3-capacity--cost-concepts)
-  - [9. Cost Savings / Efficiency Playbook](#9-cost-savings--efficiency-playbook)
-  - [10. Interview Runbook — 45 Minutes](#10-interview-runbook--45-minutes)
-  - [11. Interview Runbook — 30 Minutes](#11-interview-runbook--30-minutes)
+  - [7. Kubernetes / EKS Capacity Concepts](#7-kubernetes-eks-capacity-concepts)
+  - [8. S3 Capacity / Cost Concepts](#8-s3-capacity-cost-concepts)
+  - [9. Cost Savings / Efficiency Playbook](#9-cost-savings-efficiency-playbook)
+  - [10. Interview Runbook — 45 Minutes](#10-interview-runbook-45-minutes)
+  - [11. Interview Runbook — 30 Minutes](#11-interview-runbook-30-minutes)
   - [12. Fire Drill Questions](#12-fire-drill-questions)
   - [13. Questions To Ask Them](#13-questions-to-ask-them)
   - [14. Things To Avoid](#14-things-to-avoid)
   - [15. Final 60-Second Close](#15-final-60-second-close)
 - [Module 2 SQL Techniques](#module-2-sql-techniques)
   - [SQL Mental Model](#sql-mental-model)
-    - [Interview sentence:](#interview-sentence)
   - [Basic SELECT and WHERE](#basic-select-and-where)
   - [JOIN Pattern](#join-pattern)
-    - [Interview sentence:](#interview-sentence-1)
   - [GROUP BY Pattern](#group-by-pattern)
-  - [DATE\_TRUNC Time Buckets](#date_trunc-time-buckets)
-    - [Interview sentence](#interview-sentence-2)
-  - [P95 with PERCENTILE\_CONT](#p95-with-percentile_cont)
-    - [Interview sentence](#interview-sentence-3)
+  - [DATE_TRUNC Time Buckets](#date_trunc-time-buckets)
+  - [P95 with PERCENTILE_CONT](#p95-with-percentile_cont)
   - [CTE Pattern](#cte-pattern)
-    - [Interview sentence](#interview-sentence-4)
   - [Window Functions Mental Model](#window-functions-mental-model)
-    - [Example: compare each telemetry sample to the previous sample](#example-compare-each-telemetry-sample-to-the-previous-sample)
-  - [ROW\_NUMBER / RANK / DENSE\_RANK](#row_number--rank--dense_rank)
-    - [Plain English](#plain-english)
-    - [Interview sentence](#interview-sentence-5)
-  - [LAG / LEAD](#lag--lead)
-    - [Interview sentence](#interview-sentence-6)
+  - [ROW_NUMBER / RANK / DENSE_RANK](#row_number-rank-dense_rank)
+  - [LAG / LEAD](#lag-lead)
   - [Moving Average](#moving-average)
-    - [Interview sentence](#interview-sentence-7)
   - [JSONB Tags](#jsonb-tags)
-    - [Interview sentence](#interview-sentence-8)
   - [Risky Windows Query](#risky-windows-query)
-    - [Interview sentence](#interview-sentence-9)
-  - [Rightsizing / Over-Allocation Query](#rightsizing--over-allocation-query)
-    - [Interview sentence](#interview-sentence-10)
+  - [Rightsizing / Over-Allocation Query](#rightsizing-over-allocation-query)
   - [Cost Rollup](#cost-rollup)
-    - [Interview sentence](#interview-sentence-11)
   - [Before/After Deployment Comparison](#beforeafter-deployment-comparison)
-    - [Interview sentence](#interview-sentence-12)
   - [SQL to Pandas Translation](#sql-to-pandas-translation)
-  - [Fire Drill Q\&A](#fire-drill-qa)
+  - [Fire Drill Q&A](#fire-drill-qa)
   - [Final Memorized SQL Answer](#final-memorized-sql-answer)
 - [Module 3 Python Coding Techniques](#module-3-python-coding-techniques)
   - [Basic Grouping with Pandas](#basic-grouping-with-pandas)
-    - [Talk while coding:](#talk-while-coding)
   - [Basic Grouping with Pure Python](#basic-grouping-with-pure-python)
   - [Capacity Risk Detection](#capacity-risk-detection)
-    - [Talk while coding:](#talk-while-coding-1)
   - [P95 Utilization](#p95-utilization)
   - [Full Telemetry Mini-Project](#full-telemetry-mini-project)
-    - [Talk while coding:](#talk-while-coding-2)
   - [AWS service mapping](#aws-service-mapping)
   - [Forecasting Models Talking Point](#forecasting-models-talking-point)
   - [Stakeholder Action Loop](#stakeholder-action-loop)
   - [Final Memorized Answer](#final-memorized-answer)
-- [Module 4 ML - Forecast \_ HorizonScale](#module-4-ml---forecast-_-horizonscale)
+- [Module 4 ML - Forecast _ HorizonScale](#module-4-ml-forecast-_-horizonscale)
   - [The story in one paragraph](#the-story-in-one-paragraph)
   - [1. Purpose](#1-purpose)
   - [2. Safe Positioning](#2-safe-positioning)
@@ -88,30 +57,25 @@
   - [4. Inputs and Features](#4-inputs-and-features)
   - [5. Pipeline Flow](#5-pipeline-flow)
   - [6. Model Framing](#6-model-framing)
-    - [Prophet](#prophet)
-    - [scikit-learn](#scikit-learn)
-    - [ARIMA / SARIMA](#arima--sarima)
-    - [XGBoost / LightGBM](#xgboost--lightgbm)
-    - [Explainable baselines](#explainable-baselines)
   - [7. Validation Approach](#7-validation-approach)
   - [8. Capacity and Cost Impact](#8-capacity-and-cost-impact)
   - [9. What To Say (20 seconds)](#9-what-to-say-20-seconds)
   - [10. What To Say (60 seconds)](#10-what-to-say-60-seconds)
   - [11. What Not To Overclaim](#11-what-not-to-overclaim)
-  - [12. Rapid Q\&A](#12-rapid-qa)
+  - [12. Rapid Q&A](#12-rapid-qa)
 - [Module 5 Cheat sheet](#module-5-cheat-sheet)
   - [Automation types](#automation-types)
   - [Batch vs streaming](#batch-vs-streaming)
   - [Lambda vs container](#lambda-vs-container)
   - [df.copy()](#dfcopy)
   - [groupby().agg() named aggregation](#groupbyagg-named-aggregation)
-  - [as\_index=False](#as_indexfalse)
-  - [reset\_index(drop=True)](#reset_indexdroptrue)
+  - [as_index=False](#as_indexfalse)
+  - [reset_index(drop=True)](#reset_indexdroptrue)
   - [apply(axis=1)](#applyaxis1)
-  - [JSONB tags](#jsonb-tags-1)
+  - [JSONB tags](#jsonb-tags)
   - [Pandas P95](#pandas-p95)
-  - [SQL DATE\_TRUNC](#sql-date_trunc)
-  - [SQL PERCENTILE\_CONT](#sql-percentile_cont)
+  - [SQL DATE_TRUNC](#sql-date_trunc)
+  - [SQL PERCENTILE_CONT](#sql-percentile_cont)
   - [Kubernetes granularity](#kubernetes-granularity)
   - [HorizonScale models](#horizonscale-models)
   - [HorizonScale validation](#horizonscale-validation)
@@ -122,19 +86,13 @@
   - [What is the Job:](#what-is-the-job)
   - [Master Diagram in Words](#master-diagram-in-words)
   - [How do you think about cloud capacity planning?](#how-do-you-think-about-cloud-capacity-planning)
-    - [One Liner](#one-liner)
   - [AWS Services One Liners?](#aws-services-one-liners)
-    - [EKS (Elastic Kubernetes Service)](#eks-elastic-kubernetes-service)
-    - [EC2 (Elastic Compute Cloud)](#ec2-elastic-compute-cloud)
-    - [ECS (Elastic Container Service)](#ecs-elastic-container-service)
-    - [RDS (Relational Database Service)](#rds-relational-database-service)
-    - [S3 (Simple Storage Service)](#s3-simple-storage-service)
-
-# Module 1 Interview Question
-
-## 1. Interview Target
 
 [Back to TOC](#toc)
+
+[Back to TOC](#toc)
+
+## 1. Interview Target
 
 This is not just a SQL role and not just a Python role. It is a capacity,
 efficiency, telemetry, automation, and cloud-cost role.
@@ -143,9 +101,9 @@ Sean's safest positioning:
 Senior capacity/data engineer who automates telemetry analysis into capacity and
 cost decisions.
 
-## 2. Core Identity Statement
-
 [Back to TOC](#toc)
+
+## 2. Core Identity Statement
 
 I am strongest where capacity engineering meets data engineering. I use Python,
 SQL, telemetry, and forecasting to turn infrastructure metrics into capacity
@@ -153,9 +111,9 @@ risk, rightsizing opportunities, and stakeholder-ready reports. My deepest
 hands-on cloud is AWS, and I understand how the same capacity principles apply
 to Kubernetes, EKS, S3, and multi-cloud environments.
 
-## 3. Automation — What Carla May Mean
-
 [Back to TOC](#toc)
+
+## 3. Automation — What Carla May Mean
 
 1. Data automation
 - ingest telemetry
@@ -190,9 +148,9 @@ headroom, forecast variance, classify risk, and export stakeholder-ready
 reports. That same pattern can apply to EC2, ECS, EKS, S3, or Kubernetes
 capacity data.
 
-## Automation in Cloud Capacity Work
-
 [Back to TOC](#toc)
+
+## Automation in Cloud Capacity Work
 
 Automation in this role does not mean only one thing. It can mean data
 automation, capacity-risk automation, cloud/platform collection automation, and
@@ -371,9 +329,9 @@ work uses servers, VMs, CPU, memory, disk, and endpoint telemetry. Cloud adds
 account, region, tags, resource type, requests/limits, storage class, and cost.
 The pipeline remains collect, normalize, calculate, classify, and report.
 
-## Cloud Telemetry Collection — Batch First
-
 [Back to TOC](#toc)
+
+## Cloud Telemetry Collection — Batch First
 
 For capacity and cost analytics, batch is usually the default. We normally do
 not need streaming for capacity planning unless there is an operational
@@ -508,9 +466,9 @@ A: Lambda is good for lightweight scheduled pulls. A container job is better for
 heavier dependencies, longer runtime, larger data extracts, or more complex
 processing.
 
-## 4. HorizonScale — Code Walkthrough
-
 [Back to TOC](#toc)
+
+## 4. HorizonScale — Code Walkthrough
 
 - Inputs:
   CPU, memory, P95 latency/utilization, requests, forecast, allocated capacity,
@@ -541,9 +499,9 @@ grouped by service or workload to classify capacity risk and rightsizing
 opportunities. The value was the repeatable decision loop, not just one
 dashboard.
 
-## 5. SQL Coverage
-
 [Back to TOC](#toc)
+
+## 5. SQL Coverage
 
 - 01 basic selects:
   table inspection, filtering, simple joins
@@ -561,9 +519,9 @@ dashboard.
 In SQL, I can move from raw telemetry samples to service-level capacity views
 using JOIN, GROUP BY, DATE_TRUNC, P95 calculations, CTEs, and window functions.
 
-## 6. Python Coverage
-
 [Back to TOC](#toc)
+
+## 6. Python Coverage
 
 - db connection helper
 - SELECT-only query layer
@@ -576,9 +534,9 @@ In Python, I built a small layer over PostgreSQL that runs telemetry queries,
 loads results into Pandas, calculates flags and service summaries, classifies
 capacity status, exports reports, and validates the logic with pytest.
 
-## 7. Kubernetes / EKS Capacity Concepts
-
 [Back to TOC](#toc)
+
+## 7. Kubernetes / EKS Capacity Concepts
 
 Conceptually prepared, without claiming deep production platform ownership:
 - pods
@@ -644,9 +602,9 @@ collect metrics, group by workload or namespace, calculate P95 and headroom,
 identify over-requesting or saturation, and turn it into scaling or rightsizing
 recommendations.
 
-## 8. S3 Capacity / Cost Concepts
-
 [Back to TOC](#toc)
+
+## 8. S3 Capacity / Cost Concepts
 
 - storage growth
 - bucket/object count
@@ -664,9 +622,9 @@ data transfer cost. I would look for fast-growing buckets, rarely accessed
 objects, missing lifecycle policies, and ownership/tagging gaps so teams can
 reduce waste without risking availability.
 
-## 9. Cost Savings / Efficiency Playbook
-
 [Back to TOC](#toc)
+
+## 9. Cost Savings / Efficiency Playbook
 
 1. Find waste
 2. Validate with telemetry
@@ -690,9 +648,9 @@ storage lifecycle opportunities. Then I validate with service owners and turn
 the finding into a safe action: rightsize, scale down, add lifecycle policy,
 rebalance, or monitor.
 
-## 10. Interview Runbook — 45 Minutes
-
 [Back to TOC](#toc)
+
+## 10. Interview Runbook — 45 Minutes
 
 - 0-5 minutes: opening and background
 - 5-15 minutes: capacity/telemetry story
@@ -701,9 +659,9 @@ rebalance, or monitor.
 - 35-42 minutes: Kubernetes/EKS/S3/cost efficiency questions
 - 42-45 minutes: questions for them and close
 
-## 11. Interview Runbook — 30 Minutes
-
 [Back to TOC](#toc)
+
+## 11. Interview Runbook — 30 Minutes
 
 - 0-3 opening
 - 3-10 strongest capacity story
@@ -711,9 +669,9 @@ rebalance, or monitor.
 - 18-25 cloud/cost/automation discussion
 - 25-30 questions and close
 
-## 12. Fire Drill Questions
-
 [Back to TOC](#toc)
+
+## 12. Fire Drill Questions
 
 1. What do you mean by automation?
 - I mean replacing manual telemetry pulls and one-off spreadsheets with
@@ -775,7 +733,6 @@ rebalance, or monitor.
 - Document gaps, normalize what is available, add validation checks, and build
   a prioritized telemetry quality backlog.
 
-
 Q: Do you calculate Kubernetes capacity only at the cluster level?
 A: No. I look at multiple grains. Container/workload level is best for
 rightsizing, namespace/team level is best for ownership and cost, and cluster
@@ -786,9 +743,10 @@ A: Because autoscaling still depends on requests, limits, and actual usage. If
 requests are inflated, the cluster may scale unnecessarily or pack workloads
 inefficiently. If usage is close to limits, the workload may throttle or become
 unstable.
-## 13. Questions To Ask Them
 
 [Back to TOC](#toc)
+
+## 13. Questions To Ask Them
 
 - What are the main capacity signals your team trusts today?
 - Are the biggest efficiency opportunities in compute, Kubernetes, storage, or
@@ -797,9 +755,9 @@ unstable.
 - What automation exists today, and where is the manual pain?
 - How do you measure success for this role in the first 90 days?
 
-## 14. Things To Avoid
-
 [Back to TOC](#toc)
+
+## 14. Things To Avoid
 
 - Do not claim deep Kubernetes production ownership.
 - Do not claim deep GCP production ownership.
@@ -808,9 +766,9 @@ unstable.
 - Do not imply finance ownership of billing systems.
 - Do not over-focus on old APM unless tying it to telemetry/capacity.
 
-## 15. Final 60-Second Close
-
 [Back to TOC](#toc)
+
+## 15. Final 60-Second Close
 
 My strongest match is capacity planning at scale with automation. I have worked
 with large infrastructure telemetry, Python, SQL, forecasting, and cloud-style
@@ -820,7 +778,6 @@ platform ownership from transferable capacity principles. What I bring is the
 ability to automate the decision loop: collect telemetry, calculate utilization
 and headroom, identify risk or waste, and produce recommendations that
 engineering and leadership can act on.
-
 
 [Back to TOC](#toc)
 
@@ -1000,7 +957,7 @@ SELECT
 
     ROUND(
         t.cpu_utilization_pct
-        - LAG(t.cpu_utilization_pct) 
+        - LAG(t.cpu_utilization_pct)
         OVER (
             PARTITION BY s.service_name, t.host_id
             ORDER BY t.sampled_at
@@ -1144,7 +1101,7 @@ WITH hourly AS (
     SELECT
         DATE_TRUNC('hour', t.sampled_at) AS sample_hour,
         s.service_name,
-        ROUND(PERCENTILE_CONT(0.95) 
+        ROUND(PERCENTILE_CONT(0.95)
         WITHIN GROUP (ORDER BY t.cpu_utilization_pct)::NUMERIC, 2) AS p95_cpu_pct
     FROM telemetry_samples t
     JOIN services s ON s.service_id = t.service_id
@@ -1154,14 +1111,16 @@ SELECT
     sample_hour,
     service_name,
     p95_cpu_pct,
-    LAG(p95_cpu_pct) 
-    OVER (PARTITION BY service_name ORDER BY sample_hour) 
+    LAG(p95_cpu_pct)
+    OVER (PARTITION BY service_name ORDER BY sample_hour)
     AS previous_hour_p95_cpu_pct
 FROM hourly;
 ```
 
 ### Interview sentence
 LAG helps me detect change over time, such as sudden CPU growth or forecast drift from the previous window.
+
+[Back to TOC](#toc)
 
 ## Moving Average
 - Smooths noisy telemetry.
@@ -1755,6 +1714,8 @@ Use this as your polished answer:
 
 # Module 4 ML - Forecast _ HorizonScale
 
+[Back to TOC](#toc)
+
 ## The story in one paragraph
 
 **Walk-forward validation for telemetry forecasting:** Given 24 months of telemetry, I would train each candidate model on the first 18 months, then evaluate against the held-out final 6 months using error metrics such as MAE, RMSE, and MAPE per service or resource series. Different services behave differently — some are spiky, some are smooth, some are seasonal, and some are trending — so no single model wins universally. I would score each model per series and select the best-fit champion model for that series. Once the champion is selected, I would retrain it on the full 24 months to capture the most recent signal, then produce the next 6-month forecast. The output feeds directly into capacity decisions: headroom runway, rightsizing windows, quota planning, and budget planning cycles.
@@ -1770,17 +1731,23 @@ This guide is a fast interview talk track for HorizonScale forecasting work:
 - how data was processed
 - which model types were used and why
 - how outputs supported capacity and efficiency decisions
+
 [Back to TOC](#toc)
+
 ## 2. Safe Positioning
 Based on the files inspected, I would position HorizonScale as a practical telemetry-to-forecast pipeline focused on capacity planning decisions, not deep research ML.
+
 [Back to TOC](#toc)
+
 ## 3. Business Problem
 Manual capacity analysis is slow and reactive. Teams need earlier visibility into:
 - likely bottlenecks
 - sustained utilization pressure
 - underutilized resources
 - forecast variance versus actuals
+
 [Back to TOC](#toc)
+
 ## 4. Inputs and Features
 Typical telemetry inputs discussed in this prep:
 - sampled_at / timestamp
@@ -1799,6 +1766,7 @@ Common engineered features:
 - seasonal patterns
 - forecast variance
 - threshold breach indicators
+
 [Back to TOC](#toc)
 
 ## 5. Pipeline Flow
@@ -1813,6 +1781,7 @@ Common engineered features:
 9. Export stakeholder-ready outputs
 
 [Back to TOC](#toc)
+
 ## 6. Model Framing
 ### Prophet
 Good for trend and seasonality in time-series behavior.
@@ -1828,35 +1797,46 @@ Lag features + covariates, tabular ML style
 
 ### Explainable baselines
 Threshold and headroom logic are critical for trust with engineering and leadership.
+
 [Back to TOC](#toc)
+
 ## 7. Validation Approach
 Practical validation approach:
 - back-test on historical windows
 - compare forecasted pressure with later actuals
 - review false positives and false negatives
 - keep models explainable for decision support
-  
+
 [Back to TOC](#toc)
+
 ## 8. Capacity and Cost Impact
 Forecasting supports better decisions by:
 - preventing reactive over-provisioning
 - finding rightsizing candidates
 - highlighting sustained pressure earlier
 - improving forecast-vs-actual planning loops
+
 [Back to TOC](#toc)
+
 ## 9. What To Say (20 seconds)
 HorizonScale was a telemetry-driven capacity forecasting pipeline. I cleaned and aggregated utilization data, generated forecast features, used practical forecasting methods, and turned outputs into risk and planning recommendations.
+
 [Back to TOC](#toc)
+
 ## 10. What To Say (60 seconds)
 I used HorizonScale to move from raw telemetry to repeatable planning outputs. The workflow cleaned and normalized time-series data, calculated features like P95 and headroom, ran forecasting methods, and compared output against thresholds and actual behavior. The point was not model complexity by itself; it was giving teams earlier, explainable signals for capacity risk, rightsizing, and cost-aware planning.
+
 [Back to TOC](#toc)
+
 ## 11. What Not To Overclaim
 - Do not claim deep research ML ownership.
 - Do not claim perfect model accuracy.
 - Do not claim deep GCP production ownership.
 - Do not claim deep Kubernetes platform-admin ownership.
 - Do not claim enterprise-wide production scope unless Sean confirms.
+
 [Back to TOC](#toc)
+
 ## 12. Rapid Q&A
 Q: Why Prophet?
 A: Trend/seasonality handling and explainable time-series forecasting.
@@ -1869,12 +1849,13 @@ A: By surfacing underutilization and over-pressure early so teams can rightsize 
 
 Q: Batch or streaming?
 A: Usually batch-first for planning and efficiency; streaming mainly for alerting.
-[Back to TOC](#toc)
-
-# Module 5 Cheat sheet 
-
 
 [Back to TOC](#toc)
+
+# Module 5 Cheat sheet
+
+[Back to TOC](#toc)
+
 ## Automation types
 
 Question:
@@ -1886,7 +1867,9 @@ capacity-risk automation, cloud/platform collection automation, and reporting
 automation. The workflow is collect telemetry, normalize it, join ownership
 metadata, calculate P95/headroom/forecast variance/cost, classify risk or
 waste, and export action-ready reports.
+
 [Back to TOC](#toc)
+
 ## Batch vs streaming
 
 Question:
@@ -1897,7 +1880,9 @@ Usually no. Capacity planning and cost efficiency usually work from periodic
 snapshots: 5-minute telemetry, hourly rollups, daily cost files, or scheduled
 inventory exports. Streaming is useful for alerting, but batch is usually
 better for planning, forecasting, rightsizing, and stakeholder reporting.
+
 [Back to TOC](#toc)
+
 ## Lambda vs container
 
 Question:
@@ -1909,7 +1894,9 @@ container is better for heavier dependencies, larger extracts, or longer
 runtime. Airflow or Step Functions are better for multi-step workflows. If
 BMC/Helix/CloudWatch already collects the data, automation can focus on
 validation, transformation, classification, and reporting.
+
 [Back to TOC](#toc)
+
 ## df.copy()
 
 Question:
@@ -1917,7 +1904,9 @@ Why use `df.copy()` before modifying a DataFrame?
 
 Answer:
 It prevents accidental side effects on the original DataFrame and avoids chained-assignment surprises during transformation steps.
+
 [Back to TOC](#toc)
+
 ## groupby().agg() named aggregation
 
 Question:
@@ -1925,7 +1914,9 @@ What is the `.groupby().agg()` pattern?
 
 Answer:
 Use `output_col=(input_col, agg_fn)`, for example `sample_count=("sample_id", "count")`. Group columns define grain; `.agg()` defines metric summaries.
+
 [Back to TOC](#toc)
+
 ## as_index=False
 
 Question:
@@ -1933,7 +1924,9 @@ Why use `as_index=False` in groupby?
 
 Answer:
 It keeps grouping columns as normal columns in the result, which makes downstream reporting and exports cleaner.
+
 [Back to TOC](#toc)
+
 ## reset_index(drop=True)
 
 Question:
@@ -1941,7 +1934,9 @@ When do you use `reset_index(drop=True)`?
 
 Answer:
 After filtering/sorting when you want a clean sequential index and do not need the old index preserved.
+
 [Back to TOC](#toc)
+
 ## apply(axis=1)
 
 Question:
@@ -1949,7 +1944,9 @@ How is `apply(..., axis=1)` used for capacity status?
 
 Answer:
 `axis=1` applies a function row by row. Each row returns one label (for example `high_capacity_risk`) that is stored in a new status column.
+
 [Back to TOC](#toc)
+
 ## JSONB tags
 
 Question:
@@ -1957,7 +1954,9 @@ How do you use JSONB tags in SQL?
 
 Answer:
 Keep full `tags` for traceability and extract keys using `->>` (for example `tags ->> 'team'`) so metadata can be filtered, grouped, and reported.
+
 [Back to TOC](#toc)
+
 ## Pandas P95
 
 Question:
@@ -1965,7 +1964,9 @@ How do you calculate P95 in Pandas?
 
 Answer:
 Inside `groupby().agg()`, use `lambda x: x.quantile(0.95)`.
+
 [Back to TOC](#toc)
+
 ## SQL DATE_TRUNC
 
 Question:
@@ -1973,7 +1974,9 @@ Why use `DATE_TRUNC` for telemetry?
 
 Answer:
 It buckets timestamps into hourly/daily windows for rollups and trend reporting.
+
 [Back to TOC](#toc)
+
 ## SQL PERCENTILE_CONT
 
 Question:
@@ -1981,7 +1984,9 @@ What does `PERCENTILE_CONT(0.95) WITHIN GROUP (...)` do?
 
 Answer:
 It calculates the 95th percentile value inside each group and is useful for sustained-pressure capacity signals.
+
 [Back to TOC](#toc)
+
 ## Kubernetes granularity
 
 Question:
@@ -1989,7 +1994,9 @@ Do you analyze Kubernetes only at cluster level?
 
 Answer:
 No. Container/workload level for rightsizing, namespace/team for ownership and cost, and cluster/node for headroom and autoscaling pressure.
+
 [Back to TOC](#toc)
+
 ## HorizonScale models
 
 Question:
@@ -1997,7 +2004,9 @@ How do you describe model choice in HorizonScale?
 
 Answer:
 Use practical framing: Prophet for trend/seasonality, scikit-learn for feature-driven prediction/risk scoring, plus explainable threshold/headroom logic.
+
 [Back to TOC](#toc)
+
 ## HorizonScale validation
 
 Question:
@@ -2009,6 +2018,7 @@ Back-test against historical windows, compare with later actuals, review false p
 [Back to TOC](#toc)
 
 # Module 6 Odds and repeats
+
 [Back to TOC](#toc)
 
 ## Opener
@@ -2028,6 +2038,8 @@ where I used services like S3, Glue, Redshift, and EC2/ECS-based processing.
 My focus is turning infrastructure data into clear capacity recommendations,
 
 efficiency opportunities, and leadership-ready reporting.
+
+[Back to TOC](#toc)
 
 ## Tell me about a Python automation workflow you built for capacity planning.
 
@@ -2130,24 +2142,26 @@ The goal is not just a dashboard. The goal is a forecast-driven capacity action 
 [Back to TOC](#toc)
 
 ## AWS Services One Liners?
-[Back to TOC](#toc)
 ### EKS (Elastic Kubernetes Service)
 
 A managed service that makes it easy to run Kubernetes on AWS, providing the flexibility of open-source orchestration with the security and reliability of a managed infrastructure.
-[Back to TOC](#toc)
 ### EC2 (Elastic Compute Cloud)
 
 This service provides scalable virtual servers, giving you full control over the operating system and networking for your applications.
-[Back to TOC](#toc)
 ### ECS (Elastic Container Service)
 
 A highly scalable, high-performance container management service that allows you to run and scale Docker applications without managing a complex orchestration control plane.
-[Back to TOC](#toc)
 ### RDS (Relational Database Service)
 
 This service simplifies the setup, operation, and scaling of relational databases like MySQL, PostgreSQL, or SQL Server by automating administrative tasks like backups and patching.
-[Back to TOC](#toc)
 ### S3 (Simple Storage Service)
 
 An object storage service built to store and retrieve any amount of data from anywhere on the web, offering industry-leading durability, availability, and scalability.
-[Back to TOC](#toc)
+
+### Glue
+Serverless ETL. Crawls S3 to infer schema, runs Spark jobs to transform/load data. Key use: raw telemetry → clean Parquet → Redshift or Athena. Capacity concern: DPU hours (cost scales with job size and runtime).
+
+### Redshift
+Columnar data warehouse. SQL at scale on structured/semi-structured data. Runs on provisioned nodes or Serverless. Key capacity concerns: node utilization, storage per node, WLM queue pressure, and query concurrency limits.
+### One-liner mental model
+> S3 stores it → Glue moves it → Redshift queries it → EC2/ECS/EKS runs the workloads that generate it.
