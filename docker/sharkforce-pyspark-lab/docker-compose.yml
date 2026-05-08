@@ -1,0 +1,37 @@
+services:
+  sharkforce-pyspark-lab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sharkforce-pyspark-lab:0.1
+    container_name: sharkforce-pyspark-lab
+    hostname: sharkforce-pyspark-lab
+    ports:
+      - "127.0.0.1:8888:8888"
+      - "127.0.0.1:4040:4040"
+    labels:
+      com.docker.compose.project: "sharkforce-pyspark-lab"
+      description: "Local PySpark JupyterLab for Spark, data quality, dedup, and interview prep"
+      jupyter.url: "http://localhost:8888/lab"
+      spark.ui.url: "http://localhost:4040"
+    volumes:
+      - ./:/workspace/project
+      - D:/Workarea/StudyBook:/workspace/studybook
+    environment:
+      PYTHONPATH: /workspace/project/src
+      PYSPARK_PYTHON: python
+      PYSPARK_DRIVER_PYTHON: python
+      SPARK_LOCAL_IP: 127.0.0.1
+      SPARK_DRIVER_HOST: 127.0.0.1
+      PYARROW_IGNORE_TIMEZONE: "1"
+    working_dir: /workspace
+    command:
+      - jupyter
+      - lab
+      - --ip=0.0.0.0
+      - --port=8888
+      - --no-browser
+      - --allow-root
+      - --NotebookApp.token=
+      - --NotebookApp.password=
+      - --ServerApp.root_dir=/workspace/project

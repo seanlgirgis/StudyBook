@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: sb-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: studybook
+      POSTGRES_USER: sb_user
+      POSTGRES_PASSWORD: sb_pass_123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sb_user -d studybook"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg_data:

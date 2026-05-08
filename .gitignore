@@ -138,6 +138,7 @@ celerybeat.pid
 .env
 .envrc
 .venv
+.venv_wsl
 env/
 venv/
 ENV/
@@ -242,3 +243,8 @@ data/jobs/**/*.docx
 # Node runtime deps (installed locally)
 node_modules/
 npm-debug.log*
+
+# Local trash artifacts
+.Trash-0/
+**/.Trash-0/
+

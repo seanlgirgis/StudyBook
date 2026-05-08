@@ -1,0 +1,544 @@
+# Apple Cloud Capacity Telemetry Coding Workbook
+
+Purpose:
+
+This notebook combines Sean's Python/Pandas coding drills with the
+professional interview talking points needed for the Apple Cloud Capacity
+& Efficiency Engineer interview.
+
+The goal is not just to write code.
+
+The goal is to explain how code turns raw infrastructure telemetry into
+capacity decisions, cost-efficiency actions, and stakeholder-ready reports.
+
+## Master Interview Frame
+
+Use this sentence when asked how you approach cloud capacity planning:
+
+> I think about cloud capacity as a data and decision loop.
+> First, collect telemetry and ownership data. Then clean and normalize it.
+> Then calculate utilization, P95, headroom, growth, forecast variance,
+> and rightsizing candidates. Finally, turn that analysis into stakeholder
+> actions: scale, rightsize, approve capacity, change quotas, reduce waste,
+> or update runbooks.
+
+Key line:
+
+> The goal is not just a dashboard. The goal is a forecast-driven
+> capacity action loop.
+
+## Section 1 — Basic Grouping With Pandas
+
+Interview problem:
+
+You are given infrastructure usage records.
+
+Each record has:
+
+- service
+- CPU utilization
+- memory utilization
+
+Calculate average CPU and memory by service.
+
+```python
+import pandas as pd
+
+records = [
+    {"service": "checkout", "cpu": 72, "memory": 68},
+    {"service": "checkout", "cpu": 81, "memory": 74},
+    {"service": "search", "cpu": 45, "memory": 52},
+    {"service": "search", "cpu": 91, "memory": 88},
+]
+
+df = pd.DataFrame(records)
+
+result = (
+    df.groupby("service", as_index=False)
+      .agg(
+          avg_cpu=("cpu", "mean"),
+          avg_memory=("memory", "mean"),
+      )
+)
+
+result["avg_cpu"] = result["avg_cpu"].round(2)
+result["avg_memory"] = result["avg_memory"].round(2)
+
+print(result)
+```
+
+### What to say while coding
+
+> I am grouping by service because capacity decisions are usually made
+> at the service, team, namespace, cluster, or workload level.
+
+> Average CPU and memory give a first-pass view of utilization.
+> In production, I would also calculate P95, peak, headroom, growth rate,
+> forecast trend, and forecast-vs-actual variance.
+
+Professional point:
+
+Pandas is a strong fit when telemetry is tabular and I need fast
+data shaping before moving the results to SQL, dashboards, or reports.
+
+## Section 2 — Same Grouping With Pure Python
+
+This is useful if the interviewer wants basic Python logic without Pandas.
+
+The logic is:
+
+1. Create groups.
+2. Collect CPU and memory values.
+3. Aggregate the values.
+4. Print service-level utilization.
+
+```python
+records = [
+    {"service": "checkout", "cpu": 72, "memory": 68},
+    {"service": "checkout", "cpu": 81, "memory": 74},
+    {"service": "search", "cpu": 45, "memory": 52},
+    {"service": "search", "cpu": 91, "memory": 88},
+]
+
+grouped = {}
+
+for row in records:
+    service = row["service"]
+
+    metrics = grouped.setdefault(
+        service,
+        {"cpu": [], "memory": []},
+    )
+
+    metrics["cpu"].append(row["cpu"])
+    metrics["memory"].append(row["memory"])
+
+for service, metrics in grouped.items():
+    avg_cpu = sum(metrics["cpu"]) / len(metrics["cpu"])
+    avg_memory = sum(metrics["memory"]) / len(metrics["memory"])
+
+    print({
+        "service": service,
+        "avg_cpu": round(avg_cpu, 2),
+        "avg_memory": round(avg_memory, 2),
+    })
+```
+
+### What to say
+
+> For a small live coding exercise, I can use core Python dictionaries
+> to show that I understand the grouping logic.
+
+> In production, I would usually use Pandas or SQL because capacity
+> telemetry is normally tabular and much larger.
+
+## Section 3 — Capacity Risk Detection
+
+Interview problem:
+
+Identify services that may be capacity risks.
+
+A service is risky if:
+
+- average CPU is above 75
+- or average memory is above 75
+
+```python
+import pandas as pd
+
+records = [
+    {"service": "checkout", "cpu": 72, "memory": 68},
+    {"service": "checkout", "cpu": 81, "memory": 74},
+    {"service": "search", "cpu": 45, "memory": 52},
+    {"service": "search", "cpu": 91, "memory": 88},
+    {"service": "billing", "cpu": 30, "memory": 35},
+]
+
+df = pd.DataFrame(records)
+
+summary = (
+    df.groupby("service", as_index=False)
+      .agg(
+          avg_cpu=("cpu", "mean"),
+          avg_memory=("memory", "mean"),
+      )
+)
+
+summary = summary.round(2)
+
+summary["capacity_risk"] = (
+    (summary["avg_cpu"] > 75) |
+    (summary["avg_memory"] > 75)
+)
+
+risk_list = summary[summary["capacity_risk"]]
+
+print(risk_list)
+```
+
+### What to say
+
+> This is a simple rule-based capacity risk screen.
+
+> In production, I would not rely only on average utilization.
+> I would add P95, peak usage, forecast trend, headroom, business criticality,
+> and upcoming demand.
+
+> But this gives a clean starting point for a capacity-risk list.
+
+## Section 4 — P95 Utilization
+
+P95 is important in capacity planning.
+
+Average utilization can hide high-demand periods.
+
+Max utilization can overreact to one spike.
+
+P95 gives a better signal for high-end sustained demand.
+
+```python
+def percentile(values, percentile_value):
+    if not values:
+        return None
+
+    sorted_values = sorted(values)
+    index = round(
+        (percentile_value / 100) * (len(sorted_values) - 1)
+    )
+
+    return sorted_values[index]
+
+
+cpu_values = [45, 52, 60, 75, 80, 92, 95, 97, 99]
+
+p95_cpu = percentile(cpu_values, 95)
+
+print("P95 CPU:", p95_cpu)
+```
+
+### What to say
+
+> P95 is useful because it shows high-end demand without overreacting
+> to a single extreme spike.
+
+> For capacity planning, I usually care more about P95 and headroom
+> than average alone.
+
+## Section 5 — Pandas P95 By Service
+
+This is closer to real telemetry analysis.
+
+We calculate:
+
+- average CPU
+- P95 CPU
+- average memory
+- P95 memory
+
+```python
+import pandas as pd
+
+records = [
+    {"service": "checkout", "cpu": 72, "memory": 68},
+    {"service": "checkout", "cpu": 81, "memory": 74},
+    {"service": "checkout", "cpu": 92, "memory": 85},
+    {"service": "search", "cpu": 45, "memory": 52},
+    {"service": "search", "cpu": 91, "memory": 88},
+    {"service": "search", "cpu": 78, "memory": 76},
+]
+
+df = pd.DataFrame(records)
+
+result = (
+    df.groupby("service", as_index=False)
+      .agg(
+          avg_cpu=("cpu", "mean"),
+          p95_cpu=("cpu", lambda x: x.quantile(0.95)),
+          avg_memory=("memory", "mean"),
+          p95_memory=("memory", lambda x: x.quantile(0.95)),
+      )
+)
+
+result = result.round(2)
+
+print(result)
+```
+
+### What to say
+
+> Average utilization tells me normal load.
+> P95 tells me high-end sustained demand.
+> Max tells me the worst spike, but it may be noisy.
+
+> For capacity planning, P95 is often a better planning signal than
+> average alone.
+
+## Section 6 — Full Telemetry Mini-Project
+
+This section combines many realistic steps:
+
+- read CSV telemetry
+- clean column names
+- convert dates
+- convert numeric fields
+- handle missing or bad data
+- calculate headroom
+- calculate forecast variance
+- aggregate by service
+- classify capacity status
+- generate stakeholder recommendations
+
+```python
+import pandas as pd
+from io import StringIO
+
+
+csv_data = """
+date,service,environment,cpu,memory,forecast_cpu,allocated_cpu,cost
+2026-01-01,checkout,prod,72,68,70,100,120.50
+2026-01-02,checkout,prod,81,74,75,100,125.00
+2026-01-03,checkout,prod,92,85,80,100,132.25
+2026-01-01,search,prod,45,52,50,100,90.00
+2026-01-02,search,prod,91,88,65,100,118.75
+2026-01-03,search,prod,78,76,70,100,110.10
+2026-01-01,billing,prod,30,35,35,100,80.00
+2026-01-02,billing,prod,,38,40,100,82.50
+2026-01-03,billing,prod,28,bad_data,38,100,79.25
+"""
+
+
+# 1. Read telemetry CSV.
+df = pd.read_csv(StringIO(csv_data))
+
+
+# 2. Normalize column names.
+df.columns = [col.strip().lower() for col in df.columns]
+
+
+# 3. Convert date column.
+df["date"] = pd.to_datetime(df["date"], errors="coerce")
+
+
+# 4. Convert numeric columns safely.
+numeric_columns = [
+    "cpu",
+    "memory",
+    "forecast_cpu",
+    "allocated_cpu",
+    "cost",
+]
+
+for col in numeric_columns:
+    df[col] = pd.to_numeric(df[col], errors="coerce")
+
+
+# 5. Fill missing CPU and memory using service-level average.
+for col in ["cpu", "memory"]:
+    df[col] = (
+        df.groupby("service")[col]
+          .transform(lambda x: x.fillna(x.mean()))
+    )
+
+
+# 6. Drop records still missing critical fields.
+df = df.dropna(
+    subset=[
+        "date",
+        "service",
+        "cpu",
+        "memory",
+        "forecast_cpu",
+        "allocated_cpu",
+    ]
+)
+
+
+# 7. Calculate row-level capacity features.
+df["cpu_headroom"] = df["allocated_cpu"] - df["cpu"]
+df["forecast_variance"] = df["cpu"] - df["forecast_cpu"]
+
+df["forecast_variance_pct"] = (
+    df["forecast_variance"] / df["forecast_cpu"] * 100
+)
+
+
+# 8. Aggregate by service.
+summary = (
+    df.groupby("service", as_index=False)
+      .agg(
+          avg_cpu=("cpu", "mean"),
+          p95_cpu=("cpu", lambda x: x.quantile(0.95)),
+          avg_memory=("memory", "mean"),
+          p95_memory=("memory", lambda x: x.quantile(0.95)),
+          avg_headroom=("cpu_headroom", "mean"),
+          avg_forecast_variance_pct=("forecast_variance_pct", "mean"),
+          total_cost=("cost", "sum"),
+      )
+)
+
+
+# 9. Round output for reporting.
+summary = summary.round(2)
+
+
+# 10. Add capacity risk logic.
+def classify_capacity_risk(row):
+    if row["p95_cpu"] >= 90:
+        return "high_capacity_risk"
+
+    if row["avg_headroom"] <= 15:
+        return "watch_headroom"
+
+    if row["avg_cpu"] < 35:
+        return "rightsizing_candidate"
+
+    return "normal"
+
+
+summary["capacity_status"] = summary.apply(
+    classify_capacity_risk,
+    axis=1,
+)
+
+
+# 11. Add business recommendation.
+def recommendation(row):
+    if row["capacity_status"] == "high_capacity_risk":
+        return (
+            "Review scaling plan and forecast next quarter demand"
+        )
+
+    if row["capacity_status"] == "watch_headroom":
+        return (
+            "Monitor closely and validate upcoming demand"
+        )
+
+    if row["capacity_status"] == "rightsizing_candidate":
+        return (
+            "Review for underutilization and possible rightsizing"
+        )
+
+    return "No immediate action"
+
+
+summary["recommendation"] = summary.apply(
+    recommendation,
+    axis=1,
+)
+
+
+print("=== Cleaned Telemetry ===")
+print(df)
+
+print("\n=== Capacity Summary By Service ===")
+print(summary)
+```
+
+### What to say
+
+> This is a simplified version of a real telemetry workflow.
+
+> I start by reading raw capacity data from a CSV or exported telemetry
+> source. Then I clean the data: normalize column names, convert dates,
+> convert numeric fields, and handle missing or bad values.
+
+> After that, I calculate capacity features such as headroom, P95 utilization,
+> and forecast variance.
+
+> Then I aggregate by service because the business conversation is usually
+> not about one raw metric. It is about which service, namespace, team,
+> or workload needs action.
+
+> Finally, I classify the result into capacity risk, watch, normal,
+> or rightsizing candidate. That makes the output usable in a stakeholder
+> meeting.
+
+## Section 7 — How This Maps To AWS / EKS / ECS / EC2 / S3
+
+Use this explanation in the interview:
+
+> In AWS, the same pipeline could read telemetry from CloudWatch,
+> Container Insights, Cost Explorer, S3 Inventory, or exported billing data.
+
+> For EKS, I would group by cluster, namespace, workload, and team.
+> I would compare requests, limits, actual usage, quotas, and autoscaling.
+
+> For ECS/Fargate, I would compare task CPU and memory allocation
+> against actual usage to find over-allocation.
+
+> For EC2, I would review instance utilization, Auto Scaling Group behavior,
+> baseline demand, burst behavior, and rightsizing candidates.
+
+> For S3, I would track bucket growth, object count, access pattern,
+> storage class, lifecycle opportunity, and cost trend.
+
+Key line:
+
+> The resource layer changes, but the capacity method is the same:
+> collect telemetry, attach ownership, calculate features, forecast demand,
+> and drive action.
+
+## Section 8 — Forecasting Models Talking Point
+
+If asked what models you used:
+
+> I usually think about forecasting in three layers.
+
+> First, simple statistical baselines: P95, growth rate, headroom,
+> and threshold breach risk. These are explainable and useful in
+> stakeholder conversations.
+
+> Second, time-series models like Prophet when the signal has trend
+> or seasonality. That helps answer when a service, cluster, namespace,
+> or storage bucket may hit a threshold.
+
+> Third, feature-based models with scikit-learn when I need to combine
+> multiple signals: utilization trend, peak behavior, requests versus actuals,
+> scaling events, quota pressure, cost trend, and ownership metadata.
+
+> In practice, I do not pick the most complex model first. I start with
+> explainable features and back-testing, then use more advanced models
+> when they improve forecast accuracy.
+
+## Section 9 — Stakeholder Action Loop
+
+This is what makes the analysis valuable.
+
+The output should not be raw telemetry.
+
+The output should be an action list:
+
+- top capacity risks
+- top underutilized resources
+- services with low headroom
+- large forecast-vs-actual variance
+- high-cost services
+- over-requested Kubernetes namespaces
+- fast-growing S3 buckets
+- workloads needing capacity approval
+- workloads needing rightsizing review
+
+Interview line:
+
+> The value is not just calculating averages.
+> The value is turning messy telemetry into a clean action list:
+> capacity risk, forecast miss, rightsizing candidate, or no action.
+
+## Section 10 — Final Memorized Answer
+
+Use this as your polished answer:
+
+> My telemetry work starts with messy infrastructure data: service,
+> CPU, memory, P95, forecast, allocation, ownership, and cost.
+
+> I clean and normalize that data with Python, Pandas, SQL, or PySpark.
+> Then I calculate planning features like P95 utilization, headroom,
+> growth rate, forecast variance, and rightsizing indicators.
+
+> From there, I aggregate by service, namespace, cluster, team, or workload,
+> because that is how capacity decisions are made.
+
+> The final output is not just a dashboard. It is a stakeholder action list:
+> where we have capacity risk, where forecast missed actual demand,
+> where we are over-allocated, and where we should rightsize, scale,
+> approve capacity, or investigate.
