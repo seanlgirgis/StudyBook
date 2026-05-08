@@ -1,6 +1,27 @@
 # Apple Cloud Capacity Interview Curriculum
+## TOC
+- [1. Interview Target](#1-interview-target)
+- [2. Core Identity Statement](#2-core-identity-statement)
+- [3. Automation — What Carla May Mean](#3-automation-what-carla-may-mean)
+- [Automation in Cloud Capacity Work](#automation-in-cloud-capacity-work)
+- [Cloud Telemetry Collection — Batch First](#cloud-telemetry-collection-batch-first)
+- [4. HorizonScale — Code Walkthrough](#4-horizonscale-code-walkthrough)
+- [5. SQL Coverage](#5-sql-coverage)
+- [6. Python Coverage](#6-python-coverage)
+- [7. Kubernetes / EKS Capacity Concepts](#7-kubernetes-eks-capacity-concepts)
+- [8. S3 Capacity / Cost Concepts](#8-s3-capacity-cost-concepts)
+- [9. Cost Savings / Efficiency Playbook](#9-cost-savings-efficiency-playbook)
+- [10. Interview Runbook — 45 Minutes](#10-interview-runbook-45-minutes)
+- [11. Interview Runbook — 30 Minutes](#11-interview-runbook-30-minutes)
+- [12. Fire Drill Questions](#12-fire-drill-questions)
+- [13. Questions To Ask Them](#13-questions-to-ask-them)
+- [14. Things To Avoid](#14-things-to-avoid)
+- [15. Final 60-Second Close](#15-final-60-second-close)
+
 
 ## 1. Interview Target
+
+[Back to TOC](#toc)
 
 This is not just a SQL role and not just a Python role. It is a capacity,
 efficiency, telemetry, automation, and cloud-cost role.
@@ -11,6 +32,8 @@ cost decisions.
 
 ## 2. Core Identity Statement
 
+[Back to TOC](#toc)
+
 I am strongest where capacity engineering meets data engineering. I use Python,
 SQL, telemetry, and forecasting to turn infrastructure metrics into capacity
 risk, rightsizing opportunities, and stakeholder-ready reports. My deepest
@@ -18,6 +41,8 @@ hands-on cloud is AWS, and I understand how the same capacity principles apply
 to Kubernetes, EKS, S3, and multi-cloud environments.
 
 ## 3. Automation — What Carla May Mean
+
+[Back to TOC](#toc)
 
 1. Data automation
 - ingest telemetry
@@ -53,6 +78,8 @@ reports. That same pattern can apply to EC2, ECS, EKS, S3, or Kubernetes
 capacity data.
 
 ## Automation in Cloud Capacity Work
+
+[Back to TOC](#toc)
 
 Automation in this role does not mean only one thing. It can mean data
 automation, capacity-risk automation, cloud/platform collection automation, and
@@ -176,7 +203,8 @@ reporting.
 - src\db.py handles database connection and query execution
 - src	elemetry_queries.py centralizes reusable SELECT queries
 - src\capacity_analysis.py calculates flags, summaries, and capacity status
-- srceporting.py exports CSV/Markdown outputs
+- src
+eporting.py exports CSV/Markdown outputs
 - scripts_export_capacity_summary.py runs the end-to-end workflow
 - tests validate connection, SELECT-only safety, and Pandas logic
 
@@ -232,6 +260,8 @@ account, region, tags, resource type, requests/limits, storage class, and cost.
 The pipeline remains collect, normalize, calculate, classify, and report.
 
 ## Cloud Telemetry Collection — Batch First
+
+[Back to TOC](#toc)
 
 For capacity and cost analytics, batch is usually the default. We normally do
 not need streaming for capacity planning unless there is an operational
@@ -368,6 +398,8 @@ processing.
 
 ## 4. HorizonScale — Code Walkthrough
 
+[Back to TOC](#toc)
+
 - Inputs:
   CPU, memory, P95 latency/utilization, requests, forecast, allocated capacity,
   actual usage, cost, ownership/service metadata.
@@ -399,6 +431,8 @@ dashboard.
 
 ## 5. SQL Coverage
 
+[Back to TOC](#toc)
+
 - 01 basic selects:
   table inspection, filtering, simple joins
 - 02 joins/group by:
@@ -417,6 +451,8 @@ using JOIN, GROUP BY, DATE_TRUNC, P95 calculations, CTEs, and window functions.
 
 ## 6. Python Coverage
 
+[Back to TOC](#toc)
+
 - db connection helper
 - SELECT-only query layer
 - Pandas capacity analysis
@@ -429,6 +465,8 @@ loads results into Pandas, calculates flags and service summaries, classifies
 capacity status, exports reports, and validates the logic with pytest.
 
 ## 7. Kubernetes / EKS Capacity Concepts
+
+[Back to TOC](#toc)
 
 Conceptually prepared, without claiming deep production platform ownership:
 - pods
@@ -496,6 +534,8 @@ recommendations.
 
 ## 8. S3 Capacity / Cost Concepts
 
+[Back to TOC](#toc)
+
 - storage growth
 - bucket/object count
 - storage class
@@ -513,6 +553,8 @@ objects, missing lifecycle policies, and ownership/tagging gaps so teams can
 reduce waste without risking availability.
 
 ## 9. Cost Savings / Efficiency Playbook
+
+[Back to TOC](#toc)
 
 1. Find waste
 2. Validate with telemetry
@@ -538,6 +580,8 @@ rebalance, or monitor.
 
 ## 10. Interview Runbook — 45 Minutes
 
+[Back to TOC](#toc)
+
 - 0-5 minutes: opening and background
 - 5-15 minutes: capacity/telemetry story
 - 15-25 minutes: automation and HorizonScale code
@@ -547,6 +591,8 @@ rebalance, or monitor.
 
 ## 11. Interview Runbook — 30 Minutes
 
+[Back to TOC](#toc)
+
 - 0-3 opening
 - 3-10 strongest capacity story
 - 10-18 technical drill
@@ -554,6 +600,8 @@ rebalance, or monitor.
 - 25-30 questions and close
 
 ## 12. Fire Drill Questions
+
+[Back to TOC](#toc)
 
 1. What do you mean by automation?
 - I mean replacing manual telemetry pulls and one-off spreadsheets with
@@ -628,6 +676,8 @@ inefficiently. If usage is close to limits, the workload may throttle or become
 unstable.
 ## 13. Questions To Ask Them
 
+[Back to TOC](#toc)
+
 - What are the main capacity signals your team trusts today?
 - Are the biggest efficiency opportunities in compute, Kubernetes, storage, or
   data transfer?
@@ -637,6 +687,8 @@ unstable.
 
 ## 14. Things To Avoid
 
+[Back to TOC](#toc)
+
 - Do not claim deep Kubernetes production ownership.
 - Do not claim deep GCP production ownership.
 - Do not say it was only physical infrastructure.
@@ -645,6 +697,8 @@ unstable.
 - Do not over-focus on old APM unless tying it to telemetry/capacity.
 
 ## 15. Final 60-Second Close
+
+[Back to TOC](#toc)
 
 My strongest match is capacity planning at scale with automation. I have worked
 with large infrastructure telemetry, Python, SQL, forecasting, and cloud-style
