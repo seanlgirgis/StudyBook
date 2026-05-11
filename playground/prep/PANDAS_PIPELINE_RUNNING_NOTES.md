@@ -23,6 +23,7 @@ Each section should answer:
 
 - [8. Missing Value Handling](#pattern-08-missing-value-handling)
 - [9. Date Bucketing and Time Grouping](#pattern-09-date-bucketing-and-time-grouping)
+- [10. Source-to-Target Reconciliation](#pattern-10-source-to-target-reconciliation)
 ---
 
 <a id="pattern-01-basic-pandas-pipeline-shape"></a>
@@ -998,6 +999,168 @@ Convert to datetime first, create time buckets second, then group by the bucket.
 
 Strong practical sentence:
 In Pandas, I bucket timestamps into hour, day, or month before aggregation so telemetry, cost, or order data can be summarized at the right reporting grain.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-10-source-to-target-reconciliation"></a>
+## 10. Source-to-Target Reconciliation
+
+What it is:
+A Pandas pattern for checking whether target data matches source data
+after a pipeline run.
+
+When to use it:
+Use it after ETL/ELT processing, file loads, transformations, exports,
+or source-to-target handoffs.
+
+Mental model:
+Do not only ask whether row counts match.
+Ask:
+- Did all source keys reach the target?
+- Are there extra target keys?
+- Do important values match?
+- Do row counts and totals match?
+
+Small example setup:
+
+```python
+import pandas as pd
+
+source_df = pd.DataFrame({
+    "order_id": [1, 2, 3],
+    "customer_id": ["C001", "C002", "C003"],
+    "amount": [100, 250, 75],
+})
+
+target_df = pd.DataFrame({
+    "order_id": [1, 2, 4],
+    "customer_id": ["C001", "C002", "C004"],
+    "amount": [100, 250, 40],
+})
+```
+
+Count and control total check:
+
+```python
+summary = pd.DataFrame([
+    {
+        "dataset": "source",
+        "row_count": len(source_df),
+        "total_amount": source_df["amount"].sum(),
+    },
+    {
+        "dataset": "target",
+        "row_count": len(target_df),
+        "total_amount": target_df["amount"].sum(),
+    },
+])
+
+print(summary)
+```
+
+Find missing records in target:
+
+```python
+comparison = source_df.merge(
+    target_df,
+    on="order_id",
+    how="left",
+    suffixes=("_source", "_target"),
+    indicator=True,
+)
+
+missing_in_target = comparison[
+    comparison["_merge"] == "left_only"
+]
+
+print(missing_in_target)
+```
+
+Find extra records in target:
+
+```python
+comparison = target_df.merge(
+    source_df,
+    on="order_id",
+    how="left",
+    suffixes=("_target", "_source"),
+    indicator=True,
+)
+
+extra_in_target = comparison[
+    comparison["_merge"] == "left_only"
+]
+
+print(extra_in_target)
+```
+
+Find value mismatches:
+
+```python
+matched = source_df.merge(
+    target_df,
+    on="order_id",
+    how="inner",
+    suffixes=("_source", "_target"),
+)
+
+amount_mismatches = matched[
+    matched["amount_source"] != matched["amount_target"]
+]
+
+print(amount_mismatches)
+```
+
+One reconciliation summary:
+
+```python
+comparison = source_df.merge(
+    target_df,
+    on="order_id",
+    how="outer",
+    suffixes=("_source", "_target"),
+    indicator=True,
+)
+
+recon_summary = {
+    "source_rows": len(source_df),
+    "target_rows": len(target_df),
+    "compared_keys": len(comparison),
+    "matched_keys": (comparison["_merge"] == "both").sum(),
+    "missing_in_target": (comparison["_merge"] == "left_only").sum(),
+    "extra_in_target": (comparison["_merge"] == "right_only").sum(),
+    "amount_mismatch_count": (
+        (comparison["_merge"] == "both")
+        & (comparison["amount_source"] != comparison["amount_target"])
+    ).sum(),
+}
+
+print(recon_summary)
+```
+
+Meaning:
+
+- indicator=True creates the _merge column.
+- left_only means source-only when source is on the left.
+- right_only means target-only in an outer comparison.
+- both means the key exists in both DataFrames.
+- suffixes keep source and target fields readable.
+
+Common mistakes:
+
+- Only comparing row counts.
+- Not checking missing and extra keys.
+- Not checking value mismatches.
+- Reconciling before deduplicating keys.
+- Forgetting suffixes and confusing source/target columns.
+
+Memorize:
+For reconciliation, compare counts, totals, missing keys, extra keys, and field-level mismatches.
+
+Strong practical sentence:
+In Pandas reconciliation, I use merge with indicator=True to identify matched records, source-only records, and target-only records, then I compare important fields and control totals before trusting the output.
 
 [Back to TOC](#toc)
 
