@@ -19,6 +19,10 @@ Each section should answer:
 - [4. Data Quality Summary](#pattern-04-data-quality-summary)
 - [5. Deduplication With Survivor Selection](#pattern-05-deduplication-with-survivor-selection)
 - [6. Group and Aggregate With groupby](#pattern-06-group-and-aggregate-with-groupby)
+- [7. Pandas merge and joins](#pattern-07-pandas-merge-and-joins)
+
+- [8. Missing Value Handling](#pattern-08-missing-value-handling)
+- [9. Date Bucketing and Time Grouping](#pattern-09-date-bucketing-and-time-grouping)
 ---
 
 <a id="pattern-01-basic-pandas-pipeline-shape"></a>
@@ -642,6 +646,358 @@ Clean first, convert types, then group and aggregate with named outputs.
 
 Strong practical sentence:
 In Pandas, I use groupby with named aggregation to turn cleaned row-level data into service, batch, customer, or daily summaries that are easy to validate and export.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-07-pandas-merge-and-joins"></a>
+## 7. Pandas merge and joins
+
+What it is:
+A Pandas pattern to combine two DataFrames using business keys.
+
+When to use it:
+Use it when you need lookup enrichment, source-to-target matching,
+or SQL-like inner/left/outer join behavior in local pipelines.
+
+Mental model:
+Think SQL joins.
+Define the key first, then choose how to handle unmatched rows.
+
+Core template:
+
+```python
+joined = left_df.merge(
+    right_df,
+    how="left",
+    on=["customer_id"],
+    indicator=True
+)
+```
+
+Meaning:
+
+- on defines the join key.
+- how picks join type: inner, left, right, outer.
+- indicator=True adds _merge for match auditing.
+
+Join types quick map:
+
+- inner: keep matched rows only.
+- left: keep all left rows, matched right rows.
+- outer: keep all rows from both sides.
+
+Row-count checks:
+
+```python
+before_left = len(left_df)
+before_right = len(right_df)
+after_join = len(joined)
+
+print({
+    "left_rows": before_left,
+    "right_rows": before_right,
+    "joined_rows": after_join,
+    "merge_breakdown": joined["_merge"].value_counts().to_dict(),
+})
+```
+
+Validate key uniqueness before join:
+
+```python
+left_dupes = left_df.duplicated(subset=["customer_id"]).sum()
+right_dupes = right_df.duplicated(subset=["customer_id"]).sum()
+
+print({"left_key_dupes": left_dupes, "right_key_dupes": right_dupes})
+```
+
+Small example:
+
+```python
+import pandas as pd
+
+orders = pd.DataFrame({
+    "order_id": [1, 2, 3],
+    "customer_id": [101, 102, 999],
+    "amount": [120.0, 75.0, 40.0],
+})
+
+customers = pd.DataFrame({
+    "customer_id": [101, 102],
+    "segment": ["enterprise", "smb"],
+})
+
+enriched = orders.merge(
+    customers,
+    how="left",
+    on="customer_id",
+    indicator=True
+)
+
+print(enriched)
+print(enriched["_merge"].value_counts())
+```
+
+Common mistakes:
+
+- Joining on dirty text keys before normalization.
+- Not checking duplicate keys before merge.
+- Picking left or inner without defining unmatched-row behavior.
+- Ignoring row-count changes after join.
+- Not reviewing _merge results when debugging.
+
+Memorize:
+Define the business key, choose join type intentionally, then validate counts and unmatched rows.
+
+Strong practical sentence:
+In Pandas, I use merge the same way I think about SQL joins: define the business key, choose inner/left/outer based on whether unmatched records should be preserved, and validate row counts before and after the join.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-08-missing-value-handling"></a>
+## 8. Missing Value Handling
+
+What it is:
+A Pandas pattern for detecting, filling, dropping, or flagging missing values.
+
+When to use it:
+Use it after reading and type conversion, before aggregation, joins, deduplication, or export.
+
+Mental model:
+Missing values are not all the same.
+Some required missing values should fail or quarantine the row.
+Some optional missing values can be safely filled.
+Some missing values should be flagged for review.
+
+Core missing summary:
+
+```python
+missing_summary = df.isna().sum()
+
+print(missing_summary)
+```
+
+Required-field missing check:
+
+```python
+required_missing = df[
+    ["sampled_at", "service_name", "cpu_percent"]
+].isna().sum()
+
+print(required_missing)
+```
+
+Drop rows missing required fields:
+
+```python
+clean_df = df.dropna(
+    subset=["sampled_at", "service_name", "cpu_percent"]
+)
+```
+
+Meaning:
+Only drop rows where important required fields are missing.
+
+Fill optional numeric values:
+
+```python
+df["discount_amount"] = df["discount_amount"].fillna(0)
+```
+
+Warning:
+Only fill NULL with 0 when the business meaning is correct.
+
+Fill optional text values:
+
+```python
+df["owner_team"] = df["owner_team"].fillna("UNKNOWN")
+```
+
+Flag missing values:
+
+```python
+df["missing_cpu_flag"] = df["cpu_percent"].isna()
+```
+
+Readable quality label:
+
+```python
+df["cpu_quality_status"] = df["cpu_percent"].isna().map(
+    {True: "MISSING", False: "OK"}
+)
+```
+
+Keep bad rows for review:
+
+```python
+bad_rows = df[
+    df["sampled_at"].isna()
+    | df["service_name"].isna()
+    | df["cpu_percent"].isna()
+]
+
+clean_df = df.drop(bad_rows.index)
+
+print("bad_rows:", len(bad_rows))
+print("clean_rows:", len(clean_df))
+```
+
+Common mistakes:
+
+- Calling dropna() on the whole DataFrame and removing too many rows.
+- Filling missing values with 0 when NULL does not mean zero.
+- Dropping rows without counting how many were dropped.
+- Treating required fields and optional fields the same way.
+- Filling values before understanding why they are missing.
+
+Memorize:
+Check missing values first, then decide: drop required-missing rows, fill safe optional values, or flag rows for review.
+
+Strong practical sentence:
+In Pandas pipelines, I handle missing values based on business meaning: required fields may fail or quarantine the row, optional fields may be filled, and important missing values are counted so data loss is visible.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-09-date-bucketing-and-time-grouping"></a>
+## 9. Date Bucketing and Time Grouping
+
+What it is:
+A Pandas pattern for converting raw timestamps into useful reporting buckets
+such as hour, day, week, or month.
+
+When to use it:
+Use it when summarizing telemetry, orders, cost, events, capacity, or logs over time.
+
+Mental model:
+Raw timestamps are too detailed for most summaries.
+Convert to datetime, create a time bucket, then group by the bucket.
+
+Core template:
+
+```python
+df["sampled_at"] = pd.to_datetime(
+    df["sampled_at"],
+    errors="coerce"
+)
+
+df["sample_date"] = df["sampled_at"].dt.date
+df["sample_hour"] = df["sampled_at"].dt.floor("h")
+df["sample_month"] = df["sampled_at"].dt.to_period("M")
+```
+
+Meaning:
+
+- pd.to_datetime converts text to datetime.
+- dt.date creates a daily bucket.
+- dt.floor("h") rounds down to the hour.
+- dt.to_period("M") creates a month bucket.
+
+Group by hour:
+
+```python
+hourly_summary = (
+    df
+      .groupby(["sample_hour", "service_name"], as_index=False)
+      .agg(
+          sample_count=("cpu_percent", "count"),
+          avg_cpu=("cpu_percent", "mean"),
+          max_cpu=("cpu_percent", "max"),
+      )
+)
+```
+
+Group by day:
+
+```python
+daily_summary = (
+    df
+      .groupby(["sample_date", "service_name"], as_index=False)
+      .agg(
+          sample_count=("cpu_percent", "count"),
+          avg_cpu=("cpu_percent", "mean"),
+          max_cpu=("cpu_percent", "max"),
+          avg_memory=("memory_percent", "mean"),
+      )
+)
+```
+
+Alternative with pd.Grouper:
+
+```python
+hourly_summary = (
+    df
+      .groupby(
+          [
+              pd.Grouper(key="sampled_at", freq="h"),
+              "service_name",
+          ],
+          as_index=False,
+      )
+      .agg(
+          sample_count=("cpu_percent", "count"),
+          avg_cpu=("cpu_percent", "mean"),
+          max_cpu=("cpu_percent", "max"),
+      )
+)
+```
+
+Common frequencies:
+
+- "h" = hour
+- "D" = day
+- "W" = week
+- "M" = month end
+- "MS" = month start
+
+Small example:
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "sampled_at": [
+        "2026-05-01 10:03:22",
+        "2026-05-01 10:15:00",
+        "2026-05-01 11:05:45",
+    ],
+    "service_name": ["checkout", "checkout", "checkout"],
+    "cpu_percent": [72, 91, 80],
+})
+
+df["sampled_at"] = pd.to_datetime(df["sampled_at"], errors="coerce")
+df["sample_hour"] = df["sampled_at"].dt.floor("h")
+
+hourly_summary = (
+    df
+      .groupby(["sample_hour", "service_name"], as_index=False)
+      .agg(
+          sample_count=("cpu_percent", "count"),
+          avg_cpu=("cpu_percent", "mean"),
+          max_cpu=("cpu_percent", "max"),
+      )
+)
+
+print(hourly_summary)
+```
+
+Common mistakes:
+
+- Grouping by raw timestamps instead of buckets.
+- Creating date buckets before converting to datetime.
+- Forgetting that bad dates become NaT with errors="coerce".
+- Not checking missing timestamps before grouping.
+- Mixing time zones without noticing.
+
+Memorize:
+Convert to datetime first, create time buckets second, then group by the bucket.
+
+Strong practical sentence:
+In Pandas, I bucket timestamps into hour, day, or month before aggregation so telemetry, cost, or order data can be summarized at the right reporting grain.
 
 [Back to TOC](#toc)
 

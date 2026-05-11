@@ -960,181 +960,128 @@ I use CASE expressions to make pipeline outputs more operationally useful, such 
 ## 11. NULL Handling
 
 What it is:
-NULL handling means treating missing, unknown, or not-provided values explicitly in SQL.
+NULL means unknown or missing.
+It is not zero and not an empty string.
 
 When to use it:
-Use it in data quality checks, reconciliation, joins, calculations, reporting, deduplication, and CASE logic.
+Use this in filtering, reconciliation, comparisons, and fallback-value logic.
 
 Mental model:
-NULL is not zero.
-NULL is not an empty string.
-NULL means unknown or missing.
+NULL is special in SQL.
+Normal comparison operators do not behave the same way with NULL.
+
+Why this fails:
+
+```sql
+column = NULL
+```
+
+Reason:
+NULL is unknown, so `=` and `<>` are not the right checks.
+
+Correct checks:
+
+```sql
+column IS NULL
+column IS NOT NULL
+```
+
+Filtering examples:
+
+```sql
+SELECT *
+FROM customers
+WHERE email IS NULL;
+```
+
+```sql
+SELECT *
+FROM customers
+WHERE email IS NOT NULL;
+```
+
+NULL with comparisons:
+
+```sql
+SELECT *
+FROM payments
+WHERE amount <> 100;
+```
+
+Meaning:
+Rows where `amount` is NULL are not returned by `amount <> 100`.
+
+NULL-safe comparison (PostgreSQL):
+
+```sql
+source_amount IS DISTINCT FROM target_amount
+```
+
+Meaning:
+- `NULL` vs non-`NULL` is different.
+- `NULL` vs `NULL` is not different.
 
 COALESCE:
-COALESCE returns the first non-null value.
+
+```sql
+COALESCE(value1, value2, fallback_value)
+```
+
+Meaning:
+Return the first non-NULL value.
+
+Example:
 
 ```sql
 SELECT
     customer_id,
-    COALESCE(email, phone, 'NO_CONTACT') AS best_contact
+    COALESCE(phone_number, email, 'NO CONTACT') AS best_contact
 FROM customers;
 ```
 
-Meaning:
-Use email if it exists.
-If email is NULL, use phone.
-If phone is also NULL, use NO_CONTACT.
-
-Default numeric value:
+Reconciliation pattern with FULL OUTER JOIN:
 
 ```sql
+WITH comparison AS (
+    SELECT
+        COALESCE(src.business_key, tgt.business_key) AS business_key,
+        src.business_key AS source_key,
+        tgt.business_key AS target_key,
+        src.amount AS source_amount,
+        tgt.amount AS target_amount
+    FROM source_table AS src
+    FULL OUTER JOIN target_table AS tgt
+        ON src.business_key = tgt.business_key
+)
 SELECT
-    order_id,
-    COALESCE(discount_amount, 0) AS discount_amount
-FROM orders;
-```
-
-Warning:
-Only replace NULL with 0 when the business meaning is correct.
-
-NULLIF:
-NULLIF(a, b) returns NULL if a equals b. Otherwise it returns a.
-
-Most common use:
-Avoid divide-by-zero.
-
-```sql
-SELECT
-    service_name,
-    failed_count,
-    total_count,
-    failed_count * 1.0 / NULLIF(total_count, 0) AS failure_rate
-FROM service_quality;
-```
-
-Meaning:
-If total_count is 0, turn it into NULL so division does not crash.
-
-NULL-safe comparison problem:
-This may miss mismatches when one side is NULL.
-
-```sql
-WHERE source_amount <> target_amount
-```
-
-Reason:
-SQL does not treat NULL comparisons like normal equality comparisons.
-
-NULL-safe comparison with COALESCE:
-
-```sql
-WHERE COALESCE(source_amount, -1) <> COALESCE(target_amount, -1)
-```
-
-String version:
-
-```sql
-WHERE COALESCE(source_status, '__NULL__') <> COALESCE(target_status, '__NULL__')
-```
-
-Warning:
-The placeholder value must not be a valid business value.
-
-Better NULL-safe comparison when supported:
-
-```sql
-WHERE source_amount IS DISTINCT FROM target_amount
-```
-
-Meaning:
-NULL vs 100 is different.
-NULL vs NULL is the same.
-
-NULL handling in CASE:
-
-```sql
-SELECT
-    server_id,
-    cpu_percent,
+    business_key,
+    source_amount,
+    target_amount,
     CASE
-        WHEN cpu_percent IS NULL THEN 'MISSING'
-        WHEN cpu_percent >= 95 THEN 'CRITICAL'
-        WHEN cpu_percent >= 85 THEN 'HIGH'
-        WHEN cpu_percent >= 70 THEN 'WATCH'
-        ELSE 'NORMAL'
-    END AS cpu_status
-FROM telemetry_samples;
+        WHEN source_key IS NULL THEN 'MISSING_IN_SOURCE'
+        WHEN target_key IS NULL THEN 'MISSING_IN_TARGET'
+        WHEN source_amount IS DISTINCT FROM target_amount THEN 'AMOUNT_MISMATCH'
+        ELSE 'MATCH'
+    END AS comparison_status
+FROM comparison;
 ```
 
-Rule:
-Handle NULL first when classifying values.
+Tiny memorize block:
 
-NULL handling in aggregates:
-
-```sql
-SELECT
-    COUNT(*) AS total_rows,
-    COUNT(cpu_percent) AS rows_with_cpu,
-    SUM(CASE WHEN cpu_percent IS NULL THEN 1 ELSE 0 END) AS missing_cpu_rows
-FROM telemetry_samples;
-```
-
-Meaning:
-COUNT(*) counts all rows.
-COUNT(cpu_percent) counts only rows where cpu_percent is not NULL.
-
-Data quality example:
-
-```sql
-SELECT
-    batch_id,
-    COUNT(*) AS total_rows,
-    SUM(CASE WHEN customer_id IS NULL THEN 1 ELSE 0 END) AS missing_customer_id,
-    SUM(CASE WHEN order_total IS NULL THEN 1 ELSE 0 END) AS missing_order_total,
-    SUM(CASE WHEN order_total < 0 THEN 1 ELSE 0 END) AS negative_order_total
-FROM orders_raw
-GROUP BY batch_id;
-```
-
-Templates to memorize:
-
-```sql
-COALESCE(column_name, default_value)
-```
-
-```sql
-numerator * 1.0 / NULLIF(denominator, 0)
-```
-
-```sql
-SUM(CASE WHEN column_name IS NULL THEN 1 ELSE 0 END) AS missing_count
-```
-
-```sql
-COALESCE(source_value, '__NULL__') <> COALESCE(target_value, '__NULL__')
-```
-
-```sql
-source_value IS DISTINCT FROM target_value
-```
-
-Common mistakes:
-- Treating NULL like zero without business approval.
-- Forgetting that NULL comparisons are not normal equality comparisons.
-- Using COUNT(column) when COUNT(*) was intended.
-- Forgetting NULL handling in CASE.
-- Reconciliation queries missing NULL mismatches.
+- Use `IS NULL`, not `= NULL`.
+- Use `IS NOT NULL`, not `<> NULL`.
+- `COALESCE` gives the first non-NULL value.
+- Be careful: NULL comparisons do not behave like normal values.
 
 Memorize:
-COALESCE gives the first non-null value, NULLIF helps avoid unsafe division, and NULL-safe comparisons prevent missing mismatches.
+Handle NULLs explicitly in filters, joins, and comparisons so missing values do not hide data-quality issues.
 
 Strong practical sentence:
-I treat NULLs explicitly in pipeline logic because missing data can affect counts, joins, calculations, classifications, and reconciliation results.
+In SQL reconciliation and reporting, I use IS NULL checks, COALESCE fallback logic, and NULL-safe comparisons so missing values are handled deliberately instead of accidentally ignored.
 
 [Back to TOC](#toc)
 
 ---
-
 <a id="pattern-12-where-vs-having"></a>
 ## 12. WHERE vs HAVING
 
@@ -1247,3 +1194,4 @@ Strong practical sentence:
 I use WHERE to reduce raw input rows before aggregation, and HAVING to filter grouped results based on counts, averages, sums, or other aggregate conditions.
 
 [Back to TOC](#toc)
+
