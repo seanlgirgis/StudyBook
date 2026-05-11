@@ -34,4 +34,4 @@ services:
       - --allow-root
       - --NotebookApp.token=
       - --NotebookApp.password=
-      - --ServerApp.root_dir=/workspace/project
+      - --ServerApp.root_dir=/workspace/studybook
