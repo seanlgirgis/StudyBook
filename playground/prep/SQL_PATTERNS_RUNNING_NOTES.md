@@ -19,6 +19,7 @@ Each section should answer:
 - [4. Window Functions](#pattern-04-window-functions)
 - [5. Conditional Aggregation](#pattern-05-conditional-aggregation)
 - [6. Source-to-Target Reconciliation](#pattern-06-source-to-target-reconciliation)
+- [7. Deduplication With ROW_NUMBER()](#pattern-07-deduplication-row-number)
 
 ---
 
@@ -401,5 +402,127 @@ For reconciliation, I compare source and target by keys, counts, control totals,
 
 Strong practical sentence:
 Row count reconciliation is only the first layer. For production confidence, I also reconcile business keys, control totals, and important fields, then investigate missing, extra, or mismatched records.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-07-deduplication-row-number"></a>
+## 7. Deduplication With ROW_NUMBER()
+
+What it is:
+A deduplication pattern keeps one best row per duplicate business key.
+
+When to use it:
+Use it when many records exist for the same business entity and you need to choose one survivor row.
+
+Examples:
+- duplicate customers by customer_id or email
+- duplicate orders by order_id
+- duplicate telemetry samples by server_id + sampled_at
+- duplicate events by event_id
+- duplicate files by file_name + batch_id
+
+Mental model:
+Latest-record logic asks: which row is newest?
+Deduplication asks: which row should survive?
+
+Survivor rule:
+Before deduping, define the business rule for the winning row.
+
+Example survivor rule:
+Keep the latest updated_at.
+If there is a tie, keep the highest record_id.
+
+SQL template:
+
+```sql
+WITH ranked AS (
+    SELECT
+        t.*,
+        ROW_NUMBER() OVER (
+            PARTITION BY t.business_key
+            ORDER BY t.updated_at DESC, t.id DESC
+        ) AS rn
+    FROM source_table AS t
+)
+SELECT *
+FROM ranked
+WHERE rn = 1;
+```
+
+Meaning:
+- PARTITION BY business_key groups the duplicate records.
+- ORDER BY updated_at DESC puts the newest row first.
+- ORDER BY id DESC is a deterministic tie-breaker.
+- rn = 1 keeps the survivor row.
+
+Find duplicate groups first:
+
+```sql
+SELECT
+    business_key,
+    COUNT(*) AS row_count
+FROM source_table
+GROUP BY business_key
+HAVING COUNT(*) > 1;
+```
+
+Rejected duplicates / audit output:
+
+```sql
+WITH ranked AS (
+    SELECT
+        t.*,
+        ROW_NUMBER() OVER (
+            PARTITION BY t.business_key
+            ORDER BY t.updated_at DESC, t.id DESC
+        ) AS rn
+    FROM source_table AS t
+)
+SELECT *
+FROM ranked
+WHERE rn > 1;
+```
+
+Data engineering example: deduplicate telemetry samples
+
+```sql
+WITH ranked_samples AS (
+    SELECT
+        ts.*,
+        ROW_NUMBER() OVER (
+            PARTITION BY ts.server_id, ts.sampled_at
+            ORDER BY ts.ingested_at DESC, ts.sample_id DESC
+        ) AS rn
+    FROM telemetry_samples AS ts
+)
+SELECT
+    sample_id,
+    server_id,
+    sampled_at,
+    cpu_percent,
+    memory_percent,
+    ingested_at
+FROM ranked_samples
+WHERE rn = 1;
+```
+
+Why not DISTINCT:
+DISTINCT removes rows only when all selected columns are identical.
+ROW_NUMBER lets you define which duplicate row should survive.
+
+Common mistakes:
+- Using DISTINCT when duplicates are not exactly identical.
+- Forgetting a deterministic tie-breaker.
+- Partitioning by the wrong key.
+- Deduping before understanding the business rule.
+- Deleting duplicate rows without preserving an audit trail.
+
+Memorize:
+For deduplication, I define the duplicate business key, rank records by the survivor rule, add a tie-breaker, and keep rn = 1.
+
+Strong practical sentence:
+I do not rely only on DISTINCT for deduplication. I first define the business key and survivor rule, then use ROW_NUMBER to keep the best record and optionally preserve rejected duplicates for audit.
 
 [Back to TOC](#toc)
