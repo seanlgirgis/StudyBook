@@ -20,6 +20,11 @@ Each section should answer:
 - [5. Conditional Aggregation](#pattern-05-conditional-aggregation)
 - [6. Source-to-Target Reconciliation](#pattern-06-source-to-target-reconciliation)
 - [7. Deduplication With ROW_NUMBER()](#pattern-07-deduplication-row-number)
+- [8. Running Totals and Moving Averages](#pattern-08-running-totals-moving-averages)
+- [9. LAG() and LEAD()](#pattern-09-lag-lead)
+- [10. CASE Classification / Bucketing](#pattern-10-case-classification-bucketing)
+- [11. NULL Handling](#pattern-11-null-handling)
+- [12. WHERE vs HAVING](#pattern-12-where-vs-having)
 
 ---
 
@@ -524,5 +529,721 @@ For deduplication, I define the duplicate business key, rank records by the surv
 
 Strong practical sentence:
 I do not rely only on DISTINCT for deduplication. I first define the business key and survivor rule, then use ROW_NUMBER to keep the best record and optionally preserve rejected duplicates for audit.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-08-running-totals-moving-averages"></a>
+## 8. Running Totals and Moving Averages
+
+What it is:
+A window-function pattern for calculating values across ordered rows while keeping row-level detail.
+
+When to use it:
+Use it for time-series, telemetry, cost, sales, capacity, and reporting trends.
+
+Examples:
+- running total sales by day
+- month-to-date cloud cost
+- moving average CPU usage
+- moving average memory usage
+- cumulative order count by customer
+- trend smoothing for telemetry metrics
+
+Mental model:
+GROUP BY collapses rows.
+Window functions keep rows and add calculations beside them.
+
+Running total template:
+
+```sql
+SELECT
+    entity_id,
+    event_time,
+    value_column,
+    SUM(value_column) OVER (
+        PARTITION BY entity_id
+        ORDER BY event_time
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS running_total
+FROM source_table
+ORDER BY entity_id, event_time;
+```
+
+Meaning:
+- PARTITION BY entity_id restarts the calculation for each entity.
+- ORDER BY event_time defines the time sequence.
+- UNBOUNDED PRECEDING means start at the first row in the partition.
+- CURRENT ROW means calculate up to this row.
+
+Moving average template:
+
+```sql
+SELECT
+    entity_id,
+    event_time,
+    value_column,
+    AVG(value_column) OVER (
+        PARTITION BY entity_id
+        ORDER BY event_time
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) AS moving_average_3_rows
+FROM source_table
+ORDER BY entity_id, event_time;
+```
+
+Meaning:
+- 2 PRECEDING AND CURRENT ROW means use this row plus the previous 2 rows.
+- That creates a 3-row moving average.
+
+Telemetry example:
+
+```sql
+SELECT
+    server_id,
+    sampled_at,
+    cpu_percent,
+    AVG(cpu_percent) OVER (
+        PARTITION BY server_id
+        ORDER BY sampled_at, sample_id
+        ROWS BETWEEN 4 PRECEDING AND CURRENT ROW
+    ) AS cpu_moving_avg_5_samples
+FROM telemetry_samples
+ORDER BY server_id, sampled_at;
+```
+
+Cost example:
+
+```sql
+SELECT
+    account_id,
+    usage_date,
+    daily_cost,
+    SUM(daily_cost) OVER (
+        PARTITION BY account_id
+        ORDER BY usage_date
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS month_to_date_cost
+FROM daily_cloud_cost
+ORDER BY account_id, usage_date;
+```
+
+Common mistakes:
+- Forgetting ORDER BY. Running totals need a sequence.
+- Forgetting PARTITION BY. Different entities get mixed together.
+- Using GROUP BY when row-level output is needed.
+- Not specifying the window frame.
+- Ordering by a non-unique timestamp without a tie-breaker.
+
+Tie breaker:
+If timestamps can tie, order by a second stable column.
+
+```sql
+ORDER BY sampled_at, sample_id
+```
+
+Memorize:
+For running totals and moving averages, I partition by the entity, order by time, and define the window frame that says how many rows to look back.
+
+Strong practical sentence:
+I use window frames for time-series analysis because they let me keep row-level detail while calculating cumulative totals, recent averages, and trend indicators over ordered events.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-09-lag-lead"></a>
+## 9. LAG() and LEAD()
+
+What it is:
+LAG and LEAD are window functions used to compare the current row
+to a previous or next row.
+
+When to use it:
+Use it when records are ordered over time or sequence and you need
+to compare neighboring rows.
+
+Examples:
+- compare current CPU to previous CPU sample
+- compare today's cost to yesterday's cost
+- detect order status changes
+- calculate change from prior day
+- calculate time between events
+
+Mental model:
+LAG looks backward.
+LEAD looks forward.
+
+Basic LAG template:
+
+```sql
+SELECT
+    entity_id,
+    event_time,
+    value_column,
+    LAG(value_column) OVER (
+        PARTITION BY entity_id
+        ORDER BY event_time
+    ) AS previous_value
+FROM source_table
+ORDER BY entity_id, event_time;
+```
+
+Meaning:
+- PARTITION BY entity_id keeps each entity separate.
+- ORDER BY event_time defines the sequence.
+- LAG(value_column) brings the previous row's value into the current row.
+
+Change calculation template:
+
+```sql
+WITH with_previous AS (
+    SELECT
+        entity_id,
+        event_time,
+        value_column,
+        LAG(value_column) OVER (
+            PARTITION BY entity_id
+            ORDER BY event_time
+        ) AS previous_value
+    FROM source_table
+)
+SELECT
+    entity_id,
+    event_time,
+    value_column,
+    previous_value,
+    value_column - previous_value AS value_change
+FROM with_previous
+ORDER BY entity_id, event_time;
+```
+
+Trend label template:
+
+```sql
+WITH with_previous AS (
+    SELECT
+        entity_id,
+        event_time,
+        value_column,
+        LAG(value_column) OVER (
+            PARTITION BY entity_id
+            ORDER BY event_time
+        ) AS previous_value
+    FROM source_table
+)
+SELECT
+    entity_id,
+    event_time,
+    value_column,
+    previous_value,
+    value_column - previous_value AS value_change,
+    CASE
+        WHEN previous_value IS NULL THEN 'FIRST_ROW'
+        WHEN value_column > previous_value THEN 'INCREASED'
+        WHEN value_column < previous_value THEN 'DECREASED'
+        ELSE 'UNCHANGED'
+    END AS value_direction
+FROM with_previous
+ORDER BY entity_id, event_time;
+```
+
+Basic LEAD template:
+
+```sql
+SELECT
+    entity_id,
+    event_time,
+    value_column,
+    LEAD(value_column) OVER (
+        PARTITION BY entity_id
+        ORDER BY event_time
+    ) AS next_value
+FROM source_table
+ORDER BY entity_id, event_time;
+```
+
+Meaning:
+- LEAD(value_column) brings the next row's value into the current row.
+
+Status-change example:
+
+```sql
+WITH status_steps AS (
+    SELECT
+        order_id,
+        status,
+        status_time,
+        LAG(status) OVER (
+            PARTITION BY order_id
+            ORDER BY status_time
+        ) AS previous_status
+    FROM order_status_history
+)
+SELECT
+    order_id,
+    previous_status,
+    status AS current_status,
+    status_time
+FROM status_steps
+WHERE previous_status IS NULL
+   OR previous_status <> status
+ORDER BY order_id, status_time;
+```
+
+Common mistakes:
+- Forgetting PARTITION BY, which mixes different entities.
+- Forgetting ORDER BY, which makes "previous" meaningless.
+- Not handling the first row, where previous value is NULL.
+- Ordering only by timestamp when ties are possible.
+- Using LAG when ROW_NUMBER is needed for latest-record selection.
+
+Tie breaker:
+If timestamps can tie, add a stable second ordering column.
+
+```sql
+ORDER BY event_time, event_id
+```
+
+Memorize:
+I use LAG to compare the current row to the previous row,
+and LEAD to compare the current row to the next row.
+
+Strong practical sentence:
+For trend and status-change analysis, I partition by the entity,
+order by event time, use LAG or LEAD to bring neighboring values
+onto the current row, and then calculate differences or change flags.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-10-case-classification-bucketing"></a>
+## 10. CASE Classification / Bucketing
+
+What it is:
+CASE classification turns raw values into readable labels or buckets.
+
+When to use it:
+Use it when raw values need to become business-friendly categories.
+
+Examples:
+- CPU percent -> NORMAL / WATCH / HIGH / CRITICAL
+- order amount -> SMALL / MEDIUM / LARGE
+- data quality score -> PASS / WARNING / FAIL
+- latency -> FAST / SLOW / DEGRADED
+- null or invalid values -> MISSING / INVALID
+
+Mental model:
+CASE checks WHEN conditions from top to bottom.
+SQL stops at the first true condition.
+
+Basic template:
+
+```sql
+SELECT
+    entity_id,
+    value_column,
+    CASE
+        WHEN value_column >= 95 THEN 'CRITICAL'
+        WHEN value_column >= 85 THEN 'HIGH'
+        WHEN value_column >= 70 THEN 'WATCH'
+        ELSE 'NORMAL'
+    END AS status_label
+FROM source_table;
+```
+
+Order matters:
+Put the most specific or highest-priority condition first.
+
+Correct:
+
+```sql
+CASE
+    WHEN cpu_percent >= 95 THEN 'CRITICAL'
+    WHEN cpu_percent >= 85 THEN 'HIGH'
+    WHEN cpu_percent >= 70 THEN 'WATCH'
+    ELSE 'NORMAL'
+END AS cpu_status
+```
+
+Wrong:
+
+```sql
+CASE
+    WHEN cpu_percent >= 70 THEN 'WATCH'
+    WHEN cpu_percent >= 85 THEN 'HIGH'
+    WHEN cpu_percent >= 95 THEN 'CRITICAL'
+    ELSE 'NORMAL'
+END AS cpu_status
+```
+
+Why wrong:
+A value like 99 is also >= 70, so it gets labeled WATCH first.
+SQL stops at the first match.
+
+Production-safe template with NULL handling:
+
+```sql
+CASE
+    WHEN value_column IS NULL THEN 'MISSING'
+    WHEN value_column >= critical_threshold THEN 'CRITICAL'
+    WHEN value_column >= high_threshold THEN 'HIGH'
+    WHEN value_column >= warning_threshold THEN 'WATCH'
+    ELSE 'NORMAL'
+END AS status_label
+```
+
+Data quality example:
+
+```sql
+SELECT
+    batch_id,
+    total_rows,
+    missing_customer_id_count,
+    duplicate_order_count,
+    CASE
+        WHEN missing_customer_id_count > 0 THEN 'FAIL'
+        WHEN duplicate_order_count > 0 THEN 'WARNING'
+        ELSE 'PASS'
+    END AS quality_status
+FROM batch_quality_summary;
+```
+
+Bucketing example:
+
+```sql
+SELECT
+    order_id,
+    order_total,
+    CASE
+        WHEN order_total IS NULL THEN 'MISSING'
+        WHEN order_total < 0 THEN 'INVALID'
+        WHEN order_total >= 1000 THEN 'LARGE'
+        WHEN order_total >= 250 THEN 'MEDIUM'
+        ELSE 'SMALL'
+    END AS order_size_bucket
+FROM orders;
+```
+
+CASE inside aggregation:
+
+```sql
+SELECT
+    service_name,
+    COUNT(*) AS total_samples,
+    SUM(CASE WHEN cpu_percent >= 90 THEN 1 ELSE 0 END) AS high_cpu_samples,
+    SUM(CASE WHEN cpu_percent IS NULL THEN 1 ELSE 0 END) AS missing_cpu_samples
+FROM telemetry_samples
+GROUP BY service_name;
+```
+
+Common mistakes:
+- Putting broad conditions before specific conditions.
+- Forgetting NULL handling.
+- Forgetting ELSE, which can create unexpected NULL labels.
+- Creating labels that business users do not understand.
+- Duplicating classification logic in many places instead of standardizing it.
+
+Memorize:
+CASE turns raw values into business-friendly categories, and the order of WHEN conditions matters because SQL stops at the first match.
+
+Strong practical sentence:
+I use CASE expressions to make pipeline outputs more operationally useful, such as classifying records into PASS, WARNING, FAIL, or NORMAL, WATCH, HIGH, and CRITICAL categories.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-11-null-handling"></a>
+## 11. NULL Handling
+
+What it is:
+NULL handling means treating missing, unknown, or not-provided values explicitly in SQL.
+
+When to use it:
+Use it in data quality checks, reconciliation, joins, calculations, reporting, deduplication, and CASE logic.
+
+Mental model:
+NULL is not zero.
+NULL is not an empty string.
+NULL means unknown or missing.
+
+COALESCE:
+COALESCE returns the first non-null value.
+
+```sql
+SELECT
+    customer_id,
+    COALESCE(email, phone, 'NO_CONTACT') AS best_contact
+FROM customers;
+```
+
+Meaning:
+Use email if it exists.
+If email is NULL, use phone.
+If phone is also NULL, use NO_CONTACT.
+
+Default numeric value:
+
+```sql
+SELECT
+    order_id,
+    COALESCE(discount_amount, 0) AS discount_amount
+FROM orders;
+```
+
+Warning:
+Only replace NULL with 0 when the business meaning is correct.
+
+NULLIF:
+NULLIF(a, b) returns NULL if a equals b. Otherwise it returns a.
+
+Most common use:
+Avoid divide-by-zero.
+
+```sql
+SELECT
+    service_name,
+    failed_count,
+    total_count,
+    failed_count * 1.0 / NULLIF(total_count, 0) AS failure_rate
+FROM service_quality;
+```
+
+Meaning:
+If total_count is 0, turn it into NULL so division does not crash.
+
+NULL-safe comparison problem:
+This may miss mismatches when one side is NULL.
+
+```sql
+WHERE source_amount <> target_amount
+```
+
+Reason:
+SQL does not treat NULL comparisons like normal equality comparisons.
+
+NULL-safe comparison with COALESCE:
+
+```sql
+WHERE COALESCE(source_amount, -1) <> COALESCE(target_amount, -1)
+```
+
+String version:
+
+```sql
+WHERE COALESCE(source_status, '__NULL__') <> COALESCE(target_status, '__NULL__')
+```
+
+Warning:
+The placeholder value must not be a valid business value.
+
+Better NULL-safe comparison when supported:
+
+```sql
+WHERE source_amount IS DISTINCT FROM target_amount
+```
+
+Meaning:
+NULL vs 100 is different.
+NULL vs NULL is the same.
+
+NULL handling in CASE:
+
+```sql
+SELECT
+    server_id,
+    cpu_percent,
+    CASE
+        WHEN cpu_percent IS NULL THEN 'MISSING'
+        WHEN cpu_percent >= 95 THEN 'CRITICAL'
+        WHEN cpu_percent >= 85 THEN 'HIGH'
+        WHEN cpu_percent >= 70 THEN 'WATCH'
+        ELSE 'NORMAL'
+    END AS cpu_status
+FROM telemetry_samples;
+```
+
+Rule:
+Handle NULL first when classifying values.
+
+NULL handling in aggregates:
+
+```sql
+SELECT
+    COUNT(*) AS total_rows,
+    COUNT(cpu_percent) AS rows_with_cpu,
+    SUM(CASE WHEN cpu_percent IS NULL THEN 1 ELSE 0 END) AS missing_cpu_rows
+FROM telemetry_samples;
+```
+
+Meaning:
+COUNT(*) counts all rows.
+COUNT(cpu_percent) counts only rows where cpu_percent is not NULL.
+
+Data quality example:
+
+```sql
+SELECT
+    batch_id,
+    COUNT(*) AS total_rows,
+    SUM(CASE WHEN customer_id IS NULL THEN 1 ELSE 0 END) AS missing_customer_id,
+    SUM(CASE WHEN order_total IS NULL THEN 1 ELSE 0 END) AS missing_order_total,
+    SUM(CASE WHEN order_total < 0 THEN 1 ELSE 0 END) AS negative_order_total
+FROM orders_raw
+GROUP BY batch_id;
+```
+
+Templates to memorize:
+
+```sql
+COALESCE(column_name, default_value)
+```
+
+```sql
+numerator * 1.0 / NULLIF(denominator, 0)
+```
+
+```sql
+SUM(CASE WHEN column_name IS NULL THEN 1 ELSE 0 END) AS missing_count
+```
+
+```sql
+COALESCE(source_value, '__NULL__') <> COALESCE(target_value, '__NULL__')
+```
+
+```sql
+source_value IS DISTINCT FROM target_value
+```
+
+Common mistakes:
+- Treating NULL like zero without business approval.
+- Forgetting that NULL comparisons are not normal equality comparisons.
+- Using COUNT(column) when COUNT(*) was intended.
+- Forgetting NULL handling in CASE.
+- Reconciliation queries missing NULL mismatches.
+
+Memorize:
+COALESCE gives the first non-null value, NULLIF helps avoid unsafe division, and NULL-safe comparisons prevent missing mismatches.
+
+Strong practical sentence:
+I treat NULLs explicitly in pipeline logic because missing data can affect counts, joins, calculations, classifications, and reconciliation results.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-12-where-vs-having"></a>
+## 12. WHERE vs HAVING
+
+What it is:
+WHERE and HAVING both filter data, but they happen at different stages.
+
+When to use it:
+Use WHERE to filter raw rows before grouping.
+Use HAVING to filter grouped results after aggregation.
+
+Mental model:
+WHERE filters rows.
+HAVING filters groups.
+
+Main rule:
+
+WHERE happens before GROUP BY.
+HAVING happens after GROUP BY.
+
+Template:
+
+```sql
+SELECT
+    group_column,
+    COUNT(*) AS row_count,
+    AVG(value_column) AS avg_value
+FROM table_name
+WHERE row_level_condition
+GROUP BY group_column
+HAVING aggregate_condition;
+```
+
+Example:
+
+```sql
+SELECT
+    service_name,
+    COUNT(*) AS sample_count,
+    AVG(cpu_percent) AS avg_cpu
+FROM telemetry_samples
+WHERE sampled_at >= '2026-05-01'
+GROUP BY service_name
+HAVING AVG(cpu_percent) >= 80
+ORDER BY avg_cpu DESC;
+```
+
+Meaning:
+- WHERE sampled_at >= '2026-05-01' keeps only recent raw rows.
+- GROUP BY service_name summarizes rows by service.
+- HAVING AVG(cpu_percent) >= 80 keeps only service groups with high average CPU.
+
+Wrong example:
+
+```sql
+SELECT
+    service_name,
+    AVG(cpu_percent) AS avg_cpu
+FROM telemetry_samples
+WHERE AVG(cpu_percent) >= 80
+GROUP BY service_name;
+```
+
+Why wrong:
+WHERE happens before GROUP BY, so AVG(cpu_percent) does not exist yet.
+
+Use WHERE for row-level filters:
+
+```sql
+WHERE cpu_percent IS NOT NULL
+WHERE sampled_at >= '2026-05-01'
+WHERE service_name = 'checkout'
+```
+
+Use HAVING for aggregate filters:
+
+```sql
+HAVING COUNT(*) > 10
+HAVING AVG(cpu_percent) >= 80
+HAVING SUM(error_count) > 0
+```
+
+Data quality example:
+
+```sql
+SELECT
+    batch_id,
+    COUNT(*) AS total_rows,
+    SUM(CASE WHEN customer_id IS NULL THEN 1 ELSE 0 END) AS missing_customer_id
+FROM orders_raw
+WHERE load_date = '2026-05-01'
+GROUP BY batch_id
+HAVING SUM(CASE WHEN customer_id IS NULL THEN 1 ELSE 0 END) > 0;
+```
+
+Meaning:
+- WHERE checks only today's loaded rows.
+- GROUP BY summarizes by batch.
+- HAVING keeps only batches with missing customer IDs.
+
+Common mistakes:
+- Trying to use aggregate functions in WHERE.
+- Using HAVING for simple row filters that belong in WHERE.
+- Forgetting that WHERE happens before GROUP BY.
+- Forgetting that HAVING happens after GROUP BY.
+
+Memorize:
+WHERE filters raw rows before grouping. HAVING filters grouped results after aggregation.
+
+Strong practical sentence:
+I use WHERE to reduce raw input rows before aggregation, and HAVING to filter grouped results based on counts, averages, sums, or other aggregate conditions.
 
 [Back to TOC](#toc)
