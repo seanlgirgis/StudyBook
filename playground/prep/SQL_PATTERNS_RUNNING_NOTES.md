@@ -18,6 +18,7 @@ Each section should answer:
 - [3. Latest Record Per Entity With ROW_NUMBER()](#pattern-03-latest-record-row-number)
 - [4. Window Functions](#pattern-04-window-functions)
 - [5. Conditional Aggregation](#pattern-05-conditional-aggregation)
+- [6. Source-to-Target Reconciliation](#pattern-06-source-to-target-reconciliation)
 
 ---
 
@@ -267,5 +268,138 @@ Putting the condition in WHERE and accidentally removing rows needed for other m
 
 Memorize:
 Use CASE inside aggregates to get many metrics from one grouped pass.
+
+[Back to TOC](#toc)
+
+---
+
+<a id="pattern-06-source-to-target-reconciliation"></a>
+## 6. Source-to-Target Reconciliation
+
+What it is:
+A reconciliation pattern checks whether data in the target matches what came from the source after a pipeline run.
+
+When to use it:
+Use it after ETL/ELT jobs to validate that data was loaded correctly.
+
+Mental model:
+Do not only ask "did row counts match?"
+Ask:
+- Did keys match?
+- Did counts match?
+- Did control totals match?
+- Are records missing from target?
+- Are extra records present in target?
+- Do important fields match?
+
+SQL template 1: count and control total check
+
+```sql
+SELECT
+    'source' AS dataset_name,
+    COUNT(*) AS row_count,
+    SUM(amount) AS total_amount
+FROM source_table
+
+UNION ALL
+
+SELECT
+    'target' AS dataset_name,
+    COUNT(*) AS row_count,
+    SUM(amount) AS total_amount
+FROM target_table;
+```
+
+SQL template 2: missing from target
+
+```sql
+SELECT
+    src.*
+FROM source_table AS src
+LEFT JOIN target_table AS tgt
+    ON src.business_key = tgt.business_key
+WHERE tgt.business_key IS NULL;
+```
+
+SQL template 3: extra in target
+
+```sql
+SELECT
+    tgt.*
+FROM target_table AS tgt
+LEFT JOIN source_table AS src
+    ON tgt.business_key = src.business_key
+WHERE src.business_key IS NULL;
+```
+
+SQL template 4: value mismatch
+
+```sql
+SELECT
+    src.business_key,
+    src.amount AS source_amount,
+    tgt.amount AS target_amount
+FROM source_table AS src
+INNER JOIN target_table AS tgt
+    ON src.business_key = tgt.business_key
+WHERE src.amount <> tgt.amount;
+```
+
+Optional advanced summary pattern:
+
+```sql
+WITH comparison AS (
+    SELECT
+        COALESCE(src.business_key, tgt.business_key) AS business_key,
+        src.business_key AS source_key,
+        tgt.business_key AS target_key,
+        src.amount AS source_amount,
+        tgt.amount AS target_amount
+    FROM source_table AS src
+    FULL OUTER JOIN target_table AS tgt
+        ON src.business_key = tgt.business_key
+)
+SELECT
+    COUNT(*) AS compared_keys,
+
+    SUM(CASE
+            WHEN source_key IS NOT NULL
+             AND target_key IS NOT NULL
+            THEN 1 ELSE 0
+        END) AS matched_keys,
+
+    SUM(CASE
+            WHEN source_key IS NOT NULL
+             AND target_key IS NULL
+            THEN 1 ELSE 0
+        END) AS missing_in_target,
+
+    SUM(CASE
+            WHEN source_key IS NULL
+             AND target_key IS NOT NULL
+            THEN 1 ELSE 0
+        END) AS extra_in_target,
+
+    SUM(CASE
+            WHEN source_key IS NOT NULL
+             AND target_key IS NOT NULL
+             AND source_amount <> target_amount
+            THEN 1 ELSE 0
+        END) AS value_mismatch_count
+FROM comparison;
+```
+
+Common mistakes:
+- Only checking row counts.
+- Joining on the wrong key.
+- Ignoring duplicate keys before reconciliation.
+- Forgetting null-safe comparison rules.
+- Not checking business totals or control totals.
+
+Memorize:
+For reconciliation, I compare source and target by keys, counts, control totals, missing records, extra records, and field-level mismatches.
+
+Strong practical sentence:
+Row count reconciliation is only the first layer. For production confidence, I also reconcile business keys, control totals, and important fields, then investigate missing, extra, or mismatched records.
 
 [Back to TOC](#toc)
