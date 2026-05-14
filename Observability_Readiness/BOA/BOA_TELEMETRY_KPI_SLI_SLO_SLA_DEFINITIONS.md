@@ -46,33 +46,24 @@ BOA-safe sentence:
 what action to take."
 
 ## 4. KPI
-A KPI is a selected metric or derived signal that supports a business or
-operational decision.
+A KPI is a selected metric or derived signal that supports a business
+or operational decision.
 
-A metric says:
-"CPU is 82%."
+A metric describes a technical reading. For example, CPU is at 85%.
+A KPI gives that reading decision context: CPU headroom is below the
+safe threshold for a critical service, and action is needed to avoid a
+performance bottleneck.
 
-A KPI says:
-"CPU headroom is below the safe threshold for a critical service, and action is
-needed within the planning window."
+For capacity, examples of KPIs would be utilization trend, rolling
+peaks, recent maximums, growth slope, headroom to threshold, risk band,
+forecasted breach window, service criticality, owner, and remediation
+status.
 
-Capacity KPI examples:
-- utilization trend
-- rolling peak
-- recent maximum
-- growth slope
-- headroom to threshold
-- threshold breach count
-- forecasted breach window
-- service criticality
-- risk band
-- owner mapping
-- remediation status
+The way I define KPIs is from the decision backward. I ask what
+operations or leadership needs to decide, then choose the signal that
+best supports that action.
 
-BOA-safe sentence:
-"I define KPIs from the decision backward. First I ask what operations or
-leadership needs to decide, then I choose the signal that supports that
-decision."
+
 
 ## 5. SLI / SLO / SLA
 SLI:
