@@ -1,7 +1,10 @@
 # BOA Forecast Project Deep Dive
 
 ## 1. Plain-English Project Summary
-This project converted raw telemetry into early capacity risk visibility so engineering and management could act before incidents. It was designed for operational decision support, with practical checks, clear risk language, and repeatable reporting.
+This project converted raw telemetry into early capacity risk visibility so
+engineering and management could act before incidents. It was designed for
+operational decision support, with practical checks, clear risk language, and
+repeatable reporting.
 
 ## 2. Original Pandas Version
 Conceptual flow:
@@ -45,7 +48,8 @@ Representative features:
 
 Design intent:
 - Separate sustained trend from isolated spike.
-- Provide interpretable features that operations and management can understand.
+- Provide interpretable features that operations and management can
+  understand.
 
 ## 5. Forecast Horizon / Risk Window
 - Use a practical short-to-mid forecast window aligned to planning cycles.
@@ -61,7 +65,7 @@ Design intent:
 - feature calculation tests
 - train/test split that respects time order
 - backtesting predicted vs actual
-- naive baseline comparison
+- simple baseline comparison
 - SME/business validation
 - false positive review
 
@@ -77,7 +81,8 @@ Validation principle:
 ## 8. Management Decision Support
 - Translate telemetry into risk bands and action windows.
 - Support decisions on scaling, optimization, and prioritization.
-- Provide concise executive summaries with assumptions and confidence language.
+- Provide concise executive summaries with assumptions and confidence
+  language.
 
 ## 9. Scaling Path to PySpark / Hadoop / Cloud
 Pandas prototype
@@ -93,14 +98,33 @@ What scales:
 - More automated, scheduled, and governed pipeline operations.
 
 ## 10. 30-Second Answer
-I built a capacity forecasting workflow that converted telemetry trends into early risk visibility for engineering and leadership. The original version used Python, SQL, and Pandas to clean and bucket time-series data, compute trend and headroom features, and rank systems by near-term risk. It was tested with data quality checks, backtesting, and SME review, then communicated through dashboards and executive summaries.
+I built a capacity forecasting workflow that converted telemetry trends into
+early risk visibility for engineering and leadership. The original version used
+Python, SQL, and Pandas to clean and bucket time-series data, compute trend and
+headroom features, and rank systems by near-term risk. It was tested with data
+quality checks, backtesting, and SME review, then communicated through
+dashboards and executive summaries.
 
 ## 11. 2-Minute Answer
-The need was simple: capacity risk was too often surfaced late. I built a practical forecasting pipeline using telemetry we already trusted. In the first version, I extracted data with SQL and used Pandas for cleanup, timestamp normalization, hourly and daily bucketing, and grouping by host, application, and service. I engineered features like rolling averages, rolling max, growth slope, and headroom percentage, then applied threshold logic and risk bands to identify likely breach windows.
+The need was simple: capacity risk was too often surfaced late. I built a
+practical forecasting pipeline using telemetry we already trusted. In the first
+version, I extracted data with SQL and used Pandas for cleanup, timestamp
+normalization, hourly and daily bucketing, and grouping by host, application,
+and service. I engineered features like rolling averages, rolling max, growth
+slope, and headroom percentage, then applied threshold logic and risk bands to
+identify likely breach windows.
 
-The output was built for decisions, not model novelty. Operations got ranked risk views and trend dashboards, while leadership got concise summaries: what is at risk, when, how confident we are, and what actions are recommended. I validated with data quality checks, feature tests, time-ordered splits, backtesting versus actuals, naive baseline comparison, and SME review of false positives.
+The output was built for decisions, not model novelty. Operations got ranked
+risk views and trend dashboards, while leadership got concise summaries: what is
+at risk, when, how confident we are, and what actions are recommended. I
+validated with data quality checks, feature tests, time-ordered splits,
+backtesting versus actuals, simple baseline comparison, and SME review of false
+positives.
 
-For scale, the pattern is straightforward: keep the same logic and move distributed processing to PySpark, persist in Hadoop/HDFS or cloud data lake structures with time partitions, run scheduled ETL, and feed the reporting layer.
+For scale, the pattern is straightforward: keep the same logic and move
+distributed processing to PySpark, persist in Hadoop/HDFS or cloud data lake
+structures with time partitions, run scheduled ETL, and feed the reporting
+layer.
 
 ## 12. Whiteboard Architecture Diagram
 ```text
@@ -131,4 +155,5 @@ For scale, the pattern is straightforward: keep the same logic and move distribu
 - Do not claim advanced research-model invention.
 - Do not claim full solo ownership of Hadoop/cloud platform engineering.
 - Do not invent precision metrics you cannot defend.
-- Do not let side topics (OpenTelemetry, Kubernetes, GPU, Terraform, CloudFormation) displace the core capacity story.
+- Do not let side topics (OpenTelemetry, Kubernetes, GPU, Terraform,
+  CloudFormation) displace the core capacity story.

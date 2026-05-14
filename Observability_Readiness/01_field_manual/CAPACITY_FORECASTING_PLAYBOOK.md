@@ -1,11 +1,13 @@
 # Capacity Forecasting Playbook
 
 ## Objective
-Use telemetry-driven forecasting to surface capacity risk early, rank priorities, and support engineering and management decisions.
+Use telemetry-driven forecasting to surface capacity risk early, rank
+priorities, and support engineering and management decisions.
 
 ## 1. Telemetry Inputs
 - Infrastructure telemetry: CPU, memory, storage, and utilization trends.
-- Application/service telemetry: throughput, latency-adjacent load indicators, transaction volume.
+- Application/service telemetry: throughput, latency-adjacent load indicators,
+  transaction volume.
 - KPI and threshold context used by operations.
 - Asset metadata: host, application, service, and ownership mapping.
 
@@ -70,7 +72,7 @@ Feature validation:
 Forecast validation:
 - Time-ordered evaluation.
 - Backtesting predicted vs actual outcomes.
-- Naive baseline comparison.
+- Simple baseline comparison.
 - SME/business review for false positives and actionability.
 
 ## 9. Pandas To PySpark/Hadoop/Cloud Scale-Up Path
@@ -85,7 +87,8 @@ Scale stage:
 - Dashboard/reporting consumers on top of stable outputs.
 
 Guardrail:
-- Present this as architecture evolution and collaborative platform scaling, not full solo ownership of all data platform layers.
+- Present this as architecture evolution and collaborative platform scaling,
+  not full solo ownership of all data platform layers.
 
 ## 10. Interview-Safe Language
 - I built and validated practical forecasting decision support.

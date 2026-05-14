@@ -3,13 +3,15 @@
 ## Priority Context
 - Interview: Friday, 1:00 PM Central.
 - Primary lane: Horizon Scale Forecasting Story.
-- Focus: Capacity forecasting buildout from Pandas prototype to PySpark/Hadoop/cloud scale patterns.
+- Focus: Capacity forecasting buildout from Pandas prototype to
+  PySpark/Hadoop/cloud scale patterns.
 
 ## What To Rehearse First
 1. 30-second project summary in spoken language.
 2. 2-minute build flow from telemetry input to management decision support.
 3. 5-minute deep buildout: features, risk scoring, validation, and scale path.
-4. Ownership-safe answers: what Sean built directly vs where platform collaboration applies.
+4. Ownership-safe answers: what Sean built directly vs where platform
+   collaboration applies.
 5. Whiteboard flow from timestamp normalization to risk ranking and dashboards.
 
 ## What Not To Study Now
@@ -31,7 +33,8 @@ These can be supporting examples only if asked.
 ## Truth Anchors To Repeat
 - Enterprise capacity and APM background across large environments.
 - Telemetry workflows across 6,000+ infrastructure endpoints.
-- Practical forecasting for risk visibility, KPI reporting, and executive summaries.
+- Practical forecasting for risk visibility, KPI reporting, and executive
+  summaries.
 - Strong Python/SQL/Pandas/PySpark operator workflow understanding.
 
 ## Friday Rehearsal Sequence
@@ -43,10 +46,12 @@ These can be supporting examples only if asked.
 
 ## Final Pre-Interview Checklist
 - Can explain end-to-end build flow without notes.
-- Can define each major feature: rolling average, rolling peak, growth slope, headroom, breach flag, risk band.
+- Can define each major feature: rolling average, rolling peak, growth slope,
+  headroom, breach flag, risk band.
 - Can explain data quality and validation steps in order.
-- Can explain backtesting predicted vs actual and naive baseline comparison.
-- Can explain Pandas-to-PySpark/Hadoop/cloud scale-up as architecture path, not hype.
+- Can explain backtesting predicted vs actual and simple baseline comparison.
+- Can explain Pandas-to-PySpark/Hadoop/cloud scale-up as architecture path,
+  not hype.
 - Can describe dashboard and executive reporting outputs.
 - Can state personal ownership clearly and avoid overclaiming.
 - Can redirect side topics back to capacity decision support.
