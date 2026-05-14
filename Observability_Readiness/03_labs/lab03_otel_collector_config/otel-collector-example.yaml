@@ -1,0 +1,49 @@
+# Minimal educational OpenTelemetry Collector configuration.
+# This file is for learning the pipeline flow, not production hardening.
+
+receivers:
+  # Receivers define how telemetry enters the collector.
+  # OTLP supports traces/metrics/logs over gRPC and HTTP.
+  otlp:
+    protocols:
+      grpc: {}
+      http: {}
+
+processors:
+  # memory_limiter helps protect the collector process from runaway memory usage.
+  # In real environments this reduces risk during traffic spikes.
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+    spike_limit_mib: 128
+
+  # batch groups telemetry for more efficient export.
+  # This reduces exporter overhead and network chatter.
+  batch: {}
+
+exporters:
+  # Exporters define where telemetry leaves the collector.
+  # Debug prints telemetry for local validation and learning.
+  debug: {}
+
+  # Prometheus exporter exposes metrics on an HTTP endpoint.
+  # Prometheus then scrapes this endpoint on its scrape interval.
+  prometheus:
+    endpoint: "0.0.0.0:9464"
+
+service:
+  # Pipelines bind receivers + processors + exporters per signal type.
+  pipelines:
+    # Traces pipeline:
+    # OTLP input -> memory protection -> batching -> debug output.
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug]
+
+    # Metrics pipeline:
+    # OTLP input -> memory protection -> batching -> debug and Prometheus exposure.
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug, prometheus]
