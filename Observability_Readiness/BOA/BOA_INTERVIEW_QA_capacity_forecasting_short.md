@@ -118,10 +118,11 @@ It made stakeholder discussions more factual and less reactive.
 
 ## 10) How would you scale from Pandas to PySpark/Hadoop/cloud?
 [Back to TOC](#table-of-contents)
-Keep the same forecasting and risk logic first.
-Move heavier transforms to distributed data-processing patterns.
-Use PySpark/Hadoop/cloud as the architecture scale path.
-Do not change core logic just because tooling changes.
+- The logic stays the same: we keep the same forecasting and risk logic.
+- We scale by moving heavy data prep and feature engineering to distributed patterns, using PySpark.
+- We partition the data—often by time or group—so that Hadoop or cloud storage scales smoothly.
+- Instead of changing the core logic, we simply leverage distributed compute to handle larger data sets.
+This ensures efficient forecasting as the environment grows.
 
 ## 11) What did you own directly?
 [Back to TOC](#table-of-contents)
