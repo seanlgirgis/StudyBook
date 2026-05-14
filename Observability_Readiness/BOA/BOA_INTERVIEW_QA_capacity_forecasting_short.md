@@ -15,43 +15,36 @@
   - [9) How did this support budget or planning?](#9-how-did-this-support-budget-or-planning)
   - [10) How would you scale from Pandas to PySpark/Hadoop/cloud?](#10-how-would-you-scale-from-pandas-to-pysparkhadoopcloud)
   - [11) What did you own directly?](#11-what-did-you-own-directly)
-- [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
-- [13) How do you define KPIs?](#13-how-do-you-define-kpis)
-- [14) How did runbooks fit into the process?](#14-how-did-runbooks-fit-into-the-process)
-- [Final Memory Spine](#final-memory-spine)
-- [Do Not Say](#do-not-say)
+  - [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
+  - [13) How do you define KPIs?](#13-how-do-you-define-kpis)
+  - [14) How did runbooks fit into the process?](#14-how-did-runbooks-fit-into-the-process)
+  - [Final Memory Spine](#final-memory-spine)
+  - [Do Not Say](#do-not-say)
 
 
 ## 1) Walk me through how you built it.
 [Back to TOC](#table-of-contents)
-I started with telemetry extraction and data cleanup.
-Then I normalized timestamps and bucketed data hourly and daily.
-I grouped by host, application, and service for actionability.
-Next I engineered trend, headroom, and breach features.
-Then I forecasted risk windows and ranked systems by urgency.
-The output became dashboards, exception lists, and management summaries.
-1. Start with telemetry extraction and data cleanup.
+I started with telemetry extraction from monitoring and capacity
+systems. The first step was cleanup and normalization: normalize
+timestamps, standardize host and service identifiers, and make sure
+the mappings were reliable.
 
-2. Normalize timestamps so the time-series data is consistent.
+Then I bucketed the data into hourly and daily windows and grouped it
+by host, application, and service so the output would be actionable.
 
-3. Bucket the data into hourly and daily windows.
+After that I engineered capacity features: rolling averages, rolling
+peaks, P95s where useful, headroom to threshold, breach flags, risk
+bands, and growth slope.
 
-4. Group the data by host, application, and service so the output is actionable.
+For forecasting, I used a time-based validation approach. Train on an
+older history window, test against a recent holdout window, compare
+the forecast against actual behavior, and then refit on the full
+history before forecasting the next planning window.
 
-5. Engineer capacity features:
-   - trend
-   - headroom
-   - threshold/breach indicators
-   - risk signals
-
-6. Forecast risk windows instead of only looking at current utilization.
-
-7. Rank systems by urgency so teams know where to act first.
-
-8. Publish the output as:
-   - dashboards
-   - exception lists
-   - management summaries
+The final output was not just charts. It became reports, exception
+lists, dashboards, and management summaries that helped engineering,
+business owners, and planning stakeholders decide where action was
+needed.
 
 ## 2) What features did you use?
 [Back to TOC](#table-of-contents)
