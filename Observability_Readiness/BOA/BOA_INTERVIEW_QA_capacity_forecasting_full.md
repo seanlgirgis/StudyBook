@@ -2,43 +2,45 @@
 
 ## Table of Contents
 
-- [1) Walk me through the capacity forecasting workflow.](#1-walk-me-through-the-capacity-forecasting-workflow)
-- [2) What problem were you solving?](#2-what-problem-were-you-solving)
-- [3) What data did you use?](#3-what-data-did-you-use)
-- [4) How did the original reporting pipeline start?](#4-how-did-the-original-reporting-pipeline-start)
-- [5) How did you move from Excel/manual reports to Python?](#5-how-did-you-move-from-excelmanual-reports-to-python)
-- [6) Why SQLite or lightweight structured storage?](#6-why-sqlite-or-lightweight-structured-storage)
-- [7) How did Streamlit or team reporting fit?](#7-how-did-streamlit-or-team-reporting-fit)
-- [8) What features did you engineer?](#8-what-features-did-you-engineer)
-- [9) Why rolling averages and rolling peaks?](#9-why-rolling-averages-and-rolling-peaks)
-- [10) What is headroom to threshold?](#10-what-is-headroom-to-threshold)
-- [11) How did you define risk bands?](#11-how-did-you-define-risk-bands)
-- [12) Why Prophet?](#12-why-prophet)
-- [13) How did Prophet help with seasonality?](#13-how-did-prophet-help-with-seasonality)
-- [14) How did you handle month-end, quarter-end, or holiday effects?](#14-how-did-you-handle-month-end-quarter-end-or-holiday-effects)
-- [15) How did you validate the model?](#15-how-did-you-validate-the-model)
-- [16) Explain 18-month training and 6-month testing.](#16-explain-18-month-training-and-6-month-testing)
-- [17) Why not randomly sample time-series data?](#17-why-not-randomly-sample-time-series-data)
-- [18) What metrics did you use to compare forecast vs actual?](#18-what-metrics-did-you-use-to-compare-forecast-vs-actual)
-- [19) What does good enough mean?](#19-what-does-good-enough-mean)
-- [20) What if the model missed the test period?](#20-what-if-the-model-missed-the-test-period)
-- [21) Did you forecast all servers together?](#21-did-you-forecast-all-servers-together)
-- [22) How did you group thousands of servers?](#22-how-did-you-group-thousands-of-servers)
-- [23) What is cohort-based forecasting?](#23-what-is-cohort-based-forecasting)
-- [24) Did each server have a custom model?](#24-did-each-server-have-a-custom-model)
-- [25) How did you avoid overfitting?](#25-how-did-you-avoid-overfitting)
-- [26) How did SMEs validate the forecast?](#26-how-did-smes-validate-the-forecast)
-- [27) How did this become dashboards and reports?](#27-how-did-this-become-dashboards-and-reports)
-- [28) How did leadership use the output?](#28-how-did-leadership-use-the-output)
-- [29) How did this support budget or FinOps-style discussions?](#29-how-did-this-support-budget-or-finops-style-discussions)
-- [How do you define KPIs for capacity forecasting?](#how-do-you-define-kpis-for-capacity-forecasting)
-- [How did runbooks fit into the capacity process?](#how-did-runbooks-fit-into-the-capacity-process)
-- [30) How would you scale this from Pandas to PySpark/Hadoop/cloud?](#30-how-would-you-scale-this-from-pandas-to-pysparkhadoopcloud)
-- [31) What did you own directly?](#31-what-did-you-own-directly)
-- [32) Where did you partner with platform/data teams?](#32-where-did-you-partner-with-platformdata-teams)
-- [33) What would you modernize now?](#33-what-would-you-modernize-now)
-- [34) What are risky claims to avoid?](#34-what-are-risky-claims-to-avoid)
-- [35) Give me the 60-second version.](#35-give-me-the-60-second-version)
+- [BOA Interview Q and A: Capacity Forecasting (Full Defense)](#boa-interview-q-and-a-capacity-forecasting-full-defense)
+  - [Table of Contents](#table-of-contents)
+  - [1) Walk me through the capacity forecasting workflow.](#1-walk-me-through-the-capacity-forecasting-workflow)
+  - [2) What problem were you solving?](#2-what-problem-were-you-solving)
+  - [3) What data did you use?](#3-what-data-did-you-use)
+  - [4) How did the original reporting pipeline start?](#4-how-did-the-original-reporting-pipeline-start)
+  - [5) How did you move from Excel/manual reports to Python?](#5-how-did-you-move-from-excelmanual-reports-to-python)
+  - [6) Why SQLite or lightweight structured storage?](#6-why-sqlite-or-lightweight-structured-storage)
+  - [7) How did Streamlit or team reporting fit?](#7-how-did-streamlit-or-team-reporting-fit)
+  - [8) What features did you engineer?](#8-what-features-did-you-engineer)
+  - [9) Why rolling averages and rolling peaks?](#9-why-rolling-averages-and-rolling-peaks)
+  - [10) What is headroom to threshold?](#10-what-is-headroom-to-threshold)
+  - [11) How did you define risk bands?](#11-how-did-you-define-risk-bands)
+  - [12) Why Prophet?](#12-why-prophet)
+  - [13) How did Prophet help with seasonality?](#13-how-did-prophet-help-with-seasonality)
+  - [14) How did you handle month-end, quarter-end, or holiday effects?](#14-how-did-you-handle-month-end-quarter-end-or-holiday-effects)
+  - [15) How did you validate the model?](#15-how-did-you-validate-the-model)
+  - [16) Explain 18-month training and 6-month testing.](#16-explain-18-month-training-and-6-month-testing)
+  - [17) Why not randomly sample time-series data?](#17-why-not-randomly-sample-time-series-data)
+  - [18) What metrics did you use to compare forecast vs actual?](#18-what-metrics-did-you-use-to-compare-forecast-vs-actual)
+  - [19) What does good enough mean?](#19-what-does-good-enough-mean)
+  - [20) What if the model missed the test period?](#20-what-if-the-model-missed-the-test-period)
+  - [21) Did you forecast all servers together?](#21-did-you-forecast-all-servers-together)
+  - [22) How did you group thousands of servers?](#22-how-did-you-group-thousands-of-servers)
+  - [23) What is cohort-based forecasting?](#23-what-is-cohort-based-forecasting)
+  - [24) Did each server have a custom model?](#24-did-each-server-have-a-custom-model)
+  - [25) How did you avoid overfitting?](#25-how-did-you-avoid-overfitting)
+  - [26) How did SMEs validate the forecast?](#26-how-did-smes-validate-the-forecast)
+  - [27) How did this become dashboards and reports?](#27-how-did-this-become-dashboards-and-reports)
+  - [28) How did leadership use the output?](#28-how-did-leadership-use-the-output)
+  - [29) How did this support budget or FinOps-style discussions?](#29-how-did-this-support-budget-or-finops-style-discussions)
+  - [How do you define KPIs for capacity forecasting?](#how-do-you-define-kpis-for-capacity-forecasting)
+  - [How did runbooks fit into the capacity process?](#how-did-runbooks-fit-into-the-capacity-process)
+  - [30) How would you scale this from Pandas to PySpark/Hadoop/cloud?](#30-how-would-you-scale-this-from-pandas-to-pysparkhadoopcloud)
+  - [31) What did you own directly?](#31-what-did-you-own-directly)
+  - [32) Where did you partner with platform/data teams?](#32-where-did-you-partner-with-platformdata-teams)
+  - [33) What would you modernize now?](#33-what-would-you-modernize-now)
+  - [34) What are risky claims to avoid?](#34-what-are-risky-claims-to-avoid)
+  - [35) Give me the 60-second version.](#35-give-me-the-60-second-version)
 
 
 ## 1) Walk me through the capacity forecasting workflow.
@@ -208,9 +210,26 @@ ownership so teams could prioritize confidently.
 
 ## 28) How did leadership use the output?
 [Back to TOC](#table-of-contents)
-Leadership used concise risk summaries to guide timing and prioritization. The
-reports supported decisions on remediation windows, capacity planning, and
-resource allocation with clearer risk language.
+
+Leadership did not need raw telemetry; they needed risk, timing,
+ownership, and recommended action.
+
+The value was translating technical capacity signals into planning
+language leadership could act on.
+
+Leadership consumed actionable risk and opportunity summaries to guide
+timing and prioritization.
+
+The reports showed which services had low headroom, which were trending
+toward threshold risk, which owners needed to be involved, and what the
+likely action window looked like.
+
+That supported decisions on remediation timing, capacity planning,
+resource allocation, and budget conversations using clearer risk
+language.
+
+
+
 
 ## 29) How did this support budget or FinOps-style discussions?
 [Back to TOC](#table-of-contents)

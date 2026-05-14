@@ -149,18 +149,39 @@ Do not change core logic just because tooling changes.
 
 ## 11) What did you own directly?
 [Back to TOC](#table-of-contents)
-I owned major workflow pieces I can defend clearly.
-That includes shaping telemetry, features, forecast usage, and validation.
-I also owned risk ranking and reporting for decision support.
-For broader platform scale-out, I partnered with specialist teams.
+I owned the capacity logic and reporting workflow; I partnered on the
+broader platform scale-out.
+
+
+I owned major workflow pieces that I can defend directly:
+data extraction, cleanup, timestamp normalization, host and service
+mapping, feature design, forecast model training and testing, risk
+ranking, and reporting outputs.
+
+I also owned the logic that turned telemetry into decision support:
+headroom, growth slope, breach flags, risk bands, forecast windows,
+and ranked exception lists.
+
+For broader scale-out, I partnered with data and platform teams. I can
+explain the architecture path into distributed processing, Hadoop-style
+patterns, or multiprocessing, but I would not claim that I alone owned
+the full platform layer end to end.
+
+I also collaborated with application owners, SMEs, and planning
+stakeholders on consuming the final reports and risk lists. The goal
+was to support timely decisions: remediation, capacity planning,
+right-sizing, or cost savings where warranted.
 
 ## 12) What is the safest summary of the project?
 [Back to TOC](#table-of-contents)
-This was practical capacity forecasting decision support.
-SQL/Python/Pandas formed the real workflow foundation.
-Prophet was real forecasting work in the core flow.
-Scikit-learn risk scoring is a newer lab modernization extension.
-PySpark/Hadoop/cloud is the scale-up architecture path.
+It started as reporting automation, evolved into Prophet-based
+forecasting, and became decision support for capacity risk.
+
+This was practical capacity forecasting decision support. SQL, Python,
+and Pandas formed the workflow foundation. Prophet was real forecasting
+work. PySpark/Hadoop/cloud was the scale-up architecture path.
+Scikit-learn risk scoring is newer lab modernization work.
+
 
 ## 13) How do you define KPIs?
 [Back to TOC](#table-of-contents)
