@@ -2,13 +2,13 @@
 
 ## Purpose
 This repository is a dual-track readiness system:
-- Short-time readiness: prepare for the client interview on Monday with focused talk tracks, priority review, and morning checklists.
+- Short-time readiness: prepare for urgent interview execution with focused talk tracks, priority review, and pre-interview checklists.
 - Forever readiness: keep a reusable cloud-observability field manual, runbook set, lab recipes, and story bank for future roles and engagements.
 
-## Current Learning Unit
-- Topic 1: Metrics, Logs, Traces + OpenTelemetry Collector Flow.
-- Why now: this is the core language for most cloud observability interviews and it connects directly to prior enterprise APM and capacity work.
-- Output for this unit: clear talk tracks, one lightweight OTel collector lab, and one interview story with safe cloud-native mapping.
+## Current Priority (Time-Sensitive)
+- BOA capacity-focused interview is Friday at 1:00 PM Central.
+- Active lane: Horizon Scale Forecasting Story.
+- Primary objective: explain Capacity Forecasting Buildout from Pandas prototype to PySpark/Hadoop/cloud scale architecture patterns with honest ownership language.
 
 ## Who This Is For
 Primary voice is for an experienced enterprise APM/capacity engineer transitioning to cloud-native observability topics.
@@ -17,7 +17,7 @@ Primary voice is for an experienced enterprise APM/capacity engineer transitioni
 ### Proven strengths
 - Enterprise APM and observability: Dynatrace AppMon, Gomez, CA APM/Introscope/Wily, AppDynamics, BMC TrueSight/TSCO.
 - Capacity engineering at scale: telemetry from 6,000+ endpoints, KPI/threshold design, forecasting, RCA, executive reporting.
-- Data and automation: Python, SQL, Pandas, PySpark, AWS data platform.
+- Data and automation: Python, SQL, Pandas, PySpark, shell scripting.
 
 ### Adjacent ramp-up topics
 - Kubernetes observability, OpenTelemetry, Prometheus, Grafana.
@@ -25,21 +25,23 @@ Primary voice is for an experienced enterprise APM/capacity engineer transitioni
 - GPU monitoring patterns.
 
 ## Repository Layout
-- `00_short_time_readiness/`: Monday interview readiness.
-- `01_field_manual/`: evergreen practical reference.
+- `00_short_time_readiness/`: immediate interview readiness and spoken talk tracks.
+- `01_field_manual/`: evergreen practical reference and build playbooks.
 - `02_runbooks/`: incident and operations response playbooks.
 - `03_labs/`: small hands-on recipes with interview stories.
-- `04_stories/`: behavioral and impact stories.
-- `CURRENT_FOCUS.md`: this week priorities.
-- `DAILY_LOG.md`: progress log.
+- `04_stories/`: behavioral and impact stories, including STAR narratives.
+- `CURRENT_FOCUS.md`: active priorities and rehearsal order.
+- `DAILY_LOG.md`: execution and update log.
 
-## How To Use This Week
-1. Start at `CURRENT_FOCUS.md`.
-2. Rehearse `00_short_time_readiness/30_2_5_MINUTE_TALK_TRACK.md`.
-3. Review runbooks and stories to anchor answers in concrete operations work.
-4. Use lab READMEs as honest “next-step hands-on” examples.
+## BOA Friday Capacity Core Files
+- `00_short_time_readiness/BOA_FRIDAY_CAPACITY_INTERVIEW_PLAN.md`
+- `00_short_time_readiness/BOA_30_2_5_MINUTE_FORECASTING_TALK_TRACK.md`
+- `01_field_manual/CAPACITY_FORECASTING_PLAYBOOK.md`
+- `04_stories/STORY_capacity_forecasting_horizon_scale.md`
+- `04_stories/BOA_INTERVIEW_QA_capacity_forecasting.md`
 
 ## Interview Safety Rules
-- Lead with verified prior ownership and measurable outcomes.
-- Frame cloud-native topics as active ramp-up tied to existing monitoring fundamentals.
-- Never overclaim production ownership of tools you have not run at scale.
+- Lead with verified ownership and known facts.
+- Keep capacity forecasting as the main storyline for BOA.
+- Frame PySpark/Hadoop/cloud as scale-up architecture patterns unless direct ownership is specifically known.
+- Never overclaim production ownership of adjacent tools not directly owned.
