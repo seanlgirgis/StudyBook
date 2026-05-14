@@ -23,6 +23,13 @@
 
 These can be supporting examples only if asked.
 
+## FinOps bridge, only if asked
+- Do not lead with FinOps.
+- Use this bridge only if asked about finance, cost, budgets, management,
+  planning, or stakeholder communication.
+- Connect it back to capacity forecasting outputs: trend, headroom, risk,
+  ownership, and action timing.
+
 ## Top Risks To Control
 - Overclaiming deep ML/research model ownership.
 - Overclaiming full Hadoop or cloud platform build ownership.

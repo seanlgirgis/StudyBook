@@ -1,33 +1,70 @@
 # BOA 30 2 5 Minute Forecasting Talk Track
 
 ## 30-Second Answer
-I built a practical capacity forecasting workflow to turn telemetry trends into
-early risk visibility for operations and leadership. I used SQL, Python, and
-Pandas to normalize timestamps, bucket data hourly and daily, compute trend and
-headroom features, and rank services by near-term capacity risk. The goal was
-decision support, so teams could act earlier with clear risk language.
 
-## 2-Minute Answer
-The core problem was late capacity risk visibility. I built a forecasting
-workflow around telemetry we already trusted from infrastructure and
-application monitoring. In the first version, I used SQL extracts and Pandas to
-clean data, normalize timestamps, bucket by hour and day, and group by host,
-application, and service.
+I built a practical capacity forecasting workflow that turned
+infrastructure telemetry into early risk visibility for operations
+and leadership.
 
-Then I engineered practical features: rolling averages, rolling peaks, growth
-slope, headroom to threshold, and breach flags. I used those features to assign
-risk bands and rank systems by likely near-term risk windows. Output was built
-for decisions: operations dashboards for daily action, plus concise management
-summaries showing what was at risk, when, and what action to prioritize.
+Using SQL, Python, and Pandas, I normalized timestamps, bucketed
+the data hourly and daily, grouped it by host, application, or
+service, and calculated trend, peak, and headroom features.
 
-Validation was disciplined and practical. I ran data quality checks, validated
-feature math, used time-ordered evaluation, backtested predicted vs actual
-outcomes, used simple baseline comparison, and reviewed results with SMEs to
-reduce false positives. For scale, I explain the same logic moving from Pandas
-prototype workflows to PySpark, with Hadoop or cloud data lake storage and
-scheduled pipeline patterns.
+The goal was decision support. Instead of just showing raw CPU,
+memory, or utilization charts, the workflow ranked services by
+near-term capacity risk so teams could act earlier, communicate
+risk clearly, and plan remediation before capacity became an
+incident.
 
-## 5-Minute Deep Buildout Story
+## Strong 2-Minute Answer
+
+Raw telemetry by itself does not create a management decision.
+The work was to turn infrastructure and application telemetry
+into clean features, forecast signals, risk rankings, dashboards,
+and action plans.
+
+The pipeline started with telemetry from enterprise monitoring
+and capacity tools. The data included timestamps, host or server
+names, application and service mappings, CPU, memory, storage,
+utilization values, and threshold context.
+
+The first step was cleanup and normalization. I normalized
+timestamps, aligned the data into hourly and daily buckets,
+standardized host and server names, and validated mappings from
+systems like CMDB and BMC. That mattered because a forecast is only
+as trustworthy as the data and grouping behind it.
+
+Then I created explainable capacity features: rolling averages,
+rolling peaks, recent maximums, growth slope, headroom to threshold,
+breach flags, and risk bands. Those features helped separate a
+one-time spike from sustained capacity pressure.
+
+From there, the goal was practical forecasting, not deep ML research.
+I wanted to identify which systems were trending toward risk, how
+much headroom remained, which services were approaching threshold,
+and where teams should focus before capacity became an incident.
+
+Validation was important. I checked data quality, verified feature
+calculations, compared forecasted risk against later actual behavior,
+and reviewed the output with SMEs because capacity numbers need
+business and operational context.
+
+The final output was not just a chart. It became dashboards, reports,
+exception lists, and ranked risk views for engineering and leadership.
+That helped teams discuss remediation, budget, timing, ownership, and
+priority using clear risk language.
+
+### Story points
+1. Raw telemetry does not create decisions.
+2. Inputs came from monitoring and capacity tools.
+3. Clean timestamps and mappings.
+4. Build explainable features.
+5. Forecast practical risk, not deep ML.
+6. Validate with data, backtesting, and SMEs.
+7. Publish dashboards, reports, and ranked risk views.
+
+
+## 5-Minute Deep Buildout Story - Ignored .. combined above
 If I break it down end to end, I started with telemetry inputs from
 infrastructure and application layers, plus KPI context and asset metadata. The
 first step was cleanup and normalization: timestamp format alignment, duplicate
