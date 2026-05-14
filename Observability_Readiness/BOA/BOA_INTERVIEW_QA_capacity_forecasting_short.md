@@ -15,9 +15,11 @@
   - [9) How did this support budget or planning?](#9-how-did-this-support-budget-or-planning)
   - [10) How would you scale from Pandas to PySpark/Hadoop/cloud?](#10-how-would-you-scale-from-pandas-to-pysparkhadoopcloud)
   - [11) What did you own directly?](#11-what-did-you-own-directly)
-  - [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
-  - [Final Memory Spine](#final-memory-spine)
-  - [Do Not Say](#do-not-say)
+- [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
+- [13) How do you define KPIs?](#13-how-do-you-define-kpis)
+- [14) How did runbooks fit into the process?](#14-how-did-runbooks-fit-into-the-process)
+- [Final Memory Spine](#final-memory-spine)
+- [Do Not Say](#do-not-say)
 
 
 ## 1) Walk me through how you built it.
@@ -118,11 +120,10 @@ It made stakeholder discussions more factual and less reactive.
 
 ## 10) How would you scale from Pandas to PySpark/Hadoop/cloud?
 [Back to TOC](#table-of-contents)
-- The logic stays the same: we keep the same forecasting and risk logic.
-- We scale by moving heavy data prep and feature engineering to distributed patterns, using PySpark.
-- We partition the data—often by time or group—so that Hadoop or cloud storage scales smoothly.
-- Instead of changing the core logic, we simply leverage distributed compute to handle larger data sets.
-This ensures efficient forecasting as the environment grows.
+Keep the same forecasting and risk logic first.
+Move heavier transforms to distributed data-processing patterns.
+Use PySpark/Hadoop/cloud as the architecture scale path.
+Do not change core logic just because tooling changes.
 
 ## 11) What did you own directly?
 [Back to TOC](#table-of-contents)
@@ -138,6 +139,29 @@ SQL/Python/Pandas formed the real workflow foundation.
 Prophet was real forecasting work in the core flow.
 Scikit-learn risk scoring is a newer lab modernization extension.
 PySpark/Hadoop/cloud is the scale-up architecture path.
+
+## 13) How do you define KPIs?
+[Back to TOC](#table-of-contents)
+See `BOA_TELEMETRY_KPI_SLI_SLO_SLA_DEFINITIONS.md` for the definitions
+cheat sheet.
+
+I define KPIs by starting with the business or operational decision first.
+For capacity, useful KPIs include utilization trend, rolling peak, recent
+maximum, growth slope, headroom to threshold, breach frequency, forecasted
+breach window, service criticality, owner, risk band, and remediation status.
+A good KPI is actionable, not just a metric on a chart.
+
+## 14) How did runbooks fit into the process?
+[Back to TOC](#table-of-contents)
+See `BOA_TELEMETRY_KPI_SLI_SLO_SLA_DEFINITIONS.md` for the definitions
+cheat sheet.
+
+Runbooks turned forecast output into repeatable action.
+If risk increased, we validated data and mapping, confirmed owner, checked
+recent changes, reviewed headroom and threshold history, and involved SMEs.
+Then we chose the action path: tuning, cleanup, right-sizing, capacity
+expansion, or continued monitoring.
+That kept response consistent instead of reinventing each investigation.
 
 ## Final Memory Spine
 [Back to TOC](#table-of-contents)

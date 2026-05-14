@@ -31,6 +31,8 @@
 - [27) How did this become dashboards and reports?](#27-how-did-this-become-dashboards-and-reports)
 - [28) How did leadership use the output?](#28-how-did-leadership-use-the-output)
 - [29) How did this support budget or FinOps-style discussions?](#29-how-did-this-support-budget-or-finops-style-discussions)
+- [How do you define KPIs for capacity forecasting?](#how-do-you-define-kpis-for-capacity-forecasting)
+- [How did runbooks fit into the capacity process?](#how-did-runbooks-fit-into-the-capacity-process)
 - [30) How would you scale this from Pandas to PySpark/Hadoop/cloud?](#30-how-would-you-scale-this-from-pandas-to-pysparkhadoopcloud)
 - [31) What did you own directly?](#31-what-did-you-own-directly)
 - [32) Where did you partner with platform/data teams?](#32-where-did-you-partner-with-platformdata-teams)
@@ -215,6 +217,38 @@ resource allocation with clearer risk language.
 I was not the FinOps owner, but forecasting outputs supported those
 conversations. Trend, headroom, and risk windows gave finance, platform, and
 application stakeholders more factual inputs for planning tradeoffs.
+
+## How do you define KPIs for capacity forecasting?
+[Back to TOC](#table-of-contents)
+See `BOA_TELEMETRY_KPI_SLI_SLO_SLA_DEFINITIONS.md` for the definitions
+cheat sheet.
+
+I define KPIs from the decision backward. I do not want random metrics. I want
+signals that explain health, risk, ownership, and action timing.
+
+For capacity forecasting, useful KPIs include utilization trend, rolling peak,
+recent maximum, growth slope, headroom to threshold, breach frequency,
+forecasted breach window, service criticality, owner mapping, risk band, and
+remediation status.
+
+A KPI must be actionable. A chart value alone is not enough. The KPI should
+help the team decide what to do, who owns it, and how urgent it is.
+
+## How did runbooks fit into the capacity process?
+[Back to TOC](#table-of-contents)
+See `BOA_TELEMETRY_KPI_SLI_SLO_SLA_DEFINITIONS.md` for the definitions
+cheat sheet.
+
+Runbooks mattered because forecasting should not stop at a dashboard.
+If a service moved toward higher risk, the runbook guided repeatable response.
+
+Typical steps were data and mapping validation, owner confirmation, recent
+change review, headroom and threshold history review, and SME context.
+Then the team selected action: tuning, cleanup, right-sizing, capacity
+expansion, or continued monitoring.
+
+The value was consistency. It reduced ad-hoc investigation and made forecast
+output operational, not only informational.
 
 ## 30) How would you scale this from Pandas to PySpark/Hadoop/cloud?
 [Back to TOC](#table-of-contents)

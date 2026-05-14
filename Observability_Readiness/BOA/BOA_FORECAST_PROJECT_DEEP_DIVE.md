@@ -12,6 +12,7 @@
 - [7. Testing and Validation](#7-testing-and-validation)
 - [8. Output Reports and Dashboards](#8-output-reports-and-dashboards)
 - [9. Management Decision Support](#9-management-decision-support)
+- [KPI Definition and Runbook Connection](#kpi-definition-and-runbook-connection)
 - [10. Scaling Path to PySpark / Hadoop / Cloud](#10-scaling-path-to-pyspark-hadoop-cloud)
 - [11. 30-Second Answer](#11-30-second-answer)
 - [12. 2-Minute Answer](#12-2-minute-answer)
@@ -195,6 +196,42 @@ Validation principle:
 - Support decisions on scaling, optimization, and prioritization.
 - Provide concise executive summaries with assumptions and confidence
   language.
+
+## KPI Definition and Runbook Connection
+[Back to TOC](#table-of-contents)
+Capacity KPIs should be defined from the decision backward. The goal is not to
+show every metric. The goal is to show signals that help operations, engineering,
+and leadership decide what action is needed.
+
+Useful capacity KPIs:
+- utilization trend
+- rolling peak
+- recent maximum
+- growth slope
+- headroom to threshold
+- threshold breach count or frequency
+- forecasted breach window
+- service criticality
+- risk band
+- owner/application mapping
+- remediation status
+
+Runbooks connect those KPIs to action. If a system moves into a higher risk
+band, the runbook should guide data validation, owner confirmation, threshold
+review, SME review, and action selection.
+
+Typical runbook actions:
+- validate metric quality
+- confirm timestamp bucket and grouping
+- check recent changes or incidents
+- compare current behavior to historical pattern
+- identify service owner
+- confirm business-calendar impact
+- decide between tuning, cleanup, right-sizing, capacity expansion, or
+  continued monitoring
+
+This is how the forecast becomes operational. The dashboard shows the risk, the
+KPI explains why it matters, and the runbook tells the team what to do next.
 
 ## 10. Scaling Path to PySpark / Hadoop / Cloud
 [Back to TOC](#table-of-contents)

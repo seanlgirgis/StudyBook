@@ -15,9 +15,11 @@
   - [9) How did this support budget or planning?](#9-how-did-this-support-budget-or-planning)
   - [10) How would you scale from Pandas to PySpark/Hadoop/cloud?](#10-how-would-you-scale-from-pandas-to-pysparkhadoopcloud)
   - [11) What did you own directly?](#11-what-did-you-own-directly)
-  - [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
-  - [Final Memory Spine](#final-memory-spine)
-  - [Do Not Say](#do-not-say)
+- [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
+- [13) How do you define KPIs?](#13-how-do-you-define-kpis)
+- [14) How did runbooks fit into the process?](#14-how-did-runbooks-fit-into-the-process)
+- [Final Memory Spine](#final-memory-spine)
+- [Do Not Say](#do-not-say)
 
 
 ## 1) Walk me through how you built it.
@@ -137,6 +139,29 @@ SQL/Python/Pandas formed the real workflow foundation.
 Prophet was real forecasting work in the core flow.
 Scikit-learn risk scoring is a newer lab modernization extension.
 PySpark/Hadoop/cloud is the scale-up architecture path.
+
+## 13) How do you define KPIs?
+[Back to TOC](#table-of-contents)
+See `BOA_TELEMETRY_KPI_SLI_SLO_SLA_DEFINITIONS.md` for the definitions
+cheat sheet.
+
+I define KPIs by starting with the business or operational decision first.
+For capacity, useful KPIs include utilization trend, rolling peak, recent
+maximum, growth slope, headroom to threshold, breach frequency, forecasted
+breach window, service criticality, owner, risk band, and remediation status.
+A good KPI is actionable, not just a metric on a chart.
+
+## 14) How did runbooks fit into the process?
+[Back to TOC](#table-of-contents)
+See `BOA_TELEMETRY_KPI_SLI_SLO_SLA_DEFINITIONS.md` for the definitions
+cheat sheet.
+
+Runbooks turned forecast output into repeatable action.
+If risk increased, we validated data and mapping, confirmed owner, checked
+recent changes, reviewed headroom and threshold history, and involved SMEs.
+Then we chose the action path: tuning, cleanup, right-sizing, capacity
+expansion, or continued monitoring.
+That kept response consistent instead of reinventing each investigation.
 
 ## Final Memory Spine
 [Back to TOC](#table-of-contents)
