@@ -98,23 +98,24 @@ reliability conversation. For example, low headroom can be an early warning
 that a latency or availability SLO may be at risk.
 
 ## 6. Runbooks
-A runbook is a repeatable operating procedure that tells the team what to
-check, who to contact, how to validate the issue, and what actions to take.
+In capacity planning, the dashboard shows the risk, the KPI explains
+why it matters, and the runbook tells the team what to do next.
 
-Capacity runbook examples:
-- validate metric quality
-- confirm timestamp bucket
-- confirm host/application/service mapping
-- check recent changes
-- review headroom and threshold history
-- check whether pattern is spike, trend, batch window, or bad data
-- contact SME or owner
-- choose action:
-  tuning, cleanup, right-sizing, capacity expansion, or monitoring
+A capacity runbook is a repeatable operating procedure. It tells the
+team what to check, who to contact, how to validate the issue, and
+what actions to take.
 
-BOA-safe sentence:
-"The dashboard shows the risk, the KPI explains why it matters, and the runbook
-tells the team what to do next."
+For example, if a service moves into a higher risk band, the runbook
+would guide the team to validate metric quality, confirm the timestamp
+bucket, verify host/application/service mapping, check recent changes,
+review headroom and threshold history, and contact the SME or service
+owner.
+
+Then the team can choose the right action: tuning, cleanup,
+right-sizing, capacity expansion, or continued monitoring.
+
+The value is consistency. The team is not reinventing the investigation
+every time a capacity risk appears.
 
 ## 7. BOA interview answer: How do you define KPIs?
 "I separate telemetry, metrics, and KPIs.
