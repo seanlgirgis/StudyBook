@@ -2,20 +2,22 @@
 
 ## Table of Contents
 
-- [1) Walk me through how you built it.](#1-walk-me-through-how-you-built-it)
-- [2) What features did you use?](#2-what-features-did-you-use)
-- [3) Why Prophet?](#3-why-prophet)
-- [4) How did you validate it?](#4-how-did-you-validate-it)
-- [5) Explain 18 months training / 6 months testing.](#5-explain-18-months-training-6-months-testing)
-- [6) Did you forecast all servers together?](#6-did-you-forecast-all-servers-together)
-- [7) How did you handle 10,000 servers?](#7-how-did-you-handle-10000-servers)
-- [8) How did leadership use the output?](#8-how-did-leadership-use-the-output)
-- [9) How did this support budget or planning?](#9-how-did-this-support-budget-or-planning)
-- [10) How would you scale from Pandas to PySpark/Hadoop/cloud?](#10-how-would-you-scale-from-pandas-to-pysparkhadoopcloud)
-- [11) What did you own directly?](#11-what-did-you-own-directly)
-- [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
-- [Final Memory Spine](#final-memory-spine)
-- [Do Not Say](#do-not-say)
+- [BOA Interview Q and A: Capacity Forecasting (Short Final Drill)](#boa-interview-q-and-a-capacity-forecasting-short-final-drill)
+  - [Table of Contents](#table-of-contents)
+  - [1) Walk me through how you built it.](#1-walk-me-through-how-you-built-it)
+  - [2) What features did you use?](#2-what-features-did-you-use)
+  - [3) Why Prophet?](#3-why-prophet)
+  - [4) How did you validate it?](#4-how-did-you-validate-it)
+  - [5) Explain 18 months training / 6 months testing.](#5-explain-18-months-training--6-months-testing)
+  - [6) Did you forecast all servers together?](#6-did-you-forecast-all-servers-together)
+  - [7) How did you handle 10,000 servers?](#7-how-did-you-handle-10000-servers)
+  - [8) How did leadership use the output?](#8-how-did-leadership-use-the-output)
+  - [9) How did this support budget or planning?](#9-how-did-this-support-budget-or-planning)
+  - [10) How would you scale from Pandas to PySpark/Hadoop/cloud?](#10-how-would-you-scale-from-pandas-to-pysparkhadoopcloud)
+  - [11) What did you own directly?](#11-what-did-you-own-directly)
+  - [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
+  - [Final Memory Spine](#final-memory-spine)
+  - [Do Not Say](#do-not-say)
 
 
 ## 1) Walk me through how you built it.
@@ -34,6 +36,13 @@ Rolling peaks and recent maximum showed stress behavior.
 Growth slope and volatility helped identify acceleration risk.
 Headroom to threshold showed urgency before a breach.
 Breach flags and risk bands made prioritization clearer.
+
+- Rolling Averages features
+- Rolling Peaks / P95 features
+- Headroom features
+- breach flags 
+- Risk Bands  (OOM - High Risk - Low Risk - Severe Capcity Risk)
+- Growth Slope (capture pattern)
 
 ## 3) Why Prophet?
 [Back to TOC](#table-of-contents)
