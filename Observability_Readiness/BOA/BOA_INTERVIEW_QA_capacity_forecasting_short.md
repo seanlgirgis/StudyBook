@@ -108,10 +108,23 @@ Forecasts were applied within behavior-based cohorts and validated.
 
 ## 7) How did you handle 10,000 servers?
 [Back to TOC](#table-of-contents)
-I handled scale through cohort-based forecasting.
-Systems were grouped by function, ownership, pattern, and criticality.
-Batch, API, and database workloads were not pooled as one curve.
-That made forecasts more defensible and easier to operate.
+To be honest, we did not start by forecasting every server at once.
+We started with a smaller, more controlled set of systems and expanded
+from there.
+
+We grouped servers into cohorts based on factors like function,
+ownership, criticality, workload type, batch behavior, and whether the
+service was customer-facing.
+
+Then we focused first on the higher-risk cohorts, where the forecast
+would create the most value. As the approach became more reliable, we
+expanded by adding more servers into existing cohorts and creating new
+cohorts where the usage pattern was different.
+
+That made the forecasting process more manageable, more defensible,
+and easier to operate. We grouped first, forecast second. We did not
+dump all servers into one bucket and expect one model to explain
+different behaviors.
 
 ## 8) How did leadership use the output?
 [Back to TOC](#table-of-contents)
