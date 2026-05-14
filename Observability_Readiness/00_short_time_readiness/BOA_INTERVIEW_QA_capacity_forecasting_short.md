@@ -28,6 +28,28 @@ I grouped by host, application, and service for actionability.
 Next I engineered trend, headroom, and breach features.
 Then I forecasted risk windows and ranked systems by urgency.
 The output became dashboards, exception lists, and management summaries.
+1. Start with telemetry extraction and data cleanup.
+
+2. Normalize timestamps so the time-series data is consistent.
+
+3. Bucket the data into hourly and daily windows.
+
+4. Group the data by host, application, and service so the output is actionable.
+
+5. Engineer capacity features:
+   - trend
+   - headroom
+   - threshold/breach indicators
+   - risk signals
+
+6. Forecast risk windows instead of only looking at current utilization.
+
+7. Rank systems by urgency so teams know where to act first.
+
+8. Publish the output as:
+   - dashboards
+   - exception lists
+   - management summaries
 
 ## 2) What features did you use?
 [Back to TOC](#table-of-contents)
