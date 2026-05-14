@@ -63,10 +63,26 @@ Breach flags and risk bands made prioritization clearer.
 
 ## 3) Why Prophet?
 [Back to TOC](#table-of-contents)
-Prophet was part of the real forecasting workflow.
-It handled trend and seasonality in an explainable way.
-That made results easier to discuss with engineers and leadership.
-I used it for practical planning support, not deep ML claims.
+Prophet was a practical choice because the data was time-series
+capacity data, and we needed to handle trend plus seasonality.
+
+Some systems have weekly, monthly, quarter-end, or business-calendar
+patterns, so a simple straight-line trend would not always be enough.
+Prophet gave us an explainable way to model those patterns and discuss
+the forecast with engineers and leadership.
+
+I still treated it as decision support, not deep ML research. The goal
+was not to build the most complex model. The goal was to identify
+capacity risk earlier and give teams more time to act.
+
+For validation, I used time-based holdout testing. For example, with
+24 months of history, train on the first 18 months, test against the
+next 6 months, and compare forecasted values or risk bands against
+what actually happened.
+
+Then I would review forecast error, false positives, false negatives,
+threshold-crossing accuracy, and SME feedback before trusting the
+forecast for the next 3 to 6 month planning window.
 
 ## 4) How did you validate it?
 [Back to TOC](#table-of-contents)
