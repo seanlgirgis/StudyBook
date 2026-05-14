@@ -13,6 +13,8 @@
 4. Ownership-safe answers: what Sean built directly vs where platform
    collaboration applies.
 5. Whiteboard flow from timestamp normalization to risk ranking and dashboards.
+6. Review Prophet validation and holdout-testing Q&A only after the
+   30-second, 2-minute, and 5-minute stories are stable.
 
 ## What Not To Study Now
 - Deep OpenTelemetry collector internals.
@@ -48,8 +50,10 @@ These can be supporting examples only if asked.
 1. Say the 30-second answer out loud five times.
 2. Run the 2-minute answer with a timer and remove extra wording.
 3. Walk the 5-minute story at whiteboard pace.
-4. Practice 12 likely BOA questions with safe/unsafe contrast.
-5. End with one-minute ownership statement and collaboration statement.
+4. Review short Q&A sheet after the 30/2/5 answers.
+5. Use the full Q&A only for deeper technical defense.
+6. Practice 12 likely BOA questions with safe/unsafe contrast.
+7. End with one-minute ownership statement and collaboration statement.
 
 ## Final Pre-Interview Checklist
 - Can explain end-to-end build flow without notes.

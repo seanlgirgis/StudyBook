@@ -29,6 +29,13 @@ Operator note: data quality happens before model logic.
 - Keep grouping stable so risk ranking maps to accountable teams.
 - Use grouping keys consistently through feature, risk, and report layers.
 
+## Cohort-Based Forecasting
+- Grouping first, forecast second.
+- Validate by cohort against actual behavior and threshold outcomes.
+- Tune only where backtesting proves the need.
+- Keep settings explainable and avoid blind per-server hand tuning at scale.
+- Use cohort outputs to support operational decisions and prioritization.
+
 ## 5. Feature Engineering
 Core explainable features:
 - Rolling averages: sustained trend behavior.

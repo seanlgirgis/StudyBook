@@ -41,3 +41,9 @@
   questions, strong safe answers, and risky responses to avoid.
 - Updated `CURRENT_FOCUS.md` to lock Horizon Scale Forecasting as the active
   lane and de-prioritize side-topic depth for now.
+- Added `04_stories/BOA_INTERVIEW_QA_forecast_validation_and_prophet.md` with
+  BOA-safe Q&A on holdout testing, Prophet tuning, cohorting, and practical
+  validation framing.
+- Added BOA capacity Q&A sheets for final rehearsal and technical defense:
+  `00_short_time_readiness/BOA_INTERVIEW_QA_capacity_forecasting_short.md` and
+  `04_stories/BOA_INTERVIEW_QA_capacity_forecasting_full.md`.
