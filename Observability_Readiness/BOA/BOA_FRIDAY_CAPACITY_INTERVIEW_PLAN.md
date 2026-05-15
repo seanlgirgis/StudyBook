@@ -16,8 +16,10 @@ Use as emphasis, not as confirmed role scope.
 - Helix awareness may help, but do not overclaim.
 - Excel forecasting may still exist; Python/Pandas repeatability is valuable.
 - Dashboarding is important; Power BI and Tableau are useful language.
-- Performance testing / BreakPoint-style TPS feeds may inform capacity limits.
+- Performance testing / UCL / BreakPoint-style TPS feeds may inform capacity limits.
 - Safety factors matter; do not forecast right up to hard limits.
+- Project assessment may ask whether new volume can be absorbed or whether
+  horizontal / vertical scaling is needed.
 - AWS/Kubernetes capacity monitoring is useful as secondary awareness.
 - Team may need a technical person who can support and extend the process.
 
@@ -86,3 +88,6 @@ These can be supporting examples only if asked.
 - Can describe dashboard and executive reporting outputs.
 - Can state personal ownership clearly and avoid overclaiming.
 - Can redirect side topics back to capacity decision support.
+
+- Can explain UCL/BreakPoint/TPS project assessment: baseline, threshold,
+  safety factor, capacity pool, and horizontal/vertical scaling decision.

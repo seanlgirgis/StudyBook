@@ -16,6 +16,9 @@
   - [10) How would you scale from Pandas to PySpark/Hadoop/cloud?](#10-how-would-you-scale-from-pandas-to-pysparkhadoopcloud)
   - [11) What did you own directly?](#11-what-did-you-own-directly)
   - [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
+  - [13) How do you define KPIs?](#13-how-do-you-define-kpis)
+  - [14) How did runbooks fit into the process?](#14-how-did-runbooks-fit-into-the-process)
+  - [19) How do UCL testing, BreakPoint, TPS, and project assessment fit?](#19-how-do-ucl-testing-breakpoint-tps-and-project-assessment-fit)
   - [Final Memory Spine](#final-memory-spine)
   - [Do Not Say](#do-not-say)
 
@@ -139,6 +142,34 @@ Prophet was real forecasting work in the core flow.
 Scikit-learn risk scoring is a newer lab modernization extension.
 PySpark/Hadoop/cloud is the scale-up architecture path.
 
+## 13) How do you define KPIs?
+[Back to TOC](#table-of-contents)
+I define KPIs from the decision backward.
+
+A metric tells me what was measured. A KPI tells the team why it matters
+and whether action is needed.
+
+For capacity, useful KPIs include utilization trend, rolling peak, recent
+maximum, growth slope, headroom to threshold, breach frequency, forecasted
+breach window, service criticality, owner, risk band, and remediation status.
+
+A good KPI should help answer: what is at risk, who owns it, how urgent is
+it, and what decision needs to be made.
+
+## 14) How did runbooks fit into the process?
+[Back to TOC](#table-of-contents)
+Runbooks turned forecast output into repeatable action.
+
+If a service moved into a higher risk band, the runbook helped the team
+validate the data, confirm the owner, check recent changes, review headroom
+and threshold history, involve the SME, and choose the next action.
+
+The action might be tuning, cleanup, right-sizing, capacity expansion,
+horizontal scaling, vertical scaling, or continued monitoring.
+
+The value was consistency. The team did not need to reinvent the
+investigation every time capacity risk appeared.
+
 ## 15) How does this map to BOA-style CBFR work?
 [Back to TOC](#table-of-contents)
 This maps closely to capacity baseline forecasting work.
@@ -192,6 +223,22 @@ strength remains the capacity workflow: collect the telemetry, validate it,
 define KPIs, forecast risk, and turn the output into reports, dashboards, and
 action plans.
 
+## 19) How do UCL testing, BreakPoint, TPS, and project assessment fit?
+[Back to TOC](#table-of-contents)
+UCL or BreakPoint-style testing gives a controlled view of throughput limits,
+such as TPS capacity and saturation behavior.
+
+Production telemetry shows the real operating baseline. The test feed helps
+define upper limits and safety factors.
+
+For project assessment, I would compare expected new volume or TPS growth
+against current production baseline, CPU thresholds, capacity pools, and
+safety margin.
+
+Then the decision becomes practical: can the current pool absorb the new
+volume, or do we need tuning, horizontal scaling, vertical scaling, or a
+planned capacity add?
+
 ## Final Memory Spine
 [Back to TOC](#table-of-contents)
 ```text
@@ -199,7 +246,8 @@ Clean telemetry -> normalize time -> bucket -> group -> engineer features ->
 forecast and rank risk -> validate against actuals and SMEs -> publish
 dashboards and action lists -> support leadership planning decisions.
 For BOA-style teams: CBFR/reporting, dashboarding, TPS safety factors,
-BMC capacity data, and production critical applications are natural fits.
+BMC capacity data, UCL/BreakPoint testing, TPS project assessment,
+capacity pools, safety factors, and production critical applications are natural fits.
 ```
 
 ## Do Not Say
