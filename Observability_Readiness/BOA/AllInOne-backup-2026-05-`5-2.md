@@ -10,8 +10,6 @@
   - [12.0 How would you explain dashboards for this capacity process?](#120-how-would-you-explain-dashboards-for-this-capacity-process)
   - [21.0 What is your safest summary of the whole capacity forecasting project?](#210-what-is-your-safest-summary-of-the-whole-capacity-forecasting-project)
   - [22.0 Why should we hire you for this capacity role?](#220-why-should-we-hire-you-for-this-capacity-role)
-  - [30.0 Tell me about yourself.](#300-tell-me-about-yourself)
-  - [31.0 What questions would you ask them at the end?](#310-what-questions-would-you-ask-them-at-the-end)
 - [Must Understand](#must-understand)
   - [4.0 How do clusters, load balancing, active/passive, and DR affect capacity planning?](#40-how-do-clusters-load-balancing-activepassive-and-dr-affect-capacity-planning)
   - [5.0 How do collection exceptions or missing metrics affect capacity planning?](#50-how-do-collection-exceptions-or-missing-metrics-affect-capacity-planning)
@@ -37,7 +35,6 @@
   - [27.0 How do you define KPIs?](#270-how-do-you-define-kpis)
   - [28.0 What tools or environment signals are relevant?](#280-what-tools-or-environment-signals-are-relevant)
   - [29.0 How do criticality, governance, and audits fit?](#290-how-do-criticality-governance-and-audits-fit)
-
 ## Must Be Smooth
 
 ## 1.0 Walk me through how you built the capacity forecasting workflow.
@@ -343,7 +340,7 @@ is from zero. I am coming in as a ready contributor who can support the
 team, strengthen the process, and help deliver the goals management has
 set.
 
-### Shorter verion
+### Shorter version
 This role fits my strongest background: enterprise banking capacity
 planning, BMC-style telemetry, CBFR-style reporting, Python/Pandas
 automation, KPI dashboards, forecasting, exception handling, and
@@ -366,122 +363,6 @@ to act on.
 7. I bring technical depth without losing business communication.
 
 ### Points to hit
-
-## 30.0 Tell me about yourself.
-[Back to TOC](#table-of-contents)
-
-I am a data engineering and capacity planning professional with a
-strong background in large enterprise banking environments.
-
-Most of my recent work has been around capacity planning, performance
-analytics, telemetry reporting, and forecasting. I have worked with
-BMC TrueSight / TSCO-style capacity data, Oracle-backed reporting
-feeds, CMDB ownership context, and production infrastructure telemetry.
-
-My strength is taking raw technical signals like CPU, memory,
-utilization, throughput, thresholds, and exceptions, then turning them
-into something useful for operations and leadership: baseline reports,
-forecast views, dashboards, risk rankings, and action-oriented
-summaries.
-
-I also bring hands-on data skills with SQL, Python, Pandas,
-PySpark-style scale patterns, reporting automation, and validation. So
-I am comfortable both with the capacity operations side and the data
-pipeline side.
-
-What attracted me to this role is that it sounds very close to the work
-I have actually done: production capacity reporting, critical
-applications, BMC-style telemetry, forecast reports, dashboarding,
-thresholds, and collaboration with application, infrastructure,
-architecture, and business teams.
-
-### Shorter version
-I come from a data engineering and capacity planning background,
-mostly in large banking environments.
-
-My strongest area is turning infrastructure telemetry into capacity
-decision support: baseline reports, forecasts, dashboards, exception
-lists, KPI views, and management summaries.
-
-I have worked with BMC TrueSight / TSCO-style data, SQL, Python,
-Pandas, Oracle-backed reporting feeds, and CMDB ownership context.
-
-This role feels like a strong match because it combines production
-capacity planning, reporting, forecasting, dashboarding, and
-stakeholder communication, which are all areas I can contribute to
-quickly.
-
-### Memory line
-My strength is turning production telemetry into capacity reports,
-forecasts, dashboards, and decisions that operations and leadership can
-act on.
-
-### Spine
-1. Data engineering plus capacity planning background.
-2. Banking / enterprise production environment.
-3. BMC TrueSight / TSCO-style telemetry.
-4. SQL / Python / Pandas / reporting automation.
-5. Forecasting, dashboards, exception lists, KPIs.
-6. Translate technical telemetry into decisions.
-7. Role is close to real experience.
-
-## 31.0 What questions would you ask them at the end?
-[Back to TOC](#table-of-contents)
-
-Use three to five questions, depending on time and how the interview
-flows. Pick questions that show interest in their process, pain points,
-and first-90-day expectations.
-
-### Best questions to ask
-
-1. What would success look like in the first 60 to 90 days for someone
-   joining this team?
-
-2. What are the biggest pain points in the current CBFR or capacity
-   reporting process?
-
-3. How is the CBFR process currently produced today? Is it mostly
-   Excel-based, BMC-driven, dashboard-driven, or a mix?
-
-4. How does the team currently use UCL, BreakPoint, TPS, or performance
-   testing results in project assessment?
-
-5. What dashboarding or reporting tools are most important for the
-   team? Are you mainly using BMC reporting, Excel, Power BI, Tableau,
-   Splunk, or another internal platform?
-
-6. How does the team decide between tuning, vertical scaling,
-   horizontal scaling, or planned capacity adds?
-
-7. Where do you most need technical help right now: automation, data
-   cleanup, Python/Pandas, dashboard-ready datasets, forecasting,
-   exception reporting, or stakeholder communication?
-
-### Safest three if time is short
-
-1. What would success look like in the first 60 to 90 days?
-
-2. What are the biggest pain points in the current CBFR or capacity
-   reporting process?
-
-3. How are dashboarding and automation evolving for the team?
-
-### Strong closing question
-
-Based on what we discussed today, is there any area of my background
-you would like me to clarify further?
-
-### Do not ask
-
-- Do not ask about salary first.
-- Do not ask about remote work first.
-- Do not ask questions that sound like you are challenging their current
-  Excel/reporting process.
-- Do not ask, "Do you use modern tools?" in a way that sounds dismissive.
-
-### Memory line
-Ask about their process, pain points, success expectations, and where
-they need technical help.
 
 ## Must Understand
 
@@ -1036,8 +917,6 @@ So the model choice is driven by workload behavior and validation, not
 by choosing the fanciest option. 
 
 ### Memory line
-Fit the model to the cohort, validate against actuals, and keep the
-choice explainable.
 
 ### Spine 
 1. Start with workload behavior.
@@ -1084,9 +963,6 @@ if Helix is part of the current stack, I would treat it as related BMC ecosystem
 context and confirm the exact implementation before overclaiming details.
 
 ### Memory line
-I know the BMC-style capacity workflow: collect telemetry, validate it,
-map ownership, forecast risk, report exceptions, and support planning
-decisions.
 
 ### Spine 
 1. TrueSight / TSCO are familiar capacity tools.
@@ -1187,7 +1063,6 @@ to make and validate the actual capacity decision.
 6. Do not pretend benchmark math alone gives the final answer.
 
 ### Points to hit
-
 ## Additional Drill Questions
 
 ## 23.0 What features did you use?
