@@ -24,7 +24,7 @@
   - [20.0 How do you collaborate with application owners and architects on capacity decisions?](#200-how-do-you-collaborate-with-application-owners-and-architects-on-capacity-decisions)
 - [Backup Only](#backup-only)
   - [10.0 How would you choose the right forecasting model or BMC forecast option for different applications?](#100-how-would-you-choose-the-right-forecasting-model-or-bmc-forecast-option-for-different-applications)
-  - [13.0 How do you explain BMC TrueSight / TSCO / Helix in this capacity workflow without overclaiming?](#130-how-do-you-explain-bmc-truesight-tsco-helix-in-this-capacity-workflow-without-overclaiming)
+  - [13.0 How do you explain BMC TrueSight / TSCO / Helix in this capacity workflow without overclaiming?](#q13-bmc-truesight-tsco-helix)
   - [14.0 How would you handle a swap-space or memory-pressure exception?](#140-how-would-you-handle-a-swap-space-or-memory-pressure-exception)
   - [15.0 How do you explain SPECint or benchmark-style sizing in capacity planning without overclaiming?](#150-how-do-you-explain-specint-or-benchmark-style-sizing-in-capacity-planning-without-overclaiming)
 
@@ -923,6 +923,7 @@ by choosing the fanciest option.
 
 ### Points to hit
 
+<a id="q13-bmc-truesight-tsco-helix"></a>
 ## 13.0 How do you explain BMC TrueSight / TSCO / Helix in this capacity workflow without overclaiming?
 [Back to TOC](#table-of-contents)
 
