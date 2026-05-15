@@ -2,45 +2,41 @@
 
 ## Table of Contents
 
-- [BOA Interview Q and A: Capacity Forecasting (Full Defense)](#boa-interview-q-and-a-capacity-forecasting-full-defense)
-  - [Table of Contents](#table-of-contents)
-  - [1) Walk me through the capacity forecasting workflow.](#1-walk-me-through-the-capacity-forecasting-workflow)
-  - [2) What problem were you solving?](#2-what-problem-were-you-solving)
-  - [3) What data did you use?](#3-what-data-did-you-use)
-  - [4) How did the original reporting pipeline start?](#4-how-did-the-original-reporting-pipeline-start)
-  - [5) How did you move from Excel/manual reports to Python?](#5-how-did-you-move-from-excelmanual-reports-to-python)
-  - [6) Why SQLite or lightweight structured storage?](#6-why-sqlite-or-lightweight-structured-storage)
-  - [7) How did Streamlit or team reporting fit?](#7-how-did-streamlit-or-team-reporting-fit)
-  - [8) What features did you engineer?](#8-what-features-did-you-engineer)
-  - [9) Why rolling averages and rolling peaks?](#9-why-rolling-averages-and-rolling-peaks)
-  - [10) What is headroom to threshold?](#10-what-is-headroom-to-threshold)
-  - [11) How did you define risk bands?](#11-how-did-you-define-risk-bands)
-  - [12) Why Prophet?](#12-why-prophet)
-  - [13) How did Prophet help with seasonality?](#13-how-did-prophet-help-with-seasonality)
-  - [14) How did you handle month-end, quarter-end, or holiday effects?](#14-how-did-you-handle-month-end-quarter-end-or-holiday-effects)
-  - [15) How did you validate the model?](#15-how-did-you-validate-the-model)
-  - [16) Explain 18-month training and 6-month testing.](#16-explain-18-month-training-and-6-month-testing)
-  - [17) Why not randomly sample time-series data?](#17-why-not-randomly-sample-time-series-data)
-  - [18) What metrics did you use to compare forecast vs actual?](#18-what-metrics-did-you-use-to-compare-forecast-vs-actual)
-  - [19) What does good enough mean?](#19-what-does-good-enough-mean)
-  - [20) What if the model missed the test period?](#20-what-if-the-model-missed-the-test-period)
-  - [21) Did you forecast all servers together?](#21-did-you-forecast-all-servers-together)
-  - [22) How did you group thousands of servers?](#22-how-did-you-group-thousands-of-servers)
-  - [23) What is cohort-based forecasting?](#23-what-is-cohort-based-forecasting)
-  - [24) Did each server have a custom model?](#24-did-each-server-have-a-custom-model)
-  - [25) How did you avoid overfitting?](#25-how-did-you-avoid-overfitting)
-  - [26) How did SMEs validate the forecast?](#26-how-did-smes-validate-the-forecast)
-  - [27) How did this become dashboards and reports?](#27-how-did-this-become-dashboards-and-reports)
-  - [28) How did leadership use the output?](#28-how-did-leadership-use-the-output)
-  - [29) How did this support budget or FinOps-style discussions?](#29-how-did-this-support-budget-or-finops-style-discussions)
-  - [How do you define KPIs for capacity forecasting?](#how-do-you-define-kpis-for-capacity-forecasting)
-  - [How did runbooks fit into the capacity process?](#how-did-runbooks-fit-into-the-capacity-process)
-  - [30) How would you scale this from Pandas to PySpark/Hadoop/cloud?](#30-how-would-you-scale-this-from-pandas-to-pysparkhadoopcloud)
-  - [31) What did you own directly?](#31-what-did-you-own-directly)
-  - [32) Where did you partner with platform/data teams?](#32-where-did-you-partner-with-platformdata-teams)
-  - [33) What would you modernize now?](#33-what-would-you-modernize-now)
-  - [34) What are risky claims to avoid?](#34-what-are-risky-claims-to-avoid)
-  - [35) Give me the 60-second version.](#35-give-me-the-60-second-version)
+- [1) Walk me through the capacity forecasting workflow.](#1-walk-me-through-the-capacity-forecasting-workflow)
+- [2) What problem were you solving?](#2-what-problem-were-you-solving)
+- [3) What data did you use?](#3-what-data-did-you-use)
+- [4) How did the original reporting pipeline start?](#4-how-did-the-original-reporting-pipeline-start)
+- [5) How did you move from Excel/manual reports to Python?](#5-how-did-you-move-from-excelmanual-reports-to-python)
+- [6) Why SQLite or lightweight structured storage?](#6-why-sqlite-or-lightweight-structured-storage)
+- [7) How did Streamlit or team reporting fit?](#7-how-did-streamlit-or-team-reporting-fit)
+- [8) What features did you engineer?](#8-what-features-did-you-engineer)
+- [9) Why rolling averages and rolling peaks?](#9-why-rolling-averages-and-rolling-peaks)
+- [10) What is headroom to threshold?](#10-what-is-headroom-to-threshold)
+- [11) How did you define risk bands?](#11-how-did-you-define-risk-bands)
+- [12) Why Prophet?](#12-why-prophet)
+- [13) How did Prophet help with seasonality?](#13-how-did-prophet-help-with-seasonality)
+- [14) How did you handle month-end, quarter-end, or holiday effects?](#14-how-did-you-handle-month-end-quarter-end-or-holiday-effects)
+- [15) How did you validate the model?](#15-how-did-you-validate-the-model)
+- [16) Explain 18-month training and 6-month testing.](#16-explain-18-month-training-and-6-month-testing)
+- [17) Why not randomly sample time-series data?](#17-why-not-randomly-sample-time-series-data)
+- [18) What metrics did you use to compare forecast vs actual?](#18-what-metrics-did-you-use-to-compare-forecast-vs-actual)
+- [19) What does good enough mean?](#19-what-does-good-enough-mean)
+- [20) What if the model missed the test period?](#20-what-if-the-model-missed-the-test-period)
+- [21) Did you forecast all servers together?](#21-did-you-forecast-all-servers-together)
+- [22) How did you group thousands of servers?](#22-how-did-you-group-thousands-of-servers)
+- [23) What is cohort-based forecasting?](#23-what-is-cohort-based-forecasting)
+- [24) Did each server have a custom model?](#24-did-each-server-have-a-custom-model)
+- [25) How did you avoid overfitting?](#25-how-did-you-avoid-overfitting)
+- [26) How did SMEs validate the forecast?](#26-how-did-smes-validate-the-forecast)
+- [27) How did this become dashboards and reports?](#27-how-did-this-become-dashboards-and-reports)
+- [28) How did leadership use the output?](#28-how-did-leadership-use-the-output)
+- [29) How did this support budget or FinOps-style discussions?](#29-how-did-this-support-budget-or-finops-style-discussions)
+- [30) How would you scale this from Pandas to PySpark/Hadoop/cloud?](#30-how-would-you-scale-this-from-pandas-to-pysparkhadoopcloud)
+- [31) What did you own directly?](#31-what-did-you-own-directly)
+- [32) Where did you partner with platform/data teams?](#32-where-did-you-partner-with-platformdata-teams)
+- [33) What would you modernize now?](#33-what-would-you-modernize-now)
+- [34) What are risky claims to avoid?](#34-what-are-risky-claims-to-avoid)
+- [35) Give me the 60-second version.](#35-give-me-the-60-second-version)
 
 
 ## 1) Walk me through the capacity forecasting workflow.
@@ -210,64 +206,15 @@ ownership so teams could prioritize confidently.
 
 ## 28) How did leadership use the output?
 [Back to TOC](#table-of-contents)
-
-Leadership did not need raw telemetry; they needed risk, timing,
-ownership, and recommended action.
-
-The value was translating technical capacity signals into planning
-language leadership could act on.
-
-Leadership consumed actionable risk and opportunity summaries to guide
-timing and prioritization.
-
-The reports showed which services had low headroom, which were trending
-toward threshold risk, which owners needed to be involved, and what the
-likely action window looked like.
-
-That supported decisions on remediation timing, capacity planning,
-resource allocation, and budget conversations using clearer risk
-language.
-
-
-
+Leadership used concise risk summaries to guide timing and prioritization. The
+reports supported decisions on remediation windows, capacity planning, and
+resource allocation with clearer risk language.
 
 ## 29) How did this support budget or FinOps-style discussions?
 [Back to TOC](#table-of-contents)
 I was not the FinOps owner, but forecasting outputs supported those
 conversations. Trend, headroom, and risk windows gave finance, platform, and
 application stakeholders more factual inputs for planning tradeoffs.
-
-## How do you define KPIs for capacity forecasting?
-[Back to TOC](#table-of-contents)
-See `BOA_TELEMETRY_KPI_SLI_SLO_SLA_DEFINITIONS.md` for the definitions
-cheat sheet.
-
-I define KPIs from the decision backward. I do not want random metrics. I want
-signals that explain health, risk, ownership, and action timing.
-
-For capacity forecasting, useful KPIs include utilization trend, rolling peak,
-recent maximum, growth slope, headroom to threshold, breach frequency,
-forecasted breach window, service criticality, owner mapping, risk band, and
-remediation status.
-
-A KPI must be actionable. A chart value alone is not enough. The KPI should
-help the team decide what to do, who owns it, and how urgent it is.
-
-## How did runbooks fit into the capacity process?
-[Back to TOC](#table-of-contents)
-See `BOA_TELEMETRY_KPI_SLI_SLO_SLA_DEFINITIONS.md` for the definitions
-cheat sheet.
-
-Runbooks mattered because forecasting should not stop at a dashboard.
-If a service moved toward higher risk, the runbook guided repeatable response.
-
-Typical steps were data and mapping validation, owner confirmation, recent
-change review, headroom and threshold history review, and SME context.
-Then the team selected action: tuning, cleanup, right-sizing, capacity
-expansion, or continued monitoring.
-
-The value was consistency. It reduced ad-hoc investigation and made forecast
-output operational, not only informational.
 
 ## 30) How would you scale this from Pandas to PySpark/Hadoop/cloud?
 [Back to TOC](#table-of-contents)
@@ -309,3 +256,79 @@ testing, predicted-vs-actual checks, and SME review. The output was dashboards,
 exception lists, and ranked risk views that supported remediation timing and
 planning decisions. At scale, we grouped first and forecast second, then used
 PySpark/Hadoop/cloud patterns as the architecture path when needed.
+
+
+## 36) How does this map to BOA-style CBFR work?
+[Back to TOC](#table-of-contents)
+If the team produces a Capacity Baseline Forecast Report, I would treat that as
+the decision product. The work behind it is familiar: collect production
+telemetry, map it to applications, clusters, and owners, calculate baseline,
+trend, headroom, threshold risk, safety margin, and forecasted breach window,
+then publish a clear planning report.
+
+That maps well to my experience because I have worked with enterprise capacity
+and APM data, reporting automation, forecasting workflows, and stakeholder-ready
+risk summaries.
+
+The strongest bridge is this: I am comfortable with Excel-heavy forecasting as
+a starting point, but I can help make the process more repeatable with Python,
+Pandas, validation checks, and dashboard-ready outputs.
+
+## 37) How do performance testing, TPS, and safety factors fit?
+[Back to TOC](#table-of-contents)
+Performance testing gives a controlled view of throughput limits. If a
+performance testing or BreakPoint-style feed provides TPS, saturation behavior,
+or upper-limit results, I would use that as an input to capacity planning.
+
+Production telemetry shows real usage. Performance testing shows engineered
+limits. Together, they help define thresholds and safety factors.
+
+I would not plan production capacity right up to the hard limit. I would use
+safety margin because banking workloads can have spikes, month-end and
+quarter-end cycles, business events, and unexpected demand.
+
+## 38) How would you support dashboarding?
+[Back to TOC](#table-of-contents)
+Dashboarding is important because the forecast only creates value if teams can
+consume it. I would design dashboard-ready outputs around the decision: which
+application or cluster is at risk, when, who owns it, what threshold or safety
+factor is involved, and what action is recommended.
+
+A strong capacity dashboard should show baseline, current trend, forecasted
+risk window, headroom, threshold, safety margin, risk band, owner, and
+remediation status.
+
+I can structure the underlying data for tools like Power BI, Tableau, or other
+enterprise dashboards. I would not claim ownership of every dashboard platform,
+but I can define the data model and decision views those dashboards need.
+
+## 39) How do BMC TrueSight, TSCO, Helix, Splunk, AWS, and Kubernetes fit?
+[Back to TOC](#table-of-contents)
+BMC TrueSight and TSCO are directly aligned with my background. I understand
+the capacity workflow around production telemetry, baseline reports, threshold
+views, forecasting, and planning.
+
+If Helix is part of the environment, I would treat it as a related BMC service
+or operations platform context and learn the exact implementation. I would not
+overclaim Helix ownership unless the role needs it and I have validated the
+details.
+
+Splunk, AWS, and Kubernetes are useful adjacent signal sources or future
+capacity contexts. For example, AWS migration and Kubernetes monitoring can add
+new telemetry sources, but the core capacity logic remains the same: collect,
+validate, map ownership, define KPIs, forecast risk, and publish decision
+views.
+
+## 40) How would you describe your fit if the team is not super technical?
+[Back to TOC](#table-of-contents)
+I would position myself as the technical capacity person who can meet the team
+where they are.
+
+If the current process uses Excel, quarterly reports, BMC capacity data, and
+manual review, I can understand that workflow and improve it without dismissing
+it. I can help make the process more repeatable with Python, Pandas, structured
+data, validation checks, and dashboard-ready outputs.
+
+My value is translating between operations, data, forecasting, dashboards, and
+management decisions. I can support the team technically while still explaining
+the work in plain planning language.

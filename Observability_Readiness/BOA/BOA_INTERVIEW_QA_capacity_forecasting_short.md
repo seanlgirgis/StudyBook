@@ -16,35 +16,40 @@
   - [10) How would you scale from Pandas to PySpark/Hadoop/cloud?](#10-how-would-you-scale-from-pandas-to-pysparkhadoopcloud)
   - [11) What did you own directly?](#11-what-did-you-own-directly)
   - [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
-  - [13) How do you define KPIs?](#13-how-do-you-define-kpis)
-  - [14) How did runbooks fit into the process?](#14-how-did-runbooks-fit-into-the-process)
   - [Final Memory Spine](#final-memory-spine)
   - [Do Not Say](#do-not-say)
 
 
 ## 1) Walk me through how you built it.
 [Back to TOC](#table-of-contents)
-I started with telemetry extraction from monitoring and capacity
-systems. The first step was cleanup and normalization: normalize
-timestamps, standardize host and service identifiers, and make sure
-the mappings were reliable.
+I started with telemetry extraction and data cleanup.
+Then I normalized timestamps and bucketed data hourly and daily.
+I grouped by host, application, and service for actionability.
+Next I engineered trend, headroom, and breach features.
+Then I forecasted risk windows and ranked systems by urgency.
+The output became dashboards, exception lists, and management summaries.
+1. Start with telemetry extraction and data cleanup.
 
-Then I bucketed the data into hourly and daily windows and grouped it
-by host, application, and service so the output would be actionable.
+2. Normalize timestamps so the time-series data is consistent.
 
-After that I engineered capacity features: rolling averages, rolling
-peaks, P95s where useful, headroom to threshold, breach flags, risk
-bands, and growth slope.
+3. Bucket the data into hourly and daily windows.
 
-For forecasting, I used a time-based validation approach. Train on an
-older history window, test against a recent holdout window, compare
-the forecast against actual behavior, and then refit on the full
-history before forecasting the next planning window.
+4. Group the data by host, application, and service so the output is actionable.
 
-The final output was not just charts. It became reports, exception
-lists, dashboards, and management summaries that helped engineering,
-business owners, and planning stakeholders decide where action was
-needed.
+5. Engineer capacity features:
+   - trend
+   - headroom
+   - threshold/breach indicators
+   - risk signals
+
+6. Forecast risk windows instead of only looking at current utilization.
+
+7. Rank systems by urgency so teams know where to act first.
+
+8. Publish the output as:
+   - dashboards
+   - exception lists
+   - management summaries
 
 ## 2) What features did you use?
 [Back to TOC](#table-of-contents)
@@ -58,31 +63,15 @@ Breach flags and risk bands made prioritization clearer.
 - Rolling Peaks / P95 features
 - Headroom features
 - breach flags 
-- Risk Bands  (OOM - High Risk - Low Risk - Severe Capcity Risk)
+- Risk Bands  (OOM - High Risk - Low Risk - Severe Capacity Risk)
 - Growth Slope (capture pattern)
 
 ## 3) Why Prophet?
 [Back to TOC](#table-of-contents)
-Prophet was a practical choice because the data was time-series
-capacity data, and we needed to handle trend plus seasonality.
-
-Some systems have weekly, monthly, quarter-end, or business-calendar
-patterns, so a simple straight-line trend would not always be enough.
-Prophet gave us an explainable way to model those patterns and discuss
-the forecast with engineers and leadership.
-
-I still treated it as decision support, not deep ML research. The goal
-was not to build the most complex model. The goal was to identify
-capacity risk earlier and give teams more time to act.
-
-For validation, I used time-based holdout testing. For example, with
-24 months of history, train on the first 18 months, test against the
-next 6 months, and compare forecasted values or risk bands against
-what actually happened.
-
-Then I would review forecast error, false positives, false negatives,
-threshold-crossing accuracy, and SME feedback before trusting the
-forecast for the next 3 to 6 month planning window.
+Prophet was part of the real forecasting workflow.
+It handled trend and seasonality in an explainable way.
+That made results easier to discuss with engineers and leadership.
+I used it for practical planning support, not deep ML claims.
 
 ## 4) How did you validate it?
 [Back to TOC](#table-of-contents)
@@ -108,23 +97,10 @@ Forecasts were applied within behavior-based cohorts and validated.
 
 ## 7) How did you handle 10,000 servers?
 [Back to TOC](#table-of-contents)
-To be honest, we did not start by forecasting every server at once.
-We started with a smaller, more controlled set of systems and expanded
-from there.
-
-We grouped servers into cohorts based on factors like function,
-ownership, criticality, workload type, batch behavior, and whether the
-service was customer-facing.
-
-Then we focused first on the higher-risk cohorts, where the forecast
-would create the most value. As the approach became more reliable, we
-expanded by adding more servers into existing cohorts and creating new
-cohorts where the usage pattern was different.
-
-That made the forecasting process more manageable, more defensible,
-and easier to operate. We grouped first, forecast second. We did not
-dump all servers into one bucket and expect one model to explain
-different behaviors.
+I handled scale through cohort-based forecasting.
+Systems were grouped by function, ownership, pattern, and criticality.
+Batch, API, and database workloads were not pooled as one curve.
+That made forecasts more defensible and easier to operate.
 
 ## 8) How did leadership use the output?
 [Back to TOC](#table-of-contents)
@@ -142,69 +118,79 @@ It made stakeholder discussions more factual and less reactive.
 
 ## 10) How would you scale from Pandas to PySpark/Hadoop/cloud?
 [Back to TOC](#table-of-contents)
-Keep the same forecasting and risk logic first.
-Move heavier transforms to distributed data-processing patterns.
-Use PySpark/Hadoop/cloud as the architecture scale path.
-Do not change core logic just because tooling changes.
+- The logic stays the same: we keep the same forecasting and risk logic.
+- We scale by moving heavy data prep and feature engineering to distributed patterns, using PySpark.
+- We partition the data—often by time or group—so that Hadoop or cloud storage scales smoothly.
+- Instead of changing the core logic, we simply leverage distributed compute to handle larger data sets.
+This ensures efficient forecasting as the environment grows.
 
 ## 11) What did you own directly?
 [Back to TOC](#table-of-contents)
-I owned the capacity logic and reporting workflow; I partnered on the
-broader platform scale-out.
-
-
-I owned major workflow pieces that I can defend directly:
-data extraction, cleanup, timestamp normalization, host and service
-mapping, feature design, forecast model training and testing, risk
-ranking, and reporting outputs.
-
-I also owned the logic that turned telemetry into decision support:
-headroom, growth slope, breach flags, risk bands, forecast windows,
-and ranked exception lists.
-
-For broader scale-out, I partnered with data and platform teams. I can
-explain the architecture path into distributed processing, Hadoop-style
-patterns, or multiprocessing, but I would not claim that I alone owned
-the full platform layer end to end.
-
-I also collaborated with application owners, SMEs, and planning
-stakeholders on consuming the final reports and risk lists. The goal
-was to support timely decisions: remediation, capacity planning,
-right-sizing, or cost savings where warranted.
+I owned major workflow pieces I can defend clearly.
+That includes shaping telemetry, features, forecast usage, and validation.
+I also owned risk ranking and reporting for decision support.
+For broader platform scale-out, I partnered with specialist teams.
 
 ## 12) What is the safest summary of the project?
 [Back to TOC](#table-of-contents)
-It started as reporting automation, evolved into Prophet-based
-forecasting, and became decision support for capacity risk.
+This was practical capacity forecasting decision support.
+SQL/Python/Pandas formed the real workflow foundation.
+Prophet was real forecasting work in the core flow.
+Scikit-learn risk scoring is a newer lab modernization extension.
+PySpark/Hadoop/cloud is the scale-up architecture path.
 
-This was practical capacity forecasting decision support. SQL, Python,
-and Pandas formed the workflow foundation. Prophet was real forecasting
-work. PySpark/Hadoop/cloud was the scale-up architecture path.
-Scikit-learn risk scoring is newer lab modernization work.
-
-
-## 13) How do you define KPIs?
+## 15) How does this map to BOA-style CBFR work?
 [Back to TOC](#table-of-contents)
-See `BOA_TELEMETRY_KPI_SLI_SLO_SLA_DEFINITIONS.md` for the definitions
-cheat sheet.
+This maps closely to capacity baseline forecasting work.
 
-I define KPIs by starting with the business or operational decision first.
-For capacity, useful KPIs include utilization trend, rolling peak, recent
-maximum, growth slope, headroom to threshold, breach frequency, forecasted
-breach window, service criticality, owner, risk band, and remediation status.
-A good KPI is actionable, not just a metric on a chart.
+If the team produces quarterly Capacity Baseline Forecast Reports, I would
+treat that report as the decision product. The pipeline behind it should
+collect production telemetry, map it to applications and clusters, calculate
+trend, headroom, safety margin, and risk band, then publish a clear report for
+planning and prioritization.
 
-## 14) How did runbooks fit into the process?
+My value is that I understand both sides: the Excel/reporting starting point
+and the Python/Pandas/forecasting path that makes the process more repeatable,
+validated, and dashboard-ready.
+
+## 16) How do performance testing, TPS, and safety factors fit?
 [Back to TOC](#table-of-contents)
-See `BOA_TELEMETRY_KPI_SLI_SLO_SLA_DEFINITIONS.md` for the definitions
-cheat sheet.
+Performance testing gives a controlled view of throughput limits, such as TPS
+capacity and saturation behavior. Production telemetry shows how the system
+behaves under real usage.
 
-Runbooks turned forecast output into repeatable action.
-If risk increased, we validated data and mapping, confirmed owner, checked
-recent changes, reviewed headroom and threshold history, and involved SMEs.
-Then we chose the action path: tuning, cleanup, right-sizing, capacity
-expansion, or continued monitoring.
-That kept response consistent instead of reinventing each investigation.
+I would use both. The test feed helps define safe operating limits and safety
+factors. Production telemetry shows whether real usage is trending toward those
+limits.
+
+I would not forecast right up to the hard limit. Capacity planning needs safety
+margin because production workloads have spikes, business-calendar events, and
+unexpected demand.
+
+## 17) How would you support dashboarding?
+[Back to TOC](#table-of-contents)
+I would make the forecast output dashboard-ready.
+
+The dashboard should show baseline, actual trend, forecasted risk window,
+headroom, threshold, safety margin, risk band, service owner, and recommended
+action.
+
+I can structure the data so it can feed enterprise reporting tools such as
+Power BI, Tableau, or another dashboard platform. I would not overclaim being
+the owner of every visualization tool, but I can define the capacity data model
+and decision views the dashboard needs.
+
+## 18) What tools or environment signals are relevant?
+[Back to TOC](#table-of-contents)
+BMC TrueSight and TSCO are directly relevant to my background. I understand the
+capacity-planning style: production telemetry, baseline reports, thresholds,
+forecast views, and operational planning.
+
+If the environment also uses Helix, Splunk, AWS, or Kubernetes monitoring, I
+would treat those as additional signal sources or reporting contexts. My core
+strength remains the capacity workflow: collect the telemetry, validate it,
+define KPIs, forecast risk, and turn the output into reports, dashboards, and
+action plans.
 
 ## Final Memory Spine
 [Back to TOC](#table-of-contents)
@@ -212,6 +198,8 @@ That kept response consistent instead of reinventing each investigation.
 Clean telemetry -> normalize time -> bucket -> group -> engineer features ->
 forecast and rank risk -> validate against actuals and SMEs -> publish
 dashboards and action lists -> support leadership planning decisions.
+For BOA-style teams: CBFR/reporting, dashboarding, TPS safety factors,
+BMC capacity data, and production critical applications are natural fits.
 ```
 
 ## Do Not Say

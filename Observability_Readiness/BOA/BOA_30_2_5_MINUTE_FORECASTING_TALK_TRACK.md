@@ -1,15 +1,6 @@
 # BOA 30 2 5 Minute Forecasting Talk Track
 
-## Table of Contents
-
-- [30-Second Answer](#30-second-answer)
-- [Strong 2-Minute Answer](#strong-2-minute-answer)
-- [Optional Origin Pipeline Bridge](#optional-origin-pipeline-bridge)
-- [5-Minute Deep Technical Answer](#5-minute-deep-technical-answer)
-
-
 ## 30-Second Answer
-[Back to TOC](#table-of-contents)
 
 I built a practical capacity forecasting workflow that turned
 infrastructure telemetry into early risk visibility for operations
@@ -26,7 +17,6 @@ risk clearly, and plan remediation before capacity became an
 incident.
 
 ## Strong 2-Minute Answer
-[Back to TOC](#table-of-contents)
 
 Raw telemetry by itself does not create a management decision.
 The work was to turn infrastructure and application telemetry
@@ -73,8 +63,34 @@ priority using clear risk language.
 6. Validate with data, backtesting, and SMEs.
 7. Publish dashboards, reports, and ranked risk views.
 
-## Optional Origin Pipeline Bridge
+## Optional BOA Team Mapping Bridge
 [Back to TOC](#table-of-contents)
+
+Use this only if they ask how your background maps to their environment.
+
+From what I understand, this work is close to production capacity planning:
+critical applications and clusters, capacity baseline forecast reports,
+quarterly reviews, BMC TrueSight/TSCO-style data, dashboarding, and planning
+decisions.
+
+That maps well to my background. I have worked with enterprise capacity and APM
+telemetry, built Python/Pandas reporting and forecasting workflows, defined
+KPIs, and produced risk views that help engineering and leadership decide where
+action is needed.
+
+I am comfortable with Excel-heavy reporting as a starting point, but I can also
+help make that process more repeatable, validated, and dashboard-ready through
+Python, structured data, and forecasting logic.
+
+Memory line:
+
+```text
+I understand the current capacity reporting world, and I can help make it more
+repeatable, validated, and dashboard-ready.
+```
+
+
+## Optional Origin Pipeline Bridge
 
 Use this only if asked how the data pipeline started, how manual
 reports were automated, or how the forecasting layer became possible.
@@ -104,7 +120,6 @@ risk ranking on top of it.
 ```
 
 ## 5-Minute Deep Technical Answer
-[Back to TOC](#table-of-contents)
 HorizonScale is how I explain a capacity forecasting workflow that turned raw
 utilization data into planning recommendations.
 
@@ -113,6 +128,10 @@ reactive. If teams only looked at current utilization or waited for threshold
 breaches, they could miss early signs of sustained pressure. The goal was
 earlier, explainable signals so engineering and leadership could plan
 remediation and prioritization before capacity became an incident.
+
+This also maps well to CBFR-style capacity baseline forecasting: production
+telemetry, critical applications, quarterly reports, dashboard-ready outputs,
+and clear planning recommendations.
 
 Before the forecasting layer, there was a reporting automation foundation.
 Manual Excel-heavy capacity reports were moved toward a repeatable Python
@@ -133,15 +152,6 @@ That mattered because forecast quality depends on data quality.
 The second layer was grouping for actionability: host, application, service,
 and environment. Host-level views support engineering triage, while service
 views support planning and management prioritization.
-
-At larger scale, I would not dump thousands of heterogeneous servers into one
-forecasting bucket. We grouped first, forecast second. We did not let one model
-try to explain thousands of different server behaviors at once. Systems would
-be segmented by function, ownership, usage pattern, and criticality. A batch
-workload, an API tier, and a database layer do not have the same utilization
-curve, so treating them as one pool would create noise. Forecasts are more
-defensible when they are applied within cohorts that have coherent behavior and
-then validated against actuals and thresholds.
 
 The third layer was feature engineering with explainable signals: rolling
 average, rolling peak, recent maximum, growth slope, volatility, headroom to

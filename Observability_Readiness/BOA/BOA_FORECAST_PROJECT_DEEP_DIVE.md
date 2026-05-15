@@ -1,27 +1,6 @@
 # BOA Forecast Project Deep Dive
 
-## Table of Contents
-
-- [1. Plain-English Project Summary](#1-plain-english-project-summary)
-- [2. Original Reporting Automation Foundation](#2-original-reporting-automation-foundation)
-- [3. Original Pandas Version](#3-original-pandas-version)
-- [4. Input Telemetry Data](#4-input-telemetry-data)
-- [5. Feature Engineering](#5-feature-engineering)
-- [Cohort-Based Forecasting at Scale](#cohort-based-forecasting-at-scale)
-- [6. Forecast Horizon / Risk Window](#6-forecast-horizon-risk-window)
-- [7. Testing and Validation](#7-testing-and-validation)
-- [8. Output Reports and Dashboards](#8-output-reports-and-dashboards)
-- [9. Management Decision Support](#9-management-decision-support)
-- [KPI Definition and Runbook Connection](#kpi-definition-and-runbook-connection)
-- [10. Scaling Path to PySpark / Hadoop / Cloud](#10-scaling-path-to-pyspark-hadoop-cloud)
-- [11. 30-Second Answer](#11-30-second-answer)
-- [12. 2-Minute Answer](#12-2-minute-answer)
-- [13. Whiteboard Architecture Diagram](#13-whiteboard-architecture-diagram)
-- [14. What Not To Say](#14-what-not-to-say)
-
-
 ## 1. Plain-English Project Summary
-[Back to TOC](#table-of-contents)
 This project converted raw telemetry into early capacity risk visibility so
 engineering and management could act before incidents. It was designed for
 operational decision support, with practical checks, clear risk language, and
@@ -29,7 +8,6 @@ repeatable reporting.
 
 
 ## 2. Original Reporting Automation Foundation
-[Back to TOC](#table-of-contents)
 The forecasting work sat on top of an earlier reporting automation layer.
 A lot of capacity reporting can start as a manual Excel-heavy process:
 extracts, spreadsheet cleanup, repeated calculations, and team reports.
@@ -54,7 +32,6 @@ on top of it.
 ```
 
 ## 3. Original Pandas Version
-[Back to TOC](#table-of-contents)
 Conceptual flow:
 Manual Excel/report extracts
 -> Python cleanup pipeline
@@ -76,14 +53,12 @@ Why Pandas first:
 - Good fit for proving decision value before distributed scaling.
 
 ## 4. Input Telemetry Data
-[Back to TOC](#table-of-contents)
 - Infrastructure utilization telemetry.
 - Application/service throughput and performance indicators.
 - Existing KPI feeds used by operations teams.
 - Asset metadata for host, application, and service mapping.
 
 ## 5. Feature Engineering
-[Back to TOC](#table-of-contents)
 Representative features:
 - timestamp
 - host/application/service
@@ -105,47 +80,12 @@ Design intent:
 - Provide interpretable features that operations and management can
   understand.
 
-## Cohort-Based Forecasting at Scale
-[Back to TOC](#table-of-contents)
-At larger scale, thousands of servers should not be modeled as one pool.
-Behavior varies too much, and a single pooled model can create noise and weak
-signals.
-
-We grouped first, forecast second. We did not let one model try to explain
-thousands of different server behaviors at once.
-
-Grouping dimensions:
-- application
-- service
-- owner
-- environment
-- criticality
-- workload type
-- usage pattern
-
-Example cohorts:
-- steady-state systems
-- growth systems
-- seasonal systems
-- batch-heavy systems
-- noisy systems
-- low-utilization / waste candidates
-- critical low-headroom systems
-- retirement or migration candidates
-
-The forecast approach is applied within groups that behave similarly, then
-validated against actual behavior and threshold outcomes. Backtesting decides
-whether a cohort needs adjustment. I avoid blind per-server tuning unless
-specific exceptions fail validation and need focused review.
-
 ## 6. Forecast Horizon / Risk Window
-[Back to TOC](#table-of-contents)
 - Use a practical short-to-mid forecast window aligned to planning cycles.
 - Report likely breach windows instead of only point predictions.
 - Communicate confidence and assumptions in plain language.
 
 ## 7. Testing and Validation
-[Back to TOC](#table-of-contents)
 - missing timestamp checks
 - duplicate record checks
 - stale asset checks
@@ -184,57 +124,58 @@ Validation principle:
 - Prefer reliable decision support over model complexity.
 
 ## 8. Output Reports and Dashboards
-[Back to TOC](#table-of-contents)
 - Risk-ranked service and system views.
 - Trend and headroom visuals for operations.
 - Threshold/breach outlook for action planning.
 - Weekly summary for leadership consumption.
 
 ## 9. Management Decision Support
-[Back to TOC](#table-of-contents)
 - Translate telemetry into risk bands and action windows.
 - Support decisions on scaling, optimization, and prioritization.
 - Provide concise executive summaries with assumptions and confidence
   language.
 
-## KPI Definition and Runbook Connection
+## BOA Informal Signal and CBFR Mapping
 [Back to TOC](#table-of-contents)
-Capacity KPIs should be defined from the decision backward. The goal is not to
-show every metric. The goal is to show signals that help operations, engineering,
-and leadership decide what action is needed.
+Informal BOA team signal suggests the interview may care heavily about
+production capacity planning, quarterly Capacity Baseline Forecast Reports
+(CBFR), critical applications and clusters, BMC TrueSight/TSCO-style data,
+dashboarding, and performance-test inputs such as TPS and safety factors.
 
-Useful capacity KPIs:
-- utilization trend
-- rolling peak
-- recent maximum
-- growth slope
-- headroom to threshold
-- threshold breach count or frequency
-- forecasted breach window
-- service criticality
-- risk band
-- owner/application mapping
-- remediation status
+Use this as alignment language, not as a claim that every detail is confirmed
+for the specific role.
 
-Runbooks connect those KPIs to action. If a system moves into a higher risk
-band, the runbook should guide data validation, owner confirmation, threshold
-review, SME review, and action selection.
+How HorizonScale maps:
+- CBFR / quarterly report:
+  HorizonScale produces baseline, forecast, risk band, owner, and action timing.
+- Excel forecasting:
+  The original reporting automation story shows how Excel-heavy workflows can
+  become repeatable Python/Pandas pipelines.
+- BMC TrueSight / TSCO:
+  Directly aligned with enterprise capacity telemetry and baseline reporting.
+- Dashboarding:
+  Forecast outputs should be structured for Power BI, Tableau, or enterprise
+  reporting tools.
+- Production-only scope:
+  Emphasize production critical applications, thresholds, safety margin,
+  remediation timing, and operational stability.
+- Performance testing / TPS:
+  Use test results as engineered limits and compare production telemetry
+  against those limits with safety factors.
+- AWS / Kubernetes:
+  Treat as future or adjacent capacity contexts, not deep ownership claims.
 
-Typical runbook actions:
-- validate metric quality
-- confirm timestamp bucket and grouping
-- check recent changes or incidents
-- compare current behavior to historical pattern
-- identify service owner
-- confirm business-calendar impact
-- decide between tuning, cleanup, right-sizing, capacity expansion, or
-  continued monitoring
+Safe spoken bridge:
 
-This is how the forecast becomes operational. The dashboard shows the risk, the
-KPI explains why it matters, and the runbook tells the team what to do next.
+```text
+This sounds close to capacity baseline forecasting work: production telemetry,
+critical applications, BMC-style capacity data, quarterly reports, dashboarding,
+and planning decisions. That maps well to my background because I have worked
+with enterprise capacity data, Python/Pandas reporting automation, forecasting,
+KPI views, and management-ready risk summaries.
+```
 
 ## 10. Scaling Path to PySpark / Hadoop / Cloud
-[Back to TOC](#table-of-contents)
 Pandas prototype
 -> PySpark distributed processing
 -> Hadoop/HDFS or S3/cloud data lake
@@ -248,7 +189,6 @@ What scales:
 - More automated, scheduled, and governed pipeline operations.
 
 ## 11. 30-Second Answer
-[Back to TOC](#table-of-contents)
 I built a capacity forecasting workflow that converted telemetry trends into
 early risk visibility for engineering and leadership. The original version used
 Python, SQL, and Pandas to clean and bucket time-series data, compute trend and
@@ -257,7 +197,6 @@ quality checks, backtesting, and SME review, then communicated through
 dashboards and executive summaries.
 
 ## 12. 2-Minute Answer
-[Back to TOC](#table-of-contents)
 The need was simple: capacity risk was too often surfaced late. I built a
 practical forecasting pipeline using telemetry we already trusted. In the first
 version, I extracted data with SQL and used Pandas for cleanup, timestamp
@@ -279,7 +218,6 @@ structures with time partitions, run scheduled ETL, and feed the reporting
 layer.
 
 ## 13. Whiteboard Architecture Diagram
-[Back to TOC](#table-of-contents)
 ```text
 [Telemetry Sources]
       |
@@ -305,7 +243,6 @@ layer.
 ```
 
 ## 14. What Not To Say
-[Back to TOC](#table-of-contents)
 - Do not claim advanced research-model invention.
 - Do not claim full solo ownership of Hadoop/cloud platform engineering.
 - Do not invent precision metrics you cannot defend.

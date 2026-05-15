@@ -1,10 +1,32 @@
 # BOA Friday Capacity Interview Plan
 
 ## Priority Context
-- Interview: Friday, 1:00 PM Central.
+- Interview: Friday, 12:30 PM Central.
 - Primary lane: Horizon Scale Forecasting Story.
 - Focus: Capacity forecasting buildout from Pandas prototype to
   PySpark/Hadoop/cloud scale patterns.
+
+
+## Informal BOA Team Signal
+Use as emphasis, not as confirmed role scope.
+
+- Capacity Baseline Forecast Report (CBFR) / quarterly forecast reporting.
+- Production critical applications and clusters.
+- BMC TrueSight / TSCO are strong alignment points.
+- Helix awareness may help, but do not overclaim.
+- Excel forecasting may still exist; Python/Pandas repeatability is valuable.
+- Dashboarding is important; Power BI and Tableau are useful language.
+- Performance testing / BreakPoint-style TPS feeds may inform capacity limits.
+- Safety factors matter; do not forecast right up to hard limits.
+- AWS/Kubernetes capacity monitoring is useful as secondary awareness.
+- Team may need a technical person who can support and extend the process.
+
+Safe emphasis:
+- Meet the team where they are.
+- Respect Excel/reporting workflows.
+- Show how to improve repeatability, validation, dashboarding, and forecasting.
+- Keep the core story on production capacity planning and decision support.
+
 
 ## What To Rehearse First
 1. 30-second project summary in spoken language.
@@ -50,12 +72,8 @@ These can be supporting examples only if asked.
 1. Say the 30-second answer out loud five times.
 2. Run the 2-minute answer with a timer and remove extra wording.
 3. Walk the 5-minute story at whiteboard pace.
-4. Review short Q&A sheet after the 30/2/5 answers.
-5. Use the full Q&A only for deeper technical defense.
-6. Review the telemetry/KPI/SLI/SLO/SLA definitions cheat sheet only after
-   the short Q&A is stable.
-7. Practice 12 likely BOA questions with safe/unsafe contrast.
-8. End with one-minute ownership statement and collaboration statement.
+4. Practice 12 likely BOA questions with safe/unsafe contrast.
+5. End with one-minute ownership statement and collaboration statement.
 
 ## Final Pre-Interview Checklist
 - Can explain end-to-end build flow without notes.
