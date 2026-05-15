@@ -27,7 +27,14 @@
   - [13.0 How do you explain BMC TrueSight / TSCO / Helix in this capacity workflow without overclaiming?](#q13-bmc-truesight-tsco-helix)
   - [14.0 How would you handle a swap-space or memory-pressure exception?](#140-how-would-you-handle-a-swap-space-or-memory-pressure-exception)
   - [15.0 How do you explain SPECint or benchmark-style sizing in capacity planning without overclaiming?](#150-how-do-you-explain-specint-or-benchmark-style-sizing-in-capacity-planning-without-overclaiming)
-
+- [Additional Drill Questions](#additional-drill-questions)
+  - [23.0 What features did you use?](#230-what-features-did-you-use)
+  - [24.0 Did you forecast all servers together?](#240-did-you-forecast-all-servers-together)
+  - [25.0 How did this support budget or planning?](#250-how-did-this-support-budget-or-planning)
+  - [26.0 How would you scale from Pandas to PySpark/Hadoop/cloud?](#260-how-would-you-scale-from-pandas-to-pysparkhadoopcloud)
+  - [27.0 How do you define KPIs?](#270-how-do-you-define-kpis)
+  - [28.0 What tools or environment signals are relevant?](#280-what-tools-or-environment-signals-are-relevant)
+  - [29.0 How do criticality, governance, and audits fit?](#290-how-do-criticality-governance-and-audits-fit)
 ## Must Be Smooth
 
 ## 1.0 Walk me through how you built the capacity forecasting workflow.
@@ -1056,3 +1063,82 @@ to make and validate the actual capacity decision.
 6. Do not pretend benchmark math alone gives the final answer.
 
 ### Points to hit
+## Additional Drill Questions
+
+## 23.0 What features did you use?
+[Back to TOC](#table-of-contents)
+Rolling averages showed sustained trend direction. Rolling peaks and recent
+maximum showed stress behavior. Growth slope and volatility helped identify
+acceleration risk. Headroom to threshold showed urgency before a breach.
+Breach flags and risk bands made prioritization clearer.
+
+Feature list:
+- rolling averages
+- rolling peaks / P95 features where useful
+- headroom features
+- breach flags
+- risk bands
+- growth slope
+
+## 24.0 Did you forecast all servers together?
+[Back to TOC](#table-of-contents)
+No. I handled scale through cohort-based forecasting. Systems were grouped by
+function, ownership, pattern, and criticality. Batch, API, and database
+workloads were not pooled as one curve. That made forecasts more defensible
+and easier to operate.
+
+## 25.0 How did this support budget or planning?
+[Back to TOC](#table-of-contents)
+Forecast trend and headroom data supported planning conversations. It helped
+frame cost-risk tradeoffs with better timing context. I was not the FinOps
+owner, but the outputs supported that bridge. It made stakeholder discussions
+more factual and less reactive.
+
+## 26.0 How would you scale from Pandas to PySpark/Hadoop/cloud?
+[Back to TOC](#table-of-contents)
+The logic stays the same: keep the same forecasting and risk logic.
+
+Scale by moving heavy data preparation and feature engineering to distributed
+patterns with PySpark. Partition by time or group so Hadoop or cloud storage
+scales cleanly.
+
+Instead of changing core logic, leverage distributed compute to handle larger
+data sets efficiently as the environment grows.
+
+## 27.0 How do you define KPIs?
+[Back to TOC](#table-of-contents)
+I define KPIs from the decision backward.
+
+A metric tells me what was measured. A KPI tells the team why it matters and
+whether action is needed.
+
+For capacity, useful KPIs include utilization trend, rolling peak, recent
+maximum, growth slope, headroom to threshold, breach frequency, forecasted
+breach window, service criticality, owner, risk band, and remediation status.
+
+A good KPI should answer: what is at risk, who owns it, how urgent it is, and
+what decision needs to be made.
+
+## 28.0 What tools or environment signals are relevant?
+[Back to TOC](#table-of-contents)
+BMC TrueSight and TSCO are directly relevant to my background. I understand the
+capacity-planning style: production telemetry, baseline reports, thresholds,
+forecast views, and operational planning.
+
+If the environment also uses Helix, Splunk, AWS, or Kubernetes monitoring, I
+would treat those as additional signal sources or reporting contexts. My core
+strength remains the capacity workflow: collect telemetry, validate it, define
+KPIs, forecast risk, and turn output into reports, dashboards, and action
+plans.
+
+## 29.0 How do criticality, governance, and audits fit?
+[Back to TOC](#table-of-contents)
+Criticality changes the tolerance for risk.
+
+A franchise-critical or enterprise-critical application needs tighter safety
+margins, faster owner engagement, and stronger governance visibility than a
+low-criticality system.
+
+For audit or MCA-style review, the value is traceability: what was measured,
+what exception appeared, who owned it, what action was taken, and whether it
+was closed.
