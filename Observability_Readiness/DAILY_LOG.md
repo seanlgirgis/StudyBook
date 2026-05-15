@@ -47,3 +47,7 @@
 - Added BOA capacity Q&A sheets for final rehearsal and technical defense:
   `00_short_time_readiness/BOA_INTERVIEW_QA_capacity_forecasting_short.md` and
   `04_stories/BOA_INTERVIEW_QA_capacity_forecasting_full.md`.
+- Added strategic roadmap:
+  `ROADMAP_capacity_aware_observability_cost_benefit.md` to sequence BOA-first
+  rehearsal, then post-BOA telemetry-to-decision extraction and cloud/open-source
+  observability lanes by cost/benefit.

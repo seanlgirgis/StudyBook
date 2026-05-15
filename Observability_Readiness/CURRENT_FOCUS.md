@@ -34,3 +34,9 @@ Explain the capacity forecasting project end-to-end with practical depth:
 - Overclaiming full Hadoop/cloud platform ownership.
 - Drifting to side topics (OTel/Kubernetes/GPU/IaC/Prometheus/Grafana).
 - Using invented metrics beyond known facts.
+
+## Post-BOA Sequencing Rule
+- Before BOA: rehearse and light refresh only.
+- After BOA: use `ROADMAP_capacity_aware_observability_cost_benefit.md` to
+  harvest BOA into the generic telemetry-to-decision manual, then build
+  OpenTelemetry and Prometheus/Grafana lanes in sequence.
