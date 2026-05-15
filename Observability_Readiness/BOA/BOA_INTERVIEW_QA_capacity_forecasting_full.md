@@ -44,8 +44,15 @@
   - [38) How would you support dashboarding?](#38-how-would-you-support-dashboarding)
   - [39) How do BMC TrueSight, TSCO, Helix, Splunk, AWS, and Kubernetes fit?](#39-how-do-bmc-truesight-tsco-helix-splunk-aws-and-kubernetes-fit)
   - [40) How would you describe your fit if the team is not super technical?](#40-how-would-you-describe-your-fit-if-the-team-is-not-super-technical)
-  - [41) How do UCL testing, BreakPoint, TPS, and project assessment fit?](#41-how-do-ucl-testing-breakpoint-tps-and-project-assessment-fit)
 
+  - [41) How do UCL testing, BreakPoint, TPS, and project assessment fit?](#41-how-do-ucl-testing-breakpoint-tps-and-project-assessment-fit)
+  - [42) What is the difference between a runbook and a playbook?](#42-what-is-the-difference-between-a-runbook-and-a-playbook)
+  - [43) How do clusters, load balancing, and active/passive design affect capacity?](#43-how-do-clusters-load-balancing-and-activepassive-design-affect-capacity)
+  - [44) How do ESX hosts, physical hosts, and VM guests change capacity analysis?](#44-how-do-esx-hosts-physical-hosts-and-vm-guests-change-capacity-analysis)
+  - [45) How do collection exceptions or missing metrics affect the process?](#45-how-do-collection-exceptions-or-missing-metrics-affect-the-process)
+  - [46) How do business criticality, MCA, governance, and audit fit?](#46-how-do-business-criticality-mca-governance-and-audit-fit)
+  - [47) How do BMC collection and forecasting model choices fit?](#47-how-do-bmc-collection-and-forecasting-model-choices-fit)
+  - [48) How do communication and collaboration fit into capacity decisions?](#48-how-do-communication-and-collaboration-fit-into-capacity-decisions)
 
 ## 1) Walk me through the capacity forecasting workflow.
 [Back to TOC](#table-of-contents)
@@ -359,7 +366,114 @@ Then the recommendation becomes practical: can the current production pool
 absorb the new load, or do we need tuning, workload redistribution,
 horizontal scaling, vertical scaling, or a planned capacity add?
 
-The key is not to wait for production stress. The goal is to use baseline,
-forecast, TPS testing, and safety factors to make the scaling decision before
-risk becomes an incident.
+## 42) What is the difference between a runbook and a playbook?
+[Back to TOC](#table-of-contents)
+A runbook is the step-by-step procedure for a known operational situation. For
+a capacity threshold exception, the runbook tells the engineer what to check:
+metric quality, host mapping, threshold, owner, recent changes, and action path.
 
+A playbook is broader. It describes the operating pattern, roles, escalation
+path, governance rhythm, reporting cadence, and how multiple runbooks are used
+together.
+
+So for capacity, the runbook may guide one exception investigation. The
+playbook describes the weekly exception review, owner notification, ServiceNow
+tracking, audit evidence, governance visibility, and escalation if the issue
+remains open.
+
+## 43) How do clusters, load balancing, and active/passive design affect capacity?
+[Back to TOC](#table-of-contents)
+Cluster capacity is not just the sum of all servers. The calculation depends
+on the architecture.
+
+If the cluster is active/active or round-robin, load may be distributed across
+nodes, so I would look at both individual-node headroom and total pool
+headroom.
+
+If the cluster is active/passive, the passive node may need enough reserve to
+absorb failover. That means thresholds and safety factors must be more
+conservative.
+
+For example, I would not assume every node can be fully consumed during normal
+operation if one node must stand ready for disaster recovery or failover. The
+right threshold depends on the cluster design, failover requirement, and
+business criticality.
+
+## 44) How do ESX hosts, physical hosts, and VM guests change capacity analysis?
+[Back to TOC](#table-of-contents)
+For virtualized environments, I separate host-level capacity from guest-level
+capacity.
+
+The ESX or physical host view tells us about shared resource pressure: CPU,
+memory, contention, cluster headroom, overcommit, and physical capacity.
+
+The VM guest view tells us about application or server behavior: CPU used,
+memory used, swap, service symptoms, and workload demand.
+
+Both matter. A VM can look healthy while the physical host or cluster is under
+pressure. Or the host can look fine while one VM has application-level
+saturation. I would also avoid quoting universal sizing ratios without the
+organization's approved standard. Ratios such as vCPU to physical CPU, memory
+overcommit, or SPECint-style sizing need to be interpreted in the local
+platform context.
+
+## 45) How do collection exceptions or missing metrics affect the process?
+[Back to TOC](#table-of-contents)
+A collection exception means we cannot fully trust the capacity picture because
+telemetry is missing, stale, or broken.
+
+I would treat that as an operational exception, not just a reporting gap. The
+process should identify the missing metric, agent issue, stale host, or feed
+problem, then notify the owning team or track the issue through the normal
+process.
+
+The key point is that no metric is not the same as no risk. If the data is
+missing, the system should be flagged so leadership does not mistake missing
+data for healthy capacity.
+
+## 46) How do business criticality, MCA, governance, and audit fit?
+[Back to TOC](#table-of-contents)
+Criticality changes the tolerance for risk. A low-criticality system may allow
+more warning time, while high-criticality, enterprise-critical, or
+franchise-critical applications need tighter safety margins, faster owner
+engagement, and stronger governance visibility.
+
+In a banking environment, capacity reporting can also support MCA, governance,
+and audit. That means preserving evidence: what was measured, what threshold
+was breached, which owner was notified, what exception was opened, what action
+was taken, and whether the issue was closed.
+
+The value is traceability. The report should show the control path: detection,
+owner notification, remediation tracking, and closure.
+
+## 47) How do BMC collection and forecasting model choices fit?
+[Back to TOC](#table-of-contents)
+At a high level, BMC capacity tooling depends on agents or collection feeds
+that gather host and system metrics, process them on a regular cycle, and
+publish them into the capacity reporting platform.
+
+I would not overclaim every internal BMC implementation detail, but I
+understand the operational pattern: agent or feed collection, daily processing,
+data quality checks, collection exception reporting, and use of that data for
+baseline and forecast reports.
+
+If the tool offers different forecasting models, the model choice should match
+the application behavior and validation results. A steady workload may only
+need a simple trend. A seasonal or business-calendar workload may need a model
+that captures recurring patterns. A noisy workload may need cleanup and
+aggregation before the forecast is trusted.
+
+## 48) How do communication and collaboration fit into capacity decisions?
+[Back to TOC](#table-of-contents)
+Capacity work is not done by one person in isolation. The forecast provides the
+view, but the decision usually requires open communication with architecture
+teams, application owners, infrastructure teams, business owners, and sometimes
+governance or audit groups.
+
+My role is to bring a clear view of the telemetry, forecast, threshold risk,
+safety margin, and options. Then the group can decide whether the action is
+tuning, workload movement, right-sizing, horizontal scaling, vertical scaling,
+capacity expansion, or continued monitoring.
+
+That collaboration matters because the technical signal has to become a
+business-safe change plan.

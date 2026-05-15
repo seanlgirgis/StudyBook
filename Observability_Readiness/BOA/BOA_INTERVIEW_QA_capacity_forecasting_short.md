@@ -18,7 +18,15 @@
   - [12) What is the safest summary of the project?](#12-what-is-the-safest-summary-of-the-project)
   - [13) How do you define KPIs?](#13-how-do-you-define-kpis)
   - [14) How did runbooks fit into the process?](#14-how-did-runbooks-fit-into-the-process)
+  - [15) How does this map to BOA-style CBFR work?](#15-how-does-this-map-to-boa-style-cbfr-work)
+  - [16) How do performance testing, TPS, and safety factors fit?](#16-how-do-performance-testing-tps-and-safety-factors-fit)
+  - [17) How would you support dashboarding?](#17-how-would-you-support-dashboarding)
+  - [18) What tools or environment signals are relevant?](#18-what-tools-or-environment-signals-are-relevant)
   - [19) How do UCL testing, BreakPoint, TPS, and project assessment fit?](#19-how-do-ucl-testing-breakpoint-tps-and-project-assessment-fit)
+  - [20) How do clusters, DR, and load balancing affect capacity?](#20-how-do-clusters-dr-and-load-balancing-affect-capacity)
+  - [21) What are collection exceptions?](#21-what-are-collection-exceptions)
+  - [22) How do criticality, governance, and audits fit?](#22-how-do-criticality-governance-and-audits-fit)
+  - [23) Runbook vs playbook?](#23-runbook-vs-playbook)
   - [Final Memory Spine](#final-memory-spine)
   - [Do Not Say](#do-not-say)
 
@@ -223,6 +231,7 @@ strength remains the capacity workflow: collect the telemetry, validate it,
 define KPIs, forecast risk, and turn the output into reports, dashboards, and
 action plans.
 
+
 ## 19) How do UCL testing, BreakPoint, TPS, and project assessment fit?
 [Back to TOC](#table-of-contents)
 UCL or BreakPoint-style testing gives a controlled view of throughput limits,
@@ -239,6 +248,53 @@ Then the decision becomes practical: can the current pool absorb the new
 volume, or do we need tuning, horizontal scaling, vertical scaling, or a
 planned capacity add?
 
+## 20) How do clusters, DR, and load balancing affect capacity?
+[Back to TOC](#table-of-contents)
+Cluster capacity depends on the design.
+
+For active/active or round-robin clusters, I would look at node-level
+headroom and total pool headroom.
+
+For active/passive or DR designs, I would keep more reserve capacity because a
+passive node or standby pool may need to absorb failover.
+
+The safe answer is that thresholds depend on the cluster design, failover
+requirement, safety factor, and business criticality.
+
+## 21) What are collection exceptions?
+[Back to TOC](#table-of-contents)
+A collection exception means the capacity view is incomplete because metrics
+are missing, stale, or not collected correctly.
+
+I would not treat missing metrics as healthy capacity. I would flag the system,
+notify or track with the owning team, and keep the exception visible until the
+collection issue is fixed.
+
+Memory line: no metric is not the same as no risk.
+
+## 22) How do criticality, governance, and audits fit?
+[Back to TOC](#table-of-contents)
+Criticality changes the tolerance for risk.
+
+A franchise-critical or enterprise-critical application needs tighter safety
+margins, faster owner engagement, and stronger governance visibility than a
+low-criticality system.
+
+For audit or MCA-style review, the value is traceability: what was measured,
+what exception appeared, who owned it, what action was taken, and whether it
+was closed.
+
+## 23) Runbook vs playbook?
+[Back to TOC](#table-of-contents)
+A runbook is the step-by-step procedure for a known issue.
+
+A playbook is broader. It covers the operating rhythm, roles, escalation,
+governance, reporting cadence, and how multiple runbooks fit together.
+
+For capacity, the runbook guides one exception. The playbook governs the
+weekly review, owner follow-up, ServiceNow tracking, audit evidence, and
+escalation path.
+
 ## Final Memory Spine
 [Back to TOC](#table-of-contents)
 ```text
@@ -246,8 +302,9 @@ Clean telemetry -> normalize time -> bucket -> group -> engineer features ->
 forecast and rank risk -> validate against actuals and SMEs -> publish
 dashboards and action lists -> support leadership planning decisions.
 For BOA-style teams: CBFR/reporting, dashboarding, TPS safety factors,
-BMC capacity data, UCL/BreakPoint testing, TPS project assessment,
-capacity pools, safety factors, and production critical applications are natural fits.
+BMC capacity data, UCL/BreakPoint testing, capacity pools,
+collection exceptions, cluster/DR design, and production critical applications
+are natural fits.
 ```
 
 ## Do Not Say

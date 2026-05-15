@@ -53,4 +53,38 @@ repeatable telemetry pipeline with forecasting, validation, exception
 lists, dashboards, and planning summaries.
 
 
-## 1.0 Walk me through how you built the capacity forecasting workflow.
+## 2.0 Why did you use Prophet for this forecasting work?
+
+Prophet was part of the real forecasting work because capacity data is
+time-series data, and we needed a practical way to handle trend and
+seasonality.
+
+It fit capacity planning needs without requiring a deep research-model
+workflow. Some banking workloads have weekly rhythms, month-end effects,
+quarter-end behavior, and other business-calendar patterns. A simple
+straight-line forecast can miss those patterns.
+
+Prophet helped model recurring behavior while keeping the output
+explainable for engineers and leadership.
+
+The goal was decision support, not deep ML research. We wanted to
+identify capacity risk earlier and give teams more time to act.
+
+Validation still mattered. I used holdout testing, compared forecasted
+behavior against actual outcomes, and reviewed the output with SMEs
+before trusting it for planning. 
+
+### Memory Line
+Prophet handled trend and seasonality, but the real value was
+explainable decision support validated against actual behavior.
+
+### Spine
+1. Capacity data is time-series data.
+2. It has trend and seasonality.
+3. Some banking workloads have month-end, quarter-end,
+   weekly, or business-calendar behavior.
+4. Prophet was explainable enough for engineers and leadership.
+5. The goal was decision support, not deep ML research.
+6. Validation still mattered: holdout testing and SME review.
+
+## 3.0 How do UCL testing, BreakPoint, TPS, and project assessment fit into capacity planning?
