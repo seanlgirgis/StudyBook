@@ -1,0 +1,193 @@
+{
+  "id": "tiny_capacity_demo",
+  "title": "Tiny Capacity Demo",
+  "subtitle": "Small proof topic for the StudyBubble engine",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "signals",
+      "label": "Signals",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "analysis",
+      "label": "Analysis",
+      "color": "#F58518"
+    },
+    {
+      "id": "planning",
+      "label": "Planning",
+      "color": "#54A24B"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "telemetry",
+      "label": "Telemetry",
+      "size": "core",
+      "group": "Signals",
+      "definition": "Raw signals collected from systems, such as CPU, memory, latency, logs, traces, or events.",
+      "whyItMatters": "Telemetry is the starting material for every useful operational or capacity decision.",
+      "safeSentence": "Telemetry is raw signal. The value comes from turning it into a useful decision.",
+      "note": {
+        "summary": "Start with what the system emits before trying to forecast or explain anything."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "baseline",
+      "label": "Baseline",
+      "size": "core",
+      "group": "Analysis",
+      "definition": "The normal operating pattern learned from historical telemetry.",
+      "whyItMatters": "Without a baseline, a metric value is just a number without context.",
+      "safeSentence": "Baseline tells us what normal looks like before we call something risky.",
+      "note": {
+        "summary": "A baseline gives context for whether current behavior is normal, unusual, or trending toward risk."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "forecast",
+      "label": "Forecast",
+      "size": "core",
+      "group": "Planning",
+      "definition": "A practical estimate of future demand or utilization based on past behavior and current trend.",
+      "whyItMatters": "Forecasting helps teams act before pressure becomes an incident or planning surprise.",
+      "safeSentence": "Forecasting is decision support, not a magic prediction.",
+      "note": {
+        "summary": "A forecast helps answer what is likely to happen next and whether action is needed."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "dashboard",
+      "label": "Dashboard",
+      "size": "support",
+      "group": "Planning",
+      "definition": "A visual decision view that shows important signals, trends, risks, and next actions.",
+      "whyItMatters": "A dashboard helps people understand the state of the system quickly without reading raw data.",
+      "safeSentence": "A dashboard is not just charts. It is the decision view.",
+      "note": {
+        "summary": "The dashboard turns forecast and threshold information into something engineers and leaders can act on."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "decision",
+      "label": "Decision",
+      "size": "support",
+      "group": "Planning",
+      "definition": "The action or planning choice made from the evidence, such as monitor, tune, scale, or escalate.",
+      "whyItMatters": "The purpose of the study map is not just to explain data, but to support good decisions.",
+      "safeSentence": "The value of the pipeline is the decision it supports.",
+      "note": {
+        "summary": "A decision is where telemetry, baseline, and forecast become practical action."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "threshold",
+      "label": "Threshold",
+      "size": "support",
+      "group": "Analysis",
+      "definition": "A warning line that shows when a metric is approaching an unsafe or important limit.",
+      "whyItMatters": "Thresholds help turn raw metrics into risk signals.",
+      "safeSentence": "A threshold is the warning line before the cliff.",
+      "note": {
+        "summary": "Thresholds create the boundary that lets the system flag risk before it becomes a surprise."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "owner",
+      "label": "Owner",
+      "size": "support",
+      "group": "Planning",
+      "definition": "The person or team responsible for understanding, accepting, or acting on a capacity signal.",
+      "whyItMatters": "A risk is not actionable until someone owns the response.",
+      "safeSentence": "Owner mapping turns signal into accountability.",
+      "note": {
+        "summary": "The owner closes the loop between finding a risk and doing something about it."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    }
+  ],
+  "links": [
+    {
+      "source": "telemetry",
+      "target": "baseline",
+      "label": "creates normal behavior view"
+    },
+    {
+      "source": "baseline",
+      "target": "forecast",
+      "label": "feeds future estimate"
+    },
+    {
+      "source": "forecast",
+      "target": "dashboard",
+      "label": "feeds decision view"
+    },
+    {
+      "source": "dashboard",
+      "target": "decision",
+      "label": "supports action"
+    },
+    {
+      "source": "threshold",
+      "target": "dashboard",
+      "label": "adds risk context"
+    },
+    {
+      "source": "owner",
+      "target": "decision",
+      "label": "owns response"
+    }
+  ],
+  "paths": [
+    {
+      "id": "telemetry_to_forecast",
+      "label": "Telemetry to Forecast",
+      "description": "Raw system signals become a baseline, and the baseline supports a practical forecast.",
+      "nodeIds": [
+        "telemetry",
+        "baseline",
+        "forecast"
+      ],
+      "rehearsalPrompt": "Explain how raw telemetry becomes a practical forecast in 60 seconds."
+    },
+    {
+      "id": "telemetry_to_decision",
+      "label": "Telemetry to Decision",
+      "description": "Raw signals become a baseline, a forecast, a dashboard, and finally an owned decision.",
+      "nodeIds": [
+        "telemetry",
+        "baseline",
+        "forecast",
+        "dashboard",
+        "decision"
+      ],
+      "rehearsalPrompt": "Explain how telemetry becomes a practical decision in 60 seconds."
+    },
+    {
+      "id": "risk_to_ownership",
+      "label": "Risk to Ownership",
+      "description": "Threshold context appears on the dashboard, and the owner turns risk into action.",
+      "nodeIds": [
+        "threshold",
+        "dashboard",
+        "decision",
+        "owner"
+      ],
+      "rehearsalPrompt": "Explain why a risk signal needs an owner before it becomes action."
+    }
+  ]
+}

@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- SECTION: Metadata -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tiny Capacity Demo</title>
+
+  <!-- SECTION: Styles -->
+  <style>
+:root {
+  color-scheme: dark;
+  --bg: #111827;
+  --panel: #1f2937;
+  --panel-2: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --line: #374151;
+  --accent: #60a5fa;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #0b1220;
+}
+
+.header-top h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.header-top p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.toolbar {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#search-input {
+  min-width: 250px;
+  flex: 1 1 320px;
+  background: #111827;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+#search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.search-count {
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 64px;
+}
+
+.group-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-btn,
+.clear-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.filter-btn.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.clear-btn:hover,
+.filter-btn:hover {
+  border-color: var(--accent);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  min-height: calc(100vh - 130px);
+}
+
+.map-area {
+  border-right: 1px solid var(--line);
+  padding: 10px;
+}
+
+#map-svg {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  background: radial-gradient(circle at top, #1f2937, #111827 70%);
+  border-radius: 10px;
+}
+
+.side-panel {
+  padding: 16px;
+  background: var(--panel);
+}
+
+.side-panel h2 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.panel-card {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 18px;
+}
+
+.panel-card p {
+  margin: 0 0 10px;
+  line-height: 1.35;
+}
+
+.path-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.path-list li {
+  margin-bottom: 8px;
+}
+
+.link-line {
+  stroke: #6b7280;
+  stroke-width: 3;
+}
+
+.bubble-node {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.bubble-circle {
+  fill: #2563eb;
+  stroke: #dbeafe;
+  stroke-width: 2;
+}
+
+.bubble-node.is-active .bubble-circle {
+  fill: #1d4ed8;
+  stroke: #f8fafc;
+  stroke-width: 3;
+}
+
+.bubble-label {
+  fill: #f9fafb;
+  font-size: 16px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .map-area {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .toolbar {
+    align-items: stretch;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- SECTION: App Shell -->
+  <header class="app-header">
+    <div class="header-top">
+      <h1 id="topic-title">Loading topic...</h1>
+      <p id="topic-subtitle"></p>
+    </div>
+    <div class="toolbar">
+      <input id="search-input" type="text" placeholder="Search label, definition, safe sentence..." autocomplete="off" />
+      <span id="search-count" class="search-count"></span>
+      <div id="group-filters" class="group-filters"></div>
+      <button id="clear-filters" class="clear-btn" type="button">Reset</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="map-area">
+      <svg id="map-svg" viewBox="0 0 1000 520" role="img" aria-label="Study bubble map"></svg>
+    </section>
+
+    <aside class="side-panel">
+      <h2>Details</h2>
+      <div id="node-details" class="panel-card">
+        <p>Select a bubble to view details.</p>
+      </div>
+
+      <h2>Study Paths</h2>
+      <ul id="study-paths" class="path-list"></ul>
+    </aside>
+  </main>
+
+  <!-- SECTION: Embedded Topic Data -->
+  <script id="studybubble-topic-data" type="application/json">
+{
+  "id": "tiny_capacity_demo",
+  "title": "Tiny Capacity Demo",
+  "subtitle": "Small proof topic for the StudyBubble engine",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "signals",
+      "label": "Signals",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "analysis",
+      "label": "Analysis",
+      "color": "#F58518"
+    },
+    {
+      "id": "planning",
+      "label": "Planning",
+      "color": "#54A24B"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "telemetry",
+      "label": "Telemetry",
+      "size": "core",
+      "group": "Signals",
+      "definition": "Raw signals collected from systems, such as CPU, memory, latency, logs, traces, or events.",
+      "whyItMatters": "Telemetry is the starting material for every useful operational or capacity decision.",
+      "safeSentence": "Telemetry is raw signal. The value comes from turning it into a useful decision.",
+      "note": {
+        "summary": "Start with what the system emits before trying to forecast or explain anything."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "baseline",
+      "label": "Baseline",
+      "size": "core",
+      "group": "Analysis",
+      "definition": "The normal operating pattern learned from historical telemetry.",
+      "whyItMatters": "Without a baseline, a metric value is just a number without context.",
+      "safeSentence": "Baseline tells us what normal looks like before we call something risky.",
+      "note": {
+        "summary": "A baseline gives context for whether current behavior is normal, unusual, or trending toward risk."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "forecast",
+      "label": "Forecast",
+      "size": "core",
+      "group": "Planning",
+      "definition": "A practical estimate of future demand or utilization based on past behavior and current trend.",
+      "whyItMatters": "Forecasting helps teams act before pressure becomes an incident or planning surprise.",
+      "safeSentence": "Forecasting is decision support, not a magic prediction.",
+      "note": {
+        "summary": "A forecast helps answer what is likely to happen next and whether action is needed."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "dashboard",
+      "label": "Dashboard",
+      "size": "support",
+      "group": "Planning",
+      "definition": "A visual decision view that shows important signals, trends, risks, and next actions.",
+      "whyItMatters": "A dashboard helps people understand the state of the system quickly without reading raw data.",
+      "safeSentence": "A dashboard is not just charts. It is the decision view.",
+      "note": {
+        "summary": "The dashboard turns forecast and threshold information into something engineers and leaders can act on."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "decision",
+      "label": "Decision",
+      "size": "support",
+      "group": "Planning",
+      "definition": "The action or planning choice made from the evidence, such as monitor, tune, scale, or escalate.",
+      "whyItMatters": "The purpose of the study map is not just to explain data, but to support good decisions.",
+      "safeSentence": "The value of the pipeline is the decision it supports.",
+      "note": {
+        "summary": "A decision is where telemetry, baseline, and forecast become practical action."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "threshold",
+      "label": "Threshold",
+      "size": "support",
+      "group": "Analysis",
+      "definition": "A warning line that shows when a metric is approaching an unsafe or important limit.",
+      "whyItMatters": "Thresholds help turn raw metrics into risk signals.",
+      "safeSentence": "A threshold is the warning line before the cliff.",
+      "note": {
+        "summary": "Thresholds create the boundary that lets the system flag risk before it becomes a surprise."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "owner",
+      "label": "Owner",
+      "size": "support",
+      "group": "Planning",
+      "definition": "The person or team responsible for understanding, accepting, or acting on a capacity signal.",
+      "whyItMatters": "A risk is not actionable until someone owns the response.",
+      "safeSentence": "Owner mapping turns signal into accountability.",
+      "note": {
+        "summary": "The owner closes the loop between finding a risk and doing something about it."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    }
+  ],
+  "links": [
+    {
+      "source": "telemetry",
+      "target": "baseline",
+      "label": "creates normal behavior view"
+    },
+    {
+      "source": "baseline",
+      "target": "forecast",
+      "label": "feeds future estimate"
+    },
+    {
+      "source": "forecast",
+      "target": "dashboard",
+      "label": "feeds decision view"
+    },
+    {
+      "source": "dashboard",
+      "target": "decision",
+      "label": "supports action"
+    },
+    {
+      "source": "threshold",
+      "target": "dashboard",
+      "label": "adds risk context"
+    },
+    {
+      "source": "owner",
+      "target": "decision",
+      "label": "owns response"
+    }
+  ],
+  "paths": [
+    {
+      "id": "telemetry_to_forecast",
+      "label": "Telemetry to Forecast",
+      "description": "Raw system signals become a baseline, and the baseline supports a practical forecast.",
+      "nodeIds": [
+        "telemetry",
+        "baseline",
+        "forecast"
+      ],
+      "rehearsalPrompt": "Explain how raw telemetry becomes a practical forecast in 60 seconds."
+    },
+    {
+      "id": "telemetry_to_decision",
+      "label": "Telemetry to Decision",
+      "description": "Raw signals become a baseline, a forecast, a dashboard, and finally an owned decision.",
+      "nodeIds": [
+        "telemetry",
+        "baseline",
+        "forecast",
+        "dashboard",
+        "decision"
+      ],
+      "rehearsalPrompt": "Explain how telemetry becomes a practical decision in 60 seconds."
+    },
+    {
+      "id": "risk_to_ownership",
+      "label": "Risk to Ownership",
+      "description": "Threshold context appears on the dashboard, and the owner turns risk into action.",
+      "nodeIds": [
+        "threshold",
+        "dashboard",
+        "decision",
+        "owner"
+      ],
+      "rehearsalPrompt": "Explain why a risk signal needs an owner before it becomes action."
+    }
+  ]
+}
+  </script>
+
+  <!-- SECTION: JavaScript -->
+  <script>
+(async function initViewer() {
+  const titleEl = document.getElementById("topic-title");
+  const subtitleEl = document.getElementById("topic-subtitle");
+  const svg = document.getElementById("map-svg");
+  const detailsEl = document.getElementById("node-details");
+  const pathsEl = document.getElementById("study-paths");
+  const searchInput = document.getElementById("search-input");
+  const searchCountEl = document.getElementById("search-count");
+  const groupFiltersEl = document.getElementById("group-filters");
+  const clearBtn = document.getElementById("clear-filters");
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function toSingleFileHref(topicRef) {
+    if (!topicRef) return "#";
+    return String(topicRef).replace(/\.studybubble\.json$/i, ".html");
+  }
+
+  function toMultifileHref(topicRef) {
+    if (!topicRef) return "#";
+    const fileName = String(topicRef).split(/[\\/]/).pop() || "";
+    const topicId = fileName.replace(/\.studybubble\.json$/i, "");
+    return `../${topicId}/index.html`;
+  }
+
+  function topicRefToHref(topicRef, mode) {
+    if (mode === "single-file") return toSingleFileHref(topicRef);
+    return toMultifileHref(topicRef);
+  }
+
+  function renderExternalLinks(links) {
+    if (!Array.isArray(links) || links.length === 0) return "";
+    const items = links
+      .map(
+        (link) =>
+          `<li><a href="${escapeHtml(link.href || "#")}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label || "Link")}</a></li>`
+      )
+      .join("");
+    return `<p><strong>External Links:</strong></p><ul>${items}</ul>`;
+  }
+
+  function renderChildTopics(childTopics, mode) {
+    if (!Array.isArray(childTopics) || childTopics.length === 0) return "";
+    const items = childTopics
+      .map((child) => {
+        const href = topicRefToHref(child.topic, mode);
+        return `<li><a href="${escapeHtml(href)}">${escapeHtml(child.label || child.topic || "Child Topic")}</a></li>`;
+      })
+      .join("");
+    return `<p><strong>Child Topics:</strong></p><ul>${items}</ul>`;
+  }
+
+  function renderParentTopic(parentTopic, mode) {
+    if (!parentTopic || typeof parentTopic !== "object") return "";
+    const href = topicRefToHref(parentTopic.topic, mode);
+    return `<p><strong>Parent Topic:</strong> <a href="${escapeHtml(href)}">${escapeHtml(parentTopic.label || "Back")}</a></p>`;
+  }
+
+  function nodeSearchText(node) {
+    return [
+      node.label,
+      node.definition,
+      node.whyItMatters,
+      node.safeSentence,
+      node.note && node.note.summary,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+  }
+
+  let currentTopic = null;
+  let currentMode = "multifile";
+  let activeFilter = "All";
+  let searchTerm = "";
+  let selectedNodeId = null;
+  const nodeElements = new Map();
+  const linkElements = [];
+
+  function renderDetails(node, topic, mode) {
+    const noteSummary = node.note && node.note.summary ? node.note.summary : "N/A";
+    const hasOneChildTopic = Array.isArray(node.childTopics) && node.childTopics.length === 1;
+    const doubleClickHint = hasOneChildTopic
+      ? `<p><em>Double-click this bubble to open: ${escapeHtml(node.childTopics[0].label || node.childTopics[0].topic || "Child Topic")}</em></p>`
+      : "";
+    detailsEl.innerHTML = `
+      <p><strong>Label:</strong> ${escapeHtml(node.label)}</p>
+      <p><strong>Group:</strong> ${escapeHtml(node.group)}</p>
+      <p><strong>Definition:</strong> ${escapeHtml(node.definition)}</p>
+      <p><strong>Why It Matters:</strong> ${escapeHtml(node.whyItMatters || "")}</p>
+      <p><strong>Safe Sentence:</strong> ${escapeHtml(node.safeSentence || "")}</p>
+      <p><strong>Note:</strong> ${escapeHtml(noteSummary)}</p>
+      ${doubleClickHint}
+      ${renderExternalLinks(node.externalLinks)}
+      ${renderChildTopics(node.childTopics, mode)}
+      ${renderParentTopic(topic.parentTopic, mode)}
+    `;
+  }
+
+  function renderPaths(paths) {
+    pathsEl.innerHTML = "";
+    if (!paths || paths.length === 0) {
+      const li = document.createElement("li");
+      li.textContent = "No study paths.";
+      pathsEl.appendChild(li);
+      return;
+    }
+
+    for (const path of paths) {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${escapeHtml(path.label)}</strong><br>${escapeHtml(path.description || "")}`;
+      pathsEl.appendChild(li);
+    }
+  }
+
+  function setSelectedNode(nodeId) {
+    selectedNodeId = nodeId;
+    for (const [id, el] of nodeElements.entries()) {
+      if (id === nodeId) {
+        el.group.classList.add("is-active");
+      } else {
+        el.group.classList.remove("is-active");
+      }
+    }
+    const node = (currentTopic.nodes || []).find((n) => n.id === nodeId);
+    if (node) renderDetails(node, currentTopic, currentMode);
+  }
+
+  function shouldNodeBeVisible(node) {
+    const groupMatch = activeFilter === "All" || node.group === activeFilter;
+    if (!groupMatch) return false;
+
+    if (!searchTerm.trim()) return true;
+    return nodeSearchText(node).includes(searchTerm.trim().toLowerCase());
+  }
+
+  function applyVisibility() {
+    if (!currentTopic) return;
+
+    const visibleNodeIds = new Set();
+    let matchCount = 0;
+
+    for (const node of currentTopic.nodes || []) {
+      const visible = shouldNodeBeVisible(node);
+      const nodeEl = nodeElements.get(node.id);
+      if (!nodeEl) continue;
+
+      if (visible) {
+        nodeEl.group.style.opacity = "1";
+        visibleNodeIds.add(node.id);
+        if (searchTerm.trim()) matchCount += 1;
+      } else {
+        nodeEl.group.style.opacity = "0.15";
+      }
+    }
+
+    for (const linkEl of linkElements) {
+      const srcVisible = visibleNodeIds.has(linkEl.sourceId);
+      const tgtVisible = visibleNodeIds.has(linkEl.targetId);
+      linkEl.el.style.opacity = srcVisible && tgtVisible ? "0.85" : "0.1";
+    }
+
+    if (searchCountEl) {
+      if (searchTerm.trim()) {
+        searchCountEl.textContent = `${matchCount} match${matchCount === 1 ? "" : "es"}`;
+      } else {
+        searchCountEl.textContent = "";
+      }
+    }
+
+    if (selectedNodeId && !visibleNodeIds.has(selectedNodeId)) {
+      selectedNodeId = null;
+      detailsEl.innerHTML = "<p>Select a visible bubble to view details.</p>";
+      for (const [, el] of nodeElements.entries()) {
+        el.group.classList.remove("is-active");
+      }
+    }
+  }
+
+  function renderGroupFilters(topic) {
+    if (!groupFiltersEl) return;
+    groupFiltersEl.innerHTML = "";
+    const groups = ["All", ...((topic.groups || []).map((g) => g.label).filter(Boolean))];
+
+    for (const groupName of groups) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "filter-btn";
+      btn.textContent = groupName;
+      if (groupName === activeFilter) btn.classList.add("is-active");
+      btn.addEventListener("click", () => {
+        activeFilter = groupName;
+        for (const b of groupFiltersEl.querySelectorAll(".filter-btn")) {
+          b.classList.toggle("is-active", b.textContent === groupName);
+        }
+        applyVisibility();
+      });
+      groupFiltersEl.appendChild(btn);
+    }
+  }
+
+  function drawTopic(topic, mode) {
+    currentTopic = topic;
+    currentMode = mode;
+    activeFilter = "All";
+    searchTerm = "";
+    selectedNodeId = null;
+    if (searchInput) searchInput.value = "";
+    if (searchCountEl) searchCountEl.textContent = "";
+
+    titleEl.textContent = topic.title || "StudyBubble Topic";
+    subtitleEl.textContent = topic.subtitle || "";
+
+    svg.innerHTML = "";
+    nodeElements.clear();
+    linkElements.length = 0;
+
+    const nodes = Array.isArray(topic.nodes) ? topic.nodes : [];
+    const links = Array.isArray(topic.links) ? topic.links : [];
+    const nodeById = new Map(nodes.map((n) => [n.id, n]));
+
+    const width = 1000;
+    const y = 260;
+    const margin = 100;
+    const step = nodes.length > 1 ? (width - margin * 2) / (nodes.length - 1) : 0;
+
+    const positioned = nodes.map((node, i) => ({
+      ...node,
+      x: margin + step * i,
+      y,
+      r: node.size === "detail" ? 40 : node.size === "support" ? 48 : 56,
+    }));
+
+    const positionById = new Map(positioned.map((n) => [n.id, n]));
+
+    for (const link of links) {
+      const source = positionById.get(link.source);
+      const target = positionById.get(link.target);
+      if (!source || !target) continue;
+
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("class", "link-line");
+      line.setAttribute("x1", String(source.x));
+      line.setAttribute("y1", String(source.y));
+      line.setAttribute("x2", String(target.x));
+      line.setAttribute("y2", String(target.y));
+      svg.appendChild(line);
+      linkElements.push({ el: line, sourceId: link.source, targetId: link.target });
+    }
+
+    for (const node of positioned) {
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      group.setAttribute("class", "bubble-node");
+      group.setAttribute("tabindex", "0");
+
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("class", "bubble-circle");
+      circle.setAttribute("cx", String(node.x));
+      circle.setAttribute("cy", String(node.y));
+      circle.setAttribute("r", String(node.r));
+
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("class", "bubble-label");
+      text.setAttribute("x", String(node.x));
+      text.setAttribute("y", String(node.y));
+      text.textContent = node.label;
+
+      group.appendChild(circle);
+      group.appendChild(text);
+
+      function activate() {
+        setSelectedNode(node.id);
+      }
+
+      function navigateToSingleChildTopic() {
+        const childTopics = Array.isArray(node.childTopics) ? node.childTopics : [];
+        if (childTopics.length !== 1) return;
+        const href = topicRefToHref(childTopics[0].topic, mode);
+        if (!href || href === "#") return;
+        window.location.href = href;
+      }
+
+      group.addEventListener("click", activate);
+      group.addEventListener("dblclick", () => {
+        activate();
+        navigateToSingleChildTopic();
+      });
+      group.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          activate();
+        }
+      });
+
+      const childTopics = Array.isArray(node.childTopics) ? node.childTopics : [];
+      if (childTopics.length === 1) {
+        const childLabel = childTopics[0].label || childTopics[0].topic || "child topic";
+        group.setAttribute("title", `Double-click to open ${childLabel}`);
+      }
+
+      svg.appendChild(group);
+      nodeElements.set(node.id, { group, node });
+    }
+
+    renderGroupFilters(topic);
+    renderPaths(topic.paths || []);
+
+    if (nodes.length > 0) {
+      setSelectedNode(nodes[0].id);
+    }
+
+    applyVisibility();
+  }
+
+  async function loadTopic() {
+    const embedded = document.getElementById("studybubble-topic-data");
+    if (embedded) {
+      return JSON.parse(embedded.textContent || "{}");
+    }
+    const response = await fetch("topic.studybubble.json");
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    return response.json();
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      searchTerm = searchInput.value || "";
+      applyVisibility();
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      searchTerm = "";
+      if (searchInput) searchInput.value = "";
+      activeFilter = "All";
+      selectedNodeId = null;
+
+      if (groupFiltersEl) {
+        for (const b of groupFiltersEl.querySelectorAll(".filter-btn")) {
+          b.classList.toggle("is-active", b.textContent === "All");
+        }
+      }
+      for (const [, el] of nodeElements.entries()) {
+        el.group.classList.remove("is-active");
+      }
+
+      detailsEl.innerHTML = "<p>Select a bubble to view details.</p>";
+      applyVisibility();
+    });
+  }
+
+  try {
+    const topic = await loadTopic();
+    const mode = document.getElementById("studybubble-topic-data") ? "single-file" : "multifile";
+    drawTopic(topic, mode);
+  } catch (error) {
+    titleEl.textContent = "Failed to load topic";
+    subtitleEl.textContent = String(error);
+    detailsEl.innerHTML = `<p>Could not load <code>topic.studybubble.json</code>.</p>`;
+  }
+})();
+
+  </script>
+
+  <!-- SECTION: Build Metadata -->
+  <script id="studybubble-build-metadata" type="application/json">
+{
+  "generatedAtUtc": "2026-05-16T07:51:25.950790+00:00",
+  "mode": "single-file",
+  "sourceTopicPath": "topics\\tiny_capacity_demo.studybubble.json",
+  "topicId": "tiny_capacity_demo",
+  "title": "Tiny Capacity Demo",
+  "nodeCount": 7,
+  "linkCount": 6,
+  "pathCount": 3
+}
+  </script>
+</body>
+</html>

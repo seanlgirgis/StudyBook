@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StudyBubble Viewer</title>
+  <link rel="stylesheet" href="bubble_viewer.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-top">
+      <h1 id="topic-title">Loading topic...</h1>
+      <p id="topic-subtitle"></p>
+    </div>
+    <div class="toolbar">
+      <input id="search-input" type="text" placeholder="Search label, definition, safe sentence..." autocomplete="off" />
+      <span id="search-count" class="search-count"></span>
+      <div id="group-filters" class="group-filters"></div>
+      <button id="clear-filters" class="clear-btn" type="button">Reset</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="map-area">
+      <svg id="map-svg" viewBox="0 0 1000 520" role="img" aria-label="Study bubble map"></svg>
+    </section>
+
+    <aside class="side-panel">
+      <h2>Details</h2>
+      <div id="node-details" class="panel-card">
+        <p>Select a bubble to view details.</p>
+      </div>
+
+      <h2>Study Paths</h2>
+      <ul id="study-paths" class="path-list"></ul>
+    </aside>
+  </main>
+
+  <script src="bubble_viewer.js" defer></script>
+</body>
+</html>
