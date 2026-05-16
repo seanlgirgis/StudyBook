@@ -5,8 +5,13 @@ StudyBubble is single-file-only for current development.
 Do not use multi-file output, local HTTP server testing, or fetch-based
 topic loading as acceptance criteria unless the user explicitly reopens that
 architecture later.
+Deprecated implementation residue:
+Some old non-active code paths may still exist from earlier multi-file work.
+Do not treat them as active concerns or repeat them in normal reports unless
+they cause a failing test or the user explicitly opens a cleanup task.
+Active acceptance remains direct-open outputs/single_file/*.html.
 
-Iteration 11 is complete.
+Iteration 12 work started: visible navigation UI.
 
 What was done:
 - Added toolbar search in the viewer with case-insensitive matching across:
@@ -59,10 +64,12 @@ Status of manual smoke in this run:
   - `outputs\single_file\python_overview.html`
   - `outputs\single_file\pandas.html`
 - Confirmed checklist pass:
+  - visible child-topic button works
+  - visible parent/back button works
   - parent/child double-click roundtrip works (`python_overview` <-> `pandas`)
   - browser console clean (no runtime error)
   - search, group filters, sidebar, and reset behave as expected
 - Limitation reminder: single-file parent/child navigation requires sibling `.html` topic outputs to exist in `outputs/single_file`.
 
 Next step:
-- Discussion checkpoint complete. Do not start Iteration 12 yet.
+- Review Iteration 12 implementation and prepare commit/tag decision when requested.

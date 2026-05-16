@@ -30,10 +30,18 @@ Builder/output tests:
   - `outputs/single_file/pandas.html`
 - Single-file run mode: open pages directly from File Explorer (`file://`) with no `fetch()` requirement because topic data is embedded.
 - Parent/child single-file navigation expectation: sibling `.html` topic files must exist under `outputs/single_file`.
+- Visible navigation UI checks:
+  - topic-level parent/back button is shown when `parentTopic` exists
+  - selected-node child-topic button(s) are shown when `childTopics` exists
+  - child/parent buttons navigate to sibling `.html` targets
+  - double-click navigation still works as shortcut
 - Deprecated/historical only:
   - multi-file output smoke checks
   - multi-file local HTTP-server checks
   - fetch-based topic loading checks
+- Reporting guidance:
+  - deprecated/historical checks are not part of normal acceptance reporting
+  - only call them out when they fail and affect runtime/tests, or when explicit cleanup is requested
 - Single-file structure smoke check for organized sections:
   - metadata
   - styles

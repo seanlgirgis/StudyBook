@@ -8,6 +8,7 @@
   const searchCountEl = document.getElementById("search-count");
   const groupFiltersEl = document.getElementById("group-filters");
   const clearBtn = document.getElementById("clear-filters");
+  const headerTopEl = document.querySelector(".header-top");
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -35,6 +36,26 @@
     return toMultifileHref(topicRef);
   }
 
+  function topicJsonToHtmlName(topicRef) {
+    if (!topicRef) return "";
+    return String(topicRef)
+      .split(/[\\/]/)
+      .pop()
+      .replace(/\.studybubble\.json$/i, ".html");
+  }
+
+  function navigateToTopicRef(topicRef, mode) {
+    const href = topicRefToHref(topicRef, mode);
+    if (!href || href === "#") return;
+    window.location.href = href;
+  }
+
+  function defaultOpenLabel(topicRef) {
+    const htmlName = topicJsonToHtmlName(topicRef);
+    const base = htmlName.replace(/\.html$/i, "").replaceAll("_", " ");
+    return `Open ${base || "Child Topic"}`;
+  }
+
   function renderExternalLinks(links) {
     if (!Array.isArray(links) || links.length === 0) return "";
     const items = links
@@ -57,10 +78,50 @@
     return `<p><strong>Child Topics:</strong></p><ul>${items}</ul>`;
   }
 
+  function renderChildTopicButtons(childTopics, mode) {
+    if (!Array.isArray(childTopics) || childTopics.length === 0) return "";
+    const buttons = childTopics
+      .map((child) => {
+        const href = topicRefToHref(child.topic, mode);
+        if (!href || href === "#") return "";
+        const text = child.label ? child.label : defaultOpenLabel(child.topic);
+        return `<button type="button" class="nav-topic-btn child-topic-btn" data-nav-href="${escapeHtml(href)}">${escapeHtml(text)}</button>`;
+      })
+      .filter(Boolean)
+      .join("");
+    if (!buttons) return "";
+    return `<div class="nav-section"><p><strong>Child Topic Navigation:</strong></p><div class="nav-button-row">${buttons}</div></div>`;
+  }
+
   function renderParentTopic(parentTopic, mode) {
     if (!parentTopic || typeof parentTopic !== "object") return "";
     const href = topicRefToHref(parentTopic.topic, mode);
     return `<p><strong>Parent Topic:</strong> <a href="${escapeHtml(href)}">${escapeHtml(parentTopic.label || "Back")}</a></p>`;
+  }
+
+  function renderTopicParentButton(topic, mode) {
+    if (!headerTopEl) return;
+    const existing = document.getElementById("topic-parent-nav");
+    if (existing) existing.remove();
+    const parentTopic = topic && topic.parentTopic && typeof topic.parentTopic === "object"
+      ? topic.parentTopic
+      : null;
+    if (!parentTopic || !parentTopic.topic) return;
+    const href = topicRefToHref(parentTopic.topic, mode);
+    if (!href || href === "#") return;
+
+    const wrap = document.createElement("div");
+    wrap.id = "topic-parent-nav";
+    wrap.className = "topic-parent-nav";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "nav-topic-btn parent-topic-btn";
+    btn.textContent = parentTopic.label || "Back";
+    btn.addEventListener("click", () => {
+      navigateToTopicRef(parentTopic.topic, mode);
+    });
+    wrap.appendChild(btn);
+    headerTopEl.appendChild(wrap);
   }
 
   function nodeSearchText(node) {
@@ -102,9 +163,18 @@
       <p><strong>Note:</strong> ${escapeHtml(noteSummary)}</p>
       ${doubleClickHint}
       ${renderExternalLinks(node.externalLinks)}
+      ${renderChildTopicButtons(node.childTopics, mode)}
       ${renderChildTopics(node.childTopics, mode)}
       ${renderParentTopic(topic.parentTopic, mode)}
     `;
+
+    for (const button of detailsEl.querySelectorAll(".nav-topic-btn[data-nav-href]")) {
+      button.addEventListener("click", () => {
+        const href = button.getAttribute("data-nav-href");
+        if (!href || href === "#") return;
+        window.location.href = href;
+      });
+    }
   }
 
   function renderPaths(paths) {
@@ -220,6 +290,7 @@
 
     titleEl.textContent = topic.title || "StudyBubble Topic";
     subtitleEl.textContent = topic.subtitle || "";
+    renderTopicParentButton(topic, mode);
 
     svg.innerHTML = "";
     nodeElements.clear();
@@ -285,9 +356,7 @@
       function navigateToSingleChildTopic() {
         const childTopics = Array.isArray(node.childTopics) ? node.childTopics : [];
         if (childTopics.length !== 1) return;
-        const href = topicRefToHref(childTopics[0].topic, mode);
-        if (!href || href === "#") return;
-        window.location.href = href;
+        navigateToTopicRef(childTopics[0].topic, mode);
       }
 
       function navigateToParentTopic() {
@@ -295,9 +364,7 @@
           ? topic.parentTopic
           : null;
         if (!parentTopic || !parentTopic.topic) return;
-        const href = topicRefToHref(parentTopic.topic, mode);
-        if (!href || href === "#") return;
-        window.location.href = href;
+        navigateToTopicRef(parentTopic.topic, mode);
       }
 
       group.addEventListener("click", activate);

@@ -19,13 +19,13 @@
 - Iteration 11 documentation correction: single-file-first acceptance direction (multi-file as secondary debug mode).
 - Direction amendment: StudyBubble single-file-only active development (multi-file deprecated from acceptance).
 - Manual single-file browser smoke: PASS (`python_overview.html` <-> `pandas.html` roundtrip, console clean, search/filters/sidebar/reset verified).
+- Iteration 12: visible parent/back and child-topic navigation buttons (implementation).
 
 ## In Progress
-- None.
+- Iteration 12 validation and manual browser smoke confirmation.
 
 ## Next
-- Discussion checkpoint before Iteration 12.
-- Explicit navigation UI clarification for single-file parent/child behavior.
+- Finalize Iteration 12 manual smoke verification and record result.
 
 ## Backlog
 - Package-path cleanup if still needed.

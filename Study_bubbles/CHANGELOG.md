@@ -189,4 +189,12 @@
   - browser console has no runtime error
   - search, group filters, sidebar, and reset behavior still work
 - Iteration 12 intentionally not started; stopped at documentation/state recording step.
+## 2026-05-16 - Iteration 12 Visible Navigation UI
+- Added visible topic-level parent/back navigation button when `parentTopic` exists.
+- Added visible child-topic navigation buttons in the side-panel details for selected nodes with `childTopics`.
+- Child/parent button navigation opens sibling `.html` topic targets derived from `.studybubble.json` references.
+- Preserved existing navigation behavior:
+  - double-click child open for exactly one child topic
+  - double-click fallback to parent topic when no single child target exists
+- Preserved existing viewer behaviors: search, group filters, sidebar details, reset, and study paths.
 

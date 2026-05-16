@@ -60,3 +60,11 @@ Consequences:
 - Parent/child topic navigation depends on sibling `.html` files existing in `outputs/single_file`.
 - Topic JSON, CSS, and JS must be embedded into each generated single-file artifact for active acceptance.
 - Multi-file output is deprecated for current development and is not an active acceptance criterion.
+
+Reporting Guidance:
+- Deprecated implementation residue may remain from earlier multi-file work.
+- Do not treat deprecated residue as an active concern in normal task status reports.
+- Mention deprecated residue only when:
+  - it causes a failing test/runtime issue, or
+  - the user explicitly requests a cleanup/removal task.
+- Active acceptance remains direct-open `outputs/single_file/*.html`.

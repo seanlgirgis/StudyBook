@@ -44,6 +44,10 @@ body {
   color: var(--muted);
 }
 
+.topic-parent-nav {
+  margin-top: 10px;
+}
+
 .toolbar {
   margin-top: 10px;
   display: flex;
@@ -88,6 +92,26 @@ body {
   padding: 6px 10px;
   font-size: 12px;
   cursor: pointer;
+}
+
+.nav-topic-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-topic-btn:hover {
+  border-color: var(--accent);
+}
+
+.parent-topic-btn {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: var(--accent);
+  color: #dbeafe;
 }
 
 .filter-btn.is-active {
@@ -141,6 +165,16 @@ body {
 .panel-card p {
   margin: 0 0 10px;
   line-height: 1.35;
+}
+
+.nav-section {
+  margin: 10px 0;
+}
+
+.nav-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .path-list {
@@ -364,6 +398,7 @@ body {
   const searchCountEl = document.getElementById("search-count");
   const groupFiltersEl = document.getElementById("group-filters");
   const clearBtn = document.getElementById("clear-filters");
+  const headerTopEl = document.querySelector(".header-top");
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -391,6 +426,26 @@ body {
     return toMultifileHref(topicRef);
   }
 
+  function topicJsonToHtmlName(topicRef) {
+    if (!topicRef) return "";
+    return String(topicRef)
+      .split(/[\\/]/)
+      .pop()
+      .replace(/\.studybubble\.json$/i, ".html");
+  }
+
+  function navigateToTopicRef(topicRef, mode) {
+    const href = topicRefToHref(topicRef, mode);
+    if (!href || href === "#") return;
+    window.location.href = href;
+  }
+
+  function defaultOpenLabel(topicRef) {
+    const htmlName = topicJsonToHtmlName(topicRef);
+    const base = htmlName.replace(/\.html$/i, "").replaceAll("_", " ");
+    return `Open ${base || "Child Topic"}`;
+  }
+
   function renderExternalLinks(links) {
     if (!Array.isArray(links) || links.length === 0) return "";
     const items = links
@@ -413,10 +468,50 @@ body {
     return `<p><strong>Child Topics:</strong></p><ul>${items}</ul>`;
   }
 
+  function renderChildTopicButtons(childTopics, mode) {
+    if (!Array.isArray(childTopics) || childTopics.length === 0) return "";
+    const buttons = childTopics
+      .map((child) => {
+        const href = topicRefToHref(child.topic, mode);
+        if (!href || href === "#") return "";
+        const text = child.label ? child.label : defaultOpenLabel(child.topic);
+        return `<button type="button" class="nav-topic-btn child-topic-btn" data-nav-href="${escapeHtml(href)}">${escapeHtml(text)}</button>`;
+      })
+      .filter(Boolean)
+      .join("");
+    if (!buttons) return "";
+    return `<div class="nav-section"><p><strong>Child Topic Navigation:</strong></p><div class="nav-button-row">${buttons}</div></div>`;
+  }
+
   function renderParentTopic(parentTopic, mode) {
     if (!parentTopic || typeof parentTopic !== "object") return "";
     const href = topicRefToHref(parentTopic.topic, mode);
     return `<p><strong>Parent Topic:</strong> <a href="${escapeHtml(href)}">${escapeHtml(parentTopic.label || "Back")}</a></p>`;
+  }
+
+  function renderTopicParentButton(topic, mode) {
+    if (!headerTopEl) return;
+    const existing = document.getElementById("topic-parent-nav");
+    if (existing) existing.remove();
+    const parentTopic = topic && topic.parentTopic && typeof topic.parentTopic === "object"
+      ? topic.parentTopic
+      : null;
+    if (!parentTopic || !parentTopic.topic) return;
+    const href = topicRefToHref(parentTopic.topic, mode);
+    if (!href || href === "#") return;
+
+    const wrap = document.createElement("div");
+    wrap.id = "topic-parent-nav";
+    wrap.className = "topic-parent-nav";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "nav-topic-btn parent-topic-btn";
+    btn.textContent = parentTopic.label || "Back";
+    btn.addEventListener("click", () => {
+      navigateToTopicRef(parentTopic.topic, mode);
+    });
+    wrap.appendChild(btn);
+    headerTopEl.appendChild(wrap);
   }
 
   function nodeSearchText(node) {
@@ -458,9 +553,18 @@ body {
       <p><strong>Note:</strong> ${escapeHtml(noteSummary)}</p>
       ${doubleClickHint}
       ${renderExternalLinks(node.externalLinks)}
+      ${renderChildTopicButtons(node.childTopics, mode)}
       ${renderChildTopics(node.childTopics, mode)}
       ${renderParentTopic(topic.parentTopic, mode)}
     `;
+
+    for (const button of detailsEl.querySelectorAll(".nav-topic-btn[data-nav-href]")) {
+      button.addEventListener("click", () => {
+        const href = button.getAttribute("data-nav-href");
+        if (!href || href === "#") return;
+        window.location.href = href;
+      });
+    }
   }
 
   function renderPaths(paths) {
@@ -576,6 +680,7 @@ body {
 
     titleEl.textContent = topic.title || "StudyBubble Topic";
     subtitleEl.textContent = topic.subtitle || "";
+    renderTopicParentButton(topic, mode);
 
     svg.innerHTML = "";
     nodeElements.clear();
@@ -641,9 +746,7 @@ body {
       function navigateToSingleChildTopic() {
         const childTopics = Array.isArray(node.childTopics) ? node.childTopics : [];
         if (childTopics.length !== 1) return;
-        const href = topicRefToHref(childTopics[0].topic, mode);
-        if (!href || href === "#") return;
-        window.location.href = href;
+        navigateToTopicRef(childTopics[0].topic, mode);
       }
 
       function navigateToParentTopic() {
@@ -651,9 +754,7 @@ body {
           ? topic.parentTopic
           : null;
         if (!parentTopic || !parentTopic.topic) return;
-        const href = topicRefToHref(parentTopic.topic, mode);
-        if (!href || href === "#") return;
-        window.location.href = href;
+        navigateToTopicRef(parentTopic.topic, mode);
       }
 
       group.addEventListener("click", activate);
@@ -752,7 +853,7 @@ body {
   <!-- SECTION: Build Metadata -->
   <script id="studybubble-build-metadata" type="application/json">
 {
-  "generatedAtUtc": "2026-05-16T23:21:52.181469+00:00",
+  "generatedAtUtc": "2026-05-16T23:53:23.917013+00:00",
   "mode": "single-file",
   "sourceTopicPath": "topics\\python_overview.studybubble.json",
   "topicId": "python_overview",

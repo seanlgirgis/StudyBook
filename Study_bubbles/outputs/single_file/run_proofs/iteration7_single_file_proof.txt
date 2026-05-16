@@ -1,4 +1,4 @@
-timestamp: 2026-05-16T23:21:52.182097+00:00
+timestamp: 2026-05-16T23:53:23.917517+00:00
 source topic path: topics\python_overview.studybubble.json
 output HTML path: outputs\single_file\python_overview.html
 mode: single-file
@@ -8,7 +8,7 @@ node count: 3
 link count: 3
 path count: 1
 validation result: PASS
-generated HTML byte size: 22632
+generated HTML byte size: 25749
 manual smoke test steps:
 1. Open outputs/single_file/tiny_capacity_demo.html directly from File Explorer.
 2. Confirm title and subtitle render.
