@@ -1,0 +1,23 @@
+timestamp: 2026-05-16T07:51:25.515717+00:00
+source topic path: topics\tiny_capacity_demo.studybubble.json
+output folder: outputs\multifile\tiny_capacity_demo
+mode: multifile
+generated files:
+- index.html
+- bubble_viewer.css
+- bubble_viewer.js
+- topic.studybubble.json
+- run_proof.txt
+topic id: tiny_capacity_demo
+title: Tiny Capacity Demo
+node count: 7
+link count: 6
+path count: 3
+validation result: PASS
+summary: PASS
+manual smoke steps:
+1. Open index.html in browser.
+2. Confirm title/header and three bubbles are visible.
+3. Confirm two relationship lines are visible.
+4. Click each bubble and verify side panel content updates.
+5. Confirm study path list shows 'Telemetry to Forecast'.

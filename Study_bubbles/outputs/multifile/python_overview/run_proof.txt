@@ -1,0 +1,23 @@
+timestamp: 2026-05-16T22:35:59.795377+00:00
+source topic path: topics\python_overview.studybubble.json
+output folder: outputs\multifile\python_overview
+mode: multifile
+generated files:
+- index.html
+- bubble_viewer.css
+- bubble_viewer.js
+- topic.studybubble.json
+- run_proof.txt
+topic id: python_overview
+title: Python Overview
+node count: 3
+link count: 3
+path count: 1
+validation result: PASS
+summary: PASS
+manual smoke steps:
+1. Open index.html in browser.
+2. Confirm title/header and three bubbles are visible.
+3. Confirm two relationship lines are visible.
+4. Click each bubble and verify side panel content updates.
+5. Confirm study path list shows 'Telemetry to Forecast'.

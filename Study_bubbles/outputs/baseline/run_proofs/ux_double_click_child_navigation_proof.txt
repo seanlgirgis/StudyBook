@@ -1,0 +1,31 @@
+timestamp: 2026-05-16T02:20:39.1120063-05:00
+design decision: single click inspects; double click navigates deeper only when a bubble has exactly one child topic
+files modified:
+- viewer/bubble_viewer.js
+validation results:
+- topics\\tiny_capacity_demo.studybubble.json: PASS
+- topics\\python_overview.studybubble.json: PASS
+- topics\\pandas.studybubble.json: PASS
+pytest result: PASS (8 passed)
+build results:
+- tiny_capacity_demo multifile: PASS
+- python_overview multifile: PASS
+- pandas multifile: PASS
+- tiny_capacity_demo single-file: PASS
+- python_overview single-file: PASS
+- pandas single-file: PASS
+manual smoke test steps:
+Single-file:
+1. Open outputs\\single_file\\python_overview.html
+2. Single click Pandas. Confirm side panel opens and shows Pandas details.
+3. Confirm side panel still shows Study Pandas link.
+4. Double click Pandas. Confirm browser opens outputs\\single_file\\pandas.html.
+5. In pandas.html, confirm Back to Python Overview remains visible as a link.
+6. Click Back to Python Overview. Confirm browser returns to outputs\\single_file\\python_overview.html.
+7. Double click PySpark. Confirm it does not navigate because PySpark has no child topic.
+Multi-file:
+1. Run python -m http.server 8000
+2. Open http://localhost:8000/outputs/multifile/python_overview/index.html
+3. Double click Pandas. Confirm it opens http://localhost:8000/outputs/multifile/pandas/index.html
+4. Click Back to Python Overview. Confirm it returns to http://localhost:8000/outputs/multifile/python_overview/index.html
+summary: PASS

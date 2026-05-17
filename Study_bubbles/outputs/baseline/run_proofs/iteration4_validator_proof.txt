@@ -1,0 +1,10 @@
+timestamp: 2026-05-15T22:24:08.2167520-05:00
+command used for topic validation: ..\\env_setter.ps1; $env:PYTHONPATH='src'; python -m study_bubbles.validate_topic topics\\tiny_capacity_demo.studybubble.json
+validation result: PASS
+pytest command used: ..\\env_setter.ps1; python -m pytest tests\\test_validate_topic.py -q
+pytest result: PASS (8 passed)
+topic file path: topics\tiny_capacity_demo.studybubble.json
+node count: 3
+link count: 2
+path count: 1
+summary: PASS

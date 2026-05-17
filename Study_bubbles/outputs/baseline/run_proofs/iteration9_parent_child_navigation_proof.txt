@@ -1,0 +1,36 @@
+timestamp: 2026-05-16T02:11:04.9268062-05:00
+topics created:
+- topics\python_overview.studybubble.json
+- topics\pandas.studybubble.json
+validation results:
+- topics\tiny_capacity_demo.studybubble.json: PASS
+- topics\python_overview.studybubble.json: PASS
+- topics\pandas.studybubble.json: PASS
+pytest result: PASS (8 passed)
+build results:
+- python_overview multifile: PASS
+- python_overview single-file: PASS
+- pandas multifile: PASS
+- pandas single-file: PASS
+- tiny_capacity_demo multifile regression: PASS
+- tiny_capacity_demo single-file regression: PASS
+manual smoke test steps:
+Single-file navigation:
+1. Open outputs\single_file\python_overview.html
+2. Click Python or Pandas.
+3. Confirm side panel shows Study Pandas link.
+4. Click Study Pandas.
+5. Confirm browser opens outputs\single_file\pandas.html
+6. Confirm Pandas topic renders DataFrame, Series, GroupBy.
+7. Confirm side panel shows Back to Python Overview link.
+8. Click Back to Python Overview.
+9. Confirm browser opens outputs\single_file\python_overview.html
+10. Confirm Python official docs opens in a new tab.
+Multi-file navigation:
+1. Run python -m http.server 8000
+2. Open http://localhost:8000/outputs/multifile/python_overview/index.html
+3. Click Study Pandas.
+4. Confirm it opens http://localhost:8000/outputs/multifile/pandas/index.html
+5. Click Back to Python Overview.
+6. Confirm it returns to http://localhost:8000/outputs/multifile/python_overview/index.html
+summary: PASS

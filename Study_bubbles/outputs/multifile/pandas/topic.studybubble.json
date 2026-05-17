@@ -1,0 +1,105 @@
+{
+  "id": "pandas",
+  "title": "Pandas Study Map",
+  "subtitle": "Child topic for local tabular data work in Python",
+  "parentTopic": {
+    "label": "Back to Python Overview",
+    "topic": "python_overview.studybubble.json"
+  },
+  "groups": [
+    {
+      "id": "core_object",
+      "label": "Core Object",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "data_shape",
+      "label": "Data Shape",
+      "color": "#54A24B"
+    },
+    {
+      "id": "aggregation",
+      "label": "Aggregation",
+      "color": "#F58518"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "dataframe",
+      "label": "DataFrame",
+      "size": "core",
+      "group": "Core Object",
+      "definition": "A two-dimensional table-like data structure with rows and columns.",
+      "whyItMatters": "DataFrame is the main object used for most Pandas data cleaning and transformation work.",
+      "safeSentence": "A DataFrame is the main Pandas table object.",
+      "note": {
+        "summary": "Most Pandas workflows start by loading or creating a DataFrame."
+      },
+      "externalLinks": [
+        {
+          "label": "Pandas DataFrame docs",
+          "href": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html"
+        }
+      ],
+      "childTopics": []
+    },
+    {
+      "id": "series",
+      "label": "Series",
+      "size": "support",
+      "group": "Data Shape",
+      "definition": "A one-dimensional labeled array, often representing one column from a DataFrame.",
+      "whyItMatters": "Understanding Series helps explain how Pandas handles columns and vectorized operations.",
+      "safeSentence": "A Series is like one labeled column of data.",
+      "note": {
+        "summary": "A DataFrame is made of Series-like columns."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    },
+    {
+      "id": "groupby",
+      "label": "GroupBy",
+      "size": "support",
+      "group": "Aggregation",
+      "definition": "A split-apply-combine operation used to group data and calculate summaries.",
+      "whyItMatters": "GroupBy is how raw rows become useful totals, averages, counts, and grouped metrics.",
+      "safeSentence": "GroupBy turns detailed rows into grouped summaries.",
+      "note": {
+        "summary": "GroupBy is one of the most important Pandas patterns for reporting and analytics."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    }
+  ],
+  "links": [
+    {
+      "source": "dataframe",
+      "target": "series",
+      "label": "contains columns"
+    },
+    {
+      "source": "dataframe",
+      "target": "groupby",
+      "label": "grouped for summaries"
+    },
+    {
+      "source": "series",
+      "target": "groupby",
+      "label": "values aggregated"
+    }
+  ],
+  "paths": [
+    {
+      "id": "pandas_core_path",
+      "label": "Pandas Core Path",
+      "description": "DataFrames contain Series-like columns, and GroupBy turns rows into useful summaries.",
+      "nodeIds": [
+        "dataframe",
+        "series",
+        "groupby"
+      ],
+      "rehearsalPrompt": "Explain DataFrame, Series, and GroupBy in simple words."
+    }
+  ]
+}

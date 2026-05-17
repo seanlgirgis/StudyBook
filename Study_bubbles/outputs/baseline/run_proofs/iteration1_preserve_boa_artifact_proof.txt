@@ -1,0 +1,11 @@
+timestamp: 2026-05-15T21:45:29.1587841-05:00
+source path: D:\Workarea\StudyBook\study_bubbles\BOA_Terminology_Bubble_Map_v3.html
+legacy path: D:\Workarea\StudyBook\study_bubbles\legacy\BOA_Terminology_Bubble_Map_v3.html
+baseline path: D:\Workarea\StudyBook\study_bubbles\outputs\baseline\BOA_Terminology_Bubble_Map_v3.html
+source byte size: 85152
+legacy byte size: 85152
+baseline byte size: 85152
+source SHA256: D839958AE3C28CF567D30027EBE6320FE88594C4AAF9EEF92B1DB1E37518F46B
+legacy SHA256: D839958AE3C28CF567D30027EBE6320FE88594C4AAF9EEF92B1DB1E37518F46B
+baseline SHA256: D839958AE3C28CF567D30027EBE6320FE88594C4AAF9EEF92B1DB1E37518F46B
+result: PASS

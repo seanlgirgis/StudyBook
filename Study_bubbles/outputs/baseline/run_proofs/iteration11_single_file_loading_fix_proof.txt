@@ -1,0 +1,45 @@
+Iteration 11 Regression Fix - Single-File Topic Loading Proof
+Timestamp: 2026-05-16 02:52:04 -05:00
+
+Root Cause:
+- The single-file builder app shell did not include toolbar nodes (search-input, search-count, group-filters, clear-filters).
+- After Iteration 11, viewer JS referenced those nodes unconditionally and threw before topic rendering.
+- Result: single-file pages stayed on "Loading topic...".
+
+Files Modified:
+- viewer\bubble_viewer.js
+- src\study_bubbles\build_topic.py
+- study_bubbles\build_topic.py
+- PROJECT_STATE.md
+- TASK_BOARD.md
+- CHANGELOG.md
+- HANDOFF.md
+
+Validation Results:
+- python -m study_bubbles.validate_topic topics\tiny_capacity_demo.studybubble.json : PASS
+- python -m study_bubbles.validate_topic topics\python_overview.studybubble.json : PASS
+- python -m study_bubbles.validate_topic topics\pandas.studybubble.json : PASS
+
+Pytest Result:
+- python -m pytest tests\test_validate_topic.py -q : PASS
+
+Build Results:
+- multifile tiny_capacity_demo : PASS
+- multifile python_overview : PASS
+- multifile pandas : PASS
+- single-file tiny_capacity_demo : PASS
+- single-file python_overview : PASS
+- single-file pandas : PASS
+
+Manual Smoke Test Steps:
+1. Open directly from File Explorer: outputs\single_file\pandas.html
+2. Confirm it no longer stays on Loading topic.
+3. Confirm DataFrame, Series, GroupBy render.
+4. Confirm search/filter toolbar renders and works.
+5. Open outputs\single_file\python_overview.html and confirm Python/Pandas/PySpark render.
+6. Double-click Pandas and confirm pandas.html opens.
+7. Run local server: python -m http.server 8000
+8. Open http://localhost:8000/outputs/multifile/pandas/index.html and confirm multifile still works.
+
+PASS/FAIL Summary:
+PASS

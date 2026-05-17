@@ -1,0 +1,1587 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>BOA Capacity Terminology Bubble Map v2</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+    :root {
+      --bg: #0f1117;
+      --panel: #181c27;
+      --panel2: #1e2333;
+      --border: #2a3045;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --accent: #3b82f6;
+      --accent-soft: rgba(59,130,246,0.15);
+      --teal: #14b8a6;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --violet: #8b5cf6;
+      --emerald: #10b981;
+      --sky: #0ea5e9;
+
+      --c-forecast: #fbbf24;
+      --c-reporting: #60a5fa;
+      --c-operations: #f87171;
+      --c-governance: #a78bfa;
+      --c-architecture: #34d399;
+      --c-tools: #38bdf8;
+
+      --glow-forecast: rgba(251,191,36,0.35);
+      --glow-reporting: rgba(96,165,250,0.35);
+      --glow-operations: rgba(248,113,113,0.35);
+      --glow-governance: rgba(167,139,250,0.35);
+      --glow-architecture: rgba(52,211,153,0.35);
+      --glow-tools: rgba(56,189,248,0.35);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      gap: 12px;
+    }
+    .header-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #f1f5f9;
+      white-space: nowrap;
+    }
+    .header-title span { color: var(--accent); }
+    .toolbar {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+    input#search {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 13px;
+      color: var(--text);
+      font-family: inherit;
+      min-width: 220px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    input#search:focus { border-color: var(--accent); }
+    input#search::placeholder { color: var(--muted); }
+    .search-count {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      min-width: 48px;
+    }
+    .sep { width: 1px; height: 24px; background: var(--border); margin: 0 2px; }
+    /* BUTTONS */
+    button {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 7px;
+      padding: 6px 11px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--muted);
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    button:hover { border-color: #3a4560; color: var(--text); background: #232840; }
+    button.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+    button.grp-btn { border-left: 3px solid transparent; }
+    button.grp-btn[data-filter="Forecasting"].active    { border-left-color: var(--c-forecast);      background: rgba(251,191,36,.12);   color: var(--c-forecast);     border-color: var(--c-forecast); }
+    button.grp-btn[data-filter="BOA Reporting"].active  { border-left-color: var(--c-reporting);     background: rgba(96,165,250,.12);   color: var(--c-reporting);    border-color: var(--c-reporting); }
+    button.grp-btn[data-filter="Operations"].active     { border-left-color: var(--c-operations);    background: rgba(248,113,113,.12);  color: var(--c-operations);   border-color: var(--c-operations); }
+    button.grp-btn[data-filter="Governance"].active     { border-left-color: var(--c-governance);    background: rgba(167,139,250,.12);  color: var(--c-governance);   border-color: var(--c-governance); }
+    button.grp-btn[data-filter="Architecture"].active   { border-left-color: var(--c-architecture);  background: rgba(52,211,153,.12);   color: var(--c-architecture); border-color: var(--c-architecture); }
+    button.grp-btn[data-filter="Tools"].active          { border-left-color: var(--c-tools);         background: rgba(56,189,248,.12);   color: var(--c-tools);        border-color: var(--c-tools); }
+    /* BODY LAYOUT */
+    .body {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      flex: 1;
+      min-height: 0;
+      gap: 0;
+    }
+    /* MAP PANE */
+    .map-pane {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .map-pane svg { width: 100%; height: 100%; display: block; cursor: grab; }
+    .map-pane svg.panning { cursor: grabbing; }
+    .map-pane svg.dragging-node { cursor: none; }
+    /* MINI-MAP */
+    .minimap {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      width: 160px;
+      height: 110px;
+      background: rgba(15,17,23,0.88);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .minimap svg { width: 100%; height: 100%; display: block; }
+    /* ZOOM HUD */
+    .zoom-hud {
+      position: absolute;
+      bottom: 12px;
+      left: 184px;
+      background: rgba(15,17,23,0.88);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 9px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      z-index: 5;
+    }
+    /* MODE HUD */
+    .mode-hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(15,17,23,0.82);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 11px;
+      color: var(--muted);
+      z-index: 5;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .mode-hud .dot { width:8px; height:8px; border-radius:50%; background: var(--accent); display:inline-block; }
+    .mode-hud.drag-mode .dot { background: var(--amber); }
+    /* SIDE PANEL */
+    .side-panel {
+      background: var(--panel);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .side-top {
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .side-top h2 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #f8fafc;
+      line-height: 1.25;
+    }
+    .side-group-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .side-body { padding: 12px 14px; overflow-y: auto; flex: 1; }
+    .side-body .k {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--muted);
+      margin-top: 14px;
+      margin-bottom: 5px;
+    }
+    .side-body .val { font-size: 13.5px; line-height: 1.55; color: #cbd5e1; }
+    .safe-sentence {
+      background: rgba(59,130,246,.1);
+      border: 1px solid rgba(59,130,246,.25);
+      border-radius: 7px;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-style: italic;
+      color: #93c5fd;
+      line-height: 1.5;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+    .chip {
+      font-size: 11.5px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .chip:hover { border-color: var(--accent); color: var(--accent); }
+    .side-placeholder {
+      padding: 20px 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* FOOTER */
+    .footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      background: var(--panel);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .path-label { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    .path-note {
+      font-size: 12px;
+      color: #64748b;
+      margin-left: 4px;
+      flex: 1;
+    }
+    .path-note.active { color: var(--teal); }
+    /* LEGEND */
+    .legend {
+      display: flex; gap: 14px; align-items: center;
+      padding: 6px 14px;
+      background: var(--panel);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    /* TOOLTIP */
+    .tooltip {
+      position: fixed;
+      pointer-events: none;
+      z-index: 50;
+      max-width: 300px;
+      background: #111827;
+      border: 1px solid #1e293b;
+      color: #e2e8f0;
+      padding: 9px 11px;
+      border-radius: 9px;
+      font-size: 12px;
+      line-height: 1.45;
+      opacity: 0;
+      transition: opacity .12s;
+      box-shadow: 0 8px 28px rgba(0,0,0,.55);
+    }
+    .tooltip strong { color: #f8fafc; display: block; margin-bottom: 3px; }
+    /* CONTEXT MENU */
+    .ctx-menu {
+      position: fixed;
+      z-index: 100;
+      background: #1e2333;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 4px;
+      box-shadow: 0 12px 36px rgba(0,0,0,.5);
+      min-width: 170px;
+      display: none;
+    }
+    .ctx-menu.open { display: block; }
+    .ctx-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 11px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all .1s;
+    }
+    .ctx-item:hover { background: var(--panel2); color: var(--text); }
+    .ctx-item .icon { font-size: 14px; width: 18px; text-align: center; }
+    .ctx-sep { height: 1px; background: var(--border); margin: 3px 0; }
+    /* KEYBOARD NAV HINT */
+    .kb-hint {
+      position: absolute;
+      bottom: 130px;
+      left: 12px;
+      font-size: 10px;
+      color: var(--muted);
+      opacity: .6;
+      font-family: 'JetBrains Mono', monospace;
+      z-index: 4;
+    }
+    .kb-hint span { background: var(--panel2); border: 1px solid var(--border); border-radius: 3px; padding: 1px 4px; margin: 0 1px; }
+    /* DRAG TOGGLE */
+    .drag-toggle {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted);
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      transition: all .15s;
+      user-select: none;
+    }
+    .drag-toggle:hover { border-color: var(--amber); color: var(--amber); }
+    .drag-toggle.on { border-color: var(--amber); color: var(--amber); background: rgba(245,158,11,.1); }
+    .drag-toggle .icon { font-size: 14px; }
+    /* Animated link glow on hover */
+    @keyframes link-pulse { 0%,100%{stroke-opacity:.7} 50%{stroke-opacity:1} }
+    .link-active { animation: link-pulse 1.4s ease-in-out infinite; }
+    /* Bubble entrance */
+    @keyframes bubble-in { from { transform: scale(0.4); opacity:0; } to { transform: scale(1); opacity:1; } }
+    .bubble-enter { animation: bubble-in .35s cubic-bezier(.34,1.5,.64,1) both; }
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER / TOOLBAR -->
+<div class="header">
+  <div class="header-title">BOA <span>Capacity</span> Terminology Map</div>
+  <div class="toolbar">
+    <input id="search" type="text" placeholder="Search terms…" autocomplete="off"/>
+    <span class="search-count" id="searchCount"></span>
+    <div class="sep"></div>
+    <button data-filter="All" class="grp-btn active">All</button>
+    <button data-filter="Forecasting" class="grp-btn">Forecasting</button>
+    <button data-filter="BOA Reporting" class="grp-btn">Reporting</button>
+    <button data-filter="Operations" class="grp-btn">Operations</button>
+    <button data-filter="Governance" class="grp-btn">Governance</button>
+    <button data-filter="Architecture" class="grp-btn">Architecture</button>
+    <button data-filter="Tools" class="grp-btn">Tools</button>
+    <div class="sep"></div>
+    <div class="drag-toggle" id="dragToggle" title="Toggle bubble drag mode">
+      <span class="icon">✥</span> Drag Mode
+    </div>
+    <button id="fitBtn">⊞ Fit</button>
+    <button id="resetBtn">↺ Reset</button>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+  <div class="map-pane" id="mapPane">
+    <svg id="map" viewBox="0 0 1440 940" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <filter id="glow-forecast" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-reporting" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-operations" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-governance" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-architecture" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-tools" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="rgba(0,0,0,0.5)"/>
+        </filter>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#3a4560"/>
+        </marker>
+        <marker id="arrow-active" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#3b82f6"/>
+        </marker>
+        <marker id="arrow-path" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#14b8a6"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <!-- Mini-map -->
+    <div class="minimap">
+      <svg id="minimap" viewBox="0 0 1440 940" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+
+    <!-- Zoom HUD -->
+    <div class="zoom-hud" id="zoomHud">100%</div>
+
+    <!-- Mode HUD -->
+    <div class="mode-hud" id="modeHud">
+      <span class="dot"></span>
+      <span id="modeLabel">Pan mode</span>
+    </div>
+
+    <!-- Keyboard hint -->
+    <div class="kb-hint">
+      <span>←→↑↓</span> navigate &nbsp;
+      <span>Esc</span> deselect &nbsp;
+      <span>Tab</span> next node
+    </div>
+  </div>
+
+  <!-- SIDE PANEL -->
+  <div class="side-panel">
+    <div class="side-top" id="sideTop">
+      <div class="side-placeholder" id="sidePlaceholder">
+        <strong style="color:#f1f5f9;display:block;margin-bottom:6px;">Select a term</strong>
+        Hover a bubble for quick context.<br>
+        Click to pin full details + see connections.<br><br>
+        <em style="color:#475569;">Right-click a bubble for quick actions.</em>
+      </div>
+    </div>
+    <div class="side-body" id="sideBody" style="display:none"></div>
+  </div>
+</div>
+
+<!-- FOOTER: Study Paths -->
+<div class="footer">
+  <span class="path-label">Study Path:</span>
+  <button data-path="core_story">Core Story</button>
+  <button data-path="boa_reporting">BOA Reporting</button>
+  <button data-path="project_assessment">Project Assessment</button>
+  <button data-path="operations">Operations</button>
+  <button data-path="architecture">Architecture</button>
+  <button data-path="forecasting_pipeline">Forecast Pipeline</button>
+  <button data-path="governance_cycle">Governance Cycle</button>
+  <span class="path-note" id="pathNote">Select a study path to highlight a rehearsal lane.</span>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#fbbf24;width:16px;height:16px;"></div> Core concept</div>
+  <div class="legend-item"><div class="legend-dot" style="width:12px;height:12px;background:#60a5fa"></div> Supporting</div>
+  <div class="legend-item"><div class="legend-dot" style="width:9px;height:9px;background:#a78bfa"></div> Detail</div>
+  <div class="sep" style="height:16px;background:var(--border);width:1px;margin:0 4px;"></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--c-forecast)"></div> Forecasting</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--c-reporting)"></div> Reporting</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--c-operations)"></div> Operations</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--c-governance)"></div> Governance</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--c-architecture)"></div> Architecture</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--c-tools)"></div> Tools</div>
+</div>
+
+<!-- TOOLTIP -->
+<div id="tooltip" class="tooltip"></div>
+
+<!-- CONTEXT MENU -->
+<div class="ctx-menu" id="ctxMenu">
+  <div class="ctx-item" id="ctx-select"><span class="icon">🔍</span> Pin details</div>
+  <div class="ctx-item" id="ctx-focus"><span class="icon">✦</span> Focus connections</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" id="ctx-filter"><span class="icon">⬡</span> Filter to group</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" id="ctx-reset"><span class="icon">↺</span> Reset view</div>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────
+const GROUP_COLOR = {
+  "Forecasting":  "#fbbf24",
+  "BOA Reporting":"#60a5fa",
+  "Operations":   "#f87171",
+  "Governance":   "#a78bfa",
+  "Architecture": "#34d399",
+  "Tools":        "#38bdf8"
+};
+const GROUP_GLOW = {
+  "Forecasting":  "rgba(251,191,36,0.4)",
+  "BOA Reporting":"rgba(96,165,250,0.4)",
+  "Operations":   "rgba(248,113,113,0.4)",
+  "Governance":   "rgba(167,139,250,0.4)",
+  "Architecture": "rgba(52,211,153,0.4)",
+  "Tools":        "rgba(56,189,248,0.4)"
+};
+const SIZE_R = { core:46, support:33, detail:22 };
+
+const nodes = [
+  // CORE
+  { id:"capacity_forecasting", label:"Capacity Forecasting", size:"core", group:"Forecasting",
+    definition:"A workflow that uses historical telemetry and capacity signals to estimate future resource demand and risk windows.",
+    whyItMatters:"Lets teams act before capacity pressure becomes a production incident.",
+    safeSentence:"I use forecasting as decision support — not deep ML research. The output is risk visibility, not a black box.",
+    related:[] },
+  { id:"telemetry", label:"Telemetry", size:"core", group:"Tools",
+    definition:"Raw signals emitted by systems — CPU, memory, storage, latency, throughput, logs, traces, events — collected by agents or APIs.",
+    whyItMatters:"Telemetry is the source material for every metric, KPI, forecast, and risk decision in capacity planning.",
+    safeSentence:"Telemetry is raw signal. The value comes from turning it into decisions.",
+    related:[] },
+  { id:"cbfr", label:"CBFR", size:"core", group:"BOA Reporting",
+    definition:"Capacity Baseline Forecast Report. A recurring planning report showing baseline, forecast, thresholds, risk areas, and recommended actions.",
+    whyItMatters:"The CBFR is the primary decision artifact for capacity planning cycles at BOA.",
+    safeSentence:"CBFR = baseline + forecast + risk + action. That is the whole story.",
+    related:[] },
+  { id:"kpi", label:"KPI", size:"core", group:"Governance",
+    definition:"A selected metric or derived signal that directly supports a business or operational decision.",
+    whyItMatters:"KPIs translate raw technical measurements into action language leaders understand.",
+    safeSentence:"A metric says what was measured. A KPI says why it matters and what decision it supports.",
+    related:[] },
+  { id:"dashboard", label:"Dashboard", size:"core", group:"BOA Reporting",
+    definition:"A decision view that makes capacity risk, trend, headroom, ownership, and action visible — designed for both engineers and management.",
+    whyItMatters:"Enables the same risk picture to be consumed quickly at multiple levels of the org.",
+    safeSentence:"A dashboard is not just charts. It is the decision view.",
+    related:[] },
+  { id:"threshold", label:"Threshold", size:"core", group:"Operations",
+    definition:"A warning or risk line indicating when a system is approaching unsafe utilization or performance degradation.",
+    whyItMatters:"Thresholds trigger review before production impact — the first line of automated capacity alerting.",
+    safeSentence:"A threshold is the warning line. The safety factor keeps us away from the cliff.",
+    related:[] },
+  { id:"exception", label:"Exception", size:"core", group:"Operations",
+    definition:"A break from expected capacity behavior — missing telemetry, threshold breach, or forecasted pressure crossing a risk band.",
+    whyItMatters:"Exceptions turn findings into owned actions and drive governance accountability.",
+    safeSentence:"Exception reporting creates accountability and closure. It is not just paperwork.",
+    related:[] },
+  { id:"project_assessment", label:"Project Assessment", size:"core", group:"Forecasting",
+    definition:"A review comparing expected new volume or TPS against production baseline, thresholds, capacity pools, and safety margin.",
+    whyItMatters:"Determines whether current capacity can safely absorb new demand before a project goes live.",
+    safeSentence:"Project assessment answers: can the current pool absorb this load, or do we need tuning, vertical, or horizontal scaling?",
+    related:[] },
+  { id:"capacity_pool", label:"Capacity Pool", size:"core", group:"Architecture",
+    definition:"A logical group of servers, VMs, or cloud resources supporting a business function, application tier, or workload.",
+    whyItMatters:"Pool-level planning is more useful than isolated server analysis. Individual nodes move; pools persist.",
+    safeSentence:"The useful view is pool-level headroom plus node-level exceptions.",
+    related:[] },
+  { id:"collaboration", label:"Collaboration", size:"core", group:"Architecture",
+    definition:"The process of aligning capacity evidence with app owners, architects, infrastructure, business owners, and governance teams.",
+    whyItMatters:"Capacity teams advise — owners and architects execute the final changes. No one acts alone.",
+    safeSentence:"Capacity provides the evidence and options. Stakeholders make and execute the final decision.",
+    related:[] },
+
+  // SUPPORT
+  { id:"baseline", label:"Baseline", size:"support", group:"Forecasting",
+    definition:"The normal operating pattern of an application, cluster, server, or capacity pool — learned from historical telemetry.",
+    whyItMatters:"Without a baseline, a metric value is just a number with no context.",
+    safeSentence:"Baseline tells us what normal looks like.",
+    related:[] },
+  { id:"headroom", label:"Headroom", size:"support", group:"Forecasting",
+    definition:"The remaining safe margin between current utilization and the defined threshold.",
+    whyItMatters:"Headroom tells you how close a system is to capacity risk right now.",
+    safeSentence:"Trend tells direction. Headroom tells urgency.",
+    related:[] },
+  { id:"safety_factor", label:"Safety Factor", size:"support", group:"Forecasting",
+    definition:"An extra buffer kept below hard limits to absorb spikes, failover events, business cycles, or unexpected demand.",
+    whyItMatters:"Production should not be planned to run at the cliff edge.",
+    safeSentence:"Safety factor is the margin that protects reliability under stress.",
+    related:[] },
+  { id:"prophet", label:"Prophet", size:"support", group:"Forecasting",
+    definition:"A time-series forecasting library from Meta, useful for trend and seasonality decomposition with an explainable output.",
+    whyItMatters:"Models weekly, monthly, quarter-end, and business-calendar patterns in a way stakeholders can follow.",
+    safeSentence:"Prophet was useful for explainable trend and seasonality — not deep ML research.",
+    related:[] },
+  { id:"forecast_validation", label:"Forecast Validation", size:"support", group:"Forecasting",
+    definition:"Checking forecast output against actual behavior — risk bands, threshold crossings, and SME review before using results for planning.",
+    whyItMatters:"An unvalidated forecast can mislead planners into false confidence or unnecessary spend.",
+    safeSentence:"The model is only useful if it actually improves the capacity decision.",
+    related:[] },
+  { id:"holdout_testing", label:"Holdout Testing", size:"support", group:"Forecasting",
+    definition:"Training on an older history window and testing against a more recent known period — the standard time-series validation pattern.",
+    whyItMatters:"Simulates real future forecasting without leaking future data into the training signal.",
+    safeSentence:"Train on 18 months, test on the next 6 months. Then check if the forecast was useful.",
+    related:[] },
+  { id:"forecast_vs_actual", label:"Forecast vs Actual", size:"support", group:"Forecasting",
+    definition:"Side-by-side comparison of predicted values or risk bands against what actually happened during the holdout window.",
+    whyItMatters:"Shows whether the forecast model produces trustworthy output or needs adjustment.",
+    safeSentence:"I compare forecasted risk against actual outcomes before trusting the model for planning.",
+    related:[] },
+  { id:"arima", label:"ARIMA", size:"support", group:"Forecasting",
+    definition:"AutoRegressive Integrated Moving Average — a classical statistical time-series model used in BMC TSCO and custom pipelines.",
+    whyItMatters:"ARIMA handles autocorrelated time-series data well when seasonality is separately decomposed.",
+    safeSentence:"ARIMA is one tool in the forecasting toolkit — useful when the data is stationary after differencing.",
+    related:[] },
+  { id:"holt_winters", label:"Holt-Winters", size:"support", group:"Forecasting",
+    definition:"Exponential smoothing model that handles both trend and seasonality — used natively inside BMC TSCO.",
+    whyItMatters:"Strong default for capacity patterns with predictable business-cycle seasonality.",
+    safeSentence:"Holt-Winters is the TSCO default for seasonal workloads — solid, explainable, battle-tested.",
+    related:[] },
+  { id:"bmc_truesight", label:"BMC TrueSight", size:"support", group:"Tools",
+    definition:"Enterprise monitoring and capacity platform for telemetry collection, threshold management, reporting, and exception analysis.",
+    whyItMatters:"Directly aligned with banking-scale capacity workflows — familiar territory from Citi.",
+    safeSentence:"BMC TrueSight / TSCO-style capacity data is familiar territory for me.",
+    related:[] },
+  { id:"tsco", label:"TSCO", size:"support", group:"Tools",
+    definition:"BMC TrueSight Capacity Optimization — the capacity-specific module supporting baseline reporting, capacity views, and built-in forecasting models.",
+    whyItMatters:"TSCO is the forecasting and planning layer on top of TrueSight telemetry.",
+    safeSentence:"TSCO sits on top of TrueSight and turns telemetry into capacity plans.",
+    related:[] },
+  { id:"helix", label:"BMC Helix", size:"support", group:"Tools",
+    definition:"BMC's SaaS-based successor to TrueSight — cloud-native, containerized microservices, AIOps-enabled monitoring and operations.",
+    whyItMatters:"Helix is where BMC's product investment is going. TrueSight on-prem is considered legacy.",
+    safeSentence:"I'd treat Helix as the modern evolution of TrueSight and confirm the exact implementation before overclaiming.",
+    related:[] },
+  { id:"cmdb", label:"CMDB", size:"support", group:"Tools",
+    definition:"Configuration Management Database — the source of truth for asset, application, service, and ownership mapping.",
+    whyItMatters:"Capacity risk is not actionable until it is linked to an application owner and business context.",
+    safeSentence:"CMDB connects telemetry to application ownership. Without it, exceptions have no owner.",
+    related:[] },
+  { id:"servicenow", label:"ServiceNow", size:"support", group:"Operations",
+    definition:"Service management platform used to track incidents, capacity exceptions, owner notifications, and closure proof.",
+    whyItMatters:"Turns capacity findings into tracked operational actions with audit trail.",
+    safeSentence:"ServiceNow is where findings become tickets, owners become accountable, and actions get closed.",
+    related:[] },
+  { id:"mca", label:"MCA", size:"support", group:"Governance",
+    definition:"Manager Control Assessment. A governance and control process requiring documented evidence that risks, exceptions, owners, actions, and closures are tracked.",
+    whyItMatters:"Banking capacity work must produce audit-ready evidence, not just operational output.",
+    safeSentence:"MCA is control evidence: what was detected, who owns it, what action was taken, was it closed.",
+    related:[] },
+  { id:"runbook", label:"Runbook", size:"support", group:"Operations",
+    definition:"A step-by-step procedure for a known operational situation — what to check, what to escalate, what action to take.",
+    whyItMatters:"Runbooks reduce variability in how engineers respond to capacity exceptions.",
+    safeSentence:"The runbook tells the engineer what to do when the exception fires.",
+    related:[] },
+  { id:"playbook", label:"Playbook", size:"support", group:"Operations",
+    definition:"The broader operating model covering roles, escalation paths, cadence, governance, and how runbooks fit together.",
+    whyItMatters:"A playbook explains how the capacity process works across teams — the operating contract.",
+    safeSentence:"The playbook tells the organization how the process works. The runbook tells the engineer what to do.",
+    related:[] },
+  { id:"ucl", label:"UCL", size:"support", group:"Forecasting",
+    definition:"Upper Control Limit — the engineered or statistically derived upper boundary used in performance and capacity assessment.",
+    whyItMatters:"Defines the safe operating range boundary for project assessment and threshold conversations.",
+    safeSentence:"UCL frames the upper safe range for project capacity assessment.",
+    related:[] },
+  { id:"breakpoint", label:"BreakPoint", size:"support", group:"Forecasting",
+    definition:"The load level at which a system begins to saturate or degrade — typically determined by performance testing.",
+    whyItMatters:"Provides the engineered capacity ceiling for project assessment conversations.",
+    safeSentence:"BreakPoint is the tested ceiling. Production telemetry shows how close you are to it.",
+    related:[] },
+  { id:"tps", label:"TPS", size:"support", group:"Forecasting",
+    definition:"Transactions per second — a throughput measure used to translate business volume into infrastructure demand.",
+    whyItMatters:"Bridges the language gap between business volume and capacity impact.",
+    safeSentence:"TPS connects business demand to infrastructure load. Essential for project sizing conversations.",
+    related:[] },
+  { id:"criticality", label:"Criticality", size:"support", group:"Governance",
+    definition:"Business importance level of an application or service — often Tier 1, 2, or 3 in banking environments.",
+    whyItMatters:"Changes the safety margin, escalation speed, and governance visibility required.",
+    safeSentence:"The same CPU number means different things depending on the criticality of the application.",
+    related:[] },
+  { id:"cluster", label:"Cluster", size:"support", group:"Architecture",
+    definition:"A group of servers or nodes working together to support an application or business function with shared capacity.",
+    whyItMatters:"Cluster capacity depends on traffic distribution, failover design, and architecture — not simple server math.",
+    safeSentence:"Cluster capacity depends on traffic distribution, failover design, and the safety margin.",
+    related:[] },
+  { id:"active_active", label:"Active/Active", size:"support", group:"Architecture",
+    definition:"Multiple nodes simultaneously serve production traffic — all are active and contribute capacity.",
+    whyItMatters:"Capacity planning must check both pool-level headroom and individual node hot-spots.",
+    safeSentence:"In active/active, I check total pool capacity and flag individual node risk separately.",
+    related:[] },
+  { id:"active_passive", label:"Active/Passive", size:"support", group:"Architecture",
+    definition:"One node serves live traffic while another is reserved for failover — passive capacity is not free capacity.",
+    whyItMatters:"Planning must account for the passive node being off-limits for normal capacity headroom.",
+    safeSentence:"In active/passive, the passive side is part of resilience planning, not available headroom.",
+    related:[] },
+  { id:"dr", label:"Disaster Recovery", size:"support", group:"Architecture",
+    definition:"The ability to continue service when the primary site, node, or system fails — requires pre-planned reserve capacity.",
+    whyItMatters:"DR assumptions change safety-factor calculations and reserve capacity requirements.",
+    safeSentence:"DR capacity must be planned before the event. You cannot provision it during the outage.",
+    related:[] },
+  { id:"vertical_scaling", label:"Vertical Scaling", size:"support", group:"Architecture",
+    definition:"Adding more CPU, memory, or storage to an existing server or VM — making the node bigger.",
+    whyItMatters:"Can be a faster bridge than architectural rework when immediate capacity relief is needed.",
+    safeSentence:"Vertical scaling makes the existing node bigger. It's faster but has a ceiling.",
+    related:[] },
+  { id:"horizontal_scaling", label:"Horizontal Scaling", size:"support", group:"Architecture",
+    definition:"Adding more nodes or instances to a pool or cluster — scaling out rather than up.",
+    whyItMatters:"Works well when the application supports load distribution — but architecture must support it.",
+    safeSentence:"Horizontal scaling adds nodes. Architecture decides whether the app can actually use them.",
+    related:[] },
+  { id:"esx_host", label:"ESX Host", size:"support", group:"Architecture",
+    definition:"VMware physical host layer providing shared compute and memory to multiple virtual machines.",
+    whyItMatters:"A VM may look healthy while the underlying physical host or cluster is under serious pressure.",
+    safeSentence:"The ESX host tells us physical pool pressure. The VM guest tells us application behavior.",
+    related:[] },
+  { id:"vm_guest", label:"VM Guest", size:"support", group:"Architecture",
+    definition:"The virtual machine OS and application layer — the application's view of compute and memory.",
+    whyItMatters:"VM metrics show application behavior but may not reflect shared host-layer pressure.",
+    safeSentence:"Always check both the guest and the host. One without the other is an incomplete picture.",
+    related:[] },
+  { id:"specint", label:"SPECint", size:"support", group:"Architecture",
+    definition:"Benchmark-style CPU performance scoring used to normalize compute capacity comparisons across hardware generations.",
+    whyItMatters:"Raw CPU percentage is meaningless when comparing hardware generations. SPECint provides the conversion factor.",
+    safeSentence:"Benchmark sizing frames the conversation. Telemetry validates the actual decision.",
+    related:[] },
+  { id:"powerbi_tableau", label:"Power BI / Tableau", size:"support", group:"BOA Reporting",
+    definition:"Dashboarding and reporting platforms used to surface capacity data to engineering, management, and governance audiences.",
+    whyItMatters:"Makes forecast outputs and risk signals visible, interactive, and digestible beyond raw data.",
+    safeSentence:"I can structure dashboard-ready data for Power BI or Tableau — the visualization layer matters.",
+    related:[] },
+  { id:"oracle_plsql", label:"Oracle / PL-SQL", size:"support", group:"Tools",
+    definition:"Database and query/extraction layer used to pull capacity data from BMC's mirror Oracle database and telemetry stores.",
+    whyItMatters:"PL/SQL extractions are the bridge between TrueSight's data store and repeatable reporting pipelines.",
+    safeSentence:"PL/SQL extraction is what moved our reporting from manual pulls to repeatable data flows.",
+    related:[] },
+  { id:"pandas_python", label:"Python / Pandas", size:"support", group:"Tools",
+    definition:"Core data manipulation stack for capacity pipeline work — cleaning, normalization, feature engineering, and forecast prep.",
+    whyItMatters:"Replaces Excel-heavy workflows with repeatable, version-controlled, auditable data pipelines.",
+    safeSentence:"Python and Pandas are how I move from monthly Excel reporting to a repeatable capacity pipeline.",
+    related:[] },
+
+  // DETAIL
+  { id:"rolling_average", label:"Rolling Average", size:"detail", group:"Forecasting",
+    definition:"Average computed over a sliding time window — separates sustained pressure from one-time spikes.",
+    whyItMatters:"Prevents single-event noise from triggering false capacity escalations.",
+    safeSentence:"Rolling average shows sustained load. Spikes in the raw data become visible context, not alarm triggers.",
+    related:[] },
+  { id:"rolling_peak", label:"Rolling Peak", size:"detail", group:"Forecasting",
+    definition:"Peak value captured over a rolling time window — highlights upper-bound stress behavior.",
+    whyItMatters:"Shows how high a system gets under stress without requiring a live incident.",
+    safeSentence:"Rolling peak shows the stress ceiling, not just average behavior.",
+    related:[] },
+  { id:"p95", label:"P95", size:"detail", group:"Forecasting",
+    definition:"95th percentile value over a time window — high-end behavior without being dominated by extreme outliers.",
+    whyItMatters:"Averages hide peak pressure. P95 shows what the application actually experiences most of the time under load.",
+    safeSentence:"When averages hide peak pressure, P95 tells the real story.",
+    related:[] },
+  { id:"growth_slope", label:"Growth Slope", size:"detail", group:"Forecasting",
+    definition:"The rate at which utilization or demand is increasing over time — the trend direction signal.",
+    whyItMatters:"Tells whether capacity risk is accelerating, stable, or declining.",
+    safeSentence:"Growth slope tells whether risk is accelerating. A flat slope is very different from a steep one.",
+    related:[] },
+  { id:"breach_flag", label:"Breach Flag", size:"detail", group:"Operations",
+    definition:"A binary marker indicating that a metric crossed or closely approached a defined threshold.",
+    whyItMatters:"Converts raw metric behavior into actionable exception logic without manual review.",
+    safeSentence:"Breach flags move capacity from observation to action.",
+    related:[] },
+  { id:"risk_band", label:"Risk Band", size:"detail", group:"Operations",
+    definition:"A category label — Low / Medium / High / Severe — assigned to capacity state for prioritization and communication.",
+    whyItMatters:"Risk bands make capacity output digestible and prioritizable for both engineers and management.",
+    safeSentence:"Risk bands translate technical severity into language stakeholders act on.",
+    related:[] },
+  { id:"collection_exception", label:"Collection Exception", size:"detail", group:"Operations",
+    definition:"Expected telemetry was missing, stale, or not collected — a data quality failure in the capacity pipeline.",
+    whyItMatters:"Missing data can mask real capacity risk — silence is not the same as health.",
+    safeSentence:"No telemetry does not mean no risk. A collection exception is itself an exception.",
+    related:[] },
+  { id:"threshold_exception", label:"Threshold Exception", size:"detail", group:"Operations",
+    definition:"A metric or KPI approaches or crosses a defined threshold — triggering validation, owner notification, and possible action.",
+    whyItMatters:"The primary exception type in daily capacity operations.",
+    safeSentence:"A threshold exception is the early warning signal before an incident.",
+    related:[] },
+  { id:"swap_exception", label:"Swap Exception", size:"detail", group:"Operations",
+    definition:"Swap space usage exceeds an agreed threshold or shows sustained pressure — a memory pressure signal.",
+    whyItMatters:"Sustained swap activity indicates memory pressure that can degrade performance before a crash occurs.",
+    safeSentence:"Swap is a symptom, not the disease. The disease is memory pressure.",
+    related:[] },
+  { id:"owner_mapping", label:"Owner Mapping", size:"detail", group:"Governance",
+    definition:"Linking infrastructure or telemetry records to the application, business, or support team responsible for response.",
+    whyItMatters:"Capacity risk cannot be resolved until someone owns the response. Owner mapping creates that link.",
+    safeSentence:"Owner mapping turns telemetry into accountability.",
+    related:[] },
+  { id:"audit_evidence", label:"Audit Evidence", size:"detail", group:"Governance",
+    definition:"Historical proof of what was detected, who owned it, what action was taken, and whether it was formally closed.",
+    whyItMatters:"Banking governance requires complete traceability from detection to closure.",
+    safeSentence:"Audit evidence shows detection, ownership, action, and closure — the four pillars of control traceability.",
+    related:[] },
+  { id:"executive_summary", label:"Executive Summary", size:"detail", group:"BOA Reporting",
+    definition:"A concise leadership view of capacity risk, timing, ownership, and recommended action — designed for non-technical readers.",
+    whyItMatters:"Leaders need decision language, not raw telemetry or statistical output.",
+    safeSentence:"Leadership needs four things: risk, timing, owner, and recommended action. That is the executive summary.",
+    related:[] },
+  { id:"exception_list", label:"Exception List", size:"detail", group:"BOA Reporting",
+    definition:"A ranked list of systems needing review — missing data, threshold risk, or forecasted capacity pressure ordered by severity.",
+    whyItMatters:"Converts capacity analysis into operational work with a clear starting point.",
+    safeSentence:"Exception lists tell teams where to act first and in what order.",
+    related:[] },
+  { id:"safety_margin", label:"Safety Margin", size:"detail", group:"Forecasting",
+    definition:"The reserved capacity gap between current peak usage and the risk threshold — the buffer against surprises.",
+    whyItMatters:"Protects against unplanned spikes, failover events, and business demand surprises.",
+    safeSentence:"Safety margin keeps production away from the cliff. The tighter it is, the faster you need to act.",
+    related:[] },
+  { id:"business_calendar", label:"Business Calendar", size:"detail", group:"Forecasting",
+    definition:"Known business timing — month-end, quarter-end, billing cycles, holidays — that creates predictable capacity demand patterns.",
+    whyItMatters:"Capacity patterns often follow business events more than technical ones.",
+    safeSentence:"Business-calendar effects explain recurring spikes that look like anomalies without context.",
+    related:[] },
+  { id:"month_end_qe", label:"Month-End / QE", size:"detail", group:"Forecasting",
+    definition:"Month-end and quarter-end cycles that predictably increase workload and capacity demand at banking institutions.",
+    whyItMatters:"Creates seasonal pressure that must be modeled into forecasts, thresholds, and safety margins.",
+    safeSentence:"Month-end and quarter-end are not surprises. Treat them as capacity context, not incidents.",
+    related:[] },
+  { id:"application_owner", label:"App Owner", size:"detail", group:"Architecture",
+    definition:"Person or team responsible for the application — provides workload context and owns application-level remediation decisions.",
+    whyItMatters:"Application behavior context cannot come from infrastructure data alone. The owner fills the gap.",
+    safeSentence:"App owners help explain behavior and decide which actions actually fit their application.",
+    related:[] },
+  { id:"architecture_team", label:"Architecture Team", size:"detail", group:"Architecture",
+    definition:"Team responsible for application and infrastructure design patterns — decides whether tuning, scaling, or redesign fits.",
+    whyItMatters:"Capacity recommendations require architectural feasibility — the architecture team is the gatekeeper.",
+    safeSentence:"Architecture decides what scaling pattern actually fits. Capacity provides the evidence.",
+    related:[] },
+  { id:"infrastructure_team", label:"Infrastructure Team", size:"detail", group:"Architecture",
+    definition:"Team responsible for servers, VMs, clusters, cloud resources, and platform support — the executors.",
+    whyItMatters:"They implement infrastructure-level changes that capacity planning recommends.",
+    safeSentence:"Infrastructure teams implement the capacity changes. They need clear, evidence-backed asks.",
+    related:[] },
+  { id:"business_owner", label:"Business Owner", size:"detail", group:"Governance",
+    definition:"Business stakeholder responsible for priority, criticality, funding, and risk acceptance for their applications.",
+    whyItMatters:"Capacity decisions often require business priority context, timeline, and risk sign-off.",
+    safeSentence:"Business owners provide criticality, priority, and risk acceptance. Without them, capacity is just numbers.",
+    related:[] },
+  { id:"data_pipeline", label:"Data Pipeline", size:"detail", group:"Tools",
+    definition:"The repeatable, automated flow from telemetry extraction through cleaning, feature engineering, forecasting, and reporting output.",
+    whyItMatters:"Replaces manual, one-off reporting with an auditable, repeatable capacity process.",
+    safeSentence:"A data pipeline means the next CBFR does not require starting from scratch every month.",
+    related:[] },
+  { id:"feature_engineering", label:"Feature Engineering", size:"detail", group:"Forecasting",
+    definition:"Deriving capacity signals from raw telemetry — rolling averages, rolling peaks, P95, headroom to threshold, growth slope, breach flags.",
+    whyItMatters:"Raw telemetry alone cannot power a forecast. Features are what the models and analysts actually consume.",
+    safeSentence:"Feature engineering transforms raw CPU numbers into signals a forecast and a stakeholder can both use.",
+    related:[] },
+  { id:"linear_forecast", label:"Linear Forecast", size:"detail", group:"Forecasting",
+    definition:"A straight-line trend projection — simplest TSCO model, appropriate for steady monotonic growth patterns.",
+    whyItMatters:"When growth is consistent and predictable, linear is the most explainable and defensible model.",
+    safeSentence:"Linear forecasting is simple, honest, and often the right tool for steady growth workloads.",
+    related:[] },
+  { id:"robust_linear", label:"Robust Linear", size:"detail", group:"Forecasting",
+    definition:"A linear forecast resistant to outliers — uses robust regression so anomalous spikes don't distort the trend line.",
+    whyItMatters:"Banking workloads have spikes from batch jobs and month-end. Robust linear ignores them appropriately.",
+    safeSentence:"Robust linear gives you a trend line that a bad batch job weekend won't ruin.",
+    related:[] },
+];
+
+const links = [
+  { source:"telemetry", target:"kpi", label:"becomes decision signal" },
+  { source:"kpi", target:"dashboard", label:"displayed as decision view" },
+  { source:"dashboard", target:"executive_summary", label:"feeds leadership view" },
+  { source:"cbfr", target:"baseline", label:"anchored to normal behavior" },
+  { source:"cbfr", target:"forecast_validation", label:"forecast must be validated first" },
+  { source:"cbfr", target:"exception_list", label:"produces exception output" },
+  { source:"baseline", target:"headroom", label:"delta from threshold" },
+  { source:"headroom", target:"threshold", label:"distance to risk line" },
+  { source:"threshold", target:"safety_factor", label:"buffer before hard limit" },
+  { source:"ucl", target:"breakpoint", label:"defines upper range" },
+  { source:"breakpoint", target:"tps", label:"tested throughput ceiling" },
+  { source:"tps", target:"project_assessment", label:"expected business volume" },
+  { source:"project_assessment", target:"vertical_scaling", label:"option A" },
+  { source:"project_assessment", target:"horizontal_scaling", label:"option B" },
+  { source:"project_assessment", target:"capacity_pool", label:"checks pool headroom" },
+  { source:"cluster", target:"active_active", label:"traffic sharing model" },
+  { source:"cluster", target:"active_passive", label:"failover reserve model" },
+  { source:"cluster", target:"dr", label:"recovery planning" },
+  { source:"cluster", target:"capacity_pool", label:"pool-level planning" },
+  { source:"esx_host", target:"vm_guest", label:"physical pool vs guest view" },
+  { source:"vm_guest", target:"swap_exception", label:"memory pressure signal" },
+  { source:"exception", target:"collection_exception", label:"missing telemetry type" },
+  { source:"exception", target:"threshold_exception", label:"breach risk type" },
+  { source:"exception", target:"servicenow", label:"ticketed follow-up" },
+  { source:"servicenow", target:"audit_evidence", label:"documented proof of action" },
+  { source:"audit_evidence", target:"mca", label:"control review support" },
+  { source:"runbook", target:"exception", label:"procedure for known issue" },
+  { source:"playbook", target:"runbook", label:"operating model uses procedures" },
+  { source:"bmc_truesight", target:"telemetry", label:"collection source" },
+  { source:"bmc_truesight", target:"cbfr", label:"reporting data source" },
+  { source:"tsco", target:"bmc_truesight", label:"capacity module on top of TrueSight" },
+  { source:"helix", target:"bmc_truesight", label:"SaaS successor" },
+  { source:"oracle_plsql", target:"bmc_truesight", label:"extraction/reporting path" },
+  { source:"oracle_plsql", target:"data_pipeline", label:"pipeline data source" },
+  { source:"pandas_python", target:"data_pipeline", label:"pipeline processing engine" },
+  { source:"forecast_validation", target:"holdout_testing", label:"time-based validation method" },
+  { source:"holdout_testing", target:"forecast_vs_actual", label:"compare prediction to known outcomes" },
+  { source:"prophet", target:"forecast_validation", label:"output must be validated" },
+  { source:"arima", target:"forecast_validation", label:"output must be validated" },
+  { source:"holt_winters", target:"forecast_validation", label:"TSCO built-in, still validate" },
+  { source:"holt_winters", target:"tsco", label:"native TSCO model" },
+  { source:"business_calendar", target:"prophet", label:"seasonality input" },
+  { source:"month_end_qe", target:"business_calendar", label:"recurring workload pattern" },
+  { source:"criticality", target:"safety_margin", label:"affects required buffer" },
+  { source:"criticality", target:"mca", label:"drives governance visibility" },
+  { source:"collaboration", target:"application_owner", label:"workload context" },
+  { source:"collaboration", target:"architecture_team", label:"scaling design decisions" },
+  { source:"collaboration", target:"infrastructure_team", label:"implementation" },
+  { source:"collaboration", target:"business_owner", label:"priority and risk acceptance" },
+  { source:"specint", target:"vertical_scaling", label:"cross-generation sizing" },
+  { source:"powerbi_tableau", target:"dashboard", label:"visualization platform" },
+  { source:"rolling_average", target:"feature_engineering", label:"core capacity feature" },
+  { source:"rolling_peak", target:"feature_engineering", label:"core capacity feature" },
+  { source:"p95", target:"feature_engineering", label:"core capacity feature" },
+  { source:"growth_slope", target:"feature_engineering", label:"trend signal" },
+  { source:"feature_engineering", target:"capacity_forecasting", label:"feeds forecast models" },
+  { source:"breach_flag", target:"risk_band", label:"breach drives risk classification" },
+  { source:"risk_band", target:"exception_list", label:"prioritized output" },
+  { source:"exception_list", target:"servicenow", label:"owner follow-up tickets" },
+  { source:"cmdb", target:"owner_mapping", label:"asset-to-owner data" },
+  { source:"owner_mapping", target:"exception", label:"adds accountability" },
+  { source:"safety_margin", target:"threshold", label:"buffer before threshold" },
+  { source:"linear_forecast", target:"capacity_forecasting", label:"steady growth model" },
+  { source:"robust_linear", target:"capacity_forecasting", label:"outlier-resistant trend model" },
+  { source:"arima", target:"capacity_forecasting", label:"autocorrelation-aware model" },
+  { source:"data_pipeline", target:"cbfr", label:"automated pipeline produces CBFR" },
+];
+
+const paths = {
+  core_story: {
+    label:"Core Story",
+    nodeIds:["telemetry","baseline","feature_engineering","rolling_average","capacity_forecasting","dashboard","project_assessment"],
+    desc:"Telemetry → cleaned baseline → engineered features → forecast → dashboard → decision. The full capacity planning chain."
+  },
+  boa_reporting: {
+    label:"BOA Reporting",
+    nodeIds:["bmc_truesight","oracle_plsql","cbfr","dashboard","executive_summary","powerbi_tableau","mca"],
+    desc:"BMC telemetry extracted via PL/SQL feeds CBFR and dashboards, summaries align leadership, MCA closes governance."
+  },
+  project_assessment: {
+    label:"Project Assessment",
+    nodeIds:["ucl","breakpoint","tps","project_assessment","vertical_scaling","horizontal_scaling","capacity_pool","safety_margin"],
+    desc:"Use tested limits and TPS expectations to assess if the current pool can safely absorb new load."
+  },
+  operations: {
+    label:"Operations",
+    nodeIds:["exception","collection_exception","threshold_exception","swap_exception","runbook","servicenow","owner_mapping","audit_evidence"],
+    desc:"Exceptions fire → runbook guides response → ServiceNow tracks ownership → audit evidence supports governance."
+  },
+  architecture: {
+    label:"Architecture",
+    nodeIds:["cluster","active_active","active_passive","dr","safety_factor","esx_host","vm_guest","capacity_pool"],
+    desc:"Cluster design, failover models, and host/guest layers drive safety-factor assumptions."
+  },
+  forecasting_pipeline: {
+    label:"Forecast Pipeline",
+    nodeIds:["telemetry","pandas_python","data_pipeline","feature_engineering","rolling_average","p95","growth_slope","prophet","arima","holt_winters","holdout_testing","forecast_vs_actual","forecast_validation","capacity_forecasting"],
+    desc:"Raw telemetry → Python pipeline → feature engineering → model selection → validation → planning output."
+  },
+  governance_cycle: {
+    label:"Governance Cycle",
+    nodeIds:["exception","breach_flag","risk_band","exception_list","servicenow","owner_mapping","audit_evidence","mca","criticality","business_owner"],
+    desc:"Exceptions are classified by risk, assigned to owners, tracked to closure, and evidence supports MCA review."
+  }
+};
+
+// ─────────────────────────────────────────
+// LAYOUT
+// ─────────────────────────────────────────
+const groupCenters = {
+  "Forecasting":   { x: 370,  y: 260 },
+  "BOA Reporting": { x: 1060, y: 240 },
+  "Operations":    { x: 360,  y: 700 },
+  "Governance":    { x: 1060, y: 700 },
+  "Architecture":  { x: 720,  y: 520 },
+  "Tools":         { x: 720,  y: 180 }
+};
+
+function placeNodes() {
+  const groups = {};
+  for (const n of nodes) {
+    if (!groups[n.group]) groups[n.group] = [];
+    groups[n.group].push(n);
+  }
+  for (const [g, arr] of Object.entries(groups)) {
+    arr.sort((a,b) => SIZE_R[b.size] - SIZE_R[a.size]);
+    const c = groupCenters[g] || { x:720, y:470 };
+    arr.forEach((n, i) => {
+      const layer = Math.floor(i / 7);
+      const pos = i % 7;
+      const r = 85 + layer * 95;
+      const ang = (Math.PI * 2 * pos) / 7 + layer * 0.25;
+      n.x = c.x + Math.cos(ang) * r;
+      n.y = c.y + Math.sin(ang) * r;
+    });
+  }
+  // collision relaxation
+  for (let k = 0; k < 180; k++) {
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const dist = Math.hypot(dx, dy) || 0.1;
+        const min = SIZE_R[a.size] + SIZE_R[b.size] + 8;
+        if (dist < min) {
+          const push = (min - dist) / 2;
+          const ux = dx / dist, uy = dy / dist;
+          a.x -= ux * push; a.y -= uy * push;
+          b.x += ux * push; b.y += uy * push;
+        }
+      }
+    }
+  }
+}
+placeNodes();
+
+// Build related from links
+const nodeById = Object.fromEntries(nodes.map(n => [n.id, n]));
+for (const l of links) {
+  const s = nodeById[l.source], t = nodeById[l.target];
+  if (!s || !t) continue;
+  s.related.push({ id: t.id, label: t.label, relation: l.label });
+  t.related.push({ id: s.id, label: s.label, relation: l.label });
+}
+
+// ─────────────────────────────────────────
+// SVG BUILD
+// ─────────────────────────────────────────
+const svg = document.getElementById("map");
+const miniSvg = document.getElementById("minimap");
+
+const viewport = document.createElementNS("http://www.w3.org/2000/svg","g");
+const linkLayer = document.createElementNS("http://www.w3.org/2000/svg","g");
+const nodeLayer = document.createElementNS("http://www.w3.org/2000/svg","g");
+viewport.append(linkLayer, nodeLayer);
+svg.append(viewport);
+
+// Mini-map layer
+const miniViewport = document.createElementNS("http://www.w3.org/2000/svg","g");
+const miniLinkLayer = document.createElementNS("http://www.w3.org/2000/svg","g");
+const miniNodeLayer = document.createElementNS("http://www.w3.org/2000/svg","g");
+miniViewport.append(miniLinkLayer, miniNodeLayer);
+miniSvg.append(miniViewport);
+
+function ns(tag, attrs={}) {
+  const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [k,v] of Object.entries(attrs)) el.setAttribute(k,v);
+  return el;
+}
+
+function wrapLabel(text, maxChars=13, maxLines=3) {
+  const words = text.split(" ");
+  const lines = [];
+  let cur = "";
+  for (const w of words) {
+    const test = cur ? cur + " " + w : w;
+    if (test.length <= maxChars) cur = test;
+    else { if(cur) lines.push(cur); cur = w; }
+  }
+  if (cur) lines.push(cur);
+  return lines.slice(0, maxLines);
+}
+
+// Draw links
+const linkEls = [];
+for (const l of links) {
+  const s = nodeById[l.source], t = nodeById[l.target];
+  if (!s || !t) continue;
+  const line = ns("line", {
+    x1:s.x, y1:s.y, x2:t.x, y2:t.y,
+    stroke:"#2a3045", "stroke-width":"1.5",
+    "marker-end":"url(#arrow)"
+  });
+  line.dataset.source = l.source;
+  line.dataset.target = l.target;
+  line.dataset.label = l.label;
+  linkLayer.appendChild(line);
+  linkEls.push(line);
+
+  // mini link
+  const mini = ns("line", { x1:s.x, y1:s.y, x2:t.x, y2:t.y, stroke:"#2a3045", "stroke-width":"1" });
+  miniLinkLayer.appendChild(mini);
+}
+
+const nodeEls = {};
+const miniNodeEls = {};
+for (const n of nodes) {
+  const r = SIZE_R[n.size];
+  const col = GROUP_COLOR[n.group];
+  const glow = GROUP_GLOW[n.group];
+
+  const g = ns("g", { transform:`translate(${n.x},${n.y})`, cursor:"pointer" });
+  g.dataset.id = n.id;
+  g.classList.add("bubble-enter");
+
+  // Glow circle
+  const glowCircle = ns("circle", { r:r+8, fill:glow, opacity:"0", filter:`url(#glow-${n.group.toLowerCase().replace(/[^a-z]/g,'-')})` });
+  // Main circle
+  const circle = ns("circle", { r, fill:col, "fill-opacity":n.size==="core"?"0.22":n.size==="support"?"0.16":"0.1", stroke:col, "stroke-width": n.size==="core"?"2.5":n.size==="support"?"1.8":"1.4" });
+  // Inner glow for core
+  let inner = null;
+  if (n.size === "core") {
+    inner = ns("circle", { r:r*0.55, fill:col, "fill-opacity":"0.18" });
+  }
+  // Ring (selection)
+  const ring = ns("circle", { r:r+6, fill:"none", stroke:"none", "stroke-width":"2.5" });
+  // Label
+  const text = ns("text", { "text-anchor":"middle", "font-size": r>=44?"13":r>=30?"12":"10.5", "font-weight":"600", fill:"#e2e8f0", "pointer-events":"none" });
+  const lines = wrapLabel(n.label, r>=44?15:r>=30?13:11);
+  const startDy = -((lines.length-1)*7.5);
+  lines.forEach((ln,i)=>{
+    const ts = ns("tspan",{x:"0", dy: i===0 ? startDy : 15});
+    ts.textContent = ln;
+    text.appendChild(ts);
+  });
+
+  if (inner) g.append(glowCircle, inner, circle, ring, text);
+  else g.append(glowCircle, circle, ring, text);
+  nodeLayer.appendChild(g);
+  nodeEls[n.id] = { g, circle, ring, glowCircle };
+
+  // Mini node
+  const mc = ns("circle", { cx:n.x, cy:n.y, r:r*0.4, fill:col, opacity:"0.6" });
+  miniNodeLayer.appendChild(mc);
+  miniNodeEls[n.id] = mc;
+}
+
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let selectedId = null;
+let activeFilter = "All";
+let activePath = null;
+let searchTerm = "";
+let dragMode = false;
+
+// Panning state
+const view = { scale:1, minScale:0.4, maxScale:3.5, tx:0, ty:0 };
+let isPanning = false;
+let panStart = {x:0,y:0,tx:0,ty:0};
+
+// Drag node state
+let isDraggingNode = false;
+let dragNodeId = null;
+let dragOffset = {x:0,y:0};
+
+// Context menu state
+let ctxNodeId = null;
+
+// ─────────────────────────────────────────
+// ZOOM / PAN
+// ─────────────────────────────────────────
+function applyView() {
+  viewport.setAttribute("transform",`translate(${view.tx},${view.ty}) scale(${view.scale})`);
+  document.getElementById("zoomHud").textContent = Math.round(view.scale*100)+"%";
+  updateMiniViewport();
+}
+
+function zoomAt(factor, cx=720, cy=470) {
+  const os = view.scale;
+  const ns2 = Math.max(view.minScale, Math.min(view.maxScale, os*factor));
+  if (ns2 === os) return;
+  const wx = (cx - view.tx) / os;
+  const wy = (cy - view.ty) / os;
+  view.scale = ns2;
+  view.tx = cx - wx * ns2;
+  view.ty = cy - wy * ns2;
+  applyView();
+}
+
+function clientToSvg(cx, cy) {
+  const pt = svg.createSVGPoint();
+  pt.x = cx; pt.y = cy;
+  const ctm = svg.getScreenCTM();
+  return ctm ? pt.matrixTransform(ctm.inverse()) : {x:720,y:470};
+}
+
+function resetView() {
+  view.scale=1; view.tx=0; view.ty=0;
+  applyView();
+}
+
+// Mini viewport indicator
+function updateMiniViewport() {
+  // remove old rect
+  const old = miniSvg.querySelector(".vp-rect");
+  if (old) old.remove();
+  const rect = ns("rect", {
+    class:"vp-rect",
+    x: -view.tx / view.scale,
+    y: -view.ty / view.scale,
+    width: 1440 / view.scale,
+    height: 940 / view.scale,
+    fill:"none", stroke:"#3b82f6", "stroke-width":"12", opacity:"0.7", rx:"8"
+  });
+  miniSvg.appendChild(rect);
+}
+updateMiniViewport();
+
+svg.addEventListener("wheel", e => {
+  e.preventDefault();
+  const p = clientToSvg(e.clientX, e.clientY);
+  zoomAt(e.deltaY < 0 ? 1.1 : 0.91, p.x, p.y);
+}, {passive:false});
+
+svg.addEventListener("mousedown", e => {
+  if (dragMode && e.target.closest("g[data-id]")) return; // handled by node drag
+  if (e.target.closest("g[data-id]") && !dragMode) return;
+  isPanning = true;
+  panStart = {x:e.clientX, y:e.clientY, tx:view.tx, ty:view.ty};
+  svg.classList.add("panning");
+});
+
+window.addEventListener("mousemove", e => {
+  if (isDraggingNode) {
+    const p = clientToSvg(e.clientX, e.clientY);
+    const n = nodeById[dragNodeId];
+    n.x = p.x - dragOffset.x;
+    n.y = p.y - dragOffset.y;
+    const el = nodeEls[dragNodeId];
+    el.g.setAttribute("transform", `translate(${n.x},${n.y})`);
+    miniNodeEls[dragNodeId].setAttribute("cx", n.x);
+    miniNodeEls[dragNodeId].setAttribute("cy", n.y);
+    // update links
+    for (const le of linkEls) {
+      const s = le.dataset.source, t = le.dataset.target;
+      if (s === dragNodeId) { le.setAttribute("x1", n.x); le.setAttribute("y1", n.y); }
+      if (t === dragNodeId) { le.setAttribute("x2", n.x); le.setAttribute("y2", n.y); }
+    }
+    return;
+  }
+  if (!isPanning) return;
+  view.tx = panStart.tx + (e.clientX - panStart.x);
+  view.ty = panStart.ty + (e.clientY - panStart.y);
+  applyView();
+});
+
+window.addEventListener("mouseup", () => {
+  isPanning = false;
+  isDraggingNode = false;
+  dragNodeId = null;
+  svg.classList.remove("panning");
+  svg.classList.remove("dragging-node");
+});
+
+document.getElementById("fitBtn").addEventListener("click", resetView);
+
+// ─────────────────────────────────────────
+// DRAG TOGGLE
+// ─────────────────────────────────────────
+const dragToggle = document.getElementById("dragToggle");
+const modeHud = document.getElementById("modeHud");
+const modeLabel = document.getElementById("modeLabel");
+
+dragToggle.addEventListener("click", () => {
+  dragMode = !dragMode;
+  dragToggle.classList.toggle("on", dragMode);
+  modeHud.classList.toggle("drag-mode", dragMode);
+  modeLabel.textContent = dragMode ? "Drag mode — move bubbles" : "Pan mode";
+});
+
+// Node drag
+for (const n of nodes) {
+  const el = nodeEls[n.id];
+  el.g.addEventListener("mousedown", e => {
+    if (!dragMode) return;
+    e.stopPropagation();
+    isDraggingNode = true;
+    dragNodeId = n.id;
+    const p = clientToSvg(e.clientX, e.clientY);
+    dragOffset = { x: p.x - n.x, y: p.y - n.y };
+    svg.classList.add("dragging-node");
+  });
+}
+
+// ─────────────────────────────────────────
+// TOOLTIP
+// ─────────────────────────────────────────
+const tooltip = document.getElementById("tooltip");
+function showTip(e, n) {
+  tooltip.innerHTML = `<strong>${n.label}</strong>${n.definition}`;
+  tooltip.style.opacity = "1";
+  moveTip(e);
+}
+function moveTip(e) {
+  tooltip.style.left = (e.clientX+16)+"px";
+  tooltip.style.top  = (e.clientY+16)+"px";
+}
+function hideTip() { tooltip.style.opacity="0"; }
+
+for (const n of nodes) {
+  const el = nodeEls[n.id];
+  el.g.addEventListener("mouseenter", e => { if(!dragMode) showTip(e,n); });
+  el.g.addEventListener("mousemove", e => { if(!dragMode) moveTip(e); });
+  el.g.addEventListener("mouseleave", hideTip);
+}
+
+// ─────────────────────────────────────────
+// SELECTION & SIDE PANEL
+// ─────────────────────────────────────────
+function connectedSet(id) {
+  const s = new Set([id]);
+  for (const l of links) {
+    if (l.source===id) s.add(l.target);
+    if (l.target===id) s.add(l.source);
+  }
+  return s;
+}
+
+function pathSet(key) {
+  if (!key||!paths[key]) return new Set();
+  return new Set(paths[key].nodeIds);
+}
+
+const sideTop = document.getElementById("sideTop");
+const sideBody = document.getElementById("sideBody");
+const sidePlaceholder = document.getElementById("sidePlaceholder");
+
+function renderSide(n) {
+  if (!n) {
+    sidePlaceholder.style.display = "";
+    sideBody.style.display = "none";
+    sideTop.innerHTML = '';
+    sideTop.appendChild(sidePlaceholder);
+    return;
+  }
+  sidePlaceholder.style.display = "none";
+  sideBody.style.display = "";
+
+  const col = GROUP_COLOR[n.group];
+  sideTop.innerHTML = `
+    <span class="side-group-tag" style="background:${col}22;color:${col};border:1px solid ${col}44">${n.group}</span>
+    <h2>${n.label}</h2>
+  `;
+  const rel = n.related.map(r=>`<span class="chip" data-rel="${r.id}">${r.label}</span>`).join("");
+  sideBody.innerHTML = `
+    <div class="k">Definition</div>
+    <div class="val">${n.definition}</div>
+    <div class="k">Why it matters</div>
+    <div class="val">${n.whyItMatters}</div>
+    <div class="k">Interview-safe sentence</div>
+    <div class="safe-sentence">${n.safeSentence}</div>
+    <div class="k">Connected terms (${n.related.length})</div>
+    <div class="chips">${rel||"<span style='color:var(--muted);font-size:12px'>None</span>"}</div>
+  `;
+  sideBody.querySelectorAll(".chip").forEach(el=>{
+    el.addEventListener("click",()=>selectNode(el.dataset.rel));
+  });
+}
+
+function selectNode(id) {
+  selectedId = id;
+  renderSide(nodeById[id]);
+  updateStyles();
+  // Pulse glow on selected
+  const el = nodeEls[id];
+  el.glowCircle.setAttribute("opacity","0.7");
+  setTimeout(()=>el.glowCircle.setAttribute("opacity","0"),600);
+}
+
+function clearSelection() {
+  selectedId = null;
+  renderSide(null);
+}
+
+function updateStyles() {
+  const q = searchTerm.trim().toLowerCase();
+  const pNodes = pathSet(activePath);
+  const connected = selectedId ? connectedSet(selectedId) : new Set();
+  let matchCount = 0;
+
+  for (const n of nodes) {
+    const el = nodeEls[n.id];
+    const matchSearch = !q || n.label.toLowerCase().includes(q) || n.definition.toLowerCase().includes(q);
+    const matchFilter = activeFilter==="All" || n.group===activeFilter;
+    const inPath = !activePath || pNodes.has(n.id);
+    const visible = matchSearch && matchFilter && inPath;
+    if (visible && matchSearch) matchCount++;
+
+    let opacity = visible ? 1 : 0.06;
+    if (selectedId && visible && !connected.has(n.id) && n.id!==selectedId) opacity = 0.2;
+    el.g.style.opacity = opacity;
+
+    const isSel = n.id===selectedId;
+    const col = GROUP_COLOR[n.group];
+    el.ring.setAttribute("stroke", isSel ? col : "none");
+    el.ring.setAttribute("stroke-width", isSel ? "3" : "0");
+    el.circle.setAttribute("stroke-width", isSel ? "3" : n.size==="core"?"2.5":n.size==="support"?"1.8":"1.4");
+
+    // mini opacity
+    miniNodeEls[n.id].setAttribute("opacity", visible ? "0.7":"0.1");
+  }
+
+  for (const le of linkEls) {
+    const s = le.dataset.source, t = le.dataset.target;
+    const ns2 = nodeById[s], nt = nodeById[t];
+    const sv = (activeFilter==="All"||ns2.group===activeFilter) && (!q||ns2.label.toLowerCase().includes(q)||ns2.definition.toLowerCase().includes(q)) && (!activePath||pNodes.has(s));
+    const tv = (activeFilter==="All"||nt.group===activeFilter) && (!q||nt.label.toLowerCase().includes(q)||nt.definition.toLowerCase().includes(q)) && (!activePath||pNodes.has(t));
+    const vis = sv && tv;
+    let op = vis ? 0.6 : 0.03;
+    let stroke = "#2a3045";
+    let sw = 1.4;
+    let marker = "url(#arrow)";
+    if (selectedId && (s===selectedId||t===selectedId)) {
+      op=1; stroke="#3b82f6"; sw=2.8; marker="url(#arrow-active)";
+      le.classList.add("link-active");
+    } else {
+      le.classList.remove("link-active");
+    }
+    if (activePath && pNodes.has(s) && pNodes.has(t)) {
+      op=1; stroke="#14b8a6"; sw=2.4; marker="url(#arrow-path)";
+    }
+    le.setAttribute("stroke-opacity", String(op));
+    le.setAttribute("stroke", stroke);
+    le.setAttribute("stroke-width", String(sw));
+    le.setAttribute("marker-end", marker);
+  }
+
+  document.getElementById("searchCount").textContent = q ? `${matchCount} match${matchCount===1?"":"es"}` : "";
+}
+
+// Node click
+for (const n of nodes) {
+  nodeEls[n.id].g.addEventListener("click", e => {
+    if (isDraggingNode) return;
+    e.stopPropagation();
+    if (selectedId===n.id) clearSelection();
+    else selectNode(n.id);
+    updateStyles();
+  });
+}
+svg.addEventListener("click", () => { clearSelection(); updateStyles(); });
+
+// ─────────────────────────────────────────
+// CONTEXT MENU
+// ─────────────────────────────────────────
+const ctxMenu = document.getElementById("ctxMenu");
+
+for (const n of nodes) {
+  nodeEls[n.id].g.addEventListener("contextmenu", e => {
+    e.preventDefault();
+    ctxNodeId = n.id;
+    ctxMenu.style.left = e.clientX+"px";
+    ctxMenu.style.top  = e.clientY+"px";
+    ctxMenu.classList.add("open");
+  });
+}
+document.addEventListener("click", () => ctxMenu.classList.remove("open"));
+document.addEventListener("contextmenu", () => ctxMenu.classList.remove("open"));
+
+document.getElementById("ctx-select").addEventListener("click", ()=>{
+  if(ctxNodeId) selectNode(ctxNodeId);
+});
+document.getElementById("ctx-focus").addEventListener("click", ()=>{
+  if(ctxNodeId) { selectNode(ctxNodeId); updateStyles(); }
+});
+document.getElementById("ctx-filter").addEventListener("click", ()=>{
+  if(ctxNodeId) {
+    const grp = nodeById[ctxNodeId].group;
+    activeFilter = grp;
+    document.querySelectorAll("button.grp-btn").forEach(b=>{
+      b.classList.toggle("active", b.dataset.filter===grp||b.dataset.filter==="All"&&grp==="All");
+    });
+    updateStyles();
+  }
+});
+document.getElementById("ctx-reset").addEventListener("click", fullReset);
+
+// ─────────────────────────────────────────
+// FILTERS
+// ─────────────────────────────────────────
+document.querySelectorAll("button[data-filter]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    activeFilter = btn.dataset.filter;
+    document.querySelectorAll("button[data-filter]").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    updateStyles();
+  });
+});
+
+// ─────────────────────────────────────────
+// SEARCH
+// ─────────────────────────────────────────
+const searchInput = document.getElementById("search");
+searchInput.addEventListener("input",()=>{ searchTerm=searchInput.value; updateStyles(); });
+searchInput.addEventListener("keydown", e=>{
+  if (e.key==="Enter") {
+    const q = searchTerm.trim().toLowerCase();
+    const found = nodes.find(n=>n.label.toLowerCase().includes(q)||n.definition.toLowerCase().includes(q));
+    if (found) selectNode(found.id);
+  }
+  if (e.key==="Escape") { searchInput.value=""; searchTerm=""; updateStyles(); clearSelection(); }
+});
+
+// ─────────────────────────────────────────
+// STUDY PATHS
+// ─────────────────────────────────────────
+const pathNote = document.getElementById("pathNote");
+document.querySelectorAll("button[data-path]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const key = btn.dataset.path;
+    if (activePath===key) {
+      activePath=null;
+      document.querySelectorAll("button[data-path]").forEach(b=>b.classList.remove("active"));
+      pathNote.textContent="Select a study path to highlight a rehearsal lane.";
+      pathNote.classList.remove("active");
+    } else {
+      activePath=key;
+      document.querySelectorAll("button[data-path]").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      pathNote.textContent=paths[key].desc;
+      pathNote.classList.add("active");
+    }
+    updateStyles();
+  });
+});
+
+// ─────────────────────────────────────────
+// RESET
+// ─────────────────────────────────────────
+function fullReset() {
+  activeFilter="All"; activePath=null; searchTerm=""; selectedId=null;
+  searchInput.value="";
+  document.querySelectorAll("button[data-filter]").forEach(b=>b.classList.remove("active"));
+  document.querySelector('button[data-filter="All"]').classList.add("active");
+  document.querySelectorAll("button[data-path]").forEach(b=>b.classList.remove("active"));
+  pathNote.textContent="Select a study path to highlight a rehearsal lane.";
+  pathNote.classList.remove("active");
+  renderSide(null);
+  resetView();
+  updateStyles();
+}
+document.getElementById("resetBtn").addEventListener("click", fullReset);
+
+// ─────────────────────────────────────────
+// KEYBOARD NAV
+// ─────────────────────────────────────────
+let kbIndex = -1;
+const visibleNodes = () => nodes.filter(n=>{
+  const q = searchTerm.toLowerCase();
+  return (activeFilter==="All"||n.group===activeFilter) &&
+         (!q||n.label.toLowerCase().includes(q)) &&
+         (!activePath||pathSet(activePath).has(n.id));
+});
+
+document.addEventListener("keydown", e=>{
+  if (e.target===searchInput) return;
+  if (e.key==="Escape") { clearSelection(); updateStyles(); }
+  if (e.key==="Tab") {
+    e.preventDefault();
+    const vis = visibleNodes();
+    if (!vis.length) return;
+    kbIndex = (kbIndex+1) % vis.length;
+    selectNode(vis[kbIndex].id);
+  }
+  if (e.key==="ArrowRight"||e.key==="ArrowLeft"||e.key==="ArrowUp"||e.key==="ArrowDown") {
+    const step = e.key==="ArrowRight"||e.key==="ArrowDown" ? 1 : -1;
+    const vis = visibleNodes();
+    if (!vis.length) return;
+    const cur = vis.findIndex(n=>n.id===selectedId);
+    kbIndex = cur===-1 ? 0 : ((cur+step+vis.length)%vis.length);
+    selectNode(vis[kbIndex].id);
+  }
+});
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+renderSide(null);
+updateStyles();
+applyView();
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+timestamp: 2026-05-16T01:48:03.4811656-05:00
+topic path: topics\tiny_capacity_demo.studybubble.json
+old intended count: 3 nodes
+new final node count: 7
+final link count: 6
+final path count: 3
+validation result: PASS
+pytest result: PASS (8 passed)
+multifile build result: PASS
+single-file build result: PASS
+generated output paths:
+- outputs\multifile\tiny_capacity_demo\index.html
+- outputs\single_file\tiny_capacity_demo.html
+manual browser smoke test steps:
+Single-file:
+1. Open outputs\single_file\tiny_capacity_demo.html
+2. Confirm page opens directly from file.
+3. Confirm 7 bubbles render.
+4. Confirm Telemetry, Baseline, Forecast, Dashboard, Decision, Threshold, Owner are visible.
+5. Confirm clicking each bubble updates side panel.
+6. Confirm study path list includes Telemetry to Decision.
+7. Confirm no Failed to fetch error appears.
+Multi-file:
+1. Run python -m http.server 8000 from study_bubbles.
+2. Open http://localhost:8000/outputs/multifile/tiny_capacity_demo/index.html.
+3. Confirm 7 bubbles render.
+4. Confirm side panel works.
+5. Confirm study paths show.
+summary: PASS

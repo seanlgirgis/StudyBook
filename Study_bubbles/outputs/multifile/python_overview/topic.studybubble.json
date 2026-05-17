@@ -1,0 +1,117 @@
+{
+  "id": "python_overview",
+  "title": "Python Overview",
+  "subtitle": "Parent topic showing Python and data engineering study branches",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "language",
+      "label": "Language",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "data_tools",
+      "label": "Data Tools",
+      "color": "#54A24B"
+    },
+    {
+      "id": "distributed_data",
+      "label": "Distributed Data",
+      "color": "#F58518"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "python",
+      "label": "Python",
+      "size": "core",
+      "group": "Language",
+      "definition": "A general-purpose programming language widely used for automation, data engineering, analytics, and application development.",
+      "whyItMatters": "Python is the base language that connects many data engineering tools and workflows.",
+      "safeSentence": "Python is the foundation language that lets me automate, transform data, and connect systems.",
+      "note": {
+        "summary": "Python is the parent skill. Pandas and PySpark are deeper study branches from it."
+      },
+      "externalLinks": [
+        {
+          "label": "Python official docs",
+          "href": "https://docs.python.org/3/"
+        }
+      ],
+      "childTopics": [
+        {
+          "label": "Study Pandas",
+          "topic": "pandas.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "pandas",
+      "label": "Pandas",
+      "size": "support",
+      "group": "Data Tools",
+      "definition": "A Python library for tabular data analysis, cleaning, grouping, joining, and transformation.",
+      "whyItMatters": "Pandas is often the first practical tool for shaping data before scaling patterns to larger systems.",
+      "safeSentence": "Pandas is excellent for local tabular data work and for prototyping data transformations.",
+      "note": {
+        "summary": "Pandas is a child topic because it deserves its own map."
+      },
+      "externalLinks": [
+        {
+          "label": "Pandas official docs",
+          "href": "https://pandas.pydata.org/docs/"
+        }
+      ],
+      "childTopics": [
+        {
+          "label": "Study Pandas",
+          "topic": "pandas.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "pyspark",
+      "label": "PySpark",
+      "size": "support",
+      "group": "Distributed Data",
+      "definition": "The Python API for Apache Spark, used for distributed data processing across larger datasets and clusters.",
+      "whyItMatters": "PySpark extends Python-style data engineering into distributed processing.",
+      "safeSentence": "PySpark is where the data engineering pattern scales beyond local memory.",
+      "note": {
+        "summary": "PySpark can become its own child topic later."
+      },
+      "externalLinks": [],
+      "childTopics": []
+    }
+  ],
+  "links": [
+    {
+      "source": "python",
+      "target": "pandas",
+      "label": "local tabular branch"
+    },
+    {
+      "source": "python",
+      "target": "pyspark",
+      "label": "distributed data branch"
+    },
+    {
+      "source": "pandas",
+      "target": "pyspark",
+      "label": "scaling path"
+    }
+  ],
+  "paths": [
+    {
+      "id": "python_to_data_tools",
+      "label": "Python to Data Tools",
+      "description": "Python is the base language, Pandas supports local tabular work, and PySpark extends the pattern to distributed data.",
+      "nodeIds": [
+        "python",
+        "pandas",
+        "pyspark"
+      ],
+      "rehearsalPrompt": "Explain how Python connects Pandas and PySpark in data engineering."
+    }
+  ]
+}
