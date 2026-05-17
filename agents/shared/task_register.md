@@ -294,3 +294,6 @@ Track active and completed tasks to avoid losing continuity.
 | TB-20260430-01 | Create canonical stand-in thread doc for CreatingAudioTopicsWebsite recovered chat | done | 2026-04-30 | Added `recovered_chats/CreatingAudioTopicsWebsite_canonical_thread.md` with timeline, decisions, command pattern, path map, and reuse guidance |
 | TB-20260430-02 | Create canonical stand-in thread doc for Generate_study_prep_for_Interviews recovered chat | done | 2026-04-30 | Added recovered_chats/Generate_study_prep_for_Interviews_canonical_thread.md with timeline, decisions, commands, path map, and operating rules |
 | TB-20260430-03 | Create canonical stand-in thread doc for Audio Generation recovered chat | done | 2026-04-30 | Added `recovered_chats/Audio_Generation_canonical_thread.md` with timeline, decisions, commands, path map, and operating rules |
+
+| TB-20260515-01 | Initialize study_bubbles Iteration 0 scaffold and governance/memory docs | done | 2026-05-15 | Created requested folder/file scaffold and docs; ran lightweight existence check |
+

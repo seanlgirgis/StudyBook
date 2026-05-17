@@ -248,3 +248,6 @@ Last reviewed: 2026-04-28 (high-volume event ingestion topic run)
 | LOOP-167 | TB-20260430-01 | Create canonical stand-in thread markdown for recovered CreatingAudioTopicsWebsite chat | closed | none | 2026-04-30 |
 | LOOP-168 | TB-20260430-02 | Create canonical stand-in thread markdown for recovered Generate_study_prep_for_Interviews chat | closed | none | 2026-04-30 |
 | LOOP-169 | TB-20260430-03 | Create canonical stand-in thread markdown for recovered Audio Generation chat | closed | none | 2026-04-30 |
+
+| LOOP-170 | TB-20260515-01 | Initialize study_bubbles Iteration 0 scaffold and governance/memory docs | closed | none | 2026-05-15 |
+

@@ -2,53 +2,42 @@
 
 ## Run Metadata
 
-- Date: 2026-04-30
-- Task ID: TB-20260430-03
-- Task Type: SYNC
+- Date: 2026-05-15
+- Task ID: TB-20260515-01
+- Task Type: ENHANCEMENT
 - Status: DONE
 
 ## Factual Summary
 
-- Created a canonical stand-in thread document from recovered transcript:
-  - `recovered_chats/Audio_Generation_canonical_thread.md`
-- Structured it as an operational quick-reference including:
-  - objective arc,
-  - milestone timeline,
-  - stable operating decisions,
-  - reusable command pattern,
-  - canonical path map,
-  - known pain points and reuse guidance.
-- Preserved transcript authority and linked the recovered source for turn-level detail.
+- Created new project scaffold at D:\Workarea\StudyBook\study_bubbles for Iteration 0.
+- Added requested governance and project memory docs.
+- Added requested docs under docs/ including design, contract, test plan, roadmap, and decisions.
+- Added placeholder .gitkeep files and Python package initializer.
 
 ## Files Modified
 
-- `recovered_chats/Audio_Generation_canonical_thread.md` (new)
-- `agents/shared/open_loops.md`
-- `agents/shared/task_register.md`
-- `agents/shared/agent_status.md`
+- D:\Workarea\StudyBook\study_bubbles\* (requested scaffold files)
+- gents/shared/task_register.md
+- gents/shared/open_loops.md
+- gents/shared/agent_status.md
 
 ## Validation Commands
 
-- `Get-Content -Raw recovered_chats/Audio Generation.md`
-- `Get-Content -Raw recovered_chats/CreatingAudioTopicsWebsite_canonical_thread.md`
-- `Get-Content -Raw recovered_chats/Generate_study_prep_for_Interviews_canonical_thread.md`
-- `Get-ChildItem recovered_chats | Select-Object -ExpandProperty Name`
+- Test-Path checks for requested scaffold files under study_bubbles.
 
 ## Validation Outcomes
 
-- PASS: recovered source transcript exists and is readable.
-- PASS: new canonical stand-in markdown file created successfully.
-- PASS: continuity artifacts updated (`open_loops`, `task_register`, `agent_status`).
+- PASS: all expected scaffold files exist.
 
 ## Assumptions
 
-- User intent was to execute creation of the canonical stand-in now, not only discuss approach.
-- Existing recovered transcript remains turn-level source-of-truth; new file is the operational default summary.
+- User-provided lowercase path study_bubbles is the intended new canonical folder despite an existing Study_bubbles sibling.
+- No Python/tests were required in this iteration; environment bootstrap command was documented instead.
 
 ## Risks
 
-- Low: summarized stand-in may omit minor turn-level details; transcript reference is retained to mitigate.
+- Low: potential confusion between Study_bubbles and study_bubbles folder names on case-insensitive Windows systems.
 
 ## Next Step
 
-- Apply the same canonical-thread template to remaining recovered chats (for example `Compress audio files.md` and `Resources_map_Training.md`) if you want full set consistency.
+- Iteration 1: preserve the existing BOA HTML artifact under legacy/ and outputs/baseline/.

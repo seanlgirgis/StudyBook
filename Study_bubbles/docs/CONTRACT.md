@@ -54,6 +54,9 @@ Each node should support:
 - `note.summary` is optional short text.
 - `note.image.src` uses linked image paths/URLs (no base64 embedding in current direction).
 - `note.image.caption` is optional human-readable caption.
+- `commonTrap` is optional string.
+- `interviewAnswer` is optional string.
+- `relatedQuestions` is optional list of strings.
 
 ## Active Direction Constraint
 - Current development acceptance is single-file-only.

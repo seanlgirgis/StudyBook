@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BOA Capacity Terminology Bubble Map</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #d1d5db;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --core: #fca5a5;
+      --support: #93c5fd;
+      --detail: #c4b5fd;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .wrap {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      height: 100vh;
+      gap: 8px;
+      padding: 10px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .toolbar, .paths, .legend {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px;
+    }
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+    .search-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-row input {
+      min-width: 260px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    button {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text);
+    }
+    button.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: #1e3a8a;
+      font-weight: 600;
+    }
+    .main {
+      display: grid;
+      grid-template-columns: minmax(600px, 1fr) 380px;
+      gap: 8px;
+      min-height: 0;
+    }
+    .map-pane, .side {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .map-pane { position: relative; }
+    svg { width: 100%; height: 100%; display: block; }
+    .side {
+      padding: 12px;
+      overflow: auto;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .side h2 {
+      margin: 0 0 8px 0;
+      font-size: 20px;
+    }
+    .k {
+      font-weight: 700;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+    .muted { color: var(--muted); }
+    .chip {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin: 3px 4px 0 0;
+      font-size: 12px;
+      cursor: pointer;
+      background: #fff;
+    }
+    .chip:hover { border-color: var(--accent); color: #1e3a8a; }
+    .legend {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      font-size: 13px;
+    }
+    .legend .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+      border: 1px solid #9ca3af;
+    }
+    .tooltip {
+      position: fixed;
+      pointer-events: none;
+      z-index: 10;
+      max-width: 340px;
+      background: #111827;
+      color: #f9fafb;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.35;
+      opacity: 0;
+      transition: opacity .1s ease;
+      box-shadow: 0 6px 20px rgba(0,0,0,.25);
+    }
+    .path-note {
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      font-size: 13px;
+      color: #374151;
+      background: #fafafa;
+    }
+    .sr { font-size: 12px; color: var(--muted); margin-left: 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>BOA Capacity Terminology Bubble Map</h1>
+
+    <div class="toolbar">
+      <div class="search-row">
+        <input id="search" type="text" placeholder="Search terms (e.g., KPI, CBFR, ServiceNow, Headroom)" />
+        <span class="sr" id="searchStatus"></span>
+      </div>
+      <div class="btns" id="filters">
+        <button id="zoomInBtn" title="Zoom in">Zoom +</button>
+        <button id="zoomOutBtn" title="Zoom out">Zoom -</button>
+        <button id="fitBtn" title="Fit to view">Fit</button>
+        <button data-filter="All" class="active">All</button>
+        <button data-filter="Forecasting">Forecasting</button>
+        <button data-filter="BOA Reporting">BOA Reporting</button>
+        <button data-filter="Operations">Operations</button>
+        <button data-filter="Governance">Governance</button>
+        <button data-filter="Architecture">Architecture</button>
+        <button data-filter="Tools">Tools</button>
+        <button id="resetBtn">Reset View</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="map-pane">
+        <svg id="map" viewBox="0 0 1400 920" preserveAspectRatio="xMidYMid meet" aria-label="BOA terminology bubble map"></svg>
+      </div>
+      <aside class="side" id="side">
+        <h2>Select a term</h2>
+        <p class="muted">
+          Hover a bubble for quick context. Click a bubble to pin full details.
+          Connected terms and links will highlight.
+        </p>
+      </aside>
+    </div>
+
+    <div class="paths">
+      <div class="btns" id="paths">
+        <button data-path="core_story">Core Story</button>
+        <button data-path="boa_reporting">BOA Reporting</button>
+        <button data-path="project_assessment">Project Assessment</button>
+        <button data-path="operations">Operations</button>
+        <button data-path="architecture">Architecture</button>
+      </div>
+      <div id="pathNote" class="path-note muted">Select a study path to highlight a rehearsal lane.</div>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot" style="background:var(--core)"></i> large bubble = core concept</span>
+      <span><i class="dot" style="background:var(--support)"></i> medium bubble = supporting concept</span>
+      <span><i class="dot" style="background:var(--detail)"></i> small bubble = detail / example</span>
+    </div>
+  </div>
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <script>
+    const nodes = [
+      { id:"capacity_forecasting", label:"Capacity Forecasting", size:"core", group:"Forecasting", definition:"A workflow that uses historical telemetry and capacity signals to estimate future risk windows.", whyItMatters:"It helps teams act before capacity pressure becomes an incident.", safeSentence:"I use forecasting as decision support, not deep ML research.", related:[] },
+      { id:"telemetry", label:"Telemetry", size:"core", group:"Tools", definition:"Raw signals emitted by systems, such as CPU, memory, storage, latency, throughput, logs, traces, and events.", whyItMatters:"Telemetry is the source material for metrics, KPIs, forecasts, and risk decisions.", safeSentence:"Telemetry is raw signal; the value comes from turning it into decisions.", related:[] },
+      { id:"cbfr", label:"CBFR", size:"core", group:"BOA Reporting", definition:"Capacity Baseline Forecast Report. A recurring planning report showing baseline, forecast, thresholds, risk areas, and recommended actions.", whyItMatters:"It is the decision product for capacity planning.", safeSentence:"CBFR is baseline plus forecast plus risk plus action.", related:[] },
+      { id:"kpi", label:"KPI", size:"core", group:"Governance", definition:"A selected metric or derived signal that supports a business or operational decision.", whyItMatters:"KPIs turn technical measurements into action language.", safeSentence:"A metric says what was measured; a KPI says why it matters and what decision it supports.", related:[] },
+      { id:"dashboard", label:"Dashboard", size:"core", group:"BOA Reporting", definition:"A decision view that makes capacity risk, trend, headroom, ownership, and action visible.", whyItMatters:"Dashboards help managers and engineers consume the same risk picture quickly.", safeSentence:"A dashboard is not just charts; it is the decision view.", related:[] },
+      { id:"threshold", label:"Threshold", size:"core", group:"Operations", definition:"A warning or risk line that indicates when a system is approaching unsafe utilization or performance behavior.", whyItMatters:"Thresholds trigger review before production impact.", safeSentence:"A threshold is the warning line; the safety factor keeps us away from the cliff.", related:[] },
+      { id:"exception", label:"Exception", size:"core", group:"Operations", definition:"A break from the expected capacity baseline, such as missing telemetry or a threshold breach.", whyItMatters:"Exceptions turn findings into owned actions.", safeSentence:"Exception reporting is not paperwork; it creates accountability and closure.", related:[] },
+      { id:"project_assessment", label:"Project Assessment", size:"core", group:"Forecasting", definition:"A review that compares expected new volume or TPS against production baseline, thresholds, capacity pools, and safety margin.", whyItMatters:"It helps decide whether current capacity can absorb new demand.", safeSentence:"Project assessment asks whether the current pool can absorb new load or needs tuning, vertical scaling, or horizontal scaling.", related:[] },
+      { id:"capacity_pool", label:"Capacity Pool", size:"core", group:"Architecture", definition:"A group of servers or resources supporting a business function, application, or workload.", whyItMatters:"Capacity planning is often more useful at pool level than isolated server level.", safeSentence:"The useful view is pool-level headroom plus node-level exceptions.", related:[] },
+      { id:"collaboration", label:"Collaboration", size:"core", group:"Architecture", definition:"The process of aligning capacity evidence with application owners, architecture, infrastructure, business owners, and governance teams.", whyItMatters:"Capacity teams usually advise; owners and architects execute final changes.", safeSentence:"Capacity provides the evidence and options; stakeholders make and execute the final decision.", related:[] },
+
+      { id:"baseline", label:"Baseline", size:"support", group:"Forecasting", definition:"The normal operating pattern of an application, cluster, server, or capacity pool.", whyItMatters:"Without a baseline, a metric value is just a number.", safeSentence:"Baseline tells us what normal looks like.", related:[] },
+      { id:"headroom", label:"Headroom", size:"support", group:"Forecasting", definition:"The remaining safe margin before reaching a threshold.", whyItMatters:"Headroom tells how close the system is to capacity risk.", safeSentence:"Trend tells direction; headroom tells urgency.", related:[] },
+      { id:"safety_factor", label:"Safety Factor", size:"support", group:"Forecasting", definition:"Extra buffer kept below hard limits to absorb spikes, failover, business cycles, or unexpected demand.", whyItMatters:"Production should not be planned to run at the cliff edge.", safeSentence:"Safety factor is the margin that protects reliability.", related:[] },
+      { id:"prophet", label:"Prophet", size:"support", group:"Forecasting", definition:"A time-series forecasting tool useful for trend and seasonality.", whyItMatters:"It can model weekly, monthly, quarter-end, and business-calendar patterns in an explainable way.", safeSentence:"Prophet was useful for explainable trend and seasonality, not deep ML research.", related:[] },
+      { id:"forecast_validation", label:"Forecast Validation", size:"support", group:"Forecasting", definition:"The process of checking forecast output against actual behavior, risk bands, threshold crossings, and SME review.", whyItMatters:"Forecasts must be trusted before used for planning.", safeSentence:"The model is only useful if it improves the capacity decision.", related:[] },
+      { id:"holdout_testing", label:"Holdout Testing", size:"support", group:"Forecasting", definition:"Training on older history and testing against a later known period.", whyItMatters:"It simulates future forecasting without leaking future data.", safeSentence:"For example, train on 18 months and test on the next 6 months.", related:[] },
+      { id:"forecast_vs_actual", label:"Forecast vs Actual", size:"support", group:"Forecasting", definition:"Comparison between predicted values or risk bands and what actually happened.", whyItMatters:"It shows whether the forecast is useful or misleading.", safeSentence:"I compare forecasted risk against actual outcomes before trusting it.", related:[] },
+      { id:"bmc_truesight", label:"BMC TrueSight", size:"support", group:"Tools", definition:"An enterprise monitoring/capacity platform used for telemetry, reporting, thresholds, forecasting, and exception analysis.", whyItMatters:"It is directly aligned with banking capacity workflows.", safeSentence:"BMC TrueSight / TSCO-style capacity data is familiar territory for me.", related:[] },
+      { id:"tsco", label:"TSCO", size:"support", group:"Tools", definition:"BMC TrueSight Capacity Optimization-style capacity planning and analytics context.", whyItMatters:"It supports baseline reporting, capacity views, and forecasting.", safeSentence:"TSCO-style reporting fits the capacity baseline and forecast workflow.", related:[] },
+      { id:"helix", label:"Helix", size:"support", group:"Tools", definition:"Newer BMC operations/platform ecosystem context related to monitoring, service, and operations workflows.", whyItMatters:"It may be present in modern BMC environments.", safeSentence:"I would treat Helix as related BMC ecosystem context and confirm the exact implementation before overclaiming.", related:[] },
+      { id:"cmdb", label:"CMDB", size:"support", group:"Tools", definition:"Configuration Management Database containing asset, application, service, and ownership mapping.", whyItMatters:"Capacity risk needs owner and business context to be actionable.", safeSentence:"CMDB connects telemetry to application ownership.", related:[] },
+      { id:"servicenow", label:"ServiceNow", size:"support", group:"Operations", definition:"A service management platform often used to track incidents, requests, exceptions, owner follow-up, and closure.", whyItMatters:"It turns findings into tracked operational actions.", safeSentence:"ServiceNow helps track ownership, action, and closure.", related:[] },
+      { id:"mca", label:"MCA", size:"support", group:"Governance", definition:"Manager Control Assessment. A governance/control process requiring evidence that risks, exceptions, owners, actions, and closures are tracked.", whyItMatters:"Banking capacity work often needs audit and control evidence.", safeSentence:"MCA is control evidence: what was detected, who owns it, what action was taken, and whether it was closed.", related:[] },
+      { id:"runbook", label:"Runbook", size:"support", group:"Operations", definition:"A step-by-step procedure for a known operational situation.", whyItMatters:"It tells engineers what to check and what action path to follow.", safeSentence:"The runbook tells the engineer what to do.", related:[] },
+      { id:"playbook", label:"Playbook", size:"support", group:"Operations", definition:"A broader operating model covering roles, escalation, cadence, governance, and how runbooks fit together.", whyItMatters:"It explains how the capacity process works across teams.", safeSentence:"The playbook tells the organization how the process works.", related:[] },
+      { id:"ucl", label:"UCL", size:"support", group:"Forecasting", definition:"Upper control limit or upper capacity limit used in performance and capacity assessment.", whyItMatters:"It helps define safe operating range and risk boundaries.", safeSentence:"UCL helps frame the upper safe range for project assessment.", related:[] },
+      { id:"breakpoint", label:"BreakPoint", size:"support", group:"Forecasting", definition:"A performance testing result showing where a system begins to saturate or break down under load.", whyItMatters:"It helps estimate the capacity ceiling under controlled conditions.", safeSentence:"BreakPoint shows the engineered limit; production telemetry shows real usage.", related:[] },
+      { id:"tps", label:"TPS", size:"support", group:"Forecasting", definition:"Transactions per second, a throughput measure used in sizing and project assessment.", whyItMatters:"TPS connects business volume to infrastructure demand.", safeSentence:"TPS helps translate business demand into capacity impact.", related:[] },
+      { id:"criticality", label:"Criticality", size:"support", group:"Governance", definition:"Business importance level of an application or service.", whyItMatters:"Criticality changes safety margin, escalation speed, and governance visibility.", safeSentence:"The same CPU number means different things depending on business criticality.", related:[] },
+      { id:"cluster", label:"Cluster", size:"support", group:"Architecture", definition:"A group of servers working together to support an application or function.", whyItMatters:"Cluster capacity depends on architecture, not simple server addition.", safeSentence:"Cluster capacity depends on traffic distribution, failover, and safety margin.", related:[] },
+      { id:"active_active", label:"Active/Active", size:"support", group:"Architecture", definition:"Multiple nodes serve production traffic at the same time.", whyItMatters:"Capacity planning must look at both pool headroom and node-level hot spots.", safeSentence:"In active/active, I check total pool capacity and individual node risk.", related:[] },
+      { id:"active_passive", label:"Active/Passive", size:"support", group:"Architecture", definition:"One node serves traffic while another is reserved for failover.", whyItMatters:"Passive capacity may be reserved and should not be treated as free normal capacity.", safeSentence:"In active/passive, the passive side is part of resilience planning, not free capacity.", related:[] },
+      { id:"dr", label:"Disaster Recovery", size:"support", group:"Architecture", definition:"The ability to continue service when the primary site, node, or system fails.", whyItMatters:"DR changes reserve capacity and safety-factor assumptions.", safeSentence:"DR capacity must be planned before the event, not during it.", related:[] },
+      { id:"vertical_scaling", label:"Vertical Scaling", size:"support", group:"Architecture", definition:"Adding more CPU, memory, or storage to an existing server or VM.", whyItMatters:"It can be a quicker bridge when architecture cannot scale out easily.", safeSentence:"Vertical scaling makes the existing node bigger.", related:[] },
+      { id:"horizontal_scaling", label:"Horizontal Scaling", size:"support", group:"Architecture", definition:"Adding more nodes or instances to a pool or cluster.", whyItMatters:"It works well when the application supports distribution or load balancing.", safeSentence:"Horizontal scaling adds nodes; architecture decides if the app can use them.", related:[] },
+      { id:"esx_host", label:"ESX Host", size:"support", group:"Architecture", definition:"A VMware physical host or cluster layer that provides shared compute and memory resources.", whyItMatters:"A VM may look fine while the underlying host or cluster is under pressure.", safeSentence:"The ESX host tells us physical pool pressure.", related:[] },
+      { id:"vm_guest", label:"VM Guest", size:"support", group:"Architecture", definition:"The virtual machine operating system/application view.", whyItMatters:"It shows application/server behavior but not always shared host pressure.", safeSentence:"The VM guest tells us application behavior.", related:[] },
+      { id:"specint", label:"SPECint", size:"support", group:"Architecture", definition:"Benchmark-style CPU performance score used to compare compute capacity across hardware generations.", whyItMatters:"Raw CPU percentage is not enough when hardware differs.", safeSentence:"Benchmark sizing frames the conversation; telemetry validates the decision.", related:[] },
+      { id:"powerbi_tableau", label:"Power BI / Tableau", size:"support", group:"BOA Reporting", definition:"Dashboarding and reporting tools that can present capacity data to stakeholders.", whyItMatters:"They help make forecast outputs visible and usable.", safeSentence:"I can structure dashboard-ready data for tools like Power BI or Tableau.", related:[] },
+      { id:"oracle_plsql", label:"Oracle / PL-SQL", size:"support", group:"Tools", definition:"Database and query/extraction layer used to pull capacity data from reporting or mirrored telemetry stores.", whyItMatters:"It connects source capacity data to repeatable reporting pipelines.", safeSentence:"PL/SQL extraction helped move reporting toward repeatable data flows.", related:[] },
+
+      { id:"rolling_average", label:"Rolling Average", size:"detail", group:"Forecasting", definition:"Average over a moving time window.", whyItMatters:"It shows sustained pressure instead of one-time spikes.", safeSentence:"Rolling average helps separate noise from trend.", related:[] },
+      { id:"rolling_peak", label:"Rolling Peak", size:"detail", group:"Forecasting", definition:"Peak value over a moving time window.", whyItMatters:"It highlights stress behavior and upper-bound utilization.", safeSentence:"Rolling peak shows how high the system gets under stress.", related:[] },
+      { id:"p95", label:"P95", size:"detail", group:"Forecasting", definition:"The 95th percentile value.", whyItMatters:"It shows high-end behavior without being dominated by one extreme outlier.", safeSentence:"P95 is useful when averages hide peak pressure.", related:[] },
+      { id:"growth_slope", label:"Growth Slope", size:"detail", group:"Forecasting", definition:"The rate at which utilization or demand is increasing over time.", whyItMatters:"It helps forecast when a threshold may be reached.", safeSentence:"Growth slope tells whether risk is accelerating.", related:[] },
+      { id:"breach_flag", label:"Breach Flag", size:"detail", group:"Operations", definition:"A marker showing that a metric crossed or approached a threshold.", whyItMatters:"It turns raw metric behavior into exception logic.", safeSentence:"Breach flags help move from observation to action.", related:[] },
+      { id:"risk_band", label:"Risk Band", size:"detail", group:"Operations", definition:"A category such as low, medium, high, or severe risk.", whyItMatters:"It helps prioritize action and communicate urgency.", safeSentence:"Risk bands make capacity output easier to prioritize.", related:[] },
+      { id:"collection_exception", label:"Collection Exception", size:"detail", group:"Operations", definition:"Expected telemetry was missing, stale, or not collected.", whyItMatters:"Missing data can hide risk and weaken forecasts.", safeSentence:"No telemetry does not mean no risk.", related:[] },
+      { id:"threshold_exception", label:"Threshold Exception", size:"detail", group:"Operations", definition:"A metric or KPI approaches or crosses a defined threshold.", whyItMatters:"It triggers validation, owner notification, and possible action.", safeSentence:"A threshold exception is an early warning signal.", related:[] },
+      { id:"swap_exception", label:"Swap Exception", size:"detail", group:"Operations", definition:"Swap usage exceeds an agreed threshold or shows sustained pressure.", whyItMatters:"Swap can indicate memory pressure and performance risk.", safeSentence:"Swap is a symptom, not the disease.", related:[] },
+      { id:"owner_mapping", label:"Owner Mapping", size:"detail", group:"Governance", definition:"Connecting infrastructure or telemetry records to application, business, or support owners.", whyItMatters:"Risk is not actionable until someone owns the response.", safeSentence:"Owner mapping turns telemetry into accountability.", related:[] },
+      { id:"audit_evidence", label:"Audit Evidence", size:"detail", group:"Governance", definition:"Historical proof of what was detected, who owned it, what action was taken, and whether it was closed.", whyItMatters:"Banking governance requires traceability.", safeSentence:"Audit evidence shows detection, ownership, action, and closure.", related:[] },
+      { id:"executive_summary", label:"Executive Summary", size:"detail", group:"BOA Reporting", definition:"A concise leadership view of risk, timing, ownership, and recommended action.", whyItMatters:"Leaders need decision language, not raw telemetry.", safeSentence:"Leadership needs risk, timing, owner, and action.", related:[] },
+      { id:"exception_list", label:"Exception List", size:"detail", group:"BOA Reporting", definition:"A ranked list of systems needing review due to missing data, threshold risk, or forecasted capacity pressure.", whyItMatters:"It turns capacity analysis into operational work.", safeSentence:"Exception lists tell teams where to act first.", related:[] },
+      { id:"safety_margin", label:"Safety Margin", size:"detail", group:"Forecasting", definition:"Reserved capacity between current usage and risk threshold.", whyItMatters:"It protects against spikes, failover, and unexpected demand.", safeSentence:"Safety margin keeps production away from the cliff.", related:[] },
+      { id:"business_calendar", label:"Business Calendar", size:"detail", group:"Forecasting", definition:"Known business timing such as month-end, quarter-end, billing cycles, or holidays.", whyItMatters:"Capacity patterns often follow business events.", safeSentence:"Business-calendar effects can explain recurring capacity spikes.", related:[] },
+      { id:"month_end_qe", label:"Month-End / Quarter-End", size:"detail", group:"Forecasting", definition:"Recurring business cycles that can increase workload and capacity demand.", whyItMatters:"They can create predictable seasonal pressure.", safeSentence:"Month-end and quarter-end should be treated as capacity context.", related:[] },
+      { id:"application_owner", label:"Application Owner", size:"detail", group:"Architecture", definition:"Person or team responsible for the application.", whyItMatters:"They provide workload context and own application-level decisions.", safeSentence:"Application owners help explain behavior and decide actions.", related:[] },
+      { id:"architecture_team", label:"Architecture Team", size:"detail", group:"Architecture", definition:"Team responsible for application or infrastructure design patterns.", whyItMatters:"They decide whether tuning, vertical scaling, horizontal scaling, or design changes fit.", safeSentence:"Architecture decides what scaling pattern fits the application.", related:[] },
+      { id:"infrastructure_team", label:"Infrastructure Team", size:"detail", group:"Architecture", definition:"Team responsible for servers, VMs, clusters, cloud resources, and platform support.", whyItMatters:"They execute infrastructure-level changes.", safeSentence:"Infrastructure teams help implement capacity changes.", related:[] },
+      { id:"business_owner", label:"Business Owner", size:"detail", group:"Governance", definition:"Business stakeholder responsible for priority, criticality, funding, and risk acceptance.", whyItMatters:"Capacity decisions often require business priority and timing.", safeSentence:"Business owners provide criticality, priority, and risk acceptance.", related:[] }
+    ];
+
+    const links = [
+      { source:"telemetry", target:"kpi", label:"becomes decision signal through metrics" },
+      { source:"kpi", target:"dashboard", label:"displayed as decision view" },
+      { source:"dashboard", target:"executive_summary", label:"supports leadership" },
+      { source:"cbfr", target:"baseline", label:"starts with normal behavior" },
+      { source:"cbfr", target:"forecast_validation", label:"must be trusted" },
+      { source:"baseline", target:"headroom", label:"compare normal to threshold" },
+      { source:"headroom", target:"threshold", label:"distance from risk line" },
+      { source:"threshold", target:"safety_factor", label:"margin before hard limit" },
+      { source:"ucl", target:"breakpoint", label:"defines upper range" },
+      { source:"breakpoint", target:"tps", label:"tested throughput" },
+      { source:"tps", target:"project_assessment", label:"expected volume" },
+      { source:"project_assessment", target:"vertical_scaling", label:"possible option" },
+      { source:"project_assessment", target:"horizontal_scaling", label:"possible option" },
+      { source:"cluster", target:"active_active", label:"traffic sharing" },
+      { source:"cluster", target:"active_passive", label:"failover reserve" },
+      { source:"cluster", target:"dr", label:"recovery planning" },
+      { source:"cluster", target:"capacity_pool", label:"pool-level planning" },
+      { source:"esx_host", target:"vm_guest", label:"physical pool vs guest behavior" },
+      { source:"vm_guest", target:"swap_exception", label:"memory pressure signal" },
+      { source:"exception", target:"collection_exception", label:"missing telemetry" },
+      { source:"exception", target:"threshold_exception", label:"breach risk" },
+      { source:"exception", target:"servicenow", label:"tracked follow-up" },
+      { source:"servicenow", target:"audit_evidence", label:"proof of action" },
+      { source:"audit_evidence", target:"mca", label:"control review support" },
+      { source:"runbook", target:"exception", label:"procedure for known issue" },
+      { source:"playbook", target:"runbook", label:"operating model uses procedures" },
+      { source:"bmc_truesight", target:"telemetry", label:"collection source" },
+      { source:"bmc_truesight", target:"cbfr", label:"reporting input" },
+      { source:"tsco", target:"bmc_truesight", label:"capacity optimization context" },
+      { source:"helix", target:"bmc_truesight", label:"related BMC ecosystem" },
+      { source:"oracle_plsql", target:"bmc_truesight", label:"extraction/reporting path" },
+      { source:"forecast_validation", target:"holdout_testing", label:"time-based validation" },
+      { source:"holdout_testing", target:"forecast_vs_actual", label:"compare prediction to known outcomes" },
+      { source:"prophet", target:"forecast_validation", label:"must be validated" },
+      { source:"business_calendar", target:"prophet", label:"seasonality context" },
+      { source:"month_end_qe", target:"business_calendar", label:"recurring workload pattern" },
+      { source:"criticality", target:"safety_margin", label:"affects tolerance" },
+      { source:"criticality", target:"mca", label:"governance visibility" },
+      { source:"collaboration", target:"application_owner", label:"workload context" },
+      { source:"collaboration", target:"architecture_team", label:"scaling design" },
+      { source:"collaboration", target:"infrastructure_team", label:"implementation" },
+      { source:"collaboration", target:"business_owner", label:"priority and risk" },
+      { source:"specint", target:"vertical_scaling", label:"sizing comparison" },
+      { source:"powerbi_tableau", target:"dashboard", label:"reporting platform" },
+      { source:"rolling_average", target:"capacity_forecasting", label:"sustained trend" },
+      { source:"rolling_peak", target:"capacity_forecasting", label:"stress behavior" },
+      { source:"p95", target:"capacity_forecasting", label:"high-end behavior" },
+      { source:"growth_slope", target:"capacity_forecasting", label:"trend direction" },
+      { source:"breach_flag", target:"risk_band", label:"exception signal" },
+      { source:"risk_band", target:"exception_list", label:"prioritized output" },
+      { source:"exception_list", target:"servicenow", label:"owner follow-up" }
+    ];
+
+    const paths = {
+      core_story: {
+        label: "Core Story",
+        nodeIds: ["telemetry","baseline","rolling_average","capacity_forecasting","dashboard","project_assessment"],
+        desc: "Telemetry is cleaned into a baseline, transformed into features, projected into forecast risk, shown in dashboards, and used for decisions."
+      },
+      boa_reporting: {
+        label: "BOA Reporting",
+        nodeIds: ["bmc_truesight","cbfr","dashboard","executive_summary","mca"],
+        desc: "BMC telemetry feeds CBFR outputs, dashboards communicate risk, executive summaries align leadership, and MCA closes governance traceability."
+      },
+      project_assessment: {
+        label: "Project Assessment",
+        nodeIds: ["ucl","breakpoint","tps","project_assessment","vertical_scaling","horizontal_scaling"],
+        desc: "Use tested limits and TPS expectations to assess if the current pool is safe or needs scaling actions."
+      },
+      operations: {
+        label: "Operations",
+        nodeIds: ["exception","runbook","servicenow","owner_mapping","audit_evidence"],
+        desc: "Exceptions trigger runbooks, owner follow-up is tracked in ServiceNow, and closure evidence supports governance."
+      },
+      architecture: {
+        label: "Architecture",
+        nodeIds: ["cluster","active_active","active_passive","dr","safety_factor"],
+        desc: "Cluster and failover design drive safety-factor assumptions and capacity planning rules."
+      }
+    };
+
+    const radiusBySize = { core: 44, support: 32, detail: 22 };
+    const colorBySize = { core: "var(--core)", support: "var(--support)", detail: "var(--detail)" };
+
+    const svg = document.getElementById("map");
+    const zoomInBtn = document.getElementById("zoomInBtn");
+    const zoomOutBtn = document.getElementById("zoomOutBtn");
+    const fitBtn = document.getElementById("fitBtn");
+    const side = document.getElementById("side");
+    const tooltip = document.getElementById("tooltip");
+    const searchInput = document.getElementById("search");
+    const searchStatus = document.getElementById("searchStatus");
+    const filters = document.getElementById("filters");
+    const pathWrap = document.getElementById("paths");
+    const pathNote = document.getElementById("pathNote");
+    const resetBtn = document.getElementById("resetBtn");
+
+    let selectedId = null;
+    let activeFilter = "All";
+    let activePath = null;
+    let searchTerm = "";
+
+    const nodeById = Object.fromEntries(nodes.map(n => [n.id, n]));
+
+    // Fill related list from links
+    for (const l of links) {
+      const s = nodeById[l.source], t = nodeById[l.target];
+      if (!s || !t) continue;
+      s.related.push({ id: t.id, label: t.label, relation: l.label });
+      t.related.push({ id: s.id, label: s.label, relation: l.label });
+    }
+
+    // Static layout by group
+    const groupCenters = {
+      "Forecasting": { x: 360, y: 260 },
+      "BOA Reporting": { x: 1040, y: 260 },
+      "Operations": { x: 360, y: 680 },
+      "Governance": { x: 1040, y: 680 },
+      "Architecture": { x: 700, y: 500 },
+      "Tools": { x: 700, y: 180 }
+    };
+
+    function placeNodes() {
+      const groups = {};
+      for (const n of nodes) {
+        if (!groups[n.group]) groups[n.group] = [];
+        groups[n.group].push(n);
+      }
+      for (const [g, arr] of Object.entries(groups)) {
+        arr.sort((a,b) => radiusBySize[b.size] - radiusBySize[a.size]);
+        const c = groupCenters[g] || { x: 700, y: 460 };
+        arr.forEach((n, i) => {
+          const layer = Math.floor(i / 8);
+          const pos = i % 8;
+          const r = 80 + layer * 90;
+          const ang = (Math.PI * 2 * pos) / 8 + layer * 0.2;
+          n.x = c.x + Math.cos(ang) * r;
+          n.y = c.y + Math.sin(ang) * r;
+        });
+      }
+      // simple collision relax
+      for (let k=0; k<120; k++) {
+        for (let i=0; i<nodes.length; i++) {
+          for (let j=i+1; j<nodes.length; j++) {
+            const a = nodes[i], b = nodes[j];
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const dist = Math.hypot(dx, dy) || 0.1;
+            const min = radiusBySize[a.size] + radiusBySize[b.size] + 6;
+            if (dist < min) {
+              const push = (min - dist) / 2;
+              const ux = dx / dist, uy = dy / dist;
+              a.x -= ux * push; a.y -= uy * push;
+              b.x += ux * push; b.y += uy * push;
+            }
+          }
+        }
+      }
+    }
+    placeNodes();
+
+    // SVG layers
+    const viewport = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    const linkLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    const nodeLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    viewport.append(linkLayer, nodeLayer);
+    svg.append(viewport);
+
+    function make(tag, attrs={}) {
+      const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
+      return el;
+    }
+
+    function wrapLabel(text, maxCharsPerLine=14, maxLines=3) {
+      const words = text.split(" ");
+      const lines = [];
+      let cur = "";
+      for (const w of words) {
+        if ((cur + " " + w).trim().length <= maxCharsPerLine) cur = (cur + " " + w).trim();
+        else {
+          lines.push(cur);
+          cur = w;
+        }
+      }
+      if (cur) lines.push(cur);
+      return lines.slice(0, maxLines);
+    }
+
+    const linkEls = [];
+    for (const l of links) {
+      const s = nodeById[l.source], t = nodeById[l.target];
+      if (!s || !t) continue;
+      const line = make("line", {
+        x1: s.x, y1: s.y, x2: t.x, y2: t.y,
+        stroke: "#cbd5e1", "stroke-width": "1.4"
+      });
+      line.dataset.source = l.source;
+      line.dataset.target = l.target;
+      line.dataset.label = l.label;
+      linkLayer.appendChild(line);
+      linkEls.push(line);
+    }
+
+    const nodeEls = {};
+    for (const n of nodes) {
+      const g = make("g", { transform: `translate(${n.x},${n.y})`, cursor: "pointer" });
+      g.dataset.id = n.id;
+      const r = radiusBySize[n.size];
+      const circle = make("circle", {
+        r, fill: colorBySize[n.size], stroke: "#64748b", "stroke-width": "1.2"
+      });
+      const ring = make("circle", {
+        r: r+4, fill: "none", stroke: "none", "stroke-width": "3"
+      });
+      const text = make("text", {
+        "text-anchor": "middle",
+        "font-size": r >= 40 ? "13" : (r >= 30 ? "12" : "11"),
+        "font-weight": "600",
+        fill: "#111827"
+      });
+      const lines = wrapLabel(n.label, r >= 40 ? 15 : 12, 3);
+      const startDy = -((lines.length - 1) * 7);
+      lines.forEach((ln, i) => {
+        const tspan = make("tspan", { x: "0", dy: i === 0 ? startDy : 14 });
+        tspan.textContent = ln;
+        text.appendChild(tspan);
+      });
+      g.append(circle, ring, text);
+      nodeLayer.appendChild(g);
+      nodeEls[n.id] = { g, circle, ring, text };
+
+      g.addEventListener("mouseenter", (e) => showTooltip(e, n));
+      g.addEventListener("mousemove", (e) => moveTooltip(e));
+      g.addEventListener("mouseleave", hideTooltip);
+      g.addEventListener("click", () => selectNode(n.id));
+    }
+
+    function showTooltip(e, n) {
+      tooltip.innerHTML = `<strong>${n.label}</strong><br>${n.definition}`;
+      tooltip.style.opacity = "1";
+      moveTooltip(e);
+    }
+    function moveTooltip(e) {
+      tooltip.style.left = (e.clientX + 14) + "px";
+      tooltip.style.top = (e.clientY + 14) + "px";
+    }
+    function hideTooltip() { tooltip.style.opacity = "0"; }
+
+    function connectedSet(id) {
+      const set = new Set([id]);
+      for (const l of links) {
+        if (l.source === id) set.add(l.target);
+        if (l.target === id) set.add(l.source);
+      }
+      return set;
+    }
+
+    function pathSet(pathKey) {
+      if (!pathKey || !paths[pathKey]) return new Set();
+      return new Set(paths[pathKey].nodeIds);
+    }
+
+    function renderSidePanel(n) {
+      if (!n) {
+        side.innerHTML = `
+          <h2>Select a term</h2>
+          <p class="muted">Hover a bubble for quick context. Click a bubble to pin full details.
+          Connected terms and links will highlight.</p>`;
+        return;
+      }
+      const rel = n.related
+        .sort((a,b)=>a.label.localeCompare(b.label))
+        .map(r => `<span class="chip" data-rel="${r.id}" title="${r.relation}">${r.label}</span>`)
+        .join("");
+      const relText = n.related
+        .sort((a,b)=>a.label.localeCompare(b.label))
+        .map(r => `<li><strong>${r.label}</strong>: ${r.relation}</li>`)
+        .join("");
+      side.innerHTML = `
+        <h2>${n.label}</h2>
+        <div class="k">Definition</div>
+        <div>${n.definition}</div>
+        <div class="k">Why it matters</div>
+        <div>${n.whyItMatters}</div>
+        <div class="k">Interview-safe sentence</div>
+        <div>${n.safeSentence}</div>
+        <div class="k">Related terms</div>
+        <div>${rel || "<span class='muted'>No related terms listed.</span>"}</div>
+        <div class="k">Relationship notes</div>
+        <ul>${relText || "<li class='muted'>No relationship labels.</li>"}</ul>
+      `;
+      side.querySelectorAll(".chip").forEach(el => {
+        el.addEventListener("click", () => selectNode(el.dataset.rel));
+      });
+    }
+
+    function selectNode(id) {
+      selectedId = id;
+      const n = nodeById[id];
+      renderSidePanel(n);
+      updateStyles();
+    }
+
+    function clearSelection() {
+      selectedId = null;
+      renderSidePanel(null);
+    }
+
+    function updateStyles() {
+      const q = searchTerm.trim().toLowerCase();
+      const pathNodes = pathSet(activePath);
+      const connected = selectedId ? connectedSet(selectedId) : new Set();
+
+      let matchCount = 0;
+      for (const n of nodes) {
+        const el = nodeEls[n.id];
+        const matchSearch = !q || n.label.toLowerCase().includes(q);
+        const matchFilter = activeFilter === "All" || n.group === activeFilter;
+        const inPath = !activePath || pathNodes.has(n.id);
+        const visible = matchSearch && matchFilter && inPath;
+        if (visible) matchCount++;
+
+        let opacity = visible ? 1 : 0.12;
+        if (selectedId && visible && !connected.has(n.id) && n.id !== selectedId) opacity = 0.28;
+        el.g.style.opacity = opacity;
+
+        const isSelected = n.id === selectedId;
+        el.ring.setAttribute("stroke", isSelected ? "#1d4ed8" : "none");
+        el.ring.setAttribute("stroke-width", isSelected ? "4" : "0");
+        el.circle.setAttribute("stroke-width", isSelected ? "2.4" : "1.2");
+      }
+
+      for (const le of linkEls) {
+        const s = le.dataset.source, t = le.dataset.target;
+        const ns = nodeById[s], nt = nodeById[t];
+        const sv = (activeFilter === "All" || ns.group === activeFilter) &&
+                   (!q || ns.label.toLowerCase().includes(q)) &&
+                   (!activePath || pathNodes.has(s));
+        const tv = (activeFilter === "All" || nt.group === activeFilter) &&
+                   (!q || nt.label.toLowerCase().includes(q)) &&
+                   (!activePath || pathNodes.has(t));
+        const visible = sv && tv;
+        let op = visible ? 0.8 : 0.07;
+        let stroke = "#cbd5e1";
+        let sw = 1.4;
+        if (selectedId && (s === selectedId || t === selectedId)) {
+          op = 1; stroke = "#1d4ed8"; sw = 2.6;
+        }
+        if (activePath && pathNodes.has(s) && pathNodes.has(t)) {
+          op = 1; stroke = "#0f766e"; sw = 2.4;
+        }
+        le.setAttribute("stroke-opacity", String(op));
+        le.setAttribute("stroke", stroke);
+        le.setAttribute("stroke-width", String(sw));
+      }
+
+      searchStatus.textContent = q ? `${matchCount} match${matchCount===1?"":"es"}` : "";
+    }
+
+    // Filters
+    filters.querySelectorAll("button[data-filter]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeFilter = btn.dataset.filter;
+        filters.querySelectorAll("button[data-filter]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        updateStyles();
+      });
+    });
+
+    // Search
+    searchInput.addEventListener("input", () => {
+      searchTerm = searchInput.value;
+      updateStyles();
+    });
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const q = searchTerm.trim().toLowerCase();
+        const found = nodes.find(n => n.label.toLowerCase().includes(q));
+        if (found) selectNode(found.id);
+      }
+    });
+
+    // Study paths
+    pathWrap.querySelectorAll("button[data-path]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const key = btn.dataset.path;
+        if (activePath === key) {
+          activePath = null;
+          pathWrap.querySelectorAll("button[data-path]").forEach(b => b.classList.remove("active"));
+          pathNote.textContent = "Select a study path to highlight a rehearsal lane.";
+          pathNote.classList.add("muted");
+        } else {
+          activePath = key;
+          pathWrap.querySelectorAll("button[data-path]").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          pathNote.textContent = paths[key].desc;
+          pathNote.classList.remove("muted");
+        }
+        updateStyles();
+      });
+    });
+
+    // Reset
+    resetBtn.addEventListener("click", () => {
+      activeFilter = "All";
+      activePath = null;
+      searchTerm = "";
+      searchInput.value = "";
+      filters.querySelectorAll("button[data-filter]").forEach(b => b.classList.remove("active"));
+      filters.querySelector('button[data-filter="All"]').classList.add("active");
+      pathWrap.querySelectorAll("button[data-path]").forEach(b => b.classList.remove("active"));
+      pathNote.textContent = "Select a study path to highlight a rehearsal lane.";
+      pathNote.classList.add("muted");
+      clearSelection();
+      resetViewTransform();
+      updateStyles();
+    });
+
+    
+    // Pan + zoom (standalone, no external libs)
+    const viewState = { scale: 1, minScale: 0.55, maxScale: 2.8, tx: 0, ty: 0 };
+    let isPanning = false;
+    let panStart = { x: 0, y: 0, tx: 0, ty: 0 };
+
+    function applyView() {
+      viewport.setAttribute("transform", `translate(${viewState.tx},${viewState.ty}) scale(${viewState.scale})`);
+    }
+
+    function zoomAt(factor, cx = 700, cy = 460) {
+      const oldScale = viewState.scale;
+      const newScale = Math.max(viewState.minScale, Math.min(viewState.maxScale, oldScale * factor));
+      if (newScale === oldScale) return;
+      const worldX = (cx - viewState.tx) / oldScale;
+      const worldY = (cy - viewState.ty) / oldScale;
+      viewState.scale = newScale;
+      viewState.tx = cx - worldX * newScale;
+      viewState.ty = cy - worldY * newScale;
+      applyView();
+    }
+
+    function clientToSvg(clientX, clientY) {
+      const pt = svg.createSVGPoint();
+      pt.x = clientX;
+      pt.y = clientY;
+      const ctm = svg.getScreenCTM();
+      return ctm ? pt.matrixTransform(ctm.inverse()) : { x: 700, y: 460 };
+    }
+
+    function resetViewTransform() {
+      viewState.scale = 1;
+      viewState.tx = 0;
+      viewState.ty = 0;
+      applyView();
+    }
+
+    svg.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const p = clientToSvg(e.clientX, e.clientY);
+      zoomAt(e.deltaY < 0 ? 1.12 : 0.89, p.x, p.y);
+    }, { passive: false });
+
+    svg.addEventListener("mousedown", (e) => {
+      // Pan only from empty map area (not from node bubbles)
+      if (e.target.closest && e.target.closest("g[data-id]")) return;
+      isPanning = true;
+      panStart = { x: e.clientX, y: e.clientY, tx: viewState.tx, ty: viewState.ty };
+      svg.style.cursor = "grabbing";
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!isPanning) return;
+      viewState.tx = panStart.tx + (e.clientX - panStart.x);
+      viewState.ty = panStart.ty + (e.clientY - panStart.y);
+      applyView();
+    });
+
+    window.addEventListener("mouseup", () => {
+      isPanning = false;
+      svg.style.cursor = "default";
+    });
+
+    zoomInBtn.addEventListener("click", () => zoomAt(1.15));
+    zoomOutBtn.addEventListener("click", () => zoomAt(0.87));
+    fitBtn.addEventListener("click", () => resetViewTransform());
+    // Initial side panel and styles
+    renderSidePanel(null);
+    updateStyles();
+  </script>
+</body>
+</html>
+
+
+
+
+
