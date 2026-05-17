@@ -20,7 +20,9 @@
       <button id="focus-toggle" class="clear-btn" type="button" title="Focus selected node connections">Focus</button>
       <button id="fit-view" class="clear-btn" type="button" title="Fit map">Fit</button>
       <button id="reset-view" class="clear-btn" type="button" title="Reset map view">Reset View</button>
+      <button id="export-layout" class="clear-btn" type="button" title="Export current node layout as JSON">Export Layout</button>
       <button id="clear-filters" class="clear-btn" type="button">Reset</button>
+      <span id="layout-export-status" class="search-count"></span>
     </div>
   </header>
 
@@ -36,13 +38,16 @@
     </section>
     <div id="panel-resizer" class="panel-resizer" role="separator" aria-orientation="vertical" aria-label="Resize study panel"></div>
     <aside class="side-panel">
-      <h2>Details</h2>
-      <div id="node-details" class="panel-card">
-        <p>Select a bubble to view details.</p>
+      <div class="side-panel-body">
+        <h2>Details</h2>
+        <div id="node-details" class="panel-card">
+          <p>Select a bubble to view details.</p>
+        </div>
       </div>
-
-      <h2>Study Paths</h2>
-      <ul id="study-paths" class="path-list"></ul>
+      <div class="side-panel-footer">
+        <h2>Study Paths</h2>
+        <ul id="study-paths" class="path-list"></ul>
+      </div>
     </aside>
   </main>
 

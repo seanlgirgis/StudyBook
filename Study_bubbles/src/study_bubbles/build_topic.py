@@ -82,11 +82,83 @@ def _validate_and_load_topic(topic_path: Path) -> tuple[bool, dict, list[str], l
     return True, topic, passes, errors
 
 
-def build_multifile(topic_path: Path, out_dir: Path) -> int:
+def _load_layout(layout_path: Path, topic_id: str | None) -> tuple[dict | None, list[str], list[str]]:
+    warnings: list[str] = []
+    errors: list[str] = []
+
+    try:
+        raw = layout_path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return None, warnings, [f"FAIL: layout file not found: {layout_path}"]
+    except OSError as exc:
+        return None, warnings, [f"FAIL: could not read layout file '{layout_path}': {exc}"]
+
+    try:
+        layout = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        return None, warnings, [f"FAIL: invalid layout JSON '{layout_path}': {exc}"]
+
+    if not isinstance(layout, dict):
+        return None, warnings, [f"FAIL: layout root must be an object: {layout_path}"]
+
+    nodes = layout.get("nodes")
+    if not isinstance(nodes, dict):
+        return None, warnings, [f"FAIL: layout nodes must be an object: {layout_path}"]
+
+    layout_topic_id = layout.get("topicId")
+    if topic_id and isinstance(layout_topic_id, str) and layout_topic_id.strip() and layout_topic_id != topic_id:
+        warnings.append(
+            f"WARN: layout topicId '{layout_topic_id}' does not match topic id '{topic_id}'"
+        )
+
+    return layout, warnings, errors
+
+
+def _apply_layout_to_topic(topic: dict, layout: dict) -> tuple[int, int]:
+    nodes = layout.get("nodes", {})
+    if not isinstance(nodes, dict):
+        return 0, 0
+
+    applied = 0
+    skipped = 0
+    for node in topic.get("nodes", []):
+        if not isinstance(node, dict):
+            continue
+        node_id = node.get("id")
+        if not isinstance(node_id, str):
+            continue
+        entry = nodes.get(node_id)
+        if not isinstance(entry, dict):
+            continue
+        x = entry.get("x")
+        y = entry.get("y")
+        if isinstance(x, (int, float)) and isinstance(y, (int, float)):
+            node["x"] = float(x)
+            node["y"] = float(y)
+            applied += 1
+        else:
+            skipped += 1
+    return applied, skipped
+
+
+def build_multifile(topic_path: Path, out_dir: Path, layout_path: Path | None = None) -> int:
     ok, topic, _passes, _errors = _validate_and_load_topic(topic_path)
     if not ok:
         print("Topic validation failed. Build aborted.")
         return 1
+    if layout_path is not None:
+        layout, layout_warnings, layout_errors = _load_layout(layout_path, topic.get("id"))
+        for warning in layout_warnings:
+            print(warning)
+        for error in layout_errors:
+            print(error)
+        if layout_errors:
+            return 1
+        if layout is not None:
+            applied, skipped = _apply_layout_to_topic(topic, layout)
+            print(f"PASS: applied layout positions to {applied} node(s)")
+            if skipped:
+                print(f"WARN: skipped {skipped} layout node position(s) with invalid x/y")
 
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -107,6 +179,10 @@ def build_multifile(topic_path: Path, out_dir: Path) -> int:
             print(f"FAIL: required source file missing: {src}")
             return 1
         shutil.copyfile(src, dst)
+    if layout_path is not None:
+        (out_dir / "topic.studybubble.json").write_text(
+            json.dumps(topic, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
 
     generated_files = [
         "index.html",
@@ -148,11 +224,24 @@ def build_multifile(topic_path: Path, out_dir: Path) -> int:
     return 0
 
 
-def build_single_file(topic_path: Path, out_html_path: Path) -> int:
+def build_single_file(topic_path: Path, out_html_path: Path, layout_path: Path | None = None) -> int:
     ok, topic, _passes, _errors = _validate_and_load_topic(topic_path)
     if not ok:
         print("Topic validation failed. Build aborted.")
         return 1
+    if layout_path is not None:
+        layout, layout_warnings, layout_errors = _load_layout(layout_path, topic.get("id"))
+        for warning in layout_warnings:
+            print(warning)
+        for error in layout_errors:
+            print(error)
+        if layout_errors:
+            return 1
+        if layout is not None:
+            applied, skipped = _apply_layout_to_topic(topic, layout)
+            print(f"PASS: applied layout positions to {applied} node(s)")
+            if skipped:
+                print(f"WARN: skipped {skipped} layout node position(s) with invalid x/y")
 
     viewer_dir = Path("viewer")
     css_src = viewer_dir / "bubble_viewer.css"
@@ -205,7 +294,9 @@ def build_single_file(topic_path: Path, out_html_path: Path) -> int:
       <button id=\"focus-toggle\" class=\"clear-btn\" type=\"button\" title=\"Focus selected node connections\">Focus</button>
       <button id=\"fit-view\" class=\"clear-btn\" type=\"button\" title=\"Fit map\">Fit</button>
       <button id=\"reset-view\" class=\"clear-btn\" type=\"button\" title=\"Reset map view\">Reset View</button>
+      <button id=\"export-layout\" class=\"clear-btn\" type=\"button\" title=\"Export current node layout as JSON\">Export Layout</button>
       <button id=\"clear-filters\" class=\"clear-btn\" type=\"button\">Reset</button>
+      <span id=\"layout-export-status\" class=\"search-count\"></span>
     </div>
   </header>
 
@@ -221,13 +312,16 @@ def build_single_file(topic_path: Path, out_html_path: Path) -> int:
     </section>
     <div id=\"panel-resizer\" class=\"panel-resizer\" role=\"separator\" aria-orientation=\"vertical\" aria-label=\"Resize study panel\"></div>
     <aside class=\"side-panel\">
-      <h2>Details</h2>
-      <div id=\"node-details\" class=\"panel-card\">
-        <p>Select a bubble to view details.</p>
+      <div class=\"side-panel-body\">
+        <h2>Details</h2>
+        <div id=\"node-details\" class=\"panel-card\">
+          <p>Select a bubble to view details.</p>
+        </div>
       </div>
-
-      <h2>Study Paths</h2>
-      <ul id=\"study-paths\" class=\"path-list\"></ul>
+      <div class=\"side-panel-footer\">
+        <h2>Study Paths</h2>
+        <ul id=\"study-paths\" class=\"path-list\"></ul>
+      </div>
     </aside>
   </main>
 
@@ -305,15 +399,20 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--topic", required=True, help="Path to topic .studybubble.json file")
     parser.add_argument("--out", required=True, help="Output directory for multifile or output HTML for single-file")
     parser.add_argument("--mode", required=True, help="Build mode: multifile or single-file")
+    parser.add_argument("--layout", required=False, help="Optional layout JSON file with saved node x/y positions")
     args = parser.parse_args(argv)
 
     topic_path = Path(args.topic)
     mode = args.mode
 
     if mode == "multifile":
-        return build_multifile(topic_path=topic_path, out_dir=Path(args.out))
+        return build_multifile(topic_path=topic_path, out_dir=Path(args.out), layout_path=Path(args.layout) if args.layout else None)
     if mode == "single-file":
-        return build_single_file(topic_path=topic_path, out_html_path=Path(args.out))
+        return build_single_file(
+            topic_path=topic_path,
+            out_html_path=Path(args.out),
+            layout_path=Path(args.layout) if args.layout else None,
+        )
 
     print(
         f"FAIL: unsupported mode '{mode}'. Supported modes are: multifile, single-file"

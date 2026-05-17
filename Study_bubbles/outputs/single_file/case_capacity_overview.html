@@ -26,12 +26,17 @@ body {
   font-family: "Segoe UI", Tahoma, sans-serif;
   background: var(--bg);
   color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-header {
   padding: 12px 16px;
   border-bottom: 1px solid var(--line);
   background: #0b1220;
+  flex: 0 0 auto;
 }
 
 .header-top h1 {
@@ -128,7 +133,8 @@ body {
 .layout {
   --panel-width: 34%;
   display: flex;
-  min-height: calc(100vh - 130px);
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .map-area {
@@ -137,12 +143,13 @@ body {
   position: relative;
   overflow: hidden;
   min-width: 320px;
+  min-height: 0;
 }
 
 #map-svg {
   width: 100%;
   height: 100%;
-  min-height: 560px;
+  min-height: 0;
   background: radial-gradient(circle at top, #1f2937, #111827 70%);
   border-radius: 10px;
   cursor: grab;
@@ -162,6 +169,26 @@ body {
   max-width: 60vw;
   padding: 16px;
   background: var(--panel);
+  overflow: hidden;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.side-panel-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+.side-panel-footer {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  max-height: 34%;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -455,7 +482,9 @@ body {
       <button id="focus-toggle" class="clear-btn" type="button" title="Focus selected node connections">Focus</button>
       <button id="fit-view" class="clear-btn" type="button" title="Fit map">Fit</button>
       <button id="reset-view" class="clear-btn" type="button" title="Reset map view">Reset View</button>
+      <button id="export-layout" class="clear-btn" type="button" title="Export current node layout as JSON">Export Layout</button>
       <button id="clear-filters" class="clear-btn" type="button">Reset</button>
+      <span id="layout-export-status" class="search-count"></span>
     </div>
   </header>
 
@@ -471,13 +500,16 @@ body {
     </section>
     <div id="panel-resizer" class="panel-resizer" role="separator" aria-orientation="vertical" aria-label="Resize study panel"></div>
     <aside class="side-panel">
-      <h2>Details</h2>
-      <div id="node-details" class="panel-card">
-        <p>Select a bubble to view details.</p>
+      <div class="side-panel-body">
+        <h2>Details</h2>
+        <div id="node-details" class="panel-card">
+          <p>Select a bubble to view details.</p>
+        </div>
       </div>
-
-      <h2>Study Paths</h2>
-      <ul id="study-paths" class="path-list"></ul>
+      <div class="side-panel-footer">
+        <h2>Study Paths</h2>
+        <ul id="study-paths" class="path-list"></ul>
+      </div>
     </aside>
   </main>
 
@@ -753,6 +785,8 @@ body {
   const focusToggleBtn = document.getElementById("focus-toggle");
   const fitBtn = document.getElementById("fit-view");
   const resetViewBtn = document.getElementById("reset-view");
+  const exportLayoutBtn = document.getElementById("export-layout");
+  const layoutExportStatusEl = document.getElementById("layout-export-status");
   const zoomHudEl = document.getElementById("zoom-hud");
   const modeHudEl = document.getElementById("mode-hud");
   const ctxMenuEl = document.getElementById("context-menu");
@@ -782,6 +816,7 @@ body {
   let ctxNodeId = null;
   let activePath = null;
   let isResizingPanel = false;
+  let exportStatusTimer = null;
 
   const width = 1200;
   const height = 700;
@@ -816,6 +851,22 @@ body {
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
+  }
+
+  function setLayoutExportStatus(message) {
+    if (!layoutExportStatusEl) return;
+    layoutExportStatusEl.textContent = message || "";
+    if (exportStatusTimer) {
+      window.clearTimeout(exportStatusTimer);
+      exportStatusTimer = null;
+    }
+    if (message) {
+      exportStatusTimer = window.setTimeout(() => {
+        if (layoutExportStatusEl.textContent === message) {
+          layoutExportStatusEl.textContent = "";
+        }
+      }, 2200);
+    }
   }
 
   function groupColor(groupName) {
@@ -957,6 +1008,58 @@ body {
     }
     document.body.removeChild(ta);
     return ok;
+  }
+
+  function buildLayoutExportPayload() {
+    const nodes = {};
+    for (const [id, node] of graphById.entries()) {
+      nodes[id] = {
+        x: Number(node.x.toFixed(2)),
+        y: Number(node.y.toFixed(2)),
+      };
+    }
+    return {
+      topicId: currentTopic && currentTopic.id ? currentTopic.id : "",
+      topicTitle: currentTopic && currentTopic.title ? currentTopic.title : "",
+      version: 1,
+      nodes,
+    };
+  }
+
+  function downloadTextFile(filename, content) {
+    try {
+      const blob = new Blob([content], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.setTimeout(() => URL.revokeObjectURL(url), 0);
+      return true;
+    } catch (_e) {
+      return false;
+    }
+  }
+
+  async function exportLayout() {
+    if (!currentTopic || graphById.size === 0) {
+      setLayoutExportStatus("Nothing to export");
+      return;
+    }
+    const payload = buildLayoutExportPayload();
+    const jsonText = `${JSON.stringify(payload, null, 2)}\n`;
+    const baseName = payload.topicId || "studybubble_topic";
+    const fileName = `${baseName}.layout.json`;
+
+    if (downloadTextFile(fileName, jsonText)) {
+      setLayoutExportStatus("Layout exported");
+      return;
+    }
+
+    const copied = await copyTextWithFallback(jsonText);
+    setLayoutExportStatus(copied ? "Layout copied" : "Export unavailable");
   }
 
   function renderExternalLinks(links) {
@@ -1398,15 +1501,17 @@ body {
       const rowGap = 122;
       for (let i = 0; i < groupNodes.length; i += 1) {
         const node = groupNodes[i];
+        const hasManualPosition = Number.isFinite(node.x) && Number.isFinite(node.y);
         const col = i % columns;
         const row = Math.floor(i / columns);
         const rowOffset = (row - 0.5) * rowGap;
         const colOffset = (col - (columns - 1) / 2) * colGap;
         positioned.push({
           ...node,
-          x: centerX + colOffset,
-          y: Math.max(minY, Math.min(maxY, visualCenterY + rowOffset)),
+          x: hasManualPosition ? Number(node.x) : centerX + colOffset,
+          y: hasManualPosition ? Number(node.y) : Math.max(minY, Math.min(maxY, visualCenterY + rowOffset)),
           r: nodeRadius(node.size),
+          layoutFixed: hasManualPosition,
         });
       }
     }
@@ -1423,14 +1528,22 @@ body {
             const push = (minDist - dist) / 2;
             const ux = dx / dist;
             const uy = dy / dist;
-            a.x -= ux * push; a.y -= uy * push;
-            b.x += ux * push; b.y += uy * push;
+            if (!a.layoutFixed && !b.layoutFixed) {
+              a.x -= ux * push; a.y -= uy * push;
+              b.x += ux * push; b.y += uy * push;
+            } else if (a.layoutFixed && !b.layoutFixed) {
+              b.x += ux * (push * 2); b.y += uy * (push * 2);
+            } else if (!a.layoutFixed && b.layoutFixed) {
+              a.x -= ux * (push * 2); a.y -= uy * (push * 2);
+            }
           }
         }
       }
       for (const n of positioned) {
-        n.x = Math.max(marginX - 20, Math.min(width - marginX + 20, n.x));
-        n.y = Math.max(minY, Math.min(maxY, n.y));
+        if (!n.layoutFixed) {
+          n.x = Math.max(marginX - 20, Math.min(width - marginX + 20, n.x));
+          n.y = Math.max(minY, Math.min(maxY, n.y));
+        }
       }
     }
     return positioned;
@@ -1789,6 +1902,7 @@ body {
   }
   if (fitBtn) fitBtn.addEventListener("click", fitView);
   if (resetViewBtn) resetViewBtn.addEventListener("click", resetViewTransform);
+  if (exportLayoutBtn) exportLayoutBtn.addEventListener("click", exportLayout);
   if (panelResizerEl && sidePanelEl) {
     panelResizerEl.addEventListener("mousedown", (event) => {
       if (event.button !== 0) return;
@@ -1815,7 +1929,7 @@ body {
   <!-- SECTION: Build Metadata -->
   <script id="studybubble-build-metadata" type="application/json">
 {
-  "generatedAtUtc": "2026-05-17T06:30:48.247911+00:00",
+  "generatedAtUtc": "2026-05-17T07:20:00.653714+00:00",
   "mode": "single-file",
   "sourceTopicPath": "topics\\case_capacity_overview.studybubble.json",
   "topicId": "case_capacity_overview",
