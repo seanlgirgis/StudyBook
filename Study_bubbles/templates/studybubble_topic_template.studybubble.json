@@ -1,0 +1,119 @@
+{
+  "id": "sample_topic",
+  "title": "Sample Study Topic",
+  "subtitle": "Starter template for StudyBubble authoring",
+  "groups": [
+    { "id": "fundamentals", "label": "Fundamentals", "color": "#4C78A8" },
+    { "id": "workflow", "label": "Workflow", "color": "#54A24B" },
+    { "id": "risk_quality", "label": "Risk and Quality", "color": "#E45756" }
+  ],
+  "nodes": [
+    {
+      "id": "core_concept",
+      "label": "Core Concept",
+      "size": "core",
+      "group": "Fundamentals",
+      "definition": "Primary concept this topic revolves around.",
+      "whyItMatters": "It anchors how related tools and decisions should be interpreted.",
+      "safeSentence": "The core concept is the stable framing model for this topic.",
+      "commonTrap": "Using tool-specific jargon before explaining the underlying concept.",
+      "interviewAnswer": "I start with the core concept, then map implementation choices to it.",
+      "relatedQuestions": [
+        "How would you explain this concept to a new teammate?",
+        "What breaks when this concept is misunderstood?"
+      ],
+      "note": {
+        "summary": "Lead with concept-first explanations before implementation details."
+      },
+      "externalLinks": [
+        {
+          "label": "Official Documentation",
+          "href": "https://example.com/docs"
+        }
+      ],
+      "childTopics": []
+    },
+    {
+      "id": "key_entity",
+      "label": "Key Entity",
+      "size": "support",
+      "group": "Fundamentals",
+      "definition": "Important object/resource the concept operates on.",
+      "whyItMatters": "Correct entity boundaries reduce confusion and rework.",
+      "safeSentence": "I define the key entity before discussing advanced workflows.",
+      "childTopics": []
+    },
+    {
+      "id": "input_data",
+      "label": "Input Data",
+      "size": "support",
+      "group": "Workflow",
+      "definition": "Required inputs to start the workflow.",
+      "whyItMatters": "Bad inputs create low-trust outputs.",
+      "safeSentence": "Reliable outcomes depend on reliable inputs.",
+      "childTopics": []
+    },
+    {
+      "id": "processing_step",
+      "label": "Processing Step",
+      "size": "support",
+      "group": "Workflow",
+      "definition": "Transformation or operation that converts input to output.",
+      "whyItMatters": "This is where most practical errors and delays appear.",
+      "safeSentence": "I make processing steps observable and repeatable.",
+      "childTopics": []
+    },
+    {
+      "id": "output_artifact",
+      "label": "Output Artifact",
+      "size": "support",
+      "group": "Workflow",
+      "definition": "Deliverable output consumed by users or downstream systems.",
+      "whyItMatters": "Clear outputs improve adoption and verification.",
+      "safeSentence": "Outputs should be testable and easy to interpret.",
+      "childTopics": []
+    },
+    {
+      "id": "quality_check",
+      "label": "Quality Check",
+      "size": "detail",
+      "group": "Risk and Quality",
+      "definition": "Validation gates that verify result correctness.",
+      "whyItMatters": "Checks prevent silent failure and false confidence.",
+      "safeSentence": "Quality checks make trust explicit.",
+      "childTopics": []
+    },
+    {
+      "id": "failure_mode",
+      "label": "Failure Mode",
+      "size": "detail",
+      "group": "Risk and Quality",
+      "definition": "Known way the workflow can fail or degrade.",
+      "whyItMatters": "Failure awareness enables faster recovery.",
+      "safeSentence": "I design mitigations around known failure modes.",
+      "childTopics": []
+    }
+  ],
+  "links": [
+    { "source": "core_concept", "target": "key_entity", "label": "defines" },
+    { "source": "key_entity", "target": "input_data", "label": "requires" },
+    { "source": "input_data", "target": "processing_step", "label": "feeds" },
+    { "source": "processing_step", "target": "output_artifact", "label": "produces" },
+    { "source": "quality_check", "target": "output_artifact", "label": "validates" },
+    { "source": "failure_mode", "target": "processing_step", "label": "threatens" }
+  ],
+  "paths": [
+    {
+      "id": "fundamentals_lane",
+      "label": "Fundamentals Lane",
+      "description": "Explain the concept, entity, and quality baseline.",
+      "nodeIds": ["core_concept", "key_entity", "quality_check"]
+    },
+    {
+      "id": "workflow_lane",
+      "label": "Workflow Lane",
+      "description": "Walk from input through processing to output with risk checks.",
+      "nodeIds": ["input_data", "processing_step", "output_artifact", "failure_mode"]
+    }
+  ]
+}
