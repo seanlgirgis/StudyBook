@@ -58,3 +58,4 @@ BOA reference behavior review, not automatic migration.
 ## Next Active Step
 - Iteration 14 (in progress): grandchild navigation spike.
 - Validate/rebuild overview/evidence/new-grandchild plus case-study siblings, then run manual browser smoke for three-level navigation flow.
+- Release-gate planning pointer: see `docs/V1_RELEASE_PLAN.md` for the three major gates to v1.0 (`v0.7`, `v0.9`, `v1.0`).

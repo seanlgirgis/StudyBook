@@ -31,7 +31,7 @@
 - Iteration 14 manual browser smoke verification.
 
 ## Next
-- Record Iteration 14 smoke result and review for commit/tag readiness.
+- Release 1 gate: StudyBubble `v0.7` - BOA Interaction Parity (see `docs/V1_RELEASE_PLAN.md`).
 
 ## Backlog
 - Package-path cleanup if still needed.

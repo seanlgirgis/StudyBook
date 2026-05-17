@@ -73,6 +73,7 @@ Status of manual smoke in this run:
 
 Next step:
 - Run/record Iteration 14 manual browser smoke for three-level navigation (overview -> evidence -> feature_table -> evidence -> overview), then review before commit/tag.
+- After Iteration 14 freeze, follow three major release gates in `docs/V1_RELEASE_PLAN.md` (start with `v0.7` BOA interaction parity).
 
 Iteration 13 repair note:
 - First visual smoke failed due to dense case-study layout/readability limits.

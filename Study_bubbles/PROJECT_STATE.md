@@ -30,4 +30,4 @@ Active acceptance remains direct-open outputs/single_file/*.html.
 - Iteration 13 Manual Smoke Status: PASS (`case_capacity_overview`/`evidence`/`forecast`/`decision` direct-open screens; readable non-overlapping bubbles; clear size contrast; visible links; left/center/right flow; parent/child buttons and double-click shortcut PASS; search/filters/sidebar/reset PASS; console clean).
 - Iteration 14 Navigation Status: Grandchild topic wired (`overview -> evidence -> feature_table -> evidence -> overview`) with topic-declared parent/back links; manual browser smoke pending.
 - Multi-file Note: local HTTP server applies only to deprecated multi-file fetch testing and is not part of active acceptance.
-- Next Intended Step: run Iteration 14 manual browser smoke and record PASS/FAIL before any commit/tag.
+- Next Intended Step: execute release-gate work per `docs/V1_RELEASE_PLAN.md` (starting with StudyBubble `v0.7` BOA interaction parity).
