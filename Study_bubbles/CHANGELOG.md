@@ -197,4 +197,57 @@
   - double-click child open for exactly one child topic
   - double-click fallback to parent topic when no single child target exists
 - Preserved existing viewer behaviors: search, group filters, sidebar details, reset, and study paths.
+## 2026-05-16 - Iteration 13 Case Study Depth Demo
+- Added four linked case-study topic files under `topics/`:
+  - `case_capacity_overview.studybubble.json`
+  - `case_capacity_evidence.studybubble.json`
+  - `case_capacity_forecast.studybubble.json`
+  - `case_capacity_decision.studybubble.json`
+- Theme: "How raw telemetry becomes a capacity decision."
+- Overview screen acts as hub with child topic navigation:
+  - Evidence and Features
+  - Forecast and Risk
+  - Decision and Governance
+- Child screens include `parentTopic` back navigation to the case overview screen.
+- Added practical, interview-safe enterprise capacity language with definition, why-it-matters, and safe sentence fields on each concept node.
+- Added relationship links and study paths on each case-study screen.
+## 2026-05-16 - Iteration 13 Visual Repair (Usability Fix)
+- Recorded first visual smoke failure for Iteration 13 case-study screens:
+  - dense horizontal crowding
+  - node overlap
+  - clipped/unreadable labels
+  - weak link readability
+- Root cause: legacy single-row layout strategy in viewer did not scale to 10-14 node case-study screens.
+- Repair implemented:
+  - deterministic group-based placement across canvas regions
+  - collision relaxation with minimum spacing by radius
+  - larger canvas/viewBox and increased map height
+  - clearer core/support/detail radius differences
+  - wrapped multi-line bubble labels for long terms
+  - improved link contrast/visibility
+- Content tuning for usability:
+  - reduced densest case-study screens to 12 nodes where needed
+  - rebalanced core/support/detail assignments.
+## 2026-05-16 - Iteration 13 Visual Polish (Vertical Centering)
+- Adjusted deterministic layout y-centering in `viewer/bubble_viewer.js` so case-study bubbles sit closer to the visual middle of the map panel.
+- Reduced row spacing slightly while preserving collision relaxation and no-overlap safeguards.
+- Kept all existing interaction behavior unchanged (navigation buttons, double-click shortcut, search, filters, sidebar, reset, and study paths).
+## 2026-05-16 - Iteration 13 Manual Browser Smoke (PASS)
+- Recorded PASS for direct-open single-file case-study screens:
+  - `case_capacity_overview.html`
+  - `case_capacity_evidence.html`
+  - `case_capacity_forecast.html`
+  - `case_capacity_decision.html`
+- Confirmed visual usability:
+  - readable bubbles with no one-row crowding
+  - readable labels
+  - visible core/support/detail size contrast
+  - visible enough links to understand relationships
+  - clear left/center/right flow
+- Confirmed behavior integrity:
+  - parent/back button works
+  - child navigation buttons work
+  - double-click shortcut works
+  - search, filters, sidebar, and reset work
+  - browser console clean
 

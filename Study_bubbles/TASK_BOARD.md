@@ -20,12 +20,17 @@
 - Direction amendment: StudyBubble single-file-only active development (multi-file deprecated from acceptance).
 - Manual single-file browser smoke: PASS (`python_overview.html` <-> `pandas.html` roundtrip, console clean, search/filters/sidebar/reset verified).
 - Iteration 12: visible parent/back and child-topic navigation buttons (implementation).
+- Iteration 12: visible navigation UI browser smoke PASS (child/parent buttons and double-click shortcut confirmed).
+- Iteration 13: case-study depth demo content expansion (4 linked screens).
+- Iteration 13 visual repair: improved sizing, spacing, label readability, and link visibility for dense case-study screens.
+- Iteration 13 visual polish: improved vertical centering so case-study maps use canvas middle more effectively.
+- Iteration 13 manual browser smoke: PASS across all 4 case-study screens and navigation/interaction checks.
 
 ## In Progress
-- Iteration 12 validation and manual browser smoke confirmation.
+- None.
 
 ## Next
-- Finalize Iteration 12 manual smoke verification and record result.
+- Review Iteration 13 changes and proceed to commit/tag when requested.
 
 ## Backlog
 - Package-path cleanup if still needed.

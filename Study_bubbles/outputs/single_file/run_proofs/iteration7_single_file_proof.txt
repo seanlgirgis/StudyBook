@@ -1,14 +1,14 @@
-timestamp: 2026-05-16T23:53:23.917517+00:00
-source topic path: topics\python_overview.studybubble.json
-output HTML path: outputs\single_file\python_overview.html
+timestamp: 2026-05-17T00:17:41.241602+00:00
+source topic path: topics\case_capacity_decision.studybubble.json
+output HTML path: outputs\single_file\case_capacity_decision.html
 mode: single-file
-topic id: python_overview
-topic title: Python Overview
-node count: 3
-link count: 3
+topic id: case_capacity_decision
+topic title: Decision and Governance
+node count: 12
+link count: 13
 path count: 1
 validation result: PASS
-generated HTML byte size: 25749
+generated HTML byte size: 33979
 manual smoke test steps:
 1. Open outputs/single_file/tiny_capacity_demo.html directly from File Explorer.
 2. Confirm title and subtitle render.

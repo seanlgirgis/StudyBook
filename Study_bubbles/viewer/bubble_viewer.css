@@ -129,7 +129,7 @@ body {
 #map-svg {
   width: 100%;
   height: 100%;
-  min-height: 420px;
+  min-height: 560px;
   background: radial-gradient(circle at top, #1f2937, #111827 70%);
   border-radius: 10px;
 }
@@ -177,8 +177,9 @@ body {
 }
 
 .link-line {
-  stroke: #6b7280;
-  stroke-width: 3;
+  stroke: #93a3bf;
+  stroke-width: 2.4;
+  opacity: 0.85;
 }
 
 .bubble-node {
@@ -200,7 +201,7 @@ body {
 
 .bubble-label {
   fill: #f9fafb;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   text-anchor: middle;
   dominant-baseline: middle;

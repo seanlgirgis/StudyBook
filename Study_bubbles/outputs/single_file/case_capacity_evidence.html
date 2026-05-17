@@ -1,3 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- SECTION: Metadata -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evidence and Features</title>
+
+  <!-- SECTION: Styles -->
+  <style>
+:root {
+  color-scheme: dark;
+  --bg: #111827;
+  --panel: #1f2937;
+  --panel-2: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --line: #374151;
+  --accent: #60a5fa;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #0b1220;
+}
+
+.header-top h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.header-top p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.topic-parent-nav {
+  margin-top: 10px;
+}
+
+.toolbar {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#search-input {
+  min-width: 250px;
+  flex: 1 1 320px;
+  background: #111827;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+#search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.search-count {
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 64px;
+}
+
+.group-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-btn,
+.clear-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-topic-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-topic-btn:hover {
+  border-color: var(--accent);
+}
+
+.parent-topic-btn {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: var(--accent);
+  color: #dbeafe;
+}
+
+.filter-btn.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.clear-btn:hover,
+.filter-btn:hover {
+  border-color: var(--accent);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  min-height: calc(100vh - 130px);
+}
+
+.map-area {
+  border-right: 1px solid var(--line);
+  padding: 10px;
+}
+
+#map-svg {
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  background: radial-gradient(circle at top, #1f2937, #111827 70%);
+  border-radius: 10px;
+}
+
+.side-panel {
+  padding: 16px;
+  background: var(--panel);
+}
+
+.side-panel h2 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.panel-card {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 18px;
+}
+
+.panel-card p {
+  margin: 0 0 10px;
+  line-height: 1.35;
+}
+
+.nav-section {
+  margin: 10px 0;
+}
+
+.nav-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.path-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.path-list li {
+  margin-bottom: 8px;
+}
+
+.link-line {
+  stroke: #93a3bf;
+  stroke-width: 2.4;
+  opacity: 0.85;
+}
+
+.bubble-node {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.bubble-circle {
+  fill: #2563eb;
+  stroke: #dbeafe;
+  stroke-width: 2;
+}
+
+.bubble-node.is-active .bubble-circle {
+  fill: #1d4ed8;
+  stroke: #f8fafc;
+  stroke-width: 3;
+}
+
+.bubble-label {
+  fill: #f9fafb;
+  font-size: 14px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .map-area {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .toolbar {
+    align-items: stretch;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- SECTION: App Shell -->
+  <header class="app-header">
+    <div class="header-top">
+      <h1 id="topic-title">Loading topic...</h1>
+      <p id="topic-subtitle"></p>
+    </div>
+    <div class="toolbar">
+      <input id="search-input" type="text" placeholder="Search label, definition, safe sentence..." autocomplete="off" />
+      <span id="search-count" class="search-count"></span>
+      <div id="group-filters" class="group-filters"></div>
+      <button id="clear-filters" class="clear-btn" type="button">Reset</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="map-area">
+      <svg id="map-svg" viewBox="0 0 1000 520" role="img" aria-label="Study bubble map"></svg>
+    </section>
+
+    <aside class="side-panel">
+      <h2>Details</h2>
+      <div id="node-details" class="panel-card">
+        <p>Select a bubble to view details.</p>
+      </div>
+
+      <h2>Study Paths</h2>
+      <ul id="study-paths" class="path-list"></ul>
+    </aside>
+  </main>
+
+  <!-- SECTION: Embedded Topic Data -->
+  <script id="studybubble-topic-data" type="application/json">
+{
+  "id": "case_capacity_evidence",
+  "title": "Evidence and Features",
+  "subtitle": "How raw telemetry is transformed into forecasting-ready evidence",
+  "parentTopic": {
+    "label": "Back to Case Overview",
+    "topic": "case_capacity_overview.studybubble.json"
+  },
+  "groups": [
+    {
+      "id": "raw",
+      "label": "Raw Inputs",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "prep",
+      "label": "Preparation",
+      "color": "#54A24B"
+    },
+    {
+      "id": "features",
+      "label": "Feature Signals",
+      "color": "#F58518"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "raw_cpu",
+      "label": "Raw CPU",
+      "size": "support",
+      "group": "Raw Inputs",
+      "definition": "Unprocessed CPU utilization samples collected from monitored systems.",
+      "whyItMatters": "CPU behavior often reflects near-term saturation patterns.",
+      "safeSentence": "Raw CPU is a primary signal for understanding workload stress.",
+      "childTopics": []
+    },
+    {
+      "id": "raw_memory",
+      "label": "Raw Memory",
+      "size": "support",
+      "group": "Raw Inputs",
+      "definition": "Unprocessed memory usage samples collected from hosts and services.",
+      "whyItMatters": "Memory pressure can create performance instability before CPU breaches.",
+      "safeSentence": "Raw memory helps identify sustained pressure patterns.",
+      "childTopics": []
+    },
+    {
+      "id": "timestamp_norm",
+      "label": "Timestamp Normalization",
+      "size": "support",
+      "group": "Preparation",
+      "definition": "Converting event times to a consistent timezone and interval standard.",
+      "whyItMatters": "Misaligned timestamps corrupt trend interpretation.",
+      "safeSentence": "Normalized timestamps make telemetry comparable across sources.",
+      "childTopics": []
+    },
+    {
+      "id": "hourly_buckets",
+      "label": "Hourly Buckets",
+      "size": "detail",
+      "group": "Preparation",
+      "definition": "Aggregating raw observations into hour-level summaries.",
+      "whyItMatters": "Hourly buckets reduce noise while preserving operational rhythm.",
+      "safeSentence": "Hourly aggregation helps reveal meaningful short-term patterns.",
+      "childTopics": []
+    },
+    {
+      "id": "daily_buckets",
+      "label": "Daily Buckets",
+      "size": "detail",
+      "group": "Preparation",
+      "definition": "Summarizing usage into daily trend points for medium-horizon review.",
+      "whyItMatters": "Daily views improve interpretation of growth and seasonality.",
+      "safeSentence": "Daily buckets support planning conversations and trend comparison.",
+      "childTopics": []
+    },
+    {
+      "id": "group_app",
+      "label": "Group by Application",
+      "size": "support",
+      "group": "Preparation",
+      "definition": "Organizing telemetry by application identity before feature extraction.",
+      "whyItMatters": "Application-level grouping keeps accountability and context intact.",
+      "safeSentence": "Grouping by application aligns evidence with service ownership.",
+      "childTopics": []
+    },
+    {
+      "id": "rolling_avg",
+      "label": "Rolling Average",
+      "size": "support",
+      "group": "Feature Signals",
+      "definition": "A smoothed trend signal computed over a moving time window.",
+      "whyItMatters": "Rolling averages show direction without overreacting to spikes.",
+      "safeSentence": "Rolling average gives a stable signal for expected usage direction.",
+      "childTopics": []
+    },
+    {
+      "id": "rolling_peak",
+      "label": "Rolling Peak",
+      "size": "support",
+      "group": "Feature Signals",
+      "definition": "The moving maximum over a recent interval to track stress ceilings.",
+      "whyItMatters": "Peak behavior can trigger risk even when averages look stable.",
+      "safeSentence": "Rolling peak captures worst-case pressure over recent history.",
+      "childTopics": []
+    },
+    {
+      "id": "p95",
+      "label": "P95",
+      "size": "support",
+      "group": "Feature Signals",
+      "definition": "The 95th percentile usage level used as a robust upper-range indicator.",
+      "whyItMatters": "P95 balances outlier resilience with practical risk sensitivity.",
+      "safeSentence": "P95 is a practical high-usage signal for operational planning.",
+      "childTopics": []
+    },
+    {
+      "id": "growth_slope",
+      "label": "Growth Slope",
+      "size": "core",
+      "group": "Feature Signals",
+      "definition": "Estimated rate of usage increase over time from cleaned trend data.",
+      "whyItMatters": "Growth rate determines how quickly headroom may be consumed.",
+      "safeSentence": "Growth slope helps estimate when capacity pressure may escalate.",
+      "childTopics": []
+    },
+    {
+      "id": "dq_check",
+      "label": "Data Quality Check",
+      "size": "core",
+      "group": "Preparation",
+      "definition": "Validation of completeness, consistency, and plausibility of telemetry.",
+      "whyItMatters": "Poor data quality undermines confidence in any forecast output.",
+      "safeSentence": "Quality checks ensure forecasting is based on trustworthy evidence.",
+      "childTopics": []
+    },
+    {
+      "id": "feature_table",
+      "label": "Feature Table",
+      "size": "core",
+      "group": "Feature Signals",
+      "definition": "A structured dataset containing cleaned trend and risk features by interval.",
+      "whyItMatters": "The feature table is the handoff artifact for forecast and risk evaluation.",
+      "safeSentence": "Feature tables package evidence into reusable decision-support inputs.",
+      "childTopics": []
+    }
+  ],
+  "links": [
+    {
+      "source": "raw_cpu",
+      "target": "timestamp_norm",
+      "label": "time-aligned"
+    },
+    {
+      "source": "raw_memory",
+      "target": "timestamp_norm",
+      "label": "time-aligned"
+    },
+    {
+      "source": "timestamp_norm",
+      "target": "hourly_buckets",
+      "label": "bucketed hourly"
+    },
+    {
+      "source": "hourly_buckets",
+      "target": "daily_buckets",
+      "label": "rolled daily"
+    },
+    {
+      "source": "hourly_buckets",
+      "target": "group_app",
+      "label": "segmented by app"
+    },
+    {
+      "source": "group_app",
+      "target": "rolling_avg",
+      "label": "trend signal"
+    },
+    {
+      "source": "group_app",
+      "target": "rolling_peak",
+      "label": "stress signal"
+    },
+    {
+      "source": "group_app",
+      "target": "p95",
+      "label": "upper-range signal"
+    },
+    {
+      "source": "daily_buckets",
+      "target": "growth_slope",
+      "label": "rate estimate"
+    },
+    {
+      "source": "timestamp_norm",
+      "target": "dq_check",
+      "label": "validated"
+    },
+    {
+      "source": "rolling_avg",
+      "target": "feature_table",
+      "label": "feature output"
+    },
+    {
+      "source": "rolling_peak",
+      "target": "feature_table",
+      "label": "feature output"
+    },
+    {
+      "source": "p95",
+      "target": "feature_table",
+      "label": "feature output"
+    },
+    {
+      "source": "growth_slope",
+      "target": "feature_table",
+      "label": "feature output"
+    }
+  ],
+  "paths": [
+    {
+      "id": "evidence_to_features_path",
+      "label": "Raw Signals to Feature Table",
+      "description": "Transform raw CPU/memory telemetry into validated forecasting features.",
+      "nodeIds": [
+        "raw_cpu",
+        "raw_memory",
+        "timestamp_norm",
+        "hourly_buckets",
+        "group_app",
+        "rolling_avg",
+        "p95",
+        "growth_slope",
+        "feature_table"
+      ],
+      "rehearsalPrompt": "Explain how telemetry preparation produces a reliable feature table."
+    }
+  ]
+}
+  </script>
+
+  <!-- SECTION: JavaScript -->
+  <script>
 (async function initViewer() {
   const titleEl = document.getElementById("topic-title");
   const subtitleEl = document.getElementById("topic-subtitle");
@@ -554,3 +1067,21 @@
     detailsEl.innerHTML = `<p>Could not load <code>topic.studybubble.json</code>.</p>`;
   }
 })();
+
+  </script>
+
+  <!-- SECTION: Build Metadata -->
+  <script id="studybubble-build-metadata" type="application/json">
+{
+  "generatedAtUtc": "2026-05-17T00:17:36.181968+00:00",
+  "mode": "single-file",
+  "sourceTopicPath": "topics\\case_capacity_evidence.studybubble.json",
+  "topicId": "case_capacity_evidence",
+  "title": "Evidence and Features",
+  "nodeCount": 12,
+  "linkCount": 14,
+  "pathCount": 1
+}
+  </script>
+</body>
+</html>

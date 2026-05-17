@@ -1,0 +1,171 @@
+{
+  "id": "case_capacity_decision",
+  "title": "Decision and Governance",
+  "subtitle": "How forecast evidence becomes governed execution",
+  "parentTopic": {
+    "label": "Back to Case Overview",
+    "topic": "case_capacity_overview.studybubble.json"
+  },
+  "groups": [
+    { "id": "communication", "label": "Communication", "color": "#4C78A8" },
+    { "id": "ownership", "label": "Ownership", "color": "#54A24B" },
+    { "id": "execution", "label": "Execution and Audit", "color": "#F58518" }
+  ],
+  "nodes": [
+    {
+      "id": "executive_summary",
+      "label": "Executive Summary",
+      "size": "core",
+      "group": "Communication",
+      "definition": "A concise decision brief covering risk, impact, options, and recommendation.",
+      "whyItMatters": "Leaders need clarity before approving capacity action.",
+      "safeSentence": "The executive summary translates technical signals into business-ready decisions.",
+      "childTopics": []
+    },
+    {
+      "id": "dashboard_view",
+      "label": "Dashboard View",
+      "size": "core",
+      "group": "Communication",
+      "definition": "Visual evidence bundle showing trend, forecast, risk, and timeline.",
+      "whyItMatters": "Shared visuals reduce disagreement about current state.",
+      "safeSentence": "Dashboard views align stakeholders on a single operational picture.",
+      "childTopics": []
+    },
+    {
+      "id": "app_owner",
+      "label": "Application Owner",
+      "size": "support",
+      "group": "Ownership",
+      "definition": "The leader accountable for service behavior and business impact.",
+      "whyItMatters": "Application ownership anchors operational prioritization.",
+      "safeSentence": "Application owner input ensures service impact is represented in the decision.",
+      "childTopics": []
+    },
+    {
+      "id": "infra_owner",
+      "label": "Infrastructure Owner",
+      "size": "support",
+      "group": "Ownership",
+      "definition": "The leader accountable for platform capacity and implementation feasibility.",
+      "whyItMatters": "Infrastructure ownership ties options to delivery reality.",
+      "safeSentence": "Infrastructure owners validate whether scaling actions are practical and timely.",
+      "childTopics": []
+    },
+    {
+      "id": "architecture_review",
+      "label": "Architecture Review",
+      "size": "support",
+      "group": "Ownership",
+      "definition": "A design checkpoint for non-trivial or high-impact remediation options.",
+      "whyItMatters": "Review reduces unintended side effects from quick fixes.",
+      "safeSentence": "Architecture review confirms capacity actions fit broader system constraints.",
+      "childTopics": []
+    },
+    {
+      "id": "servicenow_ticket",
+      "label": "ServiceNow Ticket",
+      "size": "core",
+      "group": "Execution and Audit",
+      "definition": "Formal work item used to track approval, execution, and closure evidence.",
+      "whyItMatters": "Ticketing provides governance traceability and accountability.",
+      "safeSentence": "The ticket is the system of record for capacity action execution.",
+      "childTopics": []
+    },
+    {
+      "id": "runbook",
+      "label": "Runbook",
+      "size": "support",
+      "group": "Execution and Audit",
+      "definition": "Operational execution guide with steps, checks, rollback, and owner actions.",
+      "whyItMatters": "Runbooks standardize implementation and reduce change risk.",
+      "safeSentence": "Runbooks make the change process repeatable and safer.",
+      "childTopics": []
+    },
+    {
+      "id": "scaling_option",
+      "label": "Scaling Option",
+      "size": "support",
+      "group": "Execution and Audit",
+      "definition": "An action path that increases available capacity to reduce projected risk.",
+      "whyItMatters": "Scaling is a direct option when demand growth is sustained.",
+      "safeSentence": "Scaling can address near-term risk when evidence supports demand growth.",
+      "childTopics": []
+    },
+    {
+      "id": "rightsize_option",
+      "label": "Right-size Option",
+      "size": "support",
+      "group": "Execution and Audit",
+      "definition": "An action path that optimizes allocated resources to align with realistic demand.",
+      "whyItMatters": "Right-sizing avoids unnecessary spend while preserving reliability.",
+      "safeSentence": "Right-sizing balances cost control and service stability.",
+      "childTopics": []
+    },
+    {
+      "id": "audit_evidence",
+      "label": "Audit Evidence",
+      "size": "detail",
+      "group": "Execution and Audit",
+      "definition": "Documented proof of decision rationale, approvals, and implementation results.",
+      "whyItMatters": "Audit evidence supports governance, compliance, and post-review learning.",
+      "safeSentence": "Audit evidence shows that decisions were justified and controlled.",
+      "childTopics": []
+    },
+    {
+      "id": "closure_proof",
+      "label": "Closure Proof",
+      "size": "core",
+      "group": "Execution and Audit",
+      "definition": "Verification that the implemented action resolved the targeted capacity risk.",
+      "whyItMatters": "Closure confirms value delivery and prevents unresolved residual risk.",
+      "safeSentence": "Closure proof verifies the chosen action achieved the intended outcome.",
+      "childTopics": []
+    },
+    {
+      "id": "lessons_learned",
+      "label": "Lessons Learned",
+      "size": "support",
+      "group": "Execution and Audit",
+      "definition": "Captured insights to improve future forecasting, governance, and execution playbooks.",
+      "whyItMatters": "Learning loops compound quality across future capacity cycles.",
+      "safeSentence": "Lessons learned help future decisions become faster and more reliable.",
+      "childTopics": []
+    }
+  ],
+  "links": [
+    { "source": "executive_summary", "target": "dashboard_view", "label": "supported by evidence" },
+    { "source": "dashboard_view", "target": "app_owner", "label": "reviewed by app lead" },
+    { "source": "dashboard_view", "target": "infra_owner", "label": "reviewed by infra lead" },
+    { "source": "app_owner", "target": "architecture_review", "label": "requests design validation" },
+    { "source": "infra_owner", "target": "architecture_review", "label": "confirms feasibility" },
+    { "source": "architecture_review", "target": "scaling_option", "label": "approved option" },
+    { "source": "architecture_review", "target": "rightsize_option", "label": "approved option" },
+    { "source": "scaling_option", "target": "servicenow_ticket", "label": "tracked work item" },
+    { "source": "rightsize_option", "target": "servicenow_ticket", "label": "tracked work item" },
+    { "source": "servicenow_ticket", "target": "runbook", "label": "execution guide" },
+    { "source": "runbook", "target": "audit_evidence", "label": "records execution result" },
+    { "source": "audit_evidence", "target": "closure_proof", "label": "verifies outcome" },
+    { "source": "closure_proof", "target": "lessons_learned", "label": "feeds improvement" }
+  ],
+  "paths": [
+    {
+      "id": "decision_to_closure_path",
+      "label": "Decision to Closure",
+      "description": "Turn forecast evidence into approved action, controlled execution, and verified closure.",
+      "nodeIds": [
+        "executive_summary",
+        "dashboard_view",
+        "app_owner",
+        "infra_owner",
+        "architecture_review",
+        "servicenow_ticket",
+        "runbook",
+        "audit_evidence",
+        "closure_proof",
+        "lessons_learned"
+      ],
+      "rehearsalPrompt": "Explain how capacity risk decisions are governed through execution and closure."
+    }
+  ]
+}

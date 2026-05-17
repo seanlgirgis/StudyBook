@@ -1,3 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- SECTION: Metadata -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Decision and Governance</title>
+
+  <!-- SECTION: Styles -->
+  <style>
+:root {
+  color-scheme: dark;
+  --bg: #111827;
+  --panel: #1f2937;
+  --panel-2: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --line: #374151;
+  --accent: #60a5fa;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #0b1220;
+}
+
+.header-top h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.header-top p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.topic-parent-nav {
+  margin-top: 10px;
+}
+
+.toolbar {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#search-input {
+  min-width: 250px;
+  flex: 1 1 320px;
+  background: #111827;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+#search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.search-count {
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 64px;
+}
+
+.group-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-btn,
+.clear-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-topic-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-topic-btn:hover {
+  border-color: var(--accent);
+}
+
+.parent-topic-btn {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: var(--accent);
+  color: #dbeafe;
+}
+
+.filter-btn.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.clear-btn:hover,
+.filter-btn:hover {
+  border-color: var(--accent);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  min-height: calc(100vh - 130px);
+}
+
+.map-area {
+  border-right: 1px solid var(--line);
+  padding: 10px;
+}
+
+#map-svg {
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  background: radial-gradient(circle at top, #1f2937, #111827 70%);
+  border-radius: 10px;
+}
+
+.side-panel {
+  padding: 16px;
+  background: var(--panel);
+}
+
+.side-panel h2 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.panel-card {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 18px;
+}
+
+.panel-card p {
+  margin: 0 0 10px;
+  line-height: 1.35;
+}
+
+.nav-section {
+  margin: 10px 0;
+}
+
+.nav-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.path-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.path-list li {
+  margin-bottom: 8px;
+}
+
+.link-line {
+  stroke: #93a3bf;
+  stroke-width: 2.4;
+  opacity: 0.85;
+}
+
+.bubble-node {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.bubble-circle {
+  fill: #2563eb;
+  stroke: #dbeafe;
+  stroke-width: 2;
+}
+
+.bubble-node.is-active .bubble-circle {
+  fill: #1d4ed8;
+  stroke: #f8fafc;
+  stroke-width: 3;
+}
+
+.bubble-label {
+  fill: #f9fafb;
+  font-size: 14px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .map-area {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .toolbar {
+    align-items: stretch;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- SECTION: App Shell -->
+  <header class="app-header">
+    <div class="header-top">
+      <h1 id="topic-title">Loading topic...</h1>
+      <p id="topic-subtitle"></p>
+    </div>
+    <div class="toolbar">
+      <input id="search-input" type="text" placeholder="Search label, definition, safe sentence..." autocomplete="off" />
+      <span id="search-count" class="search-count"></span>
+      <div id="group-filters" class="group-filters"></div>
+      <button id="clear-filters" class="clear-btn" type="button">Reset</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="map-area">
+      <svg id="map-svg" viewBox="0 0 1000 520" role="img" aria-label="Study bubble map"></svg>
+    </section>
+
+    <aside class="side-panel">
+      <h2>Details</h2>
+      <div id="node-details" class="panel-card">
+        <p>Select a bubble to view details.</p>
+      </div>
+
+      <h2>Study Paths</h2>
+      <ul id="study-paths" class="path-list"></ul>
+    </aside>
+  </main>
+
+  <!-- SECTION: Embedded Topic Data -->
+  <script id="studybubble-topic-data" type="application/json">
+{
+  "id": "case_capacity_decision",
+  "title": "Decision and Governance",
+  "subtitle": "How forecast evidence becomes governed execution",
+  "parentTopic": {
+    "label": "Back to Case Overview",
+    "topic": "case_capacity_overview.studybubble.json"
+  },
+  "groups": [
+    {
+      "id": "communication",
+      "label": "Communication",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "ownership",
+      "label": "Ownership",
+      "color": "#54A24B"
+    },
+    {
+      "id": "execution",
+      "label": "Execution and Audit",
+      "color": "#F58518"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "executive_summary",
+      "label": "Executive Summary",
+      "size": "core",
+      "group": "Communication",
+      "definition": "A concise decision brief covering risk, impact, options, and recommendation.",
+      "whyItMatters": "Leaders need clarity before approving capacity action.",
+      "safeSentence": "The executive summary translates technical signals into business-ready decisions.",
+      "childTopics": []
+    },
+    {
+      "id": "dashboard_view",
+      "label": "Dashboard View",
+      "size": "core",
+      "group": "Communication",
+      "definition": "Visual evidence bundle showing trend, forecast, risk, and timeline.",
+      "whyItMatters": "Shared visuals reduce disagreement about current state.",
+      "safeSentence": "Dashboard views align stakeholders on a single operational picture.",
+      "childTopics": []
+    },
+    {
+      "id": "app_owner",
+      "label": "Application Owner",
+      "size": "support",
+      "group": "Ownership",
+      "definition": "The leader accountable for service behavior and business impact.",
+      "whyItMatters": "Application ownership anchors operational prioritization.",
+      "safeSentence": "Application owner input ensures service impact is represented in the decision.",
+      "childTopics": []
+    },
+    {
+      "id": "infra_owner",
+      "label": "Infrastructure Owner",
+      "size": "support",
+      "group": "Ownership",
+      "definition": "The leader accountable for platform capacity and implementation feasibility.",
+      "whyItMatters": "Infrastructure ownership ties options to delivery reality.",
+      "safeSentence": "Infrastructure owners validate whether scaling actions are practical and timely.",
+      "childTopics": []
+    },
+    {
+      "id": "architecture_review",
+      "label": "Architecture Review",
+      "size": "support",
+      "group": "Ownership",
+      "definition": "A design checkpoint for non-trivial or high-impact remediation options.",
+      "whyItMatters": "Review reduces unintended side effects from quick fixes.",
+      "safeSentence": "Architecture review confirms capacity actions fit broader system constraints.",
+      "childTopics": []
+    },
+    {
+      "id": "servicenow_ticket",
+      "label": "ServiceNow Ticket",
+      "size": "core",
+      "group": "Execution and Audit",
+      "definition": "Formal work item used to track approval, execution, and closure evidence.",
+      "whyItMatters": "Ticketing provides governance traceability and accountability.",
+      "safeSentence": "The ticket is the system of record for capacity action execution.",
+      "childTopics": []
+    },
+    {
+      "id": "runbook",
+      "label": "Runbook",
+      "size": "support",
+      "group": "Execution and Audit",
+      "definition": "Operational execution guide with steps, checks, rollback, and owner actions.",
+      "whyItMatters": "Runbooks standardize implementation and reduce change risk.",
+      "safeSentence": "Runbooks make the change process repeatable and safer.",
+      "childTopics": []
+    },
+    {
+      "id": "scaling_option",
+      "label": "Scaling Option",
+      "size": "support",
+      "group": "Execution and Audit",
+      "definition": "An action path that increases available capacity to reduce projected risk.",
+      "whyItMatters": "Scaling is a direct option when demand growth is sustained.",
+      "safeSentence": "Scaling can address near-term risk when evidence supports demand growth.",
+      "childTopics": []
+    },
+    {
+      "id": "rightsize_option",
+      "label": "Right-size Option",
+      "size": "support",
+      "group": "Execution and Audit",
+      "definition": "An action path that optimizes allocated resources to align with realistic demand.",
+      "whyItMatters": "Right-sizing avoids unnecessary spend while preserving reliability.",
+      "safeSentence": "Right-sizing balances cost control and service stability.",
+      "childTopics": []
+    },
+    {
+      "id": "audit_evidence",
+      "label": "Audit Evidence",
+      "size": "detail",
+      "group": "Execution and Audit",
+      "definition": "Documented proof of decision rationale, approvals, and implementation results.",
+      "whyItMatters": "Audit evidence supports governance, compliance, and post-review learning.",
+      "safeSentence": "Audit evidence shows that decisions were justified and controlled.",
+      "childTopics": []
+    },
+    {
+      "id": "closure_proof",
+      "label": "Closure Proof",
+      "size": "core",
+      "group": "Execution and Audit",
+      "definition": "Verification that the implemented action resolved the targeted capacity risk.",
+      "whyItMatters": "Closure confirms value delivery and prevents unresolved residual risk.",
+      "safeSentence": "Closure proof verifies the chosen action achieved the intended outcome.",
+      "childTopics": []
+    },
+    {
+      "id": "lessons_learned",
+      "label": "Lessons Learned",
+      "size": "support",
+      "group": "Execution and Audit",
+      "definition": "Captured insights to improve future forecasting, governance, and execution playbooks.",
+      "whyItMatters": "Learning loops compound quality across future capacity cycles.",
+      "safeSentence": "Lessons learned help future decisions become faster and more reliable.",
+      "childTopics": []
+    }
+  ],
+  "links": [
+    {
+      "source": "executive_summary",
+      "target": "dashboard_view",
+      "label": "supported by evidence"
+    },
+    {
+      "source": "dashboard_view",
+      "target": "app_owner",
+      "label": "reviewed by app lead"
+    },
+    {
+      "source": "dashboard_view",
+      "target": "infra_owner",
+      "label": "reviewed by infra lead"
+    },
+    {
+      "source": "app_owner",
+      "target": "architecture_review",
+      "label": "requests design validation"
+    },
+    {
+      "source": "infra_owner",
+      "target": "architecture_review",
+      "label": "confirms feasibility"
+    },
+    {
+      "source": "architecture_review",
+      "target": "scaling_option",
+      "label": "approved option"
+    },
+    {
+      "source": "architecture_review",
+      "target": "rightsize_option",
+      "label": "approved option"
+    },
+    {
+      "source": "scaling_option",
+      "target": "servicenow_ticket",
+      "label": "tracked work item"
+    },
+    {
+      "source": "rightsize_option",
+      "target": "servicenow_ticket",
+      "label": "tracked work item"
+    },
+    {
+      "source": "servicenow_ticket",
+      "target": "runbook",
+      "label": "execution guide"
+    },
+    {
+      "source": "runbook",
+      "target": "audit_evidence",
+      "label": "records execution result"
+    },
+    {
+      "source": "audit_evidence",
+      "target": "closure_proof",
+      "label": "verifies outcome"
+    },
+    {
+      "source": "closure_proof",
+      "target": "lessons_learned",
+      "label": "feeds improvement"
+    }
+  ],
+  "paths": [
+    {
+      "id": "decision_to_closure_path",
+      "label": "Decision to Closure",
+      "description": "Turn forecast evidence into approved action, controlled execution, and verified closure.",
+      "nodeIds": [
+        "executive_summary",
+        "dashboard_view",
+        "app_owner",
+        "infra_owner",
+        "architecture_review",
+        "servicenow_ticket",
+        "runbook",
+        "audit_evidence",
+        "closure_proof",
+        "lessons_learned"
+      ],
+      "rehearsalPrompt": "Explain how capacity risk decisions are governed through execution and closure."
+    }
+  ]
+}
+  </script>
+
+  <!-- SECTION: JavaScript -->
+  <script>
 (async function initViewer() {
   const titleEl = document.getElementById("topic-title");
   const subtitleEl = document.getElementById("topic-subtitle");
@@ -554,3 +1063,21 @@
     detailsEl.innerHTML = `<p>Could not load <code>topic.studybubble.json</code>.</p>`;
   }
 })();
+
+  </script>
+
+  <!-- SECTION: Build Metadata -->
+  <script id="studybubble-build-metadata" type="application/json">
+{
+  "generatedAtUtc": "2026-05-17T00:17:41.241007+00:00",
+  "mode": "single-file",
+  "sourceTopicPath": "topics\\case_capacity_decision.studybubble.json",
+  "topicId": "case_capacity_decision",
+  "title": "Decision and Governance",
+  "nodeCount": 12,
+  "linkCount": 13,
+  "pathCount": 1
+}
+  </script>
+</body>
+</html>

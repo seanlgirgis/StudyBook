@@ -28,6 +28,10 @@ Builder/output tests:
 - Primary acceptance smoke pages:
   - `outputs/single_file/python_overview.html`
   - `outputs/single_file/pandas.html`
+  - `outputs/single_file/case_capacity_overview.html`
+  - `outputs/single_file/case_capacity_evidence.html`
+  - `outputs/single_file/case_capacity_forecast.html`
+  - `outputs/single_file/case_capacity_decision.html`
 - Single-file run mode: open pages directly from File Explorer (`file://`) with no `fetch()` requirement because topic data is embedded.
 - Parent/child single-file navigation expectation: sibling `.html` topic files must exist under `outputs/single_file`.
 - Visible navigation UI checks:
@@ -35,6 +39,15 @@ Builder/output tests:
   - selected-node child-topic button(s) are shown when `childTopics` exists
   - child/parent buttons navigate to sibling `.html` targets
   - double-click navigation still works as shortcut
+- Case-study depth checks:
+  - overview screen provides child navigation to evidence, forecast, and decision screens
+  - each child screen provides visible parent/back navigation to overview
+  - search, group filters, sidebar, and reset work on each case-study screen
+  - no bubble overlap on case-study screens
+  - labels remain readable (including wrapped long labels)
+  - core/support/detail size difference is visually clear
+  - links remain visible enough to interpret relationships
+  - all four case-study screens open directly from file path and pass manual smoke checks
 - Deprecated/historical only:
   - multi-file output smoke checks
   - multi-file local HTTP-server checks

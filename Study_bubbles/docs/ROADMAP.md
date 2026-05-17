@@ -56,5 +56,5 @@ BOA reference behavior review, not automatic migration.
 - Local HTTP server testing is removed from active acceptance.
 
 ## Next Active Step
-- Iteration 12 (in progress): visible navigation UI.
-- Validate/rebuild single-file outputs, then run manual browser smoke for visible parent/back and child-topic buttons.
+- Iteration 13 (in progress): case-study depth demo.
+- Validate/rebuild four linked single-file case-study screens, then run manual browser smoke for cross-screen navigation and core viewer behaviors.

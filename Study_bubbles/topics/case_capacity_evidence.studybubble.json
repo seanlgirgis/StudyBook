@@ -1,0 +1,171 @@
+{
+  "id": "case_capacity_evidence",
+  "title": "Evidence and Features",
+  "subtitle": "How raw telemetry is transformed into forecasting-ready evidence",
+  "parentTopic": {
+    "label": "Back to Case Overview",
+    "topic": "case_capacity_overview.studybubble.json"
+  },
+  "groups": [
+    { "id": "raw", "label": "Raw Inputs", "color": "#4C78A8" },
+    { "id": "prep", "label": "Preparation", "color": "#54A24B" },
+    { "id": "features", "label": "Feature Signals", "color": "#F58518" }
+  ],
+  "nodes": [
+    {
+      "id": "raw_cpu",
+      "label": "Raw CPU",
+      "size": "support",
+      "group": "Raw Inputs",
+      "definition": "Unprocessed CPU utilization samples collected from monitored systems.",
+      "whyItMatters": "CPU behavior often reflects near-term saturation patterns.",
+      "safeSentence": "Raw CPU is a primary signal for understanding workload stress.",
+      "childTopics": []
+    },
+    {
+      "id": "raw_memory",
+      "label": "Raw Memory",
+      "size": "support",
+      "group": "Raw Inputs",
+      "definition": "Unprocessed memory usage samples collected from hosts and services.",
+      "whyItMatters": "Memory pressure can create performance instability before CPU breaches.",
+      "safeSentence": "Raw memory helps identify sustained pressure patterns.",
+      "childTopics": []
+    },
+    {
+      "id": "timestamp_norm",
+      "label": "Timestamp Normalization",
+      "size": "support",
+      "group": "Preparation",
+      "definition": "Converting event times to a consistent timezone and interval standard.",
+      "whyItMatters": "Misaligned timestamps corrupt trend interpretation.",
+      "safeSentence": "Normalized timestamps make telemetry comparable across sources.",
+      "childTopics": []
+    },
+    {
+      "id": "hourly_buckets",
+      "label": "Hourly Buckets",
+      "size": "detail",
+      "group": "Preparation",
+      "definition": "Aggregating raw observations into hour-level summaries.",
+      "whyItMatters": "Hourly buckets reduce noise while preserving operational rhythm.",
+      "safeSentence": "Hourly aggregation helps reveal meaningful short-term patterns.",
+      "childTopics": []
+    },
+    {
+      "id": "daily_buckets",
+      "label": "Daily Buckets",
+      "size": "detail",
+      "group": "Preparation",
+      "definition": "Summarizing usage into daily trend points for medium-horizon review.",
+      "whyItMatters": "Daily views improve interpretation of growth and seasonality.",
+      "safeSentence": "Daily buckets support planning conversations and trend comparison.",
+      "childTopics": []
+    },
+    {
+      "id": "group_app",
+      "label": "Group by Application",
+      "size": "support",
+      "group": "Preparation",
+      "definition": "Organizing telemetry by application identity before feature extraction.",
+      "whyItMatters": "Application-level grouping keeps accountability and context intact.",
+      "safeSentence": "Grouping by application aligns evidence with service ownership.",
+      "childTopics": []
+    },
+    {
+      "id": "rolling_avg",
+      "label": "Rolling Average",
+      "size": "support",
+      "group": "Feature Signals",
+      "definition": "A smoothed trend signal computed over a moving time window.",
+      "whyItMatters": "Rolling averages show direction without overreacting to spikes.",
+      "safeSentence": "Rolling average gives a stable signal for expected usage direction.",
+      "childTopics": []
+    },
+    {
+      "id": "rolling_peak",
+      "label": "Rolling Peak",
+      "size": "support",
+      "group": "Feature Signals",
+      "definition": "The moving maximum over a recent interval to track stress ceilings.",
+      "whyItMatters": "Peak behavior can trigger risk even when averages look stable.",
+      "safeSentence": "Rolling peak captures worst-case pressure over recent history.",
+      "childTopics": []
+    },
+    {
+      "id": "p95",
+      "label": "P95",
+      "size": "support",
+      "group": "Feature Signals",
+      "definition": "The 95th percentile usage level used as a robust upper-range indicator.",
+      "whyItMatters": "P95 balances outlier resilience with practical risk sensitivity.",
+      "safeSentence": "P95 is a practical high-usage signal for operational planning.",
+      "childTopics": []
+    },
+    {
+      "id": "growth_slope",
+      "label": "Growth Slope",
+      "size": "core",
+      "group": "Feature Signals",
+      "definition": "Estimated rate of usage increase over time from cleaned trend data.",
+      "whyItMatters": "Growth rate determines how quickly headroom may be consumed.",
+      "safeSentence": "Growth slope helps estimate when capacity pressure may escalate.",
+      "childTopics": []
+    },
+    {
+      "id": "dq_check",
+      "label": "Data Quality Check",
+      "size": "core",
+      "group": "Preparation",
+      "definition": "Validation of completeness, consistency, and plausibility of telemetry.",
+      "whyItMatters": "Poor data quality undermines confidence in any forecast output.",
+      "safeSentence": "Quality checks ensure forecasting is based on trustworthy evidence.",
+      "childTopics": []
+    },
+    {
+      "id": "feature_table",
+      "label": "Feature Table",
+      "size": "core",
+      "group": "Feature Signals",
+      "definition": "A structured dataset containing cleaned trend and risk features by interval.",
+      "whyItMatters": "The feature table is the handoff artifact for forecast and risk evaluation.",
+      "safeSentence": "Feature tables package evidence into reusable decision-support inputs.",
+      "childTopics": []
+    }
+  ],
+  "links": [
+    { "source": "raw_cpu", "target": "timestamp_norm", "label": "time-aligned" },
+    { "source": "raw_memory", "target": "timestamp_norm", "label": "time-aligned" },
+    { "source": "timestamp_norm", "target": "hourly_buckets", "label": "bucketed hourly" },
+    { "source": "hourly_buckets", "target": "daily_buckets", "label": "rolled daily" },
+    { "source": "hourly_buckets", "target": "group_app", "label": "segmented by app" },
+    { "source": "group_app", "target": "rolling_avg", "label": "trend signal" },
+    { "source": "group_app", "target": "rolling_peak", "label": "stress signal" },
+    { "source": "group_app", "target": "p95", "label": "upper-range signal" },
+    { "source": "daily_buckets", "target": "growth_slope", "label": "rate estimate" },
+    { "source": "timestamp_norm", "target": "dq_check", "label": "validated" },
+    { "source": "rolling_avg", "target": "feature_table", "label": "feature output" },
+    { "source": "rolling_peak", "target": "feature_table", "label": "feature output" },
+    { "source": "p95", "target": "feature_table", "label": "feature output" },
+    { "source": "growth_slope", "target": "feature_table", "label": "feature output" }
+  ],
+  "paths": [
+    {
+      "id": "evidence_to_features_path",
+      "label": "Raw Signals to Feature Table",
+      "description": "Transform raw CPU/memory telemetry into validated forecasting features.",
+      "nodeIds": [
+        "raw_cpu",
+        "raw_memory",
+        "timestamp_norm",
+        "hourly_buckets",
+        "group_app",
+        "rolling_avg",
+        "p95",
+        "growth_slope",
+        "feature_table"
+      ],
+      "rehearsalPrompt": "Explain how telemetry preparation produces a reliable feature table."
+    }
+  ]
+}

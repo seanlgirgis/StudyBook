@@ -11,7 +11,7 @@ Do not treat them as active concerns or repeat them in normal reports unless
 they cause a failing test or the user explicitly opens a cleanup task.
 Active acceptance remains direct-open outputs/single_file/*.html.
 
-Iteration 12 work started: visible navigation UI.
+Iteration 13 work started: case-study depth demo.
 
 What was done:
 - Added toolbar search in the viewer with case-insensitive matching across:
@@ -72,4 +72,46 @@ Status of manual smoke in this run:
 - Limitation reminder: single-file parent/child navigation requires sibling `.html` topic outputs to exist in `outputs/single_file`.
 
 Next step:
-- Review Iteration 12 implementation and prepare commit/tag decision when requested.
+- Iteration 13 manual browser smoke recorded as PASS; ready for commit/tag review.
+
+Iteration 13 repair note:
+- First visual smoke failed due to dense case-study layout/readability limits.
+- Repair completed with improved node sizing, group-based spacing, collision handling, label wrapping, and link visibility.
+- Visual polish applied: adjusted vertical centering so maps sit around the middle of the canvas instead of drifting low.
+- Manual browser smoke rerun completed and PASS confirmed.
+
+Iteration 13 manual browser smoke checklist (case-study depth demo):
+1. Open `outputs\single_file\case_capacity_overview.html` directly.
+2. Confirm the overview loads.
+3. Select each hub bubble that has a child topic.
+4. Confirm visible child-topic buttons appear.
+5. Navigate to Evidence and Features.
+6. Confirm parent/back button returns to Case Overview.
+7. Navigate to Forecast and Risk.
+8. Confirm parent/back button returns to Case Overview.
+9. Navigate to Decision and Governance.
+10. Confirm parent/back button returns to Case Overview.
+11. Confirm double-click shortcut still works where there is exactly one child.
+12. Confirm search works on each screen.
+13. Confirm group filters work on each screen.
+14. Confirm sidebar works on each screen.
+15. Confirm reset works on each screen.
+16. Confirm browser console is clean.
+
+Iteration 13 manual browser smoke result:
+- PASS for:
+  - `outputs\single_file\case_capacity_overview.html`
+  - `outputs\single_file\case_capacity_evidence.html`
+  - `outputs\single_file\case_capacity_forecast.html`
+  - `outputs\single_file\case_capacity_decision.html`
+- Confirmed:
+  - bubbles are readable and no longer crowded into one row
+  - labels are readable
+  - bubble sizes are visibly different
+  - links are visible enough to understand relationships
+  - case study flow reads left/center/right
+  - visible parent/back button works
+  - visible child navigation buttons work
+  - double-click shortcut still works
+  - search, group filters, sidebar, and reset all work
+  - browser console is clean

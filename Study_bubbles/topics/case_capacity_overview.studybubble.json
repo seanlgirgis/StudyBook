@@ -1,0 +1,180 @@
+{
+  "id": "case_capacity_overview",
+  "title": "Capacity Forecasting Case Overview",
+  "subtitle": "How raw telemetry becomes a practical capacity decision",
+  "parentTopic": null,
+  "groups": [
+    { "id": "business", "label": "Business Context", "color": "#4C78A8" },
+    { "id": "signal", "label": "Signal and Modeling", "color": "#54A24B" },
+    { "id": "governance", "label": "Decision and Governance", "color": "#F58518" }
+  ],
+  "nodes": [
+    {
+      "id": "business_demand",
+      "label": "Business Demand",
+      "size": "support",
+      "group": "Business Context",
+      "definition": "The expected service usage driven by customer and internal demand.",
+      "whyItMatters": "Capacity planning starts with expected demand, not infrastructure guesses.",
+      "safeSentence": "Business demand frames how much capacity we need and when we need it.",
+      "childTopics": []
+    },
+    {
+      "id": "application",
+      "label": "Application",
+      "size": "support",
+      "group": "Business Context",
+      "definition": "The service or workload whose performance and stability must be protected.",
+      "whyItMatters": "Capacity decisions are meaningful only when mapped to specific applications.",
+      "safeSentence": "We forecast capacity at the application level so actions stay accountable.",
+      "childTopics": []
+    },
+    {
+      "id": "telemetry",
+      "label": "Telemetry",
+      "size": "core",
+      "group": "Signal and Modeling",
+      "definition": "Operational measurements such as CPU, memory, throughput, and latency over time.",
+      "whyItMatters": "Telemetry is the evidence base for baseline and forecast calculations.",
+      "safeSentence": "Reliable telemetry turns capacity planning into evidence-based decision support.",
+      "childTopics": [
+        {
+          "label": "Open Evidence and Features",
+          "topic": "case_capacity_evidence.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "baseline",
+      "label": "Baseline",
+      "size": "support",
+      "group": "Signal and Modeling",
+      "definition": "A stable reference pattern of recent usage behavior.",
+      "whyItMatters": "A baseline gives context for growth and risk movement.",
+      "safeSentence": "Baseline behavior helps us separate normal variation from trend change.",
+      "childTopics": []
+    },
+    {
+      "id": "forecast",
+      "label": "Forecast",
+      "size": "core",
+      "group": "Signal and Modeling",
+      "definition": "A forward estimate of expected resource usage over a defined horizon.",
+      "whyItMatters": "Forecasts indicate whether current capacity can sustain expected demand.",
+      "safeSentence": "The forecast is decision support, not certainty; it guides early action.",
+      "childTopics": [
+        {
+          "label": "Open Forecast and Risk",
+          "topic": "case_capacity_forecast.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "threshold",
+      "label": "Threshold",
+      "size": "support",
+      "group": "Signal and Modeling",
+      "definition": "A predefined utilization limit that signals elevated service risk.",
+      "whyItMatters": "Thresholds convert raw values into actionable alerts.",
+      "safeSentence": "We compare forecasted usage to thresholds to trigger proportionate actions.",
+      "childTopics": []
+    },
+    {
+      "id": "headroom",
+      "label": "Headroom",
+      "size": "support",
+      "group": "Signal and Modeling",
+      "definition": "Remaining safe capacity between expected usage and practical limits.",
+      "whyItMatters": "Headroom explains urgency and action timing.",
+      "safeSentence": "Headroom tells us how much buffer remains before service risk rises.",
+      "childTopics": []
+    },
+    {
+      "id": "risk_band",
+      "label": "Risk Band",
+      "size": "support",
+      "group": "Signal and Modeling",
+      "definition": "A low, medium, or high category assigned from forecast and headroom signals.",
+      "whyItMatters": "Risk bands create a shared language for prioritization.",
+      "safeSentence": "Risk bands keep escalation and response decisions consistent.",
+      "childTopics": []
+    },
+    {
+      "id": "dashboard",
+      "label": "Dashboard",
+      "size": "core",
+      "group": "Decision and Governance",
+      "definition": "A summarized operational view showing trend, forecast, and risk indicators.",
+      "whyItMatters": "Decision makers need a common view of current and projected state.",
+      "safeSentence": "The dashboard aligns stakeholders on facts before action is chosen.",
+      "childTopics": []
+    },
+    {
+      "id": "decision",
+      "label": "Decision",
+      "size": "core",
+      "group": "Decision and Governance",
+      "definition": "The agreed operational response based on forecast evidence and business impact.",
+      "whyItMatters": "Capacity work is complete only when it results in a clear decision.",
+      "safeSentence": "Forecasting supports decisions; governance ensures they are owned and executed.",
+      "childTopics": [
+        {
+          "label": "Open Decision and Governance",
+          "topic": "case_capacity_decision.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "owner",
+      "label": "Owner",
+      "size": "detail",
+      "group": "Decision and Governance",
+      "definition": "The accountable application or infrastructure lead responsible for execution.",
+      "whyItMatters": "Named ownership prevents decision drift and delays.",
+      "safeSentence": "A clear owner converts capacity recommendations into operational follow-through.",
+      "childTopics": []
+    },
+    {
+      "id": "action_plan",
+      "label": "Action Plan",
+      "size": "detail",
+      "group": "Decision and Governance",
+      "definition": "A dated set of actions, approvals, and checkpoints tied to risk level.",
+      "whyItMatters": "A plan translates decision intent into trackable operational work.",
+      "safeSentence": "The action plan defines what will happen, who will do it, and by when.",
+      "childTopics": []
+    }
+  ],
+  "links": [
+    { "source": "business_demand", "target": "application", "label": "drives service load" },
+    { "source": "application", "target": "telemetry", "label": "emits operational signals" },
+    { "source": "telemetry", "target": "baseline", "label": "establishes reference usage" },
+    { "source": "baseline", "target": "forecast", "label": "feeds forward estimate" },
+    { "source": "forecast", "target": "threshold", "label": "checked against limits" },
+    { "source": "forecast", "target": "headroom", "label": "projects remaining buffer" },
+    { "source": "threshold", "target": "risk_band", "label": "influences risk level" },
+    { "source": "headroom", "target": "risk_band", "label": "refines severity" },
+    { "source": "risk_band", "target": "dashboard", "label": "shown to stakeholders" },
+    { "source": "dashboard", "target": "decision", "label": "supports response choice" },
+    { "source": "decision", "target": "owner", "label": "assigns accountability" },
+    { "source": "owner", "target": "action_plan", "label": "executes approved work" }
+  ],
+  "paths": [
+    {
+      "id": "capacity_decision_path",
+      "label": "Telemetry to Decision",
+      "description": "Follow the practical path from demand and telemetry through forecast, risk, and operational action.",
+      "nodeIds": [
+        "business_demand",
+        "application",
+        "telemetry",
+        "baseline",
+        "forecast",
+        "risk_band",
+        "decision",
+        "action_plan"
+      ],
+      "rehearsalPrompt": "Explain how telemetry evidence becomes a governed capacity action plan."
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "id": "case_capacity_forecast",
+  "title": "Forecast and Risk",
+  "subtitle": "How prepared evidence becomes forecast confidence and risk classification",
+  "parentTopic": {
+    "label": "Back to Case Overview",
+    "topic": "case_capacity_overview.studybubble.json"
+  },
+  "groups": [
+    { "id": "setup", "label": "Forecast Setup", "color": "#4C78A8" },
+    { "id": "evaluation", "label": "Evaluation", "color": "#54A24B" },
+    { "id": "risk", "label": "Risk Classification", "color": "#F58518" }
+  ],
+  "nodes": [
+    {
+      "id": "historical_window",
+      "label": "Historical Window",
+      "size": "support",
+      "group": "Forecast Setup",
+      "definition": "The selected lookback period used to learn usage behavior.",
+      "whyItMatters": "Window choice influences trend stability and relevance.",
+      "safeSentence": "We choose a practical history window that represents recent operating behavior.",
+      "childTopics": []
+    },
+    {
+      "id": "holdout_testing",
+      "label": "Holdout Testing",
+      "size": "core",
+      "group": "Evaluation",
+      "definition": "Testing forecast behavior on data excluded from setup calibration.",
+      "whyItMatters": "Holdout checks whether forecasts generalize beyond fitting data.",
+      "safeSentence": "Holdout testing gives a realistic check on forecast usefulness.",
+      "childTopics": []
+    },
+    {
+      "id": "forecast_horizon",
+      "label": "Forecast Horizon",
+      "size": "support",
+      "group": "Forecast Setup",
+      "definition": "The future time span covered by the capacity projection.",
+      "whyItMatters": "Horizon length must match decision lead times.",
+      "safeSentence": "Forecast horizon is set to support operational planning windows.",
+      "childTopics": []
+    },
+    {
+      "id": "forecast_vs_actual",
+      "label": "Forecast vs Actual",
+      "size": "core",
+      "group": "Evaluation",
+      "definition": "Comparison of projected values against observed usage outcomes.",
+      "whyItMatters": "Performance checks bound confidence and expected error.",
+      "safeSentence": "Forecast-versus-actual comparisons calibrate how much trust to place in projections.",
+      "childTopics": []
+    },
+    {
+      "id": "threshold_crossing",
+      "label": "Threshold Crossing",
+      "size": "support",
+      "group": "Risk Classification",
+      "definition": "A forecasted point where usage is expected to exceed configured limits.",
+      "whyItMatters": "Crossing expectations drive urgency and action sequencing.",
+      "safeSentence": "Threshold crossing projections indicate when intervention may be needed.",
+      "childTopics": []
+    },
+    {
+      "id": "headroom_burndown",
+      "label": "Headroom Burn-down",
+      "size": "support",
+      "group": "Risk Classification",
+      "definition": "Projected reduction of remaining safe capacity over time.",
+      "whyItMatters": "Burn-down rate helps prioritize near-term planning decisions.",
+      "safeSentence": "Headroom burn-down shows how quickly our capacity buffer is shrinking.",
+      "childTopics": []
+    },
+    {
+      "id": "confidence_check",
+      "label": "Confidence Check",
+      "size": "core",
+      "group": "Evaluation",
+      "definition": "A practical reliability review combining error behavior and data quality context.",
+      "whyItMatters": "Confidence checks prevent false precision in decision conversations.",
+      "safeSentence": "Confidence checks ensure we present forecast output with appropriate caution.",
+      "childTopics": []
+    },
+    {
+      "id": "sme_review",
+      "label": "SME Review",
+      "size": "support",
+      "group": "Evaluation",
+      "definition": "Domain expert review of forecast assumptions and operational plausibility.",
+      "whyItMatters": "SME context catches blind spots not visible in metrics alone.",
+      "safeSentence": "SME review complements metrics with practical service knowledge.",
+      "childTopics": []
+    },
+    {
+      "id": "low_risk",
+      "label": "Low Risk",
+      "size": "detail",
+      "group": "Risk Classification",
+      "definition": "Risk band where projected usage remains comfortably below thresholds.",
+      "whyItMatters": "Low-risk classification supports routine monitoring cadence.",
+      "safeSentence": "Low risk indicates no immediate capacity intervention is required.",
+      "childTopics": []
+    },
+    {
+      "id": "medium_risk",
+      "label": "Medium Risk",
+      "size": "detail",
+      "group": "Risk Classification",
+      "definition": "Risk band where projected usage approaches limits within planning horizon.",
+      "whyItMatters": "Medium risk prompts preparatory actions before urgency escalates.",
+      "safeSentence": "Medium risk signals that contingency planning should begin now.",
+      "childTopics": []
+    },
+    {
+      "id": "high_risk",
+      "label": "High Risk",
+      "size": "detail",
+      "group": "Risk Classification",
+      "definition": "Risk band where projected usage is near or above operational thresholds.",
+      "whyItMatters": "High risk requires priority action and governance visibility.",
+      "safeSentence": "High risk indicates urgent action to prevent service impact.",
+      "childTopics": []
+    },
+    {
+      "id": "breach_flag",
+      "label": "Breach Flag",
+      "size": "support",
+      "group": "Risk Classification",
+      "definition": "An explicit marker indicating probable or imminent threshold breach.",
+      "whyItMatters": "Breach flags accelerate escalation and action ownership.",
+      "safeSentence": "A breach flag moves the case into immediate response handling.",
+      "childTopics": []
+    }
+  ],
+  "links": [
+    { "source": "historical_window", "target": "forecast_horizon", "label": "defines setup context" },
+    { "source": "forecast_horizon", "target": "holdout_testing", "label": "evaluation scope" },
+    { "source": "holdout_testing", "target": "forecast_vs_actual", "label": "measures realism" },
+    { "source": "forecast_vs_actual", "target": "confidence_check", "label": "calibrates trust" },
+    { "source": "confidence_check", "target": "sme_review", "label": "context review" },
+    { "source": "forecast_vs_actual", "target": "threshold_crossing", "label": "projects limit timing" },
+    { "source": "forecast_vs_actual", "target": "headroom_burndown", "label": "projects buffer loss" },
+    { "source": "threshold_crossing", "target": "medium_risk", "label": "risk escalation" },
+    { "source": "headroom_burndown", "target": "medium_risk", "label": "risk escalation" },
+    { "source": "medium_risk", "target": "high_risk", "label": "if pressure accelerates" },
+    { "source": "low_risk", "target": "medium_risk", "label": "monitor trend shift" },
+    { "source": "high_risk", "target": "breach_flag", "label": "explicit signal" }
+  ],
+  "paths": [
+    {
+      "id": "forecast_to_risk_path",
+      "label": "Forecast Evidence to Risk Band",
+      "description": "Move from setup and holdout checks into practical risk classification.",
+      "nodeIds": [
+        "historical_window",
+        "forecast_horizon",
+        "holdout_testing",
+        "forecast_vs_actual",
+        "confidence_check",
+        "threshold_crossing",
+        "headroom_burndown",
+        "medium_risk",
+        "high_risk",
+        "breach_flag"
+      ],
+      "rehearsalPrompt": "Explain how forecast validation influences risk classification and escalation."
+    }
+  ]
+}
