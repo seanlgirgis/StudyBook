@@ -11,7 +11,7 @@ Do not treat them as active concerns or repeat them in normal reports unless
 they cause a failing test or the user explicitly opens a cleanup task.
 Active acceptance remains direct-open outputs/single_file/*.html.
 
-Iteration 14 work started: grandchild navigation spike.
+Release 1 (StudyBubble v0.7 BOA Interaction Parity) manual browser smoke: PASS.
 
 What was done:
 - Added toolbar search in the viewer with case-insensitive matching across:
@@ -71,9 +71,26 @@ Status of manual smoke in this run:
   - search, group filters, sidebar, and reset behave as expected
 - Limitation reminder: single-file parent/child navigation requires sibling `.html` topic outputs to exist in `outputs/single_file`.
 
+Release 1 PASS details:
+- direct-open `case_capacity_overview.html` works
+- search works
+- group filters work
+- study paths are clickable and highlight path nodes/links
+- reset clears active study path
+- minimap, zoom HUD, wheel zoom, pan, fit, toolbar reset view, drag mode all work
+- selected-node and connected-node highlighting works
+- focus works
+- right-click context menu works
+- right-click reset view works
+- keyboard navigation works
+- parent/child/grandchild navigation works:
+  - `case_capacity_overview -> case_capacity_evidence -> case_capacity_feature_table -> case_capacity_evidence -> case_capacity_overview`
+- console notes accepted as non-blocking:
+  - `file://` unique-origin warning for direct-open local HTML
+  - `aria-hidden` focus warning after context-menu close
+
 Next step:
-- Run/record Iteration 14 manual browser smoke for three-level navigation (overview -> evidence -> feature_table -> evidence -> overview), then review before commit/tag.
-- After Iteration 14 freeze, follow three major release gates in `docs/V1_RELEASE_PLAN.md` (start with `v0.7` BOA interaction parity).
+- Start Release 2 gate in `docs/V1_RELEASE_PLAN.md`: StudyBubble `v0.9` Study Card + Media + Links.
 
 Iteration 13 repair note:
 - First visual smoke failed due to dense case-study layout/readability limits.

@@ -124,6 +124,8 @@ body {
 .map-area {
   border-right: 1px solid var(--line);
   padding: 10px;
+  position: relative;
+  overflow: hidden;
 }
 
 #map-svg {
@@ -132,6 +134,15 @@ body {
   min-height: 560px;
   background: radial-gradient(circle at top, #1f2937, #111827 70%);
   border-radius: 10px;
+  cursor: grab;
+}
+
+#map-svg.is-panning {
+  cursor: grabbing;
+}
+
+#map-svg.is-dragging {
+  cursor: move;
 }
 
 .side-panel {
@@ -176,10 +187,46 @@ body {
   margin-bottom: 8px;
 }
 
+.path-item-btn {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.path-item-btn:hover {
+  border-color: var(--accent);
+}
+
+.path-item-btn.is-active {
+  border-color: #fde68a;
+  box-shadow: inset 0 0 0 1px rgba(253, 230, 138, 0.35);
+}
+
 .link-line {
   stroke: #93a3bf;
   stroke-width: 2.4;
   opacity: 0.85;
+}
+
+.link-line.is-dim {
+  opacity: 0.12;
+}
+
+.link-line.is-path {
+  stroke: #fde68a;
+  stroke-width: 3.1;
+  opacity: 0.96;
+}
+
+.link-line.is-connected {
+  stroke: #bfdbfe;
+  stroke-width: 3;
+  opacity: 0.95;
 }
 
 .bubble-node {
@@ -199,6 +246,11 @@ body {
   stroke-width: 3;
 }
 
+.bubble-node.is-connected .bubble-circle {
+  stroke: #93c5fd;
+  stroke-width: 3;
+}
+
 .bubble-label {
   fill: #f9fafb;
   font-size: 14px;
@@ -206,6 +258,85 @@ body {
   text-anchor: middle;
   dominant-baseline: middle;
   pointer-events: none;
+}
+
+.zoom-hud,
+.mode-hud {
+  position: absolute;
+  right: 18px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(17, 24, 39, 0.85);
+  font-size: 12px;
+}
+
+.zoom-hud { top: 18px; }
+.mode-hud { top: 50px; }
+
+.minimap-wrap {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 210px;
+  height: 130px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(17, 24, 39, 0.85);
+}
+
+#minimap-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.keyboard-hints {
+  position: absolute;
+  left: 18px;
+  bottom: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.keyboard-hints span {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin: 0 4px;
+  color: var(--text);
+  background: rgba(17, 24, 39, 0.85);
+}
+
+.context-menu {
+  position: fixed;
+  z-index: 9999;
+  min-width: 180px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #111827;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  padding: 6px;
+  display: none;
+}
+
+.context-menu.open {
+  display: block;
+}
+
+.ctx-item {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ctx-item:hover {
+  background: #1f2937;
 }
 
 @media (max-width: 900px) {

@@ -26,12 +26,13 @@
 - Iteration 13 visual polish: improved vertical centering so case-study maps use canvas middle more effectively.
 - Iteration 13 manual browser smoke: PASS across all 4 case-study screens and navigation/interaction checks.
 - Iteration 14: grandchild navigation spike (`overview -> evidence -> feature_table`) implemented.
+- Release 1: StudyBubble `v0.7` BOA Interaction Parity PASS (manual browser smoke).
 
 ## In Progress
-- Iteration 14 manual browser smoke verification.
+- Release 2 gate prep: StudyBubble `v0.9` Study Card + Media + Links.
 
 ## Next
-- Release 1 gate: StudyBubble `v0.7` - BOA Interaction Parity (see `docs/V1_RELEASE_PLAN.md`).
+- Implement StudyBubble `v0.9` scope from `docs/V1_RELEASE_PLAN.md` (study card depth, media preview, copy helpers, external links polish).
 
 ## Backlog
 - Package-path cleanup if still needed.

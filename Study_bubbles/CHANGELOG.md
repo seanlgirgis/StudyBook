@@ -265,4 +265,20 @@
   - topic: `case_capacity_overview.studybubble.json`
 - Resulting target flow:
   - `overview -> evidence -> feature_table -> evidence -> overview`
+## 2026-05-16 - Release 1 StudyBubble v0.7 BOA Interaction Parity (PASS)
+- Recorded manual browser smoke PASS for direct-open `outputs/single_file/case_capacity_overview.html`.
+- Confirmed interaction parity checks PASS:
+  - search and group filters
+  - clickable study paths with path node/link highlighting
+  - reset clears active study path
+  - minimap, zoom HUD, wheel zoom, pan, fit, toolbar reset view, drag mode
+  - selected-node and connected-node highlighting
+  - focus behavior
+  - right-click context menu and right-click reset view
+  - keyboard navigation
+  - parent/child/grandchild navigation flow:
+    - `case_capacity_overview -> case_capacity_evidence -> case_capacity_feature_table -> case_capacity_evidence -> case_capacity_overview`
+- Console notes accepted as non-blocking for v0.7:
+  - `file://` unique-origin warning
+  - `aria-hidden` focus warning after context-menu close
 

@@ -52,6 +52,15 @@ Builder/output tests:
   - core/support/detail size difference is visually clear
   - links remain visible enough to interpret relationships
   - all four case-study screens open directly from file path and pass manual smoke checks
+- v0.7 BOA parity checks (manual smoke, direct-open `case_capacity_overview.html`):
+  - study path entries are clickable from visible UI
+  - clicking a study path highlights path nodes and path links
+  - reset clears active study path and highlight state
+  - right-click context menu reset view triggers same view reset behavior as toolbar reset view
+  - keyboard navigation works while preserving existing navigation behavior
+  - accepted non-blocking console notes:
+    - `file://` unique-origin warning
+    - `aria-hidden` focus warning after context-menu close
 - Deprecated/historical only:
   - multi-file output smoke checks
   - multi-file local HTTP-server checks

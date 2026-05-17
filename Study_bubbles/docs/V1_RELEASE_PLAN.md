@@ -15,6 +15,9 @@ Already proven:
 
 ## Release 1: StudyBubble v0.7 - BOA Interaction Parity
 
+Status:
+- Completed (manual browser smoke PASS).
+
 Goal:
 - Make generated StudyBubble maps feel like the BOA reference prototype.
 

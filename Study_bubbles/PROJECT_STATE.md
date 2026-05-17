@@ -13,7 +13,7 @@ Active acceptance remains direct-open outputs/single_file/*.html.
 
 - Project Name: study_bubbles
 - Project Purpose: Build a small, static, reusable study bubble system that generates study maps from topic data files.
-- Current Phase: Iteration 14 - Grandchild Navigation Spike (implementation complete, manual browser smoke pending in this run)
+- Current Phase: Release 1 complete - StudyBubble v0.7 BOA Interaction Parity (manual browser smoke PASS)
 - Completed: Toolbar search and data-driven group filters were added to the viewer; Iteration 11 regression fixes restored single-file topic loading and parent-topic double-click fallback navigation; Iteration 12 adds visible parent/back and child-topic navigation buttons while preserving double-click shortcuts; Iteration 13 adds a four-screen capacity forecasting case-study path and repairs dense-layout readability with improved sizing/spacing/label/link rendering; Iteration 14 adds a grandchild topic for three-level navigation proof.
 - Outputs: Single-file outputs are the active acceptance artifacts (`outputs/single_file/*.html`); multi-file outputs are deprecated historical/debug artifacts.
 - BOA Migration Status: No BOA migration or data extraction was performed.
@@ -30,4 +30,6 @@ Active acceptance remains direct-open outputs/single_file/*.html.
 - Iteration 13 Manual Smoke Status: PASS (`case_capacity_overview`/`evidence`/`forecast`/`decision` direct-open screens; readable non-overlapping bubbles; clear size contrast; visible links; left/center/right flow; parent/child buttons and double-click shortcut PASS; search/filters/sidebar/reset PASS; console clean).
 - Iteration 14 Navigation Status: Grandchild topic wired (`overview -> evidence -> feature_table -> evidence -> overview`) with topic-declared parent/back links; manual browser smoke pending.
 - Multi-file Note: local HTTP server applies only to deprecated multi-file fetch testing and is not part of active acceptance.
-- Next Intended Step: execute release-gate work per `docs/V1_RELEASE_PLAN.md` (starting with StudyBubble `v0.7` BOA interaction parity).
+- v0.7 BOA Parity Smoke Status: PASS (`case_capacity_overview.html` direct-open; search/filter/study paths clickable with path highlighting and reset clear; minimap/zoom/pan/fit/reset/drag/focus/context menu + context reset PASS; keyboard navigation PASS; parent/child/grandchild navigation PASS; console functionally clean for acceptance).
+- Console Notes: `file://` unique origin warning observed and accepted for direct-open single-file use; `aria-hidden` focus warning observed after context-menu close and accepted as non-blocking accessibility polish.
+- Next Intended Step: execute Release 2 gate per `docs/V1_RELEASE_PLAN.md` (StudyBubble `v0.9` Study Card + Media + Links).

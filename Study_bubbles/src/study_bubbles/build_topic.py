@@ -148,6 +148,10 @@ def build_single_file(topic_path: Path, out_html_path: Path) -> int:
       <input id=\"search-input\" type=\"text\" placeholder=\"Search label, definition, safe sentence...\" autocomplete=\"off\" />
       <span id=\"search-count\" class=\"search-count\"></span>
       <div id=\"group-filters\" class=\"group-filters\"></div>
+      <button id=\"drag-toggle\" class=\"clear-btn\" type=\"button\" title=\"Toggle drag mode\">Drag Mode</button>
+      <button id=\"focus-toggle\" class=\"clear-btn\" type=\"button\" title=\"Focus selected node connections\">Focus</button>
+      <button id=\"fit-view\" class=\"clear-btn\" type=\"button\" title=\"Fit map\">Fit</button>
+      <button id=\"reset-view\" class=\"clear-btn\" type=\"button\" title=\"Reset map view\">Reset View</button>
       <button id=\"clear-filters\" class=\"clear-btn\" type=\"button\">Reset</button>
     </div>
   </header>
@@ -155,6 +159,12 @@ def build_single_file(topic_path: Path, out_html_path: Path) -> int:
   <main class=\"layout\">
     <section class=\"map-area\">
       <svg id=\"map-svg\" viewBox=\"0 0 1000 520\" role=\"img\" aria-label=\"Study bubble map\"></svg>
+      <div id=\"zoom-hud\" class=\"zoom-hud\">100%</div>
+      <div id=\"mode-hud\" class=\"mode-hud\">Pan mode</div>
+      <div class=\"minimap-wrap\">
+        <svg id=\"minimap-svg\" viewBox=\"0 0 1200 700\" role=\"img\" aria-label=\"Map minimap\"></svg>
+      </div>
+      <div class=\"keyboard-hints\">Keys: <span>Arrows</span> move selection <span>Enter</span> select <span>Esc</span> clear <span>F</span> focus</div>
     </section>
 
     <aside class=\"side-panel\">
@@ -167,6 +177,13 @@ def build_single_file(topic_path: Path, out_html_path: Path) -> int:
       <ul id=\"study-paths\" class=\"path-list\"></ul>
     </aside>
   </main>
+
+  <div id=\"context-menu\" class=\"context-menu\" aria-hidden=\"true\">
+    <button type=\"button\" class=\"ctx-item\" data-action=\"pin\">Pin details</button>
+    <button type=\"button\" class=\"ctx-item\" data-action=\"focus\">Focus connections</button>
+    <button type=\"button\" class=\"ctx-item\" data-action=\"filter\">Filter to group</button>
+    <button type=\"button\" class=\"ctx-item\" data-action=\"reset\">Reset view</button>
+  </div>
 
   <!-- SECTION: Embedded Topic Data -->
   <script id=\"studybubble-topic-data\" type=\"application/json\">
