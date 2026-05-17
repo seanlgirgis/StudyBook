@@ -28,12 +28,13 @@
 - Iteration 14: grandchild navigation spike (`overview -> evidence -> feature_table`) implemented.
 - Release 1: StudyBubble `v0.7` BOA Interaction Parity PASS (manual browser smoke).
 - Release 2: StudyBubble `v0.9` Study Card + Media + Links PASS (manual browser smoke).
+- Release 3: StudyBubble `v1.0` release-folder manual browser smoke PASS.
 
 ## In Progress
-- Release 3 gate prep: StudyBubble `v1.0` Usable Release Package.
+- v1.0 freeze commit/tag checkpoint.
 
 ## Next
-- Implement StudyBubble `v1.0` scope from `docs/V1_RELEASE_PLAN.md` (index/home generation, build-all flow, release smoke checklist, packaging/tag readiness).
+- Freeze StudyBubble v1.0 usable release with commit/tag after final user confirmation.
 
 ## Backlog
 - Package-path cleanup if still needed.

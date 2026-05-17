@@ -123,8 +123,17 @@ Product direction note:
 - StudyBubble is primarily a visual study-map builder.
 - Copy buttons are secondary polish, not the core direction.
 
+Release 3 packaging status:
+- Created `outputs/releases/studybubble-v1.0/` package folder with:
+  - core single-file maps
+  - required local image asset under `assets/`
+  - `README_RELEASE.md`
+  - `MANUAL_SMOKE_CHECKLIST.md`
+- simple `index.html` launch page
+
 Next step:
-- Start Release 3 gate in `docs/V1_RELEASE_PLAN.md`: StudyBubble `v1.0` Usable Release Package.
+- Manual browser smoke from release folder: PASS.
+- Ready for v1.0 freeze commit/tag.
 
 Iteration 13 repair note:
 - First visual smoke failed due to dense case-study layout/readability limits.

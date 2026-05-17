@@ -87,6 +87,9 @@ Acceptance:
 
 ## Release 3: StudyBubble v1.0 - Usable Release Package
 
+Status:
+- Completed for package readiness (manual release-folder smoke PASS; freeze commit/tag step pending).
+
 Goal:
 - Make StudyBubble usable as a StudyBook visual study system.
 

@@ -309,4 +309,34 @@
   - no `TypeError`, `ReferenceError`, `SyntaxError`, or `ERR_FILE_NOT_FOUND`
 - Product direction reaffirmed:
   - visual study-map experience is primary; copy actions are secondary polish.
+## 2026-05-16 - Release 3 StudyBubble v1.0 Packaging Prep
+- Rebuilt active single-file outputs for release packaging baseline.
+- Created release package folder:
+  - `outputs/releases/studybubble-v1.0/`
+- Copied release maps:
+  - `case_capacity_overview.html`
+  - `case_capacity_evidence.html`
+  - `case_capacity_feature_table.html`
+  - `case_capacity_forecast.html`
+  - `case_capacity_decision.html`
+  - `python_overview.html`
+  - `pandas.html`
+- Copied required local asset:
+  - `assets/feature-table-example.svg`
+- Added release docs:
+  - `README_RELEASE.md`
+  - `MANUAL_SMOKE_CHECKLIST.md`
+- Added simple launch page:
+  - `index.html`
+- No commit/tag created in this step; awaiting manual smoke/user acceptance.
+## 2026-05-17 - Release 3 StudyBubble v1.0 Release-Folder Smoke (PASS)
+- Recorded manual browser smoke PASS for release package folder:
+  - `outputs/releases/studybubble-v1.0/index.html` opens directly
+  - launch page displays included map links
+  - Overview, Evidence, and Feature Table Deep Dive pages open and render from release folder
+  - image/diagram displays from `outputs/releases/studybubble-v1.0/assets/feature-table-example.svg`
+- Console note accepted:
+  - `file://` unique-origin warning
+- Confirmed no serious runtime/browser blockers:
+  - no `TypeError`, `ReferenceError`, `SyntaxError`, or `ERR_FILE_NOT_FOUND`
 

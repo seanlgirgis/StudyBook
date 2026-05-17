@@ -87,3 +87,9 @@ Builder/output tests:
   - embedded topic data
   - JavaScript
   - build metadata
+- v1.0 package smoke target:
+  - `outputs/releases/studybubble-v1.0/index.html` (or `case_capacity_overview.html` if index is unavailable)
+  - release-folder navigation chain:
+    - overview -> evidence -> feature table deep dive
+  - release asset load check:
+    - `outputs/releases/studybubble-v1.0/assets/feature-table-example.svg`
