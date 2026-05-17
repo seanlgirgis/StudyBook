@@ -21,6 +21,25 @@
       "definition": "The final structured row set used as input to practical forecasting workflows.",
       "whyItMatters": "A consistent feature table enables repeatable forecasting and risk classification.",
       "safeSentence": "Feature tables package cleaned telemetry into decision-support inputs.",
+      "commonTrap": "Treating the feature table as static even when telemetry definitions or bucket rules changed.",
+      "interviewAnswer": "I describe the feature table as the contract between telemetry prep and forecasting. It preserves key, time bucket, feature signals, and row quality so downstream risk calls are explainable.",
+      "relatedQuestions": [
+        "How do you prevent feature drift after telemetry schema changes?",
+        "Which fields are required before a row can be used for forecasting?"
+      ],
+      "note": {
+        "summary": "Use one row per application and time bucket with explicit quality status.",
+        "image": {
+          "src": "assets/feature-table-example.svg",
+          "caption": "Example feature table shape for forecasting-ready telemetry."
+        }
+      },
+      "externalLinks": [
+        {
+          "label": "Feature Engineering for Time Series",
+          "href": "https://otexts.com/fpp3/features.html"
+        }
+      ],
       "childTopics": []
     },
     {
@@ -41,6 +60,14 @@
       "definition": "A normalized interval field (for example hourly) used to align telemetry points.",
       "whyItMatters": "Buckets ensure signals are comparable and joinable across features.",
       "safeSentence": "Time buckets create consistent slices for trend and peak calculations.",
+      "commonTrap": "Mixing 5-minute and hourly buckets in one training set without normalization.",
+      "relatedQuestions": [
+        "How do you choose bucket width for capacity forecasting?",
+        "How do you handle sparse telemetry in fixed buckets?"
+      ],
+      "note": {
+        "summary": "Choose a bucket cadence that matches decision frequency and telemetry stability."
+      },
       "childTopics": []
     },
     {
@@ -81,6 +108,12 @@
       "definition": "A row-level status marker indicating whether required fields and checks passed.",
       "whyItMatters": "Quality flags prevent low-trust rows from silently influencing forecasts.",
       "safeSentence": "Quality flags make row reliability explicit before forecasting use.",
+      "commonTrap": "Letting failed-quality rows pass because the percentage looks small.",
+      "interviewAnswer": "I use quality flags to gate forecasting inputs. Failed rows are either repaired or excluded with traceable rationale.",
+      "relatedQuestions": [
+        "What minimum quality checks should run before scoring?",
+        "How do you report rejected rows to stakeholders?"
+      ],
       "childTopics": []
     }
   ],

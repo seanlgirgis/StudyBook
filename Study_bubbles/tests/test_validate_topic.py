@@ -111,3 +111,27 @@ def test_child_topics_shape_with_label_and_topic_passes(tmp_path: Path, tiny_top
     ok, _passes, errors = validate_topic_file(path)
     assert ok is True
     assert errors == []
+
+
+def test_optional_rehearsal_fields_pass(tmp_path: Path, tiny_topic: dict) -> None:
+    topic = copy.deepcopy(tiny_topic)
+    topic["nodes"][0]["commonTrap"] = "Trap"
+    topic["nodes"][0]["interviewAnswer"] = "Answer"
+    topic["nodes"][0]["relatedQuestions"] = ["Q1", "Q2"]
+    topic["nodes"][0]["note"] = {
+        "summary": "Summary",
+        "image": {"src": "assets/example.svg", "caption": "Caption"},
+    }
+    path = _write_topic(tmp_path, topic)
+    ok, _passes, errors = validate_topic_file(path)
+    assert ok is True
+    assert errors == []
+
+
+def test_related_questions_non_string_fails(tmp_path: Path, tiny_topic: dict) -> None:
+    topic = copy.deepcopy(tiny_topic)
+    topic["nodes"][0]["relatedQuestions"] = ["Q1", 42]
+    path = _write_topic(tmp_path, topic)
+    ok, _passes, errors = validate_topic_file(path)
+    assert ok is False
+    assert any("relatedQuestions must contain only strings" in e for e in errors)

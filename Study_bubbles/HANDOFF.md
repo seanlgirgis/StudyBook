@@ -89,8 +89,42 @@ Release 1 PASS details:
   - `file://` unique-origin warning for direct-open local HTML
   - `aria-hidden` focus warning after context-menu close
 
+Release 2 (StudyBubble v0.9 Study Card + Media + Links) manual browser smoke: PASS.
+
+Release 2 progress note:
+- Viewer side panel now renders richer study-card sections (when present):
+  - common trap
+  - interview answer
+  - related questions
+  - study note summary
+  - image/diagram preview with graceful unavailable fallback
+  - external links
+- Copy helpers added with graceful fallback:
+  - Copy Safe Sentence
+  - Copy Study Path (when a path is active)
+- Search now includes additional rehearsal text fields.
+- Media-rich sample content added to `case_capacity_feature_table` with local SVG asset `assets/feature-table-example.svg`.
+
+Release 2 PASS details:
+- `outputs/single_file/case_capacity_feature_table.html` opens directly
+- enhanced study card renders
+- card fields display: definition, why it matters, safe sentence, common trap, interview answer, related questions, study note, image/diagram, external links, parent topic, and study path
+- local SVG image displays from `outputs/single_file/assets/feature-table-example.svg`
+- search finds optional card text (`feature drift` -> 1 match)
+- external link opens successfully
+- parent/back navigation returns to Evidence and Features
+- reset clears search and restores normal map
+- Copy Safe Sentence works
+- Copy Study Card works
+- console shows only accepted `file://` unique-origin warning
+- no `TypeError`, `ReferenceError`, `SyntaxError`, or `ERR_FILE_NOT_FOUND`
+
+Product direction note:
+- StudyBubble is primarily a visual study-map builder.
+- Copy buttons are secondary polish, not the core direction.
+
 Next step:
-- Start Release 2 gate in `docs/V1_RELEASE_PLAN.md`: StudyBubble `v0.9` Study Card + Media + Links.
+- Start Release 3 gate in `docs/V1_RELEASE_PLAN.md`: StudyBubble `v1.0` Usable Release Package.
 
 Iteration 13 repair note:
 - First visual smoke failed due to dense case-study layout/readability limits.

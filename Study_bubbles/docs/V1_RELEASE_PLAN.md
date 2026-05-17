@@ -53,6 +53,9 @@ Acceptance:
 
 ## Release 2: StudyBubble v0.9 - Study Card + Media + Links
 
+Status:
+- Completed (manual browser smoke PASS).
+
 Goal:
 - Turn the side panel into a real study/rehearsal card.
 

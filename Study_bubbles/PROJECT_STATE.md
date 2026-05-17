@@ -13,7 +13,7 @@ Active acceptance remains direct-open outputs/single_file/*.html.
 
 - Project Name: study_bubbles
 - Project Purpose: Build a small, static, reusable study bubble system that generates study maps from topic data files.
-- Current Phase: Release 1 complete - StudyBubble v0.7 BOA Interaction Parity (manual browser smoke PASS)
+- Current Phase: Release 2 complete - StudyBubble v0.9 Study Card + Media + Links (manual browser smoke PASS)
 - Completed: Toolbar search and data-driven group filters were added to the viewer; Iteration 11 regression fixes restored single-file topic loading and parent-topic double-click fallback navigation; Iteration 12 adds visible parent/back and child-topic navigation buttons while preserving double-click shortcuts; Iteration 13 adds a four-screen capacity forecasting case-study path and repairs dense-layout readability with improved sizing/spacing/label/link rendering; Iteration 14 adds a grandchild topic for three-level navigation proof.
 - Outputs: Single-file outputs are the active acceptance artifacts (`outputs/single_file/*.html`); multi-file outputs are deprecated historical/debug artifacts.
 - BOA Migration Status: No BOA migration or data extraction was performed.
@@ -32,4 +32,6 @@ Active acceptance remains direct-open outputs/single_file/*.html.
 - Multi-file Note: local HTTP server applies only to deprecated multi-file fetch testing and is not part of active acceptance.
 - v0.7 BOA Parity Smoke Status: PASS (`case_capacity_overview.html` direct-open; search/filter/study paths clickable with path highlighting and reset clear; minimap/zoom/pan/fit/reset/drag/focus/context menu + context reset PASS; keyboard navigation PASS; parent/child/grandchild navigation PASS; console functionally clean for acceptance).
 - Console Notes: `file://` unique origin warning observed and accepted for direct-open single-file use; `aria-hidden` focus warning observed after context-menu close and accepted as non-blocking accessibility polish.
-- Next Intended Step: execute Release 2 gate per `docs/V1_RELEASE_PLAN.md` (StudyBubble `v0.9` Study Card + Media + Links).
+- v0.9 Smoke Status: PASS (`case_capacity_feature_table.html` direct-open; enhanced study card fields render; local SVG preview from `outputs/single_file/assets/feature-table-example.svg`; search finds optional text; external link opens; parent/back returns to Evidence and Features; reset clears search; Copy Safe Sentence and Copy Study Card PASS; no TypeError/ReferenceError/SyntaxError/ERR_FILE_NOT_FOUND).
+- Product Direction Note: StudyBubble is primarily a visual study-map builder; copy buttons are secondary polish.
+- Next Intended Step: execute Release 3 gate per `docs/V1_RELEASE_PLAN.md` (StudyBubble `v1.0` Usable Release Package).

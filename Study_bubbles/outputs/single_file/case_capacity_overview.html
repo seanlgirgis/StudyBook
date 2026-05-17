@@ -178,6 +178,51 @@ body {
   line-height: 1.35;
 }
 
+.card-section {
+  margin-bottom: 10px;
+}
+
+.card-section.trap {
+  border-left: 3px solid #f59e0b;
+  padding-left: 8px;
+}
+
+.copy-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.card-copy-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.copy-status {
+  color: #93c5fd;
+  font-size: 12px;
+  align-self: center;
+}
+
+.note-image {
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #0b1220;
+}
+
+.note-image-caption,
+.note-image-fallback {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .nav-section {
   margin: 10px 0;
 }
@@ -703,6 +748,7 @@ body {
   let dragNodeId = null;
   let dragOffset = { x: 0, y: 0 };
   let ctxNodeId = null;
+  let activePath = null;
 
   const width = 1200;
   const height = 700;
@@ -778,10 +824,44 @@ body {
       node.definition,
       node.whyItMatters,
       node.safeSentence,
+      node.commonTrap,
+      node.interviewAnswer,
+      ...(Array.isArray(node.relatedQuestions) ? node.relatedQuestions : []),
       node.note && node.note.summary,
-      node.note && node.note.commonTrap,
-      node.note && node.note.interviewAnswer,
     ].filter(Boolean).join(" ").toLowerCase();
+  }
+
+  async function copyTextWithFallback(text) {
+    const value = String(text || "").trim();
+    if (!value) return false;
+    const isFileProtocol = window.location && window.location.protocol === "file:";
+    try {
+      if (!isFileProtocol && navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(value);
+        return true;
+      }
+    } catch (_e) {
+      // fallback below
+    }
+    const ta = document.createElement("textarea");
+    ta.value = value;
+    ta.setAttribute("readonly", "readonly");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    ta.style.top = "0";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+    let ok = false;
+    try {
+      ok = document.execCommand("copy");
+    } catch (_e) {
+      ok = false;
+    }
+    document.body.removeChild(ta);
+    return ok;
   }
 
   function renderExternalLinks(links) {
@@ -914,21 +994,54 @@ body {
   }
 
   function renderDetails(node, topic, mode) {
-    const noteSummary = node.note && node.note.summary ? node.note.summary : "N/A";
+    const noteSummary = node.note && node.note.summary ? node.note.summary : "";
     const hasOneChildTopic = Array.isArray(node.childTopics) && node.childTopics.length === 1;
     const hasParentTopic = !!(topic && topic.parentTopic && topic.parentTopic.topic);
+    const hasSafeSentence = !!node.safeSentence;
+    const relatedQuestions = Array.isArray(node.relatedQuestions) ? node.relatedQuestions : [];
+    const noteImage = node.note && node.note.image && typeof node.note.image === "object" ? node.note.image : null;
+    const copyPathVisible = !!activePath;
     const doubleClickHint = hasOneChildTopic
       ? `<p><em>Double-click this bubble to open: ${escapeHtml(node.childTopics[0].label || node.childTopics[0].topic || "Child Topic")}</em></p>`
       : hasParentTopic
       ? `<p><em>Double-click this bubble to go back to parent topic: ${escapeHtml(topic.parentTopic.label || topic.parentTopic.topic || "Back")}</em></p>`
       : "";
+    const commonTrap = node.commonTrap
+      ? `<div class="card-section trap"><p><strong>Common Trap</strong></p><p>${escapeHtml(node.commonTrap)}</p></div>`
+      : "";
+    const interviewAnswer = node.interviewAnswer
+      ? `<div class="card-section"><p><strong>Interview Answer</strong></p><p>${escapeHtml(node.interviewAnswer)}</p></div>`
+      : "";
+    const relatedQuestionsHtml = relatedQuestions.length > 0
+      ? `<div class="card-section"><p><strong>Related Questions</strong></p><ul>${relatedQuestions.map((q) => `<li>${escapeHtml(q)}</li>`).join("")}</ul></div>`
+      : "";
+    const studyNote = noteSummary
+      ? `<div class="card-section"><p><strong>Study Note</strong></p><p>${escapeHtml(noteSummary)}</p></div>`
+      : "";
+    const imageSection = noteImage && noteImage.src
+      ? `<div class="card-section"><p><strong>Image / Diagram</strong></p><img class="note-image" src="${escapeHtml(noteImage.src)}" alt="${escapeHtml(noteImage.caption || node.label || "Study image")}" data-image-preview="1" /><p class="note-image-caption">${escapeHtml(noteImage.caption || "")}</p><p class="note-image-fallback" hidden>Image unavailable</p></div>`
+      : "";
+    const copyPathButton = copyPathVisible
+      ? `<button type="button" class="card-copy-btn" data-copy-study-path="1">Copy Study Path</button>`
+      : "";
+    const copyCardButton = `<button type="button" class="card-copy-btn" data-copy-study-card="1">Copy Study Card</button>`;
     detailsEl.innerHTML = `
       <p><strong>Label:</strong> ${escapeHtml(node.label)}</p>
       <p><strong>Group:</strong> ${escapeHtml(node.group)}</p>
-      <p><strong>Definition:</strong> ${escapeHtml(node.definition)}</p>
-      <p><strong>Why It Matters:</strong> ${escapeHtml(node.whyItMatters || "")}</p>
-      <p><strong>Safe Sentence:</strong> ${escapeHtml(node.safeSentence || "")}</p>
-      <p><strong>Note:</strong> ${escapeHtml(noteSummary)}</p>
+      <div class="card-section"><p><strong>Definition</strong></p><p>${escapeHtml(node.definition || "")}</p></div>
+      <div class="card-section"><p><strong>Why It Matters</strong></p><p>${escapeHtml(node.whyItMatters || "")}</p></div>
+      <div class="card-section"><p><strong>Safe Sentence</strong></p><p>${escapeHtml(node.safeSentence || "")}</p></div>
+      <div class="copy-row">
+        ${hasSafeSentence ? '<button type="button" class="card-copy-btn" data-copy-safe="1">Copy Safe Sentence</button>' : ""}
+        ${copyCardButton}
+        ${copyPathButton}
+        <span class="copy-status" id="copy-status" aria-live="polite"></span>
+      </div>
+      ${commonTrap}
+      ${interviewAnswer}
+      ${relatedQuestionsHtml}
+      ${studyNote}
+      ${imageSection}
       ${doubleClickHint}
       ${renderExternalLinks(node.externalLinks)}
       ${renderChildTopicButtons(node.childTopics, mode)}
@@ -940,6 +1053,76 @@ body {
         const href = button.getAttribute("data-nav-href");
         if (!href || href === "#") return;
         window.location.href = href;
+      });
+    }
+    const image = detailsEl.querySelector("[data-image-preview='1']");
+    if (image) {
+      image.addEventListener("error", () => {
+        image.setAttribute("hidden", "hidden");
+        const fallback = image.parentElement && image.parentElement.querySelector(".note-image-fallback");
+        if (fallback) fallback.hidden = false;
+      });
+    }
+    const copySafeBtn = detailsEl.querySelector("[data-copy-safe='1']");
+    if (copySafeBtn) {
+      copySafeBtn.addEventListener("click", async () => {
+        const ok = await copyTextWithFallback(node.safeSentence || "");
+        const status = detailsEl.querySelector("#copy-status");
+        if (status) status.textContent = ok ? "Copied" : "Copy unavailable";
+      });
+    }
+    const copyPathBtn = detailsEl.querySelector("[data-copy-study-path='1']");
+    if (copyPathBtn) {
+      copyPathBtn.addEventListener("click", async () => {
+        if (!activePath) return;
+        const labels = (activePath.nodeIds || [])
+          .map((id) => graphById.get(id))
+          .filter(Boolean)
+          .map((n) => `- ${n.label}`);
+        const text = `${activePath.label}\n${activePath.description || ""}\n${labels.join("\n")}`.trim();
+        const ok = await copyTextWithFallback(text);
+        const status = detailsEl.querySelector("#copy-status");
+        if (status) status.textContent = ok ? "Copied" : "Copy unavailable";
+      });
+    }
+    const copyCardBtn = detailsEl.querySelector("[data-copy-study-card='1']");
+    if (copyCardBtn) {
+      copyCardBtn.addEventListener("click", async () => {
+        const lines = [
+          `Label: ${node.label || ""}`,
+          `Group: ${node.group || ""}`,
+          "",
+          "Definition:",
+          `${node.definition || ""}`,
+          "",
+          "Why It Matters:",
+          `${node.whyItMatters || ""}`,
+          "",
+          "Safe Sentence:",
+          `${node.safeSentence || ""}`,
+        ];
+        if (node.commonTrap) {
+          lines.push("", "Common Trap:", `${node.commonTrap}`);
+        }
+        if (node.interviewAnswer) {
+          lines.push("", "Interview Answer:", `${node.interviewAnswer}`);
+        }
+        if (Array.isArray(node.relatedQuestions) && node.relatedQuestions.length > 0) {
+          lines.push("", "Related Questions:");
+          for (const q of node.relatedQuestions) lines.push(`- ${q}`);
+        }
+        if (node.note && node.note.summary) {
+          lines.push("", "Study Note:", `${node.note.summary}`);
+        }
+        if (Array.isArray(node.externalLinks) && node.externalLinks.length > 0) {
+          lines.push("", "External Links:");
+          for (const link of node.externalLinks) {
+            lines.push(`- ${link.label || "Link"}: ${link.href || ""}`);
+          }
+        }
+        const ok = await copyTextWithFallback(lines.join("\n").trim());
+        const status = detailsEl.querySelector("#copy-status");
+        if (status) status.textContent = ok ? "Copied" : "Copy unavailable";
       });
     }
   }
@@ -1033,9 +1216,11 @@ body {
         if (activePathId === thisPathId) {
           activePathId = null;
           activePathNodeIds = new Set();
+          activePath = null;
         } else {
           activePathId = thisPathId;
           activePathNodeIds = new Set(path.nodeIds || []);
+          activePath = path;
         }
         for (const b of pathsEl.querySelectorAll(".path-item-btn")) {
           b.classList.toggle("is-active", b.dataset.pathId === activePathId);
@@ -1465,6 +1650,7 @@ body {
       focusedNodeId = null;
       activePathNodeIds = new Set();
       activePathId = null;
+      activePath = null;
       if (groupFiltersEl) {
         for (const b of groupFiltersEl.querySelectorAll(".filter-btn")) {
           b.classList.toggle("is-active", b.textContent === "All");
@@ -1516,7 +1702,7 @@ body {
   <!-- SECTION: Build Metadata -->
   <script id="studybubble-build-metadata" type="application/json">
 {
-  "generatedAtUtc": "2026-05-17T03:46:55.171003+00:00",
+  "generatedAtUtc": "2026-05-17T04:21:24.169893+00:00",
   "mode": "single-file",
   "sourceTopicPath": "topics\\case_capacity_overview.studybubble.json",
   "topicId": "case_capacity_overview",

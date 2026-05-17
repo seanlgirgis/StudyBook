@@ -134,16 +134,47 @@ def validate_topic_data(topic: dict[str, Any]) -> tuple[bool, list[str], list[st
             if not _is_dict(note):
                 errors.append(f"FAIL: node '{node_id}' note must be an object when present")
             else:
+                summary = note.get("summary")
+                if summary is not None and not isinstance(summary, str):
+                    errors.append(
+                        f"FAIL: node '{node_id}' note.summary must be a string when present"
+                    )
                 image = note.get("image")
                 if image is not None:
                     if not _is_dict(image):
                         errors.append(
                             f"FAIL: node '{node_id}' note.image must be an object"
                         )
-                    elif "src" not in image:
-                        errors.append(
-                            f"FAIL: node '{node_id}' note.image must include src"
-                        )
+                    else:
+                        if "src" not in image:
+                            errors.append(
+                                f"FAIL: node '{node_id}' note.image must include src"
+                            )
+                        elif not isinstance(image.get("src"), str):
+                            errors.append(
+                                f"FAIL: node '{node_id}' note.image.src must be a string"
+                            )
+                        if "caption" in image and not isinstance(image.get("caption"), str):
+                            errors.append(
+                                f"FAIL: node '{node_id}' note.image.caption must be a string when present"
+                            )
+
+        if "commonTrap" in node and not isinstance(node.get("commonTrap"), str):
+            errors.append(f"FAIL: node '{node_id}' commonTrap must be a string when present")
+        if "interviewAnswer" in node and not isinstance(node.get("interviewAnswer"), str):
+            errors.append(
+                f"FAIL: node '{node_id}' interviewAnswer must be a string when present"
+            )
+        if "relatedQuestions" in node:
+            rq = node.get("relatedQuestions")
+            if not _is_list(rq):
+                errors.append(
+                    f"FAIL: node '{node_id}' relatedQuestions must be a list of strings"
+                )
+            elif not all(isinstance(x, str) for x in rq):
+                errors.append(
+                    f"FAIL: node '{node_id}' relatedQuestions must contain only strings"
+                )
 
     if len(node_ids) != len(set(node_ids)):
         errors.append("FAIL: duplicate node ids detected")

@@ -281,4 +281,32 @@
 - Console notes accepted as non-blocking for v0.7:
   - `file://` unique-origin warning
   - `aria-hidden` focus warning after context-menu close
+## 2026-05-16 - Release 2 StudyBubble v0.9 (In Progress: Study Card + Media + Links)
+- Upgraded side-panel detail rendering toward full rehearsal card:
+  - `commonTrap`, `interviewAnswer`, `relatedQuestions`, `note.summary`, `note.image`, and `externalLinks`
+  - cleaner navigation sections retained for child topics and parent topic
+- Added copy helpers:
+  - Copy Safe Sentence (selected node)
+  - Copy Study Path (active study path)
+  - clipboard fallback behavior for `file://` contexts
+- Expanded search coverage to include study-card text fields (`commonTrap`, `interviewAnswer`, `relatedQuestions`, and `note.summary`).
+- Added media-rich sample content to `case_capacity_feature_table.studybubble.json` and added local asset `assets/feature-table-example.svg`.
+- Extended validator/tests for optional rehearsal fields and note image field typing.
+## 2026-05-16 - Release 2 StudyBubble v0.9 (PASS)
+- Recorded manual browser smoke PASS for direct-open `outputs/single_file/case_capacity_feature_table.html`.
+- Confirmed enhanced study card renders and displays:
+  - definition, why it matters, safe sentence, common trap, interview answer, related questions, study note, image/diagram, external links, parent topic, and study path.
+- Confirmed local SVG image preview loads from:
+  - `outputs/single_file/assets/feature-table-example.svg`
+- Confirmed search finds optional card text (`feature drift` -> `1` match).
+- Confirmed external link opens, parent/back returns to Evidence and Features, and reset clears search/restores map.
+- Confirmed copy actions PASS:
+  - Copy Safe Sentence
+  - Copy Study Card
+- Console note accepted:
+  - `file://` unique-origin warning
+- Confirmed absence of startup/runtime blockers:
+  - no `TypeError`, `ReferenceError`, `SyntaxError`, or `ERR_FILE_NOT_FOUND`
+- Product direction reaffirmed:
+  - visual study-map experience is primary; copy actions are secondary polish.
 

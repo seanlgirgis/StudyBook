@@ -168,6 +168,51 @@ body {
   line-height: 1.35;
 }
 
+.card-section {
+  margin-bottom: 10px;
+}
+
+.card-section.trap {
+  border-left: 3px solid #f59e0b;
+  padding-left: 8px;
+}
+
+.copy-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.card-copy-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.copy-status {
+  color: #93c5fd;
+  font-size: 12px;
+  align-self: center;
+}
+
+.note-image {
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #0b1220;
+}
+
+.note-image-caption,
+.note-image-fallback {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .nav-section {
   margin: 10px 0;
 }

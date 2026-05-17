@@ -61,6 +61,18 @@ Builder/output tests:
   - accepted non-blocking console notes:
     - `file://` unique-origin warning
     - `aria-hidden` focus warning after context-menu close
+- v0.9 study-card checks (manual smoke, direct-open `case_capacity_feature_table.html`):
+  - selected node displays optional study fields when present:
+    - `commonTrap`, `interviewAnswer`, `relatedQuestions`, `note.summary`, `note.image`, `externalLinks`
+  - missing optional fields do not break rendering
+  - Copy Safe Sentence works, or shows graceful copy fallback status
+  - Copy Study Path works when a study path is active, or shows graceful fallback status
+  - `note.image` preview displays when available, otherwise shows non-breaking unavailable message
+  - search finds content from rehearsal/study-card fields
+  - local image preview resolves from copied output asset path (`outputs/single_file/assets/...`)
+  - Copy Study Card works (secondary polish)
+  - no `TypeError`, `ReferenceError`, `SyntaxError`, or `ERR_FILE_NOT_FOUND`
+  - accepted console note: `file://` unique-origin warning
 - Deprecated/historical only:
   - multi-file output smoke checks
   - multi-file local HTTP-server checks

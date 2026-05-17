@@ -14,6 +14,59 @@ def _json_for_script(data: object) -> str:
     return json.dumps(data, indent=2, ensure_ascii=False).replace("</", "<\\/")
 
 
+def _is_external_ref(path_value: str) -> bool:
+    lower = path_value.lower()
+    return lower.startswith(("http://", "https://", "data:", "//"))
+
+
+def _copy_single_file_image_assets(topic: dict, out_html_path: Path) -> list[str]:
+    warnings: list[str] = []
+    project_root = Path.cwd().resolve()
+    out_dir = out_html_path.parent.resolve()
+
+    for node in topic.get("nodes", []):
+        if not isinstance(node, dict):
+            continue
+        note = node.get("note")
+        if not isinstance(note, dict):
+            continue
+        image = note.get("image")
+        if not isinstance(image, dict):
+            continue
+        src = image.get("src")
+        if not isinstance(src, str) or not src.strip():
+            continue
+        src = src.strip()
+        if _is_external_ref(src):
+            continue
+
+        rel_src = Path(src)
+        if rel_src.is_absolute():
+            warnings.append(f"WARN: skipped absolute image path '{src}'")
+            continue
+        if ".." in rel_src.parts:
+            warnings.append(f"WARN: skipped unsafe image path '{src}'")
+            continue
+
+        source_path = (project_root / rel_src).resolve()
+        if not source_path.exists():
+            warnings.append(f"WARN: image source not found '{src}'")
+            continue
+        if project_root not in source_path.parents and source_path != project_root:
+            warnings.append(f"WARN: skipped out-of-project image path '{src}'")
+            continue
+
+        target_path = (out_dir / rel_src).resolve()
+        if out_dir not in target_path.parents and target_path != out_dir:
+            warnings.append(f"WARN: skipped unsafe output image path '{src}'")
+            continue
+
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source_path, target_path)
+
+    return warnings
+
+
 def _validate_and_load_topic(topic_path: Path) -> tuple[bool, dict, list[str], list[str]]:
     ok, passes, errors = validate_topic_file(topic_path)
     for line in passes:
@@ -205,6 +258,7 @@ def build_single_file(topic_path: Path, out_html_path: Path) -> int:
 
     out_html_path.parent.mkdir(parents=True, exist_ok=True)
     out_html_path.write_text(html, encoding="utf-8")
+    copy_warnings = _copy_single_file_image_assets(topic, out_html_path)
 
     proof_dir = out_html_path.parent / "run_proofs"
     proof_dir.mkdir(parents=True, exist_ok=True)
@@ -234,9 +288,14 @@ def build_single_file(topic_path: Path, out_html_path: Path) -> int:
         "8. Confirm no 'Failed to fetch' message appears.",
         "summary: PASS",
     ]
+    if copy_warnings:
+        proof_lines.append("asset copy warnings:")
+        proof_lines.extend(copy_warnings)
     proof_path.write_text("\n".join(proof_lines) + "\n", encoding="utf-8")
 
     print(f"PASS: single-file output generated at {out_html_path}")
+    for warning in copy_warnings:
+        print(warning)
     print(f"PASS: proof file generated at {proof_path}")
     return 0
 
