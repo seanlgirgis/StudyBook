@@ -219,7 +219,7 @@ def build_single_file(topic_path: Path, out_html_path: Path) -> int:
       </div>
       <div class=\"keyboard-hints\">Keys: <span>Arrows</span> move selection <span>Enter</span> select <span>Esc</span> clear <span>F</span> focus</div>
     </section>
-
+    <div id=\"panel-resizer\" class=\"panel-resizer\" role=\"separator\" aria-orientation=\"vertical\" aria-label=\"Resize study panel\"></div>
     <aside class=\"side-panel\">
       <h2>Details</h2>
       <div id=\"node-details\" class=\"panel-card\">

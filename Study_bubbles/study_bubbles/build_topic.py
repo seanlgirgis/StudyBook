@@ -209,7 +209,7 @@ def build_single_file(topic_path: Path, out_html_path: Path) -> int:
     <section class=\"map-area\">
       <svg id=\"map-svg\" viewBox=\"0 0 1000 520\" role=\"img\" aria-label=\"Study bubble map\"></svg>
     </section>
-
+    <div id=\"panel-resizer\" class=\"panel-resizer\" role=\"separator\" aria-orientation=\"vertical\" aria-label=\"Resize study panel\"></div>
     <aside class=\"side-panel\">
       <h2>Details</h2>
       <div id=\"node-details\" class=\"panel-card\">

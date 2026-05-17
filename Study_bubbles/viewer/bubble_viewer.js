@@ -9,6 +9,9 @@
   const searchCountEl = document.getElementById("search-count");
   const groupFiltersEl = document.getElementById("group-filters");
   const clearBtn = document.getElementById("clear-filters");
+  const layoutEl = document.querySelector(".layout");
+  const sidePanelEl = document.querySelector(".side-panel");
+  const panelResizerEl = document.getElementById("panel-resizer");
   const headerTopEl = document.querySelector(".header-top");
   const dragToggleBtn = document.getElementById("drag-toggle");
   const focusToggleBtn = document.getElementById("focus-toggle");
@@ -42,6 +45,7 @@
   let dragOffset = { x: 0, y: 0 };
   let ctxNodeId = null;
   let activePath = null;
+  let isResizingPanel = false;
 
   const width = 1200;
   const height = 700;
@@ -53,6 +57,31 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
+  }
+
+  function applyPanelWidth(px) {
+    if (!layoutEl || !sidePanelEl) return;
+    const minPx = 280;
+    const maxPx = Math.max(360, Math.floor(window.innerWidth * 0.6));
+    const clamped = Math.max(minPx, Math.min(maxPx, px));
+    layoutEl.style.setProperty("--panel-width", `${clamped}px`);
+    try {
+      window.localStorage.setItem("studybubble.panelWidthPx", String(clamped));
+    } catch (_e) {
+      // non-fatal
+    }
+  }
+
+  function restorePanelWidth() {
+    if (!layoutEl || !sidePanelEl) return;
+    try {
+      const raw = window.localStorage.getItem("studybubble.panelWidthPx");
+      if (!raw) return;
+      const parsed = Number.parseInt(raw, 10);
+      if (Number.isFinite(parsed)) applyPanelWidth(parsed);
+    } catch (_e) {
+      // non-fatal
+    }
   }
 
   function toSingleFileHref(topicRef) {
@@ -861,6 +890,11 @@
   }
 
   window.addEventListener("mousemove", (event) => {
+    if (isResizingPanel) {
+      const desired = window.innerWidth - event.clientX;
+      applyPanelWidth(desired);
+      return;
+    }
     if (dragNodeId) {
       const world = clientToWorld(event.clientX, event.clientY);
       const n = graphById.get(dragNodeId);
@@ -877,6 +911,7 @@
   });
 
   window.addEventListener("mouseup", () => {
+    isResizingPanel = false;
     isPanning = false;
     dragNodeId = null;
     svg.classList.remove("is-panning");
@@ -977,6 +1012,14 @@
   }
   if (fitBtn) fitBtn.addEventListener("click", fitView);
   if (resetViewBtn) resetViewBtn.addEventListener("click", resetViewTransform);
+  if (panelResizerEl && sidePanelEl) {
+    panelResizerEl.addEventListener("mousedown", (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      isResizingPanel = true;
+    });
+    restorePanelWidth();
+  }
   document.addEventListener("keydown", handleKeyboard);
 
   try {

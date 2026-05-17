@@ -135,6 +135,16 @@ Next step:
 - Manual browser smoke from release folder: PASS.
 - Ready for v1.0 freeze commit/tag.
 
+v1.1 Resizable Study Panel smoke:
+- PASS
+- divider drag resizes panel
+- map area adjusts
+- text wraps and image scales in card
+- panel scroll remains usable
+- minimap stays usable
+- panel width persistence works after refresh
+- no TypeError/ReferenceError/SyntaxError/ERR_FILE_NOT_FOUND
+
 Iteration 13 repair note:
 - First visual smoke failed due to dense case-study layout/readability limits.
 - Repair completed with improved node sizing, group-based spacing, collision handling, label wrapping, and link visibility.

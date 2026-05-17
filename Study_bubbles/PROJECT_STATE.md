@@ -13,7 +13,7 @@ Active acceptance remains direct-open outputs/single_file/*.html.
 
 - Project Name: study_bubbles
 - Project Purpose: Build a small, static, reusable study bubble system that generates study maps from topic data files.
-- Current Phase: Release 3 complete - StudyBubble v1.0 Usable Release Package (manual release-folder smoke PASS)
+- Current Phase: v1.1 complete - Resizable Study Panel (manual browser smoke PASS)
 - Completed: Toolbar search and data-driven group filters were added to the viewer; Iteration 11 regression fixes restored single-file topic loading and parent-topic double-click fallback navigation; Iteration 12 adds visible parent/back and child-topic navigation buttons while preserving double-click shortcuts; Iteration 13 adds a four-screen capacity forecasting case-study path and repairs dense-layout readability with improved sizing/spacing/label/link rendering; Iteration 14 adds a grandchild topic for three-level navigation proof.
 - Outputs: Single-file outputs are the active acceptance artifacts (`outputs/single_file/*.html`); multi-file outputs are deprecated historical/debug artifacts.
 - BOA Migration Status: No BOA migration or data extraction was performed.
@@ -35,4 +35,5 @@ Active acceptance remains direct-open outputs/single_file/*.html.
 - v0.9 Smoke Status: PASS (`case_capacity_feature_table.html` direct-open; enhanced study card fields render; local SVG preview from `outputs/single_file/assets/feature-table-example.svg`; search finds optional text; external link opens; parent/back returns to Evidence and Features; reset clears search; Copy Safe Sentence and Copy Study Card PASS; no TypeError/ReferenceError/SyntaxError/ERR_FILE_NOT_FOUND).
 - Product Direction Note: StudyBubble is primarily a visual study-map builder; copy buttons are secondary polish.
 - v1.0 Release-Folder Smoke Status: PASS (`outputs/releases/studybubble-v1.0/index.html` direct-open; launch links render; overview/evidence/feature-table pages open from release folder; bubbles/controls render; image/diagram loads from release assets; no TypeError/ReferenceError/SyntaxError/ERR_FILE_NOT_FOUND).
-- Next Intended Step: freeze v1.0 package with commit/tag after user acceptance.
+- v1.1 Resize Smoke Status: PASS (divider drag resizes panel; map adjusts; card text wraps; image scales; panel scrolls; minimap remains usable; width persists after refresh; no TypeError/ReferenceError/SyntaxError/ERR_FILE_NOT_FOUND).
+- Next Intended Step: proceed with next post-v1.1 usability priorities.

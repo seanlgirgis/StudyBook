@@ -126,16 +126,17 @@ body {
 }
 
 .layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  --panel-width: 34%;
+  display: flex;
   min-height: calc(100vh - 130px);
 }
 
 .map-area {
-  border-right: 1px solid var(--line);
+  flex: 1 1 auto;
   padding: 10px;
   position: relative;
   overflow: hidden;
+  min-width: 320px;
 }
 
 #map-svg {
@@ -156,8 +157,26 @@ body {
 }
 
 .side-panel {
+  width: var(--panel-width);
+  min-width: 280px;
+  max-width: 60vw;
   padding: 16px;
   background: var(--panel);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.panel-resizer {
+  width: 8px;
+  cursor: col-resize;
+  background: #0f172a;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+
+.panel-resizer:hover {
+  background: #1e293b;
 }
 
 .side-panel h2 {
@@ -396,12 +415,21 @@ body {
 
 @media (max-width: 900px) {
   .layout {
-    grid-template-columns: 1fr;
+    display: block;
   }
 
   .map-area {
-    border-right: none;
     border-bottom: 1px solid var(--line);
+  }
+
+  .panel-resizer {
+    display: none;
+  }
+
+  .side-panel {
+    width: auto;
+    max-width: none;
+    min-width: 0;
   }
 
   .toolbar {
@@ -440,7 +468,7 @@ body {
       </div>
       <div class="keyboard-hints">Keys: <span>Arrows</span> move selection <span>Enter</span> select <span>Esc</span> clear <span>F</span> focus</div>
     </section>
-
+    <div id="panel-resizer" class="panel-resizer" role="separator" aria-orientation="vertical" aria-label="Resize study panel"></div>
     <aside class="side-panel">
       <h2>Details</h2>
       <div id="node-details" class="panel-card">
@@ -666,6 +694,9 @@ body {
   const searchCountEl = document.getElementById("search-count");
   const groupFiltersEl = document.getElementById("group-filters");
   const clearBtn = document.getElementById("clear-filters");
+  const layoutEl = document.querySelector(".layout");
+  const sidePanelEl = document.querySelector(".side-panel");
+  const panelResizerEl = document.getElementById("panel-resizer");
   const headerTopEl = document.querySelector(".header-top");
   const dragToggleBtn = document.getElementById("drag-toggle");
   const focusToggleBtn = document.getElementById("focus-toggle");
@@ -699,6 +730,7 @@ body {
   let dragOffset = { x: 0, y: 0 };
   let ctxNodeId = null;
   let activePath = null;
+  let isResizingPanel = false;
 
   const width = 1200;
   const height = 700;
@@ -710,6 +742,31 @@ body {
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
+  }
+
+  function applyPanelWidth(px) {
+    if (!layoutEl || !sidePanelEl) return;
+    const minPx = 280;
+    const maxPx = Math.max(360, Math.floor(window.innerWidth * 0.6));
+    const clamped = Math.max(minPx, Math.min(maxPx, px));
+    layoutEl.style.setProperty("--panel-width", `${clamped}px`);
+    try {
+      window.localStorage.setItem("studybubble.panelWidthPx", String(clamped));
+    } catch (_e) {
+      // non-fatal
+    }
+  }
+
+  function restorePanelWidth() {
+    if (!layoutEl || !sidePanelEl) return;
+    try {
+      const raw = window.localStorage.getItem("studybubble.panelWidthPx");
+      if (!raw) return;
+      const parsed = Number.parseInt(raw, 10);
+      if (Number.isFinite(parsed)) applyPanelWidth(parsed);
+    } catch (_e) {
+      // non-fatal
+    }
   }
 
   function toSingleFileHref(topicRef) {
@@ -1518,6 +1575,11 @@ body {
   }
 
   window.addEventListener("mousemove", (event) => {
+    if (isResizingPanel) {
+      const desired = window.innerWidth - event.clientX;
+      applyPanelWidth(desired);
+      return;
+    }
     if (dragNodeId) {
       const world = clientToWorld(event.clientX, event.clientY);
       const n = graphById.get(dragNodeId);
@@ -1534,6 +1596,7 @@ body {
   });
 
   window.addEventListener("mouseup", () => {
+    isResizingPanel = false;
     isPanning = false;
     dragNodeId = null;
     svg.classList.remove("is-panning");
@@ -1634,6 +1697,14 @@ body {
   }
   if (fitBtn) fitBtn.addEventListener("click", fitView);
   if (resetViewBtn) resetViewBtn.addEventListener("click", resetViewTransform);
+  if (panelResizerEl && sidePanelEl) {
+    panelResizerEl.addEventListener("mousedown", (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      isResizingPanel = true;
+    });
+    restorePanelWidth();
+  }
   document.addEventListener("keydown", handleKeyboard);
 
   try {
@@ -1652,7 +1723,7 @@ body {
   <!-- SECTION: Build Metadata -->
   <script id="studybubble-build-metadata" type="application/json">
 {
-  "generatedAtUtc": "2026-05-17T04:55:44.538031+00:00",
+  "generatedAtUtc": "2026-05-17T06:28:08.989632+00:00",
   "mode": "single-file",
   "sourceTopicPath": "topics\\case_capacity_feature_table.studybubble.json",
   "topicId": "case_capacity_feature_table",

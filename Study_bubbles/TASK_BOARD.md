@@ -29,12 +29,13 @@
 - Release 1: StudyBubble `v0.7` BOA Interaction Parity PASS (manual browser smoke).
 - Release 2: StudyBubble `v0.9` Study Card + Media + Links PASS (manual browser smoke).
 - Release 3: StudyBubble `v1.0` release-folder manual browser smoke PASS.
+- v1.1: Resizable Study Panel PASS (manual browser smoke).
 
 ## In Progress
-- v1.0 freeze commit/tag checkpoint.
+- Post-v1.1 backlog triage.
 
 ## Next
-- Freeze StudyBubble v1.0 usable release with commit/tag after final user confirmation.
+- Select next small usability enhancement after resizable panel completion.
 
 ## Backlog
 - Package-path cleanup if still needed.

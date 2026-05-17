@@ -93,3 +93,9 @@ Builder/output tests:
     - overview -> evidence -> feature table deep dive
   - release asset load check:
     - `outputs/releases/studybubble-v1.0/assets/feature-table-example.svg`
+- v1.1 resizable panel checks:
+  - drag divider resizes side panel
+  - map area responds to panel width change
+  - panel content remains scrollable
+  - text wraps and image scales correctly in resized panel
+  - panel width persists after refresh when localStorage is available

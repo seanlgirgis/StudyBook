@@ -339,4 +339,18 @@
   - `file://` unique-origin warning
 - Confirmed no serious runtime/browser blockers:
   - no `TypeError`, `ReferenceError`, `SyntaxError`, or `ERR_FILE_NOT_FOUND`
+## 2026-05-17 - v1.1 Resizable Study Panel (PASS)
+- Recorded manual browser smoke PASS for resizable side panel behavior.
+- Confirmed:
+  - side panel resizes by dragging divider
+  - map area adjusts with panel width
+  - study-card text wraps cleanly
+  - image/diagram scales with panel width
+  - side panel remains scrollable for long content
+  - minimap remains visible/usable
+  - panel width persists after refresh
+- Console note accepted:
+  - `file://` unique-origin warning
+- Confirmed absence of runtime blockers:
+  - no `TypeError`, `ReferenceError`, `SyntaxError`, or `ERR_FILE_NOT_FOUND`
 

@@ -132,3 +132,6 @@ Acceptance:
 ## Release Rules
 - No minor tags between these release gates unless user explicitly asks.
 - Each release gets deep browser smoke, commit, tag, and optional zip.
+
+Post-v1.0 note:
+- v1.1 usability increment completed: resizable study panel with persistence (manual smoke PASS).
