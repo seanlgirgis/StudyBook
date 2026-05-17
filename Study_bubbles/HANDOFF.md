@@ -11,7 +11,7 @@ Do not treat them as active concerns or repeat them in normal reports unless
 they cause a failing test or the user explicitly opens a cleanup task.
 Active acceptance remains direct-open outputs/single_file/*.html.
 
-Iteration 13 work started: case-study depth demo.
+Iteration 14 work started: grandchild navigation spike.
 
 What was done:
 - Added toolbar search in the viewer with case-insensitive matching across:
@@ -72,7 +72,7 @@ Status of manual smoke in this run:
 - Limitation reminder: single-file parent/child navigation requires sibling `.html` topic outputs to exist in `outputs/single_file`.
 
 Next step:
-- Iteration 13 manual browser smoke recorded as PASS; ready for commit/tag review.
+- Run/record Iteration 14 manual browser smoke for three-level navigation (overview -> evidence -> feature_table -> evidence -> overview), then review before commit/tag.
 
 Iteration 13 repair note:
 - First visual smoke failed due to dense case-study layout/readability limits.

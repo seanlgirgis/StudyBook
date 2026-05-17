@@ -56,5 +56,5 @@ BOA reference behavior review, not automatic migration.
 - Local HTTP server testing is removed from active acceptance.
 
 ## Next Active Step
-- Iteration 13 (in progress): case-study depth demo.
-- Validate/rebuild four linked single-file case-study screens, then run manual browser smoke for cross-screen navigation and core viewer behaviors.
+- Iteration 14 (in progress): grandchild navigation spike.
+- Validate/rebuild overview/evidence/new-grandchild plus case-study siblings, then run manual browser smoke for three-level navigation flow.

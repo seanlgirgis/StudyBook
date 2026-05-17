@@ -1,4 +1,4 @@
-timestamp: 2026-05-17T00:17:41.241602+00:00
+timestamp: 2026-05-17T00:31:25.125106+00:00
 source topic path: topics\case_capacity_decision.studybubble.json
 output HTML path: outputs\single_file\case_capacity_decision.html
 mode: single-file

@@ -250,4 +250,19 @@
   - double-click shortcut works
   - search, filters, sidebar, and reset work
   - browser console clean
+## 2026-05-16 - Iteration 14 Grandchild Navigation Spike
+- Added new grandchild topic:
+  - `topics/case_capacity_feature_table.studybubble.json`
+- Added new single-file output target:
+  - `outputs/single_file/case_capacity_feature_table.html`
+- Updated `topics/case_capacity_evidence.studybubble.json`:
+  - `feature_table` node now includes child topic navigation to `case_capacity_feature_table.studybubble.json`.
+- New grandchild topic includes parentTopic back navigation:
+  - label: `Back to Evidence and Features`
+  - topic: `case_capacity_evidence.studybubble.json`
+- Preserved existing evidence parentTopic back navigation:
+  - label: `Back to Case Overview`
+  - topic: `case_capacity_overview.studybubble.json`
+- Resulting target flow:
+  - `overview -> evidence -> feature_table -> evidence -> overview`
 

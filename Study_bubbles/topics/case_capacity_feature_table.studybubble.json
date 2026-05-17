@@ -1,0 +1,113 @@
+{
+  "id": "case_capacity_feature_table",
+  "title": "Feature Table Deep Dive",
+  "subtitle": "How cleaned telemetry becomes forecasting-ready rows",
+  "parentTopic": {
+    "label": "Back to Evidence and Features",
+    "topic": "case_capacity_evidence.studybubble.json"
+  },
+  "groups": [
+    { "id": "identity", "label": "Identity", "color": "#4C78A8" },
+    { "id": "time_shape", "label": "Time Shape", "color": "#54A24B" },
+    { "id": "feature_signals", "label": "Feature Signals", "color": "#F58518" },
+    { "id": "quality", "label": "Quality", "color": "#E45756" }
+  ],
+  "nodes": [
+    {
+      "id": "feature_table",
+      "label": "Feature Table",
+      "size": "core",
+      "group": "Feature Signals",
+      "definition": "The final structured row set used as input to practical forecasting workflows.",
+      "whyItMatters": "A consistent feature table enables repeatable forecasting and risk classification.",
+      "safeSentence": "Feature tables package cleaned telemetry into decision-support inputs.",
+      "childTopics": []
+    },
+    {
+      "id": "application_key",
+      "label": "Application Key",
+      "size": "support",
+      "group": "Identity",
+      "definition": "A stable identifier that ties each feature row to a specific application.",
+      "whyItMatters": "Application keys preserve ownership context and aggregation integrity.",
+      "safeSentence": "Application keys keep forecasting rows aligned to accountable services.",
+      "childTopics": []
+    },
+    {
+      "id": "time_bucket",
+      "label": "Time Bucket",
+      "size": "support",
+      "group": "Time Shape",
+      "definition": "A normalized interval field (for example hourly) used to align telemetry points.",
+      "whyItMatters": "Buckets ensure signals are comparable and joinable across features.",
+      "safeSentence": "Time buckets create consistent slices for trend and peak calculations.",
+      "childTopics": []
+    },
+    {
+      "id": "rolling_average",
+      "label": "Rolling Average",
+      "size": "support",
+      "group": "Feature Signals",
+      "definition": "A smoothed trend metric over a moving window for each application and bucket.",
+      "whyItMatters": "Rolling averages reduce noise and reveal directional behavior.",
+      "safeSentence": "Rolling averages provide stable trend context in each row.",
+      "childTopics": []
+    },
+    {
+      "id": "rolling_peak",
+      "label": "Rolling Peak",
+      "size": "support",
+      "group": "Feature Signals",
+      "definition": "A recent-window maximum feature that captures near-worst-case pressure.",
+      "whyItMatters": "Peak-sensitive features help identify practical capacity risk.",
+      "safeSentence": "Rolling peaks preserve stress signals that averages can hide.",
+      "childTopics": []
+    },
+    {
+      "id": "p95",
+      "label": "P95",
+      "size": "detail",
+      "group": "Feature Signals",
+      "definition": "A high-percentile usage signal included for robust upper-range behavior tracking.",
+      "whyItMatters": "P95 balances outlier tolerance with meaningful high-load visibility.",
+      "safeSentence": "P95 gives a practical upper-usage indicator per feature row.",
+      "childTopics": []
+    },
+    {
+      "id": "quality_flag",
+      "label": "Quality Flag",
+      "size": "detail",
+      "group": "Quality",
+      "definition": "A row-level status marker indicating whether required fields and checks passed.",
+      "whyItMatters": "Quality flags prevent low-trust rows from silently influencing forecasts.",
+      "safeSentence": "Quality flags make row reliability explicit before forecasting use.",
+      "childTopics": []
+    }
+  ],
+  "links": [
+    { "source": "application_key", "target": "time_bucket", "label": "row identity in time" },
+    { "source": "time_bucket", "target": "rolling_average", "label": "trend derived by bucket" },
+    { "source": "time_bucket", "target": "rolling_peak", "label": "peak derived by bucket" },
+    { "source": "rolling_average", "target": "feature_table", "label": "feature column added" },
+    { "source": "rolling_peak", "target": "feature_table", "label": "feature column added" },
+    { "source": "p95", "target": "feature_table", "label": "feature column added" },
+    { "source": "quality_flag", "target": "feature_table", "label": "row trust marker" }
+  ],
+  "paths": [
+    {
+      "id": "feature_table_build",
+      "label": "Build Feature Table",
+      "description": "Turn identified, bucketed telemetry into validated feature rows.",
+      "nodeIds": [
+        "application_key",
+        "time_bucket",
+        "rolling_average",
+        "rolling_peak",
+        "p95",
+        "quality_flag",
+        "feature_table"
+      ],
+      "rehearsalPrompt": "Explain how a feature table row is built from telemetry identity, time shape, and quality checks."
+    }
+  ]
+}

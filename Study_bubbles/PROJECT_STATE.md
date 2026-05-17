@@ -13,8 +13,8 @@ Active acceptance remains direct-open outputs/single_file/*.html.
 
 - Project Name: study_bubbles
 - Project Purpose: Build a small, static, reusable study bubble system that generates study maps from topic data files.
-- Current Phase: Iteration 13 - Case Study Depth Demo (manual browser smoke PASS)
-- Completed: Toolbar search and data-driven group filters were added to the viewer; Iteration 11 regression fixes restored single-file topic loading and parent-topic double-click fallback navigation; Iteration 12 adds visible parent/back and child-topic navigation buttons while preserving double-click shortcuts; Iteration 13 adds a four-screen capacity forecasting case-study path and repairs dense-layout readability with improved sizing/spacing/label/link rendering.
+- Current Phase: Iteration 14 - Grandchild Navigation Spike (implementation complete, manual browser smoke pending in this run)
+- Completed: Toolbar search and data-driven group filters were added to the viewer; Iteration 11 regression fixes restored single-file topic loading and parent-topic double-click fallback navigation; Iteration 12 adds visible parent/back and child-topic navigation buttons while preserving double-click shortcuts; Iteration 13 adds a four-screen capacity forecasting case-study path and repairs dense-layout readability with improved sizing/spacing/label/link rendering; Iteration 14 adds a grandchild topic for three-level navigation proof.
 - Outputs: Single-file outputs are the active acceptance artifacts (`outputs/single_file/*.html`); multi-file outputs are deprecated historical/debug artifacts.
 - BOA Migration Status: No BOA migration or data extraction was performed.
 - Review Artifact: `docs\BOA_REFERENCE_BEHAVIOR_REVIEW.md`
@@ -28,5 +28,6 @@ Active acceptance remains direct-open outputs/single_file/*.html.
 - Iteration 13 Visual Smoke Status: First review FAILED (overlap/crowding/readability); repair implemented; rerun pending.
 - Iteration 13 Visual Polish Status: Vertical centering adjusted to better use map area; browser smoke rerun PASS.
 - Iteration 13 Manual Smoke Status: PASS (`case_capacity_overview`/`evidence`/`forecast`/`decision` direct-open screens; readable non-overlapping bubbles; clear size contrast; visible links; left/center/right flow; parent/child buttons and double-click shortcut PASS; search/filters/sidebar/reset PASS; console clean).
+- Iteration 14 Navigation Status: Grandchild topic wired (`overview -> evidence -> feature_table -> evidence -> overview`) with topic-declared parent/back links; manual browser smoke pending.
 - Multi-file Note: local HTTP server applies only to deprecated multi-file fetch testing and is not part of active acceptance.
-- Next Intended Step: Iteration 13 is ready for commit/tag review.
+- Next Intended Step: run Iteration 14 manual browser smoke and record PASS/FAIL before any commit/tag.

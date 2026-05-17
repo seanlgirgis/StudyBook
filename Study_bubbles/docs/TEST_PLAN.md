@@ -32,6 +32,7 @@ Builder/output tests:
   - `outputs/single_file/case_capacity_evidence.html`
   - `outputs/single_file/case_capacity_forecast.html`
   - `outputs/single_file/case_capacity_decision.html`
+  - `outputs/single_file/case_capacity_feature_table.html`
 - Single-file run mode: open pages directly from File Explorer (`file://`) with no `fetch()` requirement because topic data is embedded.
 - Parent/child single-file navigation expectation: sibling `.html` topic files must exist under `outputs/single_file`.
 - Visible navigation UI checks:
@@ -42,6 +43,9 @@ Builder/output tests:
 - Case-study depth checks:
   - overview screen provides child navigation to evidence, forecast, and decision screens
   - each child screen provides visible parent/back navigation to overview
+  - evidence screen provides child navigation from Feature Table node to Feature Table Deep Dive
+  - Feature Table Deep Dive provides visible parent/back navigation to Evidence and Features
+  - three-level navigation flow works: overview -> evidence -> feature_table -> evidence -> overview
   - search, group filters, sidebar, and reset work on each case-study screen
   - no bubble overlap on case-study screens
   - labels remain readable (including wrapped long labels)

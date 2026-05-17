@@ -25,12 +25,13 @@
 - Iteration 13 visual repair: improved sizing, spacing, label readability, and link visibility for dense case-study screens.
 - Iteration 13 visual polish: improved vertical centering so case-study maps use canvas middle more effectively.
 - Iteration 13 manual browser smoke: PASS across all 4 case-study screens and navigation/interaction checks.
+- Iteration 14: grandchild navigation spike (`overview -> evidence -> feature_table`) implemented.
 
 ## In Progress
-- None.
+- Iteration 14 manual browser smoke verification.
 
 ## Next
-- Review Iteration 13 changes and proceed to commit/tag when requested.
+- Record Iteration 14 smoke result and review for commit/tag readiness.
 
 ## Backlog
 - Package-path cleanup if still needed.
