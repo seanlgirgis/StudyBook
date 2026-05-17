@@ -1,0 +1,35 @@
+{
+  "topicId": "case_capacity_feature_table",
+  "topicTitle": "Feature Table Deep Dive",
+  "version": 1,
+  "nodes": {
+    "application_key": {
+      "x": 280,
+      "y": 250
+    },
+    "time_bucket": {
+      "x": 531.71,
+      "y": 353.41
+    },
+    "feature_table": {
+      "x": 968.03,
+      "y": 441.92
+    },
+    "rolling_average": {
+      "x": 816.64,
+      "y": 59.77
+    },
+    "rolling_peak": {
+      "x": 308,
+      "y": 642.7
+    },
+    "p95": {
+      "x": 507.42,
+      "y": 775.2
+    },
+    "quality_flag": {
+      "x": 1255.68,
+      "y": 181.38
+    }
+  }
+}

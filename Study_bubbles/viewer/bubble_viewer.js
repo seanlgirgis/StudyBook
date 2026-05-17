@@ -17,6 +17,8 @@
   const focusToggleBtn = document.getElementById("focus-toggle");
   const fitBtn = document.getElementById("fit-view");
   const resetViewBtn = document.getElementById("reset-view");
+  const exportLayoutBtn = document.getElementById("export-layout");
+  const layoutExportStatusEl = document.getElementById("layout-export-status");
   const zoomHudEl = document.getElementById("zoom-hud");
   const modeHudEl = document.getElementById("mode-hud");
   const ctxMenuEl = document.getElementById("context-menu");
@@ -46,6 +48,7 @@
   let ctxNodeId = null;
   let activePath = null;
   let isResizingPanel = false;
+  let exportStatusTimer = null;
 
   const width = 1200;
   const height = 700;
@@ -80,6 +83,22 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
+  }
+
+  function setLayoutExportStatus(message) {
+    if (!layoutExportStatusEl) return;
+    layoutExportStatusEl.textContent = message || "";
+    if (exportStatusTimer) {
+      window.clearTimeout(exportStatusTimer);
+      exportStatusTimer = null;
+    }
+    if (message) {
+      exportStatusTimer = window.setTimeout(() => {
+        if (layoutExportStatusEl.textContent === message) {
+          layoutExportStatusEl.textContent = "";
+        }
+      }, 2200);
+    }
   }
 
   function groupColor(groupName) {
@@ -221,6 +240,58 @@
     }
     document.body.removeChild(ta);
     return ok;
+  }
+
+  function buildLayoutExportPayload() {
+    const nodes = {};
+    for (const [id, node] of graphById.entries()) {
+      nodes[id] = {
+        x: Number(node.x.toFixed(2)),
+        y: Number(node.y.toFixed(2)),
+      };
+    }
+    return {
+      topicId: currentTopic && currentTopic.id ? currentTopic.id : "",
+      topicTitle: currentTopic && currentTopic.title ? currentTopic.title : "",
+      version: 1,
+      nodes,
+    };
+  }
+
+  function downloadTextFile(filename, content) {
+    try {
+      const blob = new Blob([content], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.setTimeout(() => URL.revokeObjectURL(url), 0);
+      return true;
+    } catch (_e) {
+      return false;
+    }
+  }
+
+  async function exportLayout() {
+    if (!currentTopic || graphById.size === 0) {
+      setLayoutExportStatus("Nothing to export");
+      return;
+    }
+    const payload = buildLayoutExportPayload();
+    const jsonText = `${JSON.stringify(payload, null, 2)}\n`;
+    const baseName = payload.topicId || "studybubble_topic";
+    const fileName = `${baseName}.layout.json`;
+
+    if (downloadTextFile(fileName, jsonText)) {
+      setLayoutExportStatus("Layout exported");
+      return;
+    }
+
+    const copied = await copyTextWithFallback(jsonText);
+    setLayoutExportStatus(copied ? "Layout copied" : "Export unavailable");
   }
 
   function renderExternalLinks(links) {
@@ -662,15 +733,17 @@
       const rowGap = 122;
       for (let i = 0; i < groupNodes.length; i += 1) {
         const node = groupNodes[i];
+        const hasManualPosition = Number.isFinite(node.x) && Number.isFinite(node.y);
         const col = i % columns;
         const row = Math.floor(i / columns);
         const rowOffset = (row - 0.5) * rowGap;
         const colOffset = (col - (columns - 1) / 2) * colGap;
         positioned.push({
           ...node,
-          x: centerX + colOffset,
-          y: Math.max(minY, Math.min(maxY, visualCenterY + rowOffset)),
+          x: hasManualPosition ? Number(node.x) : centerX + colOffset,
+          y: hasManualPosition ? Number(node.y) : Math.max(minY, Math.min(maxY, visualCenterY + rowOffset)),
           r: nodeRadius(node.size),
+          layoutFixed: hasManualPosition,
         });
       }
     }
@@ -687,14 +760,22 @@
             const push = (minDist - dist) / 2;
             const ux = dx / dist;
             const uy = dy / dist;
-            a.x -= ux * push; a.y -= uy * push;
-            b.x += ux * push; b.y += uy * push;
+            if (!a.layoutFixed && !b.layoutFixed) {
+              a.x -= ux * push; a.y -= uy * push;
+              b.x += ux * push; b.y += uy * push;
+            } else if (a.layoutFixed && !b.layoutFixed) {
+              b.x += ux * (push * 2); b.y += uy * (push * 2);
+            } else if (!a.layoutFixed && b.layoutFixed) {
+              a.x -= ux * (push * 2); a.y -= uy * (push * 2);
+            }
           }
         }
       }
       for (const n of positioned) {
-        n.x = Math.max(marginX - 20, Math.min(width - marginX + 20, n.x));
-        n.y = Math.max(minY, Math.min(maxY, n.y));
+        if (!n.layoutFixed) {
+          n.x = Math.max(marginX - 20, Math.min(width - marginX + 20, n.x));
+          n.y = Math.max(minY, Math.min(maxY, n.y));
+        }
       }
     }
     return positioned;
@@ -1053,6 +1134,7 @@
   }
   if (fitBtn) fitBtn.addEventListener("click", fitView);
   if (resetViewBtn) resetViewBtn.addEventListener("click", resetViewTransform);
+  if (exportLayoutBtn) exportLayoutBtn.addEventListener("click", exportLayout);
   if (panelResizerEl && sidePanelEl) {
     panelResizerEl.addEventListener("mousedown", (event) => {
       if (event.button !== 0) return;

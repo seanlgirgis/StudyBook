@@ -1,14 +1,14 @@
-timestamp: 2026-05-17T04:55:55.996490+00:00
-source topic path: topics\pandas.studybubble.json
-output HTML path: outputs\single_file\pandas.html
+timestamp: 2026-05-17T07:26:14.659536+00:00
+source topic path: topics\case_capacity_feature_table.studybubble.json
+output HTML path: outputs\single_file\case_capacity_feature_table.html
 mode: single-file
-topic id: pandas
-topic title: Pandas Study Map
-node count: 3
-link count: 3
+topic id: case_capacity_feature_table
+topic title: Feature Table Deep Dive
+node count: 7
+link count: 7
 path count: 1
 validation result: PASS
-generated HTML byte size: 52372
+generated HTML byte size: 63871
 manual smoke test steps:
 1. Open outputs/single_file/tiny_capacity_demo.html directly from File Explorer.
 2. Confirm title and subtitle render.

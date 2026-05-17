@@ -9,6 +9,11 @@ from pathlib import Path
 
 from study_bubbles.validate_topic import validate_topic_file
 
+try:
+    from PIL import Image
+except Exception:  # pragma: no cover - graceful fallback when Pillow is unavailable
+    Image = None
+
 
 def _json_for_script(data: object) -> str:
     return json.dumps(data, indent=2, ensure_ascii=False).replace("</", "<\\/")
@@ -19,10 +24,23 @@ def _is_external_ref(path_value: str) -> bool:
     return lower.startswith(("http://", "https://", "data:", "//"))
 
 
-def _copy_single_file_image_assets(topic: dict, out_html_path: Path) -> list[str]:
+def _copy_single_file_image_assets(
+    topic: dict,
+    out_html_path: Path,
+    *,
+    image_max_width: int = 900,
+    image_max_height: int = 700,
+) -> tuple[list[str], dict[str, int]]:
     warnings: list[str] = []
+    stats = {
+        "copied": 0,
+        "resized": 0,
+        "skipped_external": 0,
+        "missing": 0,
+    }
     project_root = Path.cwd().resolve()
     out_dir = out_html_path.parent.resolve()
+    raster_exts = {".png", ".jpg", ".jpeg", ".webp"}
 
     for node in topic.get("nodes", []):
         if not isinstance(node, dict):
@@ -38,6 +56,7 @@ def _copy_single_file_image_assets(topic: dict, out_html_path: Path) -> list[str
             continue
         src = src.strip()
         if _is_external_ref(src):
+            stats["skipped_external"] += 1
             continue
 
         rel_src = Path(src)
@@ -51,6 +70,7 @@ def _copy_single_file_image_assets(topic: dict, out_html_path: Path) -> list[str
         source_path = (project_root / rel_src).resolve()
         if not source_path.exists():
             warnings.append(f"WARN: image source not found '{src}'")
+            stats["missing"] += 1
             continue
         if project_root not in source_path.parents and source_path != project_root:
             warnings.append(f"WARN: skipped out-of-project image path '{src}'")
@@ -62,9 +82,36 @@ def _copy_single_file_image_assets(topic: dict, out_html_path: Path) -> list[str
             continue
 
         target_path.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source_path, target_path)
+        ext = source_path.suffix.lower()
+        resized = False
 
-    return warnings
+        if ext in raster_exts and Image is not None:
+            try:
+                with Image.open(source_path) as img:
+                    w, h = img.size
+                    if w > image_max_width or h > image_max_height:
+                        img.thumbnail((image_max_width, image_max_height), Image.Resampling.LANCZOS)
+                        save_args = {}
+                        if ext in {".jpg", ".jpeg", ".webp"}:
+                            save_args["quality"] = 85
+                            save_args["optimize"] = True
+                        img.save(target_path, **save_args)
+                        resized = True
+                    else:
+                        shutil.copyfile(source_path, target_path)
+            except Exception as exc:
+                warnings.append(f"WARN: image resize failed for '{src}', copied original ({exc})")
+                shutil.copyfile(source_path, target_path)
+        else:
+            if ext in raster_exts and Image is None:
+                warnings.append("WARN: Pillow unavailable; raster images copied without resizing")
+            shutil.copyfile(source_path, target_path)
+
+        stats["copied"] += 1
+        if resized:
+            stats["resized"] += 1
+
+    return warnings, stats
 
 
 def _validate_and_load_topic(topic_path: Path) -> tuple[bool, dict, list[str], list[str]]:
@@ -224,7 +271,14 @@ def build_multifile(topic_path: Path, out_dir: Path, layout_path: Path | None = 
     return 0
 
 
-def build_single_file(topic_path: Path, out_html_path: Path, layout_path: Path | None = None) -> int:
+def build_single_file(
+    topic_path: Path,
+    out_html_path: Path,
+    layout_path: Path | None = None,
+    *,
+    image_max_width: int = 900,
+    image_max_height: int = 700,
+) -> int:
     ok, topic, _passes, _errors = _validate_and_load_topic(topic_path)
     if not ok:
         print("Topic validation failed. Build aborted.")
@@ -352,7 +406,12 @@ def build_single_file(topic_path: Path, out_html_path: Path, layout_path: Path |
 
     out_html_path.parent.mkdir(parents=True, exist_ok=True)
     out_html_path.write_text(html, encoding="utf-8")
-    copy_warnings = _copy_single_file_image_assets(topic, out_html_path)
+    copy_warnings, image_stats = _copy_single_file_image_assets(
+        topic,
+        out_html_path,
+        image_max_width=image_max_width,
+        image_max_height=image_max_height,
+    )
 
     proof_dir = out_html_path.parent / "run_proofs"
     proof_dir.mkdir(parents=True, exist_ok=True)
@@ -388,6 +447,11 @@ def build_single_file(topic_path: Path, out_html_path: Path, layout_path: Path |
     proof_path.write_text("\n".join(proof_lines) + "\n", encoding="utf-8")
 
     print(f"PASS: single-file output generated at {out_html_path}")
+    print(
+        "PASS: image asset handling copied={copied} resized={resized} skipped_external={skipped_external}".format(
+            **image_stats
+        )
+    )
     for warning in copy_warnings:
         print(warning)
     print(f"PASS: proof file generated at {proof_path}")
@@ -400,6 +464,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", required=True, help="Output directory for multifile or output HTML for single-file")
     parser.add_argument("--mode", required=True, help="Build mode: multifile or single-file")
     parser.add_argument("--layout", required=False, help="Optional layout JSON file with saved node x/y positions")
+    parser.add_argument("--image-max-width", type=int, default=900, help="Max raster image width for copied note assets")
+    parser.add_argument("--image-max-height", type=int, default=700, help="Max raster image height for copied note assets")
     args = parser.parse_args(argv)
 
     topic_path = Path(args.topic)
@@ -412,6 +478,8 @@ def main(argv: list[str] | None = None) -> int:
             topic_path=topic_path,
             out_html_path=Path(args.out),
             layout_path=Path(args.layout) if args.layout else None,
+            image_max_width=args.image_max_width,
+            image_max_height=args.image_max_height,
         )
 
     print(
