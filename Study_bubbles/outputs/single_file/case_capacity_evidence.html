@@ -126,16 +126,17 @@ body {
 }
 
 .layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  --panel-width: 34%;
+  display: flex;
   min-height: calc(100vh - 130px);
 }
 
 .map-area {
-  border-right: 1px solid var(--line);
+  flex: 1 1 auto;
   padding: 10px;
   position: relative;
   overflow: hidden;
+  min-width: 320px;
 }
 
 #map-svg {
@@ -156,8 +157,26 @@ body {
 }
 
 .side-panel {
+  width: var(--panel-width);
+  min-width: 280px;
+  max-width: 60vw;
   padding: 16px;
   background: var(--panel);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.panel-resizer {
+  width: 8px;
+  cursor: col-resize;
+  background: #0f172a;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+
+.panel-resizer:hover {
+  background: #1e293b;
 }
 
 .side-panel h2 {
@@ -290,9 +309,10 @@ body {
 }
 
 .bubble-circle {
-  fill: #2563eb;
-  stroke: #dbeafe;
+  fill: var(--node-fill, #2563eb);
+  stroke: var(--node-stroke, #dbeafe);
   stroke-width: 2;
+  filter: drop-shadow(0 0 6px var(--node-glow, rgba(37, 99, 235, 0.35)));
 }
 
 .bubble-node.is-active .bubble-circle {
@@ -396,12 +416,21 @@ body {
 
 @media (max-width: 900px) {
   .layout {
-    grid-template-columns: 1fr;
+    display: block;
   }
 
   .map-area {
-    border-right: none;
     border-bottom: 1px solid var(--line);
+  }
+
+  .panel-resizer {
+    display: none;
+  }
+
+  .side-panel {
+    width: auto;
+    max-width: none;
+    min-width: 0;
   }
 
   .toolbar {
@@ -440,7 +469,7 @@ body {
       </div>
       <div class="keyboard-hints">Keys: <span>Arrows</span> move selection <span>Enter</span> select <span>Esc</span> clear <span>F</span> focus</div>
     </section>
-
+    <div id="panel-resizer" class="panel-resizer" role="separator" aria-orientation="vertical" aria-label="Resize study panel"></div>
     <aside class="side-panel">
       <h2>Details</h2>
       <div id="node-details" class="panel-card">
@@ -720,6 +749,9 @@ body {
   const searchCountEl = document.getElementById("search-count");
   const groupFiltersEl = document.getElementById("group-filters");
   const clearBtn = document.getElementById("clear-filters");
+  const layoutEl = document.querySelector(".layout");
+  const sidePanelEl = document.querySelector(".side-panel");
+  const panelResizerEl = document.getElementById("panel-resizer");
   const headerTopEl = document.querySelector(".header-top");
   const dragToggleBtn = document.getElementById("drag-toggle");
   const focusToggleBtn = document.getElementById("focus-toggle");
@@ -753,9 +785,33 @@ body {
   let dragOffset = { x: 0, y: 0 };
   let ctxNodeId = null;
   let activePath = null;
+  let isResizingPanel = false;
 
   const width = 1200;
   const height = 700;
+  const DEFAULT_GROUP_COLOR = "#2563eb";
+  const GROUP_COLOR_MAP = {
+    forecasting: "#f97316",
+    reporting: "#0ea5e9",
+    operations: "#22c55e",
+    governance: "#a855f7",
+    architecture: "#ef4444",
+    tools: "#14b8a6",
+    "business context": "#3b82f6",
+    "signal and modeling": "#f59e0b",
+    "decision and governance": "#8b5cf6",
+    "raw inputs": "#0ea5e9",
+    "feature prep": "#22c55e",
+    quality: "#ef4444",
+    "forecast and validation": "#f97316",
+    risk: "#dc2626",
+    stakeholders: "#3b82f6",
+    action: "#14b8a6",
+    closure: "#a855f7",
+    identity: "#6366f1",
+    "time shape": "#10b981",
+    "feature signals": "#f59e0b",
+  };
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -764,6 +820,45 @@ body {
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
+  }
+
+  function groupColor(groupName) {
+    const key = String(groupName || "").trim().toLowerCase();
+    return GROUP_COLOR_MAP[key] || DEFAULT_GROUP_COLOR;
+  }
+
+  function withAlpha(hex, alpha) {
+    const h = String(hex || "").replace("#", "");
+    if (h.length !== 6) return `rgba(37, 99, 235, ${alpha})`;
+    const r = Number.parseInt(h.slice(0, 2), 16);
+    const g = Number.parseInt(h.slice(2, 4), 16);
+    const b = Number.parseInt(h.slice(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  function applyPanelWidth(px) {
+    if (!layoutEl || !sidePanelEl) return;
+    const minPx = 280;
+    const maxPx = Math.max(360, Math.floor(window.innerWidth * 0.6));
+    const clamped = Math.max(minPx, Math.min(maxPx, px));
+    layoutEl.style.setProperty("--panel-width", `${clamped}px`);
+    try {
+      window.localStorage.setItem("studybubble.panelWidthPx", String(clamped));
+    } catch (_e) {
+      // non-fatal
+    }
+  }
+
+  function restorePanelWidth() {
+    if (!layoutEl || !sidePanelEl) return;
+    try {
+      const raw = window.localStorage.getItem("studybubble.panelWidthPx");
+      if (!raw) return;
+      const parsed = Number.parseInt(raw, 10);
+      if (Number.isFinite(parsed)) applyPanelWidth(parsed);
+    } catch (_e) {
+      // non-fatal
+    }
   }
 
   function toSingleFileHref(topicRef) {
@@ -1258,7 +1353,7 @@ body {
       dot.setAttribute("cx", String(node.x));
       dot.setAttribute("cy", String(node.y));
       dot.setAttribute("r", String(Math.max(5, node.r / 6)));
-      dot.setAttribute("fill", "#60a5fa");
+      dot.setAttribute("fill", groupColor(node.group));
       dot.setAttribute("stroke", "#e2e8f0");
       dot.setAttribute("stroke-width", "1");
       miniSvg.appendChild(dot);
@@ -1433,6 +1528,10 @@ body {
       group.appendChild(circle);
       group.appendChild(text);
       nodeLayer.appendChild(group);
+      const baseColor = groupColor(node.group);
+      group.style.setProperty("--node-fill", withAlpha(baseColor, 0.66));
+      group.style.setProperty("--node-stroke", baseColor);
+      group.style.setProperty("--node-glow", withAlpha(baseColor, 0.35));
       nodeElements.set(node.id, { group, node, circle, text });
 
       function activate(alsoFocus = false) {
@@ -1572,6 +1671,11 @@ body {
   }
 
   window.addEventListener("mousemove", (event) => {
+    if (isResizingPanel) {
+      const desired = window.innerWidth - event.clientX;
+      applyPanelWidth(desired);
+      return;
+    }
     if (dragNodeId) {
       const world = clientToWorld(event.clientX, event.clientY);
       const n = graphById.get(dragNodeId);
@@ -1588,6 +1692,7 @@ body {
   });
 
   window.addEventListener("mouseup", () => {
+    isResizingPanel = false;
     isPanning = false;
     dragNodeId = null;
     svg.classList.remove("is-panning");
@@ -1688,6 +1793,14 @@ body {
   }
   if (fitBtn) fitBtn.addEventListener("click", fitView);
   if (resetViewBtn) resetViewBtn.addEventListener("click", resetViewTransform);
+  if (panelResizerEl && sidePanelEl) {
+    panelResizerEl.addEventListener("mousedown", (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      isResizingPanel = true;
+    });
+    restorePanelWidth();
+  }
   document.addEventListener("keydown", handleKeyboard);
 
   try {
@@ -1706,7 +1819,7 @@ body {
   <!-- SECTION: Build Metadata -->
   <script id="studybubble-build-metadata" type="application/json">
 {
-  "generatedAtUtc": "2026-05-17T04:55:44.539114+00:00",
+  "generatedAtUtc": "2026-05-17T06:30:48.286849+00:00",
   "mode": "single-file",
   "sourceTopicPath": "topics\\case_capacity_evidence.studybubble.json",
   "topicId": "case_capacity_evidence",

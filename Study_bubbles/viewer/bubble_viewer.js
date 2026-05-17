@@ -49,6 +49,29 @@
 
   const width = 1200;
   const height = 700;
+  const DEFAULT_GROUP_COLOR = "#2563eb";
+  const GROUP_COLOR_MAP = {
+    forecasting: "#f97316",
+    reporting: "#0ea5e9",
+    operations: "#22c55e",
+    governance: "#a855f7",
+    architecture: "#ef4444",
+    tools: "#14b8a6",
+    "business context": "#3b82f6",
+    "signal and modeling": "#f59e0b",
+    "decision and governance": "#8b5cf6",
+    "raw inputs": "#0ea5e9",
+    "feature prep": "#22c55e",
+    quality: "#ef4444",
+    "forecast and validation": "#f97316",
+    risk: "#dc2626",
+    stakeholders: "#3b82f6",
+    action: "#14b8a6",
+    closure: "#a855f7",
+    identity: "#6366f1",
+    "time shape": "#10b981",
+    "feature signals": "#f59e0b",
+  };
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -57,6 +80,20 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
+  }
+
+  function groupColor(groupName) {
+    const key = String(groupName || "").trim().toLowerCase();
+    return GROUP_COLOR_MAP[key] || DEFAULT_GROUP_COLOR;
+  }
+
+  function withAlpha(hex, alpha) {
+    const h = String(hex || "").replace("#", "");
+    if (h.length !== 6) return `rgba(37, 99, 235, ${alpha})`;
+    const r = Number.parseInt(h.slice(0, 2), 16);
+    const g = Number.parseInt(h.slice(2, 4), 16);
+    const b = Number.parseInt(h.slice(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
 
   function applyPanelWidth(px) {
@@ -576,7 +613,7 @@
       dot.setAttribute("cx", String(node.x));
       dot.setAttribute("cy", String(node.y));
       dot.setAttribute("r", String(Math.max(5, node.r / 6)));
-      dot.setAttribute("fill", "#60a5fa");
+      dot.setAttribute("fill", groupColor(node.group));
       dot.setAttribute("stroke", "#e2e8f0");
       dot.setAttribute("stroke-width", "1");
       miniSvg.appendChild(dot);
@@ -751,6 +788,10 @@
       group.appendChild(circle);
       group.appendChild(text);
       nodeLayer.appendChild(group);
+      const baseColor = groupColor(node.group);
+      group.style.setProperty("--node-fill", withAlpha(baseColor, 0.66));
+      group.style.setProperty("--node-stroke", baseColor);
+      group.style.setProperty("--node-glow", withAlpha(baseColor, 0.35));
       nodeElements.set(node.id, { group, node, circle, text });
 
       function activate(alsoFocus = false) {
