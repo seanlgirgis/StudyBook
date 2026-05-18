@@ -1,0 +1,353 @@
+{
+  "id": "terraform_safety_team_workflow_cicd",
+  "title": "Terraform Safety, Team Workflow, and CI/CD",
+  "subtitle": "Team guardrails for Terraform change safety from PR to controlled apply",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "review_workflow",
+      "label": "Review Workflow",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "automation_checks",
+      "label": "Automation Checks",
+      "color": "#7C3AED"
+    },
+    {
+      "id": "state_safety",
+      "label": "State Safety",
+      "color": "#0F766E"
+    },
+    {
+      "id": "access_policy",
+      "label": "Access and Policy",
+      "color": "#E45756"
+    },
+    {
+      "id": "risk_control",
+      "label": "Risk Control",
+      "color": "#B45309"
+    },
+    {
+      "id": "map_navigation",
+      "label": "Map Navigation",
+      "color": "#6B7280"
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open Safety, Team Workflow, and CI/CD Tutorial",
+      "type": "tutorial",
+      "href": "../../../../tutorials/IaC/TerraForm/08_safety_team_workflow_cicd/index.html"
+    },
+    {
+      "label": "Open Safety, Team Workflow, and CI/CD Lab README",
+      "type": "lab",
+      "href": "../../../../tutorials/IaC/TerraForm/08_safety_team_workflow_cicd/README.md"
+    },
+    {
+      "label": "Open LearnTerraform Course Home",
+      "type": "tutorial",
+      "href": "../index.html"
+    },
+    {
+      "label": "Back: Environments and Workspaces",
+      "type": "map",
+      "topic": "terraform_environments_workspaces.studybubble.json"
+    },
+    {
+      "label": "Related: Terraform Core Workflow",
+      "type": "map",
+      "topic": "terraform_core_workflow.studybubble.json"
+    },
+    {
+      "label": "Related: State, Drift, and Backends",
+      "type": "map",
+      "topic": "terraform_state_drift_backends.studybubble.json"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "version_control",
+      "label": "Version Control",
+      "size": "core",
+      "group": "Review Workflow",
+      "definition": "Version control stores Terraform code history and makes changes reviewable.",
+      "whyItMatters": "Infrastructure changes become auditable, repeatable, and easier to roll back or investigate.",
+      "safeSentence": "Putting Terraform in version control makes infrastructure changes reviewable and auditable.",
+      "commonTrap": "Do not treat Terraform files as private local scripts that bypass team review.",
+      "interviewAnswer": "Version control is the starting point for safe Terraform teamwork because infrastructure changes need history, review, and traceability.",
+      "note": {
+        "summary": "Terraform should be handled like application code: branches, PRs, review, and traceability to change intent.",
+        "image": {
+          "src": "assets/terraform_safety_team_workflow_cicd.svg",
+          "caption": "From code change to approved apply with state, locking, policy, and blast-radius guardrails."
+        }
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Safety Tutorial",
+          "href": "../../../../tutorials/IaC/TerraForm/08_safety_team_workflow_cicd/index.html"
+        }
+      ]
+    },
+    {
+      "id": "pull_request",
+      "label": "Pull Request",
+      "size": "support",
+      "group": "Review Workflow",
+      "definition": "A pull request is a review gate for Terraform code changes.",
+      "whyItMatters": "It lets teammates review configuration before infrastructure is changed.",
+      "safeSentence": "Pull requests give teams a chance to review Terraform changes before they are applied.",
+      "commonTrap": "Do not approve a Terraform pull request without understanding the plan impact.",
+      "interviewAnswer": "Pull requests help teams review Terraform changes as code before they become real infrastructure changes.",
+      "note": {
+        "summary": "Good PR questions: what changed, why, which environment, what does plan show, and any destroy impact?"
+      },
+      "childTopics": []
+    },
+    {
+      "id": "format_validate",
+      "label": "Format and Validate",
+      "size": "support",
+      "group": "Automation Checks",
+      "definition": "Format and validate are automated checks for Terraform style and basic configuration correctness.",
+      "whyItMatters": "They catch simple problems before a plan or review.",
+      "safeSentence": "fmt and validate are early quality checks before plan review.",
+      "commonTrap": "Do not confuse validate with safety approval. Validate does not prove the change is safe.",
+      "interviewAnswer": "A CI pipeline can run terraform fmt and terraform validate to catch formatting and configuration issues before plan review.",
+      "note": {
+        "summary": "Typical checks: terraform fmt -check and terraform validate. They reduce noise before plan review."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "plan_review",
+      "label": "Plan Review",
+      "size": "core",
+      "group": "Review Workflow",
+      "definition": "Plan review means inspecting Terraform's proposed changes before apply.",
+      "whyItMatters": "The plan shows what Terraform intends to create, change, or destroy.",
+      "safeSentence": "The Terraform plan is the key evidence for what the change will actually do.",
+      "commonTrap": "Do not treat the plan as noise or skip it in production workflows.",
+      "interviewAnswer": "Plan review is the main Terraform safety checkpoint because it shows the actual proposed infrastructure changes before execution.",
+      "note": {
+        "summary": "Check create/update/delete actions, replacements, environment/backend context, and unexpected scope."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "apply_control",
+      "label": "Apply Control",
+      "size": "core",
+      "group": "Risk Control",
+      "definition": "Apply control limits who or what can run Terraform apply, especially in shared or production environments.",
+      "whyItMatters": "Apply changes real infrastructure, so it needs approval and protection.",
+      "safeSentence": "Production applies should be controlled because Terraform can create, modify, or destroy critical infrastructure.",
+      "commonTrap": "Do not let every developer casually apply to production from a laptop.",
+      "interviewAnswer": "Teams often control apply through CI/CD, approvals, protected branches, and restricted credentials.",
+      "note": {
+        "summary": "Controls often include CI-only apply, protected branches, approval gates, and scoped credentials."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "remote_state",
+      "label": "Remote State",
+      "size": "support",
+      "group": "State Safety",
+      "definition": "Remote state stores Terraform state in a shared backend instead of one local machine.",
+      "whyItMatters": "Team workflows need one trusted state location.",
+      "safeSentence": "Remote state lets the team share a single trusted view of Terraform-managed infrastructure.",
+      "commonTrap": "Do not let different team members manage the same infrastructure with separate local state files.",
+      "interviewAnswer": "Remote state helps collaboration because everyone works against the same Terraform state instead of isolated local copies.",
+      "note": {
+        "summary": "Remote state answers: what is managed now, who can access state, and whether state safety controls exist."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "locking",
+      "label": "Locking",
+      "size": "support",
+      "group": "State Safety",
+      "definition": "Locking prevents multiple Terraform runs from writing state at the same time.",
+      "whyItMatters": "Concurrent applies can corrupt or confuse state.",
+      "safeSentence": "Locking prevents two Terraform runs from modifying state at the same time.",
+      "commonTrap": "Do not bypass locks casually just to make a command run.",
+      "interviewAnswer": "State locking protects teams by preventing concurrent Terraform operations from colliding.",
+      "note": {
+        "summary": "If lock issues happen, confirm no active run before force-unlock style actions."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "least_privilege",
+      "label": "Least Privilege",
+      "size": "support",
+      "group": "Access and Policy",
+      "definition": "Least privilege means Terraform credentials get only the permissions required.",
+      "whyItMatters": "Terraform automation can change real infrastructure, so credentials must be limited.",
+      "safeSentence": "Terraform automation should follow least privilege because it can change real cloud resources.",
+      "commonTrap": "Do not run all Terraform automation with broad admin credentials by default.",
+      "interviewAnswer": "Least privilege reduces risk by limiting what Terraform credentials can change, especially in production.",
+      "note": {
+        "summary": "Use separate lower/prod permissions and avoid permanent broad credentials."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "cicd_pipeline",
+      "label": "CI/CD Pipeline",
+      "size": "support",
+      "group": "Automation Checks",
+      "definition": "A CI/CD pipeline standardizes Terraform checks, plans, approvals, and applies.",
+      "whyItMatters": "Automation reduces manual mistakes and makes workflows repeatable.",
+      "safeSentence": "CI/CD helps standardize Terraform checks and reduce manual mistakes.",
+      "commonTrap": "Do not automate apply without understanding approval, credentials, and environment boundaries.",
+      "interviewAnswer": "A Terraform CI/CD pipeline may run fmt, validate, plan, publish the plan for review, and apply only after approval.",
+      "note": {
+        "summary": "Typical flow: PR -> checks -> plan artifact -> review -> approved apply."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "policy_checks",
+      "label": "Policy Checks",
+      "size": "support",
+      "group": "Access and Policy",
+      "definition": "Policy checks enforce rules before Terraform changes are applied.",
+      "whyItMatters": "They can block unsafe or non-compliant infrastructure changes.",
+      "safeSentence": "Policy checks can prevent unsafe infrastructure changes before they are applied.",
+      "commonTrap": "Do not rely only on human memory for every policy rule.",
+      "interviewAnswer": "Some teams use policy-as-code or pipeline checks to enforce security, tagging, cost, or compliance rules before apply.",
+      "note": {
+        "summary": "Common checks: tags, encryption, public access, region restrictions, approval requirements."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "blast_radius",
+      "label": "Blast Radius",
+      "size": "core",
+      "group": "Risk Control",
+      "definition": "Blast radius is the amount of infrastructure or business impact a change could affect.",
+      "whyItMatters": "Terraform can create broad changes quickly, so teams need to understand impact before apply.",
+      "safeSentence": "Reviewing the Terraform plan helps teams understand the blast radius before applying changes.",
+      "commonTrap": "Do not judge risk only by number of lines changed. Small code changes can have large infrastructure impact.",
+      "interviewAnswer": "Blast radius review means asking how much the proposed Terraform change could affect before approving it.",
+      "note": {
+        "summary": "Ask: how many resources change, any destroy, production impact, rollback clarity, approval needs."
+      },
+      "childTopics": [
+        {
+          "label": "Terraform AWS, Observability, and Interview Bridge",
+          "topic": "terraform_aws_observability_interview_bridge.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "environments_nav",
+      "label": "Environments and Workspaces",
+      "size": "detail",
+      "group": "Map Navigation",
+      "definition": "Open the previous map that explains environment separation and workspace caution.",
+      "whyItMatters": "Team safety depends on knowing which environment, workspace, backend, and approval path is active.",
+      "safeSentence": "Terraform safety depends on environment boundaries as much as command knowledge.",
+      "commonTrap": "Do not treat this as a safety concept. It is a map doorway.",
+      "interviewAnswer": "Environment separation supports team safety by reducing the risk of applying a change to the wrong place.",
+      "childTopics": [
+        {
+          "label": "Terraform Environments and Workspaces",
+          "topic": "terraform_environments_workspaces.studybubble.json"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "version_control",
+      "target": "pull_request",
+      "label": "feeds"
+    },
+    {
+      "source": "pull_request",
+      "target": "format_validate",
+      "label": "triggers"
+    },
+    {
+      "source": "format_validate",
+      "target": "plan_review",
+      "label": "prepares"
+    },
+    {
+      "source": "plan_review",
+      "target": "apply_control",
+      "label": "gates"
+    },
+    {
+      "source": "apply_control",
+      "target": "remote_state",
+      "label": "uses"
+    },
+    {
+      "source": "remote_state",
+      "target": "locking",
+      "label": "protects with"
+    },
+    {
+      "source": "apply_control",
+      "target": "least_privilege",
+      "label": "depends on"
+    },
+    {
+      "source": "format_validate",
+      "target": "cicd_pipeline",
+      "label": "automated by"
+    },
+    {
+      "source": "cicd_pipeline",
+      "target": "policy_checks",
+      "label": "runs"
+    },
+    {
+      "source": "policy_checks",
+      "target": "apply_control",
+      "label": "enforces"
+    },
+    {
+      "source": "plan_review",
+      "target": "blast_radius",
+      "label": "assesses"
+    },
+    {
+      "source": "blast_radius",
+      "target": "apply_control",
+      "label": "informs"
+    }
+  ],
+  "paths": [
+    {
+      "id": "terraform_safety_team_workflow_cicd_walk",
+      "label": "Terraform Safety, Team Workflow, and CI/CD Walk",
+      "description": "Walk through code review, automation checks, state protections, and production-risk control.",
+      "nodeIds": [
+        "version_control",
+        "pull_request",
+        "format_validate",
+        "plan_review",
+        "blast_radius",
+        "apply_control",
+        "remote_state",
+        "locking",
+        "least_privilege",
+        "cicd_pipeline",
+        "policy_checks"
+      ],
+      "rehearsalPrompt": "Explain how a Terraform team moves from code change to safer apply using PR review, plan evidence, and guardrails."
+    }
+  ]
+}
+

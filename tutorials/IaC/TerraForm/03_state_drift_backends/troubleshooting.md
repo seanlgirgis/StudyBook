@@ -1,0 +1,12 @@
+# Troubleshooting
+- terraform not found
+- unsupported version
+- init confusion
+- validate failures
+- unfamiliar plan output
+- no terraform.tfstate because apply was not run
+- backend vs provider confusion
+- locking confusion
+- accidental apply concern
+- cleanup guidance
+- do not manually edit state

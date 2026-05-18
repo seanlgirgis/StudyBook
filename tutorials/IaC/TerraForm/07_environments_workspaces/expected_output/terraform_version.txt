@@ -1,0 +1,2 @@
+Exact Terraform version varies by machine.
+Use `terraform version` to confirm Terraform CLI availability and version compatibility (1.4+ expected).

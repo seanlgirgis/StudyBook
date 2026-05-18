@@ -1,0 +1,10 @@
+- Terraform code should be versioned.
+- PR review gives visibility.
+- fmt/validate catch basic issues.
+- Plan review shows intended infrastructure changes.
+- Blast radius review assesses impact.
+- Apply should be controlled.
+- State and locks protect team workflow.
+- Least privilege limits damage.
+- Policy checks create guardrails.
+- Rollback requires planning.

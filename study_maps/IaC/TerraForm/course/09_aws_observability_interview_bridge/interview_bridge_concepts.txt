@@ -1,0 +1,5 @@
+- Terraform defines infrastructure.
+- Observability shows behavior.
+- Capacity planning studies headroom and trends.
+- Data engineering depends on cloud resources.
+- Safe interview positioning connects these without overclaiming.

@@ -1,0 +1,1 @@
+Exact version varies. Use Terraform 1.4+ for terraform_data.

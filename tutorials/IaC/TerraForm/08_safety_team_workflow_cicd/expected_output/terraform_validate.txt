@@ -1,0 +1,2 @@
+Typical successful output includes:
+"Success! The configuration is valid."

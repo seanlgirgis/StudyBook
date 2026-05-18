@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Terraform Core Workflow — Tutorial Leader</title>
+  <style>
+    :root { --bg:#f8fafc; --card:#fff; --text:#111827; --muted:#4b5563; --line:#d1d5db; --accent:#1d4ed8; }
+    body { margin:0; padding:24px; background:var(--bg); color:var(--text); font-family:Segoe UI, Arial, sans-serif; line-height:1.5; }
+    .wrap { max-width:980px; margin:0 auto; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin:14px 0; }
+    h1,h2,h3 { line-height:1.25; }
+    .sub { color:var(--muted); }
+    pre { background:#0f172a; color:#e5e7eb; padding:12px; border-radius:8px; overflow:auto; }
+    code { font-family:Consolas, "Courier New", monospace; }
+    .links a { color:var(--accent); text-decoration:none; }
+    .links a:hover { text-decoration:underline; }
+    .diagram { border:1px solid var(--line); border-radius:8px; background:#f9fafb; padding:10px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="card">
+    <h1>Terraform Core Workflow Lab</h1>
+    <p class="sub">Local-safe tutorial leader for init, fmt, validate, and plan.</p>
+  </section>
+
+  <section class="card">
+    <h2>Short introduction</h2>
+    <p>This page explains a practical Terraform workflow using local-safe configuration only. It does not require AWS credentials and does not require running <code>terraform apply</code>.</p>
+  </section>
+
+  <section class="card">
+    <h2>Visual learning path</h2>
+    <div class="diagram">
+      <svg xmlns="http://www.w3.org/2000/svg" width="900" height="140" viewBox="0 0 900 140">
+        <defs>
+          <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#334155"/></marker>
+        </defs>
+        <rect x="10" y="40" width="110" height="42" fill="#eef2ff" stroke="#334155"/><text x="65" y="66" font-size="12" text-anchor="middle">.tf files</text>
+        <rect x="140" y="40" width="110" height="42" fill="#eef2ff" stroke="#334155"/><text x="195" y="66" font-size="12" text-anchor="middle">init</text>
+        <rect x="270" y="40" width="110" height="42" fill="#eef2ff" stroke="#334155"/><text x="325" y="66" font-size="12" text-anchor="middle">fmt</text>
+        <rect x="400" y="40" width="110" height="42" fill="#eef2ff" stroke="#334155"/><text x="455" y="66" font-size="12" text-anchor="middle">validate</text>
+        <rect x="530" y="40" width="110" height="42" fill="#eef2ff" stroke="#334155"/><text x="585" y="66" font-size="12" text-anchor="middle">plan</text>
+        <rect x="660" y="40" width="110" height="42" fill="#eef2ff" stroke="#334155"/><text x="715" y="66" font-size="12" text-anchor="middle">review</text>
+        <rect x="790" y="40" width="100" height="42" fill="#fee2e2" stroke="#7f1d1d"/><text x="840" y="66" font-size="12" text-anchor="middle">apply*</text>
+        <line x1="120" y1="61" x2="140" y2="61" stroke="#334155" marker-end="url(#a)"/>
+        <line x1="250" y1="61" x2="270" y2="61" stroke="#334155" marker-end="url(#a)"/>
+        <line x1="380" y1="61" x2="400" y2="61" stroke="#334155" marker-end="url(#a)"/>
+        <line x1="510" y1="61" x2="530" y2="61" stroke="#334155" marker-end="url(#a)"/>
+        <line x1="640" y1="61" x2="660" y2="61" stroke="#334155" marker-end="url(#a)"/>
+        <line x1="770" y1="61" x2="790" y2="61" stroke="#334155" marker-end="url(#a)"/>
+      </svg>
+      <p><strong>*In this lab, apply is intentionally not executed.</strong></p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Copyable commands</h2>
+<pre>terraform version
+terraform init
+terraform fmt
+terraform validate
+terraform plan</pre>
+  </section>
+
+  <section class="card">
+    <h2>Lab code files</h2>
+    <h3>main.tf</h3>
+<pre>terraform {
+  required_version = ">= 1.4.0"
+}
+
+resource "terraform_data" "study_message" {
+  input = {
+    topic   = "Terraform Core Workflow"
+    purpose = "Learn init, fmt, validate, and plan safely"
+  }
+}</pre>
+    <h3>variables.tf</h3>
+<pre>variable "learner_name" {
+  description = "Name to show in the learning output."
+  type        = string
+  default     = "Sean"
+}</pre>
+    <h3>outputs.tf</h3>
+<pre>output "workflow_message" {
+  description = "Small local-safe output for the workflow lab."
+  value       = "Hello ${var.learner_name}, this lab teaches Terraform workflow basics."
+}
+
+output "study_topic" {
+  description = "Shows data carried by the terraform_data resource."
+  value       = terraform_data.study_message.output.topic
+}</pre>
+  </section>
+
+  <section class="card">
+    <h2>Expected output explanations</h2>
+    <ul>
+      <li><code>terraform version</code>: installed version varies by machine.</li>
+      <li><code>terraform fmt</code>: no output if already formatted; file names if rewritten.</li>
+      <li><code>terraform validate</code>: should report success for valid config.</li>
+      <li><code>terraform plan</code>: should show local-safe create/read behaviors for this config.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Common mistakes</h2>
+    <ul>
+      <li>Running commands from the wrong folder.</li>
+      <li>Treating <code>fmt</code> as correctness proof.</li>
+      <li>Skipping plan review mindset.</li>
+      <li>Running apply casually in other projects.</li>
+    </ul>
+  </section>
+
+  <section class="card links">
+    <h2>How this connects to the StudyBubble map</h2>
+    <ul>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_core_workflow.html">Open Terraform Core Workflow map</a></li>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_1000_foot_view.html">Open Terraform 1000-Foot View map</a></li>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_state_drift_backends.html">Open State, Drift, and Backends map</a></li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>

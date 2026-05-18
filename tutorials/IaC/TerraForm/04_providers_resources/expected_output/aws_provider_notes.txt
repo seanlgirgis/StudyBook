@@ -1,0 +1,14 @@
+AWS provider is common and important.
+Real AWS provider use requires credentials and region.
+This lab does not run AWS.
+Future optional AWS labs may use S3/IAM/CloudWatch only after approval.
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_s3_bucket" "logs" {
+  bucket = "example-learning-logs-bucket"
+}
+
+This is conceptual only. Do not run this without AWS credentials, cost awareness, naming approval, and cleanup plan.

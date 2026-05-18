@@ -1,0 +1,1 @@
+Init should prepare local Terraform working metadata/plugins for this local-safe terraform_data-based configuration.

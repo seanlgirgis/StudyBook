@@ -28,6 +28,7 @@ def _copy_single_file_image_assets(
     topic: dict,
     out_html_path: Path,
     *,
+    project_root: Path | None = None,
     image_max_width: int = 900,
     image_max_height: int = 700,
 ) -> tuple[list[str], dict[str, int]]:
@@ -38,7 +39,7 @@ def _copy_single_file_image_assets(
         "skipped_external": 0,
         "missing": 0,
     }
-    project_root = Path.cwd().resolve()
+    project_root = (project_root or Path.cwd()).resolve()
     out_dir = out_html_path.parent.resolve()
     raster_exts = {".png", ".jpg", ".jpeg", ".webp"}
 
@@ -276,6 +277,8 @@ def build_single_file(
     out_html_path: Path,
     layout_path: Path | None = None,
     *,
+    project_root: Path | None = None,
+    viewer_root: Path | None = None,
     image_max_width: int = 900,
     image_max_height: int = 700,
 ) -> int:
@@ -297,7 +300,7 @@ def build_single_file(
             if skipped:
                 print(f"WARN: skipped {skipped} layout node position(s) with invalid x/y")
 
-    viewer_dir = Path("viewer")
+    viewer_dir = (viewer_root or Path("viewer")).resolve()
     css_src = viewer_dir / "bubble_viewer.css"
     js_src = viewer_dir / "bubble_viewer.js"
 
@@ -409,6 +412,7 @@ def build_single_file(
     copy_warnings, image_stats = _copy_single_file_image_assets(
         topic,
         out_html_path,
+        project_root=project_root,
         image_max_width=image_max_width,
         image_max_height=image_max_height,
     )
@@ -464,6 +468,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", required=True, help="Output directory for multifile or output HTML for single-file")
     parser.add_argument("--mode", required=True, help="Build mode: multifile or single-file")
     parser.add_argument("--layout", required=False, help="Optional layout JSON file with saved node x/y positions")
+    parser.add_argument("--project-root", required=False, help="Project root for local asset resolution (defaults to cwd)")
+    parser.add_argument("--viewer-root", required=False, help="Viewer source folder (defaults to ./viewer)")
     parser.add_argument("--image-max-width", type=int, default=900, help="Max raster image width for copied note assets")
     parser.add_argument("--image-max-height", type=int, default=700, help="Max raster image height for copied note assets")
     args = parser.parse_args(argv)
@@ -478,6 +484,8 @@ def main(argv: list[str] | None = None) -> int:
             topic_path=topic_path,
             out_html_path=Path(args.out),
             layout_path=Path(args.layout) if args.layout else None,
+            project_root=Path(args.project_root) if args.project_root else None,
+            viewer_root=Path(args.viewer_root) if args.viewer_root else None,
             image_max_width=args.image_max_width,
             image_max_height=args.image_max_height,
         )

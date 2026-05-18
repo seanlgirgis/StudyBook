@@ -1,0 +1,326 @@
+{
+  "id": "terraform_modules_reuse",
+  "title": "Terraform Modules and Reuse",
+  "subtitle": "Reusable Terraform patterns with module inputs, outputs, standards, and version safety",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "module_basics",
+      "label": "Module Basics",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "inputs_outputs",
+      "label": "Inputs and Outputs",
+      "color": "#7C3AED"
+    },
+    {
+      "id": "reuse_standards",
+      "label": "Reuse and Standards",
+      "color": "#0F766E"
+    },
+    {
+      "id": "safety_versioning",
+      "label": "Safety and Versioning",
+      "color": "#E45756"
+    },
+    {
+      "id": "map_navigation",
+      "label": "Map Navigation",
+      "color": "#6B7280"
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open Modules and Reuse Tutorial",
+      "type": "tutorial",
+      "href": "../../../../tutorials/IaC/TerraForm/06_modules_reuse/index.html"
+    },
+    {
+      "label": "Open Modules and Reuse Lab README",
+      "type": "lab",
+      "href": "../../../../tutorials/IaC/TerraForm/06_modules_reuse/README.md"
+    },
+    {
+      "label": "Open LearnTerraform Course Home",
+      "type": "tutorial",
+      "href": "../index.html"
+    },
+    {
+      "label": "Back: Variables, Outputs, and Locals",
+      "type": "map",
+      "topic": "terraform_variables_outputs_locals.studybubble.json"
+    },
+    {
+      "label": "Related: Terraform Core Workflow",
+      "type": "map",
+      "topic": "terraform_core_workflow.studybubble.json"
+    },
+    {
+      "label": "Related: Terraform Providers and Resources",
+      "type": "map",
+      "topic": "terraform_providers_resources.studybubble.json"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "module",
+      "label": "Module",
+      "size": "core",
+      "group": "Module Basics",
+      "definition": "A module is a reusable Terraform configuration package.",
+      "whyItMatters": "Modules help teams avoid copying the same Terraform code repeatedly.",
+      "safeSentence": "A module packages Terraform code so an infrastructure pattern can be reused.",
+      "commonTrap": "Do not think modules automatically make code good. Bad modules can hide complexity.",
+      "interviewAnswer": "Modules are Terraform's reuse mechanism. They package configuration so teams can call the same pattern with different inputs.",
+      "note": {
+        "summary": "A module is a reusable Terraform building block.\n\nRoot module: calls a standard module.\nChild module: contains the reusable implementation.",
+        "image": {
+          "src": "assets/terraform_modules_reuse.svg",
+          "caption": "Root module calls child modules with inputs and receives outputs for safer reuse."
+        }
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Modules Tutorial",
+          "href": "../../../../tutorials/IaC/TerraForm/06_modules_reuse/index.html"
+        }
+      ]
+    },
+    {
+      "id": "root_module",
+      "label": "Root Module",
+      "size": "support",
+      "group": "Module Basics",
+      "definition": "The root module is the Terraform configuration in the directory where Terraform is run.",
+      "whyItMatters": "Every Terraform run has a root module, even if no child modules are used.",
+      "safeSentence": "The root module is the main Terraform configuration for the current run.",
+      "commonTrap": "Do not assume root module means a shared reusable module. It simply means the current entry point.",
+      "interviewAnswer": "The root module is the main Terraform configuration being executed.",
+      "note": {
+        "summary": "The folder where you run Terraform is the root module. It may call child modules or define resources directly."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "child_module",
+      "label": "Child Module",
+      "size": "support",
+      "group": "Module Basics",
+      "definition": "A child module is a module called by another module.",
+      "whyItMatters": "Child modules let teams compose larger infrastructure from reusable parts.",
+      "safeSentence": "A child module is a reusable package called by the root module or another module.",
+      "commonTrap": "Do not bury too much logic in child modules until nobody understands what they do.",
+      "interviewAnswer": "Child modules let teams reuse common infrastructure patterns while passing in environment-specific values.",
+      "note": {
+        "summary": "Example:\nmodule \"logs\" {\n  source = \"./modules/log_bucket\"\n  bucket_name = var.bucket_name\n}"
+      },
+      "childTopics": []
+    },
+    {
+      "id": "module_inputs",
+      "label": "Module Inputs",
+      "size": "support",
+      "group": "Inputs and Outputs",
+      "definition": "Module inputs are variables passed into a module.",
+      "whyItMatters": "Inputs let the same module behave differently for different environments or use cases.",
+      "safeSentence": "Module inputs let a reusable module accept different values.",
+      "commonTrap": "Do not create modules with too many confusing inputs.",
+      "interviewAnswer": "Module inputs are variables that let callers customize reusable Terraform patterns.",
+      "note": {
+        "summary": "Same module, different inputs for dev/prod. This connects directly to the Variables map."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "module_outputs",
+      "label": "Module Outputs",
+      "size": "support",
+      "group": "Inputs and Outputs",
+      "definition": "Module outputs expose useful values from inside a module.",
+      "whyItMatters": "Outputs let the calling configuration use values created inside the module.",
+      "safeSentence": "Module outputs let other Terraform code use results from a module.",
+      "commonTrap": "Do not expose sensitive values casually through module outputs.",
+      "interviewAnswer": "Module outputs return useful values such as IDs, names, ARNs, URLs, or other resource attributes created inside the module.",
+      "note": {
+        "summary": "Child module output example: module.logs.bucket_name"
+      },
+      "childTopics": []
+    },
+    {
+      "id": "module_source",
+      "label": "Module Source",
+      "size": "support",
+      "group": "Module Basics",
+      "definition": "Module source tells Terraform where to find the module.",
+      "whyItMatters": "Modules can come from local paths, Git repositories, registries, or other supported locations.",
+      "safeSentence": "Module source identifies where Terraform should load the module from.",
+      "commonTrap": "Do not pull unreviewed module code blindly into important environments.",
+      "interviewAnswer": "The module source tells Terraform whether the module comes from a local folder, registry, or versioned repository.",
+      "note": {
+        "summary": "Examples: local path, Git URL, Terraform registry source."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "reuse",
+      "label": "Reuse",
+      "size": "core",
+      "group": "Reuse and Standards",
+      "definition": "Reuse means calling the same Terraform pattern in multiple places instead of copying code.",
+      "whyItMatters": "Reuse reduces duplication and helps teams standardize infrastructure.",
+      "safeSentence": "Modules reduce copy/paste by making common infrastructure patterns reusable.",
+      "commonTrap": "Do not create a module too early if the pattern has not repeated yet.",
+      "interviewAnswer": "Modules are useful when a Terraform pattern repeats or needs consistent implementation across environments or teams.",
+      "note": {
+        "summary": "Good candidates: standard buckets, IAM patterns, tagging, monitoring scaffolds."
+      },
+      "childTopics": [
+        {
+          "label": "Terraform Environments and Workspaces",
+          "topic": "terraform_environments_workspaces.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "standards",
+      "label": "Standards",
+      "size": "support",
+      "group": "Reuse and Standards",
+      "definition": "Modules can encode naming, tagging, security, and environment conventions.",
+      "whyItMatters": "Standards help teams produce consistent infrastructure.",
+      "safeSentence": "Modules can help teams bake standards into reusable infrastructure patterns.",
+      "commonTrap": "Do not let standards become hidden magic that users cannot understand.",
+      "interviewAnswer": "Modules can standardize things like naming, tags, encryption settings, retention policies, or required monitoring patterns.",
+      "note": {
+        "summary": "Consistency examples: owner tags, retention defaults, naming policy."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "versioning",
+      "label": "Versioning",
+      "size": "support",
+      "group": "Safety and Versioning",
+      "definition": "Module versioning controls which release of a module a caller uses.",
+      "whyItMatters": "Versioning helps teams adopt module changes safely.",
+      "safeSentence": "Versioning protects teams from surprise module changes.",
+      "commonTrap": "Do not point production blindly at a moving branch without understanding the risk.",
+      "interviewAnswer": "Shared modules should be versioned so changes can be tested and adopted intentionally.",
+      "note": {
+        "summary": "Safer pattern: pin versions, test lower envs, then promote."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "module_risk",
+      "label": "Module Risk",
+      "size": "core",
+      "group": "Safety and Versioning",
+      "definition": "Module risk is the danger that reusable Terraform code hides complexity or causes broad impact when changed.",
+      "whyItMatters": "A bad module can spread bad patterns everywhere it is reused.",
+      "safeSentence": "Modules are powerful, but they need design, review, and version discipline.",
+      "commonTrap": "Do not treat modules as black boxes that nobody reviews.",
+      "interviewAnswer": "Modules help reuse, but teams need to review them carefully because changes can affect many environments.",
+      "note": {
+        "summary": "Risks: unclear outputs, hidden resources, weak versioning, poor docs."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "variables_outputs_locals_nav",
+      "label": "Variables, Outputs, and Locals",
+      "size": "detail",
+      "group": "Map Navigation",
+      "definition": "Open the previous map that explains Terraform inputs, internal values, and outputs.",
+      "whyItMatters": "Modules depend heavily on variables and outputs.",
+      "safeSentence": "Modules are easier to understand after variables, locals, and outputs make sense.",
+      "commonTrap": "Do not treat this as a module concept. It is a map doorway.",
+      "interviewAnswer": "Modules build on variables and outputs because inputs customize the module and outputs expose results to the caller.",
+      "childTopics": [
+        {
+          "label": "Variables, Outputs, and Locals",
+          "topic": "terraform_variables_outputs_locals.studybubble.json"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "module",
+      "target": "root_module",
+      "label": "starts at"
+    },
+    {
+      "source": "root_module",
+      "target": "child_module",
+      "label": "calls"
+    },
+    {
+      "source": "child_module",
+      "target": "module_inputs",
+      "label": "accepts"
+    },
+    {
+      "source": "child_module",
+      "target": "module_outputs",
+      "label": "returns"
+    },
+    {
+      "source": "child_module",
+      "target": "module_source",
+      "label": "loaded from"
+    },
+    {
+      "source": "module_inputs",
+      "target": "reuse",
+      "label": "enables"
+    },
+    {
+      "source": "module_outputs",
+      "target": "reuse",
+      "label": "supports"
+    },
+    {
+      "source": "reuse",
+      "target": "standards",
+      "label": "drives"
+    },
+    {
+      "source": "reuse",
+      "target": "versioning",
+      "label": "requires"
+    },
+    {
+      "source": "versioning",
+      "target": "module_risk",
+      "label": "reduces"
+    },
+    {
+      "source": "standards",
+      "target": "module_risk",
+      "label": "must balance"
+    }
+  ],
+  "paths": [
+    {
+      "id": "terraform_modules_reuse_walk",
+      "label": "Terraform Modules and Reuse Walk",
+      "description": "Walk from module basics through reuse, standards, and versioning safety.",
+      "nodeIds": [
+        "module",
+        "root_module",
+        "child_module",
+        "module_inputs",
+        "module_outputs",
+        "module_source",
+        "reuse",
+        "standards",
+        "versioning",
+        "module_risk"
+      ],
+      "rehearsalPrompt": "Explain how modules accept inputs, expose outputs, and support reusable safe patterns."
+    }
+  ]
+}

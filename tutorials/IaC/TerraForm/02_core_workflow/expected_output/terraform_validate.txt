@@ -1,0 +1,7 @@
+Typical successful terraform validate output:
+
+Success! The configuration is valid.
+
+Meaning:
+- Terraform syntax/config structure looks valid.
+- This does NOT guarantee safety of real cloud changes.

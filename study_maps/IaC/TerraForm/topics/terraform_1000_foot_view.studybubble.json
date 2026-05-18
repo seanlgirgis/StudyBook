@@ -1,0 +1,315 @@
+{
+  "id": "terraform_1000_foot_view",
+  "title": "Terraform 1000-Foot View",
+  "subtitle": "A simple first mental model for Terraform",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "terraform_basics",
+      "label": "Terraform Basics",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "terraform_workflow",
+      "label": "Terraform Workflow",
+      "color": "#F58518"
+    },
+    {
+      "id": "state_and_drift",
+      "label": "State and Drift",
+      "color": "#54A24B"
+    },
+    {
+      "id": "safety",
+      "label": "Safety",
+      "color": "#E45756"
+    },
+    {
+      "id": "map_navigation",
+      "label": "Map Navigation",
+      "color": "#6B7280"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "terraform",
+      "label": "Terraform",
+      "size": "core",
+      "group": "Terraform Basics",
+      "definition": "Terraform is an infrastructure-as-code tool used to define and manage cloud or platform infrastructure through configuration files.",
+      "whyItMatters": "It helps teams avoid one-off manual setup and makes infrastructure changes more repeatable and reviewable.",
+      "safeSentence": "Terraform lets teams describe infrastructure as code, review changes with a plan, and apply approved changes in a controlled way.",
+      "commonTrap": "Do not describe Terraform as just a script runner. It is a desired-state infrastructure tool.",
+      "interviewAnswer": "Terraform is used to define infrastructure in code, compare that desired state with what exists, and then apply controlled changes.",
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Terraform 1000-Foot View Tutorial",
+          "href": "../../../../tutorials/IaC/TerraForm/01_terraform_1000_foot_view/index.html"
+        }
+      ]
+    },
+    {
+      "id": "infrastructure_as_code",
+      "label": "Infrastructure as Code",
+      "size": "core",
+      "group": "Terraform Basics",
+      "definition": "Infrastructure as Code means infrastructure is described in files instead of being created only by clicking through a console.",
+      "whyItMatters": "Version-controlled infrastructure is easier to review, repeat, share, and audit.",
+      "safeSentence": "Infrastructure as Code makes cloud resources more repeatable and less dependent on manual console work.",
+      "commonTrap": "IaC does not automatically make infrastructure safe. Teams still need review, state control, and good process.",
+      "interviewAnswer": "Infrastructure as Code lets teams manage resources like networks, storage, compute, and permissions through reviewed configuration files.",
+      "childTopics": []
+    },
+    {
+      "id": "desired_state",
+      "label": "Desired State",
+      "size": "core",
+      "group": "Terraform Basics",
+      "definition": "Desired state is what the Terraform configuration says should exist.",
+      "whyItMatters": "Terraform uses desired state to decide what needs to be created, changed, or removed.",
+      "safeSentence": "Terraform starts from the desired state and figures out what changes are needed to reach it.",
+      "commonTrap": "Desired state is not the same as current reality. Real infrastructure can drift.",
+      "interviewAnswer": "Terraform compares the desired configuration with what it knows about the real environment, then proposes changes.",
+      "childTopics": []
+    },
+    {
+      "id": "providers",
+      "label": "Providers",
+      "size": "support",
+      "group": "Terraform Basics",
+      "definition": "Providers are Terraform plugins that know how to talk to platforms such as AWS, Azure, Google Cloud, Kubernetes, or monitoring tools.",
+      "whyItMatters": "Terraform itself needs providers to understand how to create and manage real platform resources.",
+      "safeSentence": "A provider is the bridge between Terraform and the platform being managed.",
+      "commonTrap": "Do not confuse a provider with a resource. The provider connects; the resource is the managed object.",
+      "interviewAnswer": "Providers let Terraform interact with external platforms like AWS by calling their APIs.",
+      "childTopics": [
+        {
+          "label": "Terraform Providers and Resources",
+          "topic": "terraform_providers_resources.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "resources",
+      "label": "Resources",
+      "size": "support",
+      "group": "Terraform Basics",
+      "definition": "Resources are the infrastructure objects Terraform manages, such as an S3 bucket, EC2 instance, IAM role, VPC, log group, dashboard, or alert.",
+      "whyItMatters": "Resources are the real things Terraform creates, changes, or removes.",
+      "safeSentence": "A resource is the infrastructure object Terraform manages.",
+      "commonTrap": "Do not think a resource is only a server. It can be many kinds of cloud or platform objects.",
+      "interviewAnswer": "Resources are the actual objects described in Terraform configuration and tracked through state.",
+      "childTopics": [
+        {
+          "label": "Terraform Providers and Resources",
+          "topic": "terraform_providers_resources.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "plan",
+      "label": "Plan",
+      "size": "core",
+      "group": "Terraform Workflow",
+      "definition": "Plan previews what Terraform intends to create, update, or destroy before changes are applied.",
+      "whyItMatters": "Plan is the safety checkpoint where humans review the blast radius.",
+      "safeSentence": "Terraform plan is the preview step before changing real infrastructure.",
+      "commonTrap": "Do not skip plan review, especially in shared or production environments.",
+      "interviewAnswer": "The plan step is important because it shows what Terraform will change before anything is applied.",
+      "childTopics": [
+        {
+          "topic": "terraform_core_workflow.studybubble.json",
+          "label": "Terraform Core Workflow"
+        }
+      ],
+      "externalLinks": [
+        {
+          "label": "Open Core Workflow Deep Study Page",
+          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+        }
+      ]
+    },
+    {
+      "id": "apply",
+      "label": "Apply",
+      "size": "core",
+      "group": "Terraform Workflow",
+      "definition": "Apply performs the approved Terraform changes against the target platform.",
+      "whyItMatters": "This is where the reviewed plan becomes real infrastructure.",
+      "safeSentence": "Terraform apply should happen only after the plan has been reviewed.",
+      "commonTrap": "Running apply casually can change or destroy real infrastructure.",
+      "interviewAnswer": "Apply is the execution step where Terraform carries out the reviewed infrastructure changes.",
+      "childTopics": []
+    },
+    {
+      "id": "state",
+      "label": "State",
+      "size": "core",
+      "group": "State and Drift",
+      "definition": "State is Terraform's memory of the infrastructure it manages and how the code maps to real resources.",
+      "whyItMatters": "Without state, Terraform would not know what it already created or manages.",
+      "safeSentence": "State is critical because it connects Terraform configuration to real infrastructure.",
+      "commonTrap": "State can be sensitive and dangerous if deleted, corrupted, exposed, or edited carelessly.",
+      "interviewAnswer": "State is one of the most important Terraform concepts because it tracks managed infrastructure and supports change comparison.",
+      "childTopics": [
+        {
+          "topic": "terraform_state_drift_backends.studybubble.json",
+          "label": "Terraform State, Drift, and Backends"
+        }
+      ]
+    },
+    {
+      "id": "drift",
+      "label": "Drift",
+      "size": "support",
+      "group": "State and Drift",
+      "definition": "Drift happens when real infrastructure changes outside Terraform and no longer matches the expected configuration or state.",
+      "whyItMatters": "Drift can cause confusion, unexpected plans, and operational risk.",
+      "safeSentence": "Drift means the real environment no longer matches what Terraform expects.",
+      "commonTrap": "Manual console changes can create drift if they bypass the Terraform workflow.",
+      "interviewAnswer": "Drift is when infrastructure is changed outside Terraform, causing a mismatch between code, state, and reality.",
+      "childTopics": []
+    },
+    {
+      "id": "team_safety",
+      "label": "Team Safety",
+      "size": "support",
+      "group": "Safety",
+      "definition": "Team safety means using Terraform with review, version control, remote state, locking, access control, and disciplined apply workflows.",
+      "whyItMatters": "Terraform can change important infrastructure, so teams need guardrails.",
+      "safeSentence": "Terraform is powerful, so teams need safe workflows around review, state, and change control.",
+      "commonTrap": "Do not treat Terraform as a solo local tool when a team or production environment is involved.",
+      "interviewAnswer": "Safe Terraform use is about plan review, controlled apply, protected state, locking, and version-controlled infrastructure changes.",
+      "childTopics": []
+    },
+    {
+      "id": "back_to_iac_landscape",
+      "label": "IaC: Why Terraform Exists",
+      "size": "detail",
+      "group": "Map Navigation",
+      "definition": "Open the pre-intro map that explains the IaC landscape and why Terraform exists.",
+      "whyItMatters": "This lets Sean move backward from the Terraform operating model to the broader IaC landscape and competing tools.",
+      "safeSentence": "Before going deeper into Terraform, it helps to understand the IaC landscape and why Terraform became popular.",
+      "commonTrap": "Do not mix this navigation bubble with core Terraform concepts. It is a map doorway, not a Terraform building block.",
+      "interviewAnswer": "Terraform is one tool in the larger Infrastructure as Code landscape, alongside tools such as CloudFormation, Ansible, Pulumi, and OpenTofu.",
+      "childTopics": [
+        {
+          "label": "IaC: Why Terraform Exists",
+          "topic": "iac_why_terraform_exists.studybubble.json"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "terraform",
+      "target": "infrastructure_as_code",
+      "label": "is expressed as"
+    },
+    {
+      "source": "infrastructure_as_code",
+      "target": "desired_state",
+      "label": "defines"
+    },
+    {
+      "source": "desired_state",
+      "target": "plan",
+      "label": "drives"
+    },
+    {
+      "source": "plan",
+      "target": "apply",
+      "label": "then execute"
+    },
+    {
+      "source": "providers",
+      "target": "resources",
+      "label": "manage"
+    },
+    {
+      "source": "resources",
+      "target": "state",
+      "label": "tracked in"
+    },
+    {
+      "source": "state",
+      "target": "drift",
+      "label": "can diverge from"
+    },
+    {
+      "source": "drift",
+      "target": "team_safety",
+      "label": "requires"
+    },
+    {
+      "source": "plan",
+      "target": "team_safety",
+      "label": "supports"
+    },
+    {
+      "source": "apply",
+      "target": "state",
+      "label": "updates"
+    },
+    {
+      "source": "back_to_iac_landscape",
+      "target": "terraform",
+      "label": "returns to context for"
+    }
+  ],
+  "paths": [
+    {
+      "id": "terraform_first_walk",
+      "label": "First Terraform Walk",
+      "description": "A first pass through the Terraform mental model from basics to workflow to safety.",
+      "nodeIds": [
+        "terraform",
+        "infrastructure_as_code",
+        "desired_state",
+        "providers",
+        "resources",
+        "plan",
+        "apply",
+        "state",
+        "drift",
+        "team_safety"
+      ],
+      "rehearsalPrompt": "Explain the Terraform flow from desired state to safe team execution in about 90 seconds."
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open LearnTerraform Course Home",
+      "type": "tutorial",
+      "href": "../index.html"
+    },
+    {
+      "label": "Open Terraform 1000-Foot View Tutorial",
+      "type": "tutorial",
+      "href": "../../../../tutorials/IaC/TerraForm/01_terraform_1000_foot_view/index.html"
+    },
+    {
+      "label": "Back: IaC Why Terraform Exists",
+      "type": "map",
+      "topic": "iac_why_terraform_exists.studybubble.json"
+    },
+    {
+      "label": "Next: Terraform Core Workflow",
+      "type": "map",
+      "topic": "terraform_core_workflow.studybubble.json"
+    },
+    {
+      "label": "Related: State, Drift, and Backends",
+      "type": "map",
+      "topic": "terraform_state_drift_backends.studybubble.json"
+    },
+    {
+      "label": "Related: Providers and Resources",
+      "type": "map",
+      "topic": "terraform_providers_resources.studybubble.json"
+    }
+  ]
+}
+
+

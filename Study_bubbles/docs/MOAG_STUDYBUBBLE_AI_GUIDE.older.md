@@ -33,10 +33,13 @@ Start by proposing the first 5-10 bubble cluster and the study path.
 - StudyBook repository root: `.`
 - StudyBubble engine path: `Study_bubbles/`
 - Study topic workspace path: `study_maps/`
-- Topic JSON source path: `Study_bubbles/topics/`
-- Generated HTML path: `Study_bubbles/outputs/single_file/`
-- Layout path: `Study_bubbles/layouts/`
-- Config path: `Study_bubbles/config/studybubble.ini`
+- Engine demo topic path: `Study_bubbles/topics/`
+- Engine demo generated HTML path: `Study_bubbles/outputs/single_file/`
+- Engine demo layout path: `Study_bubbles/layouts/`
+- Real project container path: `study_maps/<ProjectName>/` with `bubbles.ini`
+- Real project topic path: `study_maps/<ProjectName>/topics/`
+- Real project generated HTML path: `study_maps/<ProjectName>/outputs/`
+- Real project layout path: `study_maps/<ProjectName>/layouts/`
 
 ## Sean's Current Local Example
 This section is intentionally absolute-path based for local machine context.
@@ -50,7 +53,7 @@ cd Study_bubbles
 python -m pytest -q
 ```
 
-Build from `Study_bubbles`:
+Build engine demo from `Study_bubbles`:
 ```powershell
 python -m src.study_bubbles.build_topic --topic topics\<topic_id>.studybubble.json --out outputs\single_file\<topic_id>.html --mode single-file
 ```
@@ -60,9 +63,15 @@ Build with layout from `Study_bubbles`:
 python -m src.study_bubbles.build_topic --topic topics\<topic_id>.studybubble.json --layout layouts\<topic_id>.layout.json --out outputs\single_file\<topic_id>.html --mode single-file
 ```
 
-Layout sync and rebuild from `Study_bubbles`:
+Real project container build:
 ```powershell
-python tools\sync_layouts_and_rebuild.py
+cd study_maps\<ProjectName>
+..\..\scripts\bubbles.ps1 build
+```
+
+Layout sync and rebuild from active container:
+```powershell
+..\..\scripts\bubbles.ps1 sync-layout
 ```
 
 ## Modes Of Work
@@ -99,7 +108,7 @@ python tools\sync_layouts_and_rebuild.py
 1. Open generated single-file HTML.
 2. Turn on drag mode and adjust layout.
 3. Click `Export Layout`.
-4. Run `python tools\sync_layouts_and_rebuild.py` from `Study_bubbles`.
+4. Run `..\..\scripts\bubbles.ps1 sync-layout` from the active container folder.
 5. Re-open rebuilt HTML and continue tuning incrementally.
 
 ## Minimum Handoff Packet

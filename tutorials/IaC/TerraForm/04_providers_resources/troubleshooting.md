@@ -1,0 +1,11 @@
+# Troubleshooting
+- terraform command not found
+- unsupported version
+- init confusion
+- validate failure
+- unfamiliar plan output
+- provider vs resource confusion
+- provider vs backend confusion
+- type vs name confusion
+- accidental AWS concern
+- cleanup guidance

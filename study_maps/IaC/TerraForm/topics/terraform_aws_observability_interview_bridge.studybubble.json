@@ -1,0 +1,374 @@
+{
+  "id": "terraform_aws_observability_interview_bridge",
+  "title": "Terraform AWS, Observability, and Interview Bridge",
+  "subtitle": "Connect Terraform fluency to AWS, observability, data engineering, and interview-safe positioning",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "aws_foundation",
+      "label": "AWS Foundation",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "observability",
+      "label": "Observability",
+      "color": "#7C3AED"
+    },
+    {
+      "id": "data_capacity",
+      "label": "Data and Capacity",
+      "color": "#0F766E"
+    },
+    {
+      "id": "interview_positioning",
+      "label": "Interview Positioning",
+      "color": "#E45756"
+    },
+    {
+      "id": "map_navigation",
+      "label": "Map Navigation",
+      "color": "#6B7280"
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open AWS, Observability, and Interview Bridge Tutorial",
+      "type": "tutorial",
+      "href": "../../../../tutorials/IaC/TerraForm/09_aws_observability_interview_bridge/index.html"
+    },
+    {
+      "label": "Open AWS, Observability, and Interview Bridge Lab README",
+      "type": "lab",
+      "href": "../../../../tutorials/IaC/TerraForm/09_aws_observability_interview_bridge/README.md"
+    },
+    {
+      "label": "Open LearnTerraform Course Home",
+      "type": "tutorial",
+      "href": "../index.html"
+    },
+    {
+      "label": "Back: Safety, Team Workflow, and CI/CD",
+      "type": "map",
+      "topic": "terraform_safety_team_workflow_cicd.studybubble.json"
+    },
+    {
+      "label": "Related: Providers and Resources",
+      "type": "map",
+      "topic": "terraform_providers_resources.studybubble.json"
+    },
+    {
+      "label": "Related: State, Drift, and Backends",
+      "type": "map",
+      "topic": "terraform_state_drift_backends.studybubble.json"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "aws_foundation",
+      "label": "AWS Foundation",
+      "size": "core",
+      "group": "AWS Foundation",
+      "definition": "AWS Foundation means the common cloud building blocks Terraform can define or standardize in AWS.",
+      "whyItMatters": "Many cloud, data, platform, and observability roles expect awareness of how AWS resources are provisioned and governed.",
+      "safeSentence": "Terraform can help define AWS foundation resources in a repeatable and reviewable way.",
+      "commonTrap": "Do not imply deep AWS Terraform ownership if the actual experience is learning and collaboration-focused.",
+      "interviewAnswer": "Terraform is commonly used to manage AWS foundation resources such as storage, IAM, networking, compute, and monitoring components. I am building fluency in how those pieces fit together.",
+      "note": {
+        "summary": "This map bridges Terraform ideas into AWS/data/observability conversations without overclaiming ownership.",
+        "image": {
+          "src": "assets/terraform_aws_observability_interview_bridge.svg",
+          "caption": "Terraform connects AWS foundation, observability, operations, and interview-safe communication."
+        }
+      },
+      "childTopics": []
+    },
+    {
+      "id": "s3",
+      "label": "S3",
+      "size": "support",
+      "group": "AWS Foundation",
+      "definition": "S3 is AWS object storage commonly used for data, logs, exports, and lake-style storage.",
+      "whyItMatters": "S3 is common in data engineering and observability workflows.",
+      "safeSentence": "For data engineering, S3 is often a key storage layer that Terraform can help define consistently.",
+      "commonTrap": "Do not create real buckets without naming, security, cost, and cleanup approval.",
+      "interviewAnswer": "S3 is relevant because many data and logging workflows depend on durable object storage, and Terraform can help standardize bucket configuration.",
+      "note": {
+        "summary": "Terraform commonly defines bucket naming, tags, encryption, lifecycle, access, and logging settings."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "iam",
+      "label": "IAM",
+      "size": "support",
+      "group": "AWS Foundation",
+      "definition": "IAM controls AWS identities, roles, policies, and permissions.",
+      "whyItMatters": "Terraform-managed infrastructure still needs secure access control.",
+      "safeSentence": "IAM is critical because Terraform-managed infrastructure still needs secure access control.",
+      "commonTrap": "Do not treat IAM as a copy/paste policy exercise. Permissions can create major security risk.",
+      "interviewAnswer": "IAM matters because Terraform automation and cloud workloads need carefully scoped permissions, ideally following least privilege.",
+      "note": {
+        "summary": "IAM is high-risk: use least privilege, role-based access, separation by environment, and review of powerful permissions."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "networking",
+      "label": "Networking",
+      "size": "support",
+      "group": "AWS Foundation",
+      "definition": "Networking includes VPCs, subnets, security groups, routing, and connectivity boundaries.",
+      "whyItMatters": "Cloud systems depend on network boundaries and connectivity.",
+      "safeSentence": "Networking is one of the cloud areas where Terraform helps make infrastructure repeatable and reviewable.",
+      "commonTrap": "Do not make networking changes casually; small changes can have broad impact.",
+      "interviewAnswer": "Networking is important because applications, data pipelines, and monitoring systems all depend on connectivity and security boundaries.",
+      "note": {
+        "summary": "High-impact area: plan review and safety controls matter even for small config changes."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "compute",
+      "label": "Compute",
+      "size": "support",
+      "group": "AWS Foundation",
+      "definition": "Compute includes services that run workloads, such as EC2, ECS, EKS, Lambda, or other AWS execution platforms.",
+      "whyItMatters": "Data pipelines, applications, and observability agents depend on compute.",
+      "safeSentence": "Terraform can define the compute layer that applications, data pipelines, and monitoring tools depend on.",
+      "commonTrap": "Do not talk as if all compute choices are the same; each has different operational and cost behavior.",
+      "interviewAnswer": "Terraform can help define compute resources or supporting configuration, while operations teams still need monitoring, capacity, and cost visibility.",
+      "note": {
+        "summary": "Terraform defines shape; telemetry shows behavior; capacity planning checks sufficiency."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "cloudwatch",
+      "label": "CloudWatch",
+      "size": "support",
+      "group": "Observability",
+      "definition": "CloudWatch is AWS's native monitoring/logging/metrics service family.",
+      "whyItMatters": "It connects AWS infrastructure to operational visibility.",
+      "safeSentence": "Terraform can help define monitoring resources such as CloudWatch alarms or log groups.",
+      "commonTrap": "Do not assume creating infrastructure is enough; monitoring and alerting must also be considered.",
+      "interviewAnswer": "CloudWatch matters because AWS infrastructure needs logs, metrics, and alarms, and some of those observability assets can be managed as code.",
+      "note": {
+        "summary": "Terraform may manage log groups, alarms, dashboard config, and retention settings."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "observability_tools",
+      "label": "Observability Tools",
+      "size": "support",
+      "group": "Observability",
+      "definition": "Observability tools collect and present signals such as logs, metrics, traces, dashboards, and alerts.",
+      "whyItMatters": "Infrastructure changes need visibility after deployment.",
+      "safeSentence": "Many observability platforms can be managed partly as code through Terraform providers.",
+      "commonTrap": "Do not claim every observability setup is fully managed by Terraform.",
+      "interviewAnswer": "Terraform can sometimes manage observability resources through providers, but the operational value comes from connecting infrastructure changes to telemetry, dashboards, and alerting.",
+      "note": {
+        "summary": "Good signal design and review still matter even with IaC-managed observability assets."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "dashboards_as_code",
+      "label": "Dashboards as Code",
+      "size": "support",
+      "group": "Observability",
+      "definition": "Dashboards as code means dashboard definitions are stored, reviewed, and managed like configuration.",
+      "whyItMatters": "Dashboards become repeatable and easier to review instead of manual one-off screens.",
+      "safeSentence": "Managing dashboards as code can make observability assets repeatable and easier to review.",
+      "commonTrap": "Do not create dashboards with no owner, no purpose, or no action path.",
+      "interviewAnswer": "Dashboards as code can help teams standardize operational views and reduce manual configuration drift.",
+      "note": {
+        "summary": "Ask who owns dashboard, what question it answers, and what action it should trigger."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "alerts_as_code",
+      "label": "Alerts as Code",
+      "size": "support",
+      "group": "Observability",
+      "definition": "Alerts as code means alert rules are versioned, reviewed, and managed repeatably.",
+      "whyItMatters": "Alert consistency helps teams detect issues without relying on manual console configuration.",
+      "safeSentence": "Alerts as code help teams standardize monitoring thresholds and reduce manual configuration drift.",
+      "commonTrap": "Do not create noisy alerts that nobody trusts.",
+      "interviewAnswer": "Alerts as code can help standardize thresholds, ownership, routing, and review around monitoring changes.",
+      "note": {
+        "summary": "Good alerts need clear owner, threshold, runbook, and noise control."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "capacity_connection",
+      "label": "Capacity Connection",
+      "size": "core",
+      "group": "Data and Capacity",
+      "definition": "Capacity connection means Terraform defines infrastructure while capacity engineering studies whether that infrastructure has enough headroom.",
+      "whyItMatters": "Provisioning and capacity planning should inform each other.",
+      "safeSentence": "Terraform defines infrastructure, while capacity engineering studies whether that infrastructure has enough headroom for demand.",
+      "commonTrap": "Do not confuse provisioning with forecasting. Terraform creates or changes infrastructure; capacity analysis studies behavior over time.",
+      "interviewAnswer": "My capacity background helps me understand why infrastructure-as-code should be connected to telemetry, utilization, thresholds, and forward-looking planning.",
+      "note": {
+        "summary": "Bridge: Terraform asks what should exist; telemetry/capacity asks how it behaves and what to plan next."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "data_engineering_connection",
+      "label": "Data Engineering Connection",
+      "size": "core",
+      "group": "Data and Capacity",
+      "definition": "Data engineering connection means Terraform can define supporting cloud resources used by data pipelines.",
+      "whyItMatters": "Data pipelines often depend on storage, IAM, compute, networking, and monitoring.",
+      "safeSentence": "Data engineering pipelines often rely on infrastructure that can be provisioned or standardized through Terraform.",
+      "commonTrap": "Do not claim Terraform replaces pipeline engineering; it supports the infrastructure around it.",
+      "interviewAnswer": "For data engineering, Terraform is useful because pipelines often depend on cloud resources such as storage, IAM roles, compute, networking, and logging.",
+      "note": {
+        "summary": "Safe framing: understand resource dependencies even when platform teams own implementation."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "interview_bridge",
+      "label": "Interview Bridge",
+      "size": "core",
+      "group": "Interview Positioning",
+      "definition": "Interview Bridge is the safe story connecting Terraform learning to Sean's real background.",
+      "whyItMatters": "It prevents overclaiming while still showing useful cloud/platform fluency.",
+      "safeSentence": "My background is strongest in data, telemetry, monitoring, and capacity forecasting. Terraform helps me connect that operational experience to modern cloud infrastructure practices.",
+      "commonTrap": "Do not say you owned enterprise Terraform production platforms if that is not true.",
+      "interviewAnswer": "For my background, Terraform is valuable because it connects cloud infrastructure to the operational world I already know: monitoring, telemetry, capacity, dashboards, and risk. I am not claiming to be the main Terraform platform owner, but I understand the workflow and how it supports repeatable, safe cloud environments.",
+      "note": {
+        "summary": "Practice answer: Terraform workflow + state safety + data/telemetry/capacity bridge without overclaiming ownership."
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Interview Bridge Tutorial",
+          "href": "../../../../tutorials/IaC/TerraForm/09_aws_observability_interview_bridge/index.html"
+        }
+      ]
+    },
+    {
+      "id": "safety_nav",
+      "label": "Safety, Team Workflow, and CI/CD",
+      "size": "detail",
+      "group": "Map Navigation",
+      "definition": "Open the previous map that explains safe Terraform team workflow.",
+      "whyItMatters": "AWS and observability Terraform work must still follow review, plan, state, and apply controls.",
+      "safeSentence": "AWS-facing Terraform work still needs safe team workflow and controlled change.",
+      "commonTrap": "Do not treat this as an AWS concept. It is a map doorway.",
+      "interviewAnswer": "The AWS/observability bridge only makes sense when connected to safe Terraform workflow: plan review, state protection, least privilege, and controlled apply.",
+      "childTopics": [
+        {
+          "label": "Terraform Safety, Team Workflow, and CI/CD",
+          "topic": "terraform_safety_team_workflow_cicd.studybubble.json"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "aws_foundation",
+      "target": "s3",
+      "label": "includes"
+    },
+    {
+      "source": "aws_foundation",
+      "target": "iam",
+      "label": "includes"
+    },
+    {
+      "source": "aws_foundation",
+      "target": "networking",
+      "label": "includes"
+    },
+    {
+      "source": "aws_foundation",
+      "target": "compute",
+      "label": "includes"
+    },
+    {
+      "source": "s3",
+      "target": "data_engineering_connection",
+      "label": "supports"
+    },
+    {
+      "source": "iam",
+      "target": "interview_bridge",
+      "label": "informs"
+    },
+    {
+      "source": "networking",
+      "target": "interview_bridge",
+      "label": "informs"
+    },
+    {
+      "source": "compute",
+      "target": "capacity_connection",
+      "label": "connects"
+    },
+    {
+      "source": "cloudwatch",
+      "target": "observability_tools",
+      "label": "part of"
+    },
+    {
+      "source": "observability_tools",
+      "target": "dashboards_as_code",
+      "label": "enables"
+    },
+    {
+      "source": "observability_tools",
+      "target": "alerts_as_code",
+      "label": "enables"
+    },
+    {
+      "source": "dashboards_as_code",
+      "target": "capacity_connection",
+      "label": "feeds"
+    },
+    {
+      "source": "alerts_as_code",
+      "target": "capacity_connection",
+      "label": "feeds"
+    },
+    {
+      "source": "capacity_connection",
+      "target": "interview_bridge",
+      "label": "strengthens"
+    },
+    {
+      "source": "data_engineering_connection",
+      "target": "interview_bridge",
+      "label": "strengthens"
+    }
+  ],
+  "paths": [
+    {
+      "id": "terraform_aws_observability_interview_bridge_walk",
+      "label": "Terraform AWS, Observability, and Interview Bridge Walk",
+      "description": "Walk from AWS foundations through observability and into interview-safe operational positioning.",
+      "nodeIds": [
+        "aws_foundation",
+        "s3",
+        "iam",
+        "networking",
+        "compute",
+        "cloudwatch",
+        "observability_tools",
+        "dashboards_as_code",
+        "alerts_as_code",
+        "capacity_connection",
+        "data_engineering_connection",
+        "interview_bridge"
+      ],
+      "rehearsalPrompt": "Explain how Terraform connects AWS infrastructure, observability, and data/capacity operations without overclaiming platform ownership."
+    }
+  ]
+}
+

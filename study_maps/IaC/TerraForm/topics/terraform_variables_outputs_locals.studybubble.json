@@ -1,0 +1,328 @@
+{
+  "id": "terraform_variables_outputs_locals",
+  "title": "Terraform Variables, Outputs, and Locals",
+  "subtitle": "Inputs, internal values, and outputs for reusable Terraform patterns",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "inputs",
+      "label": "Inputs",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "internal_values",
+      "label": "Internal Values",
+      "color": "#7C3AED"
+    },
+    {
+      "id": "outputs_group",
+      "label": "Outputs",
+      "color": "#DC2626"
+    },
+    {
+      "id": "reuse_and_safety",
+      "label": "Reuse and Safety",
+      "color": "#0F766E"
+    },
+    {
+      "id": "map_navigation",
+      "label": "Map Navigation",
+      "color": "#6B7280"
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open Variables, Outputs, and Locals Tutorial",
+      "type": "tutorial",
+      "href": "../../../../tutorials/IaC/TerraForm/05_variables_outputs_locals/index.html"
+    },
+    {
+      "label": "Open Variables, Outputs, and Locals Lab README",
+      "type": "lab",
+      "href": "../../../../tutorials/IaC/TerraForm/05_variables_outputs_locals/README.md"
+    },
+    {
+      "label": "Open LearnTerraform Course Home",
+      "type": "tutorial",
+      "href": "../index.html"
+    },
+    {
+      "label": "Back: Terraform Core Workflow",
+      "type": "map",
+      "topic": "terraform_core_workflow.studybubble.json"
+    },
+    {
+      "label": "Related: Terraform State, Drift, and Backends",
+      "type": "map",
+      "topic": "terraform_state_drift_backends.studybubble.json"
+    },
+    {
+      "label": "Related: Terraform Providers and Resources",
+      "type": "map",
+      "topic": "terraform_providers_resources.studybubble.json"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "variables",
+      "label": "Variables",
+      "size": "core",
+      "group": "Inputs",
+      "definition": "Variables are input values passed into Terraform configuration.",
+      "whyItMatters": "Variables make Terraform reusable instead of hardcoding every value.",
+      "safeSentence": "Variables let the same Terraform code work with different inputs.",
+      "commonTrap": "Do not hardcode environment-specific values everywhere when variables would make the configuration cleaner.",
+      "interviewAnswer": "Variables are Terraform inputs. They let teams reuse the same configuration with different values for environment, size, region, names, or settings.",
+      "note": {
+        "summary": "Variables are how Terraform accepts input.\n\nInstead of hardcoding bucket names, pass values for dev/test/prod.\n\nTiny example:\nvariable \"bucket_name\" {\n  type = string\n}\n\nUse in resource: bucket = var.bucket_name",
+        "image": {
+          "src": "assets/terraform_variables_outputs_locals.svg",
+          "caption": "Variables/tfvars flow into config, locals, resources, and outputs across environments."
+        }
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Variables Tutorial",
+          "href": "../../../../tutorials/IaC/TerraForm/05_variables_outputs_locals/index.html"
+        }
+      ]
+    },
+    {
+      "id": "variable_types",
+      "label": "Variable Types",
+      "size": "support",
+      "group": "Inputs",
+      "definition": "Variable types define what kind of value a variable accepts.",
+      "whyItMatters": "Types help catch mistakes and document what values are expected.",
+      "safeSentence": "Variable types make Terraform inputs clearer and safer.",
+      "commonTrap": "Do not leave every input untyped in serious team configurations.",
+      "interviewAnswer": "Variable types help Terraform validate inputs such as string, number, bool, list, map, or object.",
+      "note": {
+        "summary": "Common types: string, number, bool, list(string), map(string), object({...}).\n\nExample:\nvariable \"instance_count\" {\n  type    = number\n  default = 1\n}"
+      },
+      "childTopics": []
+    },
+    {
+      "id": "defaults",
+      "label": "Defaults",
+      "size": "support",
+      "group": "Inputs",
+      "definition": "A default is the fallback value Terraform uses when no value is supplied.",
+      "whyItMatters": "Defaults make simple use cases easier, but important settings still need review.",
+      "safeSentence": "Defaults are useful, but environment-specific values should be chosen carefully.",
+      "commonTrap": "Do not hide important production choices behind casual defaults.",
+      "interviewAnswer": "Defaults make variables optional, but teams should be careful when defaults affect important infrastructure behavior.",
+      "note": {
+        "summary": "Example:\nvariable \"environment\" {\n  type    = string\n  default = \"dev\"\n}\n\nConvenient for learning; production defaults need caution."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "tfvars",
+      "label": "tfvars",
+      "size": "support",
+      "group": "Inputs",
+      "definition": "tfvars files provide values for Terraform variables.",
+      "whyItMatters": "They separate reusable Terraform logic from environment-specific inputs.",
+      "safeSentence": "tfvars files let teams keep variable values separate from reusable configuration.",
+      "commonTrap": "Do not commit secret values in tfvars files.",
+      "interviewAnswer": "tfvars files are commonly used to provide environment-specific variable values without changing the main Terraform code.",
+      "note": {
+        "summary": "Example dev.tfvars:\nenvironment = \"dev\"\nbucket_name = \"dev-learning-logs\"\n\nConceptual usage: terraform plan -var-file=\"dev.tfvars\""
+      },
+      "childTopics": []
+    },
+    {
+      "id": "sensitive_values",
+      "label": "Sensitive Values",
+      "size": "support",
+      "group": "Reuse and Safety",
+      "definition": "Sensitive values are inputs or outputs that should be hidden from casual display.",
+      "whyItMatters": "Terraform configurations may handle secrets, tokens, passwords, or IDs that need protection.",
+      "safeSentence": "Sensitive values need careful handling and should not be casually committed or exposed.",
+      "commonTrap": "Marking a variable sensitive does not mean all risk disappears; state may still contain sensitive data.",
+      "interviewAnswer": "Sensitive variables help reduce accidental exposure, but Terraform state and outputs still need access control.",
+      "note": {
+        "summary": "Example:\nvariable \"api_token\" {\n  type      = string\n  sensitive = true\n}\n\nUse secret managers/CI secrets and protect state."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "locals",
+      "label": "Locals",
+      "size": "core",
+      "group": "Internal Values",
+      "definition": "Locals are internal named expressions used inside Terraform configuration.",
+      "whyItMatters": "Locals reduce repetition and make calculated values easier to read.",
+      "safeSentence": "Locals help avoid repeating the same expression across Terraform files.",
+      "commonTrap": "Do not overuse locals until the configuration becomes hard to follow.",
+      "interviewAnswer": "Locals are reusable internal values. They are not inputs from outside; they are computed inside the Terraform configuration.",
+      "note": {
+        "summary": "Example:\nlocals {\n  name_prefix = \"${var.environment}-app\"\n}\n\nUse as local.name_prefix for tags/names."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "outputs",
+      "label": "Outputs",
+      "size": "core",
+      "group": "Outputs",
+      "definition": "Outputs expose useful values after Terraform evaluates or creates resources.",
+      "whyItMatters": "Outputs help people and downstream automation see important resulting values.",
+      "safeSentence": "Outputs make important Terraform results visible.",
+      "commonTrap": "Do not expose secrets or sensitive values casually through outputs.",
+      "interviewAnswer": "Outputs can expose values like names, IDs, URLs, endpoints, or generated resource attributes.",
+      "note": {
+        "summary": "Example:\noutput \"bucket_name\" {\n  value = var.bucket_name\n}\n\nOutputs connect Terraform to other tools and reporting."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "naming_patterns",
+      "label": "Naming Patterns",
+      "size": "support",
+      "group": "Reuse and Safety",
+      "definition": "Naming patterns keep Terraform inputs and outputs consistent and readable.",
+      "whyItMatters": "Consistent names make Terraform easier to review and maintain.",
+      "safeSentence": "Good naming patterns make Terraform code easier for teams to understand.",
+      "commonTrap": "Do not create clever names that hide what the variable or output really means.",
+      "interviewAnswer": "Naming patterns matter because Terraform is reviewed as code, and clear names reduce confusion.",
+      "note": {
+        "summary": "Good examples: environment, region, bucket_name, owner_tag, common_tags.\nAvoid: x, data1, temp_value."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "environment_inputs",
+      "label": "Environment Inputs",
+      "size": "support",
+      "group": "Reuse and Safety",
+      "definition": "Environment inputs are different variable values for dev, test, stage, or prod.",
+      "whyItMatters": "They let the same Terraform pattern behave differently across environments.",
+      "safeSentence": "Variables help the same Terraform code support different environments safely.",
+      "commonTrap": "Do not mix production and development values accidentally.",
+      "interviewAnswer": "Environment inputs help teams reuse Terraform patterns while keeping dev, test, and production settings separate.",
+      "note": {
+        "summary": "dev.tfvars vs prod.tfvars can vary size/tags/names while code stays the same."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "reuse_pattern",
+      "label": "Reuse Pattern",
+      "size": "core",
+      "group": "Reuse and Safety",
+      "definition": "The reuse pattern combines variables, locals, and outputs to make Terraform configuration flexible and understandable.",
+      "whyItMatters": "This is how Terraform grows from one-off examples into reusable infrastructure patterns.",
+      "safeSentence": "Variables, locals, and outputs are the basic ingredients of reusable Terraform.",
+      "commonTrap": "Do not jump to modules before understanding inputs, internal values, and outputs.",
+      "interviewAnswer": "Variables provide inputs, locals organize internal expressions, and outputs expose useful results. Together they make Terraform code reusable.",
+      "note": {
+        "summary": "Flow: variables in -> locals standardize -> resources manage -> outputs expose. This bridges naturally to modules."
+      },
+      "childTopics": [
+        {
+          "label": "Terraform Modules and Reuse",
+          "topic": "terraform_modules_reuse.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "terraform_core_workflow_nav",
+      "label": "Terraform Core Workflow",
+      "size": "detail",
+      "group": "Map Navigation",
+      "definition": "Open the previous map that explains the practical Terraform workflow.",
+      "whyItMatters": "Variables, locals, and outputs make more sense when connected to init, validate, plan, and apply.",
+      "safeSentence": "Inputs and outputs are part of the Terraform workflow because they affect what plan and apply will do.",
+      "commonTrap": "Do not treat this as a variable concept. It is a map doorway.",
+      "interviewAnswer": "Variables and outputs fit into the workflow because they influence the plan and make resulting infrastructure values visible.",
+      "childTopics": [
+        {
+          "label": "Terraform Core Workflow",
+          "topic": "terraform_core_workflow.studybubble.json"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "variables",
+      "target": "variable_types",
+      "label": "constrained by"
+    },
+    {
+      "source": "variables",
+      "target": "defaults",
+      "label": "can include"
+    },
+    {
+      "source": "variables",
+      "target": "tfvars",
+      "label": "fed by"
+    },
+    {
+      "source": "variables",
+      "target": "sensitive_values",
+      "label": "may include"
+    },
+    {
+      "source": "variables",
+      "target": "locals",
+      "label": "can drive"
+    },
+    {
+      "source": "locals",
+      "target": "reuse_pattern",
+      "label": "supports"
+    },
+    {
+      "source": "variables",
+      "target": "environment_inputs",
+      "label": "shape"
+    },
+    {
+      "source": "environment_inputs",
+      "target": "reuse_pattern",
+      "label": "enable"
+    },
+    {
+      "source": "reuse_pattern",
+      "target": "outputs",
+      "label": "exposes via"
+    },
+    {
+      "source": "outputs",
+      "target": "reuse_pattern",
+      "label": "completes"
+    },
+    {
+      "source": "sensitive_values",
+      "target": "outputs",
+      "label": "must protect"
+    }
+  ],
+  "paths": [
+    {
+      "id": "terraform_variables_outputs_locals_walk",
+      "label": "Terraform Variables, Outputs, and Locals Walk",
+      "description": "Walk through Terraform inputs, internal values, outputs, and reuse safety patterns.",
+      "nodeIds": [
+        "variables",
+        "variable_types",
+        "defaults",
+        "tfvars",
+        "sensitive_values",
+        "locals",
+        "outputs",
+        "naming_patterns",
+        "environment_inputs",
+        "reuse_pattern"
+      ],
+      "rehearsalPrompt": "Explain how variables, locals, and outputs make Terraform reusable across environments."
+    }
+  ]
+}
+
+

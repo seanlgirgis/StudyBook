@@ -1,0 +1,2 @@
+Exact Terraform version varies by machine.
+Use `terraform version` to confirm CLI availability.

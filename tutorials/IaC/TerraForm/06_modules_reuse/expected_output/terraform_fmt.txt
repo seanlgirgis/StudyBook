@@ -1,0 +1,1 @@
+fmt may print changed filenames when formatting is needed, or no output when files are already formatted.

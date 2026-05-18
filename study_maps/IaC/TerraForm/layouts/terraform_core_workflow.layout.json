@@ -1,0 +1,51 @@
+{
+  "topicId": "terraform_core_workflow",
+  "topicTitle": "Terraform Core Workflow",
+  "version": 1,
+  "nodes": {
+    "write_configuration": {
+      "x": 77.88,
+      "y": 136.14
+    },
+    "initialize": {
+      "x": 76.03,
+      "y": 351.34
+    },
+    "format": {
+      "x": 276.1,
+      "y": 482.41
+    },
+    "validate": {
+      "x": 392.11,
+      "y": 69.08
+    },
+    "plan": {
+      "x": 527.08,
+      "y": 312.93
+    },
+    "review_plan": {
+      "x": 536.27,
+      "y": 560.44
+    },
+    "apply": {
+      "x": 814.7,
+      "y": 536.67
+    },
+    "outputs": {
+      "x": 1049.54,
+      "y": 409.86
+    },
+    "change_over_time": {
+      "x": 728.81,
+      "y": 78.83
+    },
+    "destroy_carefully": {
+      "x": 1050.86,
+      "y": 215.39
+    },
+    "terraform_1000_foot_view_nav": {
+      "x": 51.46,
+      "y": 19.08
+    }
+  }
+}

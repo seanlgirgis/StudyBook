@@ -1,0 +1,1 @@
+Plan should show terraform_data resources with references, demonstrating dependency flow conceptually without cloud usage.

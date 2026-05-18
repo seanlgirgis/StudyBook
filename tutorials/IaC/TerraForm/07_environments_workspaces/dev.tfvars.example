@@ -1,0 +1,6 @@
+environment       = "dev"
+application_name  = "learnterraform"
+owner             = "Sean"
+size              = "small"
+retention_days    = 7
+approval_required = false

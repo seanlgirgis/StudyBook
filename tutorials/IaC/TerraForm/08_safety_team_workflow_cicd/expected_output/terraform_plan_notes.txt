@@ -1,0 +1,7 @@
+Conceptually, plan should show:
+- local-safe terraform_data resource change
+- change_summary output context
+- safety_message output context
+- no cloud resources
+- no remote backend configured
+- no apply required

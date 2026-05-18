@@ -1,0 +1,6 @@
+Conceptually, the test plan should show:
+- environment = test
+- size = medium
+- retention_days = 14
+- approval_required = true
+- local-safe resources only (no cloud resources)

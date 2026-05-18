@@ -1,0 +1,55 @@
+{
+  "topicId": "terraform_providers_resources",
+  "topicTitle": "Terraform Providers and Resources",
+  "version": 1,
+  "nodes": {
+    "provider": {
+      "x": 97.43,
+      "y": 46.57
+    },
+    "aws_provider": {
+      "x": 275.99,
+      "y": 336.56
+    },
+    "provider_configuration": {
+      "x": 55.72,
+      "y": 380.24
+    },
+    "provider_version": {
+      "x": 142.2,
+      "y": 286.55
+    },
+    "resource": {
+      "x": 371.39,
+      "y": 175.21
+    },
+    "resource_type": {
+      "x": 499.28,
+      "y": 295.7
+    },
+    "resource_name": {
+      "x": 365.31,
+      "y": 404.38
+    },
+    "resource_address": {
+      "x": 612.7,
+      "y": 418.27
+    },
+    "attributes": {
+      "x": 932.88,
+      "y": 273.32
+    },
+    "data_source": {
+      "x": 934.29,
+      "y": 45.46
+    },
+    "dependencies": {
+      "x": 780.76,
+      "y": 396.86
+    },
+    "terraform_1000_foot_view_nav": {
+      "x": -47.51,
+      "y": 66.3
+    }
+  }
+}

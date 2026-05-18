@@ -1,0 +1,7 @@
+Conceptually, the prod plan should show:
+- environment = prod
+- size = large
+- retention_days = 30
+- approval_required = true
+- local-safe resources only (no cloud resources)
+- production requires extra review in real workflows

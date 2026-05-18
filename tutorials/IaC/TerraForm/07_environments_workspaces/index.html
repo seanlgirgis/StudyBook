@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Terraform Environments and Workspaces</title>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; background:#0b1220; color:#e5e7eb; margin:0; }
+    main { max-width: 980px; margin: 0 auto; padding: 24px; line-height:1.55; }
+    .card { background:#111827; border:1px solid #334155; border-radius:10px; padding:16px; margin:14px 0; }
+    pre { background:#0f172a; border:1px solid #334155; padding:12px; border-radius:8px; overflow:auto; }
+    code { font-family: Consolas, monospace; }
+    a { color:#7dd3fc; }
+    h1,h2,h3 { margin-top:0.6rem; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Terraform Environments and Workspaces</h1>
+  <p>This tutorial expands the map with a safe, local-only lab: one Terraform configuration, multiple environment inputs, and safety-first planning discipline.</p>
+
+  <section class="card">
+    <h2>Visual Learning Path</h2>
+    <svg viewBox="0 0 980 300" width="100%" aria-label="Environment workflow diagram">
+      <rect x="20" y="120" width="280" height="48" rx="8" fill="#1d4ed8"/>
+      <text x="160" y="150" fill="#fff" text-anchor="middle">same Terraform configuration</text>
+      <rect x="360" y="40" width="240" height="48" rx="8" fill="#0f766e"/>
+      <text x="480" y="70" fill="#fff" text-anchor="middle">dev.tfvars + dev plan</text>
+      <rect x="360" y="120" width="240" height="48" rx="8" fill="#7c3aed"/>
+      <text x="480" y="150" fill="#fff" text-anchor="middle">test.tfvars + test plan</text>
+      <rect x="360" y="200" width="240" height="48" rx="8" fill="#b45309"/>
+      <text x="480" y="230" fill="#fff" text-anchor="middle">prod.tfvars + prod plan</text>
+      <line x1="300" y1="144" x2="360" y2="64" stroke="#cbd5e1" stroke-width="2"/>
+      <line x1="300" y1="144" x2="360" y2="144" stroke="#cbd5e1" stroke-width="2"/>
+      <line x1="300" y1="144" x2="360" y2="224" stroke="#cbd5e1" stroke-width="2"/>
+      <rect x="660" y="120" width="280" height="48" rx="8" fill="#334155"/>
+      <text x="800" y="150" fill="#fff" text-anchor="middle">promotion: dev -&gt; test -&gt; prod</text>
+    </svg>
+  </section>
+
+  <section class="card">
+    <h2>Copyable Commands</h2>
+<pre><code>terraform version
+terraform init
+terraform fmt
+terraform validate
+terraform plan -var-file="dev.tfvars.example"
+terraform plan -var-file="test.tfvars.example"
+terraform plan -var-file="prod.tfvars.example"</code></pre>
+    <p>`terraform apply` is intentionally excluded from this first safe environment lab.</p>
+  </section>
+
+  <section class="card">
+    <h2>Inline Lab Files</h2>
+    <h3>main.tf</h3>
+<pre><code>terraform {
+  required_version = ">= 1.4.0"
+}
+
+locals {
+  name_prefix = "${var.environment}-${var.application_name}"
+
+  common_tags = {
+    environment = var.environment
+    application = var.application_name
+    owner       = var.owner
+    managed_by  = "terraform"
+  }
+
+  environment_summary = {
+    environment     = var.environment
+    size            = var.size
+    retention_days  = var.retention_days
+    approval_needed = var.approval_required
+  }
+}
+
+resource "terraform_data" "environment_demo" {
+  input = {
+    name_prefix = local.name_prefix
+    tags        = local.common_tags
+    summary     = local.environment_summary
+    lesson      = "Same Terraform pattern, different environment inputs."
+  }
+}</code></pre>
+
+    <h3>variables.tf</h3>
+<pre><code>variable "environment" { type = string, default = "dev" }
+variable "application_name" { type = string, default = "learnterraform" }
+variable "owner" { type = string, default = "Sean" }
+variable "size" { type = string, default = "small" }
+variable "retention_days" { type = number, default = 7 }
+variable "approval_required" { type = bool, default = false }</code></pre>
+
+    <h3>outputs.tf</h3>
+<pre><code>output "name_prefix" { value = local.name_prefix }
+output "environment_summary" { value = local.environment_summary }
+output "environment_demo_output" { value = terraform_data.environment_demo.output }</code></pre>
+
+    <h3>dev.tfvars.example</h3>
+<pre><code>environment       = "dev"
+application_name  = "learnterraform"
+owner             = "Sean"
+size              = "small"
+retention_days    = 7
+approval_required = false</code></pre>
+
+    <h3>test.tfvars.example</h3>
+<pre><code>environment       = "test"
+application_name  = "learnterraform"
+owner             = "Sean"
+size              = "medium"
+retention_days    = 14
+approval_required = true</code></pre>
+
+    <h3>prod.tfvars.example</h3>
+<pre><code>environment       = "prod"
+application_name  = "learnterraform"
+owner             = "Sean"
+size              = "large"
+retention_days    = 30
+approval_required = true</code></pre>
+
+    <h3>backend_strategy_notes.md (concept excerpt)</h3>
+<pre><code>dev  state path: terraform/dev/learnterraform.tfstate
+test state path: terraform/test/learnterraform.tfstate
+prod state path: terraform/prod/learnterraform.tfstate
+
+Concept only. No real backend is configured in this lab.</code></pre>
+
+    <h3>workspace_notes.md (concept excerpt)</h3>
+<pre><code>terraform workspace list
+terraform workspace show
+terraform workspace new dev
+terraform workspace select dev
+
+Conceptual commands only for this first lab.</code></pre>
+  </section>
+
+  <section class="card"><h2>What an Environment Is</h2><p>An environment is a separate deployment context (dev/test/prod) with different risk and control expectations.</p></section>
+  <section class="card"><h2>Folder Strategy</h2><p>Folder boundaries make intent visible and reduce accidental cross-environment operations.</p></section>
+  <section class="card"><h2>tfvars Per Environment</h2><p>Use one reusable config and switch only approved input values via per-environment tfvars files.</p></section>
+  <section class="card"><h2>Workspaces and Caution</h2><p>Workspaces can isolate state instances, but wrong workspace selection is a major operational risk.</p></section>
+  <section class="card"><h2>Backend Per Environment</h2><p>Keep state boundaries aligned with environment boundaries. Backend, workspace, and provider are different concerns.</p></section>
+  <section class="card"><h2>Promotion Path</h2><p>Safer flow: validate in dev, review in test, approve for prod. Production should not be first test.</p></section>
+
+  <section class="card">
+    <h2>Wrong Environment Risk Checklist</h2>
+    <ul>
+      <li>Right folder?</li>
+      <li>Right variable file?</li>
+      <li>Right workspace?</li>
+      <li>Right backend/state?</li>
+      <li>Right cloud account?</li>
+      <li>Right approval?</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Common Mistakes</h2>
+    <ul>
+      <li>Using prod values in dev plans by mistake.</li>
+      <li>Confusing tfvars with workspace selection.</li>
+      <li>Treating workspace as complete production safety boundary.</li>
+      <li>Assuming validate proves operational safety.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>How This Connects to the StudyBubble Map</h2>
+    <ul>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_environments_workspaces.html">Terraform Environments and Workspaces map</a></li>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_modules_reuse.html">Terraform Modules and Reuse map</a></li>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_variables_outputs_locals.html">Terraform Variables, Outputs, and Locals map</a></li>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_state_drift_backends.html">Terraform State, Drift, and Backends map</a></li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>

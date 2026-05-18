@@ -1,0 +1,6 @@
+- The same Terraform pattern can use different environment inputs.
+- tfvars files carry environment-specific values.
+- Workspaces are named state instances.
+- Backend separation protects environment boundaries.
+- Promotion means moving tested change toward production.
+- Wrong-environment apply is a major Terraform risk.

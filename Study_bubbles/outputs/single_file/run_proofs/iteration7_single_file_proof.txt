@@ -1,14 +1,14 @@
-timestamp: 2026-05-17T07:26:14.659536+00:00
-source topic path: topics\case_capacity_feature_table.studybubble.json
-output HTML path: outputs\single_file\case_capacity_feature_table.html
+timestamp: 2026-05-17T08:45:38.645960+00:00
+source topic path: topics\terraform_1000_foot_view.studybubble.json
+output HTML path: outputs\single_file\terraform_1000_foot_view.html
 mode: single-file
-topic id: case_capacity_feature_table
-topic title: Feature Table Deep Dive
-node count: 7
-link count: 7
+topic id: terraform_1000_foot_view
+topic title: Terraform 1000-Foot View
+node count: 14
+link count: 16
 path count: 1
 validation result: PASS
-generated HTML byte size: 63871
+generated HTML byte size: 68142
 manual smoke test steps:
 1. Open outputs/single_file/tiny_capacity_demo.html directly from File Explorer.
 2. Confirm title and subtitle render.
@@ -19,3 +19,7 @@ manual smoke test steps:
 7. Click Forecast and confirm side panel updates.
 8. Confirm no 'Failed to fetch' message appears.
 summary: PASS
+asset copy warnings:
+WARN: image source not found 'assets/terraform-career-context-placeholder.png'
+WARN: image source not found 'assets/terraform-desired-vs-actual-placeholder.png'
+WARN: image source not found 'assets/terraform-workflow-placeholder.png'

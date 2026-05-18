@@ -1,0 +1,8 @@
+environment      = "dev"
+application_name = "learnterraform"
+owner            = "Sean"
+
+demo_settings = {
+  size      = "small"
+  retention = 7
+}

@@ -1,0 +1,6 @@
+Conceptually, the dev plan should show:
+- environment = dev
+- size = small
+- retention_days = 7
+- approval_required = false
+- local-safe resources only (no cloud resources)

@@ -1,0 +1,327 @@
+{
+  "id": "terraform_environments_workspaces",
+  "title": "Terraform Environments and Workspaces",
+  "subtitle": "Separate dev/test/prod safely with inputs, state boundaries, and promotion discipline",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "environment_basics",
+      "label": "Environment Basics",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "input_strategy",
+      "label": "Input Strategy",
+      "color": "#7C3AED"
+    },
+    {
+      "id": "state_boundaries",
+      "label": "State Boundaries",
+      "color": "#0F766E"
+    },
+    {
+      "id": "promotion_safety",
+      "label": "Promotion and Safety",
+      "color": "#E45756"
+    },
+    {
+      "id": "map_navigation",
+      "label": "Map Navigation",
+      "color": "#6B7280"
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open Environments and Workspaces Tutorial",
+      "type": "tutorial",
+      "href": "../../../../tutorials/IaC/TerraForm/07_environments_workspaces/index.html"
+    },
+    {
+      "label": "Open Environments and Workspaces Lab README",
+      "type": "lab",
+      "href": "../../../../tutorials/IaC/TerraForm/07_environments_workspaces/README.md"
+    },
+    {
+      "label": "Open LearnTerraform Course Home",
+      "type": "tutorial",
+      "href": "../index.html"
+    },
+    {
+      "label": "Back: Modules and Reuse",
+      "type": "map",
+      "topic": "terraform_modules_reuse.studybubble.json"
+    },
+    {
+      "label": "Related: Variables, Outputs, and Locals",
+      "type": "map",
+      "topic": "terraform_variables_outputs_locals.studybubble.json"
+    },
+    {
+      "label": "Related: State, Drift, and Backends",
+      "type": "map",
+      "topic": "terraform_state_drift_backends.studybubble.json"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "environment",
+      "label": "Environment",
+      "size": "core",
+      "group": "Environment Basics",
+      "definition": "An environment is a separate deployment context such as dev, test, stage, or production.",
+      "whyItMatters": "Different environments need different inputs, safety rules, and state boundaries.",
+      "safeSentence": "An environment is a separate place where infrastructure runs, such as dev, test, or production.",
+      "commonTrap": "Do not treat dev and prod as just different names if they share risky state or credentials.",
+      "interviewAnswer": "Terraform environment strategy is about keeping infrastructure contexts clearly separated so changes do not accidentally affect the wrong place.",
+      "note": {
+        "summary": "Environment means a separate deployment context with separate safety expectations.\n\nDev: learning/testing\nTest/Stage: validation\nProd: real impact",
+        "image": {
+          "src": "assets/terraform_environments_workspaces.svg",
+          "caption": "Same Terraform pattern can target dev/test/prod safely when inputs and state are separated."
+        }
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Environments Tutorial",
+          "href": "../../../../tutorials/IaC/TerraForm/07_environments_workspaces/index.html"
+        }
+      ]
+    },
+    {
+      "id": "environment_separation",
+      "label": "Environment Separation",
+      "size": "core",
+      "group": "Environment Basics",
+      "definition": "Environment separation keeps dev, test, and production from interfering with each other.",
+      "whyItMatters": "Separation reduces the chance that a test change damages production.",
+      "safeSentence": "Environment separation helps protect production from development or testing changes.",
+      "commonTrap": "Do not rely only on memory or naming discipline for production safety.",
+      "interviewAnswer": "Teams separate environments using folders, variables, workspaces, backends, permissions, and promotion rules.",
+      "note": {
+        "summary": "Use multiple boundaries: folders, tfvars, workspaces, backend paths, accounts, and CI approvals."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "folder_strategy",
+      "label": "Folder Strategy",
+      "size": "support",
+      "group": "State Boundaries",
+      "definition": "Folder strategy means organizing Terraform code into separate folders by environment or component.",
+      "whyItMatters": "Folders make environment boundaries visible and reviewable.",
+      "safeSentence": "Folder-based environment separation makes the boundaries easy to see and review.",
+      "commonTrap": "Do not create confusing folder trees where people cannot tell what environment they are changing.",
+      "interviewAnswer": "Some teams use separate folders for dev, test, and prod so each environment has a clear boundary.",
+      "note": {
+        "summary": "Example:\nenvironments/\n  dev/\n  test/\n  prod/"
+      },
+      "childTopics": []
+    },
+    {
+      "id": "variable_strategy",
+      "label": "Variable Strategy",
+      "size": "support",
+      "group": "Input Strategy",
+      "definition": "Variable strategy controls which values change between environments.",
+      "whyItMatters": "The same Terraform pattern may need different sizes, names, tags, or retention settings in each environment.",
+      "safeSentence": "Variables let the same Terraform pattern use different values per environment.",
+      "commonTrap": "Do not copy entire Terraform projects just to change a few values.",
+      "interviewAnswer": "Variables help teams reuse Terraform patterns while changing only the inputs needed for each environment.",
+      "note": {
+        "summary": "Typical environment inputs: size, tags, retention, region, thresholds."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "tfvars_per_environment",
+      "label": "tfvars Per Environment",
+      "size": "support",
+      "group": "Input Strategy",
+      "definition": "tfvars files provide environment-specific variable values.",
+      "whyItMatters": "They let teams keep reusable Terraform logic separate from environment inputs.",
+      "safeSentence": "tfvars files can separate dev, test, and prod values from the reusable configuration.",
+      "commonTrap": "Do not commit secrets into tfvars files.",
+      "interviewAnswer": "A common pattern is to keep shared Terraform code and pass different tfvars files for dev, test, or production.",
+      "note": {
+        "summary": "Example:\ndev.tfvars -> retention_days = 7\nprod.tfvars -> retention_days = 30"
+      },
+      "childTopics": []
+    },
+    {
+      "id": "workspace",
+      "label": "Workspace",
+      "size": "support",
+      "group": "State Boundaries",
+      "definition": "A Terraform workspace is a named state instance for the same configuration.",
+      "whyItMatters": "Workspaces can separate multiple instances of the same configuration.",
+      "safeSentence": "Workspaces can separate state for different instances of the same Terraform configuration.",
+      "commonTrap": "Do not assume workspaces are always the best environment strategy.",
+      "interviewAnswer": "Workspaces can be useful, but teams need discipline because it must be obvious which workspace is active before planning or applying.",
+      "note": {
+        "summary": "Same code, different state instances (default/dev/prod)."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "workspace_caution",
+      "label": "Workspace Caution",
+      "size": "support",
+      "group": "State Boundaries",
+      "definition": "Workspace caution means avoiding accidental changes caused by using the wrong active workspace.",
+      "whyItMatters": "A workspace mistake can point Terraform at the wrong state.",
+      "safeSentence": "Workspaces are useful, but teams need naming and review discipline.",
+      "commonTrap": "Do not run Terraform commands without checking the active workspace in a workspace-based setup.",
+      "interviewAnswer": "The main workspace risk is that a user or pipeline plans or applies against the wrong workspace.",
+      "note": {
+        "summary": "Safety habits: show active workspace in logs, enforce naming and approvals."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "backend_per_environment",
+      "label": "Backend Per Environment",
+      "size": "core",
+      "group": "State Boundaries",
+      "definition": "Backend per environment means each environment stores Terraform state in a separate backend location or state path.",
+      "whyItMatters": "Separate state reduces the risk of mixing dev, test, and production changes.",
+      "safeSentence": "Separate backends or state paths help reduce the risk of mixing environments.",
+      "commonTrap": "Do not let dev and prod accidentally share the same state path.",
+      "interviewAnswer": "Teams often separate backend state per environment so production state is not mixed with lower environments.",
+      "note": {
+        "summary": "State boundary should match environment boundary (dev path vs prod path)."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "promotion",
+      "label": "Promotion",
+      "size": "support",
+      "group": "Promotion and Safety",
+      "definition": "Promotion means moving a tested Terraform change from lower environments toward production.",
+      "whyItMatters": "Promotion lets teams validate changes before production impact.",
+      "safeSentence": "A safe Terraform workflow usually tests changes in lower environments before production.",
+      "commonTrap": "Do not treat production as the first test environment.",
+      "interviewAnswer": "Promotion is the path from dev to test or stage and then to production, usually with review and approval at each step.",
+      "note": {
+        "summary": "Typical path: dev plan/test -> stage review -> prod approval/apply."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "wrong_environment_risk",
+      "label": "Wrong Environment Risk",
+      "size": "core",
+      "group": "Promotion and Safety",
+      "definition": "Wrong environment risk is applying or planning against the wrong environment, workspace, account, or backend.",
+      "whyItMatters": "This is one of the most dangerous Terraform mistakes.",
+      "safeSentence": "One of the biggest Terraform risks is running a change against the wrong environment or state.",
+      "commonTrap": "Do not assume the command line is pointed at the right place.",
+      "interviewAnswer": "Before applying Terraform, teams should verify environment, workspace, backend, account, and plan output.",
+      "note": {
+        "summary": "Pre-apply checklist: folder, workspace, backend path, account, plan, required approval."
+      },
+      "childTopics": [
+        {
+          "label": "Terraform Safety, Team Workflow, and CI/CD",
+          "topic": "terraform_safety_team_workflow_cicd.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "modules_reuse_nav",
+      "label": "Modules and Reuse",
+      "size": "detail",
+      "group": "Map Navigation",
+      "definition": "Open the previous map that explains reusable Terraform modules.",
+      "whyItMatters": "Environment strategy often combines modules with different inputs per environment.",
+      "safeSentence": "Modules and environment inputs often work together to reuse patterns safely.",
+      "commonTrap": "Do not treat this as an environment concept. It is a map doorway.",
+      "interviewAnswer": "Modules provide reusable patterns, and environment strategy controls how those patterns are applied safely across dev, test, and production.",
+      "childTopics": [
+        {
+          "label": "Terraform Modules and Reuse",
+          "topic": "terraform_modules_reuse.studybubble.json"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "environment",
+      "target": "environment_separation",
+      "label": "needs"
+    },
+    {
+      "source": "environment_separation",
+      "target": "folder_strategy",
+      "label": "can use"
+    },
+    {
+      "source": "environment_separation",
+      "target": "variable_strategy",
+      "label": "depends on"
+    },
+    {
+      "source": "variable_strategy",
+      "target": "tfvars_per_environment",
+      "label": "implemented by"
+    },
+    {
+      "source": "environment_separation",
+      "target": "workspace",
+      "label": "may use"
+    },
+    {
+      "source": "workspace",
+      "target": "workspace_caution",
+      "label": "requires"
+    },
+    {
+      "source": "environment_separation",
+      "target": "backend_per_environment",
+      "label": "protect with"
+    },
+    {
+      "source": "backend_per_environment",
+      "target": "wrong_environment_risk",
+      "label": "reduces"
+    },
+    {
+      "source": "workspace_caution",
+      "target": "wrong_environment_risk",
+      "label": "prevents"
+    },
+    {
+      "source": "tfvars_per_environment",
+      "target": "promotion",
+      "label": "supports"
+    },
+    {
+      "source": "promotion",
+      "target": "wrong_environment_risk",
+      "label": "controls"
+    }
+  ],
+  "paths": [
+    {
+      "id": "terraform_environments_workspaces_walk",
+      "label": "Terraform Environments and Workspaces Walk",
+      "description": "Walk through environment separation, state boundaries, and promotion safety.",
+      "nodeIds": [
+        "environment",
+        "environment_separation",
+        "folder_strategy",
+        "variable_strategy",
+        "tfvars_per_environment",
+        "workspace",
+        "workspace_caution",
+        "backend_per_environment",
+        "promotion",
+        "wrong_environment_risk"
+      ],
+      "rehearsalPrompt": "Explain how Terraform teams separate environments safely with tfvars, workspace awareness, and backend boundaries."
+    }
+  ]
+}
+

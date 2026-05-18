@@ -1,0 +1,1 @@
+Root module is where Terraform is run. Child module is called by root. Module source points to module folder. Module inputs customize child behavior. Module outputs return values to caller. Modules help reuse and standards. Modules still require review and version discipline.

@@ -21,12 +21,35 @@ One topic data file
 -> validator/builder
 -> standalone single-file HTML
 
+## Engine vs Container
+`Study_bubbles/` is the engine. Real study projects should run as independent containers.
+
+Any folder containing `bubbles.ini` is a StudyBubble container. The current working directory is the active container root.
+
+Engine demo flow (legacy/demo-safe):
+- `Study_bubbles/topics/`
+- `Study_bubbles/layouts/`
+- `Study_bubbles/outputs/single_file/`
+
+Real study container flow:
+- `study_maps/<ProjectName>/bubbles.ini`
+- `study_maps/<ProjectName>/topics/`
+- `study_maps/<ProjectName>/layouts/`
+- `study_maps/<ProjectName>/outputs/`
+- `study_maps/<ProjectName>/assets/`
+- optional `study_maps/<ProjectName>/notes/` or `docs/`
+
+Normal container commands (run from `study_maps/<ProjectName>`):
+- `../../scripts/bubbles.ps1 build`
+- `../../scripts/bubbles.ps1 sync-layout`
+
 ## Source vs Output Rule
-Maintained source files:
+Maintained source files (engine + active container):
 - `viewer/bubble_viewer.html`
 - `viewer/bubble_viewer.css`
 - `viewer/bubble_viewer.js`
-- `topics/*.studybubble.json`
+- `topics/*.studybubble.json` (engine demos)
+- `<container>/topics/*.studybubble.json` (real study projects)
 - `src/study_bubbles/*.py`
 
 Generated output artifacts:

@@ -1,0 +1,47 @@
+{
+  "topicId": "iac_why_terraform_exists",
+  "topicTitle": "IaC: Why Terraform Exists",
+  "version": 1,
+  "nodes": {
+    "before_iac": {
+      "x": 87.89,
+      "y": 156.79
+    },
+    "manual_console_work": {
+      "x": 325.04,
+      "y": 117.44
+    },
+    "scripts_and_tribal_knowledge": {
+      "x": 87.25,
+      "y": 414.68
+    },
+    "cloud_growth_problem": {
+      "x": 288.07,
+      "y": 416.52
+    },
+    "infrastructure_as_code": {
+      "x": 524.13,
+      "y": 426.52
+    },
+    "terraform": {
+      "x": 681,
+      "y": 330
+    },
+    "opentofu": {
+      "x": 962.01,
+      "y": 345.37
+    },
+    "cloudformation": {
+      "x": 910.41,
+      "y": 103.95
+    },
+    "ansible": {
+      "x": 757.09,
+      "y": 91.74
+    },
+    "pulumi": {
+      "x": 631.95,
+      "y": 89.47
+    }
+  }
+}

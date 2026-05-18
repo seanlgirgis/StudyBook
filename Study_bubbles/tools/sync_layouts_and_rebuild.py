@@ -11,6 +11,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.sync_downloaded_layouts import resolve_paths, sync_downloaded_layouts
+from study_bubbles.container import load_container_config
 
 
 @dataclass
@@ -31,10 +32,21 @@ def topic_ids_from_updated_layouts(updated_files: list[Path]) -> list[str]:
 
 def rebuild_topics_for_layouts(topic_ids: list[str], *, dry_run: bool = False) -> RebuildReport:
     report = RebuildReport()
+    container = None
+    try:
+        container = load_container_config(cwd=Path.cwd())
+    except FileNotFoundError:
+        container = None
+
     for topic_id in topic_ids:
-        topic_path = Path("topics") / f"{topic_id}.studybubble.json"
-        layout_path = Path("layouts") / f"{topic_id}.layout.json"
-        out_path = Path("outputs") / "single_file" / f"{topic_id}.html"
+        if container is not None:
+            topic_path = container.topics_dir / f"{topic_id}.studybubble.json"
+            layout_path = container.layouts_dir / f"{topic_id}.layout.json"
+            out_path = container.outputs_dir / f"{topic_id}.html"
+        else:
+            topic_path = Path("topics") / f"{topic_id}.studybubble.json"
+            layout_path = Path("layouts") / f"{topic_id}.layout.json"
+            out_path = Path("outputs") / "single_file" / f"{topic_id}.html"
 
         if not topic_path.exists():
             report.skipped_topics.append(topic_id)
@@ -44,19 +56,27 @@ def rebuild_topics_for_layouts(topic_ids: list[str], *, dry_run: bool = False) -
             report.rebuilt_topics.append(topic_id)
             continue
 
-        cmd = [
-            sys.executable,
-            "-m",
-            "src.study_bubbles.build_topic",
-            "--topic",
-            str(topic_path),
-            "--layout",
-            str(layout_path),
-            "--out",
-            str(out_path),
-            "--mode",
-            "single-file",
-        ]
+        if container is not None:
+            cmd = [
+                sys.executable,
+                str(container.engine_path / "tools" / "studybubble.py"),
+                "build",
+                topic_id,
+            ]
+        else:
+            cmd = [
+                sys.executable,
+                "-m",
+                "src.study_bubbles.build_topic",
+                "--topic",
+                str(topic_path),
+                "--layout",
+                str(layout_path),
+                "--out",
+                str(out_path),
+                "--mode",
+                "single-file",
+            ]
         run = subprocess.run(cmd, capture_output=True, text=True)
         if run.returncode == 0:
             report.rebuilt_topics.append(topic_id)

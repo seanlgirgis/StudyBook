@@ -1,0 +1,2 @@
+`terraform init` should initialize the working directory and providers needed for local-safe resources.
+No cloud authentication is required for this lab.

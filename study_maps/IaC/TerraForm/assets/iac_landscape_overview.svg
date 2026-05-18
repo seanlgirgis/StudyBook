@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="720" viewBox="0 0 1400 720">
+  <rect width="1400" height="720" fill="#ffffff" />
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333333" />
+    </marker>
+    <style>
+      .box { fill: #f7f9fc; stroke: #2f3b52; stroke-width: 2; rx: 8; ry: 8; }
+      .txt { font-family: Segoe UI, Arial, sans-serif; font-size: 22px; fill: #1b2430; text-anchor: middle; dominant-baseline: middle; }
+      .small { font-size: 18px; }
+      .line { stroke: #333333; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+      .title { font-family: Segoe UI, Arial, sans-serif; font-size: 30px; font-weight: 600; fill: #162033; }
+    </style>
+  </defs>
+
+  <text x="700" y="48" class="title">IaC Landscape Overview</text>
+
+  <rect class="box" x="70" y="120" width="200" height="70" />
+  <text class="txt" x="170" y="155">Before IaC</text>
+
+  <rect class="box" x="330" y="70" width="260" height="70" />
+  <text class="txt" x="460" y="105">Manual Console Work</text>
+
+  <rect class="box" x="330" y="170" width="260" height="70" />
+  <text class="txt small" x="460" y="205">Scripts / Tribal Knowledge</text>
+
+  <rect class="box" x="650" y="120" width="240" height="70" />
+  <text class="txt" x="770" y="155">Cloud Growth Problem</text>
+
+  <rect class="box" x="950" y="120" width="260" height="70" />
+  <text class="txt" x="1080" y="155">Infrastructure as Code</text>
+
+  <rect class="box" x="950" y="290" width="180" height="70" />
+  <text class="txt" x="1040" y="325">Terraform</text>
+
+  <rect class="box" x="1180" y="250" width="170" height="60" />
+  <text class="txt small" x="1265" y="280">CloudFormation</text>
+
+  <rect class="box" x="1180" y="320" width="170" height="60" />
+  <text class="txt" x="1265" y="350">Ansible</text>
+
+  <rect class="box" x="1180" y="390" width="170" height="60" />
+  <text class="txt" x="1265" y="420">Pulumi</text>
+
+  <rect class="box" x="1180" y="460" width="170" height="60" />
+  <text class="txt" x="1265" y="490">OpenTofu</text>
+
+  <path class="line" d="M270 155 L330 105" />
+  <path class="line" d="M270 155 L330 205" />
+  <path class="line" d="M590 105 L650 145" />
+  <path class="line" d="M590 205 L650 165" />
+  <path class="line" d="M890 155 L950 155" />
+  <path class="line" d="M1080 190 L1040 290" />
+  <path class="line" d="M1130 325 L1180 280" />
+  <path class="line" d="M1130 325 L1180 350" />
+  <path class="line" d="M1130 325 L1180 420" />
+  <path class="line" d="M1130 325 L1180 490" />
+</svg>

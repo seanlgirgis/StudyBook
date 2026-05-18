@@ -1,0 +1,344 @@
+{
+  "id": "terraform_state_drift_backends",
+  "title": "Terraform State, Drift, and Backends",
+  "subtitle": "Why state matters, how drift happens, and how backend + locking protect teams",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "state_core",
+      "label": "State Core",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "backend_safety",
+      "label": "Backend Safety",
+      "color": "#F58518"
+    },
+    {
+      "id": "drift_and_reality",
+      "label": "Drift and Reality",
+      "color": "#54A24B"
+    },
+    {
+      "id": "state_operations",
+      "label": "State Operations",
+      "color": "#E45756"
+    },
+    {
+      "id": "map_navigation",
+      "label": "Map Navigation",
+      "color": "#6B7280"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "state",
+      "label": "State",
+      "size": "core",
+      "group": "State Core",
+      "definition": "State is Terraform's stored record of the infrastructure it manages.",
+      "whyItMatters": "Terraform uses state to know what it already created, what it tracks, and what may need to change.",
+      "safeSentence": "State is Terraform's memory of managed infrastructure.",
+      "commonTrap": "Do not treat state as a disposable cache. Losing or corrupting it can confuse Terraform.",
+      "interviewAnswer": "State maps Terraform configuration to real infrastructure, so Terraform can compare desired configuration with managed reality.",
+      "note": {
+        "summary": "State makes Terraform powerful and risky. Terraform reads .tf files, but also tracks what those files represent in real infrastructure.\n\nCode says: I want this bucket.\nState says: that is aws_s3_bucket.example and this specific real object.\nCloud says: here is what exists now.\n\nTerraform compares all three to decide changes.",
+        "image": {
+          "src": "assets/terraform_state_drift_backends.svg",
+          "caption": "State links configuration to real resources; drift appears when manual changes bypass Terraform."
+        }
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open State Tutorial",
+          "href": "../../../../tutorials/IaC/TerraForm/03_state_drift_backends/index.html"
+        }
+      ]
+    },
+    {
+      "id": "state_mapping",
+      "label": "State Mapping",
+      "size": "support",
+      "group": "State Core",
+      "definition": "State mapping connects Terraform resource addresses to real-world resource identities.",
+      "whyItMatters": "Without mapping, Terraform would not know which real object belongs to which resource block.",
+      "safeSentence": "State mapping is how Terraform connects code names to real cloud objects.",
+      "commonTrap": "Do not assume a resource name in code is enough by itself. Terraform also needs the real platform identity.",
+      "interviewAnswer": "Terraform state keeps the binding between a configuration resource and the actual remote object.",
+      "note": {
+        "summary": "Example: aws_instance.web must map to one real EC2 instance ID. If mapping is wrong, plans can become surprising or destructive."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "local_state",
+      "label": "Local State",
+      "size": "support",
+      "group": "State Core",
+      "definition": "Local state is state stored on the machine running Terraform, usually in a terraform.tfstate file.",
+      "whyItMatters": "Local state is simple for learning but risky for team collaboration.",
+      "safeSentence": "Local state may be fine for learning, but teams usually need shared remote state.",
+      "commonTrap": "Do not casually email, copy, or manually edit local state files.",
+      "interviewAnswer": "Local state is useful for small learning projects, but shared environments usually need a remote backend.",
+      "note": {
+        "summary": "Local state is easy to start with, but teams can drift into different realities if state is not shared and protected."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "remote_backend",
+      "label": "Remote Backend",
+      "size": "core",
+      "group": "Backend Safety",
+      "definition": "A backend controls where Terraform stores state; a remote backend stores state outside the local machine.",
+      "whyItMatters": "Remote backends let teams share one trusted state location.",
+      "safeSentence": "Remote state helps teams collaborate safely around one shared Terraform state.",
+      "commonTrap": "Do not confuse a backend with a provider. Backend stores state; provider talks to the target platform.",
+      "interviewAnswer": "In team workflows, remote backends are used so everyone works against the same state instead of separate local files.",
+      "note": {
+        "summary": "Backend answers where state lives. Provider answers how resources are managed. They are different responsibilities."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "locking",
+      "label": "Locking",
+      "size": "support",
+      "group": "Backend Safety",
+      "definition": "Locking prevents multiple Terraform runs from writing state at the same time.",
+      "whyItMatters": "Concurrent state writes can corrupt or confuse state.",
+      "safeSentence": "State locking protects teams from conflicting Terraform runs.",
+      "commonTrap": "Do not bypass locking casually with lock=false.",
+      "interviewAnswer": "Locking is important because it prevents two users or pipelines from changing state at the same time.",
+      "note": {
+        "summary": "Simple picture: one run holds lock, another run waits/fails instead of writing concurrently. Force-unlock exists but is a careful recovery action."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "sensitive_state",
+      "label": "Sensitive State",
+      "size": "support",
+      "group": "Backend Safety",
+      "definition": "State can contain sensitive information from managed infrastructure.",
+      "whyItMatters": "State needs access control because it may expose values that should not be public.",
+      "safeSentence": "Terraform state should be protected because it can contain sensitive values.",
+      "commonTrap": "Do not commit state files to a public repository.",
+      "interviewAnswer": "State should be treated as sensitive and protected with access control, encryption, and disciplined backend choices.",
+      "note": {
+        "summary": "Safe habits: keep state out of Git, use controlled remote backends, restrict read access, and avoid careless secret outputs."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "refresh",
+      "label": "Refresh",
+      "size": "support",
+      "group": "Drift and Reality",
+      "definition": "Refresh updates Terraform's understanding of real infrastructure before a plan or apply.",
+      "whyItMatters": "Terraform needs current information to compare desired configuration with managed reality.",
+      "safeSentence": "Refresh helps Terraform compare state with what currently exists.",
+      "commonTrap": "Do not assume state is always perfectly current before Terraform checks the real platform.",
+      "interviewAnswer": "Refresh is part of how Terraform learns whether the real infrastructure still matches what it expects.",
+      "note": {
+        "summary": "Refresh helps plan accuracy by re-checking real resource details through providers before proposing change."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "drift",
+      "label": "Drift",
+      "size": "core",
+      "group": "Drift and Reality",
+      "definition": "Drift happens when real infrastructure changes outside Terraform.",
+      "whyItMatters": "Drift creates mismatch between code, state, and real infrastructure.",
+      "safeSentence": "Drift means the real environment no longer matches what Terraform expects.",
+      "commonTrap": "Manual cloud console changes can create drift if they bypass Terraform.",
+      "interviewAnswer": "Drift is when someone changes infrastructure outside the Terraform workflow, causing reality to diverge from the managed configuration.",
+      "note": {
+        "summary": "Example: Terraform expects one instance size, manual console edit changes it. Next plan reveals unexpected differences."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "import",
+      "label": "Import",
+      "size": "support",
+      "group": "State Operations",
+      "definition": "Import connects an existing real-world resource to Terraform state.",
+      "whyItMatters": "Import helps bring resources created outside Terraform under Terraform management.",
+      "safeSentence": "Import can bring existing resources into Terraform state, but it must be done carefully.",
+      "commonTrap": "Import does not automatically write perfect Terraform configuration for you in all workflows.",
+      "interviewAnswer": "Import is used when a team wants Terraform to start tracking an existing resource, but the mapping and configuration must be handled carefully.",
+      "note": {
+        "summary": "After import, always run and review plan carefully. Mismatched config can trigger unexpected change proposals."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "state_commands",
+      "label": "State Commands",
+      "size": "support",
+      "group": "State Operations",
+      "definition": "State commands inspect or carefully adjust Terraform state.",
+      "whyItMatters": "They can help troubleshoot state, but misuse can cause serious problems.",
+      "safeSentence": "Terraform state commands are powerful and should be used carefully.",
+      "commonTrap": "Do not manually edit raw state files when safer Terraform state commands exist.",
+      "interviewAnswer": "State commands can inspect or adjust state, but they require discipline because state controls Terraform's understanding of managed infrastructure.",
+      "note": {
+        "summary": "Common commands: terraform state list, terraform state show, terraform state mv, terraform state rm. Use with review discipline."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "state_mistakes",
+      "label": "State Mistakes",
+      "size": "core",
+      "group": "State Operations",
+      "definition": "State mistakes include deleting, corrupting, exposing, or incorrectly modifying Terraform state.",
+      "whyItMatters": "Bad state handling can lead to unexpected plans, broken tracking, or security risk.",
+      "safeSentence": "State mistakes can be serious, so state operations need discipline and review.",
+      "commonTrap": "Do not fix state problems by randomly editing state files.",
+      "interviewAnswer": "The safest Terraform teams treat state as a controlled asset, not a throwaway file.",
+      "note": {
+        "summary": "Risky behavior includes deleting state blindly, committing it to Git, force-unlocking active runs, or importing to wrong addresses."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "terraform_core_workflow_nav",
+      "label": "Terraform Core Workflow",
+      "size": "detail",
+      "group": "Map Navigation",
+      "definition": "Open the previous map that explains the practical Terraform workflow.",
+      "whyItMatters": "This gives Sean a doorway back to the workflow map.",
+      "safeSentence": "State makes more sense when connected back to the plan, review, and apply workflow.",
+      "commonTrap": "Do not mix this navigation bubble with state concepts. It is a map doorway, not a state concept.",
+      "interviewAnswer": "State is central to the Terraform workflow because plan and apply rely on Terraform understanding what it already manages.",
+      "childTopics": [
+        {
+          "label": "Terraform Core Workflow",
+          "topic": "terraform_core_workflow.studybubble.json"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "state",
+      "target": "state_mapping",
+      "label": "binds"
+    },
+    {
+      "source": "state",
+      "target": "local_state",
+      "label": "can be"
+    },
+    {
+      "source": "local_state",
+      "target": "remote_backend",
+      "label": "teams move to"
+    },
+    {
+      "source": "remote_backend",
+      "target": "locking",
+      "label": "supports"
+    },
+    {
+      "source": "remote_backend",
+      "target": "sensitive_state",
+      "label": "must protect"
+    },
+    {
+      "source": "state",
+      "target": "refresh",
+      "label": "re-checks via"
+    },
+    {
+      "source": "refresh",
+      "target": "drift",
+      "label": "reveals"
+    },
+    {
+      "source": "state",
+      "target": "import",
+      "label": "can extend with"
+    },
+    {
+      "source": "import",
+      "target": "state_commands",
+      "label": "often followed by"
+    },
+    {
+      "source": "state_commands",
+      "target": "state_mistakes",
+      "label": "misuse causes"
+    },
+    {
+      "source": "drift",
+      "target": "state_mistakes",
+      "label": "can lead to"
+    },
+    {
+      "source": "locking",
+      "target": "state_mistakes",
+      "label": "reduces risk of"
+    }
+  ],
+  "paths": [
+    {
+      "id": "terraform_state_walk",
+      "label": "Terraform State Walk",
+      "description": "Walk through state fundamentals, drift, backend safety, and disciplined state operations.",
+      "nodeIds": [
+        "state",
+        "state_mapping",
+        "local_state",
+        "remote_backend",
+        "locking",
+        "sensitive_state",
+        "refresh",
+        "drift",
+        "import",
+        "state_commands",
+        "state_mistakes"
+      ],
+      "rehearsalPrompt": "Explain how Terraform state maps infrastructure, where drift comes from, and why backend + locking matter for teams."
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open LearnTerraform Course Home",
+      "type": "tutorial",
+      "href": "../index.html"
+    },
+    {
+      "label": "Open State, Drift, and Backends Tutorial",
+      "type": "tutorial",
+      "href": "../../../../tutorials/IaC/TerraForm/03_state_drift_backends/index.html"
+    },
+    {
+      "label": "Open State, Drift, and Backends Lab README",
+      "type": "lab",
+      "href": "../../../../tutorials/IaC/TerraForm/03_state_drift_backends/README.md"
+    },
+    {
+      "label": "Back: Terraform Core Workflow",
+      "type": "map",
+      "topic": "terraform_core_workflow.studybubble.json"
+    },
+    {
+      "label": "Related: Terraform 1000-Foot View",
+      "type": "map",
+      "topic": "terraform_1000_foot_view.studybubble.json"
+    },
+    {
+      "label": "Related: Providers and Resources",
+      "type": "map",
+      "topic": "terraform_providers_resources.studybubble.json"
+    }
+  ]
+}
+
+

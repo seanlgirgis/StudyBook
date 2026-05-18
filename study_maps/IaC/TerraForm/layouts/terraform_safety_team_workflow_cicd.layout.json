@@ -1,0 +1,55 @@
+{
+  "topicId": "terraform_safety_team_workflow_cicd",
+  "topicTitle": "Terraform Safety, Team Workflow, and CI/CD",
+  "version": 1,
+  "nodes": {
+    "version_control": {
+      "x": 131.42,
+      "y": 261.17
+    },
+    "pull_request": {
+      "x": 230.56,
+      "y": 115.45
+    },
+    "plan_review": {
+      "x": 100,
+      "y": 413.08
+    },
+    "format_validate": {
+      "x": 325.23,
+      "y": 295.89
+    },
+    "cicd_pipeline": {
+      "x": 421.98,
+      "y": 153.52
+    },
+    "remote_state": {
+      "x": 919.19,
+      "y": 544.75
+    },
+    "locking": {
+      "x": 1026.87,
+      "y": 366.1
+    },
+    "least_privilege": {
+      "x": 586.83,
+      "y": 284.26
+    },
+    "policy_checks": {
+      "x": 755.99,
+      "y": 155.45
+    },
+    "apply_control": {
+      "x": 837.32,
+      "y": 337.2
+    },
+    "blast_radius": {
+      "x": 496.12,
+      "y": 547.37
+    },
+    "environments_nav": {
+      "x": 1.79,
+      "y": 70.47
+    }
+  }
+}

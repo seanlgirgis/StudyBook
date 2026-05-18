@@ -1,0 +1,28 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'/><meta name='viewport' content='width=device-width,initial-scale=1'/><title>Terraform Providers and Resources - Tutorial</title><style>body{font-family:Segoe UI,Arial,sans-serif;line-height:1.5;margin:0;background:#0b1220;color:#e5e7eb}main{max-width:1024px;margin:0 auto;padding:24px}.card{background:#111827;border:1px solid #334155;border-radius:10px;padding:16px;margin:14px 0}pre{padding:12px;border-radius:8px;overflow:auto;border:1px solid #334155;background:#0f172a;color:#e2e8f0}a{color:#7dd3fc}.warn{border-left:4px solid #f59e0b;padding-left:10px}</style></head><body><main><h1>Terraform Providers and Resources</h1><p>Local-safe tutorial for provider/resource mental model without running AWS.</p><section class='card'><h2>Visual Learning Path</h2><pre>config -> provider concept -> resource block -> address -> attributes -> dependencies</pre></section><section class='card'><h2>Provider/Resource Diagram</h2><svg viewBox='0 0 980 260' width='100%'><rect x='20' y='30' width='220' height='50' rx='8' fill='#1d4ed8'/><text x='130' y='60' text-anchor='middle' fill='white'>Terraform Config</text><rect x='280' y='30' width='220' height='50' rx='8' fill='#0f766e'/><text x='390' y='60' text-anchor='middle' fill='white'>Provider / Plugin</text><rect x='540' y='30' width='200' height='50' rx='8' fill='#b45309'/><text x='640' y='60' text-anchor='middle' fill='white'>Resource Block</text><rect x='770' y='30' width='180' height='50' rx='8' fill='#7c3aed'/><text x='860' y='60' text-anchor='middle' fill='white'>Address + Attrs</text><line x1='240' y1='55' x2='280' y2='55' stroke='#cbd5e1' stroke-width='2'/><line x1='500' y1='55' x2='540' y2='55' stroke='#cbd5e1' stroke-width='2'/><line x1='740' y1='55' x2='770' y2='55' stroke='#cbd5e1' stroke-width='2'/><rect x='300' y='150' width='220' height='50' rx='8' fill='#7c2d12'/><text x='410' y='180' text-anchor='middle' fill='white'>AWS provider -> AWS API</text><rect x='560' y='150' width='230' height='50' rx='8' fill='#92400e'/><text x='675' y='180' text-anchor='middle' fill='white'>AWS resources (concept only)</text><line x1='520' y1='175' x2='560' y2='175' stroke='#cbd5e1' stroke-width='2'/></svg><p class='warn'>AWS branch is conceptual only in this lab.</p></section><section class='card'><h2>Copyable Commands</h2><pre>terraform version
+terraform init
+terraform validate
+terraform plan</pre></section><section class='card'><h2>main.tf</h2><pre>resource "terraform_data" "provider_resource_demo" {
+  input = {
+    topic   = "providers and resources"
+    purpose = "show resource type, resource name, address, and attributes"
+  }
+}
+
+resource "terraform_data" "dependent_demo" {
+  input = {
+    upstream_topic = terraform_data.provider_resource_demo.output.topic
+    dependency     = "this resource references an attribute from another resource"
+  }
+}
+
+output "resource_address_example" {
+  value = "terraform_data.provider_resource_demo"
+}
+
+output "dependency_message" {
+  value = terraform_data.dependent_demo.output.dependency
+}</pre></section><section class='card'><h2>versions.tf</h2><pre>terraform {
+  required_version = ">= 1.4.0"
+}</pre></section><section class='card'><h2>providers.tf</h2><pre># This lab intentionally uses only local-safe Terraform features.
+# No AWS credentials are required.
+# The terraform_data resource is built into modern Terraform.</pre></section><section class='card'><h2>How this connects to the StudyBubble map</h2><ul><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_providers_resources.html'>Providers and Resources map</a></li><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_1000_foot_view.html'>1000-Foot View map</a></li><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_core_workflow.html'>Core Workflow map</a></li><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_state_drift_backends.html'>State/Drift/Backends map</a></li></ul></section></main></body></html>

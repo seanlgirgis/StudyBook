@@ -1,0 +1,48 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'/><meta name='viewport' content='width=device-width,initial-scale=1'/><title>Terraform Variables, Outputs, and Locals Tutorial</title><style>body{font-family:Segoe UI,Arial,sans-serif;background:#0b1220;color:#e5e7eb;margin:0;line-height:1.5}main{max-width:1000px;margin:0 auto;padding:24px}.card{background:#111827;border:1px solid #334155;border-radius:10px;padding:16px;margin:14px 0}pre{padding:12px;border-radius:8px;overflow:auto;border:1px solid #334155;background:#0f172a;color:#e2e8f0}a{color:#7dd3fc}</style></head><body><main><h1>Terraform Variables, Outputs, and Locals Tutorial</h1><p>This page teaches reusable Terraform input/internal/output patterns using local-safe examples only.</p><section class='card'><h2>Visual Learning Path</h2><svg viewBox='0 0 980 220' width='100%'><rect x='20' y='70' width='180' height='46' rx='8' fill='#1d4ed8'/><text x='110' y='99' fill='white' text-anchor='middle'>variables / tfvars</text><rect x='250' y='70' width='130' height='46' rx='8' fill='#7c3aed'/><text x='315' y='99' fill='white' text-anchor='middle'>locals</text><rect x='430' y='70' width='150' height='46' rx='8' fill='#b45309'/><text x='505' y='99' fill='white' text-anchor='middle'>resources</text><rect x='630' y='70' width='130' height='46' rx='8' fill='#dc2626'/><text x='695' y='99' fill='white' text-anchor='middle'>outputs</text><rect x='140' y='150' width='220' height='40' rx='8' fill='#14532d'/><text x='250' y='176' fill='white' text-anchor='middle'>dev / prod inputs</text><rect x='420' y='150' width='300' height='40' rx='8' fill='#065f46'/><text x='570' y='176' fill='white' text-anchor='middle'>same reusable Terraform pattern</text></svg></section><section class='card'><h2>Copyable Commands</h2><pre>terraform version
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform plan -var-file="dev.tfvars.example"
+terraform plan -var-file="prod.tfvars.example"</pre></section><section class='card'><h2>main.tf</h2><pre>terraform {
+  required_version = ">= 1.4.0"
+}
+
+locals {
+  name_prefix = "-"
+  common_tags = {
+    environment = var.environment
+    application = var.application_name
+    owner       = var.owner
+    managed_by  = "terraform"
+  }
+  workflow_message = "Planning  for "
+}
+
+resource "terraform_data" "variables_demo" {
+  input = {
+    name_prefix = local.name_prefix
+    tags        = local.common_tags
+    message     = local.workflow_message
+  }
+}</pre></section><section class='card'><h2>variables.tf</h2><pre>variable "environment" { type = string default = "dev" }
+variable "application_name" { type = string default = "learnterraform" }
+variable "owner" { type = string default = "Sean" }
+variable "enable_extra_message" { type = bool default = true }
+variable "allowed_regions" { type = list(string) default = ["us-east-1","us-east-2"] }
+variable "demo_settings" {
+  type = object({ size = string, retention = number })
+  default = { size = "small", retention = 7 }
+}
+variable "example_sensitive_token" { type = string default = "do-not-use-real-secrets" sensitive = true }</pre></section><section class='card'><h2>tfvars Examples</h2><pre>terraform.tfvars.example
+environment      = "dev"
+application_name = "learnterraform"
+owner            = "Sean"</pre><pre>dev.tfvars.example
+environment = "dev"
+demo_settings = { size = "small", retention = 7 }</pre><pre>prod.tfvars.example
+environment = "prod"
+demo_settings = { size = "medium", retention = 30 }</pre></section><section class='card'><h2>outputs.tf</h2><pre>output "name_prefix" { value = local.name_prefix }
+output "common_tags" { value = local.common_tags }
+output "workflow_message" { value = local.workflow_message }
+output "demo_resource_output" { value = terraform_data.variables_demo.output }
+output "sensitive_token_example" { value = var.example_sensitive_token sensitive = true }</pre></section><section class='card'><h2>Common Mistakes</h2><ul><li>Hardcoding environment values everywhere</li><li>Confusing variables (input) and locals (internal computed values)</li><li>Exposing sensitive outputs casually</li><li>Treating tfvars as secret storage without controls</li></ul></section><section class='card'><h2>How this connects to StudyBubble maps</h2><ul><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_variables_outputs_locals.html'>Variables/Outputs/Locals map</a></li><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_core_workflow.html'>Core Workflow map</a></li><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_state_drift_backends.html'>State/Drift/Backends map</a></li><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_providers_resources.html'>Providers/Resources map</a></li></ul></section></main></body></html>

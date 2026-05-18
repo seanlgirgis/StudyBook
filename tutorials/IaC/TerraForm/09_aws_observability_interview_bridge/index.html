@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Terraform AWS, Observability, and Interview Bridge</title>
+  <style>
+    body{font-family:Segoe UI,Arial,sans-serif;background:#0b1220;color:#e5e7eb;margin:0;line-height:1.55}
+    main{max-width:1050px;margin:0 auto;padding:24px}.card{background:#111827;border:1px solid #334155;border-radius:10px;padding:16px;margin:14px 0}
+    pre{background:#0f172a;border:1px solid #334155;padding:12px;border-radius:8px;overflow:auto}a{color:#7dd3fc}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Terraform AWS, Observability, and Interview Bridge</h1>
+  <p>This tutorial bridges Terraform concepts to AWS, observability, data engineering, and capacity conversations with safe interview positioning.</p>
+
+  <section class="card">
+  <h2>Visual Learning Path</h2>
+  <style>
+    .bridge-diagram{display:grid;gap:12px}
+    .bridge-row{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;justify-content:center}
+    .bridge-box{background:#1e293b;border:1px solid #475569;border-radius:10px;padding:10px 12px;min-width:130px;text-align:center;font-size:14px}
+    .bridge-core{background:#1d4ed8;border-color:#60a5fa;font-weight:600}
+    .bridge-col{flex:1 1 230px;min-width:230px;display:flex;flex-direction:column;gap:8px}
+    .bridge-head{background:#334155;border:1px solid #64748b;border-radius:10px;padding:10px 12px;font-weight:600;text-align:center}
+    .bridge-subgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+    .bridge-arrow{text-align:center;color:#93c5fd;font-size:13px}
+  </style>
+  <div class="bridge-diagram">
+    <div class="bridge-row">
+      <div class="bridge-box bridge-core">Terraform</div>
+    </div>
+    <div class="bridge-arrow">flows into</div>
+    <div class="bridge-row">
+      <div class="bridge-col">
+        <div class="bridge-head">AWS Foundation</div>
+        <div class="bridge-subgrid">
+          <div class="bridge-box">S3</div><div class="bridge-box">IAM</div><div class="bridge-box">Networking</div><div class="bridge-box">Compute</div>
+        </div>
+      </div>
+      <div class="bridge-col">
+        <div class="bridge-head">Observability</div>
+        <div class="bridge-subgrid">
+          <div class="bridge-box">CloudWatch</div><div class="bridge-box">Dashboards as Code</div><div class="bridge-box">Alerts as Code</div>
+        </div>
+      </div>
+      <div class="bridge-col">
+        <div class="bridge-head">Operations</div>
+        <div class="bridge-subgrid">
+          <div class="bridge-box">Telemetry</div><div class="bridge-box">Capacity Planning</div><div class="bridge-box">Data Engineering</div>
+        </div>
+      </div>
+      <div class="bridge-col">
+        <div class="bridge-head">Interview Bridge</div>
+        <div class="bridge-subgrid">
+          <div class="bridge-box">Safe Story</div><div class="bridge-box">No Overclaiming</div><div class="bridge-box">Collaboration Language</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section class="card"><h2>Why This Map Matters</h2><p>It connects infrastructure-as-code language to operational conversations Sean already handles well.</p></section>
+  <section class="card"><h2>AWS Foundation Resources</h2><p>Terraform often participates in standardizing storage, IAM, network boundaries, compute support, and monitoring assets.</p></section>
+  <section class="card"><h2>S3 for Data and Logs</h2><p>S3 appears in pipeline storage, log retention, and analytics workflows.</p></section>
+  <section class="card"><h2>IAM and Least Privilege</h2><p>IAM changes are high risk; least-privilege review is essential.</p></section>
+  <section class="card"><h2>Networking and Blast Radius</h2><p>Small network changes can have broad service impact, so review and safety gates matter.</p></section>
+  <section class="card"><h2>Compute and Capacity</h2><p>Compute definitions and capacity visibility must inform each other.</p></section>
+  <section class="card"><h2>CloudWatch and Observability</h2><p>Monitoring resources should align with ownership, signal quality, and action paths.</p></section>
+  <section class="card"><h2>Dashboards as Code</h2><p>Versioned dashboards improve repeatability and review clarity.</p></section>
+  <section class="card"><h2>Alerts as Code</h2><p>Versioned alerts improve threshold discipline and reduce drift.</p></section>
+  <section class="card"><h2>Data Engineering Connection</h2><p>Pipelines depend on cloud foundations that Terraform discussions regularly touch.</p></section>
+  <section class="card"><h2>Capacity Planning Connection</h2><p>Terraform defines what should exist; telemetry and forecasting evaluate whether it is enough.</p></section>
+
+  <section class="card"><h2>Conceptual Example: S3</h2><p><strong>Conceptual only. Do not run without approved AWS account, credentials, naming, cost review, security review, backend/state plan, and cleanup plan.</strong></p><pre><code>resource "aws_s3_bucket" "learning_logs" {
+  bucket = "example-company-learning-logs-bucket"
+}</code></pre></section>
+  <section class="card"><h2>Conceptual Example: IAM</h2><p><strong>Conceptual only. Do not run without approved AWS account, credentials, naming, cost review, security review, backend/state plan, and cleanup plan.</strong></p><pre><code>resource "aws_iam_role" "conceptual_pipeline_role" {
+  name = "example-learning-pipeline-role"
+}</code></pre></section>
+  <section class="card"><h2>Conceptual Example: CloudWatch</h2><p><strong>Conceptual only. Do not run without approved AWS account, credentials, naming, cost review, security review, backend/state plan, and cleanup plan.</strong></p><pre><code>resource "aws_cloudwatch_log_group" "app_logs" {
+  name = "/example/learning/app"
+  retention_in_days = 14
+}</code></pre></section>
+  <section class="card"><h2>Conceptual Example: Observability Provider</h2><p><strong>Conceptual only. Do not run without approved AWS account, credentials, naming, cost review, security review, backend/state plan, and cleanup plan.</strong></p><pre><code># Many observability tools have Terraform providers.
+# Provider setup depends on credentials and approval process.</code></pre></section>
+
+  <section class="card"><h2>Safe Interview Wording</h2><p>“I understand Terraform workflow and how it supports repeatable cloud infrastructure. My strongest background is data engineering, telemetry, monitoring, and capacity forecasting. I use Terraform fluency to collaborate better with platform/cloud teams.”</p></section>
+  <section class="card"><h2>What Not To Claim</h2><p>Do not claim enterprise Terraform platform ownership if that was not your role. Use precise, collaboration-focused language.</p></section>
+
+  <section class="card">
+    <h2>How This Connects to the StudyBubble Map</h2>
+    <ul>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_aws_observability_interview_bridge.html">Terraform AWS, Observability, and Interview Bridge</a></li>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_safety_team_workflow_cicd.html">Terraform Safety, Team Workflow, and CI/CD</a></li>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_providers_resources.html">Terraform Providers and Resources</a></li>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_state_drift_backends.html">Terraform State, Drift, and Backends</a></li>
+      <li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_variables_outputs_locals.html">Terraform Variables, Outputs, and Locals</a></li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>
+

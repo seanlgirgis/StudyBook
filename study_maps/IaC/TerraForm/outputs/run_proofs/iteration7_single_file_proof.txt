@@ -1,0 +1,21 @@
+timestamp: 2026-05-18T02:03:28.692998+00:00
+source topic path: D:\Workarea\StudyBook\study_maps\IaC\TerraForm\topics\terraform_1000_foot_view.studybubble.json
+output HTML path: D:\Workarea\StudyBook\study_maps\IaC\TerraForm\outputs\terraform_1000_foot_view.html
+mode: single-file
+topic id: terraform_1000_foot_view
+topic title: Terraform 1000-Foot View
+node count: 11
+link count: 11
+path count: 1
+validation result: PASS
+generated HTML byte size: 75876
+manual smoke test steps:
+1. Open outputs/single_file/tiny_capacity_demo.html directly from File Explorer.
+2. Confirm title and subtitle render.
+3. Confirm 3 bubbles render (Telemetry, Baseline, Forecast).
+4. Confirm 2 relationship lines render.
+5. Click Telemetry and confirm side panel updates.
+6. Click Baseline and confirm side panel updates.
+7. Click Forecast and confirm side panel updates.
+8. Confirm no 'Failed to fetch' message appears.
+summary: PASS

@@ -1,0 +1,368 @@
+{
+  "id": "terraform_core_workflow",
+  "title": "Terraform Core Workflow",
+  "subtitle": "Practical lifecycle: write, check, plan, review, apply, and manage change safely",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "workflow_setup",
+      "label": "Workflow Setup",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "quality_checks",
+      "label": "Quality Checks",
+      "color": "#F58518"
+    },
+    {
+      "id": "change_preview",
+      "label": "Change Preview",
+      "color": "#54A24B"
+    },
+    {
+      "id": "execution",
+      "label": "Execution",
+      "color": "#E45756"
+    },
+    {
+      "id": "lifecycle_risk",
+      "label": "Lifecycle Risk",
+      "color": "#8B5CF6"
+    },
+    {
+      "id": "map_navigation",
+      "label": "Map Navigation",
+      "color": "#6B7280"
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open LearnTerraform Course Home",
+      "type": "tutorial",
+      "href": "../index.html"
+    },
+    {
+      "label": "Open Core Workflow Tutorial",
+      "type": "tutorial",
+      "href": "../../../../tutorials/IaC/TerraForm/02_core_workflow/index.html"
+    },
+    {
+      "label": "Open Core Workflow Lab README",
+      "type": "lab",
+      "href": "../../../../tutorials/IaC/TerraForm/02_core_workflow/README.md"
+    },
+    {
+      "label": "Back: Terraform 1000-Foot View",
+      "type": "map",
+      "topic": "terraform_1000_foot_view.studybubble.json"
+    },
+    {
+      "label": "Next: State, Drift, and Backends",
+      "type": "map",
+      "topic": "terraform_state_drift_backends.studybubble.json"
+    },
+    {
+      "label": "Related: Providers and Resources",
+      "type": "map",
+      "topic": "terraform_providers_resources.studybubble.json"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "write_configuration",
+      "label": "Write Configuration",
+      "size": "core",
+      "group": "Workflow Setup",
+      "definition": "Terraform work starts by writing configuration files that describe the desired infrastructure.",
+      "whyItMatters": "The files are the source of truth for what Terraform should manage.",
+      "safeSentence": "The workflow starts by describing the desired infrastructure in Terraform configuration files.",
+      "commonTrap": "Do not think the files are just commands. They describe the desired end state.",
+      "interviewAnswer": "Terraform begins with configuration files that describe the infrastructure the team wants to create or manage.",
+      "note": {
+        "summary": "Terraform files usually end in .tf and are often split as main.tf, providers.tf, variables.tf, outputs.tf, and versions.tf. The core idea is declaring what should exist.\n\nTiny example:\nresource \"aws_s3_bucket\" \"example\" {\n  bucket = \"example-learning-bucket\"\n}\n\nThis declares intent; nothing is created until the workflow runs."
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Deep Study Page",
+          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+        }
+      ]
+    },
+    {
+      "id": "initialize",
+      "label": "Initialize",
+      "size": "core",
+      "group": "Workflow Setup",
+      "definition": "Initialize prepares the working directory by setting up the backend and downloading needed providers and modules.",
+      "whyItMatters": "Terraform cannot plan or apply correctly until the working directory is initialized.",
+      "safeSentence": "Terraform init prepares the project by downloading providers and setting up the backend.",
+      "commonTrap": "Do not skip init after adding or changing providers, modules, or backend configuration.",
+      "interviewAnswer": "I think of terraform init as the setup step that prepares the workspace before planning or applying changes.",
+      "note": {
+        "summary": "Usual command: terraform init\n\nThis is often the first command in a project. It prepares the directory so Terraform knows which providers and modules are required."
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Deep Study Page",
+          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+        }
+      ]
+    },
+    {
+      "id": "format",
+      "label": "Format",
+      "size": "support",
+      "group": "Quality Checks",
+      "definition": "Format rewrites Terraform configuration into the standard style.",
+      "whyItMatters": "Consistent formatting makes Terraform easier to read, review, and maintain.",
+      "safeSentence": "Terraform fmt is a hygiene step that keeps configuration readable and consistent.",
+      "commonTrap": "Do not treat formatting as logic validation. It improves style, not correctness.",
+      "interviewAnswer": "I use terraform fmt as a simple consistency step before review, similar to formatting code before a pull request.",
+      "note": {
+        "summary": "Usual command: terraform fmt\n\nFormatting is not correctness, but it reduces review noise and improves collaboration."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "validate",
+      "label": "Validate",
+      "size": "support",
+      "group": "Quality Checks",
+      "definition": "Validate checks whether the Terraform configuration is syntactically valid and internally consistent.",
+      "whyItMatters": "It catches configuration problems before planning or applying changes.",
+      "safeSentence": "Terraform validate catches configuration issues before planning or applying.",
+      "commonTrap": "Validate does not prove the cloud change is safe. It mainly checks the configuration structure.",
+      "interviewAnswer": "Validate is an early quality check. It helps catch syntax and configuration issues before moving to plan.",
+      "note": {
+        "summary": "Usual command: terraform validate\n\nThink of this as a structure check. It can catch syntax mistakes and missing required arguments, but plan is still needed for real change preview."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "plan",
+      "label": "Plan",
+      "size": "core",
+      "group": "Change Preview",
+      "definition": "Plan previews what Terraform intends to create, change, or destroy.",
+      "whyItMatters": "Plan is the main safety checkpoint before touching real infrastructure.",
+      "safeSentence": "Terraform plan is the preview step before changing real infrastructure.",
+      "commonTrap": "Do not treat plan output as noise. It is the evidence for what will change.",
+      "interviewAnswer": "Plan is critical because it shows the blast radius before apply.",
+      "note": {
+        "summary": "Usual command: terraform plan\n\nPlan compares configuration, state, and provider data to propose changes.\nAsk: what is created, changed, or destroyed, and is that blast radius acceptable?",
+        "image": {
+          "src": "assets/terraform_core_workflow.svg",
+          "caption": "Core Terraform workflow from .tf files through apply, outputs/state, and destroy caution."
+        }
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Deep Study Page",
+          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+        }
+      ]
+    },
+    {
+      "id": "review_plan",
+      "label": "Review Plan",
+      "size": "core",
+      "group": "Change Preview",
+      "definition": "Review Plan means a human or team checks the planned changes before applying.",
+      "whyItMatters": "Terraform can create, modify, or destroy important infrastructure, so the plan needs human judgment.",
+      "safeSentence": "The plan should be reviewed carefully before apply, especially in shared or production environments.",
+      "commonTrap": "Do not blindly approve a plan just because Terraform generated it.",
+      "interviewAnswer": "I see plan review as the change-control checkpoint in Terraform.",
+      "note": {
+        "summary": "This is where Terraform becomes a team workflow. In mature environments, review happens via PR or CI gates.\n\nSafe framing: I understand plan review is essential because it shows what will actually change before execution."
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Deep Study Page",
+          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+        }
+      ]
+    },
+    {
+      "id": "apply",
+      "label": "Apply",
+      "size": "core",
+      "group": "Execution",
+      "definition": "Apply performs the approved Terraform changes against the target platform.",
+      "whyItMatters": "This is where the reviewed plan becomes real infrastructure.",
+      "safeSentence": "Terraform apply should happen only after the plan has been reviewed.",
+      "commonTrap": "Do not casually run apply in the wrong workspace, account, or environment.",
+      "interviewAnswer": "Apply is the execution step where Terraform carries out the reviewed infrastructure changes.",
+      "note": {
+        "summary": "Usual command: terraform apply\n\nApply calls platform APIs through providers and makes real changes. Safe habit: always read and confirm the plan before approval."
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Deep Study Page",
+          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+        }
+      ]
+    },
+    {
+      "id": "outputs",
+      "label": "Outputs",
+      "size": "support",
+      "group": "Execution",
+      "definition": "Outputs expose useful values after Terraform creates or reads infrastructure.",
+      "whyItMatters": "Outputs help people and downstream automation find important resulting values.",
+      "safeSentence": "Outputs make important infrastructure values visible after Terraform runs.",
+      "commonTrap": "Do not expose secrets casually through outputs.",
+      "interviewAnswer": "Outputs are useful for sharing values like endpoint names, IDs, URLs, or other created resource details.",
+      "note": {
+        "summary": "Tiny example:\noutput \"bucket_name\" {\n  value = aws_s3_bucket.example.bucket\n}\n\nOutputs help scripts, tools, and teammates consume created values safely."
+      },
+      "childTopics": [
+        {
+          "label": "Terraform Variables, Outputs, and Locals",
+          "topic": "terraform_variables_outputs_locals.studybubble.json"
+        }
+      ],
+      "externalLinks": [
+        {
+          "label": "Open Deep Study Page",
+          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+        }
+      ]
+    },
+    {
+      "id": "change_over_time",
+      "label": "Change Over Time",
+      "size": "core",
+      "group": "Lifecycle Risk",
+      "definition": "Terraform is used repeatedly as infrastructure evolves, not only for the first creation.",
+      "whyItMatters": "Real infrastructure changes over time, and Terraform helps manage those changes in a controlled way.",
+      "safeSentence": "Terraform is not just for initial creation; it manages infrastructure changes over time.",
+      "commonTrap": "Do not manually change Terraform-managed resources and forget to reflect the change in code.",
+      "interviewAnswer": "Terraform supports ongoing infrastructure management by repeating the plan/review/apply cycle as requirements change.",
+      "note": {
+        "summary": "Typical changes include tags, sizing, networking, permissions, and monitoring.\nSafe pattern: update code first, then plan, review, and apply to avoid drift."
+      },
+      "childTopics": [
+        {
+          "label": "Terraform State, Drift, and Backends",
+          "topic": "terraform_state_drift_backends.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "destroy_carefully",
+      "label": "Destroy Carefully",
+      "size": "support",
+      "group": "Lifecycle Risk",
+      "definition": "Destroy removes Terraform-managed infrastructure and must be treated as risky.",
+      "whyItMatters": "Destroy can delete real resources and data if used carelessly.",
+      "safeSentence": "Terraform destroy is powerful and should be used only with clear intent and review.",
+      "commonTrap": "Do not run destroy in the wrong environment or against long-lived production resources.",
+      "interviewAnswer": "Destroy should be handled carefully because it can remove infrastructure that systems depend on.",
+      "note": {
+        "summary": "Commands: terraform destroy or terraform plan -destroy\n\nUseful for temporary labs, high risk for shared/production environments. Always verify workspace, account, and plan before approval."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "terraform_1000_foot_view_nav",
+      "label": "Terraform 1000-Foot View",
+      "size": "detail",
+      "group": "Map Navigation",
+      "definition": "Open the previous map that explains Terraform's basic mental model.",
+      "whyItMatters": "This gives Sean a doorway back to the big-picture Terraform map.",
+      "safeSentence": "Before going deeper into workflow details, it helps to keep the 1000-foot Terraform model in mind.",
+      "commonTrap": "Do not mix this navigation bubble with the workflow sequence. It is a map doorway, not a workflow step.",
+      "interviewAnswer": "Terraform's workflow makes more sense when connected back to desired state, providers, resources, plan, apply, state, drift, and team safety.",
+      "childTopics": [
+        {
+          "label": "Terraform 1000-Foot View",
+          "topic": "terraform_1000_foot_view.studybubble.json"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "write_configuration",
+      "target": "initialize",
+      "label": "start with"
+    },
+    {
+      "source": "initialize",
+      "target": "format",
+      "label": "then"
+    },
+    {
+      "source": "initialize",
+      "target": "validate",
+      "label": "and"
+    },
+    {
+      "source": "format",
+      "target": "plan",
+      "label": "feeds"
+    },
+    {
+      "source": "validate",
+      "target": "plan",
+      "label": "supports"
+    },
+    {
+      "source": "plan",
+      "target": "review_plan",
+      "label": "requires"
+    },
+    {
+      "source": "review_plan",
+      "target": "apply",
+      "label": "approve then"
+    },
+    {
+      "source": "apply",
+      "target": "outputs",
+      "label": "produces"
+    },
+    {
+      "source": "apply",
+      "target": "change_over_time",
+      "label": "continues as"
+    },
+    {
+      "source": "change_over_time",
+      "target": "plan",
+      "label": "loop back"
+    },
+    {
+      "source": "change_over_time",
+      "target": "destroy_carefully",
+      "label": "sometimes ends with"
+    }
+  ],
+  "paths": [
+    {
+      "id": "terraform_core_workflow_walk",
+      "label": "Terraform Core Workflow Walk",
+      "description": "Walk through the practical Terraform lifecycle from authoring through safe execution and lifecycle risk.",
+      "nodeIds": [
+        "write_configuration",
+        "initialize",
+        "format",
+        "validate",
+        "plan",
+        "review_plan",
+        "apply",
+        "outputs",
+        "change_over_time",
+        "destroy_carefully"
+      ],
+      "rehearsalPrompt": "Explain the Terraform lifecycle and where safety checks happen before and after apply."
+    }
+  ]
+}
+
+

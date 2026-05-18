@@ -1,0 +1,1 @@
+Init should complete and prepare local plugins/metadata without cloud credentials for this local-safe config.

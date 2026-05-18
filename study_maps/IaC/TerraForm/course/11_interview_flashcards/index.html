@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Terraform Interview Flashcards</title>
+  <style>
+    :root{--bg:#0b1220;--card:#111827;--muted:#94a3b8;--text:#e5e7eb;--line:#334155;--accent:#22d3ee;--good:#14532d;--warn:#7c2d12}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
+    main{max-width:1100px;margin:0 auto;padding:20px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0}
+    h1,h2,h3{margin:.2rem 0 .7rem}
+    a{color:#7dd3fc}
+    .muted{color:var(--muted)}
+    .row{display:flex;flex-wrap:wrap;gap:8px}
+    button{background:#0f172a;color:var(--text);border:1px solid #475569;border-radius:8px;padding:8px 10px;cursor:pointer}
+    button.active{border-color:var(--accent);color:#cffafe}
+    .stats{display:flex;gap:14px;flex-wrap:wrap;font-weight:600}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid #475569}
+    .known{background:var(--good);border-color:#166534}
+    .needs{background:var(--warn);border-color:#9a3412}
+    .qa{margin-top:10px}
+    .question{font-size:1.2rem;font-weight:700}
+    .answer{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+    .answer.show{display:block}
+    .tiny{font-size:.9rem}
+    .kbd{padding:2px 6px;border:1px solid #64748b;border-radius:6px;background:#0f172a}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Terraform Interview Flashcards</h1>
+  <p class="muted">Fast oral rehearsal cards based on the LearnTerraform 00-09 course chain.</p>
+
+  <section class="card">
+    <h2>Safety Position</h2>
+    <p>Do not overclaim Terraform production ownership. Safe position: Terraform fluency, workflow understanding, and collaboration with cloud/platform teams. Strongest background remains data engineering, telemetry, monitoring, capacity forecasting, operational reporting, and production support thinking.</p>
+  </section>
+
+  <section class="card">
+    <h2>Categories</h2>
+    <div class="row" id="filters"></div>
+  </section>
+
+  <section class="card">
+    <h2>Rehearsal Controls</h2>
+    <div class="row">
+      <button id="prevBtn">Previous Card</button>
+      <button id="nextBtn">Next Card</button>
+      <button id="toggleBtn">Show Answer</button>
+      <button id="shuffleBtn">Shuffle</button>
+      <button id="resetBtn">Reset</button>
+      <button id="knownBtn">Mark Known</button>
+      <button id="needsBtn">Mark Needs Work</button>
+    </div>
+    <p class="tiny">Keyboard: <span class="kbd">Space</span> show/hide, <span class="kbd">←</span> previous, <span class="kbd">→</span> next, <span class="kbd">K</span> known, <span class="kbd">N</span> needs work, <span class="kbd">S</span> shuffle.</p>
+  </section>
+
+  <section class="card">
+    <div class="stats">
+      <div id="progress">Card 1 of 1</div>
+      <div>Known: <span id="knownCount">0</span></div>
+      <div>Needs Work: <span id="needsCount">0</span></div>
+      <div>Category: <span id="activeCat">All</span></div>
+    </div>
+  </section>
+
+  <section class="card qa" id="cardArea" tabindex="0">
+    <span class="pill" id="cardCategory">Category</span>
+    <div class="question" id="cardQuestion">Question</div>
+    <div class="answer" id="cardAnswer"></div>
+  </section>
+
+  <section class="card">
+    <h2>Related Links</h2>
+    <ul>
+      <li><a href="../10_interview_qa_consolidation/index.html">Full Q&amp;A HTML</a></li>
+      <li><a href="../index.html">Course Home</a></li>
+      <li><a href="../09_aws_observability_interview_bridge/index.html">AWS/Observability Bridge</a></li>
+      <li><a href="../../docs/TERRAFORM_INTERVIEW_QA_CONSOLIDATION.md">Source Markdown</a></li>
+      <li><a href="../outputs/terraform_1000_foot_view.html">Terraform 1000-Foot View</a></li>
+      <li><a href="../outputs/terraform_core_workflow.html">Terraform Core Workflow</a></li>
+      <li><a href="../outputs/terraform_state_drift_backends.html">State, Drift, and Backends</a></li>
+      <li><a href="../outputs/terraform_safety_team_workflow_cicd.html">Safety, Team Workflow, and CI/CD</a></li>
+      <li><a href="../outputs/terraform_aws_observability_interview_bridge.html">AWS, Observability, and Interview Bridge</a></li>
+    </ul>
+  </section>
+</main>
+<script>
+const categories=["All","Basics","Workflow","State","Providers","Variables","Modules","Environments","Safety","AWS / Observability","Experience / Positioning","Trap Questions"];
+const cards=[
+{c:"Basics",q:"What is Terraform?",a:"Terraform is infrastructure as code for defining and reviewing infrastructure changes before execution. It helps teams make infrastructure repeatable and auditable.",s:"Terraform turns infrastructure changes into reviewable code.",t:"Avoid calling it just a script runner.",m:"01 Terraform 1000-Foot View"},
+{c:"Basics",q:"What problem does Terraform solve?",a:"It reduces manual, inconsistent cloud changes. It adds repeatability and safer team review.",s:"Terraform solves repeatability and change-control problems.",t:"Avoid saying Terraform removes all risk.",m:"00 IaC Why Terraform Exists"},
+{c:"Basics",q:"What is Infrastructure as Code?",a:"IaC means infrastructure is defined in versioned code. Teams review and promote infrastructure changes like application changes.",s:"IaC applies software discipline to infrastructure.",t:"Avoid saying IaC removes need for human review.",m:"00 IaC Why Terraform Exists"},
+{c:"Workflow",q:"What is the Terraform workflow?",a:"Write config, run init/fmt/validate, review plan, then controlled apply. Safety checks are part of the workflow.",s:"Terraform workflow is commands plus safety gates.",t:"Avoid saying you just run apply.",m:"02 Terraform Core Workflow"},
+{c:"Workflow",q:"What is terraform init?",a:"init prepares the working directory and dependencies. It sets execution context before other commands.",s:"init prepares consistent execution context.",t:"Avoid saying init proves production safety.",m:"02 Terraform Core Workflow"},
+{c:"Workflow",q:"What is terraform fmt?",a:"fmt standardizes Terraform file formatting. It improves readability and review quality.",s:"fmt is hygiene, not risk approval.",t:"Avoid saying fmt means the change is safe.",m:"02 Terraform Core Workflow"},
+{c:"Workflow",q:"What is terraform validate?",a:"validate checks configuration structure and syntax. It catches basic errors early.",s:"validate checks structure, not operational impact.",t:"Avoid treating validate as full safety signoff.",m:"02 Terraform Core Workflow"},
+{c:"Workflow",q:"What is terraform plan?",a:"plan previews proposed create/change/destroy actions. Teams use it as review evidence before apply.",s:"plan is the safety preview.",t:"Avoid calling plan optional.",m:"02 Terraform Core Workflow"},
+{c:"Workflow",q:"Why is plan review important?",a:"It confirms intended impact and catches surprises. It is a core checkpoint for risk control.",s:"Plan review is the key pre-apply checkpoint.",t:"Avoid judging risk by code diff size alone.",m:"08 Safety Team Workflow and CI/CD"},
+{c:"Workflow",q:"What is terraform apply?",a:"apply executes approved infrastructure changes. It changes real systems and needs control.",s:"apply is execution and must be controlled.",t:"Avoid implying anyone can apply anywhere.",m:"02 Terraform Core Workflow"},
+{c:"Workflow",q:"Why should apply be controlled?",a:"Because apply can affect critical infrastructure. Approval gates reduce wrong-target and high-impact mistakes.",s:"Controlled apply is core operational safety.",t:"Avoid laptop-to-prod as casual default.",m:"08 Safety Team Workflow and CI/CD"},
+{c:"State",q:"What is Terraform state?",a:"State is Terraform's record of managed resources. It helps Terraform compare desired and current reality.",s:"State is Terraform's memory.",t:"Avoid saying state is optional.",m:"03 State Drift and Backends"},
+{c:"State",q:"Why is state important?",a:"Without trusted state, Terraform cannot calculate changes safely. Reliable planning depends on reliable state.",s:"Reliable state is required for reliable plans.",t:"Avoid saying config alone is enough.",m:"03 State Drift and Backends"},
+{c:"State",q:"Why is state risky?",a:"State can contain sensitive and high-impact information. Weak protection can create security and integrity risks.",s:"State needs strong access control.",t:"Avoid assuming sensitive flags solve everything.",m:"03 State Drift and Backends"},
+{c:"State",q:"What is drift?",a:"Drift means real infrastructure changed outside Terraform. Then desired state and actual state diverge.",s:"Drift is configuration-vs-reality mismatch.",t:"Avoid saying drift cannot happen.",m:"03 State Drift and Backends"},
+{c:"State",q:"What is a backend?",a:"Backend is Terraform's state storage strategy. It affects collaboration and safety.",s:"Backend is about state storage and access.",t:"Avoid confusing backend with provider.",m:"03 State Drift and Backends"},
+{c:"State",q:"What is remote state?",a:"Remote state stores one shared state source for teams. It prevents isolated local-state workflows.",s:"Remote state supports team consistency.",t:"Avoid assuming local state is enough for production teams.",m:"03 State Drift and Backends"},
+{c:"State",q:"What is state locking?",a:"Locking prevents concurrent state writes. It helps avoid collisions and state corruption.",s:"Locking protects state integrity.",t:"Avoid bypassing locks casually.",m:"03 State Drift and Backends"},
+{c:"Providers",q:"What is a provider?",a:"A provider connects Terraform to external platform APIs. It translates Terraform intent into platform operations.",s:"Provider is the API bridge.",t:"Avoid saying Terraform natively handles every platform without providers.",m:"04 Providers and Resources"},
+{c:"Providers",q:"What is a resource?",a:"A resource is a managed object declaration in Terraform. It describes what Terraform should create or change.",s:"Resources are the things Terraform manages.",t:"Avoid reducing resources to only servers.",m:"04 Providers and Resources"},
+{c:"Providers",q:"Provider vs resource?",a:"Provider is the integration layer. Resource is the specific object intent.",s:"Provider connects, resource declares.",t:"Avoid saying they are the same concept.",m:"04 Providers and Resources"},
+{c:"Variables",q:"What are variables?",a:"Variables are inputs for reusable Terraform configuration. They let one pattern serve different environments.",s:"Variables make shared code reusable.",t:"Avoid hardcoding everything.",m:"05 Variables Outputs and Locals"},
+{c:"Variables",q:"What are locals?",a:"Locals are internal computed values. They reduce duplication and improve readability.",s:"Locals organize internal logic.",t:"Avoid treating locals as external inputs.",m:"05 Variables Outputs and Locals"},
+{c:"Variables",q:"What are outputs?",a:"Outputs expose useful values from Terraform runs. They help humans and automation consume results.",s:"Outputs publish useful results.",t:"Avoid exposing sensitive values casually.",m:"05 Variables Outputs and Locals"},
+{c:"Variables",q:"What are tfvars files?",a:"tfvars files provide variable values per environment. They separate reusable logic from environment-specific inputs.",s:"tfvars separate values from shared logic.",t:"Avoid storing secrets in committed tfvars.",m:"05 Variables Outputs and Locals"},
+{c:"Modules",q:"What are modules?",a:"Modules are reusable Terraform configuration packages. They reduce copy/paste and standardize patterns.",s:"Modules scale repeatable patterns.",t:"Avoid assuming modules automatically mean good design.",m:"06 Modules and Reuse"},
+{c:"Modules",q:"What is a root module?",a:"Root module is the directory where Terraform runs. It is the current execution entry point.",s:"Root module is the active run context.",t:"Avoid treating root as an enterprise shared module.",m:"06 Modules and Reuse"},
+{c:"Modules",q:"What is a child module?",a:"A child module is called by root or another module. It receives inputs and returns outputs.",s:"Child modules are reusable called components.",t:"Avoid hiding too much opaque logic in child modules.",m:"06 Modules and Reuse"},
+{c:"Modules",q:"Why do teams use modules?",a:"Teams use modules for reuse and standards. They encode common naming, tagging, and safety patterns.",s:"Modules reduce duplication and improve consistency.",t:"Avoid modularizing everything too early.",m:"06 Modules and Reuse"},
+{c:"Modules",q:"What are module risks?",a:"Bad modules can spread bad patterns widely. Risks include unclear inputs/outputs and weak version discipline.",s:"Reuse amplifies both good and bad module design.",t:"Avoid treating modules as unreviewed black boxes.",m:"06 Modules and Reuse"},
+{c:"Environments",q:"How do teams separate dev, test, and prod?",a:"With clear boundaries in inputs, state, and approvals. Folder strategy, tfvars, and backend separation are common.",s:"Environment separation is safety design.",t:"Avoid relying only on naming conventions.",m:"07 Environments and Workspaces"},
+{c:"Environments",q:"What are Terraform workspaces?",a:"Workspaces are named state instances for one configuration. They can separate instances but require discipline.",s:"Workspaces separate state, not all risk.",t:"Avoid assuming workspaces alone secure production.",m:"07 Environments and Workspaces"},
+{c:"Environments",q:"Why can workspaces be risky?",a:"If the wrong workspace is active, plans and applies can target the wrong state. Context checks are mandatory.",s:"Always verify active workspace before change commands.",t:"Avoid treating workspace mistakes as minor.",m:"07 Environments and Workspaces"},
+{c:"Environments",q:"What is backend-per-environment?",a:"It means separate state location/path for each environment. This reduces state mixing risk.",s:"Backend boundaries should match environment boundaries.",t:"Avoid sharing prod and dev state paths.",m:"07 Environments and Workspaces"},
+{c:"Environments",q:"What is wrong-environment risk?",a:"It's running changes against unintended environment/account/state. It is one of Terraform's highest risks.",s:"Wrong-target execution is a top Terraform hazard.",t:"Avoid assuming CLI context is always right.",m:"07 Environments and Workspaces"},
+{c:"Safety",q:"How do teams use Terraform safely?",a:"They combine PR review, plan review, controlled apply, protected state, and least privilege. Safety is workflow discipline.",s:"Terraform safety is process plus controls.",t:"Avoid saying validate alone is enough.",m:"08 Safety Team Workflow and CI/CD"},
+{c:"Safety",q:"How does Terraform fit into CI/CD?",a:"CI/CD standardizes checks, produces plan evidence, and gates apply. It makes workflow repeatable.",s:"CI/CD makes Terraform review consistent.",t:"Avoid auto-apply everywhere.",m:"08 Safety Team Workflow and CI/CD"},
+{c:"Safety",q:"What role do pull requests play in Terraform?",a:"PRs are review gates for both code and impact. They improve traceability and shared decision quality.",s:"PRs turn infrastructure changes into team decisions.",t:"Avoid treating PR review as ceremony.",m:"08 Safety Team Workflow and CI/CD"},
+{c:"Safety",q:"What is blast radius?",a:"Blast radius is the scope of potential impact from a change. It guides approval and rollout caution.",s:"Blast-radius review is operational risk discipline.",t:"Avoid using line count as risk estimate.",m:"08 Safety Team Workflow and CI/CD"},
+{c:"Safety",q:"What are policy checks?",a:"Policy checks enforce guardrails before apply. They scale compliance and security consistency.",s:"Policy checks are automated safety guardrails.",t:"Avoid relying only on human memory for policy.",m:"08 Safety Team Workflow and CI/CD"},
+{c:"Safety",q:"What is least privilege in Terraform automation?",a:"Grant only required permissions to automation identities. This limits blast radius from mistakes.",s:"Least privilege limits damage potential.",t:"Avoid defaulting to admin privileges.",m:"08 Safety Team Workflow and CI/CD"},
+{c:"AWS / Observability",q:"How does Terraform relate to AWS?",a:"Terraform can define and standardize AWS infrastructure patterns. It adds review and repeatability to cloud changes.",s:"Terraform brings discipline to AWS infrastructure changes.",t:"Avoid claiming full AWS Terraform ownership.",m:"09 AWS Observability and Interview Bridge"},
+{c:"AWS / Observability",q:"What AWS resources might Terraform manage?",a:"Commonly storage, IAM, networking, compute, and monitoring components. Exact scope depends on team ownership.",s:"Terraform often manages foundational AWS components.",t:"Avoid saying everything in AWS is Terraform-managed.",m:"09 AWS Observability and Interview Bridge"},
+{c:"AWS / Observability",q:"How does Terraform relate to observability?",a:"Terraform can version parts of observability configuration, such as dashboards or alerts where supported. It improves consistency.",s:"Terraform can make observability config repeatable.",t:"Avoid saying IaC alone guarantees observability quality.",m:"09 AWS Observability and Interview Bridge"},
+{c:"AWS / Observability",q:"How can dashboards or alerts be managed as code?",a:"Store definitions in version control and review them like other config. This reduces manual drift.",s:"Dashboards and alerts as code improve repeatability.",t:"Avoid coded dashboards with no owner or action path.",m:"09 AWS Observability and Interview Bridge"},
+{c:"AWS / Observability",q:"How does Terraform relate to data engineering?",a:"Data pipelines rely on infrastructure like storage, IAM, and compute. Terraform fluency improves collaboration around those dependencies.",s:"Terraform supports the infrastructure around data pipelines.",t:"Avoid saying Terraform replaces data engineering.",m:"09 AWS Observability and Interview Bridge"},
+{c:"AWS / Observability",q:"How does Terraform relate to capacity planning?",a:"Terraform defines infrastructure shape; capacity planning studies headroom and trends. They should inform each other.",s:"Provisioning intent must connect to capacity behavior.",t:"Avoid equating provisioning with forecasting.",m:"09 AWS Observability and Interview Bridge"},
+{c:"Experience / Positioning",q:"What is your real Terraform experience?",a:"I describe practical Terraform fluency and safety awareness. My strongest production background is data engineering, telemetry, monitoring, capacity forecasting, operational reporting, and support thinking.",s:"Fluent collaborator, not overclaimed platform owner.",t:"Avoid claiming primary enterprise Terraform ownership.",m:"09 AWS Observability and Interview Bridge"},
+{c:"Experience / Positioning",q:"How would you collaborate with DevOps/platform teams on Terraform?",a:"I align on plan-review quality, safety gates, and observability outcomes. I contribute operational context while respecting ownership boundaries.",s:"I add operational clarity to Terraform workflows.",t:"Avoid implying independent production apply ownership.",m:"08 + 09"},
+{c:"Experience / Positioning",q:"How do you avoid overclaiming Terraform?",a:"I separate direct ownership from collaboration fluency. I use precise language about scope and strengths.",s:"Precision builds credibility.",t:"Avoid vague end-to-end claims.",m:"09 AWS Observability and Interview Bridge"},
+{c:"Trap Questions",q:"Trap: Have you owned Terraform in production?",a:"Safe answer: I would not position myself as the primary Terraform platform owner. I have strong workflow fluency and safety understanding, and I collaborate well with platform teams.",s:"State scope clearly, then pivot to strengths.",t:"Do not overstate ownership.",m:"09"},
+{c:"Trap Questions",q:"Trap: Are you a Terraform expert?",a:"Safe answer: I describe myself as practically fluent and safety-aware. My strongest depth is in telemetry, monitoring, data engineering, and capacity planning.",s:"Fluent and collaborative is safer than inflated labels.",t:"Avoid inflated expert claims.",m:"09"},
+{c:"Trap Questions",q:"Trap: Have you run apply in production?",a:"Safe answer: I understand controlled apply workflow and approvals. I avoid claiming unmanaged production apply ownership when not true.",s:"Controlled-apply understanding matters; claim only what is true.",t:"Do not fabricate production execution history.",m:"08"},
+{c:"Trap Questions",q:"Trap: Did you build Terraform CI/CD from scratch?",a:"Safe answer: I understand the pipeline shape and guardrails, and I collaborate on implementation. I am careful not to overclaim governance ownership.",s:"Know workflow shape; be precise about ownership.",t:"Do not claim full governance ownership if untrue.",m:"08"},
+{c:"Trap Questions",q:"Trap: Can you manage all AWS infrastructure with Terraform?",a:"Safe answer: I can collaborate effectively in AWS Terraform workflows and discuss risks and controls. Scope and ownership depend on team structure.",s:"Collaboration-first AWS framing is safer.",t:"Avoid total-ownership claims.",m:"09"},
+{c:"Trap Questions",q:"Pivot: Terraform to capacity forecasting",a:"Terraform defines what should exist. Capacity forecasting evaluates whether it is enough over time.",s:"Provisioning intent should connect to capacity behavior.",t:"Avoid saying provisioning equals forecasting.",m:"09"},
+{c:"Trap Questions",q:"Pivot: Terraform to observability",a:"Plan shows intended change; observability shows actual behavior after change. Both are needed for safe operations.",s:"IaC and telemetry are complementary.",t:"Avoid assuming config alone proves runtime health.",m:"09"},
+{c:"Trap Questions",q:"Pivot: Terraform to monitoring",a:"Monitoring validates that infrastructure changes achieve expected outcomes. Alerting and dashboards make impact visible.",s:"Change review plus signal review is stronger.",t:"Avoid no-signal change process.",m:"09"},
+{c:"Trap Questions",q:"Pivot: Terraform to data engineering",a:"Data workflows depend on reliable storage, IAM, networking, and compute foundations. Terraform fluency helps align those dependencies with change control.",s:"Terraform supports infrastructure around pipelines.",t:"Avoid implying Terraform replaces data engineering.",m:"09"},
+{c:"Trap Questions",q:"Pivot: Terraform to safe change control",a:"Safe change means PR review, plan evidence, blast-radius assessment, approvals, and protected state. Commands alone are not enough.",s:"Process discipline is the real safety layer.",t:"Avoid command-only framing.",m:"08"}
+];
+let activeCategory='All', deck=[], idx=0, showing=false;
+const known=new Set(), needs=new Set();
+const key='terraform_flashcards_v1';
+function save(){localStorage.setItem(key,JSON.stringify({known:[...known],needs:[...needs],cat:activeCategory,idx}))}
+function load(){try{const d=JSON.parse(localStorage.getItem(key)||'{}');(d.known||[]).forEach(x=>known.add(x));(d.needs||[]).forEach(x=>needs.add(x));if(d.cat)activeCategory=d.cat;if(Number.isInteger(d.idx))idx=d.idx}catch(e){}}
+function buildFilters(){const el=document.getElementById('filters');el.innerHTML='';categories.forEach(cat=>{const b=document.createElement('button');b.textContent=cat;b.className=(cat===activeCategory)?'active':'';b.onclick=()=>{activeCategory=cat;idx=0;showing=false;rebuild();save();};el.appendChild(b);});}
+function rebuild(){deck=cards.filter(c=>activeCategory==='All'||c.c===activeCategory);if(idx>=deck.length)idx=0;buildFilters();render();}
+function render(){const c=deck[idx]||{c:'None',q:'No cards in this category',a:'Switch category.',s:'',t:'',m:''};document.getElementById('activeCat').textContent=activeCategory;document.getElementById('progress').textContent=`Card ${deck.length?idx+1:0} of ${deck.length}`;document.getElementById('knownCount').textContent=known.size;document.getElementById('needsCount').textContent=needs.size;document.getElementById('cardCategory').textContent=c.c;document.getElementById('cardQuestion').textContent=c.q;const ans=document.getElementById('cardAnswer');ans.innerHTML=`<p><strong>Short answer:</strong> ${c.a}</p><p><strong>Safe sentence:</strong> ${c.s}</p>${c.t?`<p><strong>Trap / Avoid saying:</strong> ${c.t}</p>`:''}${c.m?`<p><strong>Map reference:</strong> ${c.m}</p>`:''}`;ans.classList.toggle('show',showing);document.getElementById('toggleBtn').textContent=showing?'Hide Answer':'Show Answer';}
+function next(){if(!deck.length)return;idx=(idx+1)%deck.length;showing=false;render();save();}
+function prev(){if(!deck.length)return;idx=(idx-1+deck.length)%deck.length;showing=false;render();save();}
+function toggle(){showing=!showing;render();}
+function shuffle(){for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}idx=0;showing=false;render();save();}
+function resetAll(){known.clear();needs.clear();activeCategory='All';idx=0;showing=false;rebuild();save();}
+function markKnown(){const q=deck[idx]?.q;if(!q)return;known.add(q);needs.delete(q);render();save();}
+function markNeeds(){const q=deck[idx]?.q;if(!q)return;needs.add(q);known.delete(q);render();save();}
+document.getElementById('nextBtn').onclick=next;document.getElementById('prevBtn').onclick=prev;document.getElementById('toggleBtn').onclick=toggle;document.getElementById('shuffleBtn').onclick=shuffle;document.getElementById('resetBtn').onclick=resetAll;document.getElementById('knownBtn').onclick=markKnown;document.getElementById('needsBtn').onclick=markNeeds;document.getElementById('cardArea').onclick=toggle;
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return; if(e.code==='Space'){e.preventDefault();toggle();}else if(e.key==='ArrowRight'){next();}else if(e.key==='ArrowLeft'){prev();}else if(e.key.toLowerCase()==='k'){markKnown();}else if(e.key.toLowerCase()==='n'){markNeeds();}else if(e.key.toLowerCase()==='s'){shuffle();}});
+load();rebuild();
+</script>
+</body>
+</html>
+

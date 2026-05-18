@@ -1,0 +1,51 @@
+{
+  "topicId": "terraform_modules_reuse",
+  "topicTitle": "Terraform Modules and Reuse",
+  "version": 1,
+  "nodes": {
+    "module": {
+      "x": 584.77,
+      "y": 538.47
+    },
+    "root_module": {
+      "x": 314.68,
+      "y": 564.18
+    },
+    "child_module": {
+      "x": 90.61,
+      "y": 321.38
+    },
+    "module_source": {
+      "x": 80.42,
+      "y": 562.17
+    },
+    "module_inputs": {
+      "x": 342.37,
+      "y": 316.68
+    },
+    "module_outputs": {
+      "x": 445.3,
+      "y": 49.09
+    },
+    "reuse": {
+      "x": 585.64,
+      "y": 254.05
+    },
+    "standards": {
+      "x": 707.6,
+      "y": 99.34
+    },
+    "versioning": {
+      "x": 741.03,
+      "y": 437.24
+    },
+    "module_risk": {
+      "x": 961.11,
+      "y": 329.65
+    },
+    "variables_outputs_locals_nav": {
+      "x": 1111.19,
+      "y": 128.4
+    }
+  }
+}

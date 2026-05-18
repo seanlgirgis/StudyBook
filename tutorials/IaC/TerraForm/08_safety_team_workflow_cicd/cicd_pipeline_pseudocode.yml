@@ -1,0 +1,40 @@
+# illustrative only
+# do not wire this to production without proper review and approvals
+name: terraform-safety-demo
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        run: echo "checkout repository"
+
+      - name: terraform fmt check
+        run: terraform fmt -check
+
+      - name: terraform validate
+        run: terraform validate
+
+      - name: terraform plan
+        run: terraform plan -out=tfplan
+
+      - name: publish plan artifact
+        run: echo "publish tfplan artifact for review"
+
+  approval_gate:
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: manual approval
+        run: echo "approval required before any apply path"
+
+  controlled_apply_placeholder:
+    needs: approval_gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: apply placeholder
+        run: echo "apply intentionally gated and placeholder only"

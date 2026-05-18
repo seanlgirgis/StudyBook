@@ -1,0 +1,10 @@
+terraform plan notes (conceptual):
+
+- Plan should show intended actions from current local state and configuration.
+- In this local-safe lab, the plan should be easy to review and should not require cloud credentials.
+- Review checklist:
+  - Is this the expected folder/workspace?
+  - Are proposed actions expected?
+  - Is there anything destructive?
+
+This lab intentionally stops at plan. Apply is not part of this safety-first run.

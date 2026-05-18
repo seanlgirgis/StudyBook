@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="780" viewBox="0 0 1320 780">
+  <rect width="1320" height="780" fill="#0f172a"/>
+  <g font-family="Segoe UI, Arial" fill="#fff" font-size="18" text-anchor="middle">
+    <rect x="30" y="90" width="150" height="50" rx="8" fill="#1d4ed8"/><text x="105" y="122">Code Change</text>
+    <rect x="210" y="90" width="150" height="50" rx="8" fill="#0f766e"/><text x="285" y="122">Version Control</text>
+    <rect x="390" y="90" width="150" height="50" rx="8" fill="#7c3aed"/><text x="465" y="122">Pull Request</text>
+    <rect x="570" y="90" width="150" height="50" rx="8" fill="#b45309"/><text x="645" y="122">fmt/validate</text>
+    <rect x="750" y="90" width="150" height="50" rx="8" fill="#ea580c"/><text x="825" y="122">terraform plan</text>
+    <rect x="930" y="90" width="150" height="50" rx="8" fill="#475569"/><text x="1005" y="122">Human Review</text>
+    <rect x="1110" y="90" width="180" height="50" rx="8" fill="#dc2626"/><text x="1200" y="122">Approved Apply</text>
+
+    <rect x="960" y="250" width="280" height="60" rx="8" fill="#334155"/><text x="1100" y="287">Remote State + Locking</text>
+
+    <rect x="220" y="250" width="260" height="60" rx="8" fill="#14532d"/><text x="350" y="287">Least Privilege + Policy Checks</text>
+
+    <rect x="520" y="430" width="300" height="60" rx="8" fill="#7f1d1d"/><text x="670" y="467">Blast Radius Review</text>
+    <rect x="470" y="560" width="400" height="90" rx="10" fill="#1e293b"/><text x="670" y="602">Safer Production Change</text><text x="670" y="630" font-size="16" fill="#cbd5e1">approval gates + scoped impact + protected state</text>
+  </g>
+  <g stroke="#cbd5e1" stroke-width="3" fill="none">
+    <line x1="180" y1="115" x2="210" y2="115"/>
+    <line x1="360" y1="115" x2="390" y2="115"/>
+    <line x1="540" y1="115" x2="570" y2="115"/>
+    <line x1="720" y1="115" x2="750" y2="115"/>
+    <line x1="900" y1="115" x2="930" y2="115"/>
+    <line x1="1080" y1="115" x2="1110" y2="115"/>
+
+    <line x1="1200" y1="140" x2="1100" y2="250"/>
+    <line x1="350" y1="310" x2="610" y2="430"/>
+    <line x1="1100" y1="310" x2="740" y2="430"/>
+    <line x1="670" y1="490" x2="670" y2="560"/>
+  </g>
+</svg>

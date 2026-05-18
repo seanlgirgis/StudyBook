@@ -78,7 +78,6 @@ body {
   gap: 6px;
 }
 
-.filter-btn,
 .clear-btn {
   border: 1px solid var(--line);
   background: #111827;
@@ -110,14 +109,32 @@ body {
 }
 
 .filter-btn.is-active {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(96, 165, 250, 0.12);
+  border-color: var(--filter-color, var(--accent));
+  color: #f8fafc;
+  background: var(--filter-active-bg, rgba(96, 165, 250, 0.35));
+  box-shadow: inset 0 0 0 1px var(--filter-color, var(--accent));
 }
 
-.clear-btn:hover,
-.filter-btn:hover {
+.clear-btn:hover {
   border-color: var(--accent);
+}
+
+.filter-btn {
+  --filter-color: #64748b;
+  --filter-active-bg: rgba(100, 116, 139, 0.35);
+  border: 1px solid var(--filter-color);
+  border-left-width: 5px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.filter-btn:hover {
+  border-color: var(--filter-color);
+  background: rgba(30, 41, 59, 0.9);
 }
 
 .layout {
@@ -214,6 +231,47 @@ body {
   line-height: 1.35;
 }
 
+.map-resources-section {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.map-resources-title {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+}
+
+.map-resources-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.map-resource-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.map-resource-link:hover {
+  border-color: var(--accent);
+}
+
+.map-resource-type {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 .card-section {
   margin-bottom: 10px;
 }
@@ -225,9 +283,15 @@ body {
 
 .copy-row {
   display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.copy-actions {
+  display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 10px;
 }
 
 .card-copy-btn {
@@ -240,10 +304,15 @@ body {
   cursor: pointer;
 }
 
+.copy-status-wrap {
+  min-height: 16px;
+  pointer-events: none;
+}
+
 .copy-status {
   color: #93c5fd;
   font-size: 12px;
-  align-self: center;
+  pointer-events: none;
 }
 
 .note-image {

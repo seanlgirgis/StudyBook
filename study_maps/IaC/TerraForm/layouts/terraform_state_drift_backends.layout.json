@@ -1,0 +1,55 @@
+{
+  "topicId": "terraform_state_drift_backends",
+  "topicTitle": "Terraform State, Drift, and Backends",
+  "version": 1,
+  "nodes": {
+    "state": {
+      "x": 132.55,
+      "y": 115.57
+    },
+    "state_mapping": {
+      "x": 244.6,
+      "y": 338.25
+    },
+    "local_state": {
+      "x": 118.71,
+      "y": 431.5
+    },
+    "remote_backend": {
+      "x": 724.75,
+      "y": 522.51
+    },
+    "locking": {
+      "x": 1084.09,
+      "y": 358.87
+    },
+    "sensitive_state": {
+      "x": 474.1,
+      "y": 355.82
+    },
+    "refresh": {
+      "x": 429.18,
+      "y": 54.45
+    },
+    "drift": {
+      "x": 663.06,
+      "y": 58.09
+    },
+    "import": {
+      "x": 594.53,
+      "y": 287.33
+    },
+    "state_commands": {
+      "x": 856.38,
+      "y": 284.17
+    },
+    "state_mistakes": {
+      "x": 838.47,
+      "y": 75.38
+    },
+    "terraform_core_workflow_nav": {
+      "x": -119.37,
+      "y": 65.69
+    }
+  }
+}

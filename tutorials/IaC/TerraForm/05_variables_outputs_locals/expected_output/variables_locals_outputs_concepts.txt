@@ -1,0 +1,1 @@
+Variables are inputs. tfvars files provide input values. Locals compute internal reusable values. Resources use variables and locals. Outputs expose useful results. Sensitive values reduce casual display but state still matters. dev/prod tfvars show same pattern with different inputs.

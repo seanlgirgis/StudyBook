@@ -1,0 +1,9 @@
+Terraform version varies by machine.
+
+Expected:
+- Command runs successfully if Terraform is installed.
+- Version should be 1.4.0 or newer for terraform_data compatibility.
+
+Example pattern:
+Terraform v1.x.y
+on windows_amd64

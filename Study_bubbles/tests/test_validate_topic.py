@@ -135,3 +135,24 @@ def test_related_questions_non_string_fails(tmp_path: Path, tiny_topic: dict) ->
     ok, _passes, errors = validate_topic_file(path)
     assert ok is False
     assert any("relatedQuestions must contain only strings" in e for e in errors)
+
+
+def test_map_resources_optional_shape_passes(tmp_path: Path, tiny_topic: dict) -> None:
+    topic = copy.deepcopy(tiny_topic)
+    topic["mapResources"] = [
+        {"label": "Open Tutorial", "type": "tutorial", "href": "../tutorial/index.html"},
+        {"label": "Next Map", "type": "map", "topic": "next_map.studybubble.json"},
+    ]
+    path = _write_topic(tmp_path, topic)
+    ok, _passes, errors = validate_topic_file(path)
+    assert ok is True
+    assert errors == []
+
+
+def test_map_resources_missing_target_fails(tmp_path: Path, tiny_topic: dict) -> None:
+    topic = copy.deepcopy(tiny_topic)
+    topic["mapResources"] = [{"label": "Broken Resource"}]
+    path = _write_topic(tmp_path, topic)
+    ok, _passes, errors = validate_topic_file(path)
+    assert ok is False
+    assert any("mapResources[0] must include href or topic" in e for e in errors)

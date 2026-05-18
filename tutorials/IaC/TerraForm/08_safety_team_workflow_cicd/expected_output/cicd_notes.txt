@@ -1,0 +1,6 @@
+- CI can run fmt, validate, and plan.
+- Plan should become review evidence.
+- Apply should be gated.
+- Production should require stronger controls.
+- Credentials should be protected.
+- Logs and artifacts matter.

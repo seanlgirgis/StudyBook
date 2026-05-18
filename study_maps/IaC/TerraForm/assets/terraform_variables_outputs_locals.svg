@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520">
+  <rect width="1100" height="520" fill="#0f172a"/>
+  <g font-family="Segoe UI, Arial" font-size="15" fill="#e5e7eb" text-anchor="middle">
+    <rect x="40" y="60" width="180" height="56" rx="8" fill="#1d4ed8"/><text x="130" y="94">variables / tfvars</text>
+    <rect x="280" y="60" width="230" height="56" rx="8" fill="#0f766e"/><text x="395" y="94">Terraform configuration</text>
+    <rect x="560" y="60" width="130" height="56" rx="8" fill="#7c3aed"/><text x="625" y="94">locals</text>
+    <rect x="740" y="60" width="150" height="56" rx="8" fill="#b45309"/><text x="815" y="94">resources</text>
+    <rect x="930" y="60" width="130" height="56" rx="8" fill="#dc2626"/><text x="995" y="94">outputs</text>
+
+    <line x1="220" y1="88" x2="280" y2="88" stroke="#cbd5e1" stroke-width="2"/>
+    <line x1="510" y1="88" x2="560" y2="88" stroke="#cbd5e1" stroke-width="2"/>
+    <line x1="690" y1="88" x2="740" y2="88" stroke="#cbd5e1" stroke-width="2"/>
+    <line x1="890" y1="88" x2="930" y2="88" stroke="#cbd5e1" stroke-width="2"/>
+
+    <rect x="130" y="220" width="120" height="48" rx="8" fill="#1e293b"/><text x="190" y="250">dev</text>
+    <rect x="280" y="220" width="120" height="48" rx="8" fill="#1e293b"/><text x="340" y="250">test</text>
+    <rect x="430" y="220" width="120" height="48" rx="8" fill="#1e293b"/><text x="490" y="250">prod</text>
+    <rect x="620" y="220" width="280" height="48" rx="8" fill="#14532d"/><text x="760" y="250">same reusable pattern</text>
+
+    <line x1="190" y1="268" x2="700" y2="360" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="340" y1="268" x2="740" y2="360" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="490" y1="268" x2="780" y2="360" stroke="#94a3b8" stroke-width="2"/>
+
+    <rect x="670" y="360" width="240" height="56" rx="8" fill="#065f46"/><text x="790" y="394">reusable module-style flow</text>
+  </g>
+</svg>

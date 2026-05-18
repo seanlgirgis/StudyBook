@@ -1,0 +1,1 @@
+Exact version varies by machine. Terraform 1.4+ is recommended.

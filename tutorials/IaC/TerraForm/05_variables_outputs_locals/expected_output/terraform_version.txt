@@ -1,0 +1,1 @@
+Exact Terraform version output varies by machine. Terraform 1.4+ is expected for this lab.

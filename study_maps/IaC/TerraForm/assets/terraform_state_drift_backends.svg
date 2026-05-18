@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="780" viewBox="0 0 1500 780">
+  <rect width="1500" height="780" fill="#ffffff"/>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2f3b52"/>
+    </marker>
+    <style>
+      .box { fill:#f8fafc; stroke:#2f3b52; stroke-width:2; rx:8; ry:8; }
+      .warn { fill:#fff7ed; stroke:#9a3412; }
+      .safe { fill:#ecfeff; stroke:#0e7490; }
+      .txt { font-family:Segoe UI, Arial, sans-serif; font-size:21px; fill:#111827; text-anchor:middle; dominant-baseline:middle; }
+      .small { font-size:17px; }
+      .line { stroke:#2f3b52; stroke-width:2.4; fill:none; marker-end:url(#arrow); }
+      .title { font-family:Segoe UI, Arial, sans-serif; font-size:31px; font-weight:600; fill:#111827; }
+    </style>
+  </defs>
+
+  <text x="750" y="46" class="title">Terraform State, Drift, and Backends</text>
+
+  <rect class="box" x="120" y="140" width="260" height="70"/><text class="txt" x="250" y="175">Terraform configuration</text>
+  <rect class="box" x="470" y="140" width="220" height="70"/><text class="txt" x="580" y="175">Terraform state</text>
+  <rect class="box" x="780" y="140" width="270" height="70"/><text class="txt" x="915" y="175">real cloud resources</text>
+
+  <rect class="box warn" x="780" y="280" width="270" height="64"/><text class="txt small" x="915" y="312">manual console change</text>
+  <rect class="box warn" x="1110" y="280" width="170" height="64"/><text class="txt" x="1195" y="312">drift</text>
+
+  <rect class="box safe" x="470" y="420" width="240" height="70"/><text class="txt small" x="590" y="455">remote backend + lock</text>
+  <rect class="box safe" x="790" y="420" width="250" height="70"/><text class="txt small" x="915" y="455">shared team safety</text>
+
+  <path class="line" d="M380 175 L470 175"/>
+  <path class="line" d="M690 175 L780 175"/>
+  <path class="line" d="M915 210 L915 280"/>
+  <path class="line" d="M1050 312 L1110 312"/>
+  <path class="line" d="M580 210 L590 420"/>
+  <path class="line" d="M710 455 L790 455"/>
+</svg>

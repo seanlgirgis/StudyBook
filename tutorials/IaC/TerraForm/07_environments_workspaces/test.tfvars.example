@@ -1,0 +1,6 @@
+environment       = "test"
+application_name  = "learnterraform"
+owner             = "Sean"
+size              = "medium"
+retention_days    = 14
+approval_required = true

@@ -39,6 +39,7 @@
   const nodeOrder = [];
   const graphById = new Map();
   const groupById = new Map();
+  const groupColorByKey = new Map();
 
   const view = { tx: 0, ty: 0, scale: 1 };
   let isPanning = false;
@@ -103,7 +104,24 @@
 
   function groupColor(groupName) {
     const key = String(groupName || "").trim().toLowerCase();
+    if (groupColorByKey.has(key)) return groupColorByKey.get(key);
     return GROUP_COLOR_MAP[key] || DEFAULT_GROUP_COLOR;
+  }
+
+  function buildGroupColorLookup(topic) {
+    groupColorByKey.clear();
+    const groups = Array.isArray(topic && topic.groups) ? topic.groups : [];
+    const fallbackPalette = ["#4C78A8", "#F58518", "#54A24B", "#E45756", "#72B7B2", "#B279A2", "#FF9DA6", "#9D755D", "#BAB0AC", "#2F4B7C"];
+    let fallbackIdx = 0;
+    for (const group of groups) {
+      if (!group || typeof group !== "object") continue;
+      const idKey = String(group.id || "").trim().toLowerCase();
+      const labelKey = String(group.label || "").trim().toLowerCase();
+      const color = (typeof group.color === "string" && group.color.trim()) ? group.color.trim() : fallbackPalette[fallbackIdx % fallbackPalette.length];
+      fallbackIdx += 1;
+      if (idKey) groupColorByKey.set(idKey, color);
+      if (labelKey) groupColorByKey.set(labelKey, color);
+    }
   }
 
   function withAlpha(hex, alpha) {
@@ -329,6 +347,30 @@
     return `<p><strong>Parent Topic:</strong> <a href="${escapeHtml(href)}">${escapeHtml(parentTopic.label || "Back")}</a></p>`;
   }
 
+  function renderMapResources(topic, mode) {
+    const resources = Array.isArray(topic && topic.mapResources) ? topic.mapResources : [];
+    if (resources.length === 0) return "";
+    const items = resources
+      .filter((r) => r && typeof r === "object" && r.label && (r.href || r.topic))
+      .map((resource) => {
+        const type = typeof resource.type === "string" && resource.type.trim() ? resource.type.trim() : "resource";
+        const typeTag = `<span class="map-resource-type">${escapeHtml(type)}</span>`;
+        if (resource.href) {
+          return `<a class="map-resource-link" href="${escapeHtml(resource.href)}" target="_blank" rel="noopener noreferrer">${typeTag}<span>${escapeHtml(resource.label)}</span></a>`;
+        }
+        const href = topicRefToHref(resource.topic, mode);
+        return `<a class="map-resource-link" href="${escapeHtml(href)}">${typeTag}<span>${escapeHtml(resource.label)}</span></a>`;
+      })
+      .join("");
+    if (!items) return "";
+    return `
+      <div class="map-resources-section">
+        <h3 class="map-resources-title">Map Resources</h3>
+        <div class="map-resources-list">${items}</div>
+      </div>
+    `;
+  }
+
   function renderTopicParentButton(topic, mode) {
     if (!headerTopEl) return;
     const existing = document.getElementById("topic-parent-nav");
@@ -462,10 +504,14 @@
       <div class="card-section"><p><strong>Why It Matters</strong></p><p>${escapeHtml(node.whyItMatters || "")}</p></div>
       <div class="card-section"><p><strong>Safe Sentence</strong></p><p>${escapeHtml(node.safeSentence || "")}</p></div>
       <div class="copy-row">
-        ${hasSafeSentence ? '<button type="button" class="card-copy-btn" data-copy-safe="1">Copy Safe Sentence</button>' : ""}
-        ${copyCardButton}
-        ${copyPathButton}
-        <span class="copy-status" id="copy-status" aria-live="polite"></span>
+        <div class="copy-actions">
+          ${hasSafeSentence ? '<button type="button" class="card-copy-btn" data-copy-safe="1">Copy Safe Sentence</button>' : ""}
+          ${copyCardButton}
+          ${copyPathButton}
+        </div>
+        <div class="copy-status-wrap">
+          <span class="copy-status" id="copy-status" aria-live="polite"></span>
+        </div>
       </div>
       ${commonTrap}
       ${interviewAnswer}
@@ -477,6 +523,7 @@
       ${renderChildTopicButtons(node.childTopics, mode)}
       ${renderChildTopics(node.childTopics, mode)}
       ${renderParentTopic(topic.parentTopic, mode)}
+      ${renderMapResources(topic, mode)}
     `;
     for (const button of detailsEl.querySelectorAll(".nav-topic-btn[data-nav-href]")) {
       button.addEventListener("click", () => {
@@ -494,11 +541,22 @@
       });
     }
     const copySafeBtn = detailsEl.querySelector("[data-copy-safe='1']");
+    const copyStatusEl = detailsEl.querySelector("#copy-status");
+    let copyStatusTimer = null;
+    function setCopyStatus(message) {
+      if (!copyStatusEl) return;
+      copyStatusEl.textContent = message;
+      if (copyStatusTimer) {
+        window.clearTimeout(copyStatusTimer);
+      }
+      copyStatusTimer = window.setTimeout(() => {
+        if (copyStatusEl.textContent === message) copyStatusEl.textContent = "";
+      }, 1800);
+    }
     if (copySafeBtn) {
       copySafeBtn.addEventListener("click", async () => {
         const ok = await copyTextWithFallback(node.safeSentence || "");
-        const status = detailsEl.querySelector("#copy-status");
-        if (status) status.textContent = ok ? "Copied" : "Copy unavailable";
+        setCopyStatus(ok ? "Safe sentence copied" : "Copy unavailable");
       });
     }
     const copyPathBtn = detailsEl.querySelector("[data-copy-study-path='1']");
@@ -511,8 +569,7 @@
           .map((n) => `- ${n.label}`);
         const text = `${activePath.label}\n${activePath.description || ""}\n${labels.join("\n")}`.trim();
         const ok = await copyTextWithFallback(text);
-        const status = detailsEl.querySelector("#copy-status");
-        if (status) status.textContent = ok ? "Copied" : "Copy unavailable";
+        setCopyStatus(ok ? "Study path copied" : "Copy unavailable");
       });
     }
     const copyCardBtn = detailsEl.querySelector("[data-copy-study-card='1']");
@@ -551,8 +608,7 @@
           }
         }
         const ok = await copyTextWithFallback(lines.join("\n").trim());
-        const status = detailsEl.querySelector("#copy-status");
-        if (status) status.textContent = ok ? "Copied" : "Copy unavailable";
+        setCopyStatus(ok ? "Study card copied" : "Copy unavailable");
       });
     }
   }
@@ -566,6 +622,14 @@
     const node = graphById.get(nodeId);
     if (node) renderDetails(node, currentTopic, currentMode);
     updateHighlights();
+  }
+
+  function renderNoSelectionDetails(topic, mode) {
+    detailsEl.innerHTML = `
+      <p>Select a bubble to view concept details.</p>
+      <p><strong>Map:</strong> ${escapeHtml(topic.title || "Study Map")}</p>
+      ${renderMapResources(topic, mode)}
+    `;
   }
 
   function shouldNodeBeVisible(node) {
@@ -599,7 +663,7 @@
     if (selectedNodeId && !visibleIds.has(selectedNodeId)) {
       selectedNodeId = null;
       focusedNodeId = null;
-      detailsEl.innerHTML = "<p>Select a visible bubble to view details.</p>";
+      renderNoSelectionDetails(currentTopic, currentMode);
     }
     updateHighlights();
   }
@@ -613,6 +677,9 @@
       btn.type = "button";
       btn.className = "filter-btn";
       btn.textContent = groupName;
+      const color = groupName === "All" ? "#64748b" : groupColor(groupName);
+      btn.style.setProperty("--filter-color", color);
+      btn.style.setProperty("--filter-active-bg", withAlpha(color, 0.38));
       if (groupName === activeFilter) btn.classList.add("is-active");
       btn.addEventListener("click", () => {
         activeFilter = groupName;
@@ -721,27 +788,54 @@
     }
     const groupOrder = [...groups, ...[...groupedNodes.keys()].filter((k) => !groups.includes(k))];
     const activeGroups = groupOrder.filter((k) => groupedNodes.has(k));
-    const groupCount = Math.max(activeGroups.length, 1);
-    const groupSpan = groupCount > 1 ? (width - marginX * 2) / (groupCount - 1) : 0;
     const positioned = [];
+    const avgNodesPerGroup = nodes.length / Math.max(activeGroups.length, 1);
+    const useRadialGroupLayout = activeGroups.length >= 5 && avgNodesPerGroup <= 1.6;
+    const coreNode = nodes.find((n) => n && n.size === "core") || nodes[0] || null;
+    const coreAnchorX = 380;
+    const coreAnchorY = visualCenterY;
+    const coreGroup = coreNode ? (coreNode.group || "Ungrouped") : null;
+
     for (let gIndex = 0; gIndex < activeGroups.length; gIndex += 1) {
       const groupName = activeGroups[gIndex];
       const groupNodes = groupedNodes.get(groupName) || [];
-      const centerX = marginX + groupSpan * gIndex;
-      const columns = Math.max(2, Math.ceil(Math.sqrt(groupNodes.length)));
-      const colGap = 130;
-      const rowGap = 122;
+      let centerX = marginX;
+      let centerY = visualCenterY;
+
+      if (useRadialGroupLayout) {
+        if (coreGroup && groupName === coreGroup) {
+          centerX = coreAnchorX;
+          centerY = coreAnchorY;
+        } else {
+          const nonCoreGroups = activeGroups.filter((g) => g !== coreGroup);
+          const ringIndex = Math.max(0, nonCoreGroups.indexOf(groupName));
+          const ringCount = Math.max(nonCoreGroups.length, 1);
+          const angle = (-Math.PI / 2) + (2 * Math.PI * ringIndex) / ringCount;
+          const radiusX = 280;
+          const radiusY = 200;
+          centerX = coreAnchorX + Math.cos(angle) * radiusX;
+          centerY = coreAnchorY + Math.sin(angle) * radiusY;
+        }
+      } else {
+        const groupCount = Math.max(activeGroups.length, 1);
+        const groupSpan = groupCount > 1 ? (width - marginX * 2) / (groupCount - 1) : 0;
+        centerX = marginX + groupSpan * gIndex;
+      }
+
+      const columns = Math.max(1, Math.ceil(Math.sqrt(groupNodes.length)));
+      const colGap = 120;
+      const rowGap = 110;
       for (let i = 0; i < groupNodes.length; i += 1) {
         const node = groupNodes[i];
         const hasManualPosition = Number.isFinite(node.x) && Number.isFinite(node.y);
         const col = i % columns;
         const row = Math.floor(i / columns);
-        const rowOffset = (row - 0.5) * rowGap;
+        const rowOffset = (row - (Math.max(1, Math.ceil(groupNodes.length / columns)) - 1) / 2) * rowGap;
         const colOffset = (col - (columns - 1) / 2) * colGap;
         positioned.push({
           ...node,
           x: hasManualPosition ? Number(node.x) : centerX + colOffset,
-          y: hasManualPosition ? Number(node.y) : Math.max(minY, Math.min(maxY, visualCenterY + rowOffset)),
+          y: hasManualPosition ? Number(node.y) : Math.max(minY, Math.min(maxY, centerY + rowOffset)),
           r: nodeRadius(node.size),
           layoutFixed: hasManualPosition,
         });
@@ -782,6 +876,7 @@
   }
 
   function drawTopic(topic, mode) {
+    buildGroupColorLookup(topic);
     currentTopic = topic;
     currentMode = mode;
     activeFilter = "All";
@@ -926,7 +1021,7 @@
 
     renderGroupFilters(topic);
     renderPaths(topic.paths || []);
-    if (nodes.length > 0) setSelectedNode(nodes[0].id);
+    renderNoSelectionDetails(topic, mode);
     resetViewTransform();
     fitView();
     renderMinimap();
@@ -1112,6 +1207,7 @@
         }
       }
       detailsEl.innerHTML = "<p>Select a bubble to view details.</p>";
+      if (currentTopic) renderNoSelectionDetails(currentTopic, currentMode);
       applyVisibility();
       resetViewTransform();
     });

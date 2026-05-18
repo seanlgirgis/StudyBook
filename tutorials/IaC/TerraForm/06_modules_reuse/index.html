@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Terraform Modules and Reuse Tutorial</title><style>body{font-family:Segoe UI,Arial,sans-serif;background:#0b1220;color:#e5e7eb;margin:0;line-height:1.5}main{max-width:1000px;margin:0 auto;padding:24px}.card{background:#111827;border:1px solid #334155;border-radius:10px;padding:16px;margin:14px 0}pre{padding:12px;border-radius:8px;overflow:auto;border:1px solid #334155;background:#0f172a;color:#e2e8f0}a{color:#7dd3fc}</style></head><body><main><h1>Terraform Modules and Reuse Tutorial</h1><p>This page explains reusable Terraform module patterns with a local-safe example only.</p><section class='card'><h2>Visual Learning Path</h2><svg viewBox='0 0 980 210' width='100%'><rect x='20' y='70' width='150' height='46' rx='8' fill='#1d4ed8'/><text x='95' y='99' fill='white' text-anchor='middle'>root module</text><rect x='220' y='70' width='170' height='46' rx='8' fill='#0f766e'/><text x='305' y='99' fill='white' text-anchor='middle'>child module</text><rect x='440' y='70' width='170' height='46' rx='8' fill='#7c3aed'/><text x='525' y='99' fill='white' text-anchor='middle'>inputs in</text><rect x='660' y='70' width='150' height='46' rx='8' fill='#b45309'/><text x='735' y='99' fill='white' text-anchor='middle'>organized values</text><rect x='840' y='70' width='130' height='46' rx='8' fill='#dc2626'/><text x='905' y='99' fill='white' text-anchor='middle'>outputs out</text></svg></section><section class='card'><h2>Copyable Commands</h2><pre>terraform version
+terraform init
+terraform fmt
+terraform validate
+terraform plan</pre></section><section class='card'><h2>Root main.tf</h2><pre>terraform {
+  required_version = ">= 1.4.0"
+}
+
+module "standard_name" {
+  source = "./modules/naming_standard"
+  environment      = var.environment
+  application_name = var.application_name
+  owner            = var.owner
+}
+
+resource "terraform_data" "module_demo" {
+  input = {
+    standard_name = module.standard_name.name_prefix
+    tags          = module.standard_name.common_tags
+    lesson        = "Modules package reusable Terraform patterns."
+  }
+}</pre></section><section class='card'><h2>Root variables.tf</h2><pre>variable "environment" { type = string default = "dev" }
+variable "application_name" { type = string default = "learnterraform" }
+variable "owner" { type = string default = "Sean" }</pre></section><section class='card'><h2>Root outputs.tf</h2><pre>output "standard_name_from_module" { value = module.standard_name.name_prefix }
+output "standard_tags_from_module" { value = module.standard_name.common_tags }
+output "module_demo_output" { value = terraform_data.module_demo.output }</pre></section><section class='card'><h2>Child module files</h2><pre># modules/naming_standard/main.tf
+locals {
+  name_prefix = "${var.environment}-${var.application_name}"
+  common_tags = {
+    environment = var.environment
+    application = var.application_name
+    owner       = var.owner
+    managed_by  = "terraform"
+    pattern     = "module-demo"
+  }
+}</pre><pre># modules/naming_standard/variables.tf
+variable "environment" { type = string }
+variable "application_name" { type = string }
+variable "owner" { type = string }</pre><pre># modules/naming_standard/outputs.tf
+output "name_prefix" { value = local.name_prefix }
+output "common_tags" { value = local.common_tags }</pre></section><section class='card'><h2>Common Mistakes</h2><ul><li>wrong module source path</li><li>missing child module variables</li><li>referencing wrong output path</li><li>confusing root module and child module responsibilities</li></ul></section><section class='card'><h2>How this connects to StudyBubble maps</h2><ul><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_modules_reuse.html'>Modules and Reuse map</a></li><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_variables_outputs_locals.html'>Variables/Outputs/Locals map</a></li><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_core_workflow.html'>Core Workflow map</a></li><li><a href='../../../../study_maps/IaC/TerraForm/outputs/terraform_providers_resources.html'>Providers/Resources map</a></li></ul></section></main></body></html>

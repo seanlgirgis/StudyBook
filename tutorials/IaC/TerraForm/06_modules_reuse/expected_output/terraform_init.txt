@@ -1,0 +1,1 @@
+Init should discover and load the local child module source path, then initialize the working directory successfully.

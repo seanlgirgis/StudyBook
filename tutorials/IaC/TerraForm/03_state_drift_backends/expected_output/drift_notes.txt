@@ -1,0 +1,1 @@
+Drift requires managed reality. Manual changes outside Terraform create mismatch. Plan/refresh can reveal drift. This lab teaches concept only.

@@ -1,0 +1,1 @@
+Plan should conceptually show local-safe terraform_data behavior and outputs influenced by variables/locals. No cloud resources are created in this lab.

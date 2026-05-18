@@ -1,0 +1,1 @@
+Plan should show one terraform_data resource to add if apply were run. This lab intentionally stops before apply.

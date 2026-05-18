@@ -1,0 +1,1 @@
+No Terraform CLI, AWS CLI, or cloud credentials are required for this package.

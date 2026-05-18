@@ -1,0 +1,1 @@
+`terraform fmt` may print changed filenames or no output if already formatted.

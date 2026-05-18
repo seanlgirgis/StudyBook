@@ -1,0 +1,51 @@
+{
+  "topicId": "terraform_variables_outputs_locals",
+  "topicTitle": "Terraform Variables, Outputs, and Locals",
+  "version": 1,
+  "nodes": {
+    "variables": {
+      "x": 100,
+      "y": 253.73
+    },
+    "variable_types": {
+      "x": 256.72,
+      "y": 115.6
+    },
+    "defaults": {
+      "x": 100,
+      "y": 406.63
+    },
+    "tfvars": {
+      "x": 233.5,
+      "y": 395.08
+    },
+    "locals": {
+      "x": 446.23,
+      "y": 296.16
+    },
+    "outputs": {
+      "x": 684.95,
+      "y": 252.69
+    },
+    "sensitive_values": {
+      "x": 781.01,
+      "y": 90.1
+    },
+    "naming_patterns": {
+      "x": 994.63,
+      "y": 56.97
+    },
+    "environment_inputs": {
+      "x": 749.38,
+      "y": 561.41
+    },
+    "reuse_pattern": {
+      "x": 912.72,
+      "y": 403.55
+    },
+    "terraform_core_workflow_nav": {
+      "x": 1080,
+      "y": 330
+    }
+  }
+}

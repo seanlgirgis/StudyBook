@@ -1,0 +1,264 @@
+{
+  "id": "iac_why_terraform_exists",
+  "title": "IaC: Why Terraform Exists",
+  "subtitle": "Commercial before the movie: why IaC became necessary",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "before_iac",
+      "label": "Before IaC",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "iac_core_idea",
+      "label": "IaC Core Idea",
+      "color": "#F58518"
+    },
+    {
+      "id": "terraform_family",
+      "label": "Terraform Family",
+      "color": "#54A24B"
+    },
+    {
+      "id": "alternatives",
+      "label": "Alternatives",
+      "color": "#E45756"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "before_iac",
+      "label": "Before IaC",
+      "size": "core",
+      "group": "Before IaC",
+      "definition": "Before Infrastructure as Code, infrastructure was often created manually, documented loosely, or automated with scattered scripts.",
+      "whyItMatters": "This made environments harder to repeat, review, audit, and recover.",
+      "safeSentence": "Before IaC, infrastructure changes often depended too much on manual steps and tribal knowledge.",
+      "commonTrap": "Do not assume every old environment was bad. The problem was repeatability and scale.",
+      "interviewAnswer": "IaC became important because manual and loosely scripted infrastructure did not scale well as cloud environments became larger and more dynamic.",
+      "childTopics": []
+    },
+    {
+      "id": "manual_console_work",
+      "label": "Manual Console Work",
+      "size": "support",
+      "group": "Before IaC",
+      "definition": "Manual console work means creating or changing infrastructure by clicking through a cloud provider UI.",
+      "whyItMatters": "It may be fast once, but it is hard to repeat exactly, review in advance, or track over time.",
+      "safeSentence": "Manual console work can be useful for learning, but it becomes risky as a main team workflow.",
+      "commonTrap": "Do not say the console is useless. It is useful, but not enough as the main system of record.",
+      "interviewAnswer": "The console is helpful for exploration, but teams usually want repeatable, version-controlled infrastructure changes.",
+      "childTopics": []
+    },
+    {
+      "id": "scripts_and_tribal_knowledge",
+      "label": "Scripts and Tribal Knowledge",
+      "size": "support",
+      "group": "Before IaC",
+      "definition": "Scripts automate steps, while tribal knowledge is undocumented knowledge held by a few people.",
+      "whyItMatters": "Scripts can help, but without a consistent model they may become hard to understand, reuse, or audit.",
+      "safeSentence": "Scripts are useful, but IaC gives teams a more structured way to describe infrastructure.",
+      "commonTrap": "Do not treat all scripts as bad. The issue is whether the process is reliable, reviewable, and shared.",
+      "interviewAnswer": "IaC improves on scattered scripts by giving teams a clearer desired-state model and a shared source of truth.",
+      "childTopics": []
+    },
+    {
+      "id": "cloud_growth_problem",
+      "label": "Cloud Growth Problem",
+      "size": "core",
+      "group": "Before IaC",
+      "definition": "The cloud growth problem happens when environments grow too large and dynamic for manual setup to stay safe.",
+      "whyItMatters": "More accounts, regions, services, teams, and environments create more chances for mistakes and drift.",
+      "safeSentence": "As cloud environments grow, teams need infrastructure changes to be repeatable, reviewable, and controlled.",
+      "commonTrap": "Do not think IaC is only for huge companies. Even small teams benefit from repeatability.",
+      "interviewAnswer": "Cloud scale made manual infrastructure management harder, which is one reason IaC became so important.",
+      "childTopics": []
+    },
+    {
+      "id": "infrastructure_as_code",
+      "label": "Infrastructure as Code",
+      "size": "core",
+      "group": "IaC Core Idea",
+      "definition": "Infrastructure as Code means defining infrastructure in files that can be versioned, reviewed, reused, and automated.",
+      "whyItMatters": "IaC turns infrastructure changes into an engineering workflow instead of only a manual operations task.",
+      "safeSentence": "IaC makes infrastructure more repeatable, reviewable, and easier to manage as a team.",
+      "commonTrap": "IaC does not remove the need for human judgment. Bad code can still create bad infrastructure.",
+      "interviewAnswer": "Infrastructure as Code lets teams manage cloud resources through reviewed, version-controlled definitions instead of relying only on manual changes.",
+      "note": {
+        "summary": "Simple landscape from pre-IaC pain to Terraform and alternatives.",
+        "image": {
+          "src": "assets/iac_landscape_overview.svg",
+          "caption": "IaC landscape flow from pre-IaC pain points to Terraform and alternatives."
+        }
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open IaC Landscape Tutorial",
+          "href": "../../../../tutorials/IaC/TerraForm/00_iac_why_terraform_exists/index.html"
+        }
+      ]
+    },
+    {
+      "id": "terraform",
+      "label": "Terraform",
+      "size": "core",
+      "group": "Terraform Family",
+      "definition": "Terraform is a popular IaC tool that uses providers and a desired-state workflow to manage infrastructure across many platforms.",
+      "whyItMatters": "It gives teams one common workflow for AWS, Azure, Google Cloud, Kubernetes, SaaS platforms, and observability tools.",
+      "safeSentence": "Terraform is popular because it gives teams a consistent IaC workflow across many platforms.",
+      "commonTrap": "Do not say Terraform is the only IaC option. It is one major option in a larger tool landscape.",
+      "interviewAnswer": "Terraform is often chosen because it is platform-flexible, provider-based, and built around plan, apply, and state.",
+      "childTopics": [
+        {
+          "label": "Terraform 1000-Foot View",
+          "topic": "terraform_1000_foot_view.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "cloudformation",
+      "label": "CloudFormation",
+      "size": "support",
+      "group": "Alternatives",
+      "definition": "CloudFormation is AWS-native Infrastructure as Code that uses templates to define AWS resources as stacks.",
+      "whyItMatters": "It is deeply integrated with AWS and is a common comparison point when talking about Terraform.",
+      "safeSentence": "CloudFormation is strong for AWS-native infrastructure, while Terraform is often used when teams want a broader multi-platform workflow.",
+      "commonTrap": "Do not call CloudFormation obsolete. It is still important in AWS environments.",
+      "interviewAnswer": "If a team is all-in on AWS, CloudFormation can make sense; Terraform is often chosen when teams want a consistent workflow across more than AWS.",
+      "childTopics": []
+    },
+    {
+      "id": "ansible",
+      "label": "Ansible",
+      "size": "support",
+      "group": "Alternatives",
+      "definition": "Ansible is an automation tool often used for configuration management, deployment, orchestration, and some provisioning tasks.",
+      "whyItMatters": "It overlaps with IaC but is usually discussed more as automation and configuration management than pure Terraform-style desired-state provisioning.",
+      "safeSentence": "Ansible is useful automation, especially for configuration and operational tasks, while Terraform is usually stronger for declarative infrastructure provisioning.",
+      "commonTrap": "Do not treat Ansible and Terraform as identical tools. They overlap, but their sweet spots are different.",
+      "interviewAnswer": "I think of Terraform as infrastructure provisioning and Ansible as broader automation/configuration management, though they can overlap.",
+      "childTopics": []
+    },
+    {
+      "id": "pulumi",
+      "label": "Pulumi",
+      "size": "support",
+      "group": "Alternatives",
+      "definition": "Pulumi is an IaC tool that lets teams define infrastructure using general programming languages such as Python, TypeScript, Go, C#, Java, and others.",
+      "whyItMatters": "It appeals to teams that want to use familiar programming languages instead of Terraform HCL.",
+      "safeSentence": "Pulumi is another IaC option, especially attractive when teams prefer general programming languages.",
+      "commonTrap": "Do not say Pulumi is just Terraform with another syntax. It has a different programming model and ecosystem.",
+      "interviewAnswer": "Pulumi is an alternative IaC tool that lets teams define infrastructure using regular programming languages rather than only a domain-specific language.",
+      "childTopics": []
+    },
+    {
+      "id": "opentofu",
+      "label": "OpenTofu",
+      "size": "core",
+      "group": "Terraform Family",
+      "definition": "OpenTofu is a Terraform-compatible open-source fork created after HashiCorp changed Terraform licensing.",
+      "whyItMatters": "It matters because some teams care deeply about open-source governance, compatibility, and vendor control.",
+      "safeSentence": "OpenTofu is important to know because it lives in the Terraform ecosystem and is often discussed as an open-source alternative.",
+      "commonTrap": "Do not present OpenTofu as a completely unrelated tool. It is closely tied to the Terraform ecosystem.",
+      "interviewAnswer": "OpenTofu is a Terraform-compatible fork that some teams consider when they want a more open-source governance model.",
+      "childTopics": [
+        {
+          "label": "Terraform 1000-Foot View",
+          "topic": "terraform_1000_foot_view.studybubble.json"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "before_iac",
+      "target": "manual_console_work",
+      "label": "often relied on"
+    },
+    {
+      "source": "before_iac",
+      "target": "scripts_and_tribal_knowledge",
+      "label": "also relied on"
+    },
+    {
+      "source": "manual_console_work",
+      "target": "cloud_growth_problem",
+      "label": "struggles at scale"
+    },
+    {
+      "source": "scripts_and_tribal_knowledge",
+      "target": "cloud_growth_problem",
+      "label": "gets fragile at scale"
+    },
+    {
+      "source": "cloud_growth_problem",
+      "target": "infrastructure_as_code",
+      "label": "drove adoption of"
+    },
+    {
+      "source": "infrastructure_as_code",
+      "target": "terraform",
+      "label": "popular tool is"
+    },
+    {
+      "source": "terraform",
+      "target": "cloudformation",
+      "label": "compare with"
+    },
+    {
+      "source": "terraform",
+      "target": "ansible",
+      "label": "compare with"
+    },
+    {
+      "source": "terraform",
+      "target": "pulumi",
+      "label": "compare with"
+    },
+    {
+      "source": "terraform",
+      "target": "opentofu",
+      "label": "ecosystem alternative"
+    }
+  ],
+  "paths": [
+    {
+      "id": "iac_landscape_walk",
+      "label": "IaC Landscape Walk",
+      "description": "Walk from pre-IaC pain points to IaC and key Terraform-neighborhood alternatives.",
+      "nodeIds": [
+        "before_iac",
+        "manual_console_work",
+        "scripts_and_tribal_knowledge",
+        "cloud_growth_problem",
+        "infrastructure_as_code",
+        "terraform",
+        "cloudformation",
+        "ansible",
+        "pulumi",
+        "opentofu"
+      ],
+      "rehearsalPrompt": "Explain why IaC emerged, why Terraform became popular, and what alternatives people mention."
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open LearnTerraform Course Home",
+      "type": "tutorial",
+      "href": "../index.html"
+    },
+    {
+      "label": "Open IaC Landscape Tutorial",
+      "type": "tutorial",
+      "href": "../../../../tutorials/IaC/TerraForm/00_iac_why_terraform_exists/index.html"
+    },
+    {
+      "label": "Next: Terraform 1000-Foot View",
+      "type": "map",
+      "topic": "terraform_1000_foot_view.studybubble.json"
+    }
+  ]
+}
+
+

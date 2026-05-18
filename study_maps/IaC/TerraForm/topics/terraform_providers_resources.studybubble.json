@@ -1,0 +1,349 @@
+{
+  "id": "terraform_providers_resources",
+  "title": "Terraform Providers and Resources",
+  "subtitle": "How providers connect Terraform to platforms and resources describe managed objects",
+  "parentTopic": null,
+  "groups": [
+    {
+      "id": "provider_layer",
+      "label": "Provider Layer",
+      "color": "#4C78A8"
+    },
+    {
+      "id": "resource_layer",
+      "label": "Resource Layer",
+      "color": "#F58518"
+    },
+    {
+      "id": "resource_identity",
+      "label": "Resource Identity",
+      "color": "#54A24B"
+    },
+    {
+      "id": "read_and_connect",
+      "label": "Read and Connect",
+      "color": "#E45756"
+    },
+    {
+      "id": "map_navigation",
+      "label": "Map Navigation",
+      "color": "#6B7280"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "provider",
+      "label": "Provider",
+      "size": "core",
+      "group": "Provider Layer",
+      "definition": "A provider is Terraform's integration layer for a platform or service.",
+      "whyItMatters": "Terraform needs providers to talk to systems like AWS, Azure, Google Cloud, Kubernetes, Datadog, or other APIs.",
+      "safeSentence": "A provider is the bridge between Terraform and the platform being managed.",
+      "commonTrap": "Do not confuse the provider with the resource. The provider connects; the resource is the thing being managed.",
+      "interviewAnswer": "Providers let Terraform interact with external platforms by calling their APIs.",
+      "note": {
+        "summary": "Terraform does not natively know every platform API. Providers add that knowledge.\n\nPlain-English picture:\nTerraform says: manage an AWS S3 bucket.\nAWS provider knows: which API calls create/update that bucket.",
+        "image": {
+          "src": "assets/terraform_providers_resources.svg",
+          "caption": "Provider and resource flow from Terraform configuration to real platform objects."
+        }
+      },
+      "childTopics": [],
+      "externalLinks": [
+        {
+          "label": "Open Providers and Resources Tutorial",
+          "href": "../../../../tutorials/IaC/TerraForm/04_providers_resources/index.html"
+        }
+      ]
+    },
+    {
+      "id": "aws_provider",
+      "label": "AWS Provider",
+      "size": "support",
+      "group": "Provider Layer",
+      "definition": "The AWS provider lets Terraform manage AWS resources.",
+      "whyItMatters": "AWS is a common target for Terraform in data engineering, cloud, platform, and observability work.",
+      "safeSentence": "The AWS provider allows Terraform to create and manage AWS infrastructure through code.",
+      "commonTrap": "Do not say AWS provider means Terraform runs inside AWS. It means Terraform can talk to AWS APIs.",
+      "interviewAnswer": "The AWS provider is the Terraform plugin that knows how to manage AWS services such as S3, IAM, VPC, EC2, Lambda, and CloudWatch.",
+      "note": {
+        "summary": "For Sean's context, AWS provider is relevant for S3, IAM, networking, CloudWatch, Lambda, and data-platform resources managed as code."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "provider_configuration",
+      "label": "Provider Configuration",
+      "size": "support",
+      "group": "Provider Layer",
+      "definition": "Provider configuration tells Terraform how to connect to the target platform.",
+      "whyItMatters": "The provider needs settings such as region, credentials source, or other connection details.",
+      "safeSentence": "Provider configuration tells Terraform how to connect to the platform.",
+      "commonTrap": "Do not hardcode secrets directly into provider configuration.",
+      "interviewAnswer": "Provider configuration defines connection settings such as the AWS region and how Terraform should authenticate.",
+      "note": {
+        "summary": "Tiny example:\nprovider \"aws\" {\n  region = \"us-east-1\"\n}\n\nUse secure credential sources (env vars, profiles, CI/CD secrets), not hardcoded secrets."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "provider_version",
+      "label": "Provider Version",
+      "size": "support",
+      "group": "Provider Layer",
+      "definition": "Provider versions control which provider plugin release Terraform uses.",
+      "whyItMatters": "Version constraints help keep behavior predictable across machines and teams.",
+      "safeSentence": "Provider version constraints help teams avoid surprise behavior changes.",
+      "commonTrap": "Do not leave important provider versions completely uncontrolled in team projects.",
+      "interviewAnswer": "Provider versions should be managed so Terraform behavior is repeatable across developers and automation.",
+      "note": {
+        "summary": "Example:\nterraform {\n  required_providers {\n    aws = {\n      source = \"hashicorp/aws\"\n      version = \"~> 5.0\"\n    }\n  }\n}\n\nGoal: repeatability, not random plugin drift."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "resource",
+      "label": "Resource",
+      "size": "core",
+      "group": "Resource Layer",
+      "definition": "A resource is an infrastructure object Terraform manages.",
+      "whyItMatters": "Resources are the things Terraform creates, updates, tracks, or destroys.",
+      "safeSentence": "A resource is the infrastructure object Terraform manages.",
+      "commonTrap": "Do not think resources are only servers. A resource can be storage, IAM, networking, monitoring, dashboards, alerts, and more.",
+      "interviewAnswer": "Resources are the actual infrastructure objects described in Terraform configuration and tracked through state.",
+      "note": {
+        "summary": "Examples: S3 bucket, IAM role, VPC, security group, EC2, Lambda, CloudWatch log group, Datadog monitor."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "resource_type",
+      "label": "Resource Type",
+      "size": "support",
+      "group": "Resource Layer",
+      "definition": "The resource type says what kind of object Terraform manages.",
+      "whyItMatters": "The type tells Terraform and the provider what platform object is being declared.",
+      "safeSentence": "The resource type tells Terraform what kind of infrastructure object is being managed.",
+      "commonTrap": "Do not confuse resource type with local name.",
+      "interviewAnswer": "In a resource block, the type identifies the platform object, such as an S3 bucket or IAM role.",
+      "note": {
+        "summary": "Example: in resource \"aws_s3_bucket\" \"logs\", aws_s3_bucket is the resource type."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "resource_name",
+      "label": "Resource Name",
+      "size": "support",
+      "group": "Resource Layer",
+      "definition": "The resource name is the local Terraform name used inside the configuration.",
+      "whyItMatters": "The local name lets other Terraform code refer to this resource.",
+      "safeSentence": "The local resource name lets other parts of the Terraform code reference that object.",
+      "commonTrap": "Do not assume the local Terraform name is always the real cloud resource name.",
+      "interviewAnswer": "The local name is Terraform's internal name for referencing a resource in the configuration.",
+      "note": {
+        "summary": "In resource \"aws_s3_bucket\" \"logs\", logs is local Terraform name. Real bucket name may be different."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "resource_address",
+      "label": "Resource Address",
+      "size": "core",
+      "group": "Resource Identity",
+      "definition": "A resource address is Terraform's full reference to a managed object in the configuration and state.",
+      "whyItMatters": "Terraform uses addresses to connect configuration, state, and operations.",
+      "safeSentence": "A resource address is Terraform's way of naming a managed object.",
+      "commonTrap": "Do not confuse a resource address with the cloud provider's resource ID.",
+      "interviewAnswer": "Terraform uses resource addresses like aws_s3_bucket.logs to identify managed objects in code and state.",
+      "note": {
+        "summary": "Address format combines type + local name, e.g., aws_s3_bucket.logs. This is key for state mapping and operations."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "attributes",
+      "label": "Attributes",
+      "size": "support",
+      "group": "Read and Connect",
+      "definition": "Attributes are values exposed by resources or data sources.",
+      "whyItMatters": "Attributes allow Terraform objects to connect to each other.",
+      "safeSentence": "Attributes let Terraform pass values from one object to another.",
+      "commonTrap": "Do not hardcode values when Terraform can reference attributes safely.",
+      "interviewAnswer": "Attributes expose useful values, such as IDs, names, ARNs, URLs, or endpoints, so other resources can reference them.",
+      "note": {
+        "summary": "Example pattern: one resource exports an ID, another resource references that attribute. This supports dependency inference."
+      },
+      "childTopics": [
+        {
+          "label": "Terraform Variables, Outputs, and Locals",
+          "topic": "terraform_variables_outputs_locals.studybubble.json"
+        }
+      ]
+    },
+    {
+      "id": "data_source",
+      "label": "Data Source",
+      "size": "support",
+      "group": "Read and Connect",
+      "definition": "A data source reads existing information instead of creating a new resource.",
+      "whyItMatters": "Data sources let Terraform use existing infrastructure or platform facts.",
+      "safeSentence": "Data sources let Terraform look up existing information without creating it.",
+      "commonTrap": "Do not confuse data sources with resources. Resources manage objects; data sources read objects.",
+      "interviewAnswer": "A data source is used when Terraform needs to look up existing information, such as an existing VPC, AMI, account identity, or policy document.",
+      "note": {
+        "summary": "Plain English: Resource = create/manage this. Data source = look this up and use it."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "dependencies",
+      "label": "Dependencies",
+      "size": "support",
+      "group": "Read and Connect",
+      "definition": "Dependencies define ordering between Terraform objects.",
+      "whyItMatters": "Terraform needs to know what must exist before something else can be created.",
+      "safeSentence": "Terraform often infers dependency order from references.",
+      "commonTrap": "Do not overuse manual depends_on when normal references already show the dependency.",
+      "interviewAnswer": "Terraform usually infers dependencies when one resource references another, so it can build things in the right order.",
+      "note": {
+        "summary": "If an EC2 instance references a security group ID attribute, Terraform knows security group must be created first."
+      },
+      "childTopics": []
+    },
+    {
+      "id": "terraform_1000_foot_view_nav",
+      "label": "Terraform 1000-Foot View",
+      "size": "detail",
+      "group": "Map Navigation",
+      "definition": "Open the map that explains Terraform's basic mental model.",
+      "whyItMatters": "This gives Sean a doorway back to the big-picture Terraform map.",
+      "safeSentence": "Providers and resources make more sense when connected back to the 1000-foot Terraform model.",
+      "commonTrap": "Do not mix this navigation bubble with provider/resource concepts. It is a map doorway.",
+      "interviewAnswer": "Providers and resources are two central parts of the Terraform model: providers connect to platforms, and resources describe what gets managed.",
+      "childTopics": [
+        {
+          "label": "Terraform 1000-Foot View",
+          "topic": "terraform_1000_foot_view.studybubble.json"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "provider",
+      "target": "aws_provider",
+      "label": "example"
+    },
+    {
+      "source": "provider",
+      "target": "provider_configuration",
+      "label": "configured by"
+    },
+    {
+      "source": "provider",
+      "target": "provider_version",
+      "label": "versioned by"
+    },
+    {
+      "source": "provider",
+      "target": "resource",
+      "label": "manages"
+    },
+    {
+      "source": "resource",
+      "target": "resource_type",
+      "label": "has"
+    },
+    {
+      "source": "resource",
+      "target": "resource_name",
+      "label": "has"
+    },
+    {
+      "source": "resource_type",
+      "target": "resource_address",
+      "label": "part of"
+    },
+    {
+      "source": "resource_name",
+      "target": "resource_address",
+      "label": "part of"
+    },
+    {
+      "source": "resource",
+      "target": "attributes",
+      "label": "exposes"
+    },
+    {
+      "source": "data_source",
+      "target": "attributes",
+      "label": "also exposes"
+    },
+    {
+      "source": "attributes",
+      "target": "dependencies",
+      "label": "drive"
+    },
+    {
+      "source": "provider",
+      "target": "data_source",
+      "label": "supports"
+    }
+  ],
+  "paths": [
+    {
+      "id": "terraform_providers_resources_walk",
+      "label": "Terraform Providers and Resources Walk",
+      "description": "Walk through provider connection, resource identity, and how attributes/data sources create dependency flow.",
+      "nodeIds": [
+        "provider",
+        "aws_provider",
+        "provider_configuration",
+        "provider_version",
+        "resource",
+        "resource_type",
+        "resource_name",
+        "resource_address",
+        "attributes",
+        "data_source",
+        "dependencies"
+      ],
+      "rehearsalPrompt": "Explain how providers connect Terraform to platforms and how resources are identified and connected in code."
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open LearnTerraform Course Home",
+      "type": "tutorial",
+      "href": "../index.html"
+    },
+    {
+      "label": "Open Providers and Resources Tutorial",
+      "type": "tutorial",
+      "href": "../../../../tutorials/IaC/TerraForm/04_providers_resources/index.html"
+    },
+    {
+      "label": "Open Providers and Resources Lab README",
+      "type": "lab",
+      "href": "../../../../tutorials/IaC/TerraForm/04_providers_resources/README.md"
+    },
+    {
+      "label": "Back: Terraform 1000-Foot View",
+      "type": "map",
+      "topic": "terraform_1000_foot_view.studybubble.json"
+    },
+    {
+      "label": "Related: Terraform Core Workflow",
+      "type": "map",
+      "topic": "terraform_core_workflow.studybubble.json"
+    },
+    {
+      "label": "Related: State, Drift, and Backends",
+      "type": "map",
+      "topic": "terraform_state_drift_backends.studybubble.json"
+    }
+  ]
+}
+
+

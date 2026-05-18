@@ -1,0 +1,51 @@
+{
+  "topicId": "terraform_environments_workspaces",
+  "topicTitle": "Terraform Environments and Workspaces",
+  "version": 1,
+  "nodes": {
+    "environment": {
+      "x": 100,
+      "y": 307.19
+    },
+    "environment_separation": {
+      "x": 242.18,
+      "y": 376.09
+    },
+    "variable_strategy": {
+      "x": 367.15,
+      "y": 300.6
+    },
+    "tfvars_per_environment": {
+      "x": 501.54,
+      "y": 175.75
+    },
+    "folder_strategy": {
+      "x": 315.19,
+      "y": 140.28
+    },
+    "workspace": {
+      "x": 519.46,
+      "y": 367.38
+    },
+    "workspace_caution": {
+      "x": 703.89,
+      "y": 275.73
+    },
+    "backend_per_environment": {
+      "x": 661.59,
+      "y": 492.23
+    },
+    "promotion": {
+      "x": 787.07,
+      "y": 125.56
+    },
+    "wrong_environment_risk": {
+      "x": 965.15,
+      "y": 196.8
+    },
+    "modules_reuse_nav": {
+      "x": 1080,
+      "y": 330
+    }
+  }
+}

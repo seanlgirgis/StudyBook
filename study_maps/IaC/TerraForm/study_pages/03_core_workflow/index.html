@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Terraform Core Workflow — Deep Study Page</title>
+  <style>
+    :root { --bg:#f7fafc; --card:#ffffff; --text:#1f2937; --muted:#4b5563; --line:#d1d5db; --accent:#1d4ed8; }
+    * { box-sizing:border-box; }
+    body { margin:0; padding:24px; background:var(--bg); color:var(--text); font-family:Segoe UI, Arial, sans-serif; line-height:1.5; }
+    .wrap { max-width:980px; margin:0 auto; }
+    h1,h2,h3 { line-height:1.25; }
+    .subtitle { color:var(--muted); margin-top:0; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; margin:16px 0; }
+    code, pre { font-family:Consolas, "Courier New", monospace; }
+    pre { background:#0f172a; color:#e5e7eb; padding:12px; border-radius:8px; overflow:auto; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; }
+    th,td { border:1px solid var(--line); padding:8px; text-align:left; vertical-align:top; }
+    th { background:#eef2ff; }
+    .note { border-left:4px solid var(--accent); padding-left:10px; }
+    .links a { color:var(--accent); text-decoration:none; }
+    .links a:hover { text-decoration:underline; }
+    .diag { background:#f8fafc; border:1px solid var(--line); border-radius:8px; padding:12px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="card">
+    <h1>Terraform Core Workflow</h1>
+    <p class="subtitle">From .tf files to init, fmt, validate, plan, review, apply, outputs, and safe ongoing change.</p>
+  </header>
+
+  <section class="card">
+    <h2>What this page teaches</h2>
+    <p>This page expands the StudyBubble map with a deeper, practical explanation of the Terraform workflow.</p>
+    <p class="note"><strong>My strongest background is data engineering, telemetry, monitoring, and capacity workflows. I am using Terraform learning to understand how modern cloud infrastructure changes are defined, reviewed, and applied safely.</strong></p>
+  </section>
+
+  <section class="card">
+    <h2>The workflow in one picture</h2>
+    <div class="diag">
+      <pre>.tf files
+  -> terraform init
+  -> terraform fmt
+  -> terraform validate
+  -> terraform plan
+  -> human review
+  -> terraform apply
+  -> outputs + state
+
+change over time
+  -> repeat plan/review/apply
+
+destroy
+  -> special caution path</pre>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Command quick table</h2>
+    <table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>When to use</th><th>What to be careful about</th></tr></thead>
+      <tbody>
+        <tr><td><code>terraform init</code></td><td>Prepare backend/providers/modules</td><td>At start and after provider/backend changes</td><td>Wrong backend/config can misalign state</td></tr>
+        <tr><td><code>terraform fmt</code></td><td>Standard formatting</td><td>Before commit/review</td><td>Style only, not correctness</td></tr>
+        <tr><td><code>terraform validate</code></td><td>Syntax/config consistency checks</td><td>Before plan</td><td>Does not prove runtime safety</td></tr>
+        <tr><td><code>terraform plan</code></td><td>Preview create/change/destroy</td><td>Before any apply</td><td>Review account/environment and blast radius</td></tr>
+        <tr><td><code>terraform apply</code></td><td>Execute approved plan</td><td>After review/approval</td><td>Changes real infrastructure</td></tr>
+        <tr><td><code>terraform output</code></td><td>Show output values</td><td>After apply or read operations</td><td>Avoid exposing sensitive values</td></tr>
+        <tr><td><code>terraform destroy</code></td><td>Delete managed resources</td><td>Lab cleanup or explicit teardown</td><td>High risk in shared/production environments</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Tiny Terraform example</h2>
+<pre>terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~&gt; 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_s3_bucket" "example" {
+  bucket = "example-learning-bucket"
+}
+
+output "bucket_name" {
+  value = aws_s3_bucket.example.bucket
+}</pre>
+    <ul>
+      <li><code>terraform</code> block declares provider requirements.</li>
+      <li><code>provider</code> block configures AWS connection settings.</li>
+      <li><code>resource</code> block describes desired infrastructure.</li>
+      <li><code>output</code> block exposes useful result values.</li>
+      <li>This code is illustrative and should not be blindly applied in a real AWS account.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>The workflow explained</h2>
+    <h3>A. Write Configuration</h3><p>.tf files declare desired state. Typical split: <code>main.tf</code>, <code>providers.tf</code>, <code>variables.tf</code>, <code>outputs.tf</code>, <code>versions.tf</code>.</p>
+    <h3>B. Initialize</h3><p><code>terraform init</code> downloads providers/modules and prepares backend settings.</p>
+    <h3>C. Format</h3><p><code>terraform fmt</code> improves style consistency. It is hygiene, not correctness proof.</p>
+    <h3>D. Validate</h3><p><code>terraform validate</code> checks syntax/configuration consistency. It does not prove cloud-change safety.</p>
+    <h3>E. Plan</h3>
+    <p><code>terraform plan</code> is the safety preview.</p>
+    <ul>
+      <li>What will be created?</li>
+      <li>What will be changed?</li>
+      <li>What will be destroyed?</li>
+      <li>Is this the right account/environment?</li>
+      <li>Is the blast radius acceptable?</li>
+    </ul>
+    <h3>F. Review Plan</h3><p>Human judgment matters. Teams usually review in pull requests and CI/CD visibility gates.</p>
+    <h3>G. Apply</h3><p><code>terraform apply</code> calls provider APIs and changes real infrastructure.</p>
+    <h3>H. Outputs</h3><p><code>terraform output</code> exposes resulting values. Avoid exposing sensitive outputs.</p>
+    <h3>I. Change Over Time</h3><p>Terraform is iterative. Teams repeat plan/review/apply as infrastructure evolves.</p>
+    <h3>J. Destroy Carefully</h3><p><code>terraform destroy</code> is useful for labs but risky in shared/production environments.</p>
+  </section>
+
+  <section class="card">
+    <h2>What to notice</h2>
+    <ul>
+      <li>Terraform is desired-state, not just a script runner.</li>
+      <li>Plan is the key safety checkpoint.</li>
+      <li>Apply changes real infrastructure.</li>
+      <li>State connects the workflow to real managed objects.</li>
+      <li>Destroy is a special-risk command.</li>
+      <li>Team workflows usually add review, remote state, locking, and permissions.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Common mistakes</h2>
+    <ul>
+      <li>Skipping plan review</li>
+      <li>Running apply in the wrong account/environment</li>
+      <li>Treating validate as proof of safety</li>
+      <li>Hardcoding credentials</li>
+      <li>Exposing secrets through outputs</li>
+      <li>Using destroy casually</li>
+      <li>Changing infrastructure manually and creating drift</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Interview-safe explanation</h2>
+    <p>The Terraform workflow starts with configuration files that describe the desired infrastructure. Terraform init prepares the working directory and providers. Format and validate are quality checks. Terraform plan previews what will create, change, or destroy, and that plan should be reviewed before apply. Apply makes the approved changes real. The important safety ideas are plan review, state, environment awareness, and controlled team workflow.</p>
+    <p><strong>Short version:</strong> Terraform is not just about writing .tf files. The mature workflow is configuration, initialization, validation, plan review, controlled apply, and ongoing state-aware change management.</p>
+  </section>
+
+  <section class="card">
+    <h2>Sean connection</h2>
+    <ul>
+      <li>Connects operational change control to infrastructure change control.</li>
+      <li>Provides language for DevOps/platform collaboration.</li>
+      <li>Supports safe conversations around AWS resources, monitoring, and capacity.</li>
+      <li>Does not require overclaiming production Terraform ownership.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Recall questions</h2>
+    <ol>
+      <li>Why is plan safer than jumping straight to apply?</li>
+      <li>What does init prepare?</li>
+      <li>Why is fmt not the same as validate?</li>
+      <li>Why does validate not prove the change is safe?</li>
+      <li>What should you check before apply?</li>
+      <li>Why are outputs useful?</li>
+      <li>Why is destroy risky?</li>
+      <li>How does state relate to this workflow?</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>Agent Prompts / Lab Builder Prompts</h2>
+    <p>These prompts are for a future Codex/agent run to create or extend runnable lab material under:</p>
+    <p><code>D:\Workarea\StudyBook\tutorials\IaC\TerraForm\labs\01_core_workflow</code></p>
+    <p><strong>Do not run these prompts now.</strong></p>
+
+    <h3>Prompt A — Create a local-safe Terraform workflow lab</h3>
+<pre>Create a Terraform lab under:
+D:\Workarea\StudyBook\tutorials\IaC\TerraForm\labs\01_core_workflow
+
+Create:
+- README.md
+- index.html
+- main.tf
+- variables.tf
+- outputs.tf
+- expected_output\
+- troubleshooting.md
+- prompts\
+
+Demonstrate:
+- terraform init
+- terraform fmt
+- terraform validate
+- terraform plan
+
+Prefer a safe provider/resource choice that does not require real cloud spending.
+If using AWS, mark it optional and require explicit user confirmation of credentials and cost awareness before apply.</pre>
+
+    <h3>Prompt B — Extend lab with AWS S3 example</h3>
+<pre>Extend the same lab with an optional AWS S3 example.
+
+Safety requirements:
+- do not invent credentials
+- do not apply without explicit user approval
+- include cleanup
+- include expected plan output notes
+- include destroy caution</pre>
+  </section>
+
+  <section class="card links">
+    <h2>Links back to StudyBubble maps</h2>
+    <ul>
+      <li><a href="../../../../../study_maps/IaC/TerraForm/outputs/terraform_core_workflow.html">Back to Terraform Core Workflow map</a></li>
+      <li><a href="../../../../../study_maps/IaC/TerraForm/outputs/terraform_1000_foot_view.html">Back to Terraform 1000-Foot View</a></li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>

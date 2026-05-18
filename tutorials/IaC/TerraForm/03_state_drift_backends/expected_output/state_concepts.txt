@@ -1,0 +1,1 @@
+Config says what should exist. State records what Terraform manages. Real resources are what actually exist. Plan compares these views.

@@ -1,0 +1,13 @@
+# Troubleshooting
+- terraform command not found
+- unsupported Terraform version
+- fmt changed files
+- validate failure
+- plan output looks unfamiliar
+- module source path wrong
+- child module variables missing
+- output reference wrong
+- confusion between root module and child module
+- confusion between module output and resource output
+- accidental apply concern
+- cleanup guidance

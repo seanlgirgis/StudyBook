@@ -1,0 +1,12 @@
+# Troubleshooting
+- terraform command not found
+- unsupported Terraform version
+- fmt changed files
+- validate failure
+- plan output looks unfamiliar
+- tfvars file not found
+- confusion between variable and local
+- confusion between output and resource attribute
+- sensitive output hidden
+- accidental apply concern
+- cleanup guidance

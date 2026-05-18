@@ -1,0 +1,47 @@
+{
+  "topicId": "terraform_1000_foot_view",
+  "topicTitle": "Terraform 1000-Foot View",
+  "version": 1,
+  "nodes": {
+    "terraform": {
+      "x": 100,
+      "y": 294.48
+    },
+    "infrastructure_as_code": {
+      "x": 174.75,
+      "y": 155.27
+    },
+    "desired_state": {
+      "x": 291.92,
+      "y": 261.27
+    },
+    "providers": {
+      "x": 132.37,
+      "y": 445.62
+    },
+    "resources": {
+      "x": 362.65,
+      "y": 447.09
+    },
+    "plan": {
+      "x": 614.72,
+      "y": 28.6
+    },
+    "apply": {
+      "x": 677.98,
+      "y": 259.8
+    },
+    "state": {
+      "x": 635.78,
+      "y": 406.71
+    },
+    "drift": {
+      "x": 854.34,
+      "y": 438.29
+    },
+    "team_safety": {
+      "x": 1080,
+      "y": 330
+    }
+  }
+}

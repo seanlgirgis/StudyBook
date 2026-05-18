@@ -1,0 +1,1 @@
+Provider connects Terraform to a platform. Resource describes a managed object. Type identifies object kind. Name is local Terraform name. Address combines type and name. Attributes expose values. References create dependencies.

@@ -1,0 +1,4 @@
+Typical successful validate output includes a message similar to:
+"Success! The configuration is valid."
+
+Validate checks syntax and structure. It does not prove operational safety.

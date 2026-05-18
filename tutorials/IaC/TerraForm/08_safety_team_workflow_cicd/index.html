@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Terraform Safety, Team Workflow, and CI/CD</title>
+  <style>
+    body{font-family:Segoe UI,Arial,sans-serif;background:#0b1220;color:#e5e7eb;margin:0;line-height:1.55}
+    main{max-width:1020px;margin:0 auto;padding:24px}.card{background:#111827;border:1px solid #334155;border-radius:10px;padding:16px;margin:14px 0}
+    pre{background:#0f172a;border:1px solid #334155;padding:12px;border-radius:8px;overflow:auto}a{color:#7dd3fc}
+  </style>
+</head>
+<body>
+<main>
+<h1>Terraform Safety, Team Workflow, and CI/CD</h1>
+<p>This tutorial frames Terraform as team change management: code review, plan evidence, approvals, and protected execution paths.</p>
+
+<section class="card"><h2>Visual Learning Path</h2>
+<svg viewBox="0 0 1240 300" width="100%">
+<rect x="10" y="40" width="130" height="42" rx="8" fill="#1d4ed8"/><text x="75" y="67" fill="white" text-anchor="middle">code change</text>
+<rect x="160" y="40" width="130" height="42" rx="8" fill="#0f766e"/><text x="225" y="67" fill="white" text-anchor="middle">pull request</text>
+<rect x="310" y="40" width="130" height="42" rx="8" fill="#7c3aed"/><text x="375" y="67" fill="white" text-anchor="middle">fmt/validate</text>
+<rect x="460" y="40" width="120" height="42" rx="8" fill="#b45309"/><text x="520" y="67" fill="white" text-anchor="middle">plan</text>
+<rect x="600" y="40" width="140" height="42" rx="8" fill="#475569"/><text x="670" y="67" fill="white" text-anchor="middle">plan review</text>
+<rect x="760" y="40" width="160" height="42" rx="8" fill="#7f1d1d"/><text x="840" y="67" fill="white" text-anchor="middle">blast-radius review</text>
+<rect x="940" y="40" width="140" height="42" rx="8" fill="#334155"/><text x="1010" y="67" fill="white" text-anchor="middle">approval gate</text>
+<rect x="1100" y="40" width="130" height="42" rx="8" fill="#dc2626"/><text x="1165" y="67" fill="white" text-anchor="middle">controlled apply</text>
+<rect x="960" y="150" width="260" height="48" rx="8" fill="#1e293b"/><text x="1090" y="180" fill="white" text-anchor="middle">remote state + locking</text>
+<rect x="430" y="150" width="460" height="48" rx="8" fill="#14532d"/><text x="660" y="180" fill="white" text-anchor="middle">guardrails: least privilege + policy checks + rollback thinking</text>
+</svg>
+</section>
+
+<section class="card"><h2>Copyable Commands</h2>
+<pre><code>terraform version
+terraform fmt
+terraform validate
+terraform plan</code></pre>
+<p>Apply is intentionally not part of this safe lab. CI/CD is pseudo-workflow only.</p>
+</section>
+
+<section class="card"><h2>Inline Code Excerpts</h2>
+<h3>main.tf</h3>
+<pre><code>terraform {
+  required_version = ">= 1.4.0"
+}
+
+locals {
+  change_summary = {
+    change_type       = var.change_type
+    environment       = var.environment
+    requested_by      = var.requested_by
+    approval_required = var.approval_required
+    blast_radius      = var.blast_radius
+  }
+
+  safety_message = "Review ${var.change_type} change for ${var.environment} before any apply."
+}
+
+resource "terraform_data" "safety_review_demo" {
+  input = {
+    change_summary = local.change_summary
+    safety_message = local.safety_message
+    lesson         = "Terraform safety is about review, plan visibility, controlled apply, and protected state."
+  }
+}</code></pre>
+
+<h3>variables.tf</h3>
+<pre><code>variable "environment" { type = string, default = "dev" }
+variable "change_type" { type = string, default = "learning-change" }
+variable "requested_by" { type = string, default = "Sean" }
+variable "approval_required" { type = bool, default = true }
+variable "blast_radius" { type = string, default = "low" }</code></pre>
+
+<h3>outputs.tf</h3>
+<pre><code>output "change_summary" { value = local.change_summary }
+output "safety_message" { value = local.safety_message }
+output "safety_review_demo_output" { value = terraform_data.safety_review_demo.output }</code></pre>
+
+<h3>cicd_pipeline_pseudocode.yml</h3>
+<pre><code># illustrative only
+# do not wire this to production without approvals
+# apply step is placeholder and gated</code></pre>
+
+<h3>Checklist excerpt</h3>
+<pre><code>- right branch?
+- right pull request?
+- right environment?
+- right workspace?
+- right backend/state?
+- right credentials?
+- right approval?
+- plan reviewed?
+- destroy/replacement checked?
+- rollback path understood?</code></pre>
+</section>
+
+<section class="card"><h2>Expected Output Explanations</h2><p>Plan output should remain local-safe, showing only terraform_data and review metadata. No cloud resources, no remote backend configuration, no apply.</p></section>
+<section class="card"><h2>Common Mistakes</h2><ul><li>Treating validate as safety approval.</li><li>Skipping plan review in high-risk environments.</li><li>Confusing PR approval with apply approval.</li><li>Assuming rollback is always trivial.</li></ul></section>
+<section class="card"><h2>Terraform as Team Change Management</h2><p>Terraform maturity is process maturity: review evidence, approval discipline, and controlled execution.</p></section>
+<section class="card"><h2>Version Control and Pull Requests</h2><p>Version control and PRs provide traceability, review history, and shared accountability.</p></section>
+<section class="card"><h2>Format, Validate, and Plan</h2><p>fmt/validate are quality gates; plan is the actionable infrastructure preview.</p></section>
+<section class="card"><h2>Plan Review and Blast Radius</h2><p>Review what changes and how much impact is possible before approving execution.</p></section>
+<section class="card"><h2>Apply Control</h2><p>Apply should be gated by role, environment, and explicit approval, especially for production.</p></section>
+<section class="card"><h2>Remote State and Locking</h2><p>Shared state with locking reduces race conditions and state corruption risk.</p></section>
+<section class="card"><h2>Least Privilege</h2><p>Credentials should grant only what is required for intended operations.</p></section>
+<section class="card"><h2>CI/CD Pipeline Shape</h2><p>CI/CD should standardize checks and plan evidence; apply remains controlled and gated.</p></section>
+<section class="card"><h2>Policy Checks</h2><p>Policy checks add repeatable guardrails for security, compliance, and operational discipline.</p></section>
+<section class="card"><h2>Rollback Thinking</h2><p>Plan rollback paths before change; not all infrastructure rollback paths are simple.</p></section>
+<section class="card"><h2>Safe Interview Wording</h2><p>“Terraform safety is not only syntax checks. Mature teams combine PR review, plan evidence, blast-radius assessment, controlled apply, protected state, and least-privilege access.”</p></section>
+
+<section class="card"><h2>How This Connects to the StudyBubble Map</h2><ul>
+<li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_safety_team_workflow_cicd.html">Terraform Safety, Team Workflow, and CI/CD</a></li>
+<li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_environments_workspaces.html">Terraform Environments and Workspaces</a></li>
+<li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_state_drift_backends.html">Terraform State, Drift, and Backends</a></li>
+<li><a href="../../../../study_maps/IaC/TerraForm/outputs/terraform_core_workflow.html">Terraform Core Workflow</a></li>
+</ul></section>
+</main>
+</body>
+</html>

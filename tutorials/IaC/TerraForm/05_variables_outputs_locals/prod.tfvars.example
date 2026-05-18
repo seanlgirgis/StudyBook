@@ -1,0 +1,8 @@
+environment      = "prod"
+application_name = "learnterraform"
+owner            = "Sean"
+
+demo_settings = {
+  size      = "medium"
+  retention = 30
+}

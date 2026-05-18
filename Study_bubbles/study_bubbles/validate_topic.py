@@ -243,6 +243,30 @@ def validate_topic_data(topic: dict[str, Any]) -> tuple[bool, list[str], list[st
         elif "label" not in parent_topic or "topic" not in parent_topic:
             errors.append("FAIL: parentTopic must include label and topic")
 
+    map_resources = topic.get("mapResources")
+    if map_resources is not None:
+        if not _is_list(map_resources):
+            errors.append("FAIL: mapResources must be a list when present")
+        else:
+            for idx, resource in enumerate(map_resources):
+                if not _is_dict(resource):
+                    errors.append(f"FAIL: mapResources[{idx}] must be an object")
+                    continue
+                label = resource.get("label")
+                if not isinstance(label, str) or not label.strip():
+                    errors.append(f"FAIL: mapResources[{idx}] must include non-empty label")
+                rtype = resource.get("type")
+                if rtype is not None and not isinstance(rtype, str):
+                    errors.append(f"FAIL: mapResources[{idx}].type must be a string when present")
+                href = resource.get("href")
+                topic_ref = resource.get("topic")
+                if not href and not topic_ref:
+                    errors.append(f"FAIL: mapResources[{idx}] must include href or topic")
+                if href is not None and not isinstance(href, str):
+                    errors.append(f"FAIL: mapResources[{idx}].href must be a string when present")
+                if topic_ref is not None and not isinstance(topic_ref, str):
+                    errors.append(f"FAIL: mapResources[{idx}].topic must be a string when present")
+
     optional_field_errors = [
         err
         for err in errors
