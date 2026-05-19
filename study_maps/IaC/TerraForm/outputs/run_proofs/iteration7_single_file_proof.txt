@@ -1,4 +1,4 @@
-timestamp: 2026-05-18T02:03:28.692998+00:00
+timestamp: 2026-05-18T04:35:40.317017+00:00
 source topic path: D:\Workarea\StudyBook\study_maps\IaC\TerraForm\topics\terraform_1000_foot_view.studybubble.json
 output HTML path: D:\Workarea\StudyBook\study_maps\IaC\TerraForm\outputs\terraform_1000_foot_view.html
 mode: single-file
@@ -8,7 +8,7 @@ node count: 11
 link count: 11
 path count: 1
 validation result: PASS
-generated HTML byte size: 75876
+generated HTML byte size: 75843
 manual smoke test steps:
 1. Open outputs/single_file/tiny_capacity_demo.html directly from File Explorer.
 2. Confirm title and subtitle render.

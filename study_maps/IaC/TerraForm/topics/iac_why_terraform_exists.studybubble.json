@@ -95,7 +95,7 @@
       "externalLinks": [
         {
           "label": "Open IaC Landscape Tutorial",
-          "href": "../../../../tutorials/IaC/TerraForm/00_iac_why_terraform_exists/index.html"
+          "href": "../study_pages/00_iac_why_terraform_exists/index.html"
         }
       ]
     },
@@ -251,7 +251,7 @@
     {
       "label": "Open IaC Landscape Tutorial",
       "type": "tutorial",
-      "href": "../../../../tutorials/IaC/TerraForm/00_iac_why_terraform_exists/index.html"
+      "href": "../study_pages/00_iac_why_terraform_exists/index.html"
     },
     {
       "label": "Next: Terraform 1000-Foot View",
@@ -260,5 +260,6 @@
     }
   ]
 }
+
 
 

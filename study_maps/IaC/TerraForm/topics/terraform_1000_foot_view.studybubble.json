@@ -45,7 +45,7 @@
       "externalLinks": [
         {
           "label": "Open Terraform 1000-Foot View Tutorial",
-          "href": "../../../../tutorials/IaC/TerraForm/01_terraform_1000_foot_view/index.html"
+          "href": "../study_pages/01_terraform_1000_foot_view/index.html"
         }
       ]
     },
@@ -126,7 +126,7 @@
       "externalLinks": [
         {
           "label": "Open Core Workflow Deep Study Page",
-          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+          "href": "../study_pages/03_core_workflow/index.html"
         }
       ]
     },
@@ -287,7 +287,7 @@
     {
       "label": "Open Terraform 1000-Foot View Tutorial",
       "type": "tutorial",
-      "href": "../../../../tutorials/IaC/TerraForm/01_terraform_1000_foot_view/index.html"
+      "href": "../study_pages/01_terraform_1000_foot_view/index.html"
     },
     {
       "label": "Back: IaC Why Terraform Exists",
@@ -311,5 +311,7 @@
     }
   ]
 }
+
+
 
 

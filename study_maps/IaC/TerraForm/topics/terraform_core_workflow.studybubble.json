@@ -85,7 +85,7 @@
       "externalLinks": [
         {
           "label": "Open Deep Study Page",
-          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+          "href": "../study_pages/03_core_workflow/index.html"
         }
       ]
     },
@@ -106,7 +106,7 @@
       "externalLinks": [
         {
           "label": "Open Deep Study Page",
-          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+          "href": "../study_pages/03_core_workflow/index.html"
         }
       ]
     },
@@ -161,7 +161,7 @@
       "externalLinks": [
         {
           "label": "Open Deep Study Page",
-          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+          "href": "../study_pages/03_core_workflow/index.html"
         }
       ]
     },
@@ -182,7 +182,7 @@
       "externalLinks": [
         {
           "label": "Open Deep Study Page",
-          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+          "href": "../study_pages/03_core_workflow/index.html"
         }
       ]
     },
@@ -203,7 +203,7 @@
       "externalLinks": [
         {
           "label": "Open Deep Study Page",
-          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+          "href": "../study_pages/03_core_workflow/index.html"
         }
       ]
     },
@@ -229,7 +229,7 @@
       "externalLinks": [
         {
           "label": "Open Deep Study Page",
-          "href": "../../../../tutorials/IaC/TerraForm/study_pages/03_core_workflow/index.html"
+          "href": "../study_pages/03_core_workflow/index.html"
         }
       ]
     },
@@ -364,5 +364,6 @@
     }
   ]
 }
+
 
 

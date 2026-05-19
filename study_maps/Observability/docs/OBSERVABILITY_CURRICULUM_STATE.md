@@ -1,0 +1,3 @@
+# OBSERVABILITY_CURRICULUM_STATE.md
+
+Placeholder only.

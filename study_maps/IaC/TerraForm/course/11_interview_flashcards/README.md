@@ -16,6 +16,7 @@ This is spoken interview practice, not infrastructure deployment.
 ## Links
 - [Open flashcards](index.html)
 - [Open full Q&A page](../10_interview_qa_consolidation/index.html)
-- [Course home](../index.html)
+- [Course home ](../../index.html)
 - [Source Markdown](../../docs/TERRAFORM_INTERVIEW_QA_CONSOLIDATION.md)
+
 
