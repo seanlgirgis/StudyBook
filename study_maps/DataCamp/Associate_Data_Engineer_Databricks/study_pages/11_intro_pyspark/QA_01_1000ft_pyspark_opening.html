@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>QA 01 - 1000-Foot PySpark Opening</title><style>body{font-family:"Segoe UI",Arial,sans-serif;background:#f6f8fb;color:#1c2430;margin:0}.wrap{max-width:980px;margin:0 auto;padding:24px 20px 40px}.card{background:#fff;border:1px solid #d9e2ef;border-radius:12px;padding:16px;margin-bottom:14px}.q{font-weight:700;margin-top:16px}.punch{background:#eef9f1;border-left:4px solid #2f855a;padding:10px 12px;border-radius:6px;margin:8px 0}a{color:#0a5db1;text-decoration:none}a:hover{text-decoration:underline}</style></head><body><main class="wrap"><div class="card"><p><a href="index.html">Back to Course 11 Home</a></p><h1>QA 01 - 1000-Foot PySpark Opening</h1><p>Final accepted answers for Course 11 interview rehearsal (Q01-Q17).</p></div><div class="card"><h2>Spark and PySpark Big Picture</h2><p class="q">Q01. What is Spark?</p><div class="punch">Punch line: Spark is the distributed engine for large-scale parallel data processing.</div><p class="q">Q02. What is PySpark?</p><div class="punch">Punch line: PySpark is Python authoring over Spark's distributed execution engine.</div><p class="q">Q03. Why does this job care about PySpark?</p><div class="punch">Punch line: The role needs scalable ETL plus production support for data pipelines.</div></div><div class="card"><h2>Spark Architecture</h2><p class="q">Q04. What is the driver?</p><div class="punch">Punch line: Driver coordinates planning and dispatches work.</div><p class="q">Q05. What are executors?</p><div class="punch">Punch line: Executors are workers processing partitions in parallel.</div></div><div class="card"><h2>DataFrame Work</h2><p class="q">Q06. What is a SparkSession?</p><div class="punch">Punch line: SparkSession is the entry point into Spark from PySpark.</div><p class="q">Q07. What is a DataFrame in PySpark?</p><div class="punch">Punch line: A distributed, table-like structure for Spark ETL and analytics.</div></div><div class="card"><h2>Execution Model</h2><p class="q">Q08. Difference between transformations and actions?</p><div class="punch">Punch line: Transformations build plans; actions trigger execution.</div><p class="q">Q09. What is lazy evaluation?</p><div class="punch">Punch line: Spark plans first and runs when an action is called.</div><p class="q">Q10. What are partitions and shuffle?</p><div class="punch">Punch line: Partitions enable parallelism; shuffle is expensive cross-worker movement.</div></div><div class="card"><h2>Production Support Mindset</h2><p class="q">Q11. How do you support a PySpark job in production?</p><div class="punch">Punch line: Check logs, counts, data quality, dependencies, and rerun safety.</div><p class="q">Q12. What to check when a job fails?</p><div class="punch">Punch line: Diagnose execution + data pipeline side before rerun.</div></div><div class="card"><h2>Orchestration and Internals Touchpoints</h2><p class="q">Q13. What is a DAG in Spark?</p><div class="punch">Punch line: Spark DAG is Spark's internal execution plan.</div><p class="q">Q14. Spark DAG vs Airflow DAG?</p><div class="punch">Punch line: Spark DAG is compute execution; Airflow DAG is workflow orchestration.</div><p class="q">Q15. Where does Airflow fit?</p><div class="punch">Punch line: Airflow schedules/monitors; Spark executes distributed work.</div><p class="q">Q16. Is PySpark only Python runtime?</p><div class="punch">Punch line: PySpark is Python interface with Spark/JVM execution underneath.</div><p class="q">Q17. Safe internals statement?</p><div class="punch">Punch line: Know practical internals for building/supporting jobs without overclaiming deep engine internals.</div></div><div class="card"><h2>Map Links</h2><ul><li><a href="../../outputs/course_11_intro_pyspark_1000ft.html">1000-Foot Opening Map</a></li><li><a href="../../outputs/course_11_intro_pyspark_architecture_runtime.html">Architecture Runtime Map</a></li></ul></div><div class="card"><h2>RDDs and Spark Foundations</h2>
+<p class="q">Q48. What is an RDD in PySpark?</p>
+<div class="punch">Accepted answer: RDD is Spark's lower-level distributed, immutable data abstraction (Resilient Distributed Dataset).</div>
+<p class="q">Q49. What is the difference between an RDD and a DataFrame?</p>
+<div class="punch">Accepted answer: RDD is lower-level and manual; DataFrame is schema-aware and usually preferred for structured ETL and analytics.</div>
+<p class="q">Q50. Why should collect() be used carefully?</p>
+<div class="punch">Accepted answer: collect() brings distributed data to driver memory, so use only for tiny result sets.</div></div>
+<div class="card"><h2>Spark SQL and Temporary Views</h2>
+<p class="q">Q51. What is Spark SQL?</p>
+<div class="punch">Accepted answer: Spark SQL lets SQL syntax run inside PySpark workflows and still returns DataFrames for continued processing.</div>
+<p class="q">Q52. How do you create a temporary view in PySpark?</p>
+<div class="punch">Accepted answer: Register DataFrame with <code>createOrReplaceTempView("name")</code>, then query it via <code>spark.sql()</code>.</div>
+<p class="q">Q53. What does spark.sql() return?</p>
+<div class="punch">Accepted answer: spark.sql() returns a DataFrame.</div>
+<p class="q">Q54. What is the production risk of temporary views?</p>
+<div class="punch">Accepted answer: Temp views are session-scoped, so production pipelines must persist outputs explicitly where needed.</div></div>
+<div class="card"><h2>Aggregations and Summary Metrics</h2>
+<p class="q">Q55. How do you perform aggregations in PySpark?</p>
+<div class="punch">Accepted answer: Use Spark SQL or DataFrame API groupBy/agg with sum, avg, count, max, min.</div>
+<p class="q">Q56. Why should data types be checked before aggregation?</p>
+<div class="punch">Accepted answer: SUM/AVG on string-typed numeric columns can fail or mislead, so cast and validate first.</div>
+<p class="q">Q57. Why should you filter early before aggregating?</p>
+<div class="punch">Accepted answer: early filtering reduces data volume and improves relevance/performance.</div>
+<p class="q">Q58. When would you use Spark SQL versus DataFrame API for aggregations?</p>
+<div class="punch">Accepted answer: choose whichever is clearer and maintainable for the team; both are interoperable.</div>
+<p class="q">Q59. Why are RDDs usually not preferred for structured aggregations?</p>
+<div class="punch">Accepted answer: RDDs are more manual/verbose; DataFrame and SQL paths are schema-aware and easier to optimize.</div></div>
+<div class="card"><h2>PySpark at Scale and Optimization</h2>
+<p class="q">Q60. What does explain() do in PySpark?</p>
+<div class="punch">Accepted answer: explain() exposes logical/physical plans for optimization and shuffle awareness.</div>
+<p class="q">Q61. When should you cache a DataFrame?</p>
+<div class="punch">Accepted answer: when a DataFrame is reused across multiple actions and recomputation is expensive.</div>
+<p class="q">Q62. What is the difference between cache() and persist()?</p>
+<div class="punch">Accepted answer: cache() uses default storage behavior; persist() allows explicit storage levels.</div>
+<p class="q">Q63. Why should you unpersist cached DataFrames?</p>
+<div class="punch">Accepted answer: to release resources and reduce memory pressure after reuse is done.</div>
+<p class="q">Q64. What is a broadcast join?</p>
+<div class="punch">Accepted answer: it broadcasts a small lookup side to reduce large join shuffle cost.</div>
+<p class="q">Q65. Why should repeated actions be avoided?</p>
+<div class="punch">Accepted answer: repeated actions trigger repeated jobs and multiply runtime/cost.</div></div>
+<div class="card"><h2>Course 11 Final Review</h2><p class="q">Q66. What did Course 11 teach me?</p><div class="punch">Accepted answer: foundational PySpark skills across architecture, DataFrames/SQL, joins/aggregations, UDF awareness, and support basics.</div><p class="q">Q67. What can I safely claim after this course?</p><div class="punch">Accepted answer: foundational PySpark readiness for structured ETL-style work and core interview discussion.</div><p class="q">Q68. What should I avoid overclaiming?</p><div class="punch">Accepted answer: deep Spark administration/tuning ownership, advanced platform/streaming CI/CD ownership.</div><p class="q">Q69. What should I practice next?</p><div class="punch">Accepted answer: remaining exercises, final audit/review, then small runnable tutorials-based drills later.</div></div>
+</main></body></html>
+
+
+
+
+

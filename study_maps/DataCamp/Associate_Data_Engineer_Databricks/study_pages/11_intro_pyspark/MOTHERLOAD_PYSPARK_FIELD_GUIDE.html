@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Course 11 PySpark Motherload Field Guide</title>
+<style>
+body{font-family:"Segoe UI",Arial,sans-serif;background:#f6f8fb;color:#1c2430;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding:24px 20px 40px}
+.card{background:#fff;border:1px solid #d9e2ef;border-radius:12px;padding:16px;margin-bottom:14px}
+a{color:#0a5db1;text-decoration:none}a:hover{text-decoration:underline}
+pre{background:#0f1724;color:#d6e2f5;padding:12px;border-radius:10px;overflow:auto}
+ul{margin-top:8px}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="card">
+<h1>Course 11 PySpark Motherload Field Guide</h1>
+<p>Durable PySpark reference from DataCamp Course 11 plus Wipro interview and production framing.</p>
+<p><a href="index.html">Course 11 Home</a> | <a href="QA_01_1000ft_pyspark_opening.html">QA 01</a> | <a href="../../outputs/course_11_intro_pyspark_1000ft.html">1000-Foot Map</a> | <a href="../../outputs/course_11_intro_pyspark_architecture_runtime.html">Architecture Runtime Map</a></p>
+</div>
+<div class="card"><h2>1. PySpark Mental Model</h2><p>Spark is distributed engine, PySpark is Python API, driver coordinates, executors process partitions, DataFrames express work, actions trigger execution.</p></div>
+<div class="card"><h2>2. SparkSession</h2><pre>from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("my_spark").getOrCreate()</pre><p>Interview angle: consistent session setup and runtime context awareness.</p></div>
+<div class="card"><h2>3-4. DataFrame Basics and Reading</h2><pre>spark.read.csv("file.csv", header=True, inferSchema=True)
+spark.read.json("file.json")
+spark.read.parquet("file.parquet")</pre></div>
+<div class="card"><h2>5. Schemas</h2><pre>from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+schema = StructType([
+  StructField("age", IntegerType(), True),
+  StructField("education_num", IntegerType(), True),
+  StructField("marital_status", StringType(), True),
+  StructField("occupation", StringType(), True),
+  StructField("income", StringType(), True)
+])</pre></div>
+<div class="card"><h2>6-12. Core Operations</h2><p>select/filter/where, groupBy/agg, sort/orderBy, null handling, column ops, joins, union, arrays/maps/structs.</p></div>
+<div class="card"><h2>13. UDF and pandas UDF</h2><p>Prefer built-ins first. Use UDF when needed, with performance caution.</p></div>
+<div class="card"><h2>UDF Decision Ladder: Built-ins First, UDFs Carefully</h2>
+<p>UDFs allow custom logic in PySpark, but they can add performance and support cost. The default should be built-in Spark DataFrame or SQL functions whenever possible.</p>
+<ol>
+<li>Use built-in Spark DataFrame or SQL functions first.</li>
+<li>Use DataFrame expressions for simple arithmetic, string, date, null, and conditional logic.</li>
+<li>Use a regular PySpark UDF only when custom logic is not easy with built-ins.</li>
+<li>Use a pandas UDF when custom logic is needed and vectorized execution is a better fit.</li>
+<li>Treat external/JVM/platform-specific UDFs as environment-specific choices, not the default beginner pattern.</li>
+</ol>
+<pre>df = df.withColumn("10_plus", df["value"] + 10)</pre>
+<pre>from pyspark.sql.functions import pandas_udf
+from pyspark.sql.types import DoubleType
+
+@pandas_udf(DoubleType())
+def add_ten_pandas(column):
+    return column + 10
+
+df = df.withColumn(
+    "10_plus",
+    add_ten_pandas(df["value"])
+)
+
+df.show()</pre>
+<p><strong>Plain English:</strong> pandas UDF syntax is useful, but simple logic like adding 10 should stay as built-in expression.</p>
+<p><strong>Production angle:</strong> validate null handling, return type, performance impact, row counts, and whether built-ins can replace UDF logic.</p>
+<p><strong>Common mistake:</strong> using UDF for logic Spark built-ins already cover.</p>
+<p><strong>Interview-safe answer:</strong> I use built-ins first, then choose regular UDF or pandas UDF only when custom logic and runtime tradeoffs justify it.</p>
+<p><strong>Punch line:</strong> Built-in Spark functions first. UDFs only when custom logic is worth the cost.</p></div>
+<div class="card"><h2>14. Lazy Evaluation</h2><p>Transformations build plan, actions (`show`, `count`, `collect`, `write`) trigger execution.</p></div>
+<div class="card"><h2>15. Production Support Checklist</h2><ul><li>counts</li><li>schema</li><li>nulls/duplicates</li><li>logs/stages/errors</li><li>dependencies/parameters</li><li>rerun safety</li><li>overwrite vs append risk</li></ul></div>
+<div class="card"><h2>16. Course Mistakes</h2><p>CSV list-arg misuse, SparkSession expected pattern, action-trigger confusion, inner join data loss risk, null drop impact, UDF overuse.</p></div>
+<div class="card"><h2>17-18. Interview Language + Mini Cookbook</h2><p>Keep safe statements concise and operationally grounded. Use the companion markdown files for full snippets and mistakes journal.</p></div>
+<div class="card"><h2>RDDs vs DataFrames</h2>
+<p>RDD means <strong>Resilient Distributed Dataset</strong>. It is Spark's lower-level distributed abstraction. RDDs are immutable, so transformations create new RDDs.</p>
+<p><strong>Plain English:</strong> RDDs are closer to raw Spark engine behavior. DataFrames are higher-level, schema-aware, and usually better for structured ETL and analytics.</p>
+<ul>
+<li>parallelization: split data and computation across workers</li>
+<li>map(): apply function to each element</li>
+<li>filter(): keep matching elements</li>
+<li>collect(): bring distributed data back to driver</li>
+</ul>
+<pre># Convert a DataFrame to an RDD
+rdd = df.rdd
+
+# Apply map to an RDD
+mapped_rdd = rdd.map(lambda row: row)
+
+# Filter an RDD
+filtered_rdd = rdd.filter(lambda row: row["age"] &gt; 40)
+
+# Collect tiny results only
+small_result = filtered_rdd.collect()</pre>
+<p><strong>Production warning:</strong> collect() can overload driver memory on large datasets.</p>
+<p><strong>Interview-safe answer:</strong> RDDs are foundational and useful for low-level custom processing, but DataFrames are usually preferred for structured ETL because they are schema-aware and easier to optimize.</p>
+<p><strong>Punch line:</strong> RDDs teach Spark internals; DataFrames are usually the practical structured ETL path.</p></div>
+<div class="card"><h2>Spark SQL and Temporary Views</h2>
+<p>Spark SQL connects SQL-style logic with DataFrame workflows inside one Spark application.</p>
+<p><strong>Plain English:</strong> register DataFrame as temp view, run <code>spark.sql()</code>, keep processing returned DataFrame.</p>
+<pre># Load data into a DataFrame
+employees_df = spark.read.csv(
+    "employees.csv",
+    header=True,
+    inferSchema=True
+)
+
+# Register as a temporary SQL view
+employees_df.createOrReplaceTempView("employees")
+
+# Query with Spark SQL
+high_earners = spark.sql("""
+    SELECT name, salary
+    FROM employees
+    WHERE salary > 100000
+""")
+
+# SQL result is still a DataFrame
+high_earners.show()</pre>
+<p><strong>Key points:</strong> temp view is session-scoped, <code>spark.sql()</code> returns DataFrame, SQL + DataFrame steps can be blended.</p>
+<p><strong>Common mistake:</strong> thinking temp view is permanent table.</p>
+<p><strong>Production angle:</strong> validate row counts before/after SQL filters, joins, aggregations; persist final outputs intentionally.</p>
+<p><strong>Interview-safe answer:</strong> Spark SQL lets SQL skills operate inside scalable PySpark pipelines, with DataFrame continuity end to end.</p>
+<p><strong>Punch line:</strong> Spark SQL and DataFrames work together in one distributed pipeline.</p></div>
+<div class="card"><h2>Spark SQL result can continue as a DataFrame</h2>
+<p><strong>Concept:</strong> <code>spark.sql()</code> returns a DataFrame, so SQL output can continue with DataFrame methods like <code>describe()</code>, <code>filter()</code>, <code>select()</code>, <code>withColumn()</code>, and <code>write</code>.</p>
+<pre>salaries_df.createOrReplaceTempView("salaries_table")
+
+query = """
+    SELECT job_title, salary_in_usd
+    FROM salaries_table
+    WHERE company_location = 'CA'
+"""
+
+canada_titles = spark.sql(query)
+
+canada_titles.describe().show()</pre>
+<p><strong>Plain English:</strong> SQL result is still DataFrame, so DataFrame profiling methods apply.</p>
+<p><strong>Common mistake:</strong> assuming SQL output is SQL-only object.</p>
+<p><strong>SQL style note:</strong> prefer <code>=</code> in SQL strings.</p>
+<p><strong>Production angle:</strong> verify numeric types, filtered row counts, and standardized filter values before trusting describe output.</p>
+<p><strong>Punch line:</strong> SQL and DataFrame methods chain in one Spark workflow.</p></div>
+<div class="card"><h2>PySpark Aggregations Best Practices</h2>
+<p><strong>Concept:</strong> Aggregations can be done via Spark SQL or DataFrame API using SUM, COUNT, AVG, MAX, MIN.</p>
+<p><strong>Plain English:</strong> Aggregations summarize many rows into business metrics, but only trustworthy after filtering, typing, cleaning, and validation.</p>
+<pre>df.createOrReplaceTempView("employees")
+
+result = spark.sql("""
+    SELECT department,
+           SUM(salary) AS total_salary,
+           AVG(salary) AS avg_salary,
+           COUNT(*) AS employee_count
+    FROM employees
+    GROUP BY department
+    ORDER BY total_salary DESC
+""")
+
+result.show()</pre>
+<pre>from pyspark.sql.functions import sum, avg, count, max, min
+
+result = (
+    df
+    .groupBy("department")
+    .agg(
+        sum("salary").alias("total_salary"),
+        avg("salary").alias("avg_salary"),
+        count("*").alias("employee_count"),
+        max("salary").alias("max_salary"),
+        min("salary").alias("min_salary")
+    )
+)
+
+result.show()</pre>
+<pre>from pyspark.sql.functions import col
+
+df_clean = df.withColumn(
+    "salary",
+    col("salary").cast("double")
+)</pre>
+<p><strong>Best practices:</strong> filter early, cast numeric types, handle nulls, validate row counts and grouping values, use explain() when performance matters.</p>
+<p><strong>RDD note:</strong> possible but more verbose for structured analytics than DataFrame/SQL paths.</p>
+<p><strong>Common mistake:</strong> SUM/AVG on string-typed values or unvalidated filtered input.</p>
+<p><strong>Punch line:</strong> Aggregate only after data is filtered, typed, cleaned, and validated.</p></div>
+<div class="card"><h2>PySpark at Scale: explain(), cache(), persist(), broadcast(), and repeated actions</h2>
+<p><strong>Concept:</strong> At scale, performance depends on execution plan, shuffle behavior, reuse strategy, and action patterns.</p>
+<p><strong>Plain English:</strong> explain() shows plan, cache/persist avoid recompute, broadcast can reduce join shuffle, repeated actions trigger repeated jobs.</p>
+<pre>df.explain()</pre>
+<pre>filtered_df = df.filter(df["company_location"] == "US")
+filtered_df.cache()
+filtered_df.count()
+filtered_df.groupBy("job_title").avg("salary_in_usd").show()
+filtered_df.unpersist()</pre>
+<pre>from pyspark import StorageLevel
+
+df.persist(StorageLevel.MEMORY_AND_DISK)
+df.unpersist()</pre>
+<pre>from pyspark.sql.functions import broadcast
+
+joined_df = large_df.join(
+    broadcast(small_lookup_df),
+    on="key",
+    how="left"
+)</pre>
+<p><strong>Best practices:</strong> inspect plan, watch shuffles, filter early, cache/persist only reused intermediates, unpersist when done, avoid repeated actions, consider broadcast for small lookups.</p>
+<p><strong>Common mistakes:</strong> repeated actions, over-caching, forgetting unpersist, ignoring shuffles, collect() on large data.</p>
+<p><strong>Punch line:</strong> at scale, ask how Spark executes, shuffles, recomputes, and uses resources.</p></div>
+<div class="card"><h2>Course 11 Final Summary - Introduction to PySpark</h2><p>Foundational PySpark course coverage completed with honest scope boundaries: practical readiness for structured ETL-style PySpark, not deep Spark platform administration.</p><p><strong>Safe claim:</strong> foundational PySpark readiness across Spark architecture, DataFrames/SQL, joins, aggregations, UDF awareness, caching/explain/broadcast concepts, and production-support basics.</p><p><strong>Not deeply covered yet:</strong> advanced cluster administration/tuning, streaming, advanced ML pipelines, cloud-platform administration, and full CI/CD deployment workflows.</p><p><strong>Punch line:</strong> practical foundation completed; deeper platform depth requires future focused practice.</p></div>
+</main>
+</body>
+</html>
+
+
+
+
+
+
+

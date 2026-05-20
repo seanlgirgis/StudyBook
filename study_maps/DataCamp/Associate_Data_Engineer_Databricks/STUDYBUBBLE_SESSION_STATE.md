@@ -233,3 +233,27 @@ Start Course 2 in a new focused chat using the DataCamp course naming pattern.
 - Course 11 opening map and architecture/runtime map are now linked as a two-map PySpark knowledge entrance, including Airflow, Spark DAG, JVM internals, and production support touchpoints.
 
 - Course 11 PySpark mapResource links repaired to work from generated outputs folder.
+
+- Course 11 structure cleanup completed: polished HTML endpoints created, mapResources updated from markdown targets to HTML targets, QA duplicate header removed, maps rebuilt, and Course 11 now has a proper study front door.
+
+- Course 11 home now links directly to the Production Support Mindset section inside QA_01 markdown for Edge markdown-viewer navigation.
+
+- Course 11 PySpark Motherload Field Guide created, including durable concepts, code snippets, common mistakes, production support checklist, and links from Course 11 home and StudyBubble maps.
+
+- Added UDF decision ladder to Course 11 Motherload: built-in Spark functions first, regular UDFs and pandas UDFs only when custom logic justifies the cost.
+
+- Added RDDs vs DataFrames delta to Course 11 Motherload, QA, snippets, mistakes, and production checklist.
+
+- Added Spark SQL and temporary views delta to Course 11 Motherload, QA, snippets, mistakes, and production checklist.
+
+- Added Spark SQL result-as-DataFrame describe() delta to Course 11 Motherload, snippets, mistakes, and production checklist.
+
+- Added PySpark aggregations best-practices delta to Course 11 Motherload, QA, snippets, mistakes, and production checklist.
+
+- Added PySpark at-scale optimization delta to Course 11 Motherload, QA, snippets, mistakes, and production checklist.
+
+- Course 11 final summary added: foundational PySpark course coverage captured, safe claim boundaries documented, and final review Q66-Q69 added.
+
+- Course 11 final stabilization audit completed. Course 11 PySpark learning package now has stable endpoints, Motherload, QA Q01-Q69, code snippets, mistakes, production checklist, maps, final summary, and documented future work.
+
+- Course 11 review-learning plan created. Course is now in review/rehearsal mode, not new content-building mode.
