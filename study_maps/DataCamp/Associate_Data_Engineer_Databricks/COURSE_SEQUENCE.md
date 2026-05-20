@@ -1,0 +1,14 @@
+﻿# Course Sequence
+- Course 01: Introduction to SQL (active)
+- Course 02: Placeholder
+- Course 03: Placeholder
+- Course 04: Placeholder
+- Course 05: Placeholder
+- Course 06: Placeholder
+- Course 07: Placeholder
+- Course 08: Placeholder
+- Course 09: Placeholder
+- Course 10: Placeholder
+- Course 11: Placeholder
+- Course 12: Placeholder
+- Course 13: Placeholder

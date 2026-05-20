@@ -1,0 +1,67 @@
+{
+  "topicId": "level_0_observability_1000_foot",
+  "topicTitle": "Level 0: Cloud Observability 1000-Foot View",
+  "version": 1,
+  "nodes": {
+    "cloud_observability": {
+      "x": 638.46,
+      "y": 343.16
+    },
+    "telemetry": {
+      "x": 100.43,
+      "y": 429.81
+    },
+    "metrics": {
+      "x": 231.78,
+      "y": 173.84
+    },
+    "logs": {
+      "x": 289.47,
+      "y": 311.93
+    },
+    "traces": {
+      "x": 103.98,
+      "y": 106.04
+    },
+    "apm": {
+      "x": 584.34,
+      "y": 117.12
+    },
+    "dashboards": {
+      "x": 746.43,
+      "y": 197.28
+    },
+    "alerts": {
+      "x": 676.37,
+      "y": 6.87
+    },
+    "runbooks": {
+      "x": 897.84,
+      "y": 150.35
+    },
+    "capacity_monitoring": {
+      "x": 651.24,
+      "y": 547.23
+    },
+    "capacity_forecasting": {
+      "x": 754.36,
+      "y": 653.39
+    },
+    "business_reporting": {
+      "x": 851.54,
+      "y": 455.79
+    },
+    "sean_skill_bridge": {
+      "x": 219.76,
+      "y": 584.12
+    },
+    "opentelemetry": {
+      "x": 430,
+      "y": 80
+    },
+    "tool_landscape": {
+      "x": 427.05,
+      "y": 473.44
+    }
+  }
+}

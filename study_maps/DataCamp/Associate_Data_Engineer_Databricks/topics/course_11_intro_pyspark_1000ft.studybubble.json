@@ -1,0 +1,251 @@
+{
+  "title": "Course 11 Introduction to PySpark - 1000-Foot Opening Map",
+  "subtitle": "DataCamp track kickoff plus Wipro interview sprint bridge",
+  "parentTopic": {
+    "label": "Track Starter Orientation",
+    "topic": "track_starter_orientation"
+  },
+  "groups": [
+    {
+      "id": "big_picture",
+      "label": "Big Picture"
+    },
+    {
+      "id": "architecture",
+      "label": "Architecture"
+    },
+    {
+      "id": "dataframe_work",
+      "label": "DataFrame Work"
+    },
+    {
+      "id": "execution_model",
+      "label": "Execution Model"
+    },
+    {
+      "id": "production",
+      "label": "Production"
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open Course 11 Start Here",
+      "href": "../study_pages/11_intro_pyspark/00_start_here.md"
+    },
+    {
+      "label": "Open 1000-Foot PySpark View",
+      "href": "../study_pages/11_intro_pyspark/00_1000ft_pyspark_view.md"
+    },
+    {
+      "label": "Open Wipro Bridge",
+      "href": "../study_pages/11_intro_pyspark/00_wipro_bridge.md"
+    },
+    {
+      "label": "Open Architecture Runtime Map",
+      "href": "course_11_intro_pyspark_architecture_runtime.html"
+    },
+    {
+      "label": "Open QA 01 1000-Foot PySpark Opening",
+      "href": "../study_pages/11_intro_pyspark/QA_01_1000ft_pyspark_opening.md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1",
+      "label": "Why Spark Exists",
+      "size": "core",
+      "group": "big_picture",
+      "definition": "Spark processes data that may be too large or too slow for one-machine tools.",
+      "whyItMatters": "It explains why distributed computing is needed for modern data workloads.",
+      "safeSentence": "Spark is a distributed processing engine used for large-scale data processing.",
+      "commonTrap": "Assuming one-machine tools are always enough.",
+      "note": {
+        "summary": "Spark exists for scale beyond single-machine limits."
+      }
+    },
+    {
+      "id": "n2",
+      "label": "What PySpark Is",
+      "size": "core",
+      "group": "big_picture",
+      "definition": "PySpark is the Python API for Apache Spark.",
+      "whyItMatters": "It allows Python-based Spark DataFrame and SQL workflows.",
+      "safeSentence": "PySpark lets me express Spark DataFrame and SQL work using Python.",
+      "commonTrap": "Thinking PySpark is a separate engine.",
+      "note": {
+        "summary": "PySpark is Python control over Spark execution."
+      }
+    },
+    {
+      "id": "n3",
+      "label": "Driver",
+      "size": "support",
+      "group": "architecture",
+      "definition": "Driver coordinates the Spark application.",
+      "whyItMatters": "It plans execution and orchestrates distributed tasks.",
+      "safeSentence": "The driver coordinates Spark planning and execution.",
+      "commonTrap": "Thinking the driver does all the data work.",
+      "note": {
+        "summary": "Driver is coordinator, not main data worker."
+      }
+    },
+    {
+      "id": "n4",
+      "label": "Executors",
+      "size": "support",
+      "group": "architecture",
+      "definition": "Executors run tasks on partitions of data.",
+      "whyItMatters": "Executor health affects performance and reliability.",
+      "safeSentence": "Executors execute distributed tasks on partitioned data.",
+      "commonTrap": "Ignoring executor failures or memory pressure.",
+      "note": {
+        "summary": "Executors perform the parallel data processing."
+      }
+    },
+    {
+      "id": "n5",
+      "label": "SparkSession",
+      "size": "support",
+      "group": "dataframe_work",
+      "definition": "SparkSession is the entry point for DataFrame and Spark SQL work.",
+      "whyItMatters": "It sets runtime context and API access.",
+      "safeSentence": "SparkSession is the main starting context for PySpark work.",
+      "commonTrap": "Working without understanding SparkSession context.",
+      "note": {
+        "summary": "SparkSession provides the operational context."
+      }
+    },
+    {
+      "id": "n6",
+      "label": "DataFrame",
+      "size": "core",
+      "group": "dataframe_work",
+      "definition": "DataFrame is a table-like distributed data structure.",
+      "whyItMatters": "Most ETL steps are implemented as DataFrame transformations.",
+      "safeSentence": "A Spark DataFrame is distributed tabular data processed in parallel.",
+      "commonTrap": "Treating it exactly like local Pandas.",
+      "note": {
+        "summary": "DataFrame operations are distributed, not local-only."
+      }
+    },
+    {
+      "id": "n7",
+      "label": "Transformations",
+      "size": "core",
+      "group": "execution_model",
+      "definition": "Transformations are lazy instructions like select, filter, withColumn, groupBy, and joins.",
+      "whyItMatters": "They define the plan before execution.",
+      "safeSentence": "Transformations describe work without immediate execution.",
+      "commonTrap": "Expecting them to run immediately.",
+      "note": {
+        "summary": "Transformations build the execution plan."
+      }
+    },
+    {
+      "id": "n8",
+      "label": "Actions",
+      "size": "core",
+      "group": "execution_model",
+      "definition": "Actions trigger execution, such as show, count, collect, and write.",
+      "whyItMatters": "Actions launch cluster work and return results or outputs.",
+      "safeSentence": "Actions trigger Spark execution.",
+      "commonTrap": "Using collect casually on large data.",
+      "note": {
+        "summary": "Actions execute lazy plans and require scale awareness."
+      }
+    },
+    {
+      "id": "n9",
+      "label": "Partitions and Shuffle",
+      "size": "support",
+      "group": "execution_model",
+      "definition": "Partitions split work; shuffle moves data across workers.",
+      "whyItMatters": "These directly affect performance and cost.",
+      "safeSentence": "Partitioning enables parallelism; shuffle is necessary but often expensive.",
+      "commonTrap": "Ignoring expensive shuffles in joins and groupBy.",
+      "note": {
+        "summary": "Partition and shuffle behavior is core Spark tuning knowledge."
+      }
+    },
+    {
+      "id": "n10",
+      "label": "Production PySpark Job",
+      "size": "core",
+      "group": "production",
+      "definition": "A real job needs validation, logs, counts, scheduling, rerun behavior, and support thinking.",
+      "whyItMatters": "Production readiness means reliability and supportability.",
+      "safeSentence": "Production PySpark combines correct logic with operational reliability.",
+      "commonTrap": "Thinking success means code ran once.",
+      "note": {
+        "summary": "Production quality requires observability and repeatable operations."
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "n1",
+      "target": "n2",
+      "label": "leads_to"
+    },
+    {
+      "source": "n2",
+      "target": "n5",
+      "label": "uses"
+    },
+    {
+      "source": "n5",
+      "target": "n6",
+      "label": "creates"
+    },
+    {
+      "source": "n6",
+      "target": "n7",
+      "label": "transforms_with"
+    },
+    {
+      "source": "n7",
+      "target": "n8",
+      "label": "triggered_by"
+    },
+    {
+      "source": "n6",
+      "target": "n9",
+      "label": "distributed_as"
+    },
+    {
+      "source": "n9",
+      "target": "n10",
+      "label": "operationalizes_into"
+    },
+    {
+      "source": "n3",
+      "target": "n4",
+      "label": "coordinates"
+    },
+    {
+      "source": "n3",
+      "target": "n5",
+      "label": "starts_with"
+    }
+  ],
+  "paths": [
+    {
+      "id": "course_11_1000ft_path",
+      "label": "Course 11 1000-Foot PySpark Path",
+      "description": "Recommended opening sequence for Course 11 foundational PySpark understanding.",
+      "nodeIds": [
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5",
+        "n6",
+        "n7",
+        "n8",
+        "n9",
+        "n10"
+      ]
+    }
+  ],
+  "id": "course_11_intro_pyspark_1000ft"
+}

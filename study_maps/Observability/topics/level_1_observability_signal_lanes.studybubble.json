@@ -1,0 +1,63 @@
+{
+  "id": "level_1_observability_signal_lanes",
+  "title": "Level 1: Observability Signal Lanes",
+  "subtitle": "How metrics, logs, traces, events, and operations workflows connect",
+  "parentTopic": null,
+  "groups": [
+    {"id":"center","label":"center","color":"#2563EB"},
+    {"id":"signals","label":"signals","color":"#0EA5E9"},
+    {"id":"operations","label":"operations","color":"#F59E0B"},
+    {"id":"platform","label":"platform","color":"#10B981"},
+    {"id":"career_safety","label":"career_safety","color":"#8B5CF6"}
+  ],
+  "nodes": [
+    {"id":"observability_signals","label":"Observability Signals","size":"core","group":"center","definition":"A connected model for reading system behavior through multiple signal lanes.","whyItMatters":"No single signal is enough for reliable operations decisions.","safeSentence":"I explain observability as combining metrics, logs, traces, and events with response workflows.","commonTrap":"Treating one dashboard or one metric as full truth.","note":{"summary":"Hub node for Level 1 signal-lane thinking."}},
+    {"id":"metrics_lane","label":"Metrics","size":"support","group":"signals","definition":"Numeric time-series data about utilization, performance, and error patterns.","whyItMatters":"Metrics reveal trend and threshold changes quickly.","safeSentence":"Metrics tell me what is changing over time and where risk may be rising.","commonTrap":"Reading averages alone without percentiles or context.","note":{"summary":"Fast health and capacity trend signal."}},
+    {"id":"logs_lane","label":"Logs","size":"support","group":"signals","definition":"Event records that describe what happened in systems and applications.","whyItMatters":"Logs add incident context and evidence for troubleshooting.","safeSentence":"Logs tell me what happened before, during, and after an issue.","commonTrap":"Collecting logs without structure, retention plan, or correlation.","note":{"summary":"Narrative context signal."}},
+    {"id":"traces_lane","label":"Traces","size":"support","group":"signals","definition":"Request-flow visibility across services showing latency and failure points.","whyItMatters":"Traces isolate bottlenecks in distributed paths.","safeSentence":"Traces show where a request traveled and where time or failure occurred.","commonTrap":"Claiming deep tracing ownership before hands-on evidence.","note":{"summary":"Distributed-request path signal."}},
+    {"id":"events_lane","label":"Events","size":"support","group":"signals","definition":"Important change markers such as deploys, scaling actions, or incidents.","whyItMatters":"Events explain why telemetry shifts at specific times.","safeSentence":"Events mark important changes that explain signal movement.","commonTrap":"Ignoring change events when analyzing metric spikes.","note":{"summary":"Change timeline signal."}},
+    {"id":"apm_lane","label":"APM","size":"support","group":"operations","definition":"Application performance monitoring that ties transactions to user and service impact.","whyItMatters":"APM connects symptom data to application behavior.","safeSentence":"My enterprise APM background helps me interpret service behavior and impact.","commonTrap":"Calling APM and observability identical concepts.","note":{"summary":"Application-impact interpretation lane."}},
+    {"id":"infra_monitoring","label":"Infrastructure Monitoring","size":"support","group":"operations","definition":"Monitoring hosts, containers, CPU, memory, disk, and network behavior.","whyItMatters":"Infrastructure health sets the baseline for service reliability.","safeSentence":"Infrastructure monitoring watches host and container resource behavior.","commonTrap":"Focusing only on CPU while ignoring memory, disk, or network pressure.","note":{"summary":"Host/container signal lane."}},
+    {"id":"cloud_monitoring","label":"Cloud Monitoring","size":"support","group":"platform","definition":"Monitoring managed cloud services and cloud-native dependencies.","whyItMatters":"Cloud services introduce platform-specific performance and reliability signals.","safeSentence":"Cloud monitoring tracks managed service behavior and platform-level risks.","commonTrap":"Assuming cloud-managed means monitoring-free.","note":{"summary":"Managed-service signal lane."}},
+    {"id":"opentelemetry_lane","label":"OpenTelemetry","size":"support","group":"platform","definition":"Vendor-neutral pattern for collecting and routing telemetry signals.","whyItMatters":"It standardizes telemetry collection across tools and environments.","safeSentence":"I use OpenTelemetry as the modern collection pattern and I am building practical depth.","commonTrap":"Overclaiming production OpenTelemetry platform ownership.","note":{"summary":"Collection and normalization lane."}},
+    {"id":"dashboards_alerts_runbooks","label":"Dashboards + Alerts + Runbooks","size":"support","group":"operations","definition":"Visibility, notification, and response guidance working together.","whyItMatters":"Signals must lead to clear human action.","safeSentence":"Dashboards make signals visible, alerts decide attention, and runbooks guide action.","commonTrap":"Creating alerts without tested runbooks.","note":{"summary":"Signal-to-action operations lane."}},
+    {"id":"capacity_headroom","label":"Capacity Headroom","size":"support","group":"operations","definition":"Remaining resource margin used for planning and risk prevention.","whyItMatters":"Headroom turns monitoring from reactive to proactive.","safeSentence":"Capacity headroom helps translate telemetry into planning decisions.","commonTrap":"Discussing capacity without demand trend and risk bands.","note":{"summary":"Planning lane from operations data."}},
+    {"id":"rca_troubleshooting","label":"RCA / Troubleshooting","size":"support","group":"operations","definition":"Systematic process to connect symptoms to likely causes and recovery actions.","whyItMatters":"Structured RCA improves reliability learning and repeatability.","safeSentence":"RCA connects symptoms to likely causes using multiple signals.","commonTrap":"Jumping to root-cause conclusions from one data source.","note":{"summary":"Investigation and learning lane."}},
+    {"id":"safe_career_positioning","label":"Safe Career Positioning","size":"support","group":"career_safety","definition":"Accurate interview positioning that separates proven strengths from active learning areas.","whyItMatters":"Honest positioning builds trust and avoids overclaim risk.","safeSentence":"My strong base is enterprise telemetry/APM/capacity, and I am actively building modern cloud-observability depth.","commonTrap":"Claiming production ownership of OpenTelemetry, Prometheus, Grafana, Kubernetes, GPU monitoring, Terraform, CloudFormation, or cloud-native SRE before evidence.","note":{"summary":"Interview safety and credibility lane."}},
+    {"id":"tool_landscape_l1","label":"Prometheus / Grafana / CloudWatch / Splunk / Dynatrace","size":"support","group":"platform","definition":"Common platform families for metrics, visualization, cloud monitoring, and observability workflows.","whyItMatters":"Knowing tool-fit helps select the right workflow for each context.","safeSentence":"I can explain where these tools fit while building practical ownership step by step.","commonTrap":"Confusing conceptual familiarity with production platform ownership.","note":{"summary":"Platform-fit lane for Level 1."}}
+  ],
+  "links": [
+    {"source":"observability_signals","target":"metrics_lane","label":"includes"},
+    {"source":"observability_signals","target":"logs_lane","label":"includes"},
+    {"source":"observability_signals","target":"traces_lane","label":"includes"},
+    {"source":"observability_signals","target":"events_lane","label":"includes"},
+    {"source":"observability_signals","target":"apm_lane","label":"connects"},
+    {"source":"observability_signals","target":"infra_monitoring","label":"connects"},
+    {"source":"observability_signals","target":"cloud_monitoring","label":"connects"},
+    {"source":"observability_signals","target":"opentelemetry_lane","label":"collected via"},
+    {"source":"observability_signals","target":"dashboards_alerts_runbooks","label":"operated by"},
+    {"source":"observability_signals","target":"capacity_headroom","label":"supports"},
+    {"source":"observability_signals","target":"rca_troubleshooting","label":"investigated by"},
+    {"source":"observability_signals","target":"safe_career_positioning","label":"framed by"},
+    {"source":"opentelemetry_lane","target":"tool_landscape_l1","label":"feeds"},
+    {"source":"dashboards_alerts_runbooks","target":"rca_troubleshooting","label":"guides"},
+    {"source":"capacity_headroom","target":"safe_career_positioning","label":"strengthens"}
+  ],
+  "paths": [
+    {
+      "id": "level_1_signal_lanes_walk",
+      "label": "Level 1 Signal Lanes Walk",
+      "description": "A practical orientation path through the major observability signal lanes and safe positioning.",
+      "nodeIds": ["observability_signals","metrics_lane","logs_lane","traces_lane","events_lane","apm_lane","infra_monitoring","cloud_monitoring","opentelemetry_lane","dashboards_alerts_runbooks","capacity_headroom","rca_troubleshooting","safe_career_positioning","tool_landscape_l1"],
+      "rehearsalPrompt": "Explain how signal lanes connect to operations, planning, RCA, and safe interview positioning."
+    }
+  ],
+  "mapResources": [
+    {"label":"Open Course Home","type":"course","href":"../index.html"},
+    {"label":"Open Level 0 Map","type":"map","href":"../outputs/level_0_observability_1000_foot.html"},
+    {"label":"Open Glossary","type":"reference","href":"../course/glossary.html"},
+    {"label":"Open Safe Positioning","type":"reference","href":"../course/safe_positioning.html"},
+    {"label":"Open Overclaim Guardrails","type":"reference","href":"../course/overclaim_guardrails.html"}
+  ]
+}
+

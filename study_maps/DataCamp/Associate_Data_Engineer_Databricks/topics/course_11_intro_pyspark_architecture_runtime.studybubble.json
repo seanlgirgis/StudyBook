@@ -1,0 +1,303 @@
+{
+  "id": "course_11_intro_pyspark_architecture_runtime",
+  "title": "Course 11 Introduction to PySpark - Architecture Runtime Map",
+  "subtitle": "How PySpark jobs are scheduled, planned, executed, logged, and supported",
+  "parentTopic": {
+    "label": "Track Starter Orientation",
+    "topic": "track_starter_orientation"
+  },
+  "groups": [
+    {
+      "id": "orchestration",
+      "label": "Orchestration"
+    },
+    {
+      "id": "job_start",
+      "label": "Job Start"
+    },
+    {
+      "id": "planning",
+      "label": "Planning"
+    },
+    {
+      "id": "internals",
+      "label": "Internals"
+    },
+    {
+      "id": "execution",
+      "label": "Execution"
+    },
+    {
+      "id": "production_support",
+      "label": "Production Support"
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Back to 1000-Foot Opening Map",
+      "href": "course_11_intro_pyspark_1000ft.html"
+    },
+    {
+      "label": "Open Course 11 Start Here",
+      "href": "../study_pages/11_intro_pyspark/00_start_here.md"
+    },
+    {
+      "label": "Open 1000-Foot PySpark View",
+      "href": "../study_pages/11_intro_pyspark/00_1000ft_pyspark_view.md"
+    },
+    {
+      "label": "Open Wipro Bridge",
+      "href": "../study_pages/11_intro_pyspark/00_wipro_bridge.md"
+    },
+    {
+      "label": "Open QA 01 1000-Foot PySpark Opening",
+      "href": "../study_pages/11_intro_pyspark/QA_01_1000ft_pyspark_opening.md"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1",
+      "label": "PySpark Script",
+      "group": "orchestration",
+      "size": "core",
+      "definition": "The Python code that defines the Spark job logic.",
+      "whyItMatters": "It is where transformation logic and data-processing intent are expressed.",
+      "safeSentence": "A PySpark script defines job logic through Python APIs over Spark.",
+      "commonTrap": "Thinking script correctness alone guarantees distributed runtime success.",
+      "note": {
+        "summary": "PySpark script is the authoring layer for Spark jobs."
+      }
+    },
+    {
+      "id": "n2",
+      "label": "Airflow / Scheduler",
+      "group": "orchestration",
+      "size": "support",
+      "definition": "Schedules and coordinates jobs, dependencies, parameters, retries, and alerts. It does not perform Spark distributed execution itself.",
+      "whyItMatters": "It governs operational timing, dependency control, and alerting in production.",
+      "safeSentence": "Airflow orchestrates job flow; Spark handles distributed computation.",
+      "commonTrap": "Confusing orchestration tooling with Spark execution internals.",
+      "note": {
+        "summary": "Scheduler manages workflow control, not Spark compute internals."
+      }
+    },
+    {
+      "id": "n3",
+      "label": "Airflow DAG",
+      "group": "orchestration",
+      "size": "support",
+      "definition": "A workflow dependency graph that controls job order, scheduling, retries, parameters, and alerting.",
+      "whyItMatters": "It defines pipeline orchestration behavior and reliability expectations.",
+      "safeSentence": "An Airflow DAG defines workflow order and operational controls for job runs.",
+      "commonTrap": "Assuming Airflow DAG and Spark DAG are the same object.",
+      "note": {
+        "summary": "Airflow DAG is orchestration logic, not Spark compute plan."
+      }
+    },
+    {
+      "id": "n4",
+      "label": "Spark Submit / Job Start",
+      "group": "job_start",
+      "size": "support",
+      "definition": "The mechanism that starts the Spark application and connects it to the runtime environment.",
+      "whyItMatters": "Launch configuration controls resources, runtime context, and job behavior.",
+      "safeSentence": "Spark submit starts the application with runtime configuration and dependencies.",
+      "commonTrap": "Ignoring launch parameters and environment mismatches.",
+      "note": {
+        "summary": "Job start bridges orchestration and Spark runtime execution."
+      }
+    },
+    {
+      "id": "n5",
+      "label": "Driver Program",
+      "group": "planning",
+      "size": "core",
+      "definition": "Coordinates the Spark application, builds the plan, and sends tasks to executors.",
+      "whyItMatters": "The driver is central to planning, scheduling, and task dispatch.",
+      "safeSentence": "The driver coordinates Spark planning and dispatches work to executors.",
+      "commonTrap": "Thinking the driver runs all partition-level processing itself.",
+      "note": {
+        "summary": "Driver is the control plane for Spark job execution."
+      }
+    },
+    {
+      "id": "n6",
+      "label": "Spark DAG",
+      "group": "planning",
+      "size": "core",
+      "definition": "Spark's internal execution plan built from transformations. Actions trigger it. This is different from an Airflow DAG.",
+      "whyItMatters": "It explains stage planning, execution order, and performance behavior.",
+      "safeSentence": "Spark DAG is Spark's internal execution graph, different from Airflow workflow DAGs.",
+      "commonTrap": "Using DAG terminology without distinguishing Spark planning vs Airflow orchestration.",
+      "note": {
+        "summary": "Spark DAG models compute stages inside Spark, not scheduler workflow."
+      }
+    },
+    {
+      "id": "n7",
+      "label": "Catalyst Optimizer",
+      "group": "planning",
+      "size": "support",
+      "definition": "Spark SQL/DataFrame optimizer that rewrites logical plans into efficient physical plans.",
+      "whyItMatters": "It affects physical execution shape, shuffle volume, and performance.",
+      "safeSentence": "Catalyst rewrites logical DataFrame/SQL plans into optimized physical plans.",
+      "commonTrap": "Assuming written code order equals physical plan behavior.",
+      "note": {
+        "summary": "Catalyst transforms intent into efficient execution strategy."
+      }
+    },
+    {
+      "id": "n8",
+      "label": "JVM / Spark Engine",
+      "group": "internals",
+      "size": "core",
+      "definition": "PySpark gives the developer a Python API, but Spark's core execution engine runs on the JVM.",
+      "whyItMatters": "It clarifies safe interview language about Python interface vs engine internals.",
+      "safeSentence": "PySpark is a Python interface, with Spark/JVM execution underneath.",
+      "commonTrap": "Saying PySpark jobs execute only as pure Python runtime work.",
+      "note": {
+        "summary": "Python authors job logic; Spark JVM engine executes distributed core work."
+      }
+    },
+    {
+      "id": "n9",
+      "label": "Executors",
+      "group": "execution",
+      "size": "core",
+      "definition": "Worker processes that run tasks on partitions of data.",
+      "whyItMatters": "Executor health and resources drive runtime stability and throughput.",
+      "safeSentence": "Executors process partitioned tasks in parallel across cluster resources.",
+      "commonTrap": "Ignoring executor memory and failure patterns during troubleshooting.",
+      "note": {
+        "summary": "Executors are distributed workers for task execution."
+      }
+    },
+    {
+      "id": "n10",
+      "label": "Tasks and Partitions",
+      "group": "execution",
+      "size": "core",
+      "definition": "Partitions split the data; tasks process partitions in parallel.",
+      "whyItMatters": "Partition strategy impacts parallelism, skew risk, and runtime efficiency.",
+      "safeSentence": "Tasks run on partitions so data can be processed in parallel.",
+      "commonTrap": "Neglecting partition sizing and skew effects.",
+      "note": {
+        "summary": "Partitioning defines how work is split across executors."
+      }
+    },
+    {
+      "id": "n11",
+      "label": "Shuffle",
+      "group": "execution",
+      "size": "support",
+      "definition": "Expensive movement of data across executors, often caused by joins, groupBy, repartitioning, and aggregations.",
+      "whyItMatters": "Shuffle drives major cost, latency, and failure pressure in distributed jobs.",
+      "safeSentence": "Shuffle is cross-executor data movement and should be controlled carefully.",
+      "commonTrap": "Ignoring shuffle-heavy operations when analyzing performance problems.",
+      "note": {
+        "summary": "Shuffle is necessary for many operations but can be expensive."
+      }
+    },
+    {
+      "id": "n12",
+      "label": "Logs, Failure, and Rerun",
+      "group": "production_support",
+      "size": "core",
+      "definition": "Production support view: check logs, failed stages, input/output counts, parameters, dependencies, and rerun safety.",
+      "whyItMatters": "Operational reliability depends on disciplined diagnostics and safe rerun patterns.",
+      "safeSentence": "Support-ready PySpark includes logging, diagnostics, dependency checks, and safe rerun behavior.",
+      "commonTrap": "Assuming one successful run means production-grade stability.",
+      "note": {
+        "summary": "Production support requires observability and controlled recovery workflows."
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "n2",
+      "target": "n3",
+      "label": "defines"
+    },
+    {
+      "source": "n3",
+      "target": "n4",
+      "label": "triggers"
+    },
+    {
+      "source": "n4",
+      "target": "n1",
+      "label": "starts_with"
+    },
+    {
+      "source": "n4",
+      "target": "n5",
+      "label": "launches"
+    },
+    {
+      "source": "n1",
+      "target": "n5",
+      "label": "provides_logic_to"
+    },
+    {
+      "source": "n5",
+      "target": "n6",
+      "label": "builds"
+    },
+    {
+      "source": "n6",
+      "target": "n7",
+      "label": "optimized_by"
+    },
+    {
+      "source": "n7",
+      "target": "n8",
+      "label": "executes_on"
+    },
+    {
+      "source": "n8",
+      "target": "n9",
+      "label": "runs_workers"
+    },
+    {
+      "source": "n5",
+      "target": "n9",
+      "label": "dispatches_to"
+    },
+    {
+      "source": "n9",
+      "target": "n10",
+      "label": "processes"
+    },
+    {
+      "source": "n10",
+      "target": "n11",
+      "label": "can_trigger"
+    },
+    {
+      "source": "n11",
+      "target": "n12",
+      "label": "investigate_with"
+    }
+  ],
+  "paths": [
+    {
+      "id": "course_11_architecture_runtime_path",
+      "label": "Course 11 Architecture Runtime Path",
+      "description": "Recommended sequence for understanding orchestration, planning, execution internals, and production support.",
+      "nodeIds": [
+        "n2",
+        "n3",
+        "n4",
+        "n1",
+        "n5",
+        "n6",
+        "n7",
+        "n8",
+        "n9",
+        "n10",
+        "n11",
+        "n12"
+      ]
+    }
+  ]
+}

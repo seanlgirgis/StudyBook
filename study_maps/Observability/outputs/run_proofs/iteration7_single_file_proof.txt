@@ -1,0 +1,21 @@
+timestamp: 2026-05-19T06:47:56.994410+00:00
+source topic path: D:\Workarea\StudyBook\study_maps\Observability\topics\level_0_observability_1000_foot.studybubble.json
+output HTML path: D:\Workarea\StudyBook\study_maps\Observability\outputs\level_0_observability_1000_foot.html
+mode: single-file
+topic id: level_0_observability_1000_foot
+topic title: Level 0: Cloud Observability 1000-Foot View
+node count: 15
+link count: 22
+path count: 1
+validation result: PASS
+generated HTML byte size: 76461
+manual smoke test steps:
+1. Open outputs/single_file/tiny_capacity_demo.html directly from File Explorer.
+2. Confirm title and subtitle render.
+3. Confirm 3 bubbles render (Telemetry, Baseline, Forecast).
+4. Confirm 2 relationship lines render.
+5. Click Telemetry and confirm side panel updates.
+6. Click Baseline and confirm side panel updates.
+7. Click Forecast and confirm side panel updates.
+8. Confirm no 'Failed to fetch' message appears.
+summary: PASS

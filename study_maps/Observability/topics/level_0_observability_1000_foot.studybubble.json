@@ -1,0 +1,65 @@
+{
+  "id": "level_0_observability_1000_foot",
+  "title": "Level 0: Cloud Observability 1000-Foot View",
+  "subtitle": "Orientation-only map for safe positioning and shared observability vocabulary",
+  "parentTopic": null,
+  "groups": [
+    {"id":"center","label":"center","color":"#2563EB"},
+    {"id":"signals","label":"signals","color":"#0EA5E9"},
+    {"id":"operations","label":"operations","color":"#F59E0B"},
+    {"id":"sean_bridge","label":"sean_bridge","color":"#10B981"},
+    {"id":"tools","label":"tools","color":"#8B5CF6"}
+  ],
+  "nodes": [
+    {"id":"cloud_observability","label":"Cloud Observability","size":"core","group":"center","definition":"A way to understand system behavior by connecting telemetry signals.","whyItMatters":"It provides one connected view of system health and risk.","safeSentence":"I see observability as the modern way to connect metrics, logs, traces, dashboards, alerts, and runbooks into operational understanding.","commonTrap":"Do not reduce observability to only dashboards.","note":{"summary":"Center concept for Level 0."}},
+    {"id":"telemetry","label":"Telemetry","size":"core","group":"signals","definition":"Data emitted by systems so people and tools can understand behavior.","whyItMatters":"Telemetry is the evidence used for monitoring, troubleshooting, and planning.","safeSentence":"Telemetry is the raw evidence used for monitoring, troubleshooting, capacity, and reporting.","commonTrap":"Do not treat telemetry as useful unless it is organized and interpreted.","note":{"summary":"Source evidence for all observability work."}},
+    {"id":"metrics","label":"Metrics","size":"support","group":"signals","definition":"Numbers measured over time, such as CPU, memory, latency, and errors.","whyItMatters":"Metrics reveal trend and threshold changes quickly.","safeSentence":"Metrics help me see trends, thresholds, headroom, and capacity risk.","commonTrap":"Do not look at one metric alone without context.","note":{"summary":"Time-series indicators for health and risk."}},
+    {"id":"logs","label":"Logs","size":"support","group":"signals","definition":"Text records that describe events, errors, warnings, and system activity.","whyItMatters":"Logs provide context around failures and anomalies.","safeSentence":"Logs help explain what happened around an event or failure.","commonTrap":"Do not confuse logs with metrics.","note":{"summary":"Event detail for troubleshooting."}},
+    {"id":"traces","label":"Traces","size":"support","group":"signals","definition":"A request path across services showing timing and failure points.","whyItMatters":"Traces reveal where delay or failure occurred across dependencies.","safeSentence":"Traces help connect user or service requests to where time or failure occurred.","commonTrap":"Do not claim deep tracing ownership before hands-on practice.","note":{"summary":"Request journey across distributed services."}},
+    {"id":"apm","label":"APM","size":"support","group":"operations","definition":"Application Performance Monitoring focuses on application health, transactions, latency, errors, and dependencies.","whyItMatters":"APM helps teams monitor service behavior and user impact.","safeSentence":"My older APM background helps me understand the purpose of modern observability.","commonTrap":"Do not say APM and observability are identical.","note":{"summary":"Application-centered operational monitoring."}},
+    {"id":"dashboards","label":"Dashboards","size":"support","group":"operations","definition":"Visual views that summarize system behavior for humans.","whyItMatters":"Dashboards make telemetry easier to consume for operations and leadership.","safeSentence":"Dashboards turn telemetry into something operators and leaders can use.","commonTrap":"A dashboard without action or context is just decoration.","note":{"summary":"Visual operating surface for key signals."}},
+    {"id":"alerts","label":"Alerts","size":"support","group":"operations","definition":"Rules or signals that notify people when attention is needed.","whyItMatters":"Alerts trigger timely response to real risk.","safeSentence":"Good alerts should point to risk or action, not just noise.","commonTrap":"Too many alerts create fatigue.","note":{"summary":"Signal-to-action notification layer."}},
+    {"id":"runbooks","label":"Runbooks","size":"support","group":"operations","definition":"Step-by-step guidance for what to check and do during an issue.","whyItMatters":"Runbooks improve consistency and speed during incidents.","safeSentence":"Runbooks turn monitoring into repeatable operational response.","commonTrap":"Do not create alerts without response guidance.","note":{"summary":"Action guidance paired with alerts."}},
+    {"id":"capacity_monitoring","label":"Capacity Monitoring","size":"support","group":"sean_bridge","definition":"Watching resource usage and headroom to avoid shortages or waste.","whyItMatters":"Capacity awareness reduces outage and cost risk.","safeSentence":"Capacity monitoring is one of my strongest bridges into cloud observability.","commonTrap":"Do not talk only about CPU; capacity includes memory, disk, network, throughput, and demand patterns.","note":{"summary":"Strong continuity from enterprise experience."}},
+    {"id":"capacity_forecasting","label":"Capacity Forecasting","size":"support","group":"sean_bridge","definition":"Using history and trends to estimate future resource risk.","whyItMatters":"Forecasting supports proactive scaling and planning.","safeSentence":"Forecasting turns telemetry into planning information.","commonTrap":"Do not oversell forecasting as perfect prediction.","note":{"summary":"Forward-looking capacity planning."}},
+    {"id":"business_reporting","label":"Business Reporting","size":"support","group":"sean_bridge","definition":"Turning technical signals into risk, trend, cost, and planning summaries.","whyItMatters":"Leaders need clear risk framing for decisions.","safeSentence":"My strength is translating telemetry into decisions leaders can act on.","commonTrap":"Do not bury leaders in raw metrics.","note":{"summary":"Management-facing interpretation layer."}},
+    {"id":"sean_skill_bridge","label":"Sean Skill Bridge","size":"support","group":"sean_bridge","definition":"The path from enterprise APM and capacity work to cloud observability.","whyItMatters":"It provides honest positioning while building modern depth.","safeSentence":"My foundation is real monitoring and capacity experience; I am updating the tooling layer.","commonTrap":"Do not pretend every new tool is already deep production experience.","note":{"summary":"Safe bridge narrative for interviews."}},
+    {"id":"opentelemetry","label":"OpenTelemetry","size":"support","group":"tools","definition":"A modern standard for collecting and moving telemetry.","whyItMatters":"It enables vendor-neutral telemetry collection patterns.","safeSentence":"I understand OpenTelemetry as a vendor-neutral telemetry collection pattern that I am building practical experience with.","commonTrap":"Do not claim production OTel platform ownership yet.","note":{"summary":"Standardized telemetry layer."}},
+    {"id":"tool_landscape","label":"Prometheus / Grafana / CloudWatch / Vendors","size":"support","group":"tools","definition":"Common tools used for metrics, dashboards, cloud monitoring, and APM.","whyItMatters":"Tool-fit awareness supports better design and interview communication.","safeSentence":"At Level 0, I can explain where the tools fit before claiming deep hands-on ownership.","commonTrap":"Do not confuse knowing the landscape with owning every platform.","note":{"summary":"Landscape awareness before implementation."}}
+  ],
+  "links": [
+    {"source":"cloud_observability","target":"telemetry","label":"connects to"},
+    {"source":"cloud_observability","target":"apm","label":"connects to"},
+    {"source":"cloud_observability","target":"dashboards","label":"connects to"},
+    {"source":"cloud_observability","target":"capacity_monitoring","label":"connects to"},
+    {"source":"cloud_observability","target":"opentelemetry","label":"connects to"},
+    {"source":"cloud_observability","target":"tool_landscape","label":"connects to"},
+    {"source":"telemetry","target":"metrics","label":"connects to"},
+    {"source":"telemetry","target":"logs","label":"connects to"},
+    {"source":"telemetry","target":"traces","label":"connects to"},
+    {"source":"apm","target":"dashboards","label":"connects to"},
+    {"source":"apm","target":"alerts","label":"connects to"},
+    {"source":"apm","target":"traces","label":"connects to"},
+    {"source":"dashboards","target":"alerts","label":"connects to"},
+    {"source":"dashboards","target":"business_reporting","label":"connects to"},
+    {"source":"alerts","target":"runbooks","label":"connects to"},
+    {"source":"capacity_monitoring","target":"capacity_forecasting","label":"connects to"},
+    {"source":"capacity_forecasting","target":"business_reporting","label":"connects to"},
+    {"source":"sean_skill_bridge","target":"capacity_monitoring","label":"connects to"},
+    {"source":"sean_skill_bridge","target":"capacity_forecasting","label":"connects to"},
+    {"source":"sean_skill_bridge","target":"apm","label":"connects to"},
+    {"source":"sean_skill_bridge","target":"opentelemetry","label":"connects to"},
+    {"source":"sean_skill_bridge","target":"tool_landscape","label":"connects to"}
+  ],
+  "paths": [
+    {"id":"level_0_first_walk","label":"Level 0 First Walk","description":"Plain-English path through core observability orientation and safe positioning.","nodeIds":["cloud_observability","telemetry","metrics","logs","traces","apm","dashboards","alerts","runbooks","capacity_monitoring","capacity_forecasting","business_reporting","sean_skill_bridge","opentelemetry","tool_landscape"],"rehearsalPrompt":"Explain the Level 0 observability model and Sean skill bridge in simple interview-safe language."}
+  ],
+  "mapResources": [
+    {"label":"Open Course Home","type":"course","href":"../index.html"},
+    {"label":"Open Glossary","type":"reference","href":"../course/glossary.html"},
+    {"label":"Open Safe Positioning","type":"reference","href":"../course/safe_positioning.html"},
+    {"label":"Open Overclaim Guardrails","type":"reference","href":"../course/overclaim_guardrails.html"},
+    {"label":"Open Interview Story","type":"reference","href":"../course/interview_story_level_0.html"},
+    {"label":"Open Completion Checklist","type":"reference","href":"../course/checklists/level_0_completion_checklist.html"}
+  ]
+}

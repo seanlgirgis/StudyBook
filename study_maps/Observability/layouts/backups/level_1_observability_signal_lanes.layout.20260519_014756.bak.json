@@ -1,0 +1,63 @@
+{
+  "topicId": "level_1_observability_signal_lanes",
+  "topicTitle": "Level 1: Observability Signal Lanes",
+  "version": 1,
+  "nodes": {
+    "observability_signals": {
+      "x": 453.69,
+      "y": 232.18
+    },
+    "metrics_lane": {
+      "x": 250,
+      "y": 180
+    },
+    "logs_lane": {
+      "x": 240,
+      "y": 290
+    },
+    "traces_lane": {
+      "x": 260,
+      "y": 400
+    },
+    "events_lane": {
+      "x": 294.6,
+      "y": 52.39
+    },
+    "apm_lane": {
+      "x": 818.01,
+      "y": 196.14
+    },
+    "infra_monitoring": {
+      "x": 856.54,
+      "y": 341.49
+    },
+    "dashboards_alerts_runbooks": {
+      "x": 839.65,
+      "y": 474.04
+    },
+    "capacity_headroom": {
+      "x": 557.99,
+      "y": 594.04
+    },
+    "rca_troubleshooting": {
+      "x": 256.29,
+      "y": 583.95
+    },
+    "cloud_monitoring": {
+      "x": 564.72,
+      "y": -10.73
+    },
+    "opentelemetry_lane": {
+      "x": 683.93,
+      "y": 63.65
+    },
+    "tool_landscape_l1": {
+      "x": 684.86,
+      "y": -91.95
+    },
+    "safe_career_positioning": {
+      "x": 434.86,
+      "y": 451.36
+    }
+  }
+}

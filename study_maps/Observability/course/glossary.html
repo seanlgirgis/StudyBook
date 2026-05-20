@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Level 0 Glossary</title>
+  <style>
+    body{font-family:Segoe UI,Arial,sans-serif;max-width:1100px;margin:24px auto;line-height:1.45;padding:0 16px}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid #d0d7de;padding:8px;vertical-align:top;text-align:left}
+    th{background:#f6f8fa}
+    a{color:#0b57d0}
+  </style>
+</head>
+<body>
+  <h1>Level 0 Glossary</h1>
+  <p><a href="../index.html">Back to Course Home</a></p>
+  <table>
+    <thead>
+      <tr><th>Term</th><th>Plain-English Meaning</th><th>Sean Safe Sentence</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Observability</td><td>Understanding system behavior by combining telemetry signals.</td><td>I explain observability as connecting signals to understand health and risk.</td></tr>
+      <tr><td>Telemetry</td><td>Operational data emitted by systems.</td><td>I use telemetry as the evidence for monitoring and decision support.</td></tr>
+      <tr><td>Signal</td><td>A data type used to observe systems, such as metrics, logs, or traces.</td><td>I treat signals as inputs that must be interpreted in context.</td></tr>
+      <tr><td>Metric</td><td>A numeric measurement over time.</td><td>I use metrics to spot trends, thresholds, and headroom risk.</td></tr>
+      <tr><td>Log</td><td>A timestamped text record of events or errors.</td><td>I use logs to understand what happened around an issue.</td></tr>
+      <tr><td>Trace</td><td>A path of one request across services.</td><td>I use traces conceptually to locate where delay or failure occurred.</td></tr>
+      <tr><td>Span</td><td>A single timed step inside a trace.</td><td>I understand spans as the building blocks of distributed tracing.</td></tr>
+      <tr><td>APM</td><td>Application performance monitoring for app health and user impact.</td><td>My APM background helps me reason about modern observability workflows.</td></tr>
+      <tr><td>Dashboard</td><td>A visual summary of key system signals.</td><td>I use dashboards to communicate operational state clearly.</td></tr>
+      <tr><td>Alert</td><td>A notification triggered by a risk condition.</td><td>I prefer alerts that point to action, not noise.</td></tr>
+      <tr><td>Runbook</td><td>Step-by-step response guidance for incidents.</td><td>I pair alerts with runbooks for repeatable response.</td></tr>
+      <tr><td>Threshold</td><td>A limit used to detect abnormal behavior.</td><td>I use thresholds as guardrails, not as the only signal.</td></tr>
+      <tr><td>SLO</td><td>An internal target for service reliability or performance.</td><td>I understand SLOs as measurable service goals teams aim to meet.</td></tr>
+      <tr><td>SLA</td><td>A formal service commitment to customers.</td><td>I distinguish customer-facing SLAs from internal SLO targets.</td></tr>
+      <tr><td>Capacity</td><td>Available resources to handle demand.</td><td>I treat capacity as a planning and reliability concern.</td></tr>
+      <tr><td>Headroom</td><td>Remaining capacity before risk increases.</td><td>I use headroom to discuss risk before saturation happens.</td></tr>
+      <tr><td>Forecast</td><td>An estimate of future behavior based on trends.</td><td>I use forecasts to support planning, not as perfect predictions.</td></tr>
+      <tr><td>Risk Band</td><td>A simple low/medium/high framing of operational risk.</td><td>I use risk bands to communicate priority clearly to leadership.</td></tr>
+      <tr><td>OpenTelemetry</td><td>A standard way to collect and move telemetry such as metrics, logs, and traces.</td><td>I understand OpenTelemetry as the modern vendor-neutral telemetry collection layer, and I am building practical experience with it.</td></tr>
+      <tr><td>Collector</td><td>A component that receives, processes, and exports telemetry.</td><td>I understand the collector role as telemetry routing and transformation.</td></tr>
+      <tr><td>Prometheus</td><td>A metrics and time-series monitoring system.</td><td>I understand Prometheus as a common metrics platform and I am building hands-on depth.</td></tr>
+      <tr><td>Grafana</td><td>A platform for dashboards and observability visualization.</td><td>I understand Grafana as a visualization layer and I am building practical usage.</td></tr>
+      <tr><td>AWS CloudWatch</td><td>AWS service for metrics, logs, alarms, and dashboards.</td><td>I understand CloudWatch as AWS-native monitoring and I am building applied experience.</td></tr>
+      <tr><td>Dynatrace</td><td>An observability and APM platform.</td><td>I can explain where Dynatrace fits and I am refreshing modern-platform knowledge.</td></tr>
+      <tr><td>Splunk</td><td>A platform for log analytics and observability workflows.</td><td>I can explain Splunk's role in logs and observability while building deeper practical skill.</td></tr>
+      <tr><td>Datadog</td><td>A cloud observability platform across metrics, logs, and traces.</td><td>I can explain Datadog's platform role and I am building hands-on capability progressively.</td></tr>
+      <tr><td>Kubernetes</td><td>A system for running and scaling containerized applications.</td><td>I understand Kubernetes monitoring concepts and I am building practical operations depth.</td></tr>
+      <tr><td>Pod</td><td>The smallest deployable compute unit in Kubernetes.</td><td>I understand pod health as a core monitoring signal in Kubernetes.</td></tr>
+      <tr><td>Node</td><td>A worker machine that runs pods.</td><td>I monitor node health to understand cluster capacity and stability risk.</td></tr>
+      <tr><td>Service</td><td>A stable network endpoint for a set of pods.</td><td>I treat service-level signals as key indicators of user-facing health.</td></tr>
+      <tr><td>Namespace</td><td>A logical scope boundary for Kubernetes resources.</td><td>I use namespaces to separate monitoring views by team or workload scope.</td></tr>
+    </tbody>
+  </table>
+  <p><a href="../index.html">Back to Course Home</a></p>
+<h2>Level 1 Signal Lanes Terms</h2>
+<table>
+  <thead><tr><th>Term</th><th>Plain-English Meaning</th><th>Sean Safe Sentence</th></tr></thead>
+  <tbody>
+    <tr><td>metrics</td><td>Numbers over time used to detect change and trend.</td><td>Metrics tell me what is changing and where risk may rise.</td></tr>
+    <tr><td>logs</td><td>Text event records that explain what happened.</td><td>Logs help me explain failures with evidence and timeline context.</td></tr>
+    <tr><td>traces</td><td>Request-path visibility across service hops.</td><td>Traces show where latency or failure appeared in a request flow.</td></tr>
+    <tr><td>events</td><td>Important system-change markers such as deploys and incidents.</td><td>Events help explain why telemetry shifted at specific times.</td></tr>
+    <tr><td>APM</td><td>Application monitoring focused on transactions and user impact.</td><td>My APM background helps me connect application behavior to operations.</td></tr>
+    <tr><td>infrastructure monitoring</td><td>Monitoring hosts, containers, CPU, memory, disk, and network.</td><td>I use infrastructure monitoring to understand baseline system health.</td></tr>
+    <tr><td>cloud monitoring</td><td>Monitoring managed cloud services and cloud-native dependencies.</td><td>I track cloud service behavior to identify platform-level risk.</td></tr>
+    <tr><td>OpenTelemetry</td><td>Vendor-neutral telemetry collection and routing pattern.</td><td>I use OpenTelemetry concepts as the modern collection layer and I am building practical depth.</td></tr>
+    <tr><td>dashboard</td><td>Visual summary of important telemetry signals.</td><td>Dashboards help teams and leaders quickly read operating conditions.</td></tr>
+    <tr><td>alert</td><td>Notification that signals a condition needing attention.</td><td>I favor alerts that are actionable and tied to risk.</td></tr>
+    <tr><td>runbook</td><td>Step-by-step response guidance for incidents.</td><td>Runbooks improve consistency when alerts fire.</td></tr>
+    <tr><td>capacity headroom</td><td>Remaining resource margin before service risk increases.</td><td>Headroom turns monitoring data into planning decisions.</td></tr>
+    <tr><td>RCA</td><td>Root cause analysis connecting symptoms to likely causes.</td><td>RCA should combine multiple signals instead of one data source.</td></tr>
+  </tbody>
+</table>
+</body>
+</html>
+
