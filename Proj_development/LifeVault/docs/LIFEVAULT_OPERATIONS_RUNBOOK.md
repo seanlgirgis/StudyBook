@@ -191,4 +191,5 @@ Recommended backup timing:
 - Smoke/temp scripts should support configurable temp roots and avoid C: for larger ASUS PC workloads when `D:\\temp` is available.
 - Real DB initialization is a separate operation from UC_004 indexing; initialize DB schema first, then index real pods later under explicit approval workflow.
 - For real DB UC_004 runs, use `--real-db-confirm`; run dry-run first, then approved indexing only after review.
+- UC_005 is read-only metadata search: use DB read-only query mode, no file hydration, no content extraction, and no DB writes.
 - LV_ingest_folder v0 is the first operator workflow: UC_001 proposal -> explicit approval gate -> UC_003 pod copy.

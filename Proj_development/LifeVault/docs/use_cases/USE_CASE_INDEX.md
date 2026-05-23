@@ -8,7 +8,7 @@
 | UC_003 | Create Onboarding Pod | implemented (temp-only) | high | UC_001 approved proposal, UC_002 sensitivity pass, folder setup script, `docs/use_cases/UC_003_CREATE_ONBOARDING_POD_WORKFLOW_SPEC.md`, `docs/contracts/UC_003_POD_PROFILE_AND_MANIFEST_CONTRACT.md` | Validate temp-only behavior and prepare guarded real-mode rollout checklist |
 | UC_004 | Index Pod to Database | implemented (temp-only) | high | migration runner, schema v0, UC_003, `docs/use_cases/UC_004_INDEX_POD_TO_DATABASE_WORKFLOW_SPEC.md` | Validate temp indexing + dry-run and keep real DB guard in place |
 | UC_011 | Detect Sensitive Content (Gated Future) | planned / future gated content scan | high | UC_004 indexed references, explicit approval, storage policy | Define gated extraction workflow and redaction pipeline |
-| UC_005 | Search Memory Without Hydration | planned | medium | UC_004 indexed metadata | Define query UX over DB metadata only |
+| UC_005 | Search Memory Without Hydration | implemented | medium | UC_004 indexed metadata, `docs/use_cases/UC_005_SEARCH_MEMORY_WITHOUT_HYDRATION_WORKFLOW_SPEC.md` | Use read-only metadata queries for pod/file/review discovery |
 | UC_006 | Publish Approved Files to Vault | planned | high | UC_004 review/publish states, UC_007 verification design | Design explicit publish workflow with checkpoints |
 | UC_007 | Verify Vault Copy | planned | high | UC_006 publish output | Define hash/path verification and audit logging |
 | UC_008 | Cleanup Source After Verification | planned | high | UC_007 verified copy, explicit approval | Define guarded cleanup policy and reversible steps |
