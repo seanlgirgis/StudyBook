@@ -66,6 +66,8 @@ Recommended backup timing:
 - Before vault publish.
 - After meaningful ingestion sessions.
 - End-of-day when LifeVault usage is heavy.
+- Use `scripts/backup_lifevault_db.ps1` for real operational backups.
+- Use `scripts/smoke_backup_lifevault_db_temp.ps1` to validate backup workflow in temp paths.
 
 ## 4. Restore Drill
 
@@ -184,4 +186,9 @@ Recommended backup timing:
 - UC_003 design reference: `docs/use_cases/UC_003_CREATE_ONBOARDING_POD_WORKFLOW_SPEC.md`.
 - Move-to-store behavior is decomposed operationally: copy -> verify -> audit/status -> explicit approval -> cleanup (UC_008).
 - UC_003 remains strictly copy-only and does not perform source cleanup/free-space operations.
+- UC_004 DB indexing must run temp-first, support dry-run no-write mode, and require explicit approval for real DB writes.
+- Current UC_004 implementation is temp-only and rejects the real DB path in this phase.
+- Smoke/temp scripts should support configurable temp roots and avoid C: for larger ASUS PC workloads when `D:\\temp` is available.
+- Real DB initialization is a separate operation from UC_004 indexing; initialize DB schema first, then index real pods later under explicit approval workflow.
+- For real DB UC_004 runs, use `--real-db-confirm`; run dry-run first, then approved indexing only after review.
 - LV_ingest_folder v0 is the first operator workflow: UC_001 proposal -> explicit approval gate -> UC_003 pod copy.

@@ -8,6 +8,7 @@ Schema design reference:
 
 - `docs/LIFEVAULT_SCHEMA_V0_PLAN.md`
 - `docs/LIFEVAULT_MIGRATION_V0_SPEC.md`
+- `docs/use_cases/UC_004_INDEX_POD_TO_DATABASE_WORKFLOW_SPEC.md`
 
 ## 1. Primary Database Name and Location
 
@@ -65,6 +66,9 @@ Policy requirements:
 - Verify backup readability before marking success.
 - Log success/failure of backup jobs.
 - If WAL mode is introduced later, handle WAL/checkpoint behavior safely.
+- Operational scripts:
+  - `scripts/backup_lifevault_db.ps1` for real DB backup
+  - `scripts/smoke_backup_lifevault_db_temp.ps1` for temp smoke validation
 
 ## 6. Sync Model
 
@@ -146,3 +150,15 @@ Codex responsibilities:
 - No operational DB created or modified.
 - No real files processed.
 - No OneDrive upload.
+
+UC_004 indexing rule:
+
+- Real DB indexing requires explicit operator approval and backup acknowledgement.
+- Dry-run mode should validate/read/report only and perform zero DB writes.
+- Real DB indexing commands require explicit `--real-db-confirm`.
+- Run dry-run before approved indexing on real DB.
+
+Initialization note:
+
+- Real DB initialization is a separate step from UC_004 indexing.
+- Initialize real DB first, then perform real pod indexing only after approval.
