@@ -176,3 +176,12 @@ Recommended backup timing:
 - No ingestion implemented yet in this new LifeVault repo.
 - No vault publish implementation yet.
 - No real file processing yet.
+
+## 9. Validation Checkpoint Note
+
+- After a real UC_001 proposal run is accepted, the next safe stage is UC_003 pod creation design/review.
+- Do not jump directly to UC_011 content inspection without explicit approval and content-scan policy controls.
+- UC_003 design reference: `docs/use_cases/UC_003_CREATE_ONBOARDING_POD_WORKFLOW_SPEC.md`.
+- Move-to-store behavior is decomposed operationally: copy -> verify -> audit/status -> explicit approval -> cleanup (UC_008).
+- UC_003 remains strictly copy-only and does not perform source cleanup/free-space operations.
+- LV_ingest_folder v0 is the first operator workflow: UC_001 proposal -> explicit approval gate -> UC_003 pod copy.

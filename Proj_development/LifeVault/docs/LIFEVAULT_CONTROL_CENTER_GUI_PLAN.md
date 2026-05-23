@@ -7,6 +7,7 @@ Define an operator-facing GUI (`LV_control_center`) for safe ingestion, review, 
 ## Initial Panels
 
 - Intake setup
+- LV_ingest_folder v0 operator workflow (UC_001 summary, explicit UC_003 approval, pod summary)
 - Pod review queue
 - Duplicate review
 - Metadata/story editor
@@ -18,3 +19,5 @@ Define an operator-facing GUI (`LV_control_center`) for safe ingestion, review, 
 - Explicit approval actions for publish/move/rename/delete-equivalent operations.
 - Strong warning banners for sensitive operations.
 - Read-only default posture for remote browsing.
+- Separate UI stages for metadata/filename sensitivity vs content sensitivity.
+- Content inspection controls must require explicit approval and enforce redaction/logging safeguards.

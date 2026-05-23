@@ -20,3 +20,5 @@
 
 - Architecture delivery is anchored to use cases in `docs/use_cases/USE_CASE_INDEX.md`.
 - Business, technical, safety, and data constraints are tracked in `docs/requirements/`.
+- Sensitivity handling is staged: metadata/filename rules first, content-based detection only in explicit approved workflows.
+- Content extraction must follow storage, privacy, and backup policy controls.

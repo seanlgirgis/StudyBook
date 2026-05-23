@@ -17,3 +17,5 @@
 ## Schema Reference
 
 - Detailed table-by-table v0 design is defined in `docs/LIFEVAULT_SCHEMA_V0_PLAN.md`.
+- Metadata-based sensitivity and content-based sensitivity are separate lifecycle stages.
+- Full extracted text is not part of UC_001/UC_002; content sensitivity workflows require explicit approval and controlled storage policy.

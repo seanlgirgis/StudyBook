@@ -8,3 +8,6 @@
 - No rclone sync operations.
 - No upload/publish to clean vault without explicit publish workflow.
 - Use read-only checks for remote validation unless workflow allows more.
+- UC_003 copy behavior must remain copy-only with explicit approval and no source mutation; see `docs/use_cases/UC_003_CREATE_ONBOARDING_POD_WORKFLOW_SPEC.md`.
+- "Move" is a future user-facing workflow, but internally it must be copy + verify + approved cleanup.
+- No source free-space operation is allowed during UC_003.

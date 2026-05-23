@@ -18,6 +18,8 @@
 - Use approved backup scripts (once implemented) rather than ad hoc DB copy approaches.
 - Report any DB paths touched by implementation or validation work.
 - Do not invent or imply unsupported multi-machine concurrent write workflows.
+- Treat filename/metadata sensitivity and content sensitivity as separate stages.
+- Do not implement content extraction/classification flows without explicit approval and storage/privacy/backup policy controls.
 
 ## Data Boundary
 

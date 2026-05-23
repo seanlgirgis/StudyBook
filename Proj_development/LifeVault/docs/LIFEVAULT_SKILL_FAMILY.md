@@ -22,4 +22,6 @@
 ## Use-Case Alignment
 
 - Skill implementation priorities should follow `docs/use_cases/USE_CASE_INDEX.md`.
-- First implementation candidate is UC_001 (`LV_ingest_folder` proposal-only flow).
+- First operator workflow is `LV_ingest_folder v0` (`UC_001` + approval gate + `UC_003`).
+- Filename/metadata sensitivity (UC_002) and content sensitivity (UC_011) are separate stages.
+- Content extraction/classification requires explicit approval and must follow storage, privacy, and backup policy.

@@ -14,3 +14,4 @@
 - No token/secret material in Git.
 - Config templates may be tracked; local secrets must stay local.
 - Do not commit real DB files, real backups, real exports, reports, logs, pod manifests, or text cache artifacts.
+- UC_003 pod creation boundaries and output layout are specified in `docs/use_cases/UC_003_CREATE_ONBOARDING_POD_WORKFLOW_SPEC.md`.

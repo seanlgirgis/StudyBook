@@ -22,6 +22,16 @@
 
 ## Safety Rules
 
+## Content Inspection Level
+
+## Extracted Text Policy
+
+## Sensitive Data Exposure Risk
+
+## AI Content Access Allowed?
+
+## Redaction Requirements
+
 ## Data Created/Updated
 
 ## Database Impact
