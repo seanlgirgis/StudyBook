@@ -1,0 +1,63 @@
+{
+  "topicId": "course_11_spark_runtime_architecture_quest",
+  "topicTitle": "Spark Runtime Architecture Quest",
+  "version": 1,
+  "nodes": {
+    "pyspark_code": {
+      "x": 100,
+      "y": 308.06
+    },
+    "submission_layer": {
+      "x": 238.36,
+      "y": 384.35
+    },
+    "spark_submit": {
+      "x": 271.73,
+      "y": 218.25
+    },
+    "orchestrator": {
+      "x": 336.36,
+      "y": 572.11
+    },
+    "driver": {
+      "x": 816.53,
+      "y": 665.07
+    },
+    "executors": {
+      "x": 422.39,
+      "y": 352.6
+    },
+    "cluster_manager": {
+      "x": 603.44,
+      "y": 317.85
+    },
+    "yarn_hadoop": {
+      "x": 587.75,
+      "y": 15.75
+    },
+    "kubernetes": {
+      "x": 819.5,
+      "y": 324.31
+    },
+    "databricks": {
+      "x": 881.97,
+      "y": 80.26
+    },
+    "emr": {
+      "x": 447.58,
+      "y": 149.44
+    },
+    "glue": {
+      "x": 817.4,
+      "y": 488.08
+    },
+    "storage_layer": {
+      "x": 324.94,
+      "y": 43.71
+    },
+    "catalog_metadata": {
+      "x": 1086.59,
+      "y": 311.77
+    }
+  }
+}

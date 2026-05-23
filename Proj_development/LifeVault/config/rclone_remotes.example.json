@@ -1,0 +1,7 @@
+{
+  "dirty_remote": "onedrive_dirty",
+  "clean_remote": "onedrive_clean",
+  "excluded_remote_paths": [
+    "Personal Vault/**"
+  ]
+}

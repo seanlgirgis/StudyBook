@@ -1,0 +1,17 @@
+{
+  "batches": {
+    "batch_002_boa_ltimindtree_onboarding": {
+      "source_name": "downloads",
+      "include_globs": [
+        "*.pdf",
+        "*.md"
+      ],
+      "exclude_globs": [
+        "Oldies/**"
+      ],
+      "project": "BOA_LTIMindtree",
+      "category": "career_onboarding",
+      "suggested_clean_remote_path": "FileStore/10_Career/BOA_LTIMindtree/2026_Onboarding"
+    }
+  }
+}

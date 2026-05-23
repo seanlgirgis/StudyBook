@@ -114,3 +114,19 @@ Sections:
 3. DataFrames
 4. Reading data
 5. Schemas
+
+
+# Cockpit Note
+The Course 11 home page is now the review cockpit. When a review section is named, it exists directly on index.html with a stable anchor.
+
+index.html#mental-model
+index.html#spark-entry
+index.html#reading-and-schemas
+index.html#dataframe-operations
+index.html#joins-unions-udfs
+index.html#rdds-spark-sql
+index.html#aggregations-scale
+index.html#production-support
+index.html#safe-claims
+index.html#deep-reference
+

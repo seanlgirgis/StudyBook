@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560" role="img" aria-labelledby="title desc">
+  <title id="title">UNION ALL</title>
+  <desc id="desc">Union all includes left and right and keeps duplicates.</desc>
+  <rect width="900" height="560" fill="#f8fafc"/>
+  <text x="450" y="58" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700" fill="#0f172a">UNION ALL</text>
+  <text x="450" y="94" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#334155">Both sides included, duplicates kept</text>
+  <circle cx="360" cy="290" r="150" fill="#22c55e" fill-opacity="0.65" stroke="#166534" stroke-width="4"/>
+  <circle cx="540" cy="290" r="150" fill="#22c55e" fill-opacity="0.65" stroke="#166534" stroke-width="4"/>
+  <text x="450" y="290" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#052e16">Overlap kept from both inputs</text>
+  <text x="450" y="330" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#14532d">(duplicates remain)</text>
+  <text x="275" y="485" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#1e3a8a">Left result</text>
+  <text x="625" y="485" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#9a3412">Right result</text>
+</svg>

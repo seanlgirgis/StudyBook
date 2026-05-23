@@ -1,0 +1,20 @@
+# Local/private config
+config/*.local.json
+
+# Operational outputs and data
+/db/
+/reports/
+/logs/
+/onboarding/pods/
+/onboarding/proposals/
+/text_cache/
+/exports/
+
+# Secrets and credentials
+rclone.conf
+*token*
+*secret*
+*credential*
+
+# Personal file outputs
+*.personal.*

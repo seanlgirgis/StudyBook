@@ -1,0 +1,11 @@
+{
+  "lab_root": "D:\\AI_Lab\\LifeVault",
+  "onboarding_dir": "onboarding",
+  "pods_dir": "onboarding\\pods",
+  "proposals_dir": "onboarding\\proposals",
+  "db_dir": "db",
+  "reports_dir": "reports",
+  "logs_dir": "logs",
+  "exports_dir": "exports",
+  "text_cache_dir": "text_cache"
+}

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Join Comparison Overview</title>
+  <desc id="desc">Four mini Venn diagrams for inner, left, right, and full joins.</desc>
+  <rect width="1200" height="760" fill="#f8fafc"/>
+  <text x="600" y="60" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="42" font-weight="700" fill="#0f172a">Join Comparison Overview</text>
+
+  <g transform="translate(120,130)">
+    <text x="180" y="0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">INNER</text>
+    <circle cx="140" cy="130" r="90" fill="#93c5fd" fill-opacity="0.35" stroke="#1e3a8a" stroke-width="3"/>
+    <circle cx="220" cy="130" r="90" fill="#fdba74" fill-opacity="0.35" stroke="#9a3412" stroke-width="3"/>
+    <clipPath id="cmpInnerL"><circle cx="140" cy="130" r="90"/></clipPath>
+    <clipPath id="cmpInnerR"><circle cx="220" cy="130" r="90"/></clipPath>
+    <circle cx="140" cy="130" r="90" fill="#22c55e" fill-opacity="0.85" clip-path="url(#cmpInnerR)"/>
+    <text x="88" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#1e3a8a">Left table</text>
+    <text x="240" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#9a3412">Right table</text>
+  </g>
+
+  <g transform="translate(640,130)">
+    <text x="180" y="0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">LEFT</text>
+    <circle cx="140" cy="130" r="90" fill="#22c55e" fill-opacity="0.8" stroke="#166534" stroke-width="3"/>
+    <circle cx="220" cy="130" r="90" fill="#fdba74" fill-opacity="0.35" stroke="#9a3412" stroke-width="3"/>
+    <text x="88" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#1e3a8a">Left table</text>
+    <text x="240" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#9a3412">Right table</text>
+  </g>
+
+  <g transform="translate(120,430)">
+    <text x="180" y="0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">RIGHT</text>
+    <circle cx="140" cy="130" r="90" fill="#93c5fd" fill-opacity="0.35" stroke="#1e3a8a" stroke-width="3"/>
+    <circle cx="220" cy="130" r="90" fill="#22c55e" fill-opacity="0.8" stroke="#166534" stroke-width="3"/>
+    <text x="88" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#1e3a8a">Left table</text>
+    <text x="240" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#9a3412">Right table</text>
+  </g>
+
+  <g transform="translate(640,430)">
+    <text x="180" y="0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">FULL</text>
+    <circle cx="140" cy="130" r="90" fill="#22c55e" fill-opacity="0.65" stroke="#166534" stroke-width="3"/>
+    <circle cx="220" cy="130" r="90" fill="#22c55e" fill-opacity="0.65" stroke="#166534" stroke-width="3"/>
+    <text x="88" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#1e3a8a">Left table</text>
+    <text x="240" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#9a3412">Right table</text>
+  </g>
+</svg>

@@ -571,3 +571,26 @@ Course 11 gives Sean a practical PySpark foundation: enough to read, inspect, tr
 3. Create a Course 11 final review page.
 4. Later, when environment is ready, create small runnable PySpark drills under tutorials only.
 5. Use Motherload + QA + code snippets as the future interview/practice base.
+
+# Spark Runtime Architecture Quest
+
+Purpose:
+This section points to the deeper architecture quest that explains how PySpark
+jobs run in production platforms.
+
+Link:
+SPARK_RUNTIME_ARCHITECTURE_QUEST.html
+
+Key idea:
+PySpark code defines the data work; the submission layer starts the job; Spark
+runs it with a driver and executors; the cluster/resource manager allocates
+resources; storage holds the data; catalog describes the tables; orchestration
+coordinates the pipeline.
+
+# Spark Review Lanes
+
+This Course 11 package now has two related QA/study files:
+- QA_01_1000ft_pyspark_opening.md for the Course 11 foundation.
+- Spark.Study.md for expanded production Spark, Delta, architecture, and streaming.
+
+Use SPARK_REVIEW_LANES.md to choose the correct study lane.

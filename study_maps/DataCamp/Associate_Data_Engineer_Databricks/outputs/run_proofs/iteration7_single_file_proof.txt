@@ -1,14 +1,14 @@
-timestamp: 2026-05-20T15:29:21.688614+00:00
-source topic path: D:\Workarea\StudyBook\study_maps\DataCamp\Associate_Data_Engineer_Databricks\topics\course_11_intro_pyspark_architecture_runtime.studybubble.json
-output HTML path: D:\Workarea\StudyBook\study_maps\DataCamp\Associate_Data_Engineer_Databricks\outputs\course_11_intro_pyspark_architecture_runtime.html
+timestamp: 2026-05-21T04:07:24.340276+00:00
+source topic path: D:\Workarea\StudyBook\study_maps\DataCamp\Associate_Data_Engineer_Databricks\topics\course_11_spark_runtime_architecture_quest.studybubble.json
+output HTML path: D:\Workarea\StudyBook\study_maps\DataCamp\Associate_Data_Engineer_Databricks\outputs\course_11_spark_runtime_architecture_quest.html
 mode: single-file
-topic id: course_11_intro_pyspark_architecture_runtime
-topic title: Course 11 Introduction to PySpark - Architecture Runtime Map
-node count: 12
-link count: 13
+topic id: course_11_spark_runtime_architecture_quest
+topic title: Spark Runtime Architecture Quest
+node count: 14
+link count: 19
 path count: 1
 validation result: PASS
-generated HTML byte size: 74086
+generated HTML byte size: 75858
 manual smoke test steps:
 1. Open outputs/single_file/tiny_capacity_demo.html directly from File Explorer.
 2. Confirm title and subtitle render.

@@ -1,0 +1,15 @@
+{
+  "lab_root": "D:\\AI_Lab\\OneDriveClean",
+  "lab_runs_dir": "lab_runs",
+  "inventory_dir": "inventory",
+  "hydrated_dir": "hydrated",
+  "staging_dir": "staging",
+  "db_dir": "db",
+  "reports_dir": "reports",
+  "logs_dir": "logs",
+  "large_file_threshold_bytes": 104857600,
+  "onboarding_dir": "onboarding",
+  "pods_dir": "onboarding\\pods",
+  "llm_mode": "off",
+  "llm_command": ""
+}

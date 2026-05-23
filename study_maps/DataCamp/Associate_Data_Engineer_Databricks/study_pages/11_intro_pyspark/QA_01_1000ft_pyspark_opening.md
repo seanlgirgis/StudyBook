@@ -7,7 +7,12 @@ rehearsal.
 
 Only final accepted answers should be kept here. Draft thinking stays in chat.
 
----
+Relationship note:
+This file is the Course 11 canonical foundation QA. It keeps the DataCamp Introduction to PySpark / Wipro sprint review path stable. For expanded Spark, Delta Lake, runtime architecture, and streaming study, use Spark.Study.md.
+
+
+
+Source-of-truth note:`r`nFor Course 11 foundation questions, this file is canonical.`r`nFor expanded production Spark, Delta Lake, performance, catalog/governance, and`r`nstreaming questions, Spark.Study.md is canonical.`r`n`r`n---
 
 # Spark and PySpark Big Picture
 
@@ -487,7 +492,8 @@ Punch line:
 
 ## Q28. What do sort(), orderBy(), and na.drop() do?
 
-`sort()` and `orderBy()` order rows by one or more columns. `na.drop()` removes
+`sort()` and `orderBy()` order rows by one or more columns. 
+a.drop()` removes
 rows with null values.
 
 ```python
@@ -497,7 +503,8 @@ df.na.drop()
 ```
 
 Punch line:
-`sort()` and `orderBy()` order data; `na.drop()` removes incomplete rows.
+`sort()` and `orderBy()` order data; 
+a.drop()` removes incomplete rows.
 
 ---
 
@@ -905,3 +912,109 @@ I should avoid overclaiming deep Spark platform administration, advanced tuning,
 
 ## Q69. What should I practice next?
 Finish remaining exercises, audit architecture/content, refine final review, and later run small tutorials-based runnable PySpark drills when environment is ready.
+
+
+## Q70. How is a PySpark job submitted to a Spark cluster, and who decides which machines run the work?
+
+My PySpark code defines what data-processing work should happen. The cluster
+target and resources are usually defined outside the code by the submission
+layer or platform.
+
+For example, with Hadoop/YARN, a job can be submitted with spark-submit using
+options such as --master yarn, deploy mode, executor count, executor memory, and
+executor cores. YARN manages the available machines and allocates resources for
+the Spark driver and executors.
+
+In Databricks, EMR, Glue, Kubernetes, or other managed Spark environments, the
+platform or job configuration usually defines the cluster/runtime target. The
+PySpark code still focuses on the ETL logic, while the runtime decides where
+and how the distributed work runs.
+
+Punch line:
+PySpark code says what to do. The submission layer or platform says where to
+run it and with what resources.
+
+## Q71. If Python uses fast C libraries, why do we still need Spark or PySpark?
+
+PySpark is not mainly valuable because Python is faster than Java or C.
+Its value is that Python code can express work for Spark’s distributed engine.
+Spark can split data into partitions and run tasks across executors on a
+cluster. So the real advantage is scale, parallelism, fault tolerance, and
+optimized distributed execution.
+
+Punch line:
+C may make one-machine operations fast.
+Spark makes many-machine data processing possible.
+
+## Q72.  How does PySpark connect the Python/SQL analytics world with distributed Spark data engineering?
+Python, Pandas, and SQL are very useful for analytics, data exploration, and
+working with small to medium datasets. But they are often local-first tools or
+database-specific tools.
+
+Spark is different because it is designed for distributed data processing
+across a cluster. It can split data into partitions, run work in parallel
+across executors, and process datasets that may be too large or too slow for a
+single machine.
+
+PySpark connects these worlds. It lets me write Python-style data engineering
+logic while Spark’s distributed engine handles planning and execution
+underneath.
+
+Punch line:
+Python made data work easy. Spark made big data work distributed. PySpark
+connects the two worlds.
+
+
+# Production Spark Runtime Architecture
+
+## Q73. What are the main architecture layers around a PySpark job in production?
+
+A PySpark job is not just Python code. In production, it usually sits inside a
+larger runtime architecture.
+
+The first layer is the PySpark application code. This defines the data work:
+reading data, transforming DataFrames, joining, aggregating, validating, and
+writing outputs.
+
+The second layer is the submission or job layer. This starts the Spark
+application and passes runtime configuration. Examples include spark-submit,
+Airflow tasks, Databricks Jobs, EMR Steps, AWS Glue Jobs, or Kubernetes job
+specs.
+
+The third layer is the Spark runtime. The driver coordinates the application,
+builds the execution plan, and sends tasks to executors. Executors process
+partitions of data in parallel and report status or failures back to the
+driver.
+
+The fourth layer is the cluster or resource manager. It allocates machines,
+CPU, and memory for the driver and executors. Examples include YARN,
+Kubernetes, Spark Standalone, Databricks clusters, EMR, or the AWS Glue managed
+runtime.
+
+The fifth layer is storage. Spark reads and writes data from systems such as
+HDFS, S3, ADLS, GCS, Parquet files, Delta tables, databases, or streaming
+sources.
+
+The sixth layer is the catalog or metadata layer. This tracks table names,
+schemas, locations, and permissions. Examples include Hive Metastore, AWS Glue
+Data Catalog, and Databricks Unity Catalog.
+
+The seventh layer is orchestration. Tools such as Airflow, Databricks
+Workflows, Control-M, Autosys, or Step Functions coordinate schedules,
+dependencies, retries, parameters, and alerts.
+
+Safe way to say it:
+My PySpark code defines the data work. The submission layer starts the job.
+The Spark driver and executors perform the distributed execution. The cluster
+manager or platform allocates resources. Storage holds the data. The catalog
+describes the tables. The orchestrator coordinates the pipeline.
+
+Punch line:
+A PySpark job is not just Python code. It sits in an architecture with a
+submission layer, Spark driver/executors, a cluster manager, storage, metadata
+catalog, and often an orchestrator. PySpark defines the data work; the platform
+and cluster manager decide where and with what resources it runs.
+
+
+
+

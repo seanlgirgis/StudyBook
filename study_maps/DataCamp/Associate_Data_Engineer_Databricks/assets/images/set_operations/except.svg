@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560" role="img" aria-labelledby="title desc">
+  <title id="title">EXCEPT</title>
+  <desc id="desc">Except includes left-only rows.</desc>
+  <rect width="900" height="560" fill="#f8fafc"/>
+  <text x="450" y="58" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700" fill="#0f172a">EXCEPT</text>
+  <text x="450" y="94" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#334155">Left-side rows that are not in the right side</text>
+  <circle cx="360" cy="290" r="150" fill="#22c55e" fill-opacity="0.75" stroke="#166534" stroke-width="4"/>
+  <circle cx="540" cy="290" r="150" fill="#fdba74" fill-opacity="0.30" stroke="#9a3412" stroke-width="4"/>
+  <circle cx="360" cy="290" r="150" fill="#f8fafc" fill-opacity="1" clip-path="url(#excR)"/>
+  <defs><clipPath id="excR"><circle cx="540" cy="290" r="150"/></clipPath></defs>
+  <text x="305" y="292" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#052e16">Included</text>
+  <text x="275" y="485" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#1e3a8a">Left result</text>
+  <text x="625" y="485" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#9a3412">Right result</text>
+</svg>

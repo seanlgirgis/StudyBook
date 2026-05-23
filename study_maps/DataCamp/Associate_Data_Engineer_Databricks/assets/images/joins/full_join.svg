@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560" role="img" aria-labelledby="title desc">
+  <title id="title">FULL JOIN Diagram</title>
+  <desc id="desc">Two overlapping circles. Both circles are highlighted.</desc>
+  <rect width="900" height="560" fill="#f8fafc"/>
+  <text x="450" y="60" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="38" font-weight="700" fill="#0f172a">FULL JOIN</text>
+  <text x="450" y="98" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#334155">Keep all rows from both tables</text>
+
+  <circle cx="360" cy="300" r="155" fill="#22c55e" fill-opacity="0.65" stroke="#166534" stroke-width="4"/>
+  <circle cx="540" cy="300" r="155" fill="#22c55e" fill-opacity="0.65" stroke="#166534" stroke-width="4"/>
+
+  <text x="290" y="490" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="600" fill="#1e3a8a">Left table</text>
+  <text x="610" y="490" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="600" fill="#9a3412">Right table</text>
+  <text x="450" y="300" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#052e16">Included</text>
+</svg>

@@ -60,6 +60,14 @@
     {
       "label": "Open PySpark Motherload Field Guide",
       "href": "../study_pages/11_intro_pyspark/MOTHERLOAD_PYSPARK_FIELD_GUIDE.html"
+    },
+    {
+      "label": "Open Spark Runtime Architecture Quest",
+      "href": "../study_pages/11_intro_pyspark/SPARK_RUNTIME_ARCHITECTURE_QUEST.html"
+    },
+    {
+      "label": "Open Spark Runtime Architecture Map",
+      "href": "course_11_spark_runtime_architecture_quest.html"
     }
   ],
   "nodes": [

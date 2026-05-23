@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Course 3 - When to Use Each SQL Join</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 24px; color: #111827; }
+    h1, h2 { color: #0f172a; }
+    table { border-collapse: collapse; width: 100%; max-width: 960px; }
+    th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #e2e8f0; }
+    pre { background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h1>Course 3 - When to Use Each SQL Join</h1>
+  <p><a href="index.html">Back to Course 3 landing page</a> | <a href="14_join_types_visual_guide.html">Open Join Types Visual Guide</a> | <a href="16_set_operations_visual_examples.html">Open Set Operations Visual Examples</a></p>
+
+  <h2>1. Purpose</h2>
+  <p>This page translates SQL joins into business decisions. The question is not only "what does the join do?" but "which business problem does it solve?"</p>
+
+  <h2>2. INNER JOIN - only matching records</h2>
+  <p><strong>Meaning:</strong><br />Use when you only want rows that exist in both tables.</p>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>Sales order + payment table: show only orders that have confirmed payments.</li>
+    <li>Employee + badge access: show only employees who actually entered the building.</li>
+    <li>Product + active price: show only products that currently have a valid price.</li>
+    <li>Customer + signed contract: show only customers with completed contracts.</li>
+    <li>Server + monitoring agent: show only servers that are registered and sending telemetry.</li>
+  </ul>
+  <p><strong>SQL pattern:</strong></p>
+  <pre><code>SELECT ...
+FROM table_a AS a
+INNER JOIN table_b AS b
+ON a.key = b.key;</code></pre>
+
+  <h2>3. LEFT JOIN - keep the main list</h2>
+  <p><strong>Meaning:</strong><br />Use when the left table is your main list and you do not want to lose any rows.</p>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>All customers + weekly orders: keep every customer, show NULL where they placed no order.</li>
+    <li>All servers + latest monitoring data: keep every server, show NULL where telemetry is missing.</li>
+    <li>All job applicants + interview schedule: keep every applicant, show who has not been scheduled yet.</li>
+    <li>All bank accounts + fraud alerts: keep all accounts, show alerts only where they exist.</li>
+    <li>All products + inventory: keep all products, find products with missing stock records.</li>
+  </ul>
+  <p><strong>SQL pattern:</strong></p>
+  <pre><code>SELECT ...
+FROM main_table AS m
+LEFT JOIN detail_table AS d
+ON m.key = d.key;</code></pre>
+
+  <h2>4. RIGHT JOIN - keep the right-side list</h2>
+  <p><strong>Meaning:</strong><br />Use when the right table is the main list. Less common because most teams rewrite it as a LEFT JOIN by swapping table order.</p>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>Languages RIGHT JOIN countries: keep all countries even if language data is missing.</li>
+    <li>Orders RIGHT JOIN customers: keep all customers even if there are no orders.</li>
+    <li>Monitoring records RIGHT JOIN CMDB: keep all CMDB assets even if monitoring is missing.</li>
+  </ul>
+  <p><strong>Teaching note:</strong><br />Prefer rewriting as LEFT JOIN when possible.</p>
+
+  <h2>5. FULL JOIN - reconciliation and gap finding</h2>
+  <p><strong>Meaning:</strong><br />Use when you want to compare two systems and see matched and unmatched records from both sides.</p>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>Payroll system vs HR system: find employees missing from either side.</li>
+    <li>CMDB assets vs monitoring inventory: show assets in CMDB only, monitoring only, and both.</li>
+    <li>Bank transactions vs ledger entries: detect unmatched transactions and unmatched accounting records.</li>
+    <li>Customer CRM vs billing platform: find customers that exist in one system but not the other.</li>
+    <li>Data migration source vs target: verify what copied, what failed, and what is extra.</li>
+  </ul>
+  <p><strong>SQL pattern:</strong></p>
+  <pre><code>SELECT ...
+FROM system_a AS a
+FULL JOIN system_b AS b
+ON a.key = b.key;</code></pre>
+
+  <h2>6. CROSS JOIN - every possible combination</h2>
+  <p><strong>Meaning:</strong><br />Use when you intentionally want every possible pairing between two tables. CROSS JOIN does not use ON or USING.</p>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>Products × regions: create a product-region planning grid.</li>
+    <li>Employees × training modules: create required training assignments.</li>
+    <li>Drivers × delivery zones: evaluate possible coverage combinations.</li>
+    <li>Prime ministers × presidents: generate all possible meeting pairs.</li>
+    <li>Price scenarios × demand scenarios: test every business planning combination.</li>
+  </ul>
+  <p><strong>Warning:</strong><br />Rows multiply fast. 100 rows × 100 rows = 10,000 rows.</p>
+
+  <h2>7. SELF JOIN - compare a table to itself</h2>
+  <p><strong>Meaning:</strong><br />Use when comparing rows inside the same table. SELF JOIN is not a special SQL keyword. It is a pattern using aliases.</p>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>Employees table: match employees to their managers.</li>
+    <li>Populations table: compare 2010 population to 2015 population for the same country.</li>
+    <li>Products table: find products in the same category.</li>
+    <li>Transactions table: find suspicious transactions from the same account close in time.</li>
+    <li>Server events table: compare current incident to previous incident on the same server.</li>
+  </ul>
+  <p><strong>SQL pattern:</strong></p>
+  <pre><code>SELECT ...
+FROM same_table AS a
+INNER JOIN same_table AS b
+ON a.key = b.key;</code></pre>
+
+  <h2>8. Quick decision guide</h2>
+  <table>
+    <tr><th>Question</th><th>Join to consider</th></tr>
+    <tr><td>Only matching rows?</td><td>INNER JOIN</td></tr>
+    <tr><td>Keep every row from my main list?</td><td>LEFT JOIN</td></tr>
+    <tr><td>Keep every row from the right-side list?</td><td>RIGHT JOIN, or rewrite as LEFT JOIN</td></tr>
+    <tr><td>Compare two systems and find gaps on both sides?</td><td>FULL JOIN</td></tr>
+    <tr><td>Generate every possible pairing?</td><td>CROSS JOIN</td></tr>
+    <tr><td>Compare rows inside the same table?</td><td>SELF JOIN pattern</td></tr>
+  </table>
+
+  <h2>9. Sean interview-safe summary</h2>
+  <p>I choose the join based on the business question. If I only need matched records, I use INNER JOIN. If I need to preserve my main list and show missing detail as NULL, I use LEFT JOIN. If I am reconciling two systems and need unmatched rows from both sides, I use FULL JOIN. For all possible combinations, I use CROSS JOIN. For comparing records inside one table, I use a self join with aliases.</p>
+
+  <p><a href="index.html">Back to Course 3 landing page</a> | <a href="14_join_types_visual_guide.html">Open Join Types Visual Guide</a> | <a href="16_set_operations_visual_examples.html">Open Set Operations Visual Examples</a></p>
+
+  <h2>10. Semi joins and anti joins</h2>
+  <p><strong>Semi join business examples:</strong></p>
+  <ul>
+    <li>Find customers who placed at least one order.</li>
+    <li>Find servers that appear in the monitoring feed.</li>
+    <li>Find applicants who already completed an assessment.</li>
+    <li>Find products that have at least one active price record.</li>
+  </ul>
+  <p><strong>Anti join business examples:</strong></p>
+  <ul>
+    <li>Find customers who have not placed an order.</li>
+    <li>Find CMDB servers that are not reporting telemetry.</li>
+    <li>Find applicants who have not completed an assessment.</li>
+    <li>Find products missing an active price record.</li>
+  </ul>
+  <p><strong>Teaching note:</strong><br />Semi and anti joins usually filter the first table using a subquery. They do not add columns like normal joins.</p>
+
+  <h2>11. Subqueries inside WHERE and SELECT</h2>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>WHERE subquery: Find customers who placed an order last month.</li>
+    <li>WHERE subquery: Find servers that appear in an outage event table.</li>
+    <li>WHERE subquery: Find products whose category appears in a priority-category list.</li>
+    <li>SELECT subquery: Show each continent with a count of monarchs.</li>
+    <li>SELECT subquery: Show each customer with their number of support tickets.</li>
+  </ul>
+  <p><strong>Teaching note:</strong><br />A WHERE subquery filters rows. A SELECT subquery calculates a value to display as a column.</p>
+
+  <h2>12. Subqueries inside FROM</h2>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>Build a temporary table of latest transaction date per customer, then join or filter from it.</li>
+    <li>Build a temporary table of highest server utilization per application, then rank the risky applications.</li>
+    <li>Build a temporary table of most recent independence year per continent, then compare only continents with monarchs.</li>
+    <li>Build a temporary table of monthly sales totals, then compare months.</li>
+    <li>Build a temporary table of incident counts per service, then filter high-risk services.</li>
+  </ul>
+  <p><strong>Teaching note:</strong><br />A FROM subquery is useful when the inner query creates a summarized or prepared dataset that the outer query can treat like a table.</p>
+</body>
+</html>
+
+
+
+

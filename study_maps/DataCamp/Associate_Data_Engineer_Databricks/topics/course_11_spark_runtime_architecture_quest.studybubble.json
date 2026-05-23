@@ -1,0 +1,70 @@
+{
+  "id": "course_11_spark_runtime_architecture_quest",
+  "title": "Spark Runtime Architecture Quest",
+  "subtitle": "How PySpark jobs run in production platforms",
+  "parentTopic": { "label": "Back to 1000-Foot Opening", "topic": "course_11_intro_pyspark_1000ft" },
+  "groups": [
+    { "id": "application", "label": "Application" },
+    { "id": "submission", "label": "Submission" },
+    { "id": "orchestration", "label": "Orchestration" },
+    { "id": "spark_runtime", "label": "Spark Runtime" },
+    { "id": "resources", "label": "Resources" },
+    { "id": "platforms", "label": "Platforms" },
+    { "id": "storage", "label": "Storage" },
+    { "id": "metadata", "label": "Metadata" }
+  ],
+  "mapResources": [
+    { "label": "Open Course 11 Home", "href": "../study_pages/11_intro_pyspark/index.html" },
+    { "label": "Open Spark Runtime Architecture Quest", "href": "../study_pages/11_intro_pyspark/SPARK_RUNTIME_ARCHITECTURE_QUEST.html" },
+    { "label": "Open Diagram Notes", "href": "../study_pages/11_intro_pyspark/SPARK_RUNTIME_ARCHITECTURE_DIAGRAM.md" },
+    { "label": "Open QA Q01-Q69", "href": "../study_pages/11_intro_pyspark/QA_01_1000ft_pyspark_opening.html" },
+    { "label": "Back to 1000-Foot Map", "href": "course_11_intro_pyspark_1000ft.html" }
+  ],
+  "nodes": [
+    { "id": "pyspark_code", "label": "PySpark Code", "size": "core", "group": "application", "definition": "Defines the data-processing work.", "whyItMatters": "This is where ETL logic is authored.", "safeSentence": "Code says what to do, not usually which machines to use.", "commonTrap": "Hard-coding infrastructure assumptions in business logic.", "note": { "summary": "Business data logic starts here." } },
+    { "id": "submission_layer", "label": "Submission Layer", "size": "core", "group": "submission", "definition": "Starts the Spark job and passes runtime configuration.", "whyItMatters": "Bridges code and runtime infrastructure.", "safeSentence": "Submission starts the Spark app and passes runtime settings.", "commonTrap": "Treating submission details as optional in production.", "note": { "summary": "Launch/control layer for Spark jobs." } },
+    { "id": "spark_submit", "label": "spark-submit", "size": "support", "group": "submission", "definition": "Standard Spark command for launching applications.", "whyItMatters": "Baseline launch mechanism across environments.", "safeSentence": "spark-submit is the canonical Spark launcher.", "commonTrap": "Assuming platforms remove the need to understand launch configuration.", "note": { "summary": "Core Spark launch entrypoint." } },
+    { "id": "orchestrator", "label": "Orchestrator", "size": "support", "group": "orchestration", "definition": "Coordinates schedules, dependencies, retries, parameters, and alerts.", "whyItMatters": "Production pipelines require workflow control.", "safeSentence": "Orchestrators coordinate jobs; Spark executes data processing.", "commonTrap": "Confusing orchestration with distributed execution.", "note": { "summary": "Workflow coordination layer." } },
+    { "id": "driver", "label": "Driver", "size": "core", "group": "spark_runtime", "definition": "Coordinates the Spark application and schedules tasks.", "whyItMatters": "Controls planning and execution lifecycle.", "safeSentence": "Driver plans and dispatches Spark tasks.", "commonTrap": "Assuming driver does all heavy data processing.", "note": { "summary": "Control plane for Spark app." } },
+    { "id": "executors", "label": "Executors", "size": "core", "group": "spark_runtime", "definition": "Run tasks on partitions and report status/failures.", "whyItMatters": "Distributed compute happens here.", "safeSentence": "Executors run parallel tasks on partitioned data.", "commonTrap": "Ignoring executor memory/failure behavior.", "note": { "summary": "Distributed workers for Spark tasks." } },
+    { "id": "cluster_manager", "label": "Cluster Manager", "size": "core", "group": "resources", "definition": "Allocates CPU, memory, and machines for Spark applications.", "whyItMatters": "Without resources, Spark cannot run at scale.", "safeSentence": "Cluster manager provides resources Spark consumes.", "commonTrap": "Thinking Spark itself allocates infrastructure directly.", "note": { "summary": "Resource allocation authority." } },
+    { "id": "yarn_hadoop", "label": "Hadoop / YARN", "size": "support", "group": "platforms", "definition": "Classic enterprise Spark deployment where YARN allocates resources.", "whyItMatters": "Common legacy and enterprise architecture pattern.", "safeSentence": "YARN is a common Spark resource manager in Hadoop ecosystems.", "commonTrap": "Treating Hadoop and Spark as identical.", "note": { "summary": "Classic enterprise platform family." } },
+    { "id": "kubernetes", "label": "Kubernetes", "size": "support", "group": "platforms", "definition": "Runs Spark driver and executors as pods.", "whyItMatters": "Container-native Spark deployments are widespread.", "safeSentence": "Kubernetes can schedule Spark driver/executor pods.", "commonTrap": "Assuming Spark architecture changes fundamentally on K8s.", "note": { "summary": "Containerized Spark runtime platform." } },
+    { "id": "databricks", "label": "Databricks", "size": "support", "group": "platforms", "definition": "Managed Spark/lakehouse platform with notebooks, jobs, clusters, Delta, and catalog features.", "whyItMatters": "Major production platform for Spark data engineering.", "safeSentence": "Databricks is a managed Spark/lakehouse platform.", "commonTrap": "Equating platform abstractions with Spark internals.", "note": { "summary": "Managed Spark/lakehouse platform." } },
+    { "id": "emr", "label": "Amazon EMR", "size": "support", "group": "platforms", "definition": "Managed Hadoop/Spark cluster platform on AWS.", "whyItMatters": "Gives managed clusters with infrastructure-level control.", "safeSentence": "EMR manages Hadoop/Spark cluster infrastructure on AWS.", "commonTrap": "Assuming EMR and Glue have identical operating models.", "note": { "summary": "AWS managed cluster family." } },
+    { "id": "glue", "label": "AWS Glue", "size": "support", "group": "platforms", "definition": "Managed Spark ETL service integrated with S3 and Glue Data Catalog.", "whyItMatters": "Reduces direct cluster management effort.", "safeSentence": "Glue is a managed ETL service that can run Spark jobs.", "commonTrap": "Expecting full EMR-style infrastructure controls in Glue.", "note": { "summary": "Managed ETL Spark service." } },
+    { "id": "storage_layer", "label": "Storage Layer", "size": "core", "group": "storage", "definition": "Stores input and output data.", "whyItMatters": "Compute is useless without durable data storage.", "safeSentence": "Spark is compute; storage is where data lives.", "commonTrap": "Blending compute-layer assumptions into storage semantics.", "note": { "summary": "Persistent data foundation." } },
+    { "id": "catalog_metadata", "label": "Catalog / Metadata", "size": "core", "group": "metadata", "definition": "Tracks table names, schemas, locations, and permissions.", "whyItMatters": "Enables reliable table discovery and governance.", "safeSentence": "Catalogs define what tables mean and where they live.", "commonTrap": "Assuming table names imply physical location without metadata.", "note": { "summary": "Schema/location/governance layer." } }
+  ],
+  "links": [
+    { "source": "pyspark_code", "target": "submission_layer", "label": "launches_through" },
+    { "source": "submission_layer", "target": "spark_submit", "label": "includes" },
+    { "source": "submission_layer", "target": "orchestrator", "label": "coordinated_by" },
+    { "source": "submission_layer", "target": "driver", "label": "starts" },
+    { "source": "orchestrator", "target": "submission_layer", "label": "triggers" },
+    { "source": "driver", "target": "executors", "label": "dispatches_to" },
+    { "source": "driver", "target": "cluster_manager", "label": "requests_resources_from" },
+    { "source": "cluster_manager", "target": "executors", "label": "allocates" },
+    { "source": "cluster_manager", "target": "yarn_hadoop", "label": "implemented_as" },
+    { "source": "cluster_manager", "target": "kubernetes", "label": "implemented_as" },
+    { "source": "cluster_manager", "target": "databricks", "label": "managed_by" },
+    { "source": "cluster_manager", "target": "emr", "label": "managed_by" },
+    { "source": "cluster_manager", "target": "glue", "label": "managed_by" },
+    { "source": "executors", "target": "storage_layer", "label": "reads_writes" },
+    { "source": "driver", "target": "catalog_metadata", "label": "resolves_tables" },
+    { "source": "storage_layer", "target": "catalog_metadata", "label": "described_by" },
+    { "source": "databricks", "target": "catalog_metadata", "label": "governed_with" },
+    { "source": "emr", "target": "storage_layer", "label": "typically_reads_writes" },
+    { "source": "glue", "target": "catalog_metadata", "label": "integrates_with" }
+  ],
+  "paths": [
+    {
+      "id": "spark_runtime_architecture_review_path",
+      "label": "Spark Runtime Architecture Review Path",
+      "description": "Recommended review order for runtime architecture understanding.",
+      "nodeIds": [
+        "pyspark_code", "submission_layer", "orchestrator", "driver", "executors", "cluster_manager", "yarn_hadoop", "kubernetes", "databricks", "emr", "glue", "storage_layer", "catalog_metadata"
+      ]
+    }
+  ]
+}

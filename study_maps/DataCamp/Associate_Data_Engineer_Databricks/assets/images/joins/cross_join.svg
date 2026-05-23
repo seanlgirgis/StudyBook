@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700" role="img" aria-labelledby="title desc">
+  <title id="title">CROSS JOIN</title>
+  <desc id="desc">CROSS JOIN showing every possible combination between table values 1,2,3 and A,B,C.</desc>
+  <rect width="1000" height="700" fill="#f8fafc"/>
+  <text x="500" y="58" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="700" fill="#0f172a">CROSS JOIN</text>
+  <text x="500" y="95" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#334155">every possible combination</text>
+
+  <rect x="90" y="150" width="210" height="220" rx="10" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="2"/>
+  <text x="195" y="185" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#1e3a8a">Table 1</text>
+  <text x="195" y="230" text-anchor="middle" font-family="Consolas, monospace" font-size="30" fill="#0f172a">1</text>
+  <text x="195" y="280" text-anchor="middle" font-family="Consolas, monospace" font-size="30" fill="#0f172a">2</text>
+  <text x="195" y="330" text-anchor="middle" font-family="Consolas, monospace" font-size="30" fill="#0f172a">3</text>
+
+  <rect x="340" y="150" width="210" height="220" rx="10" fill="#ffedd5" stroke="#9a3412" stroke-width="2"/>
+  <text x="445" y="185" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#9a3412">Table 2</text>
+  <text x="445" y="230" text-anchor="middle" font-family="Consolas, monospace" font-size="30" fill="#0f172a">A</text>
+  <text x="445" y="280" text-anchor="middle" font-family="Consolas, monospace" font-size="30" fill="#0f172a">B</text>
+  <text x="445" y="330" text-anchor="middle" font-family="Consolas, monospace" font-size="30" fill="#0f172a">C</text>
+
+  <path d="M580,260 L640,260" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect x="660" y="130" width="270" height="470" rx="10" fill="#dcfce7" stroke="#166534" stroke-width="2"/>
+  <text x="795" y="170" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#166534">Result (9 rows)</text>
+
+  <text x="795" y="220" text-anchor="middle" font-family="Consolas, monospace" font-size="26" fill="#0f172a">1-A   1-B   1-C</text>
+  <text x="795" y="280" text-anchor="middle" font-family="Consolas, monospace" font-size="26" fill="#0f172a">2-A   2-B   2-C</text>
+  <text x="795" y="340" text-anchor="middle" font-family="Consolas, monospace" font-size="26" fill="#0f172a">3-A   3-B   3-C</text>
+
+  <text x="795" y="430" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#14532d">All pairings are included.</text>
+  <text x="795" y="465" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#14532d">No ON or USING clause.</text>
+</svg>

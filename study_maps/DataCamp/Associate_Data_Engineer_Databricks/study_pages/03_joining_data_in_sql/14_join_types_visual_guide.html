@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Course 3 - Join Types Visual Guide</title>
+<style>
+body { font-family: Arial, sans-serif; line-height: 1.5; margin: 24px; color: #111827; }
+.join-diagram {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  border: 1px solid #cbd5e1;
+  padding: 10px;
+  background: #f8fafc;
+  margin: 12px 0 18px;
+  box-sizing: border-box;
+}
+</style>
+</head>
+<body>
+<h1>Course 3 - Join Types Visual Guide</h1>
+<p><a href="index.html">Back to Course 3 landing page</a> | <a href="15_join_business_scenarios.html">Open Join Business Scenarios</a></p>
+<h2>1. Intro</h2><p>A SQL join combines rows from two tables based on a matching rule. Joins matter because real data is usually split across multiple related tables.</p>
+<h2>2. Join vocabulary</h2><ul><li>left table</li><li>right table</li><li>matching rows</li><li>unmatched rows</li><li>NULL values</li></ul>
+<h2>3. INNER JOIN</h2><p>returns only matching rows from both tables</p><img class="join-diagram" src="../../assets/images/joins/inner_join.svg" alt="INNER JOIN diagram showing only overlap included" /><pre><code>SELECT c.name, l.name FROM countries AS c INNER JOIN languages AS l USING (code);</code></pre>
+<h2>4. LEFT JOIN</h2><p>returns all rows from the left table and matching rows from the right table</p><p>LEFT JOIN is also called LEFT OUTER JOIN</p><img class="join-diagram" src="../../assets/images/joins/left_join.svg" alt="LEFT JOIN diagram showing full left side included" /><pre><code>SELECT c.name, l.name FROM countries AS c LEFT JOIN languages AS l USING (code);</code></pre>
+<h2>5. RIGHT JOIN</h2><p>returns all rows from the right table and matching rows from the left table</p><p>RIGHT JOIN is also called RIGHT OUTER JOIN</p><p>less common because it can usually be rewritten as LEFT JOIN by swapping table order</p><img class="join-diagram" src="../../assets/images/joins/right_join.svg" alt="RIGHT JOIN diagram showing full right side included" /><pre><code>SELECT c.name, l.name FROM countries AS c RIGHT JOIN languages AS l USING (code);</code></pre>
+<h2>6. FULL JOIN</h2><p>returns all matched rows plus unmatched rows from both tables</p><p>FULL JOIN is also called FULL OUTER JOIN</p><p>conceptually, FULL JOIN gives LEFT JOIN + RIGHT JOIN style coverage</p><img class="join-diagram" src="../../assets/images/joins/full_join.svg" alt="FULL JOIN diagram showing both sides included" /><pre><code>SELECT c.name, l.name FROM countries AS c FULL JOIN languages AS l USING (code);</code></pre>
+<h2>7. CROSS JOIN</h2><p>CROSS JOIN returns every possible combination of rows from the two tables. It does not use ON or USING. If table A has 3 rows and table B has 3 rows, the result has 9 rows.</p><img class="join-diagram" src="../../assets/images/joins/cross_join.svg" alt="CROSS JOIN diagram showing 3 by 3 combinations producing 9 rows" /><pre><code>SELECT
+    p1.prime_minister,
+    p2.president
+FROM prime_ministers AS p1
+CROSS JOIN presidents AS p2
+WHERE p1.continent = 'Asia'
+  AND p2.continent = 'South America';</code></pre>
+<h2>8. SELF JOIN</h2><p>A self join is when a table is joined to itself. It does not use a special SELF JOIN keyword. Instead, the same table appears twice with different aliases. Self joins are useful when comparing rows within the same table, such as pairing countries from the same continent.</p><img class="join-diagram" src="../../assets/images/joins/self_join.svg" alt="SELF JOIN diagram showing prime_ministers table used as p1 and p2 with same-continent pairing" /><pre><code>SELECT
+    p1.country AS country1,
+    p2.country AS country2,
+    p1.continent
+FROM prime_ministers AS p1
+INNER JOIN prime_ministers AS p2
+ON p1.continent = p2.continent
+   AND p1.country &lt;&gt; p2.country;</code></pre>
+<h2>9. Quick comparison table</h2><table border="1"><tr><th>Join type</th><th>What it keeps</th><th>Outer join?</th><th>Common use</th></tr><tr><td>INNER JOIN</td><td>matching rows only</td><td>No</td><td>Keep only matched records</td></tr><tr><td>LEFT JOIN</td><td>all left + matching right</td><td>Yes</td><td>Preserve complete left-side list</td></tr><tr><td>RIGHT JOIN</td><td>all right + matching left</td><td>Yes</td><td>Preserve complete right-side list</td></tr><tr><td>FULL JOIN</td><td>all matched + unmatched from both sides</td><td>Yes</td><td>Compare overlap/gaps</td></tr><tr><td>CROSS JOIN</td><td>every possible row combination</td><td>No</td><td>generate all pairings/combinations</td></tr><tr><td>SELF JOIN</td><td>rows from the same table matched to other rows</td><td>Depends on join used</td><td>compare or pair rows within one table</td></tr></table>
+<h2>10. Common traps</h2><ul><li>INNER JOIN does not keep unmatched rows</li><li>LEFT JOIN keeps all left rows, not all rows</li><li>RIGHT JOIN keeps all right rows, not all rows</li><li>FULL JOIN can produce NULLs on either side</li><li>USING only works cleanly when the join key has the same name in both tables</li><li>CROSS JOIN does not use ON or USING.</li><li>CROSS JOIN can multiply row counts quickly.</li><li>SELF JOIN is not a SQL keyword.</li><li>Aliases are required when joining a table to itself.</li><li>Add a not-equal condition when you need to avoid pairing a row with itself.</li></ul>
+<h2>11. Interview-safe language</h2><ul><li>INNER: I use INNER JOIN when I only want rows with matching keys in both tables.</li><li>LEFT: I use LEFT JOIN when I must keep every left-table row even if right-side values are missing.</li><li>FULL: I use FULL JOIN when I need complete coverage from both tables, including unmatched rows.</li><li>CROSS: I use CROSS JOIN when I need all possible pairings between two sets of rows.</li><li>SELF: I use a self join pattern with aliases when I need to compare rows within the same table.</li></ul>
+<h2>12. Small note</h2><p>LEFT, RIGHT, and FULL belong to the outer join family. INNER JOIN and CROSS JOIN are not outer joins. SELF JOIN is a pattern, not a separate join keyword; it can use INNER JOIN, LEFT JOIN, or another join type depending on the goal.</p><img class="join-diagram" src="../../assets/images/joins/join_comparison_overview.svg" alt="Join comparison overview with INNER, LEFT, RIGHT, and FULL mini diagrams" /><p>CROSS JOIN and SELF JOIN are shown separately above.</p>
+<h2>13. Related Course 3 Resources</h2><ul><li><a href="15_join_business_scenarios.html">Join Business Scenarios</a></li><li><a href="16_set_operations_visual_examples.html">Set Operations Visual Examples (UNION, UNION ALL, INTERSECT, EXCEPT)</a></li><li><a href="03_sql_patterns.md">SQL Patterns Notes (includes INTERSECT and EXCEPT patterns)</a></li><li><a href="index.html">Course 3 Landing Page</a></li></ul>
+</body></html>
+
+
+

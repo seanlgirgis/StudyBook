@@ -1,0 +1,2302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- SECTION: Metadata -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spark Runtime Architecture Quest</title>
+
+  <!-- SECTION: Styles -->
+  <style>
+:root {
+  color-scheme: dark;
+  --bg: #111827;
+  --panel: #1f2937;
+  --panel-2: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --line: #374151;
+  --accent: #60a5fa;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #0b1220;
+  flex: 0 0 auto;
+}
+
+.header-top h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.header-top p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.topic-parent-nav {
+  margin-top: 10px;
+}
+
+.toolbar {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#search-input {
+  min-width: 250px;
+  flex: 1 1 320px;
+  background: #111827;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+#search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.search-count {
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 64px;
+}
+
+.group-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.clear-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-topic-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-topic-btn:hover {
+  border-color: var(--accent);
+}
+
+.parent-topic-btn {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: var(--accent);
+  color: #dbeafe;
+}
+
+.filter-btn.is-active {
+  border-color: var(--filter-color, var(--accent));
+  color: #f8fafc;
+  font-weight: 700;
+  background: var(--filter-active-bg, rgba(96, 165, 250, 0.35));
+  box-shadow: inset 0 0 0 1px var(--filter-color, var(--accent)), 0 0 0 1px rgba(248, 250, 252, 0.18), 0 0 14px rgba(96, 165, 250, 0.35);
+}
+
+.clear-btn:hover {
+  border-color: var(--accent);
+}
+
+.filter-btn {
+  --filter-color: #64748b;
+  --filter-active-bg: rgba(100, 116, 139, 0.35);
+  border: 1px solid var(--filter-color);
+  border-left-width: 5px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.filter-btn:hover {
+  border-color: var(--filter-color);
+  background: rgba(30, 41, 59, 0.9);
+}
+
+.layout {
+  --panel-width: 34%;
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.map-area {
+  flex: 1 1 auto;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+  min-width: 320px;
+  min-height: 0;
+}
+
+#map-svg {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: radial-gradient(circle at top, #1f2937, #111827 70%);
+  border-radius: 10px;
+  cursor: grab;
+}
+
+#map-svg.is-panning {
+  cursor: grabbing;
+}
+
+#map-svg.is-dragging {
+  cursor: move;
+}
+
+.side-panel {
+  width: var(--panel-width);
+  min-width: 280px;
+  max-width: 60vw;
+  padding: 16px;
+  background: var(--panel);
+  overflow: hidden;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.side-panel-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+.side-panel-footer {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  max-height: 34%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.panel-resizer {
+  width: 8px;
+  cursor: col-resize;
+  background: #0f172a;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+
+.panel-resizer:hover {
+  background: #1e293b;
+}
+
+.side-panel h2 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.panel-card {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 18px;
+}
+
+.panel-card p {
+  margin: 0 0 10px;
+  line-height: 1.35;
+}
+
+.map-resources-section {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.map-resources-title {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+}
+
+.map-resources-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.map-resource-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.map-resource-link:hover {
+  border-color: var(--accent);
+}
+
+.map-resource-type {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.card-section {
+  margin-bottom: 10px;
+}
+
+.card-section.trap {
+  border-left: 3px solid #f59e0b;
+  padding-left: 8px;
+}
+
+.copy-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.copy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.card-copy-btn {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.copy-status-wrap {
+  min-height: 16px;
+  pointer-events: none;
+}
+
+.copy-status {
+  color: #93c5fd;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.note-image {
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #0b1220;
+}
+
+.note-image-caption,
+.note-image-fallback {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.nav-section {
+  margin: 10px 0;
+}
+
+.nav-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.path-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.path-list li {
+  margin-bottom: 8px;
+}
+
+.path-item-btn {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  background: #111827;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.path-item-btn:hover {
+  border-color: var(--accent);
+}
+
+.path-item-btn.is-active {
+  border-color: #fde68a;
+  box-shadow: inset 0 0 0 1px rgba(253, 230, 138, 0.35);
+}
+
+.link-line {
+  stroke: #93a3bf;
+  stroke-width: 2.4;
+  opacity: 0.85;
+}
+
+.link-line.is-filter-match {
+  opacity: 0.88;
+}
+
+.link-line.is-filter-dim {
+  opacity: 0.08;
+}
+
+.link-line.is-dim {
+  opacity: 0.12;
+}
+
+.link-line.is-path {
+  stroke: #fde68a;
+  stroke-width: 3.1;
+  opacity: 0.96;
+}
+
+.link-line.is-connected {
+  stroke: #bfdbfe;
+  stroke-width: 3;
+  opacity: 0.95;
+}
+
+.bubble-node {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.bubble-node.is-filter-match .bubble-circle {
+  stroke: #f8fafc;
+  stroke-width: 3.2;
+  filter: drop-shadow(0 0 10px var(--node-glow, rgba(37, 99, 235, 0.35)));
+}
+
+.bubble-node.is-filter-match .bubble-label {
+  fill: #ffffff;
+}
+
+.bubble-circle {
+  fill: var(--node-fill, #2563eb);
+  stroke: var(--node-stroke, #dbeafe);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 6px var(--node-glow, rgba(37, 99, 235, 0.35)));
+}
+
+.bubble-node.is-active .bubble-circle {
+  fill: #1d4ed8;
+  stroke: #f8fafc;
+  stroke-width: 3;
+}
+
+.bubble-node.is-connected .bubble-circle {
+  stroke: #93c5fd;
+  stroke-width: 3;
+}
+
+.bubble-label {
+  fill: #f9fafb;
+  font-size: 14px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.zoom-hud,
+.mode-hud {
+  position: absolute;
+  right: 18px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(17, 24, 39, 0.85);
+  font-size: 12px;
+}
+
+.zoom-hud { top: 18px; }
+.mode-hud { top: 50px; }
+
+.minimap-wrap {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 210px;
+  height: 130px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(17, 24, 39, 0.85);
+}
+
+#minimap-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.keyboard-hints {
+  position: absolute;
+  left: 18px;
+  bottom: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.keyboard-hints span {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin: 0 4px;
+  color: var(--text);
+  background: rgba(17, 24, 39, 0.85);
+}
+
+.context-menu {
+  position: fixed;
+  z-index: 9999;
+  min-width: 180px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #111827;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  padding: 6px;
+  display: none;
+}
+
+.context-menu.open {
+  display: block;
+}
+
+.ctx-item {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ctx-item:hover {
+  background: #1f2937;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    display: block;
+  }
+
+  .map-area {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .panel-resizer {
+    display: none;
+  }
+
+  .side-panel {
+    width: auto;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .toolbar {
+    align-items: stretch;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- SECTION: App Shell -->
+  <header class="app-header">
+    <div class="header-top">
+      <h1 id="topic-title">Loading topic...</h1>
+      <p id="topic-subtitle"></p>
+    </div>
+    <div class="toolbar">
+      <input id="search-input" type="text" placeholder="Search label, definition, safe sentence..." autocomplete="off" />
+      <span id="search-count" class="search-count"></span>
+      <div id="group-filters" class="group-filters"></div>
+      <button id="drag-toggle" class="clear-btn" type="button" title="Toggle drag mode">Drag Mode</button>
+      <button id="focus-toggle" class="clear-btn" type="button" title="Focus selected node connections">Focus</button>
+      <button id="fit-view" class="clear-btn" type="button" title="Fit map">Fit</button>
+      <button id="reset-view" class="clear-btn" type="button" title="Reset map view">Reset View</button>
+      <button id="export-layout" class="clear-btn" type="button" title="Export current node layout as JSON">Export Layout</button>
+      <button id="clear-filters" class="clear-btn" type="button">Reset</button>
+      <span id="layout-export-status" class="search-count"></span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="map-area">
+      <svg id="map-svg" viewBox="0 0 1000 520" role="img" aria-label="Study bubble map"></svg>
+      <div id="zoom-hud" class="zoom-hud">100%</div>
+      <div id="mode-hud" class="mode-hud">Pan mode</div>
+      <div class="minimap-wrap">
+        <svg id="minimap-svg" viewBox="0 0 1200 700" role="img" aria-label="Map minimap"></svg>
+      </div>
+      <div class="keyboard-hints">Keys: <span>Arrows</span> move selection <span>Enter</span> select <span>Esc</span> clear <span>F</span> focus</div>
+    </section>
+    <div id="panel-resizer" class="panel-resizer" role="separator" aria-orientation="vertical" aria-label="Resize study panel"></div>
+    <aside class="side-panel">
+      <div class="side-panel-body">
+        <h2>Details</h2>
+        <div id="node-details" class="panel-card">
+          <p>Select a bubble to view details.</p>
+        </div>
+      </div>
+      <div class="side-panel-footer">
+        <h2>Study Paths</h2>
+        <ul id="study-paths" class="path-list"></ul>
+      </div>
+    </aside>
+  </main>
+
+  <div id="context-menu" class="context-menu" aria-hidden="true">
+    <button type="button" class="ctx-item" data-action="pin">Pin details</button>
+    <button type="button" class="ctx-item" data-action="focus">Focus connections</button>
+    <button type="button" class="ctx-item" data-action="filter">Filter to group</button>
+    <button type="button" class="ctx-item" data-action="reset">Reset view</button>
+  </div>
+
+  <!-- SECTION: Embedded Topic Data -->
+  <script id="studybubble-topic-data" type="application/json">
+{
+  "id": "course_11_spark_runtime_architecture_quest",
+  "title": "Spark Runtime Architecture Quest",
+  "subtitle": "How PySpark jobs run in production platforms",
+  "parentTopic": {
+    "label": "Back to 1000-Foot Opening",
+    "topic": "course_11_intro_pyspark_1000ft"
+  },
+  "groups": [
+    {
+      "id": "application",
+      "label": "Application"
+    },
+    {
+      "id": "submission",
+      "label": "Submission"
+    },
+    {
+      "id": "orchestration",
+      "label": "Orchestration"
+    },
+    {
+      "id": "spark_runtime",
+      "label": "Spark Runtime"
+    },
+    {
+      "id": "resources",
+      "label": "Resources"
+    },
+    {
+      "id": "platforms",
+      "label": "Platforms"
+    },
+    {
+      "id": "storage",
+      "label": "Storage"
+    },
+    {
+      "id": "metadata",
+      "label": "Metadata"
+    }
+  ],
+  "mapResources": [
+    {
+      "label": "Open Course 11 Home",
+      "href": "../study_pages/11_intro_pyspark/index.html"
+    },
+    {
+      "label": "Open Spark Runtime Architecture Quest",
+      "href": "../study_pages/11_intro_pyspark/SPARK_RUNTIME_ARCHITECTURE_QUEST.html"
+    },
+    {
+      "label": "Open Diagram Notes",
+      "href": "../study_pages/11_intro_pyspark/SPARK_RUNTIME_ARCHITECTURE_DIAGRAM.md"
+    },
+    {
+      "label": "Open QA Q01-Q69",
+      "href": "../study_pages/11_intro_pyspark/QA_01_1000ft_pyspark_opening.html"
+    },
+    {
+      "label": "Back to 1000-Foot Map",
+      "href": "course_11_intro_pyspark_1000ft.html"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "pyspark_code",
+      "label": "PySpark Code",
+      "size": "core",
+      "group": "application",
+      "definition": "Defines the data-processing work.",
+      "whyItMatters": "This is where ETL logic is authored.",
+      "safeSentence": "Code says what to do, not usually which machines to use.",
+      "commonTrap": "Hard-coding infrastructure assumptions in business logic.",
+      "note": {
+        "summary": "Business data logic starts here."
+      },
+      "x": 100.0,
+      "y": 308.06
+    },
+    {
+      "id": "submission_layer",
+      "label": "Submission Layer",
+      "size": "core",
+      "group": "submission",
+      "definition": "Starts the Spark job and passes runtime configuration.",
+      "whyItMatters": "Bridges code and runtime infrastructure.",
+      "safeSentence": "Submission starts the Spark app and passes runtime settings.",
+      "commonTrap": "Treating submission details as optional in production.",
+      "note": {
+        "summary": "Launch/control layer for Spark jobs."
+      },
+      "x": 238.36,
+      "y": 384.35
+    },
+    {
+      "id": "spark_submit",
+      "label": "spark-submit",
+      "size": "support",
+      "group": "submission",
+      "definition": "Standard Spark command for launching applications.",
+      "whyItMatters": "Baseline launch mechanism across environments.",
+      "safeSentence": "spark-submit is the canonical Spark launcher.",
+      "commonTrap": "Assuming platforms remove the need to understand launch configuration.",
+      "note": {
+        "summary": "Core Spark launch entrypoint."
+      },
+      "x": 271.73,
+      "y": 218.25
+    },
+    {
+      "id": "orchestrator",
+      "label": "Orchestrator",
+      "size": "support",
+      "group": "orchestration",
+      "definition": "Coordinates schedules, dependencies, retries, parameters, and alerts.",
+      "whyItMatters": "Production pipelines require workflow control.",
+      "safeSentence": "Orchestrators coordinate jobs; Spark executes data processing.",
+      "commonTrap": "Confusing orchestration with distributed execution.",
+      "note": {
+        "summary": "Workflow coordination layer."
+      },
+      "x": 336.36,
+      "y": 572.11
+    },
+    {
+      "id": "driver",
+      "label": "Driver",
+      "size": "core",
+      "group": "spark_runtime",
+      "definition": "Coordinates the Spark application and schedules tasks.",
+      "whyItMatters": "Controls planning and execution lifecycle.",
+      "safeSentence": "Driver plans and dispatches Spark tasks.",
+      "commonTrap": "Assuming driver does all heavy data processing.",
+      "note": {
+        "summary": "Control plane for Spark app."
+      },
+      "x": 816.53,
+      "y": 665.07
+    },
+    {
+      "id": "executors",
+      "label": "Executors",
+      "size": "core",
+      "group": "spark_runtime",
+      "definition": "Run tasks on partitions and report status/failures.",
+      "whyItMatters": "Distributed compute happens here.",
+      "safeSentence": "Executors run parallel tasks on partitioned data.",
+      "commonTrap": "Ignoring executor memory/failure behavior.",
+      "note": {
+        "summary": "Distributed workers for Spark tasks."
+      },
+      "x": 422.39,
+      "y": 352.6
+    },
+    {
+      "id": "cluster_manager",
+      "label": "Cluster Manager",
+      "size": "core",
+      "group": "resources",
+      "definition": "Allocates CPU, memory, and machines for Spark applications.",
+      "whyItMatters": "Without resources, Spark cannot run at scale.",
+      "safeSentence": "Cluster manager provides resources Spark consumes.",
+      "commonTrap": "Thinking Spark itself allocates infrastructure directly.",
+      "note": {
+        "summary": "Resource allocation authority."
+      },
+      "x": 603.44,
+      "y": 317.85
+    },
+    {
+      "id": "yarn_hadoop",
+      "label": "Hadoop / YARN",
+      "size": "support",
+      "group": "platforms",
+      "definition": "Classic enterprise Spark deployment where YARN allocates resources.",
+      "whyItMatters": "Common legacy and enterprise architecture pattern.",
+      "safeSentence": "YARN is a common Spark resource manager in Hadoop ecosystems.",
+      "commonTrap": "Treating Hadoop and Spark as identical.",
+      "note": {
+        "summary": "Classic enterprise platform family."
+      },
+      "x": 587.75,
+      "y": 15.75
+    },
+    {
+      "id": "kubernetes",
+      "label": "Kubernetes",
+      "size": "support",
+      "group": "platforms",
+      "definition": "Runs Spark driver and executors as pods.",
+      "whyItMatters": "Container-native Spark deployments are widespread.",
+      "safeSentence": "Kubernetes can schedule Spark driver/executor pods.",
+      "commonTrap": "Assuming Spark architecture changes fundamentally on K8s.",
+      "note": {
+        "summary": "Containerized Spark runtime platform."
+      },
+      "x": 819.5,
+      "y": 324.31
+    },
+    {
+      "id": "databricks",
+      "label": "Databricks",
+      "size": "support",
+      "group": "platforms",
+      "definition": "Managed Spark/lakehouse platform with notebooks, jobs, clusters, Delta, and catalog features.",
+      "whyItMatters": "Major production platform for Spark data engineering.",
+      "safeSentence": "Databricks is a managed Spark/lakehouse platform.",
+      "commonTrap": "Equating platform abstractions with Spark internals.",
+      "note": {
+        "summary": "Managed Spark/lakehouse platform."
+      },
+      "x": 881.97,
+      "y": 80.26
+    },
+    {
+      "id": "emr",
+      "label": "Amazon EMR",
+      "size": "support",
+      "group": "platforms",
+      "definition": "Managed Hadoop/Spark cluster platform on AWS.",
+      "whyItMatters": "Gives managed clusters with infrastructure-level control.",
+      "safeSentence": "EMR manages Hadoop/Spark cluster infrastructure on AWS.",
+      "commonTrap": "Assuming EMR and Glue have identical operating models.",
+      "note": {
+        "summary": "AWS managed cluster family."
+      },
+      "x": 447.58,
+      "y": 149.44
+    },
+    {
+      "id": "glue",
+      "label": "AWS Glue",
+      "size": "support",
+      "group": "platforms",
+      "definition": "Managed Spark ETL service integrated with S3 and Glue Data Catalog.",
+      "whyItMatters": "Reduces direct cluster management effort.",
+      "safeSentence": "Glue is a managed ETL service that can run Spark jobs.",
+      "commonTrap": "Expecting full EMR-style infrastructure controls in Glue.",
+      "note": {
+        "summary": "Managed ETL Spark service."
+      },
+      "x": 817.4,
+      "y": 488.08
+    },
+    {
+      "id": "storage_layer",
+      "label": "Storage Layer",
+      "size": "core",
+      "group": "storage",
+      "definition": "Stores input and output data.",
+      "whyItMatters": "Compute is useless without durable data storage.",
+      "safeSentence": "Spark is compute; storage is where data lives.",
+      "commonTrap": "Blending compute-layer assumptions into storage semantics.",
+      "note": {
+        "summary": "Persistent data foundation."
+      },
+      "x": 324.94,
+      "y": 43.71
+    },
+    {
+      "id": "catalog_metadata",
+      "label": "Catalog / Metadata",
+      "size": "core",
+      "group": "metadata",
+      "definition": "Tracks table names, schemas, locations, and permissions.",
+      "whyItMatters": "Enables reliable table discovery and governance.",
+      "safeSentence": "Catalogs define what tables mean and where they live.",
+      "commonTrap": "Assuming table names imply physical location without metadata.",
+      "note": {
+        "summary": "Schema/location/governance layer."
+      },
+      "x": 1086.59,
+      "y": 311.77
+    }
+  ],
+  "links": [
+    {
+      "source": "pyspark_code",
+      "target": "submission_layer",
+      "label": "launches_through"
+    },
+    {
+      "source": "submission_layer",
+      "target": "spark_submit",
+      "label": "includes"
+    },
+    {
+      "source": "submission_layer",
+      "target": "orchestrator",
+      "label": "coordinated_by"
+    },
+    {
+      "source": "submission_layer",
+      "target": "driver",
+      "label": "starts"
+    },
+    {
+      "source": "orchestrator",
+      "target": "submission_layer",
+      "label": "triggers"
+    },
+    {
+      "source": "driver",
+      "target": "executors",
+      "label": "dispatches_to"
+    },
+    {
+      "source": "driver",
+      "target": "cluster_manager",
+      "label": "requests_resources_from"
+    },
+    {
+      "source": "cluster_manager",
+      "target": "executors",
+      "label": "allocates"
+    },
+    {
+      "source": "cluster_manager",
+      "target": "yarn_hadoop",
+      "label": "implemented_as"
+    },
+    {
+      "source": "cluster_manager",
+      "target": "kubernetes",
+      "label": "implemented_as"
+    },
+    {
+      "source": "cluster_manager",
+      "target": "databricks",
+      "label": "managed_by"
+    },
+    {
+      "source": "cluster_manager",
+      "target": "emr",
+      "label": "managed_by"
+    },
+    {
+      "source": "cluster_manager",
+      "target": "glue",
+      "label": "managed_by"
+    },
+    {
+      "source": "executors",
+      "target": "storage_layer",
+      "label": "reads_writes"
+    },
+    {
+      "source": "driver",
+      "target": "catalog_metadata",
+      "label": "resolves_tables"
+    },
+    {
+      "source": "storage_layer",
+      "target": "catalog_metadata",
+      "label": "described_by"
+    },
+    {
+      "source": "databricks",
+      "target": "catalog_metadata",
+      "label": "governed_with"
+    },
+    {
+      "source": "emr",
+      "target": "storage_layer",
+      "label": "typically_reads_writes"
+    },
+    {
+      "source": "glue",
+      "target": "catalog_metadata",
+      "label": "integrates_with"
+    }
+  ],
+  "paths": [
+    {
+      "id": "spark_runtime_architecture_review_path",
+      "label": "Spark Runtime Architecture Review Path",
+      "description": "Recommended review order for runtime architecture understanding.",
+      "nodeIds": [
+        "pyspark_code",
+        "submission_layer",
+        "orchestrator",
+        "driver",
+        "executors",
+        "cluster_manager",
+        "yarn_hadoop",
+        "kubernetes",
+        "databricks",
+        "emr",
+        "glue",
+        "storage_layer",
+        "catalog_metadata"
+      ]
+    }
+  ]
+}
+  </script>
+
+  <!-- SECTION: JavaScript -->
+  <script>
+(async function initViewer() {
+  const titleEl = document.getElementById("topic-title");
+  const subtitleEl = document.getElementById("topic-subtitle");
+  const svg = document.getElementById("map-svg");
+  const miniSvg = document.getElementById("minimap-svg");
+  const detailsEl = document.getElementById("node-details");
+  const pathsEl = document.getElementById("study-paths");
+  const searchInput = document.getElementById("search-input");
+  const searchCountEl = document.getElementById("search-count");
+  const groupFiltersEl = document.getElementById("group-filters");
+  const clearBtn = document.getElementById("clear-filters");
+  const layoutEl = document.querySelector(".layout");
+  const sidePanelEl = document.querySelector(".side-panel");
+  const panelResizerEl = document.getElementById("panel-resizer");
+  const headerTopEl = document.querySelector(".header-top");
+  const dragToggleBtn = document.getElementById("drag-toggle");
+  const focusToggleBtn = document.getElementById("focus-toggle");
+  const fitBtn = document.getElementById("fit-view");
+  const resetViewBtn = document.getElementById("reset-view");
+  const exportLayoutBtn = document.getElementById("export-layout");
+  const layoutExportStatusEl = document.getElementById("layout-export-status");
+  const zoomHudEl = document.getElementById("zoom-hud");
+  const modeHudEl = document.getElementById("mode-hud");
+  const ctxMenuEl = document.getElementById("context-menu");
+
+  const NS = "http://www.w3.org/2000/svg";
+  let currentTopic = null;
+  let currentMode = "multifile";
+  let activeFilter = "all";
+  let searchTerm = "";
+  let selectedNodeId = null;
+  let focusedNodeId = null;
+  let activePathNodeIds = new Set();
+  let activePathId = null;
+  let dragMode = false;
+
+  const nodeElements = new Map();
+  const linkElements = [];
+  const nodeOrder = [];
+  const graphById = new Map();
+  const groupById = new Map();
+  const groupColorByKey = new Map();
+
+  const view = { tx: 0, ty: 0, scale: 1 };
+  let isPanning = false;
+  let panStart = { x: 0, y: 0, tx: 0, ty: 0 };
+  let dragNodeId = null;
+  let dragOffset = { x: 0, y: 0 };
+  let ctxNodeId = null;
+  let activePath = null;
+  let isResizingPanel = false;
+  let exportStatusTimer = null;
+
+  const width = 1200;
+  const height = 700;
+  const DEFAULT_GROUP_COLOR = "#2563eb";
+  const GROUP_COLOR_MAP = {
+    forecasting: "#f97316",
+    reporting: "#0ea5e9",
+    operations: "#22c55e",
+    governance: "#a855f7",
+    architecture: "#ef4444",
+    tools: "#14b8a6",
+    "business context": "#3b82f6",
+    "signal and modeling": "#f59e0b",
+    "decision and governance": "#8b5cf6",
+    "raw inputs": "#0ea5e9",
+    "feature prep": "#22c55e",
+    quality: "#ef4444",
+    "forecast and validation": "#f97316",
+    risk: "#dc2626",
+    stakeholders: "#3b82f6",
+    action: "#14b8a6",
+    closure: "#a855f7",
+    identity: "#6366f1",
+    "time shape": "#10b981",
+    "feature signals": "#f59e0b",
+  };
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function normalizeFilterKey(value) {
+    return String(value || "").trim().toLowerCase();
+  }
+
+  function setLayoutExportStatus(message) {
+    if (!layoutExportStatusEl) return;
+    layoutExportStatusEl.textContent = message || "";
+    if (exportStatusTimer) {
+      window.clearTimeout(exportStatusTimer);
+      exportStatusTimer = null;
+    }
+    if (message) {
+      exportStatusTimer = window.setTimeout(() => {
+        if (layoutExportStatusEl.textContent === message) {
+          layoutExportStatusEl.textContent = "";
+        }
+      }, 2200);
+    }
+  }
+
+  function groupColor(groupName) {
+    const key = String(groupName || "").trim().toLowerCase();
+    if (groupColorByKey.has(key)) return groupColorByKey.get(key);
+    return GROUP_COLOR_MAP[key] || DEFAULT_GROUP_COLOR;
+  }
+
+  function buildGroupColorLookup(topic) {
+    groupColorByKey.clear();
+    const groups = Array.isArray(topic && topic.groups) ? topic.groups : [];
+    const fallbackPalette = ["#4C78A8", "#F58518", "#54A24B", "#E45756", "#72B7B2", "#B279A2", "#FF9DA6", "#9D755D", "#BAB0AC", "#2F4B7C"];
+    let fallbackIdx = 0;
+    for (const group of groups) {
+      if (!group || typeof group !== "object") continue;
+      const idKey = String(group.id || "").trim().toLowerCase();
+      const labelKey = String(group.label || "").trim().toLowerCase();
+      const color = (typeof group.color === "string" && group.color.trim()) ? group.color.trim() : fallbackPalette[fallbackIdx % fallbackPalette.length];
+      fallbackIdx += 1;
+      if (idKey) groupColorByKey.set(idKey, color);
+      if (labelKey) groupColorByKey.set(labelKey, color);
+    }
+  }
+
+  function withAlpha(hex, alpha) {
+    const h = String(hex || "").replace("#", "");
+    if (h.length !== 6) return `rgba(37, 99, 235, ${alpha})`;
+    const r = Number.parseInt(h.slice(0, 2), 16);
+    const g = Number.parseInt(h.slice(2, 4), 16);
+    const b = Number.parseInt(h.slice(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  function applyPanelWidth(px) {
+    if (!layoutEl || !sidePanelEl) return;
+    const minPx = 280;
+    const maxPx = Math.max(360, Math.floor(window.innerWidth * 0.6));
+    const clamped = Math.max(minPx, Math.min(maxPx, px));
+    layoutEl.style.setProperty("--panel-width", `${clamped}px`);
+    try {
+      window.localStorage.setItem("studybubble.panelWidthPx", String(clamped));
+    } catch (_e) {
+      // non-fatal
+    }
+  }
+
+  function restorePanelWidth() {
+    if (!layoutEl || !sidePanelEl) return;
+    try {
+      const raw = window.localStorage.getItem("studybubble.panelWidthPx");
+      if (!raw) return;
+      const parsed = Number.parseInt(raw, 10);
+      if (Number.isFinite(parsed)) applyPanelWidth(parsed);
+    } catch (_e) {
+      // non-fatal
+    }
+  }
+
+  function toSingleFileHref(topicRef) {
+    if (!topicRef) return "#";
+    return String(topicRef).replace(/\.studybubble\.json$/i, ".html");
+  }
+
+  function toMultifileHref(topicRef) {
+    if (!topicRef) return "#";
+    const fileName = String(topicRef).split(/[\\/]/).pop() || "";
+    const topicId = fileName.replace(/\.studybubble\.json$/i, "");
+    return `../${topicId}/index.html`;
+  }
+
+  function topicRefToHref(topicRef, mode) {
+    return mode === "single-file" ? toSingleFileHref(topicRef) : toMultifileHref(topicRef);
+  }
+
+  function topicJsonToHtmlName(topicRef) {
+    if (!topicRef) return "";
+    return String(topicRef).split(/[\\/]/).pop().replace(/\.studybubble\.json$/i, ".html");
+  }
+
+  function navigateToTopicRef(topicRef, mode) {
+    const href = topicRefToHref(topicRef, mode);
+    if (!href || href === "#") return;
+    window.location.href = href;
+  }
+
+  function defaultOpenLabel(topicRef) {
+    const htmlName = topicJsonToHtmlName(topicRef);
+    const base = htmlName.replace(/\.html$/i, "").replaceAll("_", " ");
+    return `Open ${base || "Child Topic"}`;
+  }
+
+  function nodeRadius(size) {
+    if (size === "core") return 62;
+    if (size === "support") return 50;
+    return 40;
+  }
+
+  function wrapLabel(text, maxCharsPerLine) {
+    const words = String(text || "").split(/\s+/).filter(Boolean);
+    if (words.length === 0) return [""];
+    const lines = [];
+    let current = words[0];
+    for (let i = 1; i < words.length; i += 1) {
+      const candidate = `${current} ${words[i]}`;
+      if (candidate.length <= maxCharsPerLine) current = candidate;
+      else {
+        lines.push(current);
+        current = words[i];
+      }
+    }
+    lines.push(current);
+    return lines.slice(0, 3);
+  }
+
+  function nodeSearchText(node) {
+    return [
+      node.label,
+      node.definition,
+      node.whyItMatters,
+      node.safeSentence,
+      node.commonTrap,
+      node.interviewAnswer,
+      ...(Array.isArray(node.relatedQuestions) ? node.relatedQuestions : []),
+      node.note && node.note.summary,
+    ].filter(Boolean).join(" ").toLowerCase();
+  }
+
+  async function copyTextWithFallback(text) {
+    const value = String(text || "").trim();
+    if (!value) return false;
+    const isFileProtocol = window.location && window.location.protocol === "file:";
+    try {
+      if (!isFileProtocol && navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(value);
+        return true;
+      }
+    } catch (_e) {
+      // fallback below
+    }
+    const ta = document.createElement("textarea");
+    ta.value = value;
+    ta.setAttribute("readonly", "readonly");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    ta.style.top = "0";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+    let ok = false;
+    try {
+      ok = document.execCommand("copy");
+    } catch (_e) {
+      ok = false;
+    }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  function buildLayoutExportPayload() {
+    const nodes = {};
+    for (const [id, node] of graphById.entries()) {
+      nodes[id] = {
+        x: Number(node.x.toFixed(2)),
+        y: Number(node.y.toFixed(2)),
+      };
+    }
+    return {
+      topicId: currentTopic && currentTopic.id ? currentTopic.id : "",
+      topicTitle: currentTopic && currentTopic.title ? currentTopic.title : "",
+      version: 1,
+      nodes,
+    };
+  }
+
+  function downloadTextFile(filename, content) {
+    try {
+      const blob = new Blob([content], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.setTimeout(() => URL.revokeObjectURL(url), 0);
+      return true;
+    } catch (_e) {
+      return false;
+    }
+  }
+
+  async function exportLayout() {
+    if (!currentTopic || graphById.size === 0) {
+      setLayoutExportStatus("Nothing to export");
+      return;
+    }
+    const payload = buildLayoutExportPayload();
+    const jsonText = `${JSON.stringify(payload, null, 2)}\n`;
+    const baseName = payload.topicId || "studybubble_topic";
+    const fileName = `${baseName}.layout.json`;
+
+    if (downloadTextFile(fileName, jsonText)) {
+      setLayoutExportStatus("Layout exported");
+      return;
+    }
+
+    const copied = await copyTextWithFallback(jsonText);
+    setLayoutExportStatus(copied ? "Layout copied" : "Export unavailable");
+  }
+
+  function renderExternalLinks(links) {
+    if (!Array.isArray(links) || links.length === 0) return "";
+    const items = links.map(
+      (link) => `<li><a href="${escapeHtml(link.href || "#")}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label || "Link")}</a></li>`
+    ).join("");
+    return `<p><strong>External Links:</strong></p><ul>${items}</ul>`;
+  }
+
+  function renderChildTopics(childTopics, mode) {
+    if (!Array.isArray(childTopics) || childTopics.length === 0) return "";
+    const items = childTopics.map((child) => {
+      const href = topicRefToHref(child.topic, mode);
+      return `<li><a href="${escapeHtml(href)}">${escapeHtml(child.label || child.topic || "Child Topic")}</a></li>`;
+    }).join("");
+    return `<p><strong>Child Topics:</strong></p><ul>${items}</ul>`;
+  }
+
+  function renderChildTopicButtons(childTopics, mode) {
+    if (!Array.isArray(childTopics) || childTopics.length === 0) return "";
+    const buttons = childTopics.map((child) => {
+      const href = topicRefToHref(child.topic, mode);
+      if (!href || href === "#") return "";
+      const text = child.label ? child.label : defaultOpenLabel(child.topic);
+      return `<button type="button" class="nav-topic-btn child-topic-btn" data-nav-href="${escapeHtml(href)}">${escapeHtml(text)}</button>`;
+    }).filter(Boolean).join("");
+    if (!buttons) return "";
+    return `<div class="nav-section"><p><strong>Child Topic Navigation:</strong></p><div class="nav-button-row">${buttons}</div></div>`;
+  }
+
+  function renderParentTopic(parentTopic, mode) {
+    if (!parentTopic || typeof parentTopic !== "object") return "";
+    const href = topicRefToHref(parentTopic.topic, mode);
+    return `<p><strong>Parent Topic:</strong> <a href="${escapeHtml(href)}">${escapeHtml(parentTopic.label || "Back")}</a></p>`;
+  }
+
+  function renderMapResources(topic, mode) {
+    const resources = Array.isArray(topic && topic.mapResources) ? topic.mapResources : [];
+    if (resources.length === 0) return "";
+    const items = resources
+      .filter((r) => r && typeof r === "object" && r.label && (r.href || r.topic))
+      .map((resource) => {
+        const type = typeof resource.type === "string" && resource.type.trim() ? resource.type.trim() : "resource";
+        const typeTag = `<span class="map-resource-type">${escapeHtml(type)}</span>`;
+        if (resource.href) {
+          return `<a class="map-resource-link" href="${escapeHtml(resource.href)}" target="_blank" rel="noopener noreferrer">${typeTag}<span>${escapeHtml(resource.label)}</span></a>`;
+        }
+        const href = topicRefToHref(resource.topic, mode);
+        return `<a class="map-resource-link" href="${escapeHtml(href)}">${typeTag}<span>${escapeHtml(resource.label)}</span></a>`;
+      })
+      .join("");
+    if (!items) return "";
+    return `
+      <div class="map-resources-section">
+        <h3 class="map-resources-title">Map Resources</h3>
+        <div class="map-resources-list">${items}</div>
+      </div>
+    `;
+  }
+
+  function renderTopicParentButton(topic, mode) {
+    if (!headerTopEl) return;
+    const existing = document.getElementById("topic-parent-nav");
+    if (existing) existing.remove();
+    const parentTopic = topic && topic.parentTopic && typeof topic.parentTopic === "object" ? topic.parentTopic : null;
+    if (!parentTopic || !parentTopic.topic) return;
+    const href = topicRefToHref(parentTopic.topic, mode);
+    if (!href || href === "#") return;
+    const wrap = document.createElement("div");
+    wrap.id = "topic-parent-nav";
+    wrap.className = "topic-parent-nav";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "nav-topic-btn parent-topic-btn";
+    btn.textContent = parentTopic.label || "Back";
+    btn.addEventListener("click", () => navigateToTopicRef(parentTopic.topic, mode));
+    wrap.appendChild(btn);
+    headerTopEl.appendChild(wrap);
+  }
+
+  function applyViewTransform() {
+    const viewport = document.getElementById("map-viewport");
+    if (viewport) {
+      viewport.setAttribute("transform", `translate(${view.tx} ${view.ty}) scale(${view.scale})`);
+    }
+    if (zoomHudEl) zoomHudEl.textContent = `${Math.round(view.scale * 100)}%`;
+    renderMinimapViewport();
+  }
+
+  function resetViewTransform() {
+    view.tx = 0;
+    view.ty = 0;
+    view.scale = 1;
+    applyViewTransform();
+  }
+
+  function fitView() {
+    if (graphById.size === 0) return;
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (const node of graphById.values()) {
+      minX = Math.min(minX, node.x - node.r);
+      maxX = Math.max(maxX, node.x + node.r);
+      minY = Math.min(minY, node.y - node.r);
+      maxY = Math.max(maxY, node.y + node.r);
+    }
+    const pad = 40;
+    minX -= pad; minY -= pad; maxX += pad; maxY += pad;
+    const sx = width / Math.max(1, maxX - minX);
+    const sy = height / Math.max(1, maxY - minY);
+    view.scale = Math.max(0.45, Math.min(1.35, Math.min(sx, sy)));
+    view.tx = (width - (minX + maxX) * view.scale) / 2;
+    view.ty = (height - (minY + maxY) * view.scale) / 2;
+    applyViewTransform();
+  }
+
+  function clientToWorld(clientX, clientY) {
+    if (!svg) return { x: 0, y: 0 };
+    const rect = svg.getBoundingClientRect();
+    const sx = (clientX - rect.left) * (width / rect.width);
+    const sy = (clientY - rect.top) * (height / rect.height);
+    return { x: (sx - view.tx) / view.scale, y: (sy - view.ty) / view.scale };
+  }
+
+  function updateModeHud() {
+    if (!modeHudEl) return;
+    modeHudEl.textContent = dragMode ? "Drag mode" : "Pan mode";
+  }
+
+  function getConnectedNodeIds(nodeId) {
+    const ids = new Set([nodeId]);
+    for (const link of linkElements) {
+      if (link.sourceId === nodeId) ids.add(link.targetId);
+      if (link.targetId === nodeId) ids.add(link.sourceId);
+    }
+    return ids;
+  }
+
+  function updateHighlights() {
+    const connectedIds = focusedNodeId ? getConnectedNodeIds(focusedNodeId) : new Set();
+    for (const [id, nodeEl] of nodeElements.entries()) {
+      nodeEl.group.classList.toggle("is-connected", connectedIds.has(id) && id !== focusedNodeId);
+    }
+    for (const link of linkElements) {
+      const isPath = activePathNodeIds.has(link.sourceId) && activePathNodeIds.has(link.targetId);
+      link.el.classList.toggle("is-path", isPath);
+      const connected = focusedNodeId && (link.sourceId === focusedNodeId || link.targetId === focusedNodeId || (connectedIds.has(link.sourceId) && connectedIds.has(link.targetId)));
+      link.el.classList.toggle("is-connected", !!connected);
+      link.el.classList.toggle("is-dim", !!focusedNodeId && !connected);
+    }
+  }
+
+  function renderDetails(node, topic, mode) {
+    const noteSummary = node.note && node.note.summary ? node.note.summary : "";
+    const hasOneChildTopic = Array.isArray(node.childTopics) && node.childTopics.length === 1;
+    const hasParentTopic = !!(topic && topic.parentTopic && topic.parentTopic.topic);
+    const hasSafeSentence = !!node.safeSentence;
+    const relatedQuestions = Array.isArray(node.relatedQuestions) ? node.relatedQuestions : [];
+    const noteImage = node.note && node.note.image && typeof node.note.image === "object" ? node.note.image : null;
+    const copyPathVisible = !!activePath;
+    const doubleClickHint = hasOneChildTopic
+      ? `<p><em>Double-click this bubble to open: ${escapeHtml(node.childTopics[0].label || node.childTopics[0].topic || "Child Topic")}</em></p>`
+      : hasParentTopic
+      ? `<p><em>Double-click this bubble to go back to parent topic: ${escapeHtml(topic.parentTopic.label || topic.parentTopic.topic || "Back")}</em></p>`
+      : "";
+    const commonTrap = node.commonTrap
+      ? `<div class="card-section trap"><p><strong>Common Trap</strong></p><p>${escapeHtml(node.commonTrap)}</p></div>`
+      : "";
+    const interviewAnswer = node.interviewAnswer
+      ? `<div class="card-section"><p><strong>Interview Answer</strong></p><p>${escapeHtml(node.interviewAnswer)}</p></div>`
+      : "";
+    const relatedQuestionsHtml = relatedQuestions.length > 0
+      ? `<div class="card-section"><p><strong>Related Questions</strong></p><ul>${relatedQuestions.map((q) => `<li>${escapeHtml(q)}</li>`).join("")}</ul></div>`
+      : "";
+    const studyNote = noteSummary
+      ? `<div class="card-section"><p><strong>Study Note</strong></p><p>${escapeHtml(noteSummary)}</p></div>`
+      : "";
+    const imageSection = noteImage && noteImage.src
+      ? `<div class="card-section"><p><strong>Image / Diagram</strong></p><img class="note-image" src="${escapeHtml(noteImage.src)}" alt="${escapeHtml(noteImage.caption || node.label || "Study image")}" data-image-preview="1" /><p class="note-image-caption">${escapeHtml(noteImage.caption || "")}</p><p class="note-image-fallback" hidden>Image unavailable</p></div>`
+      : "";
+    const copyPathButton = copyPathVisible
+      ? `<button type="button" class="card-copy-btn" data-copy-study-path="1">Copy Study Path</button>`
+      : "";
+    const copyCardButton = `<button type="button" class="card-copy-btn" data-copy-study-card="1">Copy Study Card</button>`;
+    detailsEl.innerHTML = `
+      <p><strong>Label:</strong> ${escapeHtml(node.label)}</p>
+      <p><strong>Group:</strong> ${escapeHtml(node.group)}</p>
+      <div class="card-section"><p><strong>Definition</strong></p><p>${escapeHtml(node.definition || "")}</p></div>
+      <div class="card-section"><p><strong>Why It Matters</strong></p><p>${escapeHtml(node.whyItMatters || "")}</p></div>
+      <div class="card-section"><p><strong>Safe Sentence</strong></p><p>${escapeHtml(node.safeSentence || "")}</p></div>
+      <div class="copy-row">
+        <div class="copy-actions">
+          ${hasSafeSentence ? '<button type="button" class="card-copy-btn" data-copy-safe="1">Copy Safe Sentence</button>' : ""}
+          ${copyCardButton}
+          ${copyPathButton}
+        </div>
+        <div class="copy-status-wrap">
+          <span class="copy-status" id="copy-status" aria-live="polite"></span>
+        </div>
+      </div>
+      ${commonTrap}
+      ${interviewAnswer}
+      ${relatedQuestionsHtml}
+      ${studyNote}
+      ${imageSection}
+      ${doubleClickHint}
+      ${renderExternalLinks(node.externalLinks)}
+      ${renderChildTopicButtons(node.childTopics, mode)}
+      ${renderChildTopics(node.childTopics, mode)}
+      ${renderParentTopic(topic.parentTopic, mode)}
+      ${renderMapResources(topic, mode)}
+    `;
+    for (const button of detailsEl.querySelectorAll(".nav-topic-btn[data-nav-href]")) {
+      button.addEventListener("click", () => {
+        const href = button.getAttribute("data-nav-href");
+        if (!href || href === "#") return;
+        window.location.href = href;
+      });
+    }
+    const image = detailsEl.querySelector("[data-image-preview='1']");
+    if (image) {
+      image.addEventListener("error", () => {
+        image.setAttribute("hidden", "hidden");
+        const fallback = image.parentElement && image.parentElement.querySelector(".note-image-fallback");
+        if (fallback) fallback.hidden = false;
+      });
+    }
+    const copySafeBtn = detailsEl.querySelector("[data-copy-safe='1']");
+    const copyStatusEl = detailsEl.querySelector("#copy-status");
+    let copyStatusTimer = null;
+    function setCopyStatus(message) {
+      if (!copyStatusEl) return;
+      copyStatusEl.textContent = message;
+      if (copyStatusTimer) {
+        window.clearTimeout(copyStatusTimer);
+      }
+      copyStatusTimer = window.setTimeout(() => {
+        if (copyStatusEl.textContent === message) copyStatusEl.textContent = "";
+      }, 1800);
+    }
+    if (copySafeBtn) {
+      copySafeBtn.addEventListener("click", async () => {
+        const ok = await copyTextWithFallback(node.safeSentence || "");
+        setCopyStatus(ok ? "Safe sentence copied" : "Copy unavailable");
+      });
+    }
+    const copyPathBtn = detailsEl.querySelector("[data-copy-study-path='1']");
+    if (copyPathBtn) {
+      copyPathBtn.addEventListener("click", async () => {
+        if (!activePath) return;
+        const labels = (activePath.nodeIds || [])
+          .map((id) => graphById.get(id))
+          .filter(Boolean)
+          .map((n) => `- ${n.label}`);
+        const text = `${activePath.label}\n${activePath.description || ""}\n${labels.join("\n")}`.trim();
+        const ok = await copyTextWithFallback(text);
+        setCopyStatus(ok ? "Study path copied" : "Copy unavailable");
+      });
+    }
+    const copyCardBtn = detailsEl.querySelector("[data-copy-study-card='1']");
+    if (copyCardBtn) {
+      copyCardBtn.addEventListener("click", async () => {
+        const lines = [
+          `Label: ${node.label || ""}`,
+          `Group: ${node.group || ""}`,
+          "",
+          "Definition:",
+          `${node.definition || ""}`,
+          "",
+          "Why It Matters:",
+          `${node.whyItMatters || ""}`,
+          "",
+          "Safe Sentence:",
+          `${node.safeSentence || ""}`,
+        ];
+        if (node.commonTrap) {
+          lines.push("", "Common Trap:", `${node.commonTrap}`);
+        }
+        if (node.interviewAnswer) {
+          lines.push("", "Interview Answer:", `${node.interviewAnswer}`);
+        }
+        if (Array.isArray(node.relatedQuestions) && node.relatedQuestions.length > 0) {
+          lines.push("", "Related Questions:");
+          for (const q of node.relatedQuestions) lines.push(`- ${q}`);
+        }
+        if (node.note && node.note.summary) {
+          lines.push("", "Study Note:", `${node.note.summary}`);
+        }
+        if (Array.isArray(node.externalLinks) && node.externalLinks.length > 0) {
+          lines.push("", "External Links:");
+          for (const link of node.externalLinks) {
+            lines.push(`- ${link.label || "Link"}: ${link.href || ""}`);
+          }
+        }
+        const ok = await copyTextWithFallback(lines.join("\n").trim());
+        setCopyStatus(ok ? "Study card copied" : "Copy unavailable");
+      });
+    }
+  }
+
+  function setSelectedNode(nodeId, alsoFocus = false) {
+    selectedNodeId = nodeId;
+    if (alsoFocus) focusedNodeId = nodeId;
+    for (const [id, el] of nodeElements.entries()) {
+      el.group.classList.toggle("is-active", id === nodeId);
+    }
+    const node = graphById.get(nodeId);
+    if (node) renderDetails(node, currentTopic, currentMode);
+    updateHighlights();
+  }
+
+  function renderNoSelectionDetails(topic, mode) {
+    detailsEl.innerHTML = `
+      <p>Select a bubble to view concept details.</p>
+      <p><strong>Map:</strong> ${escapeHtml(topic.title || "Study Map")}</p>
+      ${renderMapResources(topic, mode)}
+    `;
+  }
+
+  function shouldNodeBeVisible(node) {
+    const nodeGroupKey = normalizeFilterKey(node && node.group);
+    const groupMatch = activeFilter === "all" || nodeGroupKey === activeFilter;
+    if (!groupMatch) return false;
+    if (!searchTerm.trim()) return true;
+    return nodeSearchText(node).includes(searchTerm.trim().toLowerCase());
+  }
+
+  function applyVisibility() {
+    const visibleIds = new Set();
+    let matchCount = 0;
+    const hasGroupFilter = activeFilter !== "all";
+    for (const node of graphById.values()) {
+      const visible = shouldNodeBeVisible(node);
+      const nodeEl = nodeElements.get(node.id);
+      if (!nodeEl) continue;
+      const dimOpacity = hasGroupFilter ? "0.18" : "0.15";
+      nodeEl.group.style.opacity = visible ? "1" : dimOpacity;
+      nodeEl.group.classList.toggle("is-filter-match", hasGroupFilter && visible);
+      if (visible) {
+        visibleIds.add(node.id);
+        if (searchTerm.trim()) matchCount += 1;
+      }
+    }
+    for (const linkEl of linkElements) {
+      const srcVisible = visibleIds.has(linkEl.sourceId);
+      const tgtVisible = visibleIds.has(linkEl.targetId);
+      const matched = srcVisible && tgtVisible;
+      linkEl.el.style.opacity = matched ? "" : "0.1";
+      linkEl.el.classList.toggle("is-filter-match", hasGroupFilter && matched);
+      linkEl.el.classList.toggle("is-filter-dim", hasGroupFilter && !matched);
+    }
+    if (searchCountEl) {
+      searchCountEl.textContent = searchTerm.trim() ? `${matchCount} match${matchCount === 1 ? "" : "es"}` : "";
+    }
+    if (selectedNodeId && !visibleIds.has(selectedNodeId)) {
+      selectedNodeId = null;
+      focusedNodeId = null;
+      renderNoSelectionDetails(currentTopic, currentMode);
+    }
+    updateHighlights();
+  }
+
+  function renderGroupFilters(topic) {
+    if (!groupFiltersEl) return;
+    groupFiltersEl.innerHTML = "";
+    const groupEntries = [{ label: "All", key: "all" }];
+    for (const g of (topic.groups || [])) {
+      if (!g || typeof g !== "object") continue;
+      const label = String(g.label || g.id || "").trim();
+      if (!label) continue;
+      const key = normalizeFilterKey(g.id || g.label);
+      groupEntries.push({ label, key });
+    }
+    for (const entry of groupEntries) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "filter-btn";
+      btn.textContent = entry.label;
+      btn.dataset.filterKey = entry.key;
+      const color = entry.key === "all" ? "#64748b" : groupColor(entry.label);
+      btn.style.setProperty("--filter-color", color);
+      btn.style.setProperty("--filter-active-bg", withAlpha(color, 0.38));
+      if (entry.key === activeFilter) btn.classList.add("is-active");
+      btn.addEventListener("click", () => {
+        activeFilter = entry.key;
+        for (const b of groupFiltersEl.querySelectorAll(".filter-btn")) {
+          b.classList.toggle("is-active", b.dataset.filterKey === entry.key);
+        }
+        applyVisibility();
+      });
+      groupFiltersEl.appendChild(btn);
+    }
+  }
+
+  function renderPaths(paths) {
+    if (!pathsEl) return;
+    pathsEl.innerHTML = "";
+    if (!paths || paths.length === 0) {
+      const li = document.createElement("li");
+      li.textContent = "No study paths.";
+      pathsEl.appendChild(li);
+      return;
+    }
+    for (const path of paths) {
+      const li = document.createElement("li");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "path-item-btn";
+      btn.dataset.pathId = path.id || path.label || "";
+      btn.innerHTML = `<strong>${escapeHtml(path.label)}</strong><br>${escapeHtml(path.description || "")}`;
+      btn.addEventListener("click", () => {
+        const thisPathId = path.id || path.label || "";
+        if (activePathId === thisPathId) {
+          activePathId = null;
+          activePathNodeIds = new Set();
+          activePath = null;
+        } else {
+          activePathId = thisPathId;
+          activePathNodeIds = new Set(path.nodeIds || []);
+          activePath = path;
+        }
+        for (const b of pathsEl.querySelectorAll(".path-item-btn")) {
+          b.classList.toggle("is-active", b.dataset.pathId === activePathId);
+        }
+        updateHighlights();
+      });
+      li.appendChild(btn);
+      pathsEl.appendChild(li);
+    }
+  }
+
+  function renderMinimap() {
+    if (!miniSvg) return;
+    miniSvg.innerHTML = "";
+    for (const link of linkElements) {
+      const source = graphById.get(link.sourceId);
+      const target = graphById.get(link.targetId);
+      if (!source || !target) continue;
+      const line = document.createElementNS(NS, "line");
+      line.setAttribute("x1", String(source.x));
+      line.setAttribute("y1", String(source.y));
+      line.setAttribute("x2", String(target.x));
+      line.setAttribute("y2", String(target.y));
+      line.setAttribute("stroke", "#64748b");
+      line.setAttribute("stroke-width", "1.5");
+      line.setAttribute("opacity", "0.8");
+      miniSvg.appendChild(line);
+    }
+    for (const node of graphById.values()) {
+      const dot = document.createElementNS(NS, "circle");
+      dot.setAttribute("cx", String(node.x));
+      dot.setAttribute("cy", String(node.y));
+      dot.setAttribute("r", String(Math.max(5, node.r / 6)));
+      dot.setAttribute("fill", groupColor(node.group));
+      dot.setAttribute("stroke", "#e2e8f0");
+      dot.setAttribute("stroke-width", "1");
+      miniSvg.appendChild(dot);
+    }
+    const viewportRect = document.createElementNS(NS, "rect");
+    viewportRect.setAttribute("id", "mini-viewport");
+    viewportRect.setAttribute("fill", "none");
+    viewportRect.setAttribute("stroke", "#f8fafc");
+    viewportRect.setAttribute("stroke-width", "2");
+    miniSvg.appendChild(viewportRect);
+    renderMinimapViewport();
+  }
+
+  function renderMinimapViewport() {
+    const rect = document.getElementById("mini-viewport");
+    if (!rect) return;
+    rect.setAttribute("x", String((-view.tx) / view.scale));
+    rect.setAttribute("y", String((-view.ty) / view.scale));
+    rect.setAttribute("width", String(width / view.scale));
+    rect.setAttribute("height", String(height / view.scale));
+  }
+
+  function buildLayout(nodes, topic) {
+    const marginX = 120;
+    const minY = 90;
+    const maxY = 610;
+    const visualCenterY = 330;
+    const groups = (topic.groups || []).map((g) => g.label).filter(Boolean);
+    const groupedNodes = new Map();
+    for (const node of nodes) {
+      const key = node.group || "Ungrouped";
+      if (!groupedNodes.has(key)) groupedNodes.set(key, []);
+      groupedNodes.get(key).push(node);
+    }
+    const groupOrder = [...groups, ...[...groupedNodes.keys()].filter((k) => !groups.includes(k))];
+    const activeGroups = groupOrder.filter((k) => groupedNodes.has(k));
+    const positioned = [];
+    const avgNodesPerGroup = nodes.length / Math.max(activeGroups.length, 1);
+    const useRadialGroupLayout = activeGroups.length >= 5 && avgNodesPerGroup <= 1.6;
+    const coreNode = nodes.find((n) => n && n.size === "core") || nodes[0] || null;
+    const coreAnchorX = 380;
+    const coreAnchorY = visualCenterY;
+    const coreGroup = coreNode ? (coreNode.group || "Ungrouped") : null;
+
+    for (let gIndex = 0; gIndex < activeGroups.length; gIndex += 1) {
+      const groupName = activeGroups[gIndex];
+      const groupNodes = groupedNodes.get(groupName) || [];
+      let centerX = marginX;
+      let centerY = visualCenterY;
+
+      if (useRadialGroupLayout) {
+        if (coreGroup && groupName === coreGroup) {
+          centerX = coreAnchorX;
+          centerY = coreAnchorY;
+        } else {
+          const nonCoreGroups = activeGroups.filter((g) => g !== coreGroup);
+          const ringIndex = Math.max(0, nonCoreGroups.indexOf(groupName));
+          const ringCount = Math.max(nonCoreGroups.length, 1);
+          const angle = (-Math.PI / 2) + (2 * Math.PI * ringIndex) / ringCount;
+          const radiusX = 280;
+          const radiusY = 200;
+          centerX = coreAnchorX + Math.cos(angle) * radiusX;
+          centerY = coreAnchorY + Math.sin(angle) * radiusY;
+        }
+      } else {
+        const groupCount = Math.max(activeGroups.length, 1);
+        const groupSpan = groupCount > 1 ? (width - marginX * 2) / (groupCount - 1) : 0;
+        centerX = marginX + groupSpan * gIndex;
+      }
+
+      const columns = Math.max(1, Math.ceil(Math.sqrt(groupNodes.length)));
+      const colGap = 120;
+      const rowGap = 110;
+      for (let i = 0; i < groupNodes.length; i += 1) {
+        const node = groupNodes[i];
+        const hasManualPosition = Number.isFinite(node.x) && Number.isFinite(node.y);
+        const col = i % columns;
+        const row = Math.floor(i / columns);
+        const rowOffset = (row - (Math.max(1, Math.ceil(groupNodes.length / columns)) - 1) / 2) * rowGap;
+        const colOffset = (col - (columns - 1) / 2) * colGap;
+        positioned.push({
+          ...node,
+          x: hasManualPosition ? Number(node.x) : centerX + colOffset,
+          y: hasManualPosition ? Number(node.y) : Math.max(minY, Math.min(maxY, centerY + rowOffset)),
+          r: nodeRadius(node.size),
+          layoutFixed: hasManualPosition,
+        });
+      }
+    }
+    for (let iter = 0; iter < 110; iter += 1) {
+      for (let i = 0; i < positioned.length; i += 1) {
+        for (let j = i + 1; j < positioned.length; j += 1) {
+          const a = positioned[i];
+          const b = positioned[j];
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const dist = Math.hypot(dx, dy) || 0.0001;
+          const minDist = a.r + b.r + 34;
+          if (dist < minDist) {
+            const push = (minDist - dist) / 2;
+            const ux = dx / dist;
+            const uy = dy / dist;
+            if (!a.layoutFixed && !b.layoutFixed) {
+              a.x -= ux * push; a.y -= uy * push;
+              b.x += ux * push; b.y += uy * push;
+            } else if (a.layoutFixed && !b.layoutFixed) {
+              b.x += ux * (push * 2); b.y += uy * (push * 2);
+            } else if (!a.layoutFixed && b.layoutFixed) {
+              a.x -= ux * (push * 2); a.y -= uy * (push * 2);
+            }
+          }
+        }
+      }
+      for (const n of positioned) {
+        if (!n.layoutFixed) {
+          n.x = Math.max(marginX - 20, Math.min(width - marginX + 20, n.x));
+          n.y = Math.max(minY, Math.min(maxY, n.y));
+        }
+      }
+    }
+    return positioned;
+  }
+
+  function drawTopic(topic, mode) {
+    buildGroupColorLookup(topic);
+    currentTopic = topic;
+    currentMode = mode;
+    activeFilter = "all";
+    searchTerm = "";
+    selectedNodeId = null;
+    focusedNodeId = null;
+    activePathNodeIds = new Set();
+    activePathId = null;
+    if (searchInput) searchInput.value = "";
+    if (searchCountEl) searchCountEl.textContent = "";
+    titleEl.textContent = topic.title || "StudyBubble Topic";
+    subtitleEl.textContent = topic.subtitle || "";
+    renderTopicParentButton(topic, mode);
+
+    svg.innerHTML = "";
+    nodeElements.clear();
+    linkElements.length = 0;
+    graphById.clear();
+    groupById.clear();
+    nodeOrder.length = 0;
+
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    const nodes = Array.isArray(topic.nodes) ? topic.nodes : [];
+    const links = Array.isArray(topic.links) ? topic.links : [];
+    const positioned = buildLayout(nodes, topic);
+    const positionById = new Map(positioned.map((n) => [n.id, n]));
+
+    const viewport = document.createElementNS(NS, "g");
+    viewport.setAttribute("id", "map-viewport");
+    svg.appendChild(viewport);
+
+    const linkLayer = document.createElementNS(NS, "g");
+    const nodeLayer = document.createElementNS(NS, "g");
+    viewport.appendChild(linkLayer);
+    viewport.appendChild(nodeLayer);
+
+    for (const p of positioned) {
+      graphById.set(p.id, p);
+      groupById.set(p.id, p.group);
+      nodeOrder.push(p.id);
+    }
+
+    for (const link of links) {
+      const source = positionById.get(link.source);
+      const target = positionById.get(link.target);
+      if (!source || !target) continue;
+      const line = document.createElementNS(NS, "line");
+      line.setAttribute("class", "link-line");
+      line.setAttribute("x1", String(source.x));
+      line.setAttribute("y1", String(source.y));
+      line.setAttribute("x2", String(target.x));
+      line.setAttribute("y2", String(target.y));
+      linkLayer.appendChild(line);
+      linkElements.push({ el: line, sourceId: link.source, targetId: link.target });
+    }
+
+    for (const node of positioned) {
+      const group = document.createElementNS(NS, "g");
+      group.setAttribute("class", "bubble-node");
+      group.setAttribute("tabindex", "0");
+      group.dataset.nodeId = node.id;
+
+      const circle = document.createElementNS(NS, "circle");
+      circle.setAttribute("class", "bubble-circle");
+      circle.setAttribute("cx", String(node.x));
+      circle.setAttribute("cy", String(node.y));
+      circle.setAttribute("r", String(node.r));
+
+      const text = document.createElementNS(NS, "text");
+      text.setAttribute("class", "bubble-label");
+      text.setAttribute("x", String(node.x));
+      text.setAttribute("y", String(node.y));
+      const maxCharsPerLine = node.size === "core" ? 13 : node.size === "support" ? 11 : 10;
+      const lines = wrapLabel(node.label, maxCharsPerLine);
+      const lineHeight = 16;
+      const startOffset = -((lines.length - 1) * lineHeight) / 2;
+      for (let i = 0; i < lines.length; i += 1) {
+        const tspan = document.createElementNS(NS, "tspan");
+        tspan.setAttribute("x", String(node.x));
+        tspan.setAttribute("dy", i === 0 ? String(startOffset) : String(lineHeight));
+        tspan.textContent = lines[i];
+        text.appendChild(tspan);
+      }
+
+      group.appendChild(circle);
+      group.appendChild(text);
+      nodeLayer.appendChild(group);
+      const baseColor = groupColor(node.group);
+      group.style.setProperty("--node-fill", withAlpha(baseColor, 0.66));
+      group.style.setProperty("--node-stroke", baseColor);
+      group.style.setProperty("--node-glow", withAlpha(baseColor, 0.35));
+      nodeElements.set(node.id, { group, node, circle, text });
+
+      function activate(alsoFocus = false) {
+        setSelectedNode(node.id, alsoFocus);
+      }
+      function openSingleChild() {
+        const childTopics = Array.isArray(node.childTopics) ? node.childTopics : [];
+        if (childTopics.length === 1) navigateToTopicRef(childTopics[0].topic, mode);
+      }
+      function openParent() {
+        const parentTopic = topic && topic.parentTopic && typeof topic.parentTopic === "object" ? topic.parentTopic : null;
+        if (parentTopic && parentTopic.topic) navigateToTopicRef(parentTopic.topic, mode);
+      }
+
+      group.addEventListener("click", () => activate());
+      group.addEventListener("dblclick", () => {
+        activate();
+        const childTopics = Array.isArray(node.childTopics) ? node.childTopics : [];
+        if (childTopics.length === 1) openSingleChild();
+        else openParent();
+      });
+      group.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          activate(true);
+        }
+      });
+      group.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+        activate();
+        ctxNodeId = node.id;
+        if (!ctxMenuEl) return;
+        ctxMenuEl.style.left = `${event.clientX + 8}px`;
+        ctxMenuEl.style.top = `${event.clientY + 8}px`;
+        ctxMenuEl.classList.add("open");
+        ctxMenuEl.setAttribute("aria-hidden", "false");
+      });
+      group.addEventListener("mousedown", (event) => {
+        if (!dragMode || event.button !== 0) return;
+        event.preventDefault();
+        dragNodeId = node.id;
+        const world = clientToWorld(event.clientX, event.clientY);
+        dragOffset = { x: world.x - node.x, y: world.y - node.y };
+        svg.classList.add("is-dragging");
+      });
+
+      const childTopics = Array.isArray(node.childTopics) ? node.childTopics : [];
+      if (childTopics.length === 1) group.setAttribute("title", `Double-click to open ${childTopics[0].label || childTopics[0].topic || "child topic"}`);
+      else if (topic.parentTopic && topic.parentTopic.topic) group.setAttribute("title", `Double-click to go back to ${topic.parentTopic.label || topic.parentTopic.topic || "parent topic"}`);
+    }
+
+    renderGroupFilters(topic);
+    renderPaths(topic.paths || []);
+    renderNoSelectionDetails(topic, mode);
+    resetViewTransform();
+    fitView();
+    renderMinimap();
+    applyVisibility();
+    updateModeHud();
+  }
+
+  function refreshNodeGeometry(nodeId) {
+    const n = graphById.get(nodeId);
+    const el = nodeElements.get(nodeId);
+    if (!n || !el) return;
+    el.circle.setAttribute("cx", String(n.x));
+    el.circle.setAttribute("cy", String(n.y));
+    el.text.setAttribute("x", String(n.x));
+    el.text.setAttribute("y", String(n.y));
+    for (const tspan of el.text.querySelectorAll("tspan")) {
+      tspan.setAttribute("x", String(n.x));
+    }
+    for (const link of linkElements) {
+      if (link.sourceId === nodeId) {
+        link.el.setAttribute("x1", String(n.x));
+        link.el.setAttribute("y1", String(n.y));
+      } else if (link.targetId === nodeId) {
+        link.el.setAttribute("x2", String(n.x));
+        link.el.setAttribute("y2", String(n.y));
+      }
+    }
+    if (miniSvg) renderMinimap();
+  }
+
+  function handleKeyboard(event) {
+    if (!currentTopic || !nodeOrder.length) return;
+    const idx = Math.max(0, nodeOrder.indexOf(selectedNodeId || nodeOrder[0]));
+    if (event.key === "Escape") {
+      selectedNodeId = null;
+      focusedNodeId = null;
+      detailsEl.innerHTML = "<p>Select a bubble to view details.</p>";
+      for (const [, el] of nodeElements.entries()) el.group.classList.remove("is-active");
+      updateHighlights();
+      return;
+    }
+    if (event.key.toLowerCase() === "f" && selectedNodeId) {
+      focusedNodeId = focusedNodeId === selectedNodeId ? null : selectedNodeId;
+      updateHighlights();
+      return;
+    }
+    if (!["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp", "Tab"].includes(event.key)) return;
+    event.preventDefault();
+    const next = event.key === "ArrowLeft" || (event.key === "Tab" && event.shiftKey)
+      ? (idx - 1 + nodeOrder.length) % nodeOrder.length
+      : (idx + 1) % nodeOrder.length;
+    setSelectedNode(nodeOrder[next]);
+  }
+
+  function loadTopic() {
+    const embedded = document.getElementById("studybubble-topic-data");
+    if (embedded) return Promise.resolve(JSON.parse(embedded.textContent || "{}"));
+    return fetch("topic.studybubble.json").then((response) => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    });
+  }
+
+  if (svg) {
+    svg.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      const world = clientToWorld(event.clientX, event.clientY);
+      const factor = event.deltaY < 0 ? 1.1 : 0.92;
+      const nextScale = Math.max(0.4, Math.min(2.2, view.scale * factor));
+      view.tx = world.x * (view.scale - nextScale) + view.tx;
+      view.ty = world.y * (view.scale - nextScale) + view.ty;
+      view.scale = nextScale;
+      applyViewTransform();
+    }, { passive: false });
+
+    svg.addEventListener("mousedown", (event) => {
+      if (event.button !== 0 || dragMode) return;
+      if (event.target.closest(".bubble-node")) return;
+      isPanning = true;
+      panStart = { x: event.clientX, y: event.clientY, tx: view.tx, ty: view.ty };
+      svg.classList.add("is-panning");
+    });
+  }
+
+  window.addEventListener("mousemove", (event) => {
+    if (isResizingPanel) {
+      const desired = window.innerWidth - event.clientX;
+      applyPanelWidth(desired);
+      return;
+    }
+    if (dragNodeId) {
+      const world = clientToWorld(event.clientX, event.clientY);
+      const n = graphById.get(dragNodeId);
+      if (!n) return;
+      n.x = world.x - dragOffset.x;
+      n.y = world.y - dragOffset.y;
+      refreshNodeGeometry(dragNodeId);
+      return;
+    }
+    if (!isPanning) return;
+    view.tx = panStart.tx + (event.clientX - panStart.x);
+    view.ty = panStart.ty + (event.clientY - panStart.y);
+    applyViewTransform();
+  });
+
+  window.addEventListener("mouseup", () => {
+    isResizingPanel = false;
+    isPanning = false;
+    dragNodeId = null;
+    svg.classList.remove("is-panning");
+    svg.classList.remove("is-dragging");
+  });
+
+  document.addEventListener("click", (event) => {
+    if (ctxMenuEl && !ctxMenuEl.contains(event.target)) {
+      ctxMenuEl.classList.remove("open");
+      ctxMenuEl.setAttribute("aria-hidden", "true");
+    }
+  });
+
+  if (ctxMenuEl) ctxMenuEl.addEventListener("click", (event) => {
+    const btn = event.target.closest(".ctx-item");
+    if (!btn || !ctxNodeId) return;
+    const action = btn.dataset.action;
+    if (action === "reset") {
+      resetViewTransform();
+      focusedNodeId = null;
+      updateHighlights();
+      ctxMenuEl.classList.remove("open");
+      ctxMenuEl.setAttribute("aria-hidden", "true");
+      return;
+    }
+    if (!ctxNodeId) {
+      ctxMenuEl.classList.remove("open");
+      ctxMenuEl.setAttribute("aria-hidden", "true");
+      return;
+    }
+    if (action === "pin") setSelectedNode(ctxNodeId);
+    else if (action === "focus") {
+      focusedNodeId = ctxNodeId;
+      updateHighlights();
+    } else if (action === "filter") {
+      const group = groupById.get(ctxNodeId);
+      if (group) {
+        activeFilter = normalizeFilterKey(group);
+        if (groupFiltersEl) {
+          for (const b of groupFiltersEl.querySelectorAll(".filter-btn")) {
+            b.classList.toggle("is-active", b.dataset.filterKey === activeFilter);
+          }
+        }
+        applyVisibility();
+      }
+    }
+    ctxMenuEl.classList.remove("open");
+    ctxMenuEl.setAttribute("aria-hidden", "true");
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      searchTerm = searchInput.value || "";
+      applyVisibility();
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      searchTerm = "";
+      if (searchInput) searchInput.value = "";
+      activeFilter = "all";
+      selectedNodeId = null;
+      focusedNodeId = null;
+      activePathNodeIds = new Set();
+      activePathId = null;
+      activePath = null;
+        if (groupFiltersEl) {
+          for (const b of groupFiltersEl.querySelectorAll(".filter-btn")) {
+            b.classList.toggle("is-active", b.dataset.filterKey === "all");
+          }
+        }
+      if (pathsEl) {
+        for (const b of pathsEl.querySelectorAll(".path-item-btn")) {
+          b.classList.remove("is-active");
+        }
+      }
+      detailsEl.innerHTML = "<p>Select a bubble to view details.</p>";
+      if (currentTopic) renderNoSelectionDetails(currentTopic, currentMode);
+      applyVisibility();
+      resetViewTransform();
+    });
+  }
+
+  if (dragToggleBtn) {
+    dragToggleBtn.addEventListener("click", () => {
+      dragMode = !dragMode;
+      dragToggleBtn.classList.toggle("is-active", dragMode);
+      updateModeHud();
+    });
+  }
+  if (focusToggleBtn) {
+    focusToggleBtn.addEventListener("click", () => {
+      if (!selectedNodeId) return;
+      focusedNodeId = focusedNodeId === selectedNodeId ? null : selectedNodeId;
+      focusToggleBtn.classList.toggle("is-active", !!focusedNodeId);
+      updateHighlights();
+    });
+  }
+  if (fitBtn) fitBtn.addEventListener("click", fitView);
+  if (resetViewBtn) resetViewBtn.addEventListener("click", resetViewTransform);
+  if (exportLayoutBtn) exportLayoutBtn.addEventListener("click", exportLayout);
+  if (panelResizerEl && sidePanelEl) {
+    panelResizerEl.addEventListener("mousedown", (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      isResizingPanel = true;
+    });
+    restorePanelWidth();
+  }
+  document.addEventListener("keydown", handleKeyboard);
+
+  try {
+    const topic = await loadTopic();
+    const mode = document.getElementById("studybubble-topic-data") ? "single-file" : "multifile";
+    drawTopic(topic, mode);
+  } catch (error) {
+    titleEl.textContent = "Failed to load topic";
+    subtitleEl.textContent = String(error);
+    detailsEl.innerHTML = "<p>Could not load topic data.</p>";
+  }
+})();
+
+  </script>
+
+  <!-- SECTION: Build Metadata -->
+  <script id="studybubble-build-metadata" type="application/json">
+{
+  "generatedAtUtc": "2026-05-21T04:07:24.340276+00:00",
+  "mode": "single-file",
+  "sourceTopicPath": "D:\\Workarea\\StudyBook\\study_maps\\DataCamp\\Associate_Data_Engineer_Databricks\\topics\\course_11_spark_runtime_architecture_quest.studybubble.json",
+  "topicId": "course_11_spark_runtime_architecture_quest",
+  "title": "Spark Runtime Architecture Quest",
+  "nodeCount": 14,
+  "linkCount": 19,
+  "pathCount": 1
+}
+  </script>
+</body>
+</html>

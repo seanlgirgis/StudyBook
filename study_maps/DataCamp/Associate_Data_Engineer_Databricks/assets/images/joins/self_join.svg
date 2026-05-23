@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
+  <title id="title">SELF JOIN</title>
+  <desc id="desc">A self join diagram showing prime_ministers joined to itself using aliases p1 and p2.</desc>
+  <rect width="1100" height="700" fill="#f8fafc"/>
+  <text x="550" y="58" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="700" fill="#0f172a">SELF JOIN</text>
+  <text x="550" y="94" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#334155">same table, two aliases, paired rows on matching continent</text>
+
+  <rect x="90" y="140" width="300" height="200" rx="12" fill="#e0f2fe" stroke="#1e3a8a" stroke-width="2"/>
+  <text x="240" y="178" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#1e3a8a">prime_ministers AS p1</text>
+  <text x="120" y="225" font-family="Consolas, monospace" font-size="22" fill="#0f172a">country</text>
+  <text x="260" y="225" font-family="Consolas, monospace" font-size="22" fill="#0f172a">continent</text>
+  <text x="120" y="262" font-family="Consolas, monospace" font-size="21" fill="#0f172a">Japan</text>
+  <text x="260" y="262" font-family="Consolas, monospace" font-size="21" fill="#0f172a">Asia</text>
+
+  <rect x="420" y="140" width="300" height="200" rx="12" fill="#ffedd5" stroke="#9a3412" stroke-width="2"/>
+  <text x="570" y="178" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#9a3412">prime_ministers AS p2</text>
+  <text x="450" y="225" font-family="Consolas, monospace" font-size="22" fill="#0f172a">country</text>
+  <text x="590" y="225" font-family="Consolas, monospace" font-size="22" fill="#0f172a">continent</text>
+  <text x="450" y="262" font-family="Consolas, monospace" font-size="21" fill="#0f172a">India</text>
+  <text x="590" y="262" font-family="Consolas, monospace" font-size="21" fill="#0f172a">Asia</text>
+
+  <path d="M390,240 L420,240" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect x="90" y="380" width="630" height="180" rx="12" fill="#dcfce7" stroke="#166534" stroke-width="2"/>
+  <text x="405" y="422" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700" fill="#166534">Join Conditions</text>
+  <text x="130" y="468" font-family="Consolas, monospace" font-size="26" fill="#14532d">p1.continent = p2.continent</text>
+  <text x="130" y="510" font-family="Consolas, monospace" font-size="26" fill="#14532d">p1.country &lt;&gt; p2.country</text>
+
+  <rect x="760" y="140" width="280" height="420" rx="12" fill="#fef9c3" stroke="#a16207" stroke-width="2"/>
+  <text x="900" y="180" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#854d0e">Result Idea</text>
+  <text x="900" y="230" text-anchor="middle" font-family="Consolas, monospace" font-size="22" fill="#0f172a">country1 | country2 | continent</text>
+  <text x="900" y="280" text-anchor="middle" font-family="Consolas, monospace" font-size="21" fill="#0f172a">Japan    | India    | Asia</text>
+  <text x="900" y="320" text-anchor="middle" font-family="Consolas, monospace" font-size="21" fill="#0f172a">India    | Japan    | Asia</text>
+  <text x="900" y="375" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#713f12">country1 paired with country2</text>
+  <text x="900" y="405" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#713f12">on the same continent</text>
+</svg>

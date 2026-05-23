@@ -26,7 +26,7 @@
   const NS = "http://www.w3.org/2000/svg";
   let currentTopic = null;
   let currentMode = "multifile";
-  let activeFilter = "All";
+  let activeFilter = "all";
   let searchTerm = "";
   let selectedNodeId = null;
   let focusedNodeId = null;
@@ -84,6 +84,10 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
+  }
+
+  function normalizeFilterKey(value) {
+    return String(value || "").trim().toLowerCase();
   }
 
   function setLayoutExportStatus(message) {
@@ -633,7 +637,8 @@
   }
 
   function shouldNodeBeVisible(node) {
-    const groupMatch = activeFilter === "All" || node.group === activeFilter;
+    const nodeGroupKey = normalizeFilterKey(node && node.group);
+    const groupMatch = activeFilter === "all" || nodeGroupKey === activeFilter;
     if (!groupMatch) return false;
     if (!searchTerm.trim()) return true;
     return nodeSearchText(node).includes(searchTerm.trim().toLowerCase());
@@ -642,11 +647,14 @@
   function applyVisibility() {
     const visibleIds = new Set();
     let matchCount = 0;
+    const hasGroupFilter = activeFilter !== "all";
     for (const node of graphById.values()) {
       const visible = shouldNodeBeVisible(node);
       const nodeEl = nodeElements.get(node.id);
       if (!nodeEl) continue;
-      nodeEl.group.style.opacity = visible ? "1" : "0.15";
+      const dimOpacity = hasGroupFilter ? "0.18" : "0.15";
+      nodeEl.group.style.opacity = visible ? "1" : dimOpacity;
+      nodeEl.group.classList.toggle("is-filter-match", hasGroupFilter && visible);
       if (visible) {
         visibleIds.add(node.id);
         if (searchTerm.trim()) matchCount += 1;
@@ -655,7 +663,10 @@
     for (const linkEl of linkElements) {
       const srcVisible = visibleIds.has(linkEl.sourceId);
       const tgtVisible = visibleIds.has(linkEl.targetId);
-      linkEl.el.style.opacity = srcVisible && tgtVisible ? "" : "0.1";
+      const matched = srcVisible && tgtVisible;
+      linkEl.el.style.opacity = matched ? "" : "0.1";
+      linkEl.el.classList.toggle("is-filter-match", hasGroupFilter && matched);
+      linkEl.el.classList.toggle("is-filter-dim", hasGroupFilter && !matched);
     }
     if (searchCountEl) {
       searchCountEl.textContent = searchTerm.trim() ? `${matchCount} match${matchCount === 1 ? "" : "es"}` : "";
@@ -671,20 +682,28 @@
   function renderGroupFilters(topic) {
     if (!groupFiltersEl) return;
     groupFiltersEl.innerHTML = "";
-    const groups = ["All", ...((topic.groups || []).map((g) => g.label).filter(Boolean))];
-    for (const groupName of groups) {
+    const groupEntries = [{ label: "All", key: "all" }];
+    for (const g of (topic.groups || [])) {
+      if (!g || typeof g !== "object") continue;
+      const label = String(g.label || g.id || "").trim();
+      if (!label) continue;
+      const key = normalizeFilterKey(g.id || g.label);
+      groupEntries.push({ label, key });
+    }
+    for (const entry of groupEntries) {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "filter-btn";
-      btn.textContent = groupName;
-      const color = groupName === "All" ? "#64748b" : groupColor(groupName);
+      btn.textContent = entry.label;
+      btn.dataset.filterKey = entry.key;
+      const color = entry.key === "all" ? "#64748b" : groupColor(entry.label);
       btn.style.setProperty("--filter-color", color);
       btn.style.setProperty("--filter-active-bg", withAlpha(color, 0.38));
-      if (groupName === activeFilter) btn.classList.add("is-active");
+      if (entry.key === activeFilter) btn.classList.add("is-active");
       btn.addEventListener("click", () => {
-        activeFilter = groupName;
+        activeFilter = entry.key;
         for (const b of groupFiltersEl.querySelectorAll(".filter-btn")) {
-          b.classList.toggle("is-active", b.textContent === groupName);
+          b.classList.toggle("is-active", b.dataset.filterKey === entry.key);
         }
         applyVisibility();
       });
@@ -879,7 +898,7 @@
     buildGroupColorLookup(topic);
     currentTopic = topic;
     currentMode = mode;
-    activeFilter = "All";
+    activeFilter = "all";
     searchTerm = "";
     selectedNodeId = null;
     focusedNodeId = null;
@@ -1166,10 +1185,10 @@
     } else if (action === "filter") {
       const group = groupById.get(ctxNodeId);
       if (group) {
-        activeFilter = group;
+        activeFilter = normalizeFilterKey(group);
         if (groupFiltersEl) {
           for (const b of groupFiltersEl.querySelectorAll(".filter-btn")) {
-            b.classList.toggle("is-active", b.textContent === group);
+            b.classList.toggle("is-active", b.dataset.filterKey === activeFilter);
           }
         }
         applyVisibility();
@@ -1190,17 +1209,17 @@
     clearBtn.addEventListener("click", () => {
       searchTerm = "";
       if (searchInput) searchInput.value = "";
-      activeFilter = "All";
+      activeFilter = "all";
       selectedNodeId = null;
       focusedNodeId = null;
       activePathNodeIds = new Set();
       activePathId = null;
       activePath = null;
-      if (groupFiltersEl) {
-        for (const b of groupFiltersEl.querySelectorAll(".filter-btn")) {
-          b.classList.toggle("is-active", b.textContent === "All");
+        if (groupFiltersEl) {
+          for (const b of groupFiltersEl.querySelectorAll(".filter-btn")) {
+            b.classList.toggle("is-active", b.dataset.filterKey === "all");
+          }
         }
-      }
       if (pathsEl) {
         for (const b of pathsEl.querySelectorAll(".path-item-btn")) {
           b.classList.remove("is-active");

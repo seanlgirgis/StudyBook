@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Course 3 - Set Operations Visual Examples</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 24px; color: #111827; }
+    h1, h2 { color: #0f172a; }
+    .diagram { display: block; width: 100%; max-width: 560px; border: 1px solid #cbd5e1; padding: 10px; background: #f8fafc; margin: 12px 0 18px; box-sizing: border-box; }
+    table { border-collapse: collapse; width: 100%; max-width: 980px; }
+    th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #e2e8f0; }
+    pre { background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h1>Course 3 - Set Operations Visual Examples</h1>
+  <p><a href="index.html">Back to Course 3 landing page</a> | <a href="14_join_types_visual_guide.html">Open Join Types Visual Guide</a> | <a href="15_join_business_scenarios.html">Open Join Business Scenarios</a></p>
+
+  <h2>1. Big idea</h2>
+  <p>Set operations combine result sets from SELECT statements. They do not join tables side-by-side. They stack or compare rows.</p>
+  <p>JOIN = side-by-side using keys.<br />SET OPERATION = stack or compare SELECT results.</p>
+  <p>Set operations do not use ON or USING. Each SELECT must return the same number of columns. Matching columns must have compatible data types. Final column names come from the first SELECT.</p>
+  <img class="diagram" src="../../assets/images/set_operations/set_operations_overview.svg" alt="Overview diagram of UNION, UNION ALL, INTERSECT, and EXCEPT" />
+
+  <h2>2. UNION</h2>
+  <p><strong>Meaning:</strong><br />Returns all rows from both SELECT results and removes exact duplicates.</p>
+  <img class="diagram" src="../../assets/images/set_operations/union.svg" alt="UNION diagram showing both sides included and overlap counted once" />
+  <p><strong>SQL pattern:</strong></p>
+  <pre><code>SELECT column1, column2
+FROM table_a
+
+UNION
+
+SELECT column1, column2
+FROM table_b;</code></pre>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>Combine 2024 customers and 2025 customers into one unique customer list.</li>
+    <li>Combine students from multiple classes into one consolidated roster, removing duplicates.</li>
+    <li>Combine active vendor lists from two systems and remove repeated vendors.</li>
+    <li>Combine countries from two reports and keep each country once.</li>
+    <li>Combine incident IDs from two monitoring sources without duplicate incidents.</li>
+  </ul>
+  <p><strong>Use when:</strong><br />You want one clean list and duplicates should be removed.</p>
+
+  <h2>3. UNION ALL</h2>
+  <p><strong>Meaning:</strong><br />Returns all rows from both SELECT results and keeps duplicates.</p>
+  <img class="diagram" src="../../assets/images/set_operations/union_all.svg" alt="UNION ALL diagram showing both sides included with duplicates kept" />
+  <p><strong>SQL pattern:</strong></p>
+  <pre><code>SELECT column1, column2
+FROM table_a
+
+UNION ALL
+
+SELECT column1, column2
+FROM table_b;</code></pre>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>Combine monthly sales records where repeated transactions must remain.</li>
+    <li>Combine log records from two systems where duplicates may be meaningful.</li>
+    <li>Combine attendance submissions from multiple classes before deduplication.</li>
+    <li>Combine all claim records from multiple feeds for audit review.</li>
+    <li>Combine all leader records when the same person may hold two roles.</li>
+  </ul>
+  <p><strong>Use when:</strong><br />Duplicates matter or you want raw combined data.</p>
+  <p><strong>Warning:</strong><br />UNION ALL can return more rows than UNION because it keeps duplicates.</p>
+
+  <h2>4. INTERSECT</h2>
+  <p><strong>Meaning:</strong><br />Returns only rows that appear in both SELECT results.</p>
+  <img class="diagram" src="../../assets/images/set_operations/intersect.svg" alt="INTERSECT diagram showing only overlap/common rows included" />
+  <p><strong>SQL pattern:</strong></p>
+  <pre><code>SELECT column1, column2
+FROM table_a
+
+INTERSECT
+
+SELECT column1, column2
+FROM table_b;</code></pre>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>Find customers who appear in both CRM and billing.</li>
+    <li>Find students who selected the same room preference list.</li>
+    <li>Find products sold in both online and retail channels.</li>
+    <li>Find country/year pairs that exist in both economies and populations.</li>
+    <li>Find employees present in both HR and payroll extracts.</li>
+  </ul>
+  <p><strong>Use when:</strong><br />You want what both result sets have in common.</p>
+  <p><strong>Trap:</strong><br />INTERSECT compares the full selected row, not just one key column.</p>
+
+  <h2>5. EXCEPT</h2>
+  <p><strong>Meaning:</strong><br />Returns rows from the first SELECT result that do not appear in the second SELECT result.</p>
+  <img class="diagram" src="../../assets/images/set_operations/except.svg" alt="EXCEPT diagram showing left-only rows included" />
+  <p><strong>SQL pattern:</strong></p>
+  <pre><code>SELECT column1, column2
+FROM table_a
+
+EXCEPT
+
+SELECT column1, column2
+FROM table_b;</code></pre>
+  <p><strong>Business examples:</strong></p>
+  <ul>
+    <li>Find songs a user has not listened to yet.</li>
+    <li>Find customers in CRM but missing from billing.</li>
+    <li>Find city names that are not also country names.</li>
+    <li>Find source records that did not migrate to the target system.</li>
+    <li>Find servers in CMDB that are not reporting telemetry.</li>
+  </ul>
+  <p><strong>Use when:</strong><br />You want left-side records that are missing from the right side.</p>
+  <p><strong>Trap:</strong><br />Order matters. A EXCEPT B is not the same as B EXCEPT A.</p>
+
+  <h2>6. Quick decision table</h2>
+  <table>
+    <tr><th>Question</th><th>Set operation</th></tr>
+    <tr><td>Combine two lists and remove duplicates?</td><td>UNION</td></tr>
+    <tr><td>Combine two lists and keep duplicates?</td><td>UNION ALL</td></tr>
+    <tr><td>Find rows common to both lists?</td><td>INTERSECT</td></tr>
+    <tr><td>Find rows in the first list but missing from the second?</td><td>EXCEPT</td></tr>
+  </table>
+
+  <h2>7. Set operations vs joins</h2>
+  <table>
+    <tr><th>Concept</th><th>Joins</th><th>Set operations</th></tr>
+    <tr><td>Shape</td><td>side-by-side</td><td>vertical stack/compare</td></tr>
+    <tr><td>Needs ON/USING?</td><td>usually yes</td><td>no</td></tr>
+    <tr><td>Column count must match?</td><td>no</td><td>yes</td></tr>
+    <tr><td>Main question</td><td>how are rows related?</td><td>which rows belong in final set?</td></tr>
+  </table>
+
+  <h2>8. Interview-safe summary</h2>
+  <p>I use joins when I need to combine related columns from different tables using keys. I use set operations when I need to combine or compare complete SELECT results. UNION removes duplicates, UNION ALL keeps duplicates, INTERSECT keeps only common rows, and EXCEPT returns rows from the first result that are missing from the second.</p>
+
+  <p><a href="index.html">Back to Course 3 landing page</a> | <a href="14_join_types_visual_guide.html">Open Join Types Visual Guide</a> | <a href="15_join_business_scenarios.html">Open Join Business Scenarios</a></p>
+</body>
+</html>
