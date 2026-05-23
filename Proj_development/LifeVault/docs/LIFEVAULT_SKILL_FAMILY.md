@@ -18,3 +18,8 @@
 
 - Deprecated naming prefix: `ODC_*`
 - Future-facing naming prefix: `LV_*`
+
+## Use-Case Alignment
+
+- Skill implementation priorities should follow `docs/use_cases/USE_CASE_INDEX.md`.
+- First implementation candidate is UC_001 (`LV_ingest_folder` proposal-only flow).

@@ -2,11 +2,18 @@
 
 ## Core Entities
 
-- `source_asset`: discovered item and source location metadata.
-- `pod_item`: onboarding copy tracked inside a pod.
-- `provenance_event`: ingestion and handling history.
-- `sensitivity_profile`: privacy/security classification.
-- `storage_state`: hot/warm/cold and target vault location.
-- `dedupe_link`: duplicate or near-duplicate relationships.
-- `search_document`: normalized searchable context and extracted signals.
-- `publish_decision`: human approval outcome and publish record.
+- `sources`: origin systems/locations for ingested material.
+- `pods`: onboarding pod metadata with story/context.
+- `files`: content identity records.
+- `file_instances`: observed/copied path instances for files.
+- `vault_locations`: approved final vault destinations.
+- `tags` and `file_tags`: controlled labels and mappings.
+- `review_decisions`: human review and publish decisions.
+- `duplicate_groups` and `duplicate_group_members`: duplicate analysis structures.
+- `audit_log`: immutable-ish operational event history.
+- `text_cache_index`: extracted text pointer placeholders (no full text in v0).
+- `export_snapshots`: backup/export/snapshot artifact records.
+
+## Schema Reference
+
+- Detailed table-by-table v0 design is defined in `docs/LIFEVAULT_SCHEMA_V0_PLAN.md`.
