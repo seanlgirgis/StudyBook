@@ -21,5 +21,7 @@
 - Full extracted text is not part of UC_001/UC_002; content sensitivity workflows require explicit approval and controlled storage policy.
 - UC_004 indexing behavior and table-mapping workflow are defined in `docs/use_cases/UC_004_INDEX_POD_TO_DATABASE_WORKFLOW_SPEC.md`.
 - UC_005 search reads these indexed metadata entities only; no document-content hydration is required in v0.
+- UC_006 review updates are instance/path-aware at workflow level and stored in review metadata without file operations.
+- UC_006B readiness reporting classifies each file instance into publish-ready or blocked states without writing DB rows.
 - Current v0 duplicate membership is file-level (`duplicate_group_members.file_id`), while duplicate candidates originate from file-instance/path observations in pod manifests.
 - v0 indexing should preserve instance-vs-file counts in duplicate group notes for review clarity; future schema may add explicit instance-level duplicate membership.
