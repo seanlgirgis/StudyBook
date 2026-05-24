@@ -77,23 +77,29 @@ This is a planning seed, not a complete backlog.
 ### 4. SUC_005 / Notes and Knowledge Memory
 
 - **Task:** Design notes v0
-  - status: open
+  - status: done
   - priority: P0
   - intake_date: TBD
   - due_date: none
-  - notes: note item model and package contract
+  - notes: SUC_005 note model + template/filename contracts documented
 - **Task:** Implement thin slice
-  - status: open
+  - status: done
   - priority: P1
   - intake_date: TBD
   - due_date: none
-  - notes: one safe note ingest/index/search path
+  - notes: one safe note create/search path implemented (markdown + frontmatter parsing, no DB writes)
 - **Task:** Add search/report view
   - status: open
   - priority: P1
   - intake_date: TBD
   - due_date: none
   - notes: recent notes + lifecycle status
+- **Task:** Create acceptance checklist
+  - status: done
+  - priority: P1
+  - intake_date: TBD
+  - due_date: none
+  - notes: `SUC_005_ACCEPTANCE_CHECKLIST.md` created
 
 ### 5. SUC_010 / Secrets and Sensitive Records
 

@@ -119,6 +119,12 @@ note_folder/
 
 Markdown should use relative asset links for portability.
 
+Detailed note model/contracts:
+
+- `docs/architecture/LIFEVAULT_NOTE_MODEL.md`
+- `docs/contracts/NOTE_AND_NOTE_FOLDER_CONTRACT.md`
+- `docs/contracts/NOTE_ASSET_STORE_CONTRACT.md`
+
 ## Notes Asset Store
 
 Global notes asset store:

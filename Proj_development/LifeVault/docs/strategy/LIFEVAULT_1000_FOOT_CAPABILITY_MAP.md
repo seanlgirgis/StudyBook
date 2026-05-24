@@ -108,6 +108,11 @@ The current local folder lifecycle has already proven this spine end-to-end in v
 - add simple task/maintenance queue v0 design
 - start Streamlit read-only dashboard
 
+Current note status:
+
+- SUC_005 note v0 design contracts completed
+- implementation remains future cycle work
+
 ### Cycle 2
 
 - implement notes v0

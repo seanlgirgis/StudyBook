@@ -39,10 +39,22 @@
 - Super-use-case map and validated lifecycle are defined in:
   - `docs/strategy/LIFEVAULT_1000_FOOT_CAPABILITY_MAP.md`
   - `docs/architecture/LIFEVAULT_VAULT_ITEM_MODEL.md`
+  - `docs/architecture/LIFEVAULT_NOTE_MODEL.md`
+  - `docs/architecture/LIFEVAULT_NOTE_FILENAME_POLICY.md`
   - `docs/architecture/LIFEVAULT_POLICY_MODEL.md`
   - `docs/architecture/LIFEVAULT_TASK_PROJECT_MODEL.md`
+  - `docs/contracts/NOTE_AND_NOTE_FOLDER_CONTRACT.md`
+  - `docs/contracts/NOTE_ASSET_STORE_CONTRACT.md`
+  - `docs/contracts/NOTE_TEMPLATE_CONTRACT.md`
+  - `docs/contracts/NOTE_AND_NOTE_FOLDER_CONTRACT.md`
+  - `docs/contracts/NOTE_TEMPLATE_CONTRACT.md`
+  - `docs/contracts/NOTE_ASSET_STORE_CONTRACT.md`
   - `docs/tasks/LIFEVAULT_PROJECT_TASK_SEED.md`
   - `docs/super_use_cases/SUPER_USE_CASE_INDEX.md`
+  - `docs/super_use_cases/SUC_005_NOTES_AND_KNOWLEDGE_MEMORY.md`
+  - `docs/super_use_cases/SUC_005_ACCEPTANCE_CHECKLIST.md`
+  - `src/lifevault/notes.py`
+  - `src/lifevault/notes_cli.py`
   - `docs/super_use_cases/SUC_021_TASKS_PROJECTS_MAINTENANCE_QUEUES.md`
   - `docs/super_use_cases/SUPER_USE_CASE_001_LOCAL_FOLDER_LIFECYCLE.md`
   - `docs/super_use_cases/SUC_001_ACCEPTANCE_TEST_PLAN.md`
