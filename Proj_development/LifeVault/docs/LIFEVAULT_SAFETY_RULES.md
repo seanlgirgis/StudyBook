@@ -15,3 +15,7 @@
 - UC_003 copy behavior must remain copy-only with explicit approval and no source mutation; see `docs/use_cases/UC_003_CREATE_ONBOARDING_POD_WORKFLOW_SPEC.md`.
 - "Move" is a future user-facing workflow, but internally it must be copy + verify + approved cleanup.
 - No source free-space operation is allowed during UC_003.
+- UC_009 cleanup is quarantine/archive only in v0; no permanent delete.
+- UC_009 requires explicit approval and successful UC_008 verification evidence.
+- No sensitive/highly_sensitive cleanup in UC_009 unless explicitly enabled by `IncludeSensitive`.
+- UC_009 dry-run is mandatory before approved quarantine actions in real workflows.

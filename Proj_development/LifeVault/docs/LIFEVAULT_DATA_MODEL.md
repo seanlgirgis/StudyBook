@@ -25,5 +25,7 @@
 - UC_006B readiness reporting classifies each file instance into publish-ready or blocked states without writing DB rows.
 - UC_007 updates publish status only for successfully copied ready-to-publish items and records audit events.
 - UC_008 verifies source/destination size+SHA256 from UC_007 manifest and updates publish status to `verified` only on match.
+- UC_009 (future implementation) will produce quarantine manifests and audit entries; v0 policy is quarantine-only, not permanent deletion.
+- UC_009 now records quarantine-manifest outcomes and audit events in temp-only implementation; no permanent delete behavior exists in v0.
 - Current v0 duplicate membership is file-level (`duplicate_group_members.file_id`), while duplicate candidates originate from file-instance/path observations in pod manifests.
 - v0 indexing should preserve instance-vs-file counts in duplicate group notes for review clarity; future schema may add explicit instance-level duplicate membership.

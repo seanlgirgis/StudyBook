@@ -200,4 +200,6 @@ Recommended backup timing:
 - UC_007 v0 publish scope is local copy-only (no OneDrive/rclone), and sensitive/highly_sensitive rows require explicit approval gates.
 - UC_007 implementation is currently temp-only validated; use dry-run before approved publish in real workflows.
 - UC_008 verification must pass before any UC_009 cleanup workflow is allowed; cleanup remains blocked until verification evidence exists.
+- UC_009 v0 cleanup policy is quarantine-only (no permanent delete), approval-gated, and must never run as whole-folder cleanup.
+- UC_009 implementation is currently temp-only validated; run dry-run before approved quarantine in any real workflow.
 - LV_ingest_folder v0 is the first operator workflow: UC_001 proposal -> explicit approval gate -> UC_003 pod copy.
