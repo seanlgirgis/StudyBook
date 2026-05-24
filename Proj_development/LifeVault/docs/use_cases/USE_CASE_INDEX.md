@@ -10,7 +10,7 @@
 | UC_011 | Detect Sensitive Content (Gated Future) | planned / future gated content scan | high | UC_004 indexed references, explicit approval, storage policy | Define gated extraction workflow and redaction pipeline |
 | UC_005 | Search Memory Without Hydration | implemented | medium | UC_004 indexed metadata, `docs/use_cases/UC_005_SEARCH_MEMORY_WITHOUT_HYDRATION_WORKFLOW_SPEC.md` | Use read-only metadata queries for pod/file/review discovery |
 | UC_006 | Review and Decide Pod Items | implemented | high | UC_004 indexed pod metadata, `docs/use_cases/UC_006_REVIEW_AND_DECIDE_POD_ITEMS_WORKFLOW_SPEC.md` | Run UC_006B publish-readiness report, then apply approved metadata-only decisions with explicit flags |
-| UC_007 | Publish Approved Files to Vault | planned | high | UC_006 reviewed/approved metadata, UC_007 verification design | Design explicit publish workflow with checkpoints |
+| UC_007 | Publish Approved Files to Local Vault | implemented (temp-only) | high | UC_006B readiness output, explicit publish approval, `docs/use_cases/UC_007_PUBLISH_APPROVED_FILES_TO_LOCAL_VAULT_WORKFLOW_SPEC.md` | Run temp dry-run and approved publish checks; perform real dry-run review before any real publish |
 | UC_008 | Cleanup Source After Verification | planned | high | UC_007 verified copy, explicit approval | Define guarded cleanup policy and reversible steps |
 | UC_009 | Ingest Code Folder | planned | medium | UC_001 proposal flow, UC_002 metadata sensitivity | Define code-aware metadata extraction without secret leakage |
 | UC_010 | Backup/Restore Database | designed | high | backup policy, operations runbook | Implement backup/restore scripts after migration runner hardening |

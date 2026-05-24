@@ -7,6 +7,10 @@
 - Copy only in early phases unless explicitly approved otherwise.
 - No rclone sync operations.
 - No upload/publish to clean vault without explicit publish workflow.
+- Encryption is deferred for v0 but remains required future work; see `docs/security/LIFEVAULT_SECURITY_BACKLOG.md`.
+- v0 publish is local/plain unless later upgraded with approved encryption design.
+- Sensitive/highly_sensitive publish requires explicit human review and approval.
+- OneDrive/cloud publish should wait until encryption design and key handling are approved.
 - Use read-only checks for remote validation unless workflow allows more.
 - UC_003 copy behavior must remain copy-only with explicit approval and no source mutation; see `docs/use_cases/UC_003_CREATE_ONBOARDING_POD_WORKFLOW_SPEC.md`.
 - "Move" is a future user-facing workflow, but internally it must be copy + verify + approved cleanup.

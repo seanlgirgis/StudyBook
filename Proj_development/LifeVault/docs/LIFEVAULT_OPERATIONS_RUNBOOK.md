@@ -17,6 +17,8 @@ Use-case/requirements references:
 - `docs/requirements/TECHNICAL_REQUIREMENTS.md`
 - `docs/requirements/SAFETY_REQUIREMENTS.md`
 - `docs/requirements/DATA_REQUIREMENTS.md`
+Security planning references:
+- `docs/security/LIFEVAULT_SECURITY_BACKLOG.md`
 
 ## 1. Operating Modes
 
@@ -194,4 +196,7 @@ Recommended backup timing:
 - UC_005 is read-only metadata search: use DB read-only query mode, no file hydration, no content extraction, and no DB writes.
 - UC_006 is metadata-only review/decision workflow: no copy/move/delete/rename, no OneDrive/rclone, and DB writes require explicit approval flags.
 - UC_006B publish-readiness review is read-only and must be run before UC_007 to confirm `ready_to_publish` vs blocked items.
+- Encryption is deferred in v0 but tracked in security backlog; local/plain publish scope must be treated as interim only.
+- UC_007 v0 publish scope is local copy-only (no OneDrive/rclone), and sensitive/highly_sensitive rows require explicit approval gates.
+- UC_007 implementation is currently temp-only validated; use dry-run before approved publish in real workflows.
 - LV_ingest_folder v0 is the first operator workflow: UC_001 proposal -> explicit approval gate -> UC_003 pod copy.
