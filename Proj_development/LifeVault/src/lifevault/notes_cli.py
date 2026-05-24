@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 
-from .notes import create_note, create_note_folder, list_note_folders, search_notes
+from .notes import create_note, create_note_folder, create_sensitive_note_phase0, list_note_folders, search_notes
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -31,6 +31,14 @@ def main(argv: list[str] | None = None) -> int:
 
     lf = sub.add_parser("list-folders")
     lf.add_argument("--notes-root", required=True)
+
+    sp0 = sub.add_parser("create-sensitive-phase0")
+    sp0.add_argument("--title", required=True)
+    sp0.add_argument("--public-hint", required=True)
+    sp0.add_argument("--story", default="")
+    sp0.add_argument("--tags", default="")
+    sp0.add_argument("--demo-protected-body", required=True)
+    sp0.add_argument("--notes-root", required=True)
 
     args = parser.parse_args(argv)
     try:
@@ -60,6 +68,17 @@ def main(argv: list[str] | None = None) -> int:
             print(f"rows={len(rows)}")
             for row in rows:
                 print(json.dumps(row, ensure_ascii=True))
+            return 0
+        if args.cmd == "create-sensitive-phase0":
+            out = create_sensitive_note_phase0(
+                title=args.title,
+                public_hint=args.public_hint,
+                story=args.story,
+                tags=args.tags,
+                demo_protected_body=args.demo_protected_body,
+                notes_root=args.notes_root,
+            )
+            print(json.dumps(out, ensure_ascii=True))
             return 0
         rows = search_notes(args.notes_root, args.query)
         print(f"rows={len(rows)}")

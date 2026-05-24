@@ -68,6 +68,13 @@ Managed folder layout for v0 implementation:
 
 No encryption implementation in this contract phase.
 
+Planned encryption behavior:
+
+- searchable fields remain title/story/tags/public_hint
+- `encrypted_body` is protected payload and non-plaintext-searchable
+- decrypt/view requires unlock session policy
+- sensitive note body should use protected storage layout outside normal note markdown
+
 ## Portable Retrieval Package Contract
 
 ```text

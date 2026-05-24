@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -99,6 +100,18 @@ def _render_frontmatter(meta: Dict[str, Any]) -> str:
         "created_at",
     ]:
         val = meta.get(key)
+        if key == "tags":
+            rendered = "[" + ", ".join(val or []) + "]"
+        else:
+            rendered = "" if val is None else str(val)
+        lines.append(f"{key}: {rendered}")
+    lines.append("---")
+    return "\n".join(lines)
+
+
+def _render_frontmatter_pairs(pairs: List[tuple[str, Any]]) -> str:
+    lines = ["---"]
+    for key, val in pairs:
         if key == "tags":
             rendered = "[" + ", ".join(val or []) + "]"
         else:
@@ -216,6 +229,65 @@ def create_note_folder(
     }
 
 
+def create_sensitive_note_phase0(
+    title: str,
+    public_hint: str,
+    story: str | None,
+    tags: str | None,
+    demo_protected_body: str,
+    notes_root: str | Path,
+) -> Dict[str, Any]:
+    root = Path(notes_root)
+    root.mkdir(parents=True, exist_ok=True)
+    created_at = _now_iso()
+    folder_name = _safe_filename(f"sensitive_note_{_ts_for_name()}_{_slugify(title)}")
+    folder_path = _select_unique_dir(root, folder_name)
+    protected_dir = folder_path / "protected"
+    protected_dir.mkdir(parents=True, exist_ok=False)
+
+    placeholder_token = hashlib.sha256(demo_protected_body.encode("utf-8")).hexdigest()
+    placeholder = f"PHASE0_PLACEHOLDER_NOT_ENCRYPTION:{placeholder_token}"
+    lvenc_path = protected_dir / "encrypted_body.lvenc"
+    lvenc_path.write_text(placeholder + "\n", encoding="utf-8")
+
+    manifest = {
+        "encrypted_body_id": f"enc_{_ts_for_name()}_{_slugify(title, max_len=16)}",
+        "version": "1.0",
+        "created_at": created_at,
+        "ciphertext_sha256": hashlib.sha256(placeholder.encode("utf-8")).hexdigest(),
+        "size_bytes": len(placeholder.encode("utf-8")),
+        "phase": "phase0_placeholder",
+    }
+    (protected_dir / "encrypted_body_manifest.json").write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=True) + "\n",
+        encoding="utf-8",
+    )
+
+    note_md = _render_frontmatter_pairs(
+        [
+            ("title", title),
+            ("vault_item_type", "note"),
+            ("sensitivity_level", "sensitive"),
+            ("public_hint", public_hint),
+            ("tags", _split_tags(tags)),
+            ("story", story or ""),
+            ("lifecycle_status", "hot"),
+            ("retention_policy_id", "default_lifetime_user_use"),
+            ("encrypted_body_ref", "protected/encrypted_body.lvenc"),
+            ("created_at", created_at),
+        ]
+    ) + "\n\n# Sensitive Note (Phase 0)\n\nProtected payload placeholder is stored under `protected/`.\n"
+    (folder_path / "note.md").write_text(note_md, encoding="utf-8")
+    return {
+        "sensitive_note_path": str(folder_path),
+        "note_path": str(folder_path / "note.md"),
+        "title": title,
+        "public_hint": public_hint,
+        "sensitivity_level": "sensitive",
+        "phase": "phase0_placeholder_not_encryption",
+    }
+
+
 def _parse_note(path: Path) -> Dict[str, Any]:
     text = path.read_text(encoding="utf-8")
     meta: Dict[str, Any] = {}
@@ -253,6 +325,7 @@ def search_notes(notes_root: str | Path, query: str) -> List[Dict[str, Any]]:
         m = n["meta"]
         title = (m.get("title") or "").lower()
         story = (m.get("story") or "").lower()
+        public_hint = (m.get("public_hint") or "").lower()
         tags = [t.lower() for t in m.get("tags", [])]
         body = (n.get("body") or "").lower()
 
@@ -263,6 +336,8 @@ def search_notes(notes_root: str | Path, query: str) -> List[Dict[str, Any]]:
             match_types.append("story")
         if any(q in t for t in tags):
             match_types.append("tag")
+        if q in public_hint:
+            match_types.append("public_hint")
         if q in body:
             match_types.append("body")
         if match_types:
@@ -279,6 +354,8 @@ def search_notes(notes_root: str | Path, query: str) -> List[Dict[str, Any]]:
                     "story": m.get("story", ""),
                     "match_type": ",".join(match_types),
                     "parent_note_folder": parent_note_folder,
+                    "sensitivity_level": m.get("sensitivity_level", "normal"),
+                    "unlock_required": (m.get("sensitivity_level", "normal") == "sensitive"),
                 }
             )
     return results

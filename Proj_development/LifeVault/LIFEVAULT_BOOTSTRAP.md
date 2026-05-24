@@ -45,6 +45,14 @@
   - `docs/architecture/LIFEVAULT_TASK_PROJECT_MODEL.md`
   - `docs/contracts/NOTE_AND_NOTE_FOLDER_CONTRACT.md`
   - `docs/contracts/NOTE_ASSET_STORE_CONTRACT.md`
+  - `docs/security/LIFEVAULT_ENCRYPTION_V0_DESIGN.md`
+  - `docs/security/LIFEVAULT_SENSITIVE_NOTE_V0_CONTRACT.md`
+  - `docs/security/LIFEVAULT_UNLOCK_SESSION_POLICY.md`
+  - `docs/security/LIFEVAULT_UNLOCK_SESSION_STATE_CONTRACT.md`
+  - `docs/security/SENSITIVE_NOTE_STORAGE_LAYOUT_V0.md`
+  - `docs/security/SENSITIVE_NOTE_MINIMAL_IMPLEMENTATION_PLAN_V0.md`
+  - `docs/contracts/SENSITIVE_NOTE_COMMAND_CONTRACT.md`
+  - `docs/super_use_cases/SUC_010_ACCEPTANCE_CHECKLIST.md`
   - `docs/contracts/NOTE_TEMPLATE_CONTRACT.md`
   - `docs/contracts/NOTE_AND_NOTE_FOLDER_CONTRACT.md`
   - `docs/contracts/NOTE_TEMPLATE_CONTRACT.md`

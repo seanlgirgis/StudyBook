@@ -65,6 +65,13 @@ Use two-part note pattern:
 
 Encryption/decryption remains deferred in this v0 design.
 
+Planned v0 encryption target:
+
+- sensitive note metadata remains searchable
+- `encrypted_body` is not plaintext searchable
+- decrypt/view requires unlock session (default 4 hours policy)
+- sensitive body stored outside `note.md` under protected layout contract
+
 ## 6. Search Model (v0)
 
 Searchable fields:
@@ -101,3 +108,8 @@ Task notes follow the same markdown-first principles, but remain tied to task re
 - `docs/contracts/NOTE_TEMPLATE_CONTRACT.md`
 - `docs/architecture/LIFEVAULT_NOTE_FILENAME_POLICY.md`
 - `docs/super_use_cases/SUC_005_NOTES_AND_KNOWLEDGE_MEMORY.md`
+- `docs/security/LIFEVAULT_ENCRYPTION_V0_DESIGN.md`
+- `docs/security/LIFEVAULT_SENSITIVE_NOTE_V0_CONTRACT.md`
+- `docs/security/LIFEVAULT_UNLOCK_SESSION_POLICY.md`
+- `docs/contracts/SENSITIVE_NOTE_COMMAND_CONTRACT.md`
+- `docs/security/SENSITIVE_NOTE_STORAGE_LAYOUT_V0.md`

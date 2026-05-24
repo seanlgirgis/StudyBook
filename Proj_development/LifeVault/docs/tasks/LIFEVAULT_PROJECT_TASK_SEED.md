@@ -104,32 +104,32 @@ This is a planning seed, not a complete backlog.
 ### 5. SUC_010 / Secrets and Sensitive Records
 
 - **Task:** Design v0 boundary and policy
-  - status: open
+  - status: done
   - priority: P1
   - intake_date: TBD
   - due_date: none
-  - notes: define LifeVault vs password-manager split
+  - notes: sensitive-note contract + protected storage layout contract documented
 - **Task:** Create acceptance checklist
-  - status: open
+  - status: done
   - priority: P1
   - intake_date: TBD
   - due_date: none
-  - notes: include non-destructive validation only
+  - notes: `SUC_010_ACCEPTANCE_CHECKLIST.md` + sensitive command contract documented
 
 ### 6. SUC_014 / Encryption, Decryption, and Secure View
 
 - **Task:** Design sensitive unlock model
-  - status: open
+  - status: done
   - priority: P1
   - intake_date: TBD
   - due_date: none
-  - notes: target 4-hour unlock session default
+  - notes: unlock session policy documented with 4-hour default
 - **Task:** Design thin slice implementation boundary
-  - status: open
+  - status: done
   - priority: P2
   - intake_date: TBD
   - due_date: none
-  - notes: no implementation until approved cycle
+  - notes: command contract + unlock/session-state + minimal phased implementation plan documented
 
 ### 7. SUC_015 / Streamlit Control Center / Agent Console
 

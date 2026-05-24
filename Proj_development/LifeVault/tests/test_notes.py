@@ -7,7 +7,7 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from lifevault.notes import create_note, create_note_folder, list_note_folders, search_notes
+from lifevault.notes import create_note, create_note_folder, create_sensitive_note_phase0, list_note_folders, search_notes
 
 
 def test_note_creates_markdown_file_and_frontmatter(tmp_path: Path) -> None:
@@ -124,3 +124,51 @@ def test_weird_folder_title_sanitized(tmp_path: Path) -> None:
     assert name.startswith("note_folder_")
     for c in '<>:"/\\|?*':
         assert c not in name
+
+
+def test_sensitive_phase0_package_layout_and_leak_prevention(tmp_path: Path) -> None:
+    marker = "DO_NOT_STORE_THIS_AS_PLAINTEXT"
+    out = create_sensitive_note_phase0(
+        title="Demo Sensitive Note",
+        public_hint="Demo public hint only",
+        story="Testing sensitive note layout only",
+        tags="lifevault,sensitive,demo",
+        demo_protected_body=marker,
+        notes_root=tmp_path,
+    )
+    folder = Path(out["sensitive_note_path"])
+    note_md = folder / "note.md"
+    lvenc = folder / "protected" / "encrypted_body.lvenc"
+    manifest = folder / "protected" / "encrypted_body_manifest.json"
+    assert note_md.exists()
+    assert lvenc.exists()
+    assert manifest.exists()
+
+    note_text = note_md.read_text(encoding="utf-8")
+    lvenc_text = lvenc.read_text(encoding="utf-8")
+    manifest_text = manifest.read_text(encoding="utf-8")
+    assert "public_hint: Demo public hint only" in note_text
+    assert "sensitivity_level: sensitive" in note_text
+    assert marker not in note_text
+    assert marker not in lvenc_text
+    assert marker not in manifest_text
+
+
+def test_sensitive_phase0_search_behavior(tmp_path: Path) -> None:
+    marker = "DO_NOT_STORE_THIS_AS_PLAINTEXT"
+    create_sensitive_note_phase0(
+        title="Demo Sensitive Note",
+        public_hint="Demo public hint only",
+        story="Testing sensitive note layout only",
+        tags="lifevault,sensitive,demo",
+        demo_protected_body=marker,
+        notes_root=tmp_path,
+    )
+    assert any("title" in r["match_type"] for r in search_notes(tmp_path, "Demo Sensitive"))
+    assert any("story" in r["match_type"] for r in search_notes(tmp_path, "layout only"))
+    assert any("tag" in r["match_type"] for r in search_notes(tmp_path, "sensitive"))
+    rows = search_notes(tmp_path, "public hint")
+    assert rows
+    assert all(r.get("sensitivity_level") == "sensitive" for r in rows)
+    assert all(r.get("unlock_required") is True for r in rows)
+    assert search_notes(tmp_path, marker) == []

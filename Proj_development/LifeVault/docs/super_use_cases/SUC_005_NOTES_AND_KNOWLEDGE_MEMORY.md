@@ -65,3 +65,17 @@ Sensitive encrypted bodies are deferred and not searchable until explicit future
 - design-only in this phase; no implementation side effects
 - no encryption implementation in this bite
 - no cloud sync/rclone usage in this bite
+
+## Sensitive Notes Dependency
+
+SUC_005 depends on SUC_010/SUC_014 policy for sensitive-note unlock behavior:
+
+- sensitive notes keep metadata/public_hint searchable
+- sensitive payload/body uses `encrypted_body` model
+- decrypt/view requires unlock session (default 4 hours policy)
+
+References:
+
+- `docs/security/LIFEVAULT_ENCRYPTION_V0_DESIGN.md`
+- `docs/security/LIFEVAULT_SENSITIVE_NOTE_V0_CONTRACT.md`
+- `docs/security/LIFEVAULT_UNLOCK_SESSION_POLICY.md`
