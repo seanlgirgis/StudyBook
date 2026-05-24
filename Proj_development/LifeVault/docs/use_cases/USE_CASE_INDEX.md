@@ -11,6 +11,7 @@
 | UC_005 | Search Memory Without Hydration | implemented | medium | UC_004 indexed metadata, `docs/use_cases/UC_005_SEARCH_MEMORY_WITHOUT_HYDRATION_WORKFLOW_SPEC.md` | Use read-only metadata queries for pod/file/review discovery |
 | UC_006 | Review and Decide Pod Items | implemented | high | UC_004 indexed pod metadata, `docs/use_cases/UC_006_REVIEW_AND_DECIDE_POD_ITEMS_WORKFLOW_SPEC.md` | Run UC_006B publish-readiness report, then apply approved metadata-only decisions with explicit flags |
 | UC_007 | Publish Approved Files to Local Vault | implemented (temp-only) | high | UC_006B readiness output, explicit publish approval, `docs/use_cases/UC_007_PUBLISH_APPROVED_FILES_TO_LOCAL_VAULT_WORKFLOW_SPEC.md` | Run temp dry-run and approved publish checks; perform real dry-run review before any real publish |
-| UC_008 | Cleanup Source After Verification | planned | high | UC_007 verified copy, explicit approval | Define guarded cleanup policy and reversible steps |
-| UC_009 | Ingest Code Folder | planned | medium | UC_001 proposal flow, UC_002 metadata sensitivity | Define code-aware metadata extraction without secret leakage |
-| UC_010 | Backup/Restore Database | designed | high | backup policy, operations runbook | Implement backup/restore scripts after migration runner hardening |
+| UC_008 | Verify Local Vault Publish | implemented (temp-only) | high | UC_007 publish manifest, explicit verify approval, `docs/use_cases/UC_008_VERIFY_LOCAL_VAULT_PUBLISH_WORKFLOW_SPEC.md` | Run temp verify checks; run real dry-run and approved verify before any cleanup planning |
+| UC_009 | Cleanup Source After Verification | planned (blocked by UC_008 pass) | high | UC_008 successful verification, explicit approval | Keep blocked until UC_008 verification evidence is complete |
+| UC_010 | Ingest Code Folder | planned | medium | UC_001 proposal flow, UC_002 metadata sensitivity | Define code-aware metadata extraction without secret leakage |
+| UC_012 | Backup/Restore Database | designed | high | backup policy, operations runbook | Implement backup/restore scripts after migration runner hardening |

@@ -24,5 +24,6 @@
 - UC_006 review updates are instance/path-aware at workflow level and stored in review metadata without file operations.
 - UC_006B readiness reporting classifies each file instance into publish-ready or blocked states without writing DB rows.
 - UC_007 updates publish status only for successfully copied ready-to-publish items and records audit events.
+- UC_008 verifies source/destination size+SHA256 from UC_007 manifest and updates publish status to `verified` only on match.
 - Current v0 duplicate membership is file-level (`duplicate_group_members.file_id`), while duplicate candidates originate from file-instance/path observations in pod manifests.
 - v0 indexing should preserve instance-vs-file counts in duplicate group notes for review clarity; future schema may add explicit instance-level duplicate membership.

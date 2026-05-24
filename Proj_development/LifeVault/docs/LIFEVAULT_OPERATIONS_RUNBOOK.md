@@ -199,4 +199,5 @@ Recommended backup timing:
 - Encryption is deferred in v0 but tracked in security backlog; local/plain publish scope must be treated as interim only.
 - UC_007 v0 publish scope is local copy-only (no OneDrive/rclone), and sensitive/highly_sensitive rows require explicit approval gates.
 - UC_007 implementation is currently temp-only validated; use dry-run before approved publish in real workflows.
+- UC_008 verification must pass before any UC_009 cleanup workflow is allowed; cleanup remains blocked until verification evidence exists.
 - LV_ingest_folder v0 is the first operator workflow: UC_001 proposal -> explicit approval gate -> UC_003 pod copy.

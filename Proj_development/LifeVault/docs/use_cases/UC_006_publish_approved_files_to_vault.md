@@ -15,6 +15,7 @@ Encryption/cloud publish are deferred security phases:
 Historical placeholder. Do not use as current UC_006 workflow.
 For active publish planning use:
 - `docs/use_cases/UC_007_PUBLISH_APPROVED_FILES_TO_LOCAL_VAULT_WORKFLOW_SPEC.md`
+- `docs/use_cases/UC_008_VERIFY_LOCAL_VAULT_PUBLISH_WORKFLOW_SPEC.md` (verification before cleanup)
 
 ## Safety Boundaries
 
