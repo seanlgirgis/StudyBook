@@ -1,5 +1,9 @@
 # USE_CASE_INDEX.md
 
+Super use case references:
+- `docs/super_use_cases/SUPER_USE_CASE_INDEX.md`
+- `docs/super_use_cases/SUPER_USE_CASE_001_LOCAL_FOLDER_LIFECYCLE.md`
+
 | ID | Name | Status | Risk | Dependencies | Next Action |
 |---|---|---|---|---|---|
 | LV_INGEST_FOLDER_V0 | Operator Workflow (UC_001 + UC_003) | implemented (temp-only) | medium | UC_001, UC_003, explicit pod approval gate | Run temp smoke and then guarded real run with explicit operator approval |

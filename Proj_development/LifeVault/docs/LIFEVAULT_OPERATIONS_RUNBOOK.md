@@ -17,6 +17,13 @@ Use-case/requirements references:
 - `docs/requirements/TECHNICAL_REQUIREMENTS.md`
 - `docs/requirements/SAFETY_REQUIREMENTS.md`
 - `docs/requirements/DATA_REQUIREMENTS.md`
+Super use case references:
+- `docs/super_use_cases/SUPER_USE_CASE_INDEX.md`
+- `docs/super_use_cases/SUPER_USE_CASE_001_LOCAL_FOLDER_LIFECYCLE.md`
+Strategy/architecture references:
+- `docs/strategy/LIFEVAULT_1000_FOOT_CAPABILITY_MAP.md`
+- `docs/architecture/LIFEVAULT_VAULT_ITEM_MODEL.md`
+- `docs/architecture/LIFEVAULT_POLICY_MODEL.md`
 Security planning references:
 - `docs/security/LIFEVAULT_SECURITY_BACKLOG.md`
 

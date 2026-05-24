@@ -2,6 +2,10 @@
 
 ## Core Entities
 
+- Strategic item-model foundation is documented in:
+  - `docs/architecture/LIFEVAULT_VAULT_ITEM_MODEL.md`
+  - `docs/architecture/LIFEVAULT_POLICY_MODEL.md`
+- Core principle: everything important becomes or relates to a `vault_item`.
 - `sources`: origin systems/locations for ingested material.
 - `pods`: onboarding pod metadata with story/context.
 - `files`: content identity records.

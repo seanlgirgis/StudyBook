@@ -36,3 +36,14 @@
 ## Operations Reference
 
 - Day-to-day operational procedures are defined in `docs/LIFEVAULT_OPERATIONS_RUNBOOK.md`.
+- Super-use-case map and validated lifecycle are defined in:
+  - `docs/strategy/LIFEVAULT_1000_FOOT_CAPABILITY_MAP.md`
+  - `docs/architecture/LIFEVAULT_VAULT_ITEM_MODEL.md`
+  - `docs/architecture/LIFEVAULT_POLICY_MODEL.md`
+  - `docs/architecture/LIFEVAULT_TASK_PROJECT_MODEL.md`
+  - `docs/tasks/LIFEVAULT_PROJECT_TASK_SEED.md`
+  - `docs/super_use_cases/SUPER_USE_CASE_INDEX.md`
+  - `docs/super_use_cases/SUC_021_TASKS_PROJECTS_MAINTENANCE_QUEUES.md`
+  - `docs/super_use_cases/SUPER_USE_CASE_001_LOCAL_FOLDER_LIFECYCLE.md`
+  - `docs/super_use_cases/SUC_001_ACCEPTANCE_TEST_PLAN.md`
+  - `docs/super_use_cases/SUC_001_OPERATOR_CHECKLIST.md`
