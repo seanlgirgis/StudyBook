@@ -46,6 +46,16 @@ Title/file rule:
 
 A note folder groups notes and may apply shared lifecycle/policy metadata.
 
+Implemented note_folder v0 thin slice:
+
+- create managed folder layout:
+  - `_folder_manifest.json`
+  - `README.md`
+  - `notes/`
+- create notes directly inside `<note_folder>/notes`
+- list note folders with note counts
+- search includes nested folder notes and reports `parent_note_folder`
+
 ## 5. Sensitive Note Pattern (Design-Only)
 
 Use two-part note pattern:

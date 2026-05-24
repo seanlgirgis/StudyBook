@@ -55,6 +55,8 @@
   - `docs/super_use_cases/SUC_005_ACCEPTANCE_CHECKLIST.md`
   - `src/lifevault/notes.py`
   - `src/lifevault/notes_cli.py`
+  - `scripts/run_note_folder_create.ps1`
+  - `scripts/run_note_folder_list.ps1`
   - `docs/super_use_cases/SUC_021_TASKS_PROJECTS_MAINTENANCE_QUEUES.md`
   - `docs/super_use_cases/SUPER_USE_CASE_001_LOCAL_FOLDER_LIFECYCLE.md`
   - `docs/super_use_cases/SUC_001_ACCEPTANCE_TEST_PLAN.md`

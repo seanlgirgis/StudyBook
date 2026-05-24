@@ -43,6 +43,24 @@ Required conceptual fields:
 - `created_at`
 - `updated_at`
 
+Managed folder layout for v0 implementation:
+
+- `note_folder_<YYYYMMDD_HHMMSS>_<short_slug>/`
+- `_folder_manifest.json`
+- `README.md`
+- `notes/`
+
+`README.md` frontmatter fields:
+
+- `title`
+- `vault_item_type: note_folder`
+- `lifecycle_status: hot`
+- `sensitivity_level: normal`
+- `retention_policy_id: default_lifetime_user_use`
+- `tags`
+- `story`
+- `created_at`
+
 ## Sensitive Note Pattern (Design-Only)
 
 - `public_hint`: searchable metadata-safe summary

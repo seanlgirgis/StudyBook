@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 
-from .notes import create_note, search_notes
+from .notes import create_note, create_note_folder, list_note_folders, search_notes
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -17,10 +17,20 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--body", default="")
     c.add_argument("--notes-root", required=True)
     c.add_argument("--filename", default=None)
+    c.add_argument("--note-folder-path", default=None)
+
+    cf = sub.add_parser("create-folder")
+    cf.add_argument("--title", required=True)
+    cf.add_argument("--story", default="")
+    cf.add_argument("--tags", default="")
+    cf.add_argument("--notes-root", required=True)
 
     s = sub.add_parser("search")
     s.add_argument("--query", required=True)
     s.add_argument("--notes-root", required=True)
+
+    lf = sub.add_parser("list-folders")
+    lf.add_argument("--notes-root", required=True)
 
     args = parser.parse_args(argv)
     try:
@@ -31,9 +41,25 @@ def main(argv: list[str] | None = None) -> int:
                 tags=args.tags,
                 body=args.body,
                 notes_root=args.notes_root,
+                note_folder_path=args.note_folder_path,
                 requested_filename=args.filename,
             )
             print(json.dumps(out, ensure_ascii=True))
+            return 0
+        if args.cmd == "create-folder":
+            out = create_note_folder(
+                title=args.title,
+                story=args.story,
+                tags=args.tags,
+                notes_root=args.notes_root,
+            )
+            print(json.dumps(out, ensure_ascii=True))
+            return 0
+        if args.cmd == "list-folders":
+            rows = list_note_folders(args.notes_root)
+            print(f"rows={len(rows)}")
+            for row in rows:
+                print(json.dumps(row, ensure_ascii=True))
             return 0
         rows = search_notes(args.notes_root, args.query)
         print(f"rows={len(rows)}")

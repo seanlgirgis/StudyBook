@@ -23,4 +23,8 @@ Notes v0 thin-slice checks:
 - [x] Create note CLI/wrapper works with `notes_root`.
 - [x] Search notes CLI/wrapper supports title/story/tags/body match.
 - [x] Temp-path tests cover note creation and search behavior.
+- [x] Note folder create CLI/wrapper creates managed folder layout.
+- [x] Notes can be created under `<note_folder>/notes`.
+- [x] Search finds notes inside note folders and reports parent folder.
+- [x] List-folders returns folder metadata and note counts.
 - [ ] Older notes remain valid after template updates.

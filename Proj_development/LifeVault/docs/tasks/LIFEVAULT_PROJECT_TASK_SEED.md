@@ -89,11 +89,11 @@ This is a planning seed, not a complete backlog.
   - due_date: none
   - notes: one safe note create/search path implemented (markdown + frontmatter parsing, no DB writes)
 - **Task:** Add search/report view
-  - status: open
+  - status: done
   - priority: P1
   - intake_date: TBD
   - due_date: none
-  - notes: recent notes + lifecycle status
+  - notes: notes search/list thin slice implemented (standalone + note_folder notes)
 - **Task:** Create acceptance checklist
   - status: done
   - priority: P1

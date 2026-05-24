@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -8,6 +9,8 @@ from typing import Any, Dict, List
 
 DEFAULT_TEMPLATE_ID = "quick_note"
 DEFAULT_TEMPLATE_VERSION = "1.0"
+DEFAULT_FOLDER_TEMPLATE_ID = "note_folder"
+DEFAULT_FOLDER_TEMPLATE_VERSION = "1.0"
 
 
 def _now_utc() -> datetime:
@@ -70,6 +73,17 @@ def _select_unique_path(root: Path, filename: str) -> Path:
     raise RuntimeError("Unable to find non-colliding note filename")
 
 
+def _select_unique_dir(root: Path, dirname: str) -> Path:
+    candidate = root / dirname
+    if not candidate.exists():
+        return candidate
+    for i in range(1, 1000):
+        p = root / f"{dirname}_{i:03d}"
+        if not p.exists():
+            return p
+    raise RuntimeError("Unable to find non-colliding note folder name")
+
+
 def _render_frontmatter(meta: Dict[str, Any]) -> str:
     lines = ["---"]
     for key in [
@@ -100,10 +114,18 @@ def create_note(
     tags: str | None,
     body: str,
     notes_root: str | Path,
+    note_folder_path: str | Path | None = None,
     requested_filename: str | None = None,
 ) -> Dict[str, Any]:
     root = Path(notes_root)
     root.mkdir(parents=True, exist_ok=True)
+    write_root = root
+    if note_folder_path:
+        folder_path = Path(note_folder_path)
+        notes_dir = folder_path / "notes"
+        if not notes_dir.exists():
+            raise FileNotFoundError(f"note folder notes path does not exist: {notes_dir}")
+        write_root = notes_dir
     meta = {
         "title": title,
         "vault_item_type": "note",
@@ -121,10 +143,10 @@ def create_note(
         fn = _safe_filename(requested_filename)
         if not fn.lower().endswith(".md"):
             fn = f"{fn}.md"
-        note_path = _select_unique_path(root, fn)
+        note_path = _select_unique_path(write_root, fn)
     else:
         fn = generate_note_filename(title)
-        note_path = _select_unique_path(root, fn)
+        note_path = _select_unique_path(write_root, fn)
     content = _render_frontmatter(meta) + "\n\n" + (body or "") + "\n"
     note_path.write_text(content, encoding="utf-8")
     return {
@@ -133,6 +155,64 @@ def create_note(
         "filename": note_path.name,
         "lifecycle_status": meta["lifecycle_status"],
         "sensitivity_level": meta["sensitivity_level"],
+    }
+
+
+def create_note_folder(
+    title: str,
+    story: str | None,
+    tags: str | None,
+    notes_root: str | Path,
+) -> Dict[str, Any]:
+    root = Path(notes_root)
+    root.mkdir(parents=True, exist_ok=True)
+    created_at = _now_iso()
+    dirname = _safe_filename(f"note_folder_{_ts_for_name()}_{_slugify(title)}")
+    folder_path = _select_unique_dir(root, dirname)
+    notes_dir = folder_path / "notes"
+    reports_dir = folder_path
+    notes_dir.mkdir(parents=True, exist_ok=False)
+
+    folder_meta = {
+        "schema_version": "1.0",
+        "folder_id": folder_path.name,
+        "title": title,
+        "vault_item_type": "note_folder",
+        "template_id": DEFAULT_FOLDER_TEMPLATE_ID,
+        "template_version": DEFAULT_FOLDER_TEMPLATE_VERSION,
+        "lifecycle_status": "hot",
+        "sensitivity_level": "normal",
+        "retention_policy_id": "default_lifetime_user_use",
+        "tags": _split_tags(tags),
+        "story": story or "",
+        "created_at": created_at,
+    }
+    (reports_dir / "_folder_manifest.json").write_text(
+        json.dumps(folder_meta, indent=2, ensure_ascii=True) + "\n",
+        encoding="utf-8",
+    )
+    readme_frontmatter = _render_frontmatter(
+        {
+            "title": title,
+            "vault_item_type": "note_folder",
+            "template_id": DEFAULT_FOLDER_TEMPLATE_ID,
+            "template_version": DEFAULT_FOLDER_TEMPLATE_VERSION,
+            "lifecycle_status": "hot",
+            "sensitivity_level": "normal",
+            "retention_policy_id": "default_lifetime_user_use",
+            "tags": _split_tags(tags),
+            "story": story or "",
+            "created_at": created_at,
+        }
+    )
+    readme_body = "\n\n# Note Folder\n\nManaged LifeVault note folder.\n"
+    (reports_dir / "README.md").write_text(readme_frontmatter + readme_body, encoding="utf-8")
+    return {
+        "folder_title": title,
+        "folder_path": str(folder_path),
+        "folder_name": folder_path.name,
+        "tags": _split_tags(tags),
+        "story": story or "",
     }
 
 
@@ -186,6 +266,11 @@ def search_notes(notes_root: str | Path, query: str) -> List[Dict[str, Any]]:
         if q in body:
             match_types.append("body")
         if match_types:
+            parent_note_folder = ""
+            if path.parent.name == "notes":
+                candidate = path.parent.parent
+                if (candidate / "_folder_manifest.json").exists():
+                    parent_note_folder = str(candidate)
             results.append(
                 {
                     "title": m.get("title", path.stem),
@@ -193,6 +278,32 @@ def search_notes(notes_root: str | Path, query: str) -> List[Dict[str, Any]]:
                     "tags": m.get("tags", []),
                     "story": m.get("story", ""),
                     "match_type": ",".join(match_types),
+                    "parent_note_folder": parent_note_folder,
                 }
             )
     return results
+
+
+def list_note_folders(notes_root: str | Path) -> List[Dict[str, Any]]:
+    root = Path(notes_root)
+    if not root.exists():
+        return []
+    rows: List[Dict[str, Any]] = []
+    for manifest in root.rglob("_folder_manifest.json"):
+        folder = manifest.parent
+        readme = folder / "README.md"
+        if not readme.exists():
+            continue
+        parsed = _parse_note(readme)
+        meta = parsed["meta"]
+        note_count = len(list((folder / "notes").rglob("*.md"))) if (folder / "notes").exists() else 0
+        rows.append(
+            {
+                "folder_title": meta.get("title", folder.name),
+                "folder_path": str(folder),
+                "tags": meta.get("tags", []),
+                "story": meta.get("story", ""),
+                "note_count": note_count,
+            }
+        )
+    return rows
