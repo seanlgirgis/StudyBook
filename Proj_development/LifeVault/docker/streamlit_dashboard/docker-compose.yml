@@ -1,0 +1,12 @@
+services:
+  lifevault-help-console:
+    build:
+      context: ../..
+      dockerfile: docker/streamlit_dashboard/Dockerfile
+    container_name: lifevault-help-console
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    volumes:
+      - ../../:/workspace:ro
+    working_dir: /workspace

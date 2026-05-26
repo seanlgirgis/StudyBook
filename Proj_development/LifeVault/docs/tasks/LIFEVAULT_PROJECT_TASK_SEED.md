@@ -134,17 +134,17 @@ This is a planning seed, not a complete backlog.
 ### 7. SUC_015 / Streamlit Control Center / Agent Console
 
 - **Task:** Design read-only dashboard v0
-  - status: open
+  - status: done
   - priority: P0
   - intake_date: TBD
   - due_date: none
-  - notes: capability map/status/recent activity
+  - notes: Help/Operator Console v0 design documented (start here, runbook helper, safety panel, read-only search)
 - **Task:** Implement thin slice read-only view
-  - status: open
+  - status: done
   - priority: P1
   - intake_date: TBD
   - due_date: none
-  - notes: no write actions in first cut
+  - notes: Streamlit Help Console Phase 2 implemented (sidebar navigation, command builders, read-only notes inventory) with Docker start/stop/status and logon auto-start scripts
 
 ### 8. SUC_018 / Physical Storage Inventory
 

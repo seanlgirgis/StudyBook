@@ -92,6 +92,7 @@ The current local folder lifecycle has already proven this spine end-to-end in v
 - build thin slices across major item types
 - persistent storage early gives value
 - GUI/control center should start early as guide/search display
+  - first as Help/Operator Console, not full automation plane
 - scripts/Python carry execution load
 - AI/agent layer guides and reasons
 - encryption is important but can be layered in cycles
@@ -140,4 +141,5 @@ Current note status:
 - Which items can be stored plaintext?
 - What belongs in LifeVault vs a password manager?
 - What should the Streamlit control center show first?
+- Streamlit v0 should be guidance-first: what is safe now, what is next?
 - What belongs in LifeVault vs a password manager?

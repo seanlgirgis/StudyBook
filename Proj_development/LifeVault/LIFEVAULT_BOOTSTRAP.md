@@ -53,6 +53,20 @@
   - `docs/security/SENSITIVE_NOTE_MINIMAL_IMPLEMENTATION_PLAN_V0.md`
   - `docs/contracts/SENSITIVE_NOTE_COMMAND_CONTRACT.md`
   - `docs/super_use_cases/SUC_010_ACCEPTANCE_CHECKLIST.md`
+  - `docs/super_use_cases/SUC_015_STREAMLIT_HELP_OPERATOR_CONSOLE.md`
+  - `docs/architecture/LIFEVAULT_STREAMLIT_DOCKER_V0.md`
+  - `docs/contracts/STREAMLIT_HELP_CONSOLE_V0_CONTRACT.md`
+  - `app/streamlit/lifevault_help_console.py`
+  - `app/streamlit/README.md`
+  - `tests/test_streamlit_help_console_static.py`
+  - `docker/streamlit_dashboard/Dockerfile`
+  - `docker/streamlit_dashboard/docker-compose.yml`
+  - `scripts/run_streamlit_help_console.ps1`
+  - `scripts/start_streamlit_help_console_docker.ps1`
+  - `scripts/stop_streamlit_help_console_docker.ps1`
+  - `scripts/status_streamlit_help_console_docker.ps1`
+  - `scripts/install_streamlit_help_console_startup_task.ps1`
+  - `scripts/uninstall_streamlit_help_console_startup_task.ps1`
   - `docs/contracts/NOTE_TEMPLATE_CONTRACT.md`
   - `docs/contracts/NOTE_AND_NOTE_FOLDER_CONTRACT.md`
   - `docs/contracts/NOTE_TEMPLATE_CONTRACT.md`
