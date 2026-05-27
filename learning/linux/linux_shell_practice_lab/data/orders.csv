@@ -1,0 +1,11 @@
+order_id,customer,status,amount,order_date
+1001,Apex Plumbing,completed,250.50,2026-05-01
+1002,North HVAC,pending,850.00,2026-05-02
+1003,Quality Air,completed,1250.75,2026-05-02
+1004,Metro Repair,cancelled,99.99,2026-05-03
+1005,Apex Plumbing,completed,675.25,2026-05-04
+1006,North HVAC,completed,430.00,2026-05-04
+1007,Quality Air,pending,700.00,2026-05-05
+1008,Metro Repair,completed,520.00,2026-05-06
+1009,Apex Plumbing,failed,300.00,2026-05-07
+1010,Quality Air,completed,980.00,2026-05-08

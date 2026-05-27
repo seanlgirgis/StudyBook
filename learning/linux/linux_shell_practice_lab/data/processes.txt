@@ -1,0 +1,9 @@
+USER       PID %CPU %MEM COMMAND
+root         1  0.1  0.2 /sbin/init
+sean      1042  3.5  1.2 python app.py
+sean      1100  0.5  0.6 bash
+spark     2100 15.2  8.5 java -Dspark.driver
+spark     2144 12.8  7.9 python pyspark_worker.py
+postgres  3001  2.1  4.2 postgres: writer
+root      4000  0.2  0.1 cron
+sean      4500 20.4  3.1 python heavy_job.py
