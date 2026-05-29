@@ -1,0 +1,17 @@
+LifeVault Blob Search + AI Rerank Report
+============================================================
+Original query: Find the financial data engineer job I applied for around February 2026.
+Infer worked: True
+Elapsed seconds: 0.80
+-
+Local top candidates:
+- lv-item-001 | score=22 | title=Senior Data Engineer Application - Financial Services | overlap=2026, applied, data, engineer, february, financial, for, i, job, the
+- lv-item-002 | score=4 | title=BOA Client Onboarding Checklist | overlap=2026, for
+- lv-item-003 | score=4 | title=PySpark Interview Prep - Join Strategy | overlap=data, for
+-
+Raw AI rerank response:
+
+-
+AI response empty: True
+Fallback: AI rerank was empty; used local top candidate.
+Final selected item: lv-item-001

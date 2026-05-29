@@ -1,0 +1,5 @@
+MEMORY_DESCRIPTION: On February 12, 2026, I applied for a Senior Data Engineer role with a financial services client through a staffing contact.
+FUTURE_SEARCHES: senior data engineer, financial services, staffing contact, February 12, 2026, job application, recruiter, production support
+TAGS: data engineer, finance, staffing contact, February 12, 2026, job application, recruiter, production support
+DATE_HINTS: February 12, 2026, 2026
+CONFIDENCE: medium

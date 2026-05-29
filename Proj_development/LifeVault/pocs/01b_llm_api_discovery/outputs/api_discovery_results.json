@@ -1,0 +1,680 @@
+[
+  {
+    "method": "GET",
+    "url": "http://localhost:8002/",
+    "payload": null,
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8002/health",
+    "payload": null,
+    "status_code": 200,
+    "content_type": "application/json",
+    "response_body_preview": "{\"ok\":true}",
+    "looks_successful": true
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8002/docs",
+    "payload": null,
+    "status_code": 200,
+    "content_type": "text/html; charset=utf-8",
+    "response_body_preview": "\n    <!DOCTYPE html>\n    <html>\n    <head>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link type=\"text/css\" rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css\">\n    <link rel=\"shortcut icon\" href=\"https://fastapi.tiangolo.com/img/favicon.png\">\n    <title>Phase2 7B Mini LLM API - Swagger UI</title>\n    </head>\n    <body>\n    <div id=\"swagger-ui\">\n    </div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js\"></script>\n    <!-- `SwaggerUIBundle` is now available on the page -->\n    <script>\n    const ui = SwaggerUIBundle({\n        url: '/openapi.json',\n    \"dom_id\": \"#swagger-ui\",\n\"layout\": \"BaseLayout\",\n\"deepLinking\": true,\n\"showExtensions\": true,\n\"showCommonExtensions\": true,\noauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',\n    presets: [\n        SwaggerUIBundle.presets.apis,\n        SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n    })\n    </script>\n    </b",
+    "looks_successful": true
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8002/redoc",
+    "payload": null,
+    "status_code": 200,
+    "content_type": "text/html; charset=utf-8",
+    "response_body_preview": "\n    <!DOCTYPE html>\n    <html>\n    <head>\n    <title>Phase2 7B Mini LLM API - ReDoc</title>\n    <!-- needed for adaptive design -->\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    \n    <link href=\"https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700\" rel=\"stylesheet\">\n    \n    <link rel=\"shortcut icon\" href=\"https://fastapi.tiangolo.com/img/favicon.png\">\n    <!--\n    ReDoc doesn't change outer page styles\n    -->\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n      }\n    </style>\n    </head>\n    <body>\n    <noscript>\n        ReDoc requires Javascript to function. Please enable it to browse the documentation.\n    </noscript>\n    <redoc spec-url=\"/openapi.json\"></redoc>\n    <script src=\"https://cdn.jsdelivr.net/npm/redoc@2/bundles/redoc.standalone.js\"> </script>\n    </body>\n    </html>\n    ",
+    "looks_successful": true
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8002/openapi.json",
+    "payload": null,
+    "status_code": 200,
+    "content_type": "application/json",
+    "response_body_preview": "{\"openapi\":\"3.1.0\",\"info\":{\"title\":\"Phase2 7B Mini LLM API\",\"version\":\"0.1.0\"},\"paths\":{\"/health\":{\"get\":{\"summary\":\"Health\",\"operationId\":\"health_health_get\",\"responses\":{\"200\":{\"description\":\"Successful Response\",\"content\":{\"application/json\":{\"schema\":{}}}}}}},\"/infer\":{\"post\":{\"summary\":\"Infer\",\"operationId\":\"infer_infer_post\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"$ref\":\"#/components/schemas/QueryRequest\"}}},\"required\":true},\"responses\":{\"200\":{\"description\":\"Successful Response\",\"content\":{\"application/json\":{\"schema\":{\"$ref\":\"#/components/schemas/QueryResponse\"}}}},\"422\":{\"description\":\"Validation Error\",\"content\":{\"application/json\":{\"schema\":{\"$ref\":\"#/components/schemas/HTTPValidationError\"}}}}}}}},\"components\":{\"schemas\":{\"HTTPValidationError\":{\"properties\":{\"detail\":{\"items\":{\"$ref\":\"#/components/schemas/ValidationError\"},\"type\":\"array\",\"title\":\"Detail\"}},\"type\":\"object\",\"title\":\"HTTPValidationError\"},\"QueryRequest\":{\"properties\":{\"query\":{\"type\":\"string\",",
+    "looks_successful": true
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8002/routes",
+    "payload": null,
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8002/api",
+    "payload": null,
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8002/api/tags",
+    "payload": null,
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8002/models",
+    "payload": null,
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8002/v1/models",
+    "payload": null,
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/generate",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/generate",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/generate",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/generate",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/predict",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/predict",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/predict",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/predict",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/infer",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 422,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"body\",\"query\"],\"msg\":\"Field required\",\"input\":{\"prompt\":\"Say LifeVault API discovery works.\"}}]}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/infer",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 422,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"body\",\"query\"],\"msg\":\"Field required\",\"input\":{\"text\":\"Say LifeVault API discovery works.\"}}]}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/infer",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 422,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"body\",\"query\"],\"msg\":\"Field required\",\"input\":{\"inputs\":\"Say LifeVault API discovery works.\"}}]}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/infer",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 422,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"body\",\"query\"],\"msg\":\"Field required\",\"input\":{\"messages\":[{\"role\":\"user\",\"content\":\"Say LifeVault API discovery works.\"}]}}]}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/inference",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/inference",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/inference",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/inference",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/completion",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/completion",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/completion",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/completion",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/completions",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/completions",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/completions",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/completions",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/chat",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/chat",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/chat",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/chat",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/chat/completions",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/chat/completions",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/chat/completions",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/chat/completions",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/api/generate",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/api/generate",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/api/generate",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/api/generate",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/api/chat",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/api/chat",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/api/chat",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/api/chat",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/v1/completions",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/v1/completions",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/v1/completions",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/v1/completions",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/v1/chat/completions",
+    "payload": {
+      "prompt": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/v1/chat/completions",
+    "payload": {
+      "text": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/v1/chat/completions",
+    "payload": {
+      "inputs": "Say LifeVault API discovery works."
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8002/v1/chat/completions",
+    "payload": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say LifeVault API discovery works."
+        }
+      ]
+    },
+    "status_code": 404,
+    "content_type": "application/json",
+    "response_body_preview": "{\"detail\":\"Not Found\"}",
+    "looks_successful": false
+  }
+]

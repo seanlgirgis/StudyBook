@@ -1,0 +1,21 @@
+You are ranking search results.
+
+User query:
+Find the financial data engineer job I applied for around February 2026.
+
+Candidates:
+A) lv-item-001 - Senior Data Engineer Application - Financial Services
+In February 2026, I applied for a Senior Data Engineer job through a recruiter for a financial services client. The work involved PySpark, SQL, ETL pipelines, banking data reporting, production support, and troubleshooting batch data workflows.
+
+B) lv-item-002 - BOA Client Onboarding Checklist
+May 2026 onboarding notes for BOA bank-client work: start date confirmation, laptop pickup, badge process, first-day instructions, LTIM setup, and manager contact details.
+
+C) lv-item-003 - PySpark Interview Prep - Join Strategy
+PySpark study summary for interview prep: broadcast joins, shuffle costs, partitioning strategy, data skew salting techniques, and performance tradeoffs in ETL jobs.
+
+Pick the best candidate.
+Then explain why in 1 short sentence.
+
+Format:
+BEST: <vault_item_id>
+WHY: <short reason>

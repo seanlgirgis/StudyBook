@@ -1,0 +1,5 @@
+infer_worked: True
+elapsed_seconds: 12.84
+label_parsing_worked: True
+sections_found: MEMORY_DESCRIPTION, FUTURE_SEARCHES
+final_memory_note_non_empty: True

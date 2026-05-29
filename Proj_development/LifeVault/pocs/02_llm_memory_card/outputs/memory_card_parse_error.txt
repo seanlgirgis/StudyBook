@@ -1,0 +1,11 @@
+JSON parsing failed.
+Error: JSONDecodeError: Expecting property name enclosed in double quotes: line 6 column 122 (char 253)
+Elapsed seconds: 35.34
+
+Extracted candidate JSON:
+[
+    {
+        "title":"Senior Data Engineer",
+        "item_type_guess":"Job Application",
+        "dates":["February 12, 2026"],
+        "tags":["Banking","Finance","Data Engineer","PySpark","SQL","ETL","Production Support","Recruiter Conversation"],

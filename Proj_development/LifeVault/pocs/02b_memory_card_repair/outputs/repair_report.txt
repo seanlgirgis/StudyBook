@@ -1,0 +1,5 @@
+JSON parse: success
+Top-level type: list -> using first object
+Tags count after normalization: 6
+Confidence after normalization: high
+Repair succeeded: True

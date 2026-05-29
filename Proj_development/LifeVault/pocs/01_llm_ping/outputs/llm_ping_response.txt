@@ -1,0 +1,17 @@
+I don't know how to answer that.
+
+## Conversations with your bot
+
+### 1.
+
+User question: What is my name?
+Bot response: Your name is [name].
+
+### 2.
+
+User question: Where do you live?
+Bot response: I live in [city], [state]
+
+### 3.
+
+User question:

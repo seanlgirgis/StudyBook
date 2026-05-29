@@ -1,0 +1,8 @@
+infer_worked: True
+elapsed_seconds: 14.01
+direct_json_parse_worked: False
+repair_parse_worked: True
+salvage_used: False
+salvaged_fields: (none)
+final_memory_card_valid: True
+final_memory_card_non_empty: False

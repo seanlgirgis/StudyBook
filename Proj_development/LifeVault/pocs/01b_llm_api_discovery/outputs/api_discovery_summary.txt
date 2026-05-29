@@ -1,0 +1,21 @@
+LLM API Discovery Summary
+======================================================================
+Base URL: http://localhost:8002
+Total requests: 58
+Non-404 responses: 8
+Successful (2xx): 4
+-
+Non-404 routes:
+- GET http://localhost:8002/health -> 200 [application/json]
+- GET http://localhost:8002/docs -> 200 [text/html; charset=utf-8]
+- GET http://localhost:8002/redoc -> 200 [text/html; charset=utf-8]
+- GET http://localhost:8002/openapi.json -> 200 [application/json]
+- POST http://localhost:8002/infer -> 422 [application/json]
+- POST http://localhost:8002/infer -> 422 [application/json]
+- POST http://localhost:8002/infer -> 422 [application/json]
+- POST http://localhost:8002/infer -> 422 [application/json]
+-
+Likely inference route found:
+- none discovered from tested routes/payloads
+-
+OpenAPI schema saved: D:\Workarea\StudyBook\Proj_development\LifeVault\pocs\01b_llm_api_discovery\outputs\openapi.json

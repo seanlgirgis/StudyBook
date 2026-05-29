@@ -1,0 +1,43 @@
+[
+  {
+    "vault_item_id": "lv-item-001",
+    "title": "Senior Data Engineer Application - Financial Services",
+    "source_location": "notes/jobs/2026-02-finance-role.txt",
+    "memory_blob": "In February 2026, I applied for a Senior Data Engineer job through a recruiter for a financial services client. The work involved PySpark, SQL, ETL pipelines, banking data reporting, production support, and troubleshooting batch data workflows.",
+    "local_score": 22,
+    "overlap_words": [
+      "2026",
+      "applied",
+      "data",
+      "engineer",
+      "february",
+      "financial",
+      "for",
+      "i",
+      "job",
+      "the"
+    ]
+  },
+  {
+    "vault_item_id": "lv-item-002",
+    "title": "BOA Client Onboarding Checklist",
+    "source_location": "docs/work/boa-onboarding-may-2026.txt",
+    "memory_blob": "May 2026 onboarding notes for BOA bank-client work: start date confirmation, laptop pickup, badge process, first-day instructions, LTIM setup, and manager contact details.",
+    "local_score": 4,
+    "overlap_words": [
+      "2026",
+      "for"
+    ]
+  },
+  {
+    "vault_item_id": "lv-item-003",
+    "title": "PySpark Interview Prep - Join Strategy",
+    "source_location": "study/pyspark/broadcast-shuffle-notes.txt",
+    "memory_blob": "PySpark study summary for interview prep: broadcast joins, shuffle costs, partitioning strategy, data skew salting techniques, and performance tradeoffs in ETL jobs.",
+    "local_score": 4,
+    "overlap_words": [
+      "data",
+      "for"
+    ]
+  }
+]

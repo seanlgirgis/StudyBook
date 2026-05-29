@@ -1,0 +1,17 @@
+On February 12, 2026, I applied for a Senior Data Engineer role
+with a financial services client through a staffing contact.
+
+The role focused on Python, SQL, PySpark, ETL pipelines, and
+reporting for banking data. The recruiter said the client wanted
+someone who could troubleshoot production data workflows, support
+batch jobs, and explain pipeline failures clearly.
+
+I remember this opportunity because it sounded close to my Citi
+background: telemetry data, capacity reporting, forecasting,
+data quality checks, and operational support. I may need to find
+this later when comparing financial-services job applications,
+interview prep notes, resumes, and recruiter conversations.
+
+Possible related terms:
+banking, finance, data engineer, PySpark, SQL, ETL, February 2026,
+job application, recruiter, production support.
