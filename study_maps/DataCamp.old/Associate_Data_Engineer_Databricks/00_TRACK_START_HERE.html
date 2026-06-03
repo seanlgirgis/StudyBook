@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Associate Data Engineer Databricks - Start Here</title>
+  <style>
+    :root {
+      --bg: #0a1020;
+      --panel: #121827;
+      --panel-2: #1a2338;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #22d3ee;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #020617 0%, #0a1020 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+
+    .panel,
+    .card {
+      background: rgba(18, 24, 39, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+    }
+
+    .panel {
+      padding: 24px;
+      margin-bottom: 22px;
+    }
+
+    .hero {
+      padding: 28px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin-top: 0;
+      color: #f8fafc;
+    }
+
+    p,
+    li {
+      color: var(--text);
+    }
+
+    .rule {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(2, 6, 23, 0.55);
+    }
+
+    .toc ul,
+    .workflow ol {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(26, 35, 56, 0.96), rgba(18, 24, 39, 0.96));
+    }
+
+    .label {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .path,
+    code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .path {
+      display: block;
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(2, 6, 23, 0.58);
+      color: #dbeafe;
+      word-break: break-word;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .toplink {
+      margin-top: 14px;
+      display: inline-block;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="top">
+    <section class="panel hero">
+      <h1>Associate Data Engineer Databricks - Start Here</h1>
+      <p>This is the front door for Sean's DataCamp Associate Data Engineer Databricks track.</p>
+      <div class="rule">
+        <h2>Simple rule</h2>
+        <p><code>study_pages</code> = polished study material, summaries, field guides, workbooks, flashcards, interview translation.</p>
+        <p><code>source_material</code> = raw transcripts, exercise notes, and source capture.</p>
+        <p><code>tutorials</code> = runnable local SQL/Python/PySpark labs, commands, outputs, and troubleshooting.</p>
+      </div>
+    </section>
+
+    <section class="panel toc">
+      <h2>Table of Contents</h2>
+      <ul>
+        <li>Relative locations</li>
+        <li>Study Pages</li>
+        <li>Source Material</li>
+        <li>PySpark</li>
+        <li>Runnable Labs</li>
+        <li>Recommended workflow</li>
+      </ul>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+
+    <section class="panel" id="locations">
+      <h2>Relative locations from this track folder</h2>
+      <p><span class="label">Study pages</span><span class="path">.\study_pages</span></p>
+      <p><span class="label">Source material</span><span class="path">.\source_material</span></p>
+      <p><span class="label">Runnable labs for this track</span><span class="path">..\..\..\tutorials\DataCamp\Associate_Data_Engineer_Databricks</span></p>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+
+    <section class="panel" id="cards">
+      <h2>Track navigation cards</h2>
+      <div class="cards">
+        <article class="card">
+          <div class="label">Study Pages</div>
+          <h3>Polished course pages</h3>
+          <p class="path">.\study_pages</p>
+          <ul>
+            <li>.\study_pages\01_intro_sql</li>
+            <li>.\study_pages\02_intermediate_sql</li>
+            <li>.\study_pages\03_joining_data_in_sql</li>
+            <li>.\study_pages\04_data_manipulation_in_sql</li>
+            <li>.\study_pages\11_intro_pyspark</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="label">Source Material</div>
+          <h3>Raw source capture</h3>
+          <p class="path">.\source_material</p>
+          <ul>
+            <li>.\source_material\course_01_intro_sql</li>
+            <li>.\source_material\course_02_intermediate_sql</li>
+            <li>.\source_material\course_03_joining_data_in_sql</li>
+            <li>.\source_material\course_04_data_manipulation_in_sql</li>
+            <li>.\source_material\course_11_intro_pyspark</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="label">PySpark</div>
+          <h3>Interview and practice lane</h3>
+          <p class="path">.\study_pages\11_intro_pyspark</p>
+          <p>Course 11 Introduction to PySpark was also used for Wipro/PySpark interview preparation and local Spark practice.</p>
+        </article>
+
+        <article class="card">
+          <div class="label">Runnable Labs</div>
+          <h3>Local practice path</h3>
+          <p class="path">..\..\..\tutorials\DataCamp\Associate_Data_Engineer_Databricks</p>
+          <p class="muted">Use tutorials only when running SQL, Python, PySpark, Docker, or local lab commands.</p>
+        </article>
+      </div>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+
+    <section class="panel workflow" id="workflow">
+      <h2>Recommended workflow</h2>
+      <ol>
+        <li>Open this track page.</li>
+        <li>Pick the course folder.</li>
+        <li>Use study_pages for review and durable notes.</li>
+        <li>Use source_material only for transcript/exercise capture.</li>
+        <li>Use tutorials only when running SQL, Python, PySpark, Docker, or local lab commands.</li>
+      </ol>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+  </div>
+</body>
+</html>

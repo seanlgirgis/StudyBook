@@ -19,3 +19,4 @@ LEFT JOIN daily_forecast f ON a.day_bucket=f.day_bucket AND a.host=f.host AND a.
 WHERE f.predicted_peak_cpu IS NOT NULL
 ORDER BY a.day_bucket DESC, a.host
 LIMIT 300;
+m

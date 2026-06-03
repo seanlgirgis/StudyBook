@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataCamp Start Here</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #020617 0%, #0f172a 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    .hero,
+    .panel,
+    .card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .hero {
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin-top: 0;
+      color: #f8fafc;
+    }
+
+    p,
+    li {
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .rule {
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      color: #dbeafe;
+      background: rgba(15, 23, 42, 0.9);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .panel {
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+
+    .toc ul,
+    .plan ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(31, 41, 55, 0.96), rgba(17, 24, 39, 0.96));
+    }
+
+    .path {
+      display: block;
+      margin: 12px 0 16px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #bfdbfe;
+      word-break: break-word;
+    }
+
+    .path-link {
+      display: block;
+      margin: 12px 0 16px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--accent);
+      word-break: break-word;
+    }
+
+    .label {
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero" id="top">
+      <h1>DataCamp Start Here</h1>
+      <p>This is the front door for Sean's DataCamp study area.</p>
+      <div class="rule">
+        <h2>Main rule</h2>
+        <p><code>study_maps\DataCamp</code> = read, study, review, HTML guides, field guides, workbooks, transcripts, StudyBubble material.</p>
+        <p><code>tutorials\DataCamp</code> = run, practice, SQL/Python/Spark labs, commands, outputs, troubleshooting.</p>
+      </div>
+    </section>
+
+    <section class="panel toc" id="toc">
+      <h2>Table of Contents</h2>
+      <ul>
+        <li>Purpose and main rule</li>
+        <li>Known tracks</li>
+        <li>Related runnable lab root</li>
+        <li>Navigation plan</li>
+        <li>Current next landing pages planned</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="tracks">
+      <h2>Known tracks</h2>
+      <div class="cards">
+        <article class="card">
+          <div class="label">Track 1</div>
+          <h3>Associate Data Analyst in SQL</h3>
+          <p class="path">.\associate-data-analyst-in-sql</p>
+          <a class="path-link" href="./associate-data-analyst-in-sql/00_TRACK_START_HERE.html">.\associate-data-analyst-in-sql\00_TRACK_START_HERE.html</a>
+          <p>Use this for: SQL analyst track, SQL projects, PostgreSQL courses, field guides, workbooks, and StudyBubble study pages.</p>
+        </article>
+
+        <article class="card">
+          <div class="label">Track 2</div>
+          <h3>Associate Data Engineer Databricks</h3>
+          <p class="path">.\Associate_Data_Engineer_Databricks</p>
+          <a class="path-link" href="./Associate_Data_Engineer_Databricks/00_TRACK_START_HERE.html">.\Associate_Data_Engineer_Databricks\00_TRACK_START_HERE.html</a>
+          <p>Use this for: Databricks data engineer track, SQL basics, joins, manipulation, PySpark, and Databricks-oriented study pages.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" id="labs">
+      <h2>Related runnable lab root</h2>
+      <p class="path">..\..\tutorials\DataCamp</p>
+      <p class="muted">Use tutorials folders only when running code.</p>
+    </section>
+
+    <section class="panel plan" id="plan">
+      <h2>Navigation plan</h2>
+      <ul>
+        <li>Open this page first.</li>
+        <li>Choose a track landing page.</li>
+        <li>Choose a course/project from the track page.</li>
+        <li>Use HTML files for reading.</li>
+        <li>Use tutorials folders only when running code.</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="planned-pages">
+      <h2>Current next landing pages planned</h2>
+      <a class="path-link" href="./associate-data-analyst-in-sql/00_TRACK_START_HERE.html">associate-data-analyst-in-sql\00_TRACK_START_HERE.html</a>
+      <a class="path-link" href="./Associate_Data_Engineer_Databricks/00_TRACK_START_HERE.html">Associate_Data_Engineer_Databricks\00_TRACK_START_HERE.html</a>
+    </section>
+  </div>
+</body>
+</html>

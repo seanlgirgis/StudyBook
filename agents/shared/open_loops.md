@@ -250,4 +250,5 @@ Last reviewed: 2026-04-28 (high-volume event ingestion topic run)
 | LOOP-169 | TB-20260430-03 | Create canonical stand-in thread markdown for recovered Audio Generation chat | closed | none | 2026-04-30 |
 
 | LOOP-170 | TB-20260515-01 | Initialize study_bubbles Iteration 0 scaffold and governance/memory docs | closed | none | 2026-05-15 |
+| LOOP-171 | TB-20260603-11 | Create BOM scaffold for DataCamp course `functions_for_manipulating_data_in_postgresql` | closed | none | 2026-06-03 |
 

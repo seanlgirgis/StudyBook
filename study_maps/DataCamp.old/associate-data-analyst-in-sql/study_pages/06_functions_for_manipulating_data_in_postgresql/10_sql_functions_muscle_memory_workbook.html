@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course 06 SQL Functions Muscle-Memory Workbook</title>
+<style>
+  :root {
+    --bg: #0b1020;
+    --panel: #131a2e;
+    --panel-2: #1a233b;
+    --text: #e8eefc;
+    --muted: #9dadc9;
+    --line: #2a3554;
+    --accent: #7dd3fc;
+    --accent-2: #f59e0b;
+    --code: #0a0f1d;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Consolas, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top right, rgba(125, 211, 252, 0.12), transparent 28%),
+      linear-gradient(180deg, #0a0f1d 0%, #0b1020 100%);
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, rgba(125, 211, 252, 0.12), rgba(245, 158, 11, 0.08));
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(125, 211, 252, 0.4);
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  h1, h2, h3 {
+    margin: 0 0 12px;
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: 2rem;
+    letter-spacing: -0.03em;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 28px;
+  }
+
+  h3 {
+    font-size: 1rem;
+    color: var(--accent);
+    margin-top: 22px;
+  }
+
+  p, li {
+    color: var(--muted);
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+
+  .toc {
+    list-style: none;
+    padding-left: 0;
+    margin: 12px 0 0;
+  }
+
+  .toc a {
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-block;
+    padding: 6px 0;
+  }
+
+  .back-top {
+    display: inline-block;
+    margin-top: 16px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 13px;
+  }
+
+  .rule-list,
+  .steps {
+    padding-left: 20px;
+    margin: 12px 0 0;
+  }
+
+  .exercise-title {
+    color: var(--accent-2);
+    letter-spacing: 0.02em;
+  }
+
+  .slot {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+
+  pre {
+    margin: 0;
+    padding: 14px 16px;
+    background: var(--code);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow-x: auto;
+    color: var(--text);
+  }
+
+  code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 14px;
+  }
+
+  .placeholder {
+    color: var(--muted);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <a id="top"></a>
+    <section class="hero">
+      <div class="eyebrow">Course 06 · PostgreSQL Functions</div>
+      <h1>Course 06 SQL Functions Muscle-Memory Workbook</h1>
+      <p>Hands-on rehearsal log for PostgreSQL data manipulation functions.</p>
+    </section>
+
+    <section class="card">
+      <h2>Table of Contents</h2>
+      <ul class="toc">
+        <li><a href="#training-rules">Training Mode Rules</a></li>
+        <li><a href="#how-to-use">How To Use This Workbook</a></li>
+        <li><a href="#exercise-01-schema-inspection-arrays">Exercise 01 - Schema Inspection and Arrays</a></li>
+      </ul>
+      <a class="back-top" href="#top">↑ back to top</a>
+    </section>
+
+    <section class="card" id="training-rules">
+      <h2>Training Mode Rules</h2>
+      <ul class="rule-list">
+        <li>Type the SQL by hand before checking older notes.</li>
+        <li>Keep each exercise small and repeatable.</li>
+        <li>Record mistakes exactly as they happened.</li>
+        <li>Convert each correction into a reusable pattern.</li>
+        <li>End each exercise with one memory nugget and one interview translation.</li>
+      </ul>
+      <a class="back-top" href="#top">↑ back to top</a>
+    </section>
+
+    <section class="card" id="how-to-use">
+      <h2>How To Use This Workbook</h2>
+      <ol class="steps">
+        <li>Read the prompt.</li>
+        <li>Write your own SQL in the <strong>Sean SQL</strong> section.</li>
+        <li>Note what the result means in plain English.</li>
+        <li>Capture mistakes, discoveries, and fixes immediately.</li>
+        <li>Distill the exercise into a compact memory nugget.</li>
+        <li>Translate the exercise into interview-ready language.</li>
+      </ol>
+      <a class="back-top" href="#top">↑ back to top</a>
+    </section>
+
+    <section class="card" id="exercise-01-schema-inspection-arrays">
+      <h2 class="exercise-title">Exercise 01 - Schema Inspection and Arrays</h2>
+
+      <div class="slot">
+        <h3>Prompt</h3>
+        <p>Inspect the Course 06 lab schema, list its tables, inspect the <code>lab_customers</code> column types, then compare array position access with array-wide search.</p>
+      </div>
+
+      <div class="slot">
+        <h3>Sean SQL</h3>
+        <pre><code>SET search_path TO course06_functions_lab;
+
+SELECT
+  table_name
+FROM information_schema.tables
+WHERE table_schema = 'course06_functions_lab'
+ORDER BY table_name;
+
+SELECT
+  column_name,
+  data_type
+FROM information_schema.columns
+WHERE table_schema = 'course06_functions_lab'
+  AND table_name = 'lab_customers'
+ORDER BY ordinal_position;
+
+SELECT
+  customer_id,
+  first_name,
+  last_name,
+  email,
+  favorite_tags
+FROM lab_customers
+ORDER BY customer_id;
+
+SELECT
+  customer_id,
+  favorite_tags[1] AS first_tag,
+  'sql' = ANY(favorite_tags) AS has_sql_tag
+FROM lab_customers
+ORDER BY customer_id;</code></pre>
+      </div>
+
+      <div class="slot">
+        <h3>Result Meaning</h3>
+        <p><code>information_schema.tables</code> lists tables in the lab schema. <code>information_schema.columns</code> shows column names and data types. <code>favorite_tags</code> is an ARRAY, not plain text. <code>favorite_tags[1]</code> returns only the first array item. <code>'sql' = ANY(favorite_tags)</code> searches the whole array.</p>
+        <p>Important result: Sean had <code>sql</code> as the first tag, so <code>first_tag = sql</code> and <code>has_sql_tag = true</code>. Brian had <code>strategy</code> as the first tag, but <code>sql</code> elsewhere in the array, so <code>first_tag = strategy</code> and <code>has_sql_tag = true</code>.</p>
+      </div>
+
+      <div class="slot">
+        <h3>Mistake / Discovery</h3>
+        <p>A column can look like text when displayed, but PostgreSQL knows its real data type. Array position access and array searching are different.</p>
+      </div>
+
+      <div class="slot">
+        <h3>Corrected Pattern</h3>
+        <p>Use <code>array[1]</code> when you need a specific position. Use <code>value = ANY(array_column)</code> when you need to search the whole array.</p>
+      </div>
+
+      <div class="slot">
+        <h3>Memory Nugget</h3>
+        <p><code>array[1]</code> checks one position. <code>ANY(array)</code> searches the whole array.</p>
+      </div>
+
+      <div class="slot">
+        <h3>Interview Translation</h3>
+        <p>Before transforming data, I inspect the schema so I know the real column types. For PostgreSQL arrays, I know that position access like <code>array[1]</code> is different from searching the whole array with <code>ANY</code>.</p>
+      </div>
+      <a class="back-top" href="#top">↑ back to top</a>
+    </section>
+  </div>
+</body>
+</html>

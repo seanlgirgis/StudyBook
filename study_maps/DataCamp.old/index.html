@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataCamp Master Library</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #121a2b;
+      --panel-2: #182338;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #67e8f9;
+      --border: #334155;
+      --badge: #1d4ed8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #020617 0%, #0b1220 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+
+    .panel,
+    .card {
+      background: rgba(18, 26, 43, 0.94);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+    }
+
+    .panel {
+      padding: 24px;
+      margin-bottom: 22px;
+    }
+
+    .hero {
+      padding: 28px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(24, 35, 56, 0.96), rgba(18, 26, 43, 0.96));
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin-top: 0;
+      color: #f8fafc;
+    }
+
+    p,
+    li {
+      color: var(--text);
+    }
+
+    ul,
+    ol {
+      padding-left: 22px;
+    }
+
+    .toc ul {
+      margin: 0;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(29, 78, 216, 0.25);
+      border: 1px solid rgba(103, 232, 249, 0.35);
+      color: #dbeafe;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .path,
+    code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .path {
+      display: block;
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(2, 6, 23, 0.58);
+      color: #dbeafe;
+      word-break: break-word;
+    }
+
+    .path-link {
+      display: block;
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(2, 6, 23, 0.58);
+      color: var(--accent);
+      word-break: break-word;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .toplink {
+      margin-top: 14px;
+      display: inline-block;
+    }
+
+    .label {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="top">
+    <section class="panel hero">
+      <h1>DataCamp Master Library</h1>
+      <p class="muted">Master entrance for Sean's DataCamp study assets.</p>
+    </section>
+
+    <section class="panel toc">
+      <h2>Table of Contents</h2>
+      <ul>
+        <li><a href="#continue-now">Continue Now</a></li>
+        <li><a href="#main-navigation">Main Navigation</a></li>
+        <li><a href="#sql-analyst-list">Associate Data Analyst in SQL course list</a></li>
+        <li><a href="#databricks-track">Databricks track</a></li>
+      </ul>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+
+    <section class="panel" id="continue-now">
+      <h2>Continue Now</h2>
+      <p><span class="badge">Active</span></p>
+      <p><strong>Active track:</strong> Associate Data Analyst in SQL</p>
+      <p><strong>Active course:</strong> Course 06 — Functions for Manipulating Data in PostgreSQL</p>
+      <a class="path-link" href="./associate-data-analyst-in-sql/study_pages/06_functions_for_manipulating_data_in_postgresql/00_START_HERE_COURSE_06.html">Course 06 Start Here: .\associate-data-analyst-in-sql\study_pages\06_functions_for_manipulating_data_in_postgresql\00_START_HERE_COURSE_06.html</a>
+      <a class="path-link" href="./associate-data-analyst-in-sql/study_pages/06_functions_for_manipulating_data_in_postgresql/09_postgresql_data_functions_field_guide.html">Course 06 Field Guide: .\associate-data-analyst-in-sql\study_pages\06_functions_for_manipulating_data_in_postgresql\09_postgresql_data_functions_field_guide.html</a>
+      <a class="path-link" href="./associate-data-analyst-in-sql/study_pages/06_functions_for_manipulating_data_in_postgresql/10_sql_functions_muscle_memory_workbook.html">Course 06 Muscle-Memory Workbook: .\associate-data-analyst-in-sql\study_pages\06_functions_for_manipulating_data_in_postgresql\10_sql_functions_muscle_memory_workbook.html</a>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+
+    <section class="panel" id="main-navigation">
+      <h2>Main Navigation</h2>
+      <div class="cards">
+        <article class="card">
+          <div class="label">Global</div>
+          <h3>DataCamp Global Start Here</h3>
+          <a class="path-link" href="./00_DATACAMP_START_HERE.html">.\00_DATACAMP_START_HERE.html</a>
+        </article>
+
+        <article class="card">
+          <div class="label">SQL Analyst</div>
+          <h3>Associate Data Analyst in SQL</h3>
+          <a class="path-link" href="./associate-data-analyst-in-sql/00_TRACK_START_HERE.html">.\associate-data-analyst-in-sql\00_TRACK_START_HERE.html</a>
+        </article>
+
+        <article class="card">
+          <div class="label">Databricks</div>
+          <h3>Associate Data Engineer Databricks</h3>
+          <a class="path-link" href="./Associate_Data_Engineer_Databricks/00_TRACK_START_HERE.html">.\Associate_Data_Engineer_Databricks\00_TRACK_START_HERE.html</a>
+        </article>
+      </div>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+
+    <section class="panel" id="sql-analyst-list">
+      <h2>Associate Data Analyst in SQL course list</h2>
+      <ul>
+        <li>01 Introduction to SQL <span class="muted">- planned/known item</span></li>
+        <li>02 Intermediate SQL <span class="muted">- planned/known item</span></li>
+        <li>03 Analyzing Students' Mental Health <span class="muted">- planned/known item</span></li>
+        <li>04 Joining Data in SQL <span class="muted">- planned/known item</span></li>
+        <li>05 Data Manipulation in SQL <span class="muted">- planned/known item</span></li>
+        <li>06 PostgreSQL Summary Stats and Window Functions <span class="muted">- planned/known item</span></li>
+        <li>07 Functions for Manipulating Data in PostgreSQL - <a href="./associate-data-analyst-in-sql/study_pages/06_functions_for_manipulating_data_in_postgresql/00_START_HERE_COURSE_06.html">local START_HERE page</a></li>
+        <li>08 Introduction to Statistics <span class="muted">- planned/known item</span></li>
+        <li>09 Exploratory Data Analysis in SQL <span class="muted">- planned/known item</span></li>
+        <li>10 Data-Driven Decision Making in SQL <span class="muted">- planned/known item</span></li>
+        <li>11 Understanding Data Visualization <span class="muted">- planned/known item</span></li>
+        <li>12 Data Communication Concepts <span class="muted">- planned/known item</span></li>
+        <li>13 Analyzing Motorcycle Part Sales <span class="muted">- planned/known item</span></li>
+      </ul>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+
+    <section class="panel" id="databricks-track">
+      <h2>Databricks track</h2>
+      <div class="cards">
+        <article class="card">
+          <div class="label">Track</div>
+          <h3>Associate Data Engineer Databricks</h3>
+          <a class="path-link" href="./Associate_Data_Engineer_Databricks/00_TRACK_START_HERE.html">.\Associate_Data_Engineer_Databricks\00_TRACK_START_HERE.html</a>
+          <p class="muted">Available as a compact track landing page, but not the active Continue Now item.</p>
+        </article>
+      </div>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+  </div>
+</body>
+</html>

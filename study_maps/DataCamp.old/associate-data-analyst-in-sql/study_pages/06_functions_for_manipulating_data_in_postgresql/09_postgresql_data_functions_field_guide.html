@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PostgreSQL Functions for Manipulating Data — Course 06 Field Guide</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #79c0ff;
+    --green: #56d364;
+    --green-bg: #0d2818;
+    --yellow: #e3b341;
+    --yellow-bg: #2d1d00;
+    --red: #ff7b72;
+    --red-bg: #2d0d0d;
+    --purple: #bc8cff;
+    --purple-bg: #1e1235;
+    --teal: #39d0d8;
+    --teal-bg: #03242a;
+    --orange: #ffa657;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 0 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--purple), var(--teal));
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .header-badge {
+    display: inline-block;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    color: var(--green);
+    background: var(--green-bg);
+    border: 1px solid var(--green);
+    border-radius: 4px;
+    padding: 3px 10px;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.45rem;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  header p {
+    color: var(--muted);
+    font-size: 1rem;
+    font-family: Consolas, "Courier New", monospace;
+  }
+
+  .subnote {
+    margin-top: 0.8rem;
+    color: #c9d1d9;
+    font-size: 0.95rem;
+  }
+
+  .toc-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 2.5rem 0;
+    overflow: hidden;
+  }
+
+  .toc-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+
+  .toc-header span {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--yellow);
+    letter-spacing: 0.1em;
+  }
+
+  .toc-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .d-red { background: #ff5f56; }
+  .d-yellow { background: #ffbd2e; }
+  .d-green { background: #27c93f; }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .toc-section {
+    padding: 1.2rem 1.4rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .toc-section:nth-child(even) { border-right: none; }
+
+  .toc-section h4 {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .toc-section ul { list-style: none; }
+  .toc-section li { margin-bottom: 0.38rem; }
+
+  .toc-section a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
+    font-family: Consolas, "Courier New", monospace;
+    display: flex;
+    gap: 8px;
+  }
+
+  .toc-section a:hover { color: var(--accent2); }
+
+  .toc-section .num {
+    color: var(--muted);
+    min-width: 28px;
+  }
+
+  .section {
+    margin-bottom: 2rem;
+    scroll-margin-top: 80px;
+  }
+
+  .section-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 1rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg);
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 3px 8px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  .section h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+
+  .section h3 {
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent2);
+  }
+
+  .section p,
+  .section li,
+  .section td,
+  .section th {
+    color: #c9d1d9;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .section ul {
+    padding-left: 1.4rem;
+    margin: 0.8rem 0;
+  }
+
+  .section li { margin-bottom: 0.3rem; }
+
+  code {
+    font-family: Consolas, "Courier New", monospace;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 13px;
+    color: var(--orange);
+  }
+
+  pre {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    position: relative;
+  }
+
+  pre .label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--bg3);
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-radius: 0 6px 0 4px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 10px;
+    color: var(--muted);
+    padding: 3px 8px;
+    letter-spacing: 0.08em;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: #e6edf3;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+
+  .callout {
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .callout strong {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    opacity: 0.8;
+  }
+
+  .nugget {
+    background: var(--teal-bg);
+    border: 1px solid rgba(57, 208, 216, 0.45);
+    color: var(--teal);
+  }
+
+  .memory {
+    background: rgba(188, 140, 255, 0.1);
+    border: 1px solid rgba(188, 140, 255, 0.45);
+    color: var(--purple);
+  }
+
+  .trap {
+    background: var(--yellow-bg);
+    border: 1px solid rgba(227, 179, 65, 0.65);
+    color: var(--yellow);
+  }
+
+  .interview {
+    background: var(--green-bg);
+    border: 1px solid rgba(86, 211, 100, 0.45);
+    color: var(--green);
+  }
+
+  table.lookup {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 14px;
+  }
+
+  table.lookup th,
+  table.lookup td {
+    border: 1px solid var(--border);
+    padding: 0.75rem;
+    vertical-align: top;
+  }
+
+  table.lookup th {
+    background: var(--bg3);
+    color: var(--accent2);
+    text-align: left;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+  }
+
+  table.lookup tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .cheat-cell {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .cheat-cell h3 {
+    margin-top: 0;
+    color: var(--accent);
+  }
+
+  .back-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-top: 1rem;
+  }
+
+  .back-top:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: 4rem;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  @media (max-width: 760px) {
+    .container { padding: 0 1rem; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .cheat-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <div class="header-badge">POSTGRESQL · COURSE 06 · ROBUST FIELD GUIDE</div>
+    <h1>PostgreSQL <span>Functions for Manipulating Data</span></h1>
+    <p>DataCamp Associate Data Analyst in SQL</p>
+    <div class="subnote">Markdown is the editable source of truth. HTML is the polished reading version.</div>
+  </div>
+</header>
+
+<div class="container">
+  <a id="top"></a>
+
+  <div class="toc-wrap">
+    <div class="toc-header">
+      <div class="toc-dot d-red"></div>
+      <div class="toc-dot d-yellow"></div>
+      <div class="toc-dot d-green"></div>
+      <span>Table of Contents</span>
+    </div>
+    <div class="toc-grid">
+      <div class="toc-section">
+        <h4>Foundations</h4>
+        <ul>
+          <li><a href="#s01"><span class="num">01</span> Course 06 Big Map</a></li>
+          <li><a href="#s02"><span class="num">02</span> Schema Inspection</a></li>
+          <li><a href="#s03"><span class="num">03</span> PostgreSQL Data Types</a></li>
+          <li><a href="#s04"><span class="num">04</span> Date and Time Arithmetic</a></li>
+          <li><a href="#s05"><span class="num">05</span> Current Date/Time and Casting</a></li>
+          <li><a href="#s06"><span class="num">06</span> AGE</a></li>
+          <li><a href="#s07"><span class="num">07</span> EXTRACT, DATE_PART, DATE_TRUNC</a></li>
+          <li><a href="#s08"><span class="num">08</span> Arrays</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Text and Search</h4>
+        <ul>
+          <li><a href="#s09"><span class="num">09</span> Text Reformatting</a></li>
+          <li><a href="#s10"><span class="num">10</span> Text Parsing</a></li>
+          <li><a href="#s11"><span class="num">11</span> Trimming and Padding</a></li>
+          <li><a href="#s12"><span class="num">12</span> Full-Text Search</a></li>
+          <li><a href="#s13"><span class="num">13</span> Extensions and Custom Database Features</a></li>
+          <li><a href="#s14"><span class="num">14</span> Common Traps</a></li>
+          <li><a href="#s15"><span class="num">15</span> Interview Cheatsheet</a></li>
+          <li><a href="#s16"><span class="num">16</span> One-Page Quick Lookup</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s01">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">01</div>
+        <h2>Course 06 Big Map</h2>
+      </div>
+      <p>Course 06 is about matching PostgreSQL functions to the real type of the value you are working with.</p>
+      <pre><span class="label">MENTAL MODEL</span><code>raw messy values -> inspect type -> choose function -> transform -> clean -> extract -> format -> search</code></pre>
+      <div class="callout nugget">
+        <strong>NUGGET</strong>
+        PostgreSQL function choice becomes easier when you think in type families: text, numeric, timestamp, interval, array, and user-defined.
+      </div>
+      <div class="callout memory">
+        <strong>SEAN MEMORY LINE</strong>
+        Inspect the type first. Then pick the function.
+      </div>
+      <div class="callout interview">
+        <strong>INTERVIEW SENTENCE</strong>
+        Before transforming columns, I inspect data types so I can apply the right PostgreSQL function family and avoid wrong assumptions.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s02">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <h2>Schema Inspection</h2>
+      </div>
+      <p><code>information_schema</code> gives you a safe, portable way to inspect tables and columns before you transform anything.</p>
+      <pre><span class="label">SQL</span><code>SELECT
+    table_name
+FROM information_schema.tables
+WHERE table_schema = 'public';</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    column_name,
+    data_type
+FROM information_schema.columns
+WHERE table_name = 'customer';</code></pre>
+      <div class="callout nugget">
+        <strong>NUGGET</strong>
+        Metadata queries often answer transformation questions faster than scanning sample rows.
+      </div>
+      <div class="callout trap">
+        <strong>COMMON TRAP</strong>
+        A column can display like text in a result set while actually being stored as <code>ARRAY</code> or <code>USER-DEFINED</code>.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s03">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <h2>PostgreSQL Data Types</h2>
+      </div>
+      <p>Course 06 works mainly with text, numeric, date/time, array, and custom type patterns.</p>
+      <ul>
+        <li><code>CHAR</code>, <code>VARCHAR</code>, <code>TEXT</code></li>
+        <li><code>INT</code>, <code>DECIMAL</code></li>
+        <li><code>DATE</code>, <code>TIME</code>, <code>TIMESTAMP</code>, <code>INTERVAL</code></li>
+        <li><code>ARRAY</code></li>
+        <li><code>USER-DEFINED</code></li>
+      </ul>
+      <h3>How to think about them</h3>
+      <ul>
+        <li><code>TEXT</code> is usually the most flexible string type.</li>
+        <li><code>DECIMAL</code> is better when exact numeric precision matters.</li>
+        <li><code>INTERVAL</code> stores duration, not clock time.</li>
+        <li><code>USER-DEFINED</code> usually means inspect further before transforming.</li>
+      </ul>
+      <div class="callout trap">
+        <strong>COMMON TRAP</strong>
+        <code>STRING</code> is not a PostgreSQL text type.
+      </div>
+      <div class="callout memory">
+        <strong>SEAN MEMORY LINE</strong>
+        Visible shape is not storage type.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s04">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">04</div>
+        <h2>Date and Time Arithmetic</h2>
+      </div>
+      <ul>
+        <li><code>DATE - DATE</code> returns integer days.</li>
+        <li><code>DATE + integer</code> adds days.</li>
+        <li><code>TIMESTAMP - TIMESTAMP</code> returns <code>INTERVAL</code>.</li>
+        <li><code>TIMESTAMP + INTERVAL</code> shifts a timestamp.</li>
+        <li><code>INTERVAL</code> can be multiplied.</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+    rental_date,
+    return_date,
+    return_date - rental_date AS days_rented
+FROM rental
+WHERE return_date IS NOT NULL;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    rental_date,
+    rental_date + INTERVAL '3 days' AS expected_return_date
+FROM rental;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    INTERVAL '1 day' * rental_duration AS allowed_rental_period
+FROM film;</code></pre>
+      <div class="callout nugget">
+        <strong>NUGGET</strong>
+        Operand type controls result type, so date arithmetic and timestamp arithmetic should not be explained the same way.
+      </div>
+      <div class="callout trap">
+        <strong>COMMON TRAP</strong>
+        <code>DATE + integer</code> treats the integer as days, not hours or generic units.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s05">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">05</div>
+        <h2>Current Date/Time and Casting</h2>
+      </div>
+      <ul>
+        <li><code>NOW()</code></li>
+        <li><code>CURRENT_TIMESTAMP</code></li>
+        <li><code>CURRENT_TIMESTAMP(2)</code></li>
+        <li><code>CURRENT_DATE</code></li>
+        <li><code>CURRENT_TIME</code></li>
+        <li><code>NOW()::timestamp</code></li>
+        <li><code>CAST(NOW() AS timestamp)</code></li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+    NOW() AS now_value,
+    CURRENT_TIMESTAMP AS current_ts,
+    CURRENT_TIMESTAMP(2) AS current_ts_2dp,
+    CURRENT_DATE AS current_date_value,
+    CURRENT_TIME AS current_time_value;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    NOW()::timestamp AS cast_with_double_colon,
+    CAST(NOW() AS timestamp) AS cast_with_cast;</code></pre>
+      <div class="callout interview">
+        <strong>INTERVIEW SENTENCE</strong>
+        Function choice depends on the underlying data type, and explicit casting helps make time values fit the intended comparison or grouping logic.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s06">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">06</div>
+        <h2>AGE</h2>
+      </div>
+      <p><code>AGE(later, earlier)</code> returns an interval-style elapsed-time result.</p>
+      <pre><span class="label">SQL</span><code>SELECT
+    rental_date,
+    return_date,
+    AGE(return_date, rental_date) AS rental_age
+FROM rental
+WHERE return_date IS NOT NULL;</code></pre>
+      <div class="callout trap">
+        <strong>COMMON TRAP</strong>
+        Use <code>AGE(later, earlier)</code>, not the other way around.
+      </div>
+      <div class="callout memory">
+        <strong>SEAN MEMORY LINE</strong>
+        Subtraction gives difference. <code>AGE()</code> gives elapsed age.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s07">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">07</div>
+        <h2>EXTRACT, DATE_PART, DATE_TRUNC</h2>
+      </div>
+      <p><code>EXTRACT</code> and <code>DATE_PART</code> return subfield values. <code>DATE_TRUNC</code> returns a bucketed timestamp or interval.</p>
+      <pre><span class="label">SQL</span><code>SELECT
+    EXTRACT(year FROM payment_date) AS payment_year,
+    EXTRACT(quarter FROM payment_date) AS payment_quarter,
+    SUM(amount) AS revenue
+FROM payment
+GROUP BY 1, 2
+ORDER BY 1, 2;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    DATE_PART('month', payment_date) AS payment_month
+FROM payment;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    DATE_TRUNC('month', payment_date) AS payment_month_start,
+    SUM(amount) AS revenue
+FROM payment
+GROUP BY 1
+ORDER BY 1;</code></pre>
+      <div class="callout trap">
+        <strong>COMMON TRAP</strong>
+        <code>DATE_TRUNC</code> returns timestamp/interval, not just a number.
+      </div>
+      <div class="callout interview">
+        <strong>INTERVIEW SENTENCE</strong>
+        For timestamp grouping, I use <code>EXTRACT</code> or <code>DATE_TRUNC</code> depending on whether I need a numeric subfield or a truncated timestamp.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s08">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">08</div>
+        <h2>Arrays</h2>
+      </div>
+      <p>Arrays are common in Sakila-style examples because one row can hold multiple values in a single column.</p>
+      <pre><span class="label">SQL</span><code>SELECT
+    title,
+    special_features
+FROM film
+WHERE special_features[1] = 'Trailers';</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    title,
+    special_features
+FROM film
+WHERE 'Trailers' = ANY(special_features);</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    title,
+    special_features
+FROM film
+WHERE special_features @&gt; ARRAY['Deleted Scenes'];</code></pre>
+      <div class="callout nugget">
+        <strong>NUGGET</strong>
+        Arrays force you to think about position, search scope, and containment as three different operations.
+      </div>
+      <div class="callout trap">
+        <strong>COMMON TRAP</strong>
+        PostgreSQL arrays start at 1, not 0.
+      </div>
+      <div class="callout interview">
+        <strong>INTERVIEW SENTENCE</strong>
+        For arrays, I know position checks are different from searching the full array.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s09">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">09</div>
+        <h2>Text Reformatting</h2>
+      </div>
+      <pre><span class="label">SQL</span><code>SELECT
+    first_name || ' ' || last_name AS full_name
+FROM customer;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    CONCAT(customer_id, ': ', first_name, ' ', last_name) AS customer_label
+FROM customer;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    UPPER(first_name) AS first_name_upper,
+    LOWER(last_name) AS last_name_lower,
+    INITCAP(email) AS email_title_case
+FROM customer;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    REPLACE(description, 'A Astounding', 'An Astounding') AS fixed_description
+FROM film;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    REVERSE(title) AS reversed_title
+FROM film;</code></pre>
+      <div class="callout memory">
+        <strong>SEAN MEMORY LINE</strong>
+        Reformatting is about readability, not just correctness.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s10">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">10</div>
+        <h2>Text Parsing</h2>
+      </div>
+      <pre><span class="label">SQL</span><code>SELECT
+    title,
+    CHAR_LENGTH(title) AS title_length
+FROM film;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    email,
+    POSITION('@' IN email) AS at_position
+FROM customer;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    email,
+    SUBSTRING(email FROM 1 FOR POSITION('@' IN email) - 1) AS username
+FROM customer;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    email,
+    SUBSTRING(email FROM POSITION('@' IN email) + 1 FOR CHAR_LENGTH(email)) AS domain
+FROM customer;</code></pre>
+      <div class="callout nugget">
+        <strong>NUGGET</strong>
+        Parsing usually combines one function that finds a marker with another that extracts a slice.
+      </div>
+      <div class="callout trap">
+        <strong>COMMON TRAP</strong>
+        <code>SUBSTRING</code> positions are 1-based.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s11">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">11</div>
+        <h2>Trimming and Padding</h2>
+      </div>
+      <pre><span class="label">SQL</span><code>SELECT
+    TRIM('  padded text  ') AS cleaned_text;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    LPAD(customer_id::text, 5, '0') AS padded_customer_id
+FROM customer;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    RPAD(first_name, 12, '.') AS first_name_padded
+FROM customer;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    LTRIM('---value', '-') AS left_trimmed,
+    RTRIM('value---', '-') AS right_trimmed;</code></pre>
+      <div class="callout trap">
+        <strong>COMMON TRAP</strong>
+        Padding can truncate if the requested length is shorter than the original string.
+      </div>
+      <div class="callout memory">
+        <strong>SEAN MEMORY LINE</strong>
+        Trim removes noise. Pad creates alignment.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s12">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">12</div>
+        <h2>Full-Text Search</h2>
+      </div>
+      <p><code>LIKE</code> is useful but limited and case-sensitive. Full-Text Search normalizes search terms and is better for natural-language-style matching.</p>
+      <pre><span class="label">SQL</span><code>SELECT
+    title
+FROM film
+WHERE title LIKE 'ELF%';</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    title
+FROM film
+WHERE to_tsvector(title) @@ to_tsquery('elf');</code></pre>
+      <p><code>to_tsvector</code> converts text into searchable tokens. <code>to_tsquery</code> converts query text into a search query. <code>@@</code> compares the two.</p>
+      <div class="callout trap">
+        <strong>COMMON TRAP</strong>
+        Full-Text Search is not the same as <code>LIKE</code>.
+      </div>
+      <div class="callout interview">
+        <strong>INTERVIEW SENTENCE</strong>
+        For text search, <code>LIKE</code> is useful for simple patterns, while Full-Text Search is better for natural language matching.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s13">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">13</div>
+        <h2>Extensions and Custom Database Features</h2>
+      </div>
+      <pre><span class="label">SQL</span><code>CREATE TYPE dayofweek AS ENUM (
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+);</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    typname,
+    typcategory
+FROM pg_type
+WHERE typname = 'dayofweek';</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    column_name,
+    data_type,
+    udt_name
+FROM information_schema.columns
+WHERE table_name = 'film';</code></pre>
+      <pre><span class="label">SQL</span><code>CREATE FUNCTION example_label(input_text text)
+RETURNS text
+LANGUAGE sql
+AS $$
+    SELECT UPPER(input_text);
+$$;</code></pre>
+      <pre><span class="label">SQL</span><code>CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    levenshtein('GUMBO', 'GAMBOL') AS edit_distance;</code></pre>
+      <pre><span class="label">SQL</span><code>CREATE EXTENSION IF NOT EXISTS pg_trgm;</code></pre>
+      <pre><span class="label">SQL</span><code>SELECT
+    similarity('word', 'words') AS similarity_score;</code></pre>
+      <div class="callout nugget">
+        <strong>NUGGET</strong>
+        PostgreSQL can be extended with custom types, custom functions, and packaged extensions, so not every useful capability is built in from the start.
+      </div>
+      <div class="callout trap">
+        <strong>COMMON TRAP</strong>
+        <code>USER-DEFINED</code> means inspect the actual type name before you assume normal text behavior.
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s14">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">14</div>
+        <h2>Common Traps</h2>
+      </div>
+      <ul>
+        <li><code>STRING</code> is not a PostgreSQL text type.</li>
+        <li>PostgreSQL arrays start at 1, not 0.</li>
+        <li><code>special_features[1]</code> checks only the first array position.</li>
+        <li><code>ANY</code> searches anywhere in the array.</li>
+        <li><code>DATE - DATE</code> returns integer days.</li>
+        <li><code>TIMESTAMP - TIMESTAMP</code> returns <code>INTERVAL</code>.</li>
+        <li><code>DATE + integer</code> treats the integer as days.</li>
+        <li><code>AGE(later, earlier)</code>, not the other way around.</li>
+        <li><code>DATE_TRUNC</code> returns timestamp/interval, not just a number.</li>
+        <li><code>LIKE</code> is case-sensitive.</li>
+        <li><code>SUBSTRING</code> positions are 1-based.</li>
+        <li>Padding can truncate if requested length is shorter than the original string.</li>
+        <li>Full-Text Search is not the same as <code>LIKE</code>.</li>
+      </ul>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s15">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">15</div>
+        <h2>Interview Cheatsheet</h2>
+      </div>
+      <div class="cheat-grid">
+        <div class="cheat-cell">
+          <h3>Schema first</h3>
+          <p>Before transforming columns, I inspect data types using <code>information_schema</code>.</p>
+        </div>
+        <div class="cheat-cell">
+          <h3>Function choice</h3>
+          <p>Function choice depends on the underlying data type.</p>
+        </div>
+        <div class="cheat-cell">
+          <h3>Event data</h3>
+          <p>For event data, I distinguish <code>DATE</code>, <code>TIME</code>, <code>TIMESTAMP</code>, and <code>INTERVAL</code>.</p>
+        </div>
+        <div class="cheat-cell">
+          <h3>Timestamp grouping</h3>
+          <p>For timestamp grouping, I use <code>EXTRACT</code> or <code>DATE_TRUNC</code> depending on whether I need a numeric subfield or a truncated timestamp.</p>
+        </div>
+        <div class="cheat-cell">
+          <h3>Text cleanup</h3>
+          <p>For text cleanup, I use case, replace, trim, pad, and substring functions.</p>
+        </div>
+        <div class="cheat-cell">
+          <h3>Arrays and search</h3>
+          <p>For arrays, I know position checks are different from searching the full array. For text search, <code>LIKE</code> is useful for simple patterns, while Full-Text Search is better for natural language matching.</p>
+        </div>
+      </div>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+
+  <div class="section" id="s16">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">16</div>
+        <h2>One-Page Quick Lookup</h2>
+      </div>
+      <table class="lookup">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Function/operator</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>inspect column type</td><td><code>information_schema.columns</code></td><td><code>WHERE table_name = 'customer'</code></td></tr>
+          <tr><td>add 3 days</td><td><code>+ INTERVAL '3 days'</code></td><td><code>rental_date + INTERVAL '3 days'</code></td></tr>
+          <tr><td>duration between timestamps</td><td><code>AGE()</code> or subtraction</td><td><code>AGE(return_date, rental_date)</code></td></tr>
+          <tr><td>current timestamp</td><td><code>NOW()</code>, <code>CURRENT_TIMESTAMP</code></td><td><code>CURRENT_TIMESTAMP(2)</code></td></tr>
+          <tr><td>extract year</td><td><code>EXTRACT</code></td><td><code>EXTRACT(year FROM payment_date)</code></td></tr>
+          <tr><td>truncate to month</td><td><code>DATE_TRUNC</code></td><td><code>DATE_TRUNC('month', payment_date)</code></td></tr>
+          <tr><td>concatenate names</td><td><code>||</code>, <code>CONCAT()</code></td><td><code>first_name || ' ' || last_name</code></td></tr>
+          <tr><td>uppercase text</td><td><code>UPPER</code></td><td><code>UPPER(first_name)</code></td></tr>
+          <tr><td>replace text</td><td><code>REPLACE</code></td><td><code>REPLACE(description, 'A', 'An')</code></td></tr>
+          <tr><td>find @ position</td><td><code>POSITION</code>, <code>STRPOS</code></td><td><code>POSITION('@' IN email)</code></td></tr>
+          <tr><td>email username</td><td><code>SUBSTRING</code></td><td><code>SUBSTRING(email FROM 1 FOR ...)</code></td></tr>
+          <tr><td>trim whitespace</td><td><code>TRIM</code></td><td><code>TRIM('  padded text  ')</code></td></tr>
+          <tr><td>pad ID</td><td><code>LPAD</code></td><td><code>LPAD(customer_id::text, 5, '0')</code></td></tr>
+          <tr><td>array contains</td><td><code>ANY</code>, <code>@&gt;</code></td><td><code>'Trailers' = ANY(special_features)</code></td></tr>
+          <tr><td>LIKE pattern</td><td><code>LIKE</code>, <code>%</code>, <code>_</code></td><td><code>title LIKE 'ELF%'</code></td></tr>
+          <tr><td>Full-Text Search</td><td><code>to_tsvector</code>, <code>to_tsquery</code>, <code>@@</code></td><td><code>to_tsvector(title) @@ to_tsquery('elf')</code></td></tr>
+          <tr><td>levenshtein distance</td><td><code>levenshtein</code></td><td><code>levenshtein('GUMBO', 'GAMBOL')</code></td></tr>
+          <tr><td>similarity score</td><td><code>similarity</code></td><td><code>similarity('word', 'words')</code></td></tr>
+        </tbody>
+      </table>
+      <a href="#top" class="back-top">↑ back to top</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>PostgreSQL Functions for Manipulating Data · Course 06 robust field guide</p>
+    <p style="margin-top: 6px;"><a href="#top">↑ back to top</a></p>
+  </div>
+</footer>
+</body>
+</html>

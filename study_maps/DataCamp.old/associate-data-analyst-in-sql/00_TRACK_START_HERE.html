@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Associate Data Analyst in SQL - Start Here</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #121a2b;
+      --panel-2: #182338;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #67e8f9;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #020617 0%, #0b1220 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+
+    .panel,
+    .card {
+      background: rgba(18, 26, 43, 0.94);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+    }
+
+    .panel {
+      padding: 24px;
+      margin-bottom: 22px;
+    }
+
+    .hero {
+      padding: 28px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin-top: 0;
+      color: #f8fafc;
+    }
+
+    p,
+    li {
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .rule {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(2, 6, 23, 0.55);
+    }
+
+    .toc ul,
+    .workflow ol {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(24, 35, 56, 0.96), rgba(18, 26, 43, 0.96));
+    }
+
+    .label {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .path,
+    code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .path {
+      display: block;
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(2, 6, 23, 0.58);
+      color: #dbeafe;
+      word-break: break-word;
+    }
+
+    .path-link {
+      display: block;
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(2, 6, 23, 0.58);
+      color: var(--accent);
+      word-break: break-word;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .toplink {
+      margin-top: 14px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="top">
+    <section class="panel hero">
+      <h1>Associate Data Analyst in SQL - Start Here</h1>
+      <p>This is the front door for Sean's DataCamp Associate Data Analyst in SQL track.</p>
+      <div class="rule">
+        <h2>Simple rule</h2>
+        <p><code>study_pages</code> = polished study material, field guides, workbooks, summaries, flashcards, interview translation.</p>
+        <p><code>source_material</code> = raw transcripts, exercise notes, and source capture.</p>
+        <p><code>tutorials</code> = runnable local SQL labs and outputs.</p>
+      </div>
+    </section>
+
+    <section class="panel toc">
+      <h2>Table of Contents</h2>
+      <ul>
+        <li>Relative locations</li>
+        <li>Study Pages</li>
+        <li>Source Material</li>
+        <li>Course 06</li>
+        <li>Runnable Labs</li>
+        <li>Navigation workflow</li>
+      </ul>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+
+    <section class="panel" id="locations">
+      <h2>Relative locations from this track folder</h2>
+      <p><span class="label">Study pages</span><span class="path">.\study_pages</span></p>
+      <p><span class="label">Source material</span><span class="path">.\source_material</span></p>
+      <p><span class="label">Runnable labs for this track</span><span class="path">..\..\..\tutorials\DataCamp\associate-data-analyst-in-sql</span></p>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+
+    <section class="panel" id="cards">
+      <h2>Track navigation cards</h2>
+      <div class="cards">
+        <article class="card">
+          <div class="label">Study Pages</div>
+          <h3>Polished study material</h3>
+          <p class="path">.\study_pages</p>
+          <ul>
+            <li>.\study_pages\03_project_analyzing_students_mental_health</li>
+            <li>.\study_pages\05_postgresql_summary_stats_and_window_functions</li>
+            <li>.\study_pages\06_functions_for_manipulating_data_in_postgresql</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="label">Source Material</div>
+          <h3>Raw source capture</h3>
+          <p class="path">.\source_material</p>
+          <ul>
+            <li>.\source_material\project_03_analyzing_students_mental_health</li>
+            <li>.\source_material\course_05_postgresql_summary_stats_and_window_functions</li>
+            <li>.\source_material\course_06_functions_for_manipulating_data_in_postgresql</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="label">Course 06</div>
+          <h3>Key reading files</h3>
+          <p class="path">.\study_pages\06_functions_for_manipulating_data_in_postgresql</p>
+          <ul>
+            <li><a href="./study_pages/06_functions_for_manipulating_data_in_postgresql/09_postgresql_data_functions_field_guide.html">09_postgresql_data_functions_field_guide.html</a></li>
+            <li><a href="./study_pages/06_functions_for_manipulating_data_in_postgresql/10_sql_functions_muscle_memory_workbook.html">10_sql_functions_muscle_memory_workbook.html</a></li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="label">Runnable Labs</div>
+          <h3>Local practice path</h3>
+          <p class="path">..\..\..\tutorials\DataCamp\associate-data-analyst-in-sql</p>
+          <p class="path">..\..\..\tutorials\DataCamp\associate-data-analyst-in-sql\06_functions_for_manipulating_data_in_postgresql</p>
+        </article>
+      </div>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+
+    <section class="panel workflow" id="workflow">
+      <h2>Navigation workflow</h2>
+      <ol>
+        <li>Open this track page.</li>
+        <li>Pick the course/project folder.</li>
+        <li>Open the course START_HERE page if present.</li>
+        <li>Use HTML files for reading and review.</li>
+        <li>Use source_material only when updating raw transcripts or exercise notes.</li>
+        <li>Use tutorials only when running SQL locally.</li>
+      </ol>
+      <a class="toplink" href="#top">Back to top</a>
+    </section>
+  </div>
+</body>
+</html>

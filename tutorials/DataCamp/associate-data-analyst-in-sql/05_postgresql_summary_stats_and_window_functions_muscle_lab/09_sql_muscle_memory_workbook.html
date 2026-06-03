@@ -1,0 +1,2342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course 05 SQL Muscle-Memory Workbook</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #56d364;
+    --yellow: #e3b341;
+    --purple: #bc8cff;
+    --teal: #39d0d8;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: Segoe UI, Arial, sans-serif; line-height: 1.65; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
+  header { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+  h1 { margin: 0 0 8px; font-size: 1.8rem; }
+  .sub { color: var(--muted); font-size: 0.95rem; }
+  .toc { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 24px; }
+  .toc h2 { margin: 0 0 8px; font-size: 1rem; color: var(--yellow); }
+  .toc ul { margin: 0; padding-left: 18px; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .section { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin: 0 0 16px; }
+  .section h2 { margin-top: 0; font-size: 1.15rem; }
+  .tag { display: inline-block; font-size: 12px; color: var(--green); border: 1px solid var(--green); border-radius: 4px; padding: 2px 8px; margin-bottom: 8px; }
+  .note { border-left: 3px solid var(--teal); background: #03242a; color: var(--teal); padding: 10px 12px; border-radius: 0 6px 6px 0; margin: 10px 0; }
+  .callout { border-left: 3px solid var(--accent); background: #0b2239; color: var(--text); padding: 10px 12px; border-radius: 0 6px 6px 0; margin: 10px 0; }
+  .callout.warn { border-left-color: var(--yellow); background: #2b2110; }
+  .mini-title { margin: 14px 0 8px; color: var(--yellow); font-size: 0.95rem; font-weight: 600; }
+  .memory { border-left: 3px solid var(--green); background: #0f2515; color: var(--text); padding: 10px 12px; border-radius: 0 6px 6px 0; margin: 10px 0; }
+  pre { background: #010409; border: 1px solid var(--border); border-radius: 8px; padding: 12px; overflow-x: auto; }
+  code { color: #d2a8ff; font-family: Consolas, monospace; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; background: #010409; border: 1px solid var(--border); }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; vertical-align: top; }
+  th { background: var(--bg3); color: var(--yellow); text-align: left; }
+  .muted { color: var(--muted); }
+  .back { display: inline-block; margin-top: 8px; color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+  .footer { margin: 20px 0 8px; text-align: center; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a id="top"></a>
+  <header>
+    <h1>Course 05 SQL Muscle-Memory Workbook</h1>
+    <div class="sub">Hands-on training log from local session. This is not the polished theory guide.</div>
+  </header>
+
+  <div class="toc">
+    <h2>Contents</h2>
+    <ul>
+      <li><a href="#s1">1. Training Mode Rules</a></li>
+      <li><a href="#s1a">How to Use This Workbook</a></li>
+      <li><a href="#s2">2. Exercise 01 — GROUP BY Baseline</a></li>
+      <li><a href="#s3">3. Exercise 02 — PARTITION BY Full Region Total</a></li>
+      <li><a href="#s4">4. Exercise 03 — COUNT and SUM Full vs Running</a></li>
+      <li><a href="#s5">5. Named Windows Nugget</a></li>
+      <li><a href="#s6">6. Exercise 04 — MAX/MIN Full Region vs So Far</a></li>
+      <li><a href="#s7">7. Exercise 05 — ROW_NUMBER Inside Region</a></li>
+      <li><a href="#s8">8. Exercise 06 — ROW_NUMBER vs RANK vs DENSE_RANK</a></li>
+      <li><a href="#s9">9. Forced Tie Data Update</a></li>
+      <li><a href="#s10">10. Exercise 07 — Third Salesperson by Department</a></li>
+      <li><a href="#s11">11. Exercise 08 — Top 2 Salespeople per Department</a></li>
+      <li><a href="#s12">12. Checkpoint Summary After Exercise 08</a></li>
+      <li><a href="#s13">Exercise 09 to 11 — ROW_NUMBER vs RANK vs DENSE_RANK with real ties</a></li>
+      <li><a href="#s14">Exercise 12 to 18 — LAG and LEAD row-to-row comparison</a></li>
+      <li><a href="#s15">Exercise 19 to 20 — FIRST_VALUE and LAST_VALUE</a></li>
+      <li><a href="#s16">Exercise 21 to 28 — Window frames and moving calculations</a></li>
+      <li><a href="#s17">Exercise 29 to 35 — NTILE vs percentile_cont / P95</a></li>
+      <li><a href="#s18">Exercise 36 to 42 — CUME_DIST, PERCENT_RANK, and P95 comparison</a></li>
+      <li><a href="#s19">Exercise 43 to 48 — Percentile bands, review queues, and owner priority scoring</a></li>
+      <li><a href="#s20">Final Oral Defense Q&amp;A — Window Functions, Percentiles, and Priority Scoring</a></li>
+    </ul>
+  </div>
+
+  <div class="section" id="s1"><h2>1) Training Mode Rules</h2><ul><li>One exercise at a time.</li><li>Sean writes SQL first.</li><li>Review the query before final answer.</li><li>Explain the mistake and corrected pattern.</li><li>Preserve discoveries as nuggets.</li></ul><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s1a"><h2>How to Use This Workbook</h2><p>This workbook is meant for rehearsal, not passive reading. For each exercise:</p><ol><li>Read the business question.</li><li>Try writing the SQL from memory.</li><li>Compare against the final SQL.</li><li>Read the mistake/correction notes.</li><li>Repeat the memory nugget out loud.</li></ol><div class="memory">This keeps the file aligned with Sean's muscle-memory training workflow.</div><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s2"><h2>2) Exercise 01 — GROUP BY Baseline</h2><pre><code>SELECT
+  region,
+  SUM(revenue) AS total_revenue
+FROM sales_events
+GROUP BY region
+ORDER BY total_revenue DESC;</code></pre><div class="note">GROUP BY collapses many rows into summary rows.</div><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s3"><h2>3) Exercise 02 — PARTITION BY Full Region Total</h2><pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  SUM(revenue) OVER (
+    PARTITION BY region
+  ) AS region_total_revenue
+FROM sales_events
+ORDER BY
+  region ASC,
+  sale_date ASC,
+  sale_id ASC
+LIMIT 20;</code></pre><div class="note">No ORDER BY in OVER = full partition value. ORDER BY in OVER = running value.</div><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s4"><h2>4) Exercise 03 — COUNT and SUM Full vs Running</h2><pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  COUNT(*) OVER (PARTITION BY region) AS region_row_count,
+  COUNT(*) OVER (PARTITION BY region ORDER BY sale_date, sale_id) AS running_region_row_count,
+  SUM(revenue) OVER (PARTITION BY region) AS region_total_revenue,
+  SUM(revenue) OVER (PARTITION BY region ORDER BY sale_date, sale_id) AS running_region_revenue
+FROM sales_events
+ORDER BY region ASC, sale_date ASC, sale_id ASC
+LIMIT 20;</code></pre><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s5"><h2>5) Named Windows Nugget</h2><pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  SUM(revenue) OVER region_window AS region_total_revenue,
+  SUM(revenue) OVER region_ordered_window AS running_region_revenue
+FROM sales_events
+WINDOW
+  region_window AS (
+    PARTITION BY region
+  ),
+  region_ordered_window AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+  )
+ORDER BY region, sale_date, sale_id;</code></pre><div class="note">WINDOW names the definition, not the calculation function.</div><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s6"><h2>6) Exercise 04 — MAX/MIN Full Region vs So Far</h2><pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  MAX(revenue) OVER region_window AS region_max_revenue,
+  MAX(revenue) OVER region_ordered_window AS max_revenue_so_far,
+  MIN(revenue) OVER region_window AS region_min_revenue,
+  MIN(revenue) OVER region_ordered_window AS min_revenue_so_far
+FROM sales_events
+WINDOW
+  region_window AS (
+    PARTITION BY region
+  ),
+  region_ordered_window AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+  )
+ORDER BY region ASC, sale_date ASC, sale_id ASC
+LIMIT 20;</code></pre><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s7"><h2>7) Exercise 05 — ROW_NUMBER Inside Region</h2><pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  salesperson,
+  revenue,
+  ROW_NUMBER() OVER (
+    PARTITION BY region
+    ORDER BY revenue DESC, sale_id ASC
+  ) AS region_revenue_row_number
+FROM sales_events
+ORDER BY region ASC, region_revenue_row_number ASC
+LIMIT 20;</code></pre><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s8"><h2>8) Exercise 06 — ROW_NUMBER vs RANK vs DENSE_RANK</h2><pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  salesperson,
+  revenue,
+  ROW_NUMBER() OVER row_number_window AS row_number_rank,
+  RANK() OVER rank_window AS rank_rank,
+  DENSE_RANK() OVER rank_window AS dense_rank_rank
+FROM sales_events
+WINDOW
+  row_number_window AS (
+    PARTITION BY region
+    ORDER BY revenue DESC, sale_id ASC
+  ),
+  rank_window AS (
+    PARTITION BY region
+    ORDER BY revenue DESC
+  )
+ORDER BY region ASC, revenue DESC, sale_id ASC
+LIMIT 20;</code></pre><pre><code>WITH sample_scores AS (
+  SELECT *
+  FROM (
+    VALUES
+      ('East', 'A', 900),
+      ('East', 'B', 700),
+      ('East', 'C', 700),
+      ('East', 'D', 400)
+  ) AS v(region, salesperson, revenue)
+)
+SELECT
+  region,
+  salesperson,
+  revenue,
+  ROW_NUMBER() OVER (PARTITION BY region ORDER BY revenue DESC, salesperson ASC) AS row_number_rank,
+  RANK() OVER (PARTITION BY region ORDER BY revenue DESC) AS rank_rank,
+  DENSE_RANK() OVER (PARTITION BY region ORDER BY revenue DESC) AS dense_rank_rank
+FROM sample_scores
+ORDER BY region, revenue DESC, salesperson;</code></pre><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s9"><h2>9) Forced Tie Data Update</h2><pre><code>BEGIN;
+UPDATE sales_events SET revenue = 2000.00 WHERE sale_id = 351;
+UPDATE sales_events SET revenue = 1800.00 WHERE sale_id IN (263, 175);
+UPDATE sales_events SET revenue = 1600.00 WHERE sale_id = 19;
+UPDATE sales_events SET revenue = 1500.00 WHERE sale_id IN (159, 171);
+COMMIT;</code></pre><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s10"><h2>10) Exercise 07 — Third Salesperson by Department</h2><pre><code>WITH salesperson_totals AS (
+  SELECT
+    department,
+    salesperson,
+    SUM(sales_amount) AS total_sales
+  FROM employee_sales
+  GROUP BY department, salesperson
+),
+ranked_salespeople AS (
+  SELECT
+    department,
+    salesperson,
+    total_sales,
+    ROW_NUMBER() OVER (
+      PARTITION BY department
+      ORDER BY total_sales DESC, salesperson ASC
+    ) AS sales_rank
+  FROM salesperson_totals
+)
+SELECT
+  department,
+  salesperson,
+  total_sales,
+  sales_rank
+FROM ranked_salespeople
+WHERE sales_rank = 3
+ORDER BY department ASC;</code></pre><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s11"><h2>11) Exercise 08 — Top 2 Salespeople per Department</h2><pre><code>WITH salesperson_totals AS (
+  SELECT
+    department,
+    salesperson,
+    SUM(sales_amount) AS total_sales
+  FROM employee_sales
+  GROUP BY department, salesperson
+),
+ranked_salespeople AS (
+  SELECT
+    department,
+    salesperson,
+    total_sales,
+    ROW_NUMBER() OVER (
+      PARTITION BY department
+      ORDER BY total_sales DESC, salesperson ASC
+    ) AS sales_rank
+  FROM salesperson_totals
+)
+SELECT
+  department,
+  salesperson,
+  total_sales,
+  sales_rank
+FROM ranked_salespeople
+WHERE sales_rank <= 2
+ORDER BY department ASC, sales_rank ASC;</code></pre><a class="back" href="#top">↑ back to top</a></div>
+  <div class="section" id="s12"><h2>12) Checkpoint Summary After Exercise 08</h2><ul><li>GROUP BY collapses.</li><li>PARTITION BY keeps detail rows.</li><li>ORDER BY inside OVER creates running calculations.</li><li>Named windows reduce repetition.</li><li>ROW_NUMBER gives exact positions.</li><li>RANK/DENSE_RANK preserve ties when no unique tie-breaker is added.</li><li>Aggregate to the right grain before ranking.</li><li>Top N per group = aggregate + rank + filter.</li></ul><a class="back" href="#top">↑ back to top</a></div>
+
+  <div class="section" id="s13">
+    <h2>Exercise 09 to 11 — ROW_NUMBER vs RANK vs DENSE_RANK with real ties</h2>
+    <p>Find the third salesperson by sales volume per department can mean:</p>
+    <ul>
+      <li>exact third row</li>
+      <li>competition rank 3</li>
+      <li>third distinct sales tier</li>
+    </ul>
+    <h3>Forced tie snapshot (Data Engineering)</h3>
+    <table>
+      <tr><th>Department</th><th>Salesperson</th><th>Total Sales</th><th>ROW_NUMBER</th><th>RANK</th><th>DENSE_RANK</th></tr>
+      <tr><td>Data Engineering</td><td>Mila Tran</td><td>260440.00</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td>Data Engineering</td><td>Leah Kim</td><td>253536.00</td><td>2</td><td>2</td><td>2</td></tr>
+      <tr><td>Data Engineering</td><td>Nora Diaz</td><td>253536.00</td><td>3</td><td>2</td><td>2</td></tr>
+      <tr><td>Data Engineering</td><td>Evan Stone</td><td>250248.00</td><td>4</td><td>4</td><td>3</td></tr>
+      <tr><td>Data Engineering</td><td>Avi Gupta</td><td>249152.00</td><td>5</td><td>5</td><td>4</td></tr>
+      <tr><td>Data Engineering</td><td>Omar Ali</td><td>236632.00</td><td>6</td><td>6</td><td>5</td></tr>
+    </table>
+
+    <pre><code>BEGIN;
+
+WITH target_row AS (
+    SELECT
+        sale_id
+    FROM employee_sales
+    WHERE department = 'Data Engineering'
+      AND salesperson = 'Leah Kim'
+    ORDER BY sale_id
+    LIMIT 1
+)
+UPDATE employee_sales AS e
+SET sales_amount = sales_amount + 2192.00
+FROM target_row AS t
+WHERE e.sale_id = t.sale_id;
+
+COMMIT;</code></pre>
+
+    <pre><code>WITH salesperson_totals AS (
+    SELECT
+        department,
+        salesperson,
+        SUM(sales_amount) AS total_sales
+    FROM employee_sales
+    GROUP BY
+        department,
+        salesperson
+),
+
+ranked_salespeople AS (
+    SELECT
+        department,
+        salesperson,
+        total_sales,
+        ROW_NUMBER() OVER row_number_window AS row_number_rank,
+        RANK()       OVER rank_window       AS rank_rank,
+        DENSE_RANK() OVER rank_window       AS dense_rank_rank
+    FROM salesperson_totals
+
+    WINDOW
+        row_number_window AS (
+            PARTITION BY department
+            ORDER BY total_sales DESC, salesperson ASC
+        ),
+
+        rank_window AS (
+            PARTITION BY department
+            ORDER BY total_sales DESC
+        )
+)
+
+SELECT
+    department,
+    salesperson,
+    total_sales,
+    row_number_rank,
+    rank_rank,
+    dense_rank_rank
+FROM ranked_salespeople
+ORDER BY
+    department ASC,
+    total_sales DESC,
+    salesperson ASC;</code></pre>
+
+    <h3>Exercise 11A</h3>
+    <p><code>row_number_rank = 3</code> => exact third row (Data Engineering: Nora Diaz)</p>
+    <h3>Exercise 11B</h3>
+    <p><code>rank_rank = 3</code> => competition rank 3 (Data Engineering: no row)</p>
+    <h3>Exercise 11C</h3>
+    <p><code>dense_rank_rank = 3</code> => third distinct sales tier (Data Engineering: Evan Stone)</p>
+
+    <h3>Final comparison</h3>
+    <table>
+      <tr><th>Filter used</th><th>Business meaning</th><th>Data Engineering result</th></tr>
+      <tr><td><code>row_number_rank = 3</code></td><td>exact third row</td><td>Nora Diaz</td></tr>
+      <tr><td><code>rank_rank = 3</code></td><td>competition rank 3</td><td>no Data Engineering row</td></tr>
+      <tr><td><code>dense_rank_rank = 3</code></td><td>third distinct sales tier</td><td>Evan Stone</td></tr>
+    </table>
+
+    <div class="note">Window function result first goes into a CTE. Then the outer query can filter it.</div>
+    <a class="back" href="#top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s14">
+    <h2>Exercise 12 to 18 — LAG and LEAD row-to-row comparison</h2>
+    <p>Main mental model:</p>
+    <ul>
+      <li>LAG = bring a value from a previous row into the current row.</li>
+      <li>LEAD = bring a value from a future row into the current row.</li>
+    </ul>
+    <div class="note">LAG = rearview mirror. LEAD = windshield.</div>
+    <p>I use LAG and LEAD when I need row-to-row comparison. They let the current row see a previous or future row without doing a self-join.</p>
+
+    <h3>Exercise 12 — Previous sale in the same region</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  LAG(revenue) OVER (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+  ) AS previous_region_revenue
+FROM sales_events
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <p><code>PARTITION BY region</code> keeps regions separate. <code>ORDER BY sale_date, sale_id</code> defines which row counts as previous. First row in each region has NULL.</p>
+    <div class="note">LAG does not summarize. LAG copies a value from a previous row into the current row.</div>
+
+    <h3>LAG default value discussion</h3>
+    <pre><code>LAG(revenue, 1, 0)</code></pre>
+    <p><code>NULL</code> was preferred in this training because it truthfully means no previous row exists. Default <code>0</code> is only right when the business meaning truly is zero.</p>
+
+    <h3>Exercise 13 — Difference and percent change from previous sale</h3>
+    <pre><code>WITH sales_with_previous AS (
+  SELECT
+    sale_id,
+    sale_date,
+    region,
+    revenue,
+    LAG(revenue) OVER (
+      PARTITION BY region
+      ORDER BY sale_date, sale_id
+    ) AS previous_region_revenue
+  FROM sales_events
+)
+
+SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  previous_region_revenue,
+  revenue - previous_region_revenue AS revenue_change,
+  ROUND(
+    100.0 * (revenue - previous_region_revenue)
+    / NULLIF(previous_region_revenue, 0),
+    2
+  ) AS revenue_pct_change
+FROM sales_with_previous
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <p>LAG creates the previous value. The outer SELECT calculates change. NULLIF prevents divide-by-zero. First row stays NULL.</p>
+    <div class="note">Calculate first. Display/filter second.</div>
+
+    <h3>Exercise 14 — Direction label with CASE</h3>
+    <pre><code>WITH sales_with_previous AS (
+  SELECT
+    sale_id,
+    sale_date,
+    region,
+    revenue,
+    LAG(revenue) OVER (
+      PARTITION BY region
+      ORDER BY sale_date, sale_id
+    ) AS previous_region_revenue
+  FROM sales_events
+)
+
+SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  previous_region_revenue,
+  ROUND(
+    100.0 * (revenue - previous_region_revenue)
+    / NULLIF(previous_region_revenue, 0),
+    2
+  ) AS revenue_pct_change,
+  CASE
+    WHEN previous_region_revenue IS NULL THEN 'First sale in region'
+    WHEN revenue > previous_region_revenue THEN 'Up'
+    WHEN revenue < previous_region_revenue THEN 'Down'
+    ELSE 'No change'
+  END AS revenue_direction
+FROM sales_with_previous
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <div class="note">LAG gives the old value. Math gives the change. CASE gives the meaning.</div>
+
+    <h3>Exercise 15 — LEAD current row vs next row</h3>
+    <pre><code>WITH sales_with_next AS (
+  SELECT
+    sale_id,
+    sale_date,
+    region,
+    revenue,
+    LEAD(revenue) OVER (
+      PARTITION BY region
+      ORDER BY sale_date, sale_id
+    ) AS next_region_revenue
+  FROM sales_events
+)
+
+SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  next_region_revenue,
+  next_region_revenue - revenue AS next_revenue_change,
+  CASE
+    WHEN next_region_revenue IS NULL THEN 'Last sale in region'
+    WHEN next_region_revenue > revenue THEN 'Next is up'
+    WHEN next_region_revenue < revenue THEN 'Next is down'
+    ELSE 'No change'
+  END AS next_revenue_direction
+FROM sales_with_next
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <div class="note">LAG looks backward. LEAD looks forward.</div>
+
+    <h3>Exercise 16 — Previous and next together</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  LAG(revenue) OVER by_region AS previous_region_revenue,
+  LEAD(revenue) OVER by_region AS next_region_revenue
+FROM sales_events
+
+WINDOW
+  by_region AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+  )
+
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <div class="note">previous row &lt;- current row -&gt; next row</div>
+
+    <h3>Exercise 17 — Local peak and local valley</h3>
+    <pre><code>WITH sales_with_compared AS (
+  SELECT
+    sale_id,
+    sale_date,
+    region,
+    revenue,
+    LAG(revenue) OVER by_region AS previous_region_revenue,
+    LEAD(revenue) OVER by_region AS next_region_revenue
+  FROM sales_events
+  WINDOW
+    by_region AS (
+      PARTITION BY region
+      ORDER BY sale_date, sale_id
+    )
+)
+
+SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  previous_region_revenue,
+  next_region_revenue,
+  CASE
+    WHEN next_region_revenue IS NULL
+      OR previous_region_revenue IS NULL
+      THEN 'Edge row'
+    WHEN revenue > next_region_revenue
+      AND revenue > previous_region_revenue
+      THEN 'Local peak'
+    WHEN revenue < next_region_revenue
+      AND revenue < previous_region_revenue
+      THEN 'Local valley'
+    ELSE 'Middle'
+  END AS local_shape
+FROM sales_with_compared
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <div class="note">LAG gives left neighbor. LEAD gives right neighbor. CASE gives the business label.</div>
+
+    <h3>Exercise 18 — Count local shapes by region</h3>
+    <pre><code>WITH sales_with_compared AS (
+  SELECT
+    sale_id,
+    sale_date,
+    region,
+    revenue,
+    LAG(revenue) OVER by_region AS previous_region_revenue,
+    LEAD(revenue) OVER by_region AS next_region_revenue
+  FROM sales_events
+  WINDOW
+    by_region AS (
+      PARTITION BY region
+      ORDER BY sale_date, sale_id
+    )
+),
+classified_sales AS (
+  SELECT
+    region,
+    CASE
+      WHEN next_region_revenue IS NULL
+        OR previous_region_revenue IS NULL
+        THEN 'Edge row'
+      WHEN revenue > next_region_revenue
+        AND revenue > previous_region_revenue
+        THEN 'Local peak'
+      WHEN revenue < next_region_revenue
+        AND revenue < previous_region_revenue
+        THEN 'Local valley'
+      ELSE 'Middle'
+    END AS local_shape
+  FROM sales_with_compared
+)
+SELECT
+  region,
+  local_shape,
+  COUNT(*) AS shape_count
+FROM classified_sales
+GROUP BY
+  region,
+  local_shape
+ORDER BY
+  region ASC,
+  shape_count DESC;</code></pre>
+    <p>Observed result per region:</p>
+    <ul>
+      <li>Local peak: 35</li>
+      <li>Local valley: 34</li>
+      <li>Middle: 19</li>
+      <li>Edge row: 2</li>
+    </ul>
+    <div class="note">row-level window analysis -> CASE business label -> GROUP BY summary</div>
+
+    <h3>CTE chaining vs nested WITH</h3>
+    <p>You can nest WITH, but most training/interview SQL should chain CTEs instead.</p>
+    <pre><code>WITH first_cte AS (...),
+     second_cte AS (...),
+     third_cte AS (...)
+SELECT ...
+FROM third_cte;</code></pre>
+    <div class="note">You can nest WITH, but most training/interview SQL should chain CTEs instead.</div>
+
+    <h3>SQL order and placement notes from this cluster</h3>
+    <ul>
+      <li>Window ORDER BY inside OVER defines row sequence for LAG/LEAD.</li>
+      <li>Final ORDER BY controls display order.</li>
+      <li>ORDER BY inside a CTE is usually unnecessary unless paired with LIMIT or used for a specific purpose.</li>
+      <li>CTE 1 can calculate previous/next values.</li>
+      <li>CTE 2 can classify rows.</li>
+      <li>Final SELECT can summarize or filter.</li>
+    </ul>
+
+    <h3>Final cluster summary</h3>
+    <ul>
+      <li>LAG = previous row</li>
+      <li>LEAD = next row</li>
+      <li>LAG/LEAD are for row-to-row comparison</li>
+      <li>Use CTEs when calculation needs to be reused</li>
+      <li>Use NULL honestly for missing previous/next rows</li>
+      <li>Use NULLIF for safe percent-change math</li>
+      <li>Use CASE to turn numeric comparisons into business labels</li>
+      <li>Use GROUP BY after classification to summarize patterns</li>
+    </ul>
+
+    <a class="back" href="#top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s15">
+    <h2>Exercise 19 to 20 — FIRST_VALUE and LAST_VALUE</h2>
+    <p>Mental model:</p>
+    <ul>
+      <li>LAG = previous row</li>
+      <li>LEAD = next row</li>
+      <li>FIRST_VALUE = first value in the ordered window</li>
+      <li>LAST_VALUE = last visible value in the ordered window</li>
+    </ul>
+    <div class="note">FIRST_VALUE usually behaves as expected. LAST_VALUE needs a full frame if you want the true last row in the partition.</div>
+
+    <h3>Exercise 19 — FIRST_VALUE and the LAST_VALUE default trap</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+
+  FIRST_VALUE(revenue) OVER by_region AS first_region_revenue,
+
+  LAST_VALUE(revenue) OVER by_region AS last_value_default
+
+FROM sales_events
+
+WINDOW
+  by_region AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+  )
+
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <p>Observed East behavior:</p>
+    <ul>
+      <li><code>first_region_revenue</code> stayed <code>673.00</code></li>
+      <li><code>last_value_default</code> matched the current row revenue</li>
+    </ul>
+    <p>default frame: first row to current row. full frame: first row to last row.</p>
+
+    <h3>Exercise 19B — Correct LAST_VALUE with full frame</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+
+  FIRST_VALUE(revenue) OVER by_region AS first_region_revenue,
+
+  LAST_VALUE(revenue) OVER by_region AS last_value_default,
+
+  LAST_VALUE(revenue) OVER by_region_full AS last_region_revenue
+
+FROM sales_events
+
+WINDOW
+  by_region AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+  ),
+
+  by_region_full AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+    ROWS BETWEEN UNBOUNDED PRECEDING
+      AND UNBOUNDED FOLLOWING
+  )
+
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <p>Observed East behavior:</p>
+    <ul>
+      <li><code>first_region_revenue = 673.00</code></li>
+      <li><code>last_value_default = current row revenue</code></li>
+      <li><code>last_region_revenue = 869.00</code></li>
+    </ul>
+    <div class="note">If I need the true last value in a partition, I explicitly use a full frame: <code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code>.</div>
+
+    <h3>Exercise 20 — Compare each row to first and last region revenue</h3>
+    <pre><code>WITH revenue_with_first_last AS (
+  SELECT
+    sale_id,
+    sale_date,
+    region,
+    revenue,
+
+    FIRST_VALUE(revenue) OVER by_region AS first_region_revenue,
+
+    LAST_VALUE(revenue) OVER by_region_full AS last_region_revenue
+
+  FROM sales_events
+
+  WINDOW
+    by_region AS (
+      PARTITION BY region
+      ORDER BY sale_date, sale_id
+    ),
+
+    by_region_full AS (
+      PARTITION BY region
+      ORDER BY sale_date, sale_id
+      ROWS BETWEEN UNBOUNDED PRECEDING
+        AND UNBOUNDED FOLLOWING
+    )
+)
+
+SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  first_region_revenue,
+  last_region_revenue,
+  revenue - first_region_revenue AS change_from_first,
+  last_region_revenue - revenue AS change_to_last
+FROM revenue_with_first_last
+ORDER BY
+  region ASC,
+  sale_date ASC,
+  sale_id ASC
+LIMIT 10;</code></pre>
+    <p>Correction note: only one semicolon goes at the very end of the full query. Do not end the statement before the outer <code>ORDER BY</code>.</p>
+    <p>Observed East example:</p>
+    <ul>
+      <li><code>first_region_revenue = 673.00</code></li>
+      <li><code>last_region_revenue = 869.00</code></li>
+      <li>For <code>sale_id 123</code>: <code>change_from_first = 420</code>, <code>change_to_last = -224</code></li>
+    </ul>
+    <div class="note">FIRST_VALUE gives the starting benchmark. LAST_VALUE with full frame gives the ending benchmark. The outer SELECT compares each row to those benchmarks.</div>
+
+    <h3>SQL order / frame notes</h3>
+    <ul>
+      <li><code>ORDER BY</code> inside <code>OVER</code> defines row sequence for FIRST_VALUE/LAST_VALUE.</li>
+      <li>The frame controls how many rows the function can see.</li>
+      <li>Default frame often ends at the current row.</li>
+      <li>Full frame uses <code>UNBOUNDED FOLLOWING</code> to reach the partition end.</li>
+      <li>Final <code>ORDER BY</code> controls display only.</li>
+      <li>Semicolon ends the whole SQL statement; do not place it before <code>ORDER BY</code>.</li>
+    </ul>
+
+    <h3>Final cluster summary</h3>
+    <ul>
+      <li>FIRST_VALUE gets the first ordered value in the partition.</li>
+      <li>LAST_VALUE default can be misleading.</li>
+      <li>Use full frame for true last value.</li>
+      <li>Use CTE when comparing current row to first/last benchmarks.</li>
+      <li>Put semicolon only at the end.</li>
+    </ul>
+
+    <a class="back" href="#top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s16">
+    <h2>Exercise 21 to 28 — Window frames and moving calculations</h2>
+    <p>Main mental model:</p>
+    <ul>
+      <li>PARTITION BY chooses the group.</li>
+      <li>ORDER BY lines rows up inside the group.</li>
+      <li>ROWS BETWEEN defines which nearby rows are visible.</li>
+    </ul>
+    <div class="note">Frame chooses the rows. Function chooses the calculation.</div>
+
+    <h3>Exercise 21 — 3-sale moving average by region</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  ROUND(
+    AVG(revenue) OVER (
+      PARTITION BY region
+      ORDER BY sale_date, sale_id
+      ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ),
+    2
+  ) AS moving_avg_3_sales
+FROM sales_events
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <p><code>ROWS BETWEEN 2 PRECEDING AND CURRENT ROW</code> means previous 2 rows plus current row.</p>
+
+    <h3>Exercise 22 — 3-sale moving total</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  SUM(revenue) OVER (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+  ) AS moving_total_3_sales
+FROM sales_events
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <div class="note">AVG + frame = moving average. SUM + frame = moving total.</div>
+
+    <h3>Exercise 23 — Moving average and moving total together</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  ROUND(AVG(revenue) OVER trailing_3_sales, 2) AS moving_avg_3_sales,
+  SUM(revenue) OVER trailing_3_sales AS moving_total_3_sales
+FROM sales_events
+
+WINDOW
+  trailing_3_sales AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+  )
+
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+
+    <h3>Exercise 24 — Rolling max and rolling min</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  MAX(revenue) OVER trailing_3_sales AS rolling_max_3_sales,
+  MIN(revenue) OVER trailing_3_sales AS rolling_min_3_sales
+FROM sales_events
+
+WINDOW
+  trailing_3_sales AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+  )
+
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+
+    <h3>Exercise 25 — Forward-looking frame</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  MAX(revenue) OVER current_and_next_sale AS max_current_or_next_revenue
+FROM sales_events
+
+WINDOW
+  current_and_next_sale AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+    ROWS BETWEEN CURRENT ROW AND 1 FOLLOWING
+  )
+
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <div class="note">PRECEDING looks backward. FOLLOWING looks forward. CURRENT ROW anchors the frame.</div>
+
+    <h3>Exercise 26 — Centered 3-sale moving average</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  ROUND(AVG(revenue) OVER centered_3_sales, 2) AS centered_avg_3_sales
+FROM sales_events
+
+WINDOW
+  centered_3_sales AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+    ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+  )
+
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+
+    <h3>Exercise 27 — Previous-only frame, excluding current row</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  ROUND(AVG(revenue) OVER prev_sales_win, 2) AS avg_previous_3_sales
+FROM sales_events
+
+WINDOW
+  prev_sales_win AS (
+    PARTITION BY region
+    ORDER BY sale_date, sale_id
+    ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING
+  )
+
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <p>Weighted moving average is realistic, but Pandas or Spark is often cleaner for richer feature engineering.</p>
+
+    <h3>Exercise 28 — Compare current revenue to previous-3 average</h3>
+    <pre><code>WITH sales_with_previous_avg AS (
+  SELECT
+    sale_id,
+    sale_date,
+    region,
+    revenue,
+    ROUND(AVG(revenue) OVER prev_sales_win, 2) AS avg_previous_3_sales
+  FROM sales_events
+
+  WINDOW
+    prev_sales_win AS (
+      PARTITION BY region
+      ORDER BY sale_date, sale_id
+      ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING
+    )
+)
+
+SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+  avg_previous_3_sales,
+  CASE
+    WHEN avg_previous_3_sales IS NULL THEN 'No prior benchmark'
+    WHEN revenue > avg_previous_3_sales THEN 'Above previous avg'
+    WHEN revenue < avg_previous_3_sales THEN 'Below previous avg'
+    ELSE 'Equal to previous avg'
+  END AS vs_previous_3_avg
+FROM sales_with_previous_avg
+ORDER BY
+  region,
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+
+    <h3>Exercise 28B — Summarize above/below by region</h3>
+    <pre><code>WITH sales_with_previous_avg AS (
+  SELECT
+    sale_id,
+    sale_date,
+    region,
+    revenue,
+    ROUND(AVG(revenue) OVER prev_sales_win, 2) AS avg_previous_3_sales
+  FROM sales_events
+
+  WINDOW
+    prev_sales_win AS (
+      PARTITION BY region
+      ORDER BY sale_date, sale_id
+      ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING
+    )
+),
+above_below AS (
+  SELECT
+    sale_id,
+    sale_date,
+    region,
+    revenue,
+    avg_previous_3_sales,
+    CASE
+      WHEN avg_previous_3_sales IS NULL THEN 'No prior benchmark'
+      WHEN revenue > avg_previous_3_sales THEN 'Above previous avg'
+      WHEN revenue < avg_previous_3_sales THEN 'Below previous avg'
+      ELSE 'Equal to previous avg'
+    END AS vs_previous_3_avg
+  FROM sales_with_previous_avg
+)
+SELECT
+  region,
+  vs_previous_3_avg,
+  COUNT(*) AS row_count
+FROM above_below
+GROUP BY
+  region,
+  vs_previous_3_avg
+ORDER BY
+  region ASC,
+  row_count DESC;</code></pre>
+    <div class="note">window frame benchmark -> CASE classification -> GROUP BY summary</div>
+
+    <h3>ROWS vs RANGE</h3>
+    <pre><code>SELECT
+  sale_id,
+  sale_date,
+  region,
+  revenue,
+
+  SUM(revenue) OVER (
+    PARTITION BY region
+    ORDER BY sale_date
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  ) AS running_total_rows,
+
+  SUM(revenue) OVER (
+    PARTITION BY region
+    ORDER BY sale_date
+    RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  ) AS running_total_range
+
+FROM sales_events
+WHERE region = 'East'
+ORDER BY
+  sale_date,
+  sale_id
+LIMIT 20;</code></pre>
+    <p>ROWS = physical row movement. RANGE = value-peer movement. For moving calculations, prefer ROWS.</p>
+
+    <a class="back" href="#top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s17">
+    <h2>Exercise 29 to 35 — NTILE vs percentile_cont / P95</h2>
+    <p>Key distinction:</p>
+    <ul>
+      <li>NTILE labels rows into buckets.</li>
+      <li>percentile_cont calculates an actual cutoff value.</li>
+    </ul>
+    <div class="note">NTILE is a bucket label. P95 is a cutoff value.</div>
+
+    <h3>Exercise 29 — Revenue quartiles by region</h3>
+    <pre><code>SELECT
+  sale_id,
+  region,
+  salesperson,
+  revenue,
+  NTILE(4) OVER (
+    PARTITION BY region
+    ORDER BY revenue DESC
+  ) AS revenue_quartile
+FROM sales_events
+ORDER BY
+  region,
+  revenue_quartile,
+  revenue DESC
+LIMIT 40;</code></pre>
+
+    <h3>Exercise 30 — Count rows per quartile</h3>
+    <pre><code>WITH revenue_buckets AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+    NTILE(4) OVER (
+      PARTITION BY region
+      ORDER BY revenue DESC
+    ) AS revenue_quartile
+  FROM sales_events
+)
+
+SELECT
+  region,
+  revenue_quartile,
+  COUNT(*) AS quartile_row_count,
+  MIN(revenue) AS min_revenue_in_quartile,
+  MAX(revenue) AS max_revenue_in_quartile
+FROM revenue_buckets
+GROUP BY
+  region,
+  revenue_quartile
+ORDER BY
+  region ASC,
+  revenue_quartile ASC;</code></pre>
+
+    <h3>Exercise 31 — Label the quartiles</h3>
+    <pre><code>WITH revenue_buckets AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+    NTILE(4) OVER (
+      PARTITION BY region
+      ORDER BY revenue DESC
+    ) AS revenue_quartile
+  FROM sales_events
+)
+
+SELECT
+  region,
+  revenue_quartile,
+  CASE
+    WHEN revenue_quartile = 1 THEN 'Top revenue bucket'
+    WHEN revenue_quartile = 2 THEN 'Upper-middle revenue bucket'
+    WHEN revenue_quartile = 3 THEN 'Lower-middle revenue bucket'
+    ELSE 'Lowest revenue bucket'
+  END AS quartile_label,
+  COUNT(*) AS quartile_row_count,
+  MIN(revenue) AS min_revenue_in_quartile,
+  MAX(revenue) AS max_revenue_in_quartile
+FROM revenue_buckets
+GROUP BY
+  region,
+  revenue_quartile
+ORDER BY
+  region ASC,
+  revenue_quartile ASC;</code></pre>
+
+    <h3>Exercise 32 — Top bucket only</h3>
+    <pre><code>WITH revenue_buckets AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+    NTILE(4) OVER (
+      PARTITION BY region
+      ORDER BY revenue DESC
+    ) AS revenue_quartile
+  FROM sales_events
+)
+
+SELECT
+  sale_id,
+  region,
+  salesperson,
+  revenue,
+  revenue_quartile
+FROM revenue_buckets
+WHERE revenue_quartile = 1
+ORDER BY
+  region ASC,
+  revenue DESC,
+  sale_id ASC
+LIMIT 40;</code></pre>
+
+    <h3>Exercise 33 — P95 revenue by region</h3>
+    <pre><code>SELECT
+  region,
+  ROUND(
+    percentile_cont(0.95) WITHIN GROUP (
+      ORDER BY revenue
+    )::numeric,
+    2
+  ) AS p95_revenue
+FROM sales_events
+GROUP BY region
+ORDER BY region;</code></pre>
+    <div class="note">OVER keeps rows visible. GROUP BY collapses rows. WITHIN GROUP sorts values inside an aggregate calculation.</div>
+
+    <h3>Exercise 34 — NTILE(100) issue with only 90 rows</h3>
+    <pre><code>WITH revenue_deciles AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+    NTILE(10) OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_decile
+  FROM sales_events
+)
+
+SELECT
+  sale_id,
+  region,
+  salesperson,
+  revenue,
+  revenue_decile
+FROM revenue_deciles
+WHERE revenue_decile = 10
+ORDER BY
+  region ASC,
+  revenue DESC,
+  sale_id ASC;</code></pre>
+    <p>NTILE(100) with only 90 rows per region can leave bucket 100 empty.</p>
+
+    <h3>Exercise 35 — Flag rows at or above P95</h3>
+    <pre><code>WITH region_p95 AS (
+  SELECT
+    region,
+    ROUND(
+      percentile_cont(0.95) WITHIN GROUP (
+        ORDER BY revenue
+      )::numeric,
+      2
+    ) AS p95_revenue
+  FROM sales_events
+  GROUP BY region
+)
+
+SELECT
+  s.sale_id,
+  s.region,
+  s.salesperson,
+  s.revenue,
+  p.p95_revenue,
+  CASE
+    WHEN s.revenue >= p.p95_revenue THEN 'At or above P95'
+    ELSE 'Below P95'
+  END AS p95_flag
+FROM sales_events AS s
+INNER JOIN region_p95 AS p
+  ON s.region = p.region
+ORDER BY
+  s.region ASC,
+  s.revenue DESC,
+  s.sale_id ASC
+LIMIT 40;</code></pre>
+    <div class="note">Percentile gives the cutoff. Join attaches the cutoff. CASE labels the row.</div>
+
+    <h3>Final cluster summary</h3>
+    <ul>
+      <li>Window frames define visible rows around the current row.</li>
+      <li>ROWS is usually best for moving calculations.</li>
+      <li>RANGE groups peers by ORDER BY value and can jump by duplicate dates.</li>
+      <li>NTILE labels rows into buckets.</li>
+      <li>NTILE is row-count based.</li>
+      <li>percentile_cont calculates an actual cutoff value.</li>
+      <li>P95 is a threshold, not a row label.</li>
+      <li>WITHIN GROUP sorts values inside an aggregate calculation.</li>
+      <li>To label rows by P95, calculate the threshold first, join it back, then use CASE.</li>
+      <li>For complex weighted moving average work and richer feature engineering, Pandas or Spark can be cleaner than SQL.</li>
+    </ul>
+
+    <a class="back" href="#top">↑ back to top</a>
+  </div>
+  <div class="section" id="s18">
+    <h2>Exercise 36 to 42 — CUME_DIST, PERCENT_RANK, and P95 comparison</h2>
+    <p>Purpose: document the training cluster where Sean learned how <code>CUME_DIST</code>, <code>PERCENT_RANK</code>, <code>P95</code>, and <code>NTILE</code> relate to percentile-style business flags.</p>
+    <div class="callout">
+      <strong>Core mental model</strong><br>
+      <code>NTILE</code> puts rows into buckets. <code>percentile_cont</code> / P95 calculates a percentile cutoff value. <code>CUME_DIST</code> tells what fraction of rows are at or below the current value. <code>PERCENT_RANK</code> tells where the current value starts on the ranking ladder.
+    </div>
+    <div class="memory">CUME_DIST = percent of rows covered so far. PERCENT_RANK = percent rank position. When methods agree, confidence goes up. When methods disagree, investigate ties, row counts, and business definition.</div>
+
+    <h3>Exercise 36 — CUME_DIST and PERCENT_RANK by region</h3>
+    <p>Sean calculated each sale's relative revenue position inside its region.</p>
+    <pre><code>WITH revenue_positions AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist,
+
+    PERCENT_RANK() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_percent_rank
+
+  FROM sales_events
+)
+
+SELECT
+  sale_id,
+  region,
+  salesperson,
+  revenue,
+  ROUND(revenue_cume_dist::numeric, 4) AS revenue_cume_dist,
+  ROUND(revenue_percent_rank::numeric, 4) AS revenue_percent_rank
+FROM revenue_positions
+ORDER BY
+  region ASC,
+  revenue DESC,
+  sale_id ASC
+LIMIT 40;</code></pre>
+    <p>Layman explanation: SQL orders revenue from low to high inside each region. The final display shows high to low, so the top visible rows have values near <code>1.0000</code>.</p>
+    <ul>
+      <li><code>CUME_DIST</code> asks: what percent of rows are at or below this value?</li>
+      <li><code>PERCENT_RANK</code> asks: how far up the ranking ladder does this value start?</li>
+    </ul>
+    <p>Observed East examples:</p>
+    <ul>
+      <li>revenue <code>2000</code> had <code>CUME_DIST 1.0000</code> and <code>PERCENT_RANK 1.0000</code></li>
+      <li>revenue <code>1500</code> had <code>CUME_DIST 0.9556</code> but <code>PERCENT_RANK 0.9438</code></li>
+      <li>revenue <code>1800</code> ties shared the same values</li>
+    </ul>
+    <div class="note"><code>CUME_DIST</code> counts through the end of a tie group. <code>PERCENT_RANK</code> uses where the tie group starts.</div>
+
+    <h3>Exercise 37 — Flag top 5% using CUME_DIST</h3>
+    <pre><code>WITH revenue_positions AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+
+  FROM sales_events
+)
+
+SELECT
+  sale_id,
+  region,
+  salesperson,
+  revenue,
+  ROUND(revenue_cume_dist::numeric, 4) AS revenue_cume_dist,
+
+  CASE
+    WHEN revenue_cume_dist >= 0.95 THEN 'Top 5%'
+    ELSE 'Below top 5%'
+  END AS revenue_band
+
+FROM revenue_positions
+ORDER BY
+  region ASC,
+  revenue DESC,
+  sale_id ASC
+LIMIT 40;</code></pre>
+    <p>Observed East result: rows <code>2000</code>, <code>1800</code>, <code>1800</code>, <code>1600</code>, <code>1500</code>, <code>1500</code> were marked <code>Top 5%</code>. The <code>1449</code> row was <code>Below top 5%</code>.</p>
+    <p>East had <code>90</code> rows. A pure 5% would be <code>4.5</code> rows, but tied boundary behavior included both <code>1500</code> rows, so East had <code>6</code> Top 5% rows.</p>
+    <div class="memory"><code>CUME_DIST</code> gives row position. <code>CASE</code> turns position into a business band.</div>
+
+    <h3>Exercise 38 — Summarize CUME_DIST top-5 bands by region</h3>
+    <pre><code>WITH revenue_positions AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+
+  FROM sales_events
+),
+
+revenue_bands AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+    ROUND(revenue_cume_dist::numeric, 4) AS revenue_cume_dist,
+
+    CASE
+      WHEN revenue_cume_dist >= 0.95 THEN 'Top 5%'
+      ELSE 'Below top 5%'
+    END AS revenue_band
+
+  FROM revenue_positions
+)
+
+SELECT
+  region,
+  revenue_band,
+  COUNT(*) AS row_count
+FROM revenue_bands
+GROUP BY
+  region,
+  revenue_band
+ORDER BY
+  region ASC,
+  row_count DESC;</code></pre>
+    <p>Observed result:</p>
+    <ul>
+      <li>East: <code>Below top 5% = 84</code>, <code>Top 5% = 6</code></li>
+      <li>North/South/West: <code>Below top 5% = 85</code>, <code>Top 5% = 5</code></li>
+    </ul>
+    <div class="memory"><code>CUME_DIST</code> finds percentile-like position. <code>CASE</code> creates the band. <code>GROUP BY</code> counts the band.</div>
+
+    <h3>Exercise 39 — Compare CUME_DIST top-5 flag to P95 flag</h3>
+    <pre><code>WITH revenue_positions AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+
+  FROM sales_events
+),
+
+region_p95 AS (
+  SELECT
+    region,
+    ROUND(
+      percentile_cont(0.95) WITHIN GROUP (
+        ORDER BY revenue
+      )::numeric,
+      2
+    ) AS p95_revenue
+  FROM sales_events
+  GROUP BY region
+)
+
+SELECT
+  rp.sale_id,
+  rp.region,
+  rp.salesperson,
+  rp.revenue,
+  ROUND(rp.revenue_cume_dist::numeric, 4) AS revenue_cume_dist,
+
+  CASE
+    WHEN rp.revenue_cume_dist >= 0.95 THEN 'Top 5%'
+    ELSE 'Below top 5%'
+  END AS cume_dist_band,
+
+  p.p95_revenue,
+
+  CASE
+    WHEN rp.revenue >= p.p95_revenue THEN 'At or above P95'
+    ELSE 'Below P95'
+  END AS p95_band
+
+FROM revenue_positions AS rp
+INNER JOIN region_p95 AS p
+  ON rp.region = p.region
+
+ORDER BY
+  rp.region ASC,
+  rp.revenue DESC,
+  rp.sale_id ASC
+LIMIT 40;</code></pre>
+    <p>Observed East result: <code>CUME_DIST</code> and <code>P95</code> agreed. Revenue <code>1500</code> and above was <code>Top 5%</code> / <code>At or above P95</code>. Revenue <code>1449</code> and below was <code>Below top 5%</code> / <code>Below P95</code>.</p>
+    <div class="memory"><code>CUME_DIST</code> flags by row position. <code>P95</code> flags by percentile cutoff value.</div>
+
+    <h3>Exercise 40 — Find rows where CUME_DIST and P95 disagree</h3>
+    <pre><code>WITH revenue_positions AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+
+  FROM sales_events
+),
+
+region_p95 AS (
+  SELECT
+    region,
+    ROUND(
+      percentile_cont(0.95) WITHIN GROUP (
+        ORDER BY revenue
+      )::numeric,
+      2
+    ) AS p95_revenue
+  FROM sales_events
+  GROUP BY region
+),
+
+compare_methods AS (
+  SELECT
+    rp.sale_id,
+    rp.region,
+    rp.salesperson,
+    rp.revenue,
+    ROUND(rp.revenue_cume_dist::numeric, 4) AS revenue_cume_dist,
+
+    CASE
+      WHEN rp.revenue_cume_dist >= 0.95 THEN 'Top 5%'
+      ELSE 'Below top 5%'
+    END AS cume_dist_band,
+
+    p.p95_revenue,
+
+    CASE
+      WHEN rp.revenue >= p.p95_revenue THEN 'At or above P95'
+      ELSE 'Below P95'
+    END AS p95_band
+
+  FROM revenue_positions AS rp
+  INNER JOIN region_p95 AS p
+    ON rp.region = p.region
+)
+
+SELECT
+  sale_id,
+  region,
+  salesperson,
+  revenue,
+  revenue_cume_dist,
+  cume_dist_band,
+  p95_revenue,
+  p95_band
+FROM compare_methods
+WHERE
+  (
+    cume_dist_band = 'Top 5%'
+    AND p95_band = 'Below P95'
+  )
+  OR
+  (
+    cume_dist_band = 'Below top 5%'
+    AND p95_band = 'At or above P95'
+  )
+ORDER BY
+  region ASC,
+  revenue DESC,
+  sale_id ASC;</code></pre>
+    <p>Observed result: <code>0 rows</code>.</p>
+    <p>A zero-row disagreement query is not a failure. It means both rules produced the same classification on this dataset.</p>
+    <div class="memory">Build method A. Build method B. Compare them. If disagreements are zero, the methods agree. If disagreements exist, inspect tied boundary cases, row counts, and business rule.</div>
+
+    <h3>Exercise 40B — Summarize method agreement</h3>
+    <pre><code>SELECT
+  cume_dist_band,
+  p95_band,
+  COUNT(*) AS row_count
+FROM compare_methods
+GROUP BY
+  cume_dist_band,
+  p95_band
+ORDER BY
+  row_count DESC;</code></pre>
+    <p>Observed result:</p>
+    <ul>
+      <li><code>Below top 5% + Below P95 = 339</code></li>
+      <li><code>Top 5% + At or above P95 = 21</code></li>
+    </ul>
+    <p>Total rows = <code>360</code>. There were no mixed-label rows. <code>CUME_DIST</code> and <code>P95</code> agreed across the whole dataset.</p>
+
+    <h3>Exercise 41 — Flag and summarize top rank-zone rows using PERCENT_RANK</h3>
+    <pre><code>WITH revenue_percent_ranks AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    PERCENT_RANK() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_percent_rank
+
+  FROM sales_events
+),
+
+revenue_rank_bands AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+    revenue_percent_rank,
+
+    CASE
+      WHEN revenue_percent_rank >= 0.95 THEN 'Top rank zone'
+      ELSE 'Below top rank zone'
+    END AS percent_rank_band
+
+  FROM revenue_percent_ranks
+)
+
+SELECT
+  region,
+  percent_rank_band,
+  COUNT(*) AS row_count
+FROM revenue_rank_bands
+GROUP BY
+  region,
+  percent_rank_band
+ORDER BY
+  region ASC,
+  row_count DESC;</code></pre>
+    <p>Observed result:</p>
+    <ul>
+      <li>East: <code>Below top rank zone = 86</code>, <code>Top rank zone = 4</code></li>
+      <li>North/South/West: <code>Below top rank zone = 85</code>, <code>Top rank zone = 5</code></li>
+    </ul>
+    <p>East differed because the <code>1500</code> tie group had <code>PERCENT_RANK 0.9438</code>. That is below <code>0.95</code>, so those rows were excluded from <code>Top rank zone</code>.</p>
+    <div class="note"><code>CUME_DIST</code> sees how much of the group is covered after this value. <code>PERCENT_RANK</code> sees where this value starts on the ranking ladder.</div>
+
+    <h3>Exercise 42 — Count top rows by all three methods</h3>
+    <pre><code>WITH revenue_positions AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist,
+
+    PERCENT_RANK() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_percent_rank
+
+  FROM sales_events
+),
+
+region_p95 AS (
+  SELECT
+    region,
+    ROUND(
+      percentile_cont(0.95) WITHIN GROUP (
+        ORDER BY revenue
+      )::numeric,
+      2
+    ) AS p95_revenue
+  FROM sales_events
+  GROUP BY region
+),
+
+method_flags AS (
+  SELECT
+    rp.sale_id,
+    rp.region,
+    rp.salesperson,
+    rp.revenue,
+    rp.revenue_cume_dist,
+    rp.revenue_percent_rank,
+    p.p95_revenue,
+
+    CASE
+      WHEN rp.revenue_cume_dist >= 0.95 THEN 1
+      ELSE 0
+    END AS is_cume_dist_top,
+
+    CASE
+      WHEN rp.revenue >= p.p95_revenue THEN 1
+      ELSE 0
+    END AS is_p95_top,
+
+    CASE
+      WHEN rp.revenue_percent_rank >= 0.95 THEN 1
+      ELSE 0
+    END AS is_percent_rank_top
+
+  FROM revenue_positions AS rp
+  INNER JOIN region_p95 AS p
+    ON rp.region = p.region
+)
+
+SELECT
+  region,
+  SUM(is_cume_dist_top) AS cume_dist_top_count,
+  SUM(is_p95_top) AS p95_top_count,
+  SUM(is_percent_rank_top) AS percent_rank_top_count,
+  COUNT(*) AS total_rows
+FROM method_flags
+GROUP BY region
+ORDER BY region ASC;</code></pre>
+    <p>Observed result:</p>
+    <ul>
+      <li>East: <code>CUME_DIST top count = 6</code>, <code>P95 top count = 6</code>, <code>PERCENT_RANK top count = 4</code>, <code>total rows = 90</code></li>
+      <li>North/South/West: all three methods count = <code>5</code>, <code>total rows = 90</code> each</li>
+    </ul>
+    <p><code>CUME_DIST</code> and <code>P95</code> behaved like percentile cutoff tools. <code>PERCENT_RANK</code> behaved like rank-position progress. East exposed the difference because of tied boundary values.</p>
+    <div class="callout warn">
+      <strong>Interview-safe summary</strong><br>
+      I compared three ways to mark top revenue rows: <code>CUME_DIST</code>, <code>P95</code> threshold, and <code>PERCENT_RANK</code>. <code>CUME_DIST</code> and <code>P95</code> agreed in this dataset. <code>PERCENT_RANK</code> differed in East because of tied boundary values. That showed why ties and business definition matter when choosing a percentile-style method.
+    </div>
+
+    <h3>Final cluster summary</h3>
+    <ul>
+      <li><code>P95</code> gives the percentile cutoff value.</li>
+      <li><code>CUME_DIST</code> gives row-level percentile-like coverage.</li>
+      <li><code>PERCENT_RANK</code> gives rank-position progress.</li>
+      <li><code>NTILE</code> creates rough buckets.</li>
+      <li><code>CUME_DIST</code> and <code>P95</code> are usually more intuitive for top-percent flags.</li>
+      <li><code>PERCENT_RANK</code> is useful, but can be less intuitive around tied boundary cases.</li>
+      <li>For millions of rows, the goal is not manual grading. Use thresholds, buckets, or bands to segment the population.</li>
+    </ul>
+
+    <a class="back" href="#top">↑ back to top</a>
+  </div>
+  <div class="section" id="s19">
+    <h2>Exercise 43 to 48 — Percentile bands, review queues, and owner priority scoring</h2>
+    <p>Purpose: document the training cluster where Sean converted row-level percentile positions into business bands, review queues, owner summaries, weighted priority scores, regional ranks, and final recommended actions.</p>
+    <div class="callout">
+      <strong>Core mental model</strong><br>
+      raw value -> relative position -> business band -> review queue -> owner summary -> weighted priority score -> rank -> recommended action
+    </div>
+    <div class="memory">CUME_DIST creates relative position. CASE creates business bands. GROUP BY creates the management report. WHERE selects the review queue. Conditional SUM counts each band. Weights create urgency. RANK creates management order. CASE at the end turns analytics into a business recommendation.</div>
+
+    <h3>Exercise 43 — Create revenue bands with CUME_DIST</h3>
+    <p>Sean classified each sale inside its own region using <code>CUME_DIST</code>.</p>
+    <p>Band rules:</p>
+    <ul>
+      <li><code>CUME_DIST &gt;= 0.95</code> -> <code>Top 5%</code></li>
+      <li><code>CUME_DIST &gt;= 0.80</code> -> <code>High</code></li>
+      <li><code>CUME_DIST &gt;= 0.20</code> -> <code>Middle</code></li>
+      <li>else -> <code>Low</code></li>
+    </ul>
+    <pre><code>WITH revenue_positions AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+
+  FROM sales_events
+),
+
+revenue_bands AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+    ROUND(revenue_cume_dist::numeric, 4) AS revenue_cume_dist,
+
+    CASE
+      WHEN revenue_cume_dist >= 0.95 THEN 'Top 5%'
+      WHEN revenue_cume_dist >= 0.80 THEN 'High'
+      WHEN revenue_cume_dist >= 0.20 THEN 'Middle'
+      ELSE 'Low'
+    END AS revenue_band
+
+  FROM revenue_positions
+)
+
+SELECT
+  region,
+  revenue_band,
+  COUNT(*) AS row_count,
+  MIN(revenue) AS min_revenue,
+  MAX(revenue) AS max_revenue
+FROM revenue_bands
+GROUP BY
+  region,
+  revenue_band
+ORDER BY
+  region ASC,
+  CASE
+    WHEN revenue_band = 'Top 5%' THEN 1
+    WHEN revenue_band = 'High' THEN 2
+    WHEN revenue_band = 'Middle' THEN 3
+    WHEN revenue_band = 'Low' THEN 4
+  END;</code></pre>
+    <p>Observed summary:</p>
+    <ul>
+      <li>East: <code>Top 5% = 6</code> rows, revenue <code>1500</code> to <code>2000</code></li>
+      <li>East: <code>High = 13</code> rows, revenue <code>1345</code> to <code>1449</code></li>
+      <li>East: <code>Middle = 54</code> rows, revenue <code>782</code> to <code>1341</code></li>
+      <li>East: <code>Low = 17</code> rows, revenue <code>417</code> to <code>781</code></li>
+    </ul>
+    <p>North/South/West had the same overall band shape except <code>Top 5%</code> had <code>5</code> rows and <code>High</code> had <code>14</code> rows.</p>
+    <div class="note">The bands are relative per region. Each region is judged against its own distribution, not one global revenue threshold.</div>
+
+    <h3>Exercise 44 — Detail review queue for Top 5% and High rows</h3>
+    <p>The previous query was a summary report. This query returns the actual rows to review.</p>
+    <pre><code>WITH revenue_positions AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+
+  FROM sales_events
+),
+
+revenue_bands AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+    ROUND(revenue_cume_dist::numeric, 4) AS revenue_cume_dist,
+
+    CASE
+      WHEN revenue_cume_dist >= 0.95 THEN 'Top 5%'
+      WHEN revenue_cume_dist >= 0.80 THEN 'High'
+      WHEN revenue_cume_dist >= 0.20 THEN 'Middle'
+      ELSE 'Low'
+    END AS revenue_band
+
+  FROM revenue_positions
+)
+
+SELECT
+  sale_id,
+  region,
+  salesperson,
+  revenue,
+  revenue_cume_dist,
+  revenue_band
+FROM revenue_bands
+WHERE revenue_band IN ('Top 5%', 'High')
+ORDER BY
+  region ASC,
+  CASE
+    WHEN revenue_band = 'Top 5%' THEN 1
+    WHEN revenue_band = 'High' THEN 2
+  END,
+  revenue DESC,
+  sale_id ASC;</code></pre>
+    <p>Observed meaning: this returned the actual <code>Top 5%</code> and <code>High</code> rows, sorted as a review queue.</p>
+    <div class="memory">Summary report = GROUP BY band and count rows. Review queue = WHERE band IN (...) and show detail rows.</div>
+
+    <h3>Exercise 45 — Count review queue by salesperson</h3>
+    <p>Sean summarized the high-priority review queue by owner.</p>
+    <pre><code>WITH revenue_positions AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+
+  FROM sales_events
+),
+
+revenue_bands AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+    ROUND(revenue_cume_dist::numeric, 4) AS revenue_cume_dist,
+
+    CASE
+      WHEN revenue_cume_dist >= 0.95 THEN 'Top 5%'
+      WHEN revenue_cume_dist >= 0.80 THEN 'High'
+      WHEN revenue_cume_dist >= 0.20 THEN 'Middle'
+      ELSE 'Low'
+    END AS revenue_band
+
+  FROM revenue_positions
+)
+
+SELECT
+  region,
+  salesperson,
+  revenue_band,
+  COUNT(*) AS row_count,
+  MAX(revenue) AS max_revenue
+FROM revenue_bands
+WHERE revenue_band IN ('Top 5%', 'High')
+GROUP BY
+  region,
+  salesperson,
+  revenue_band
+ORDER BY
+  region ASC,
+  CASE
+    WHEN revenue_band = 'Top 5%' THEN 1
+    WHEN revenue_band = 'High' THEN 2
+  END,
+  row_count DESC,
+  max_revenue DESC,
+  salesperson ASC;</code></pre>
+    <p>Observed examples:</p>
+    <ul>
+      <li>East: Casey Nguyen, <code>Top 5% = 4</code> rows, max <code>2000</code></li>
+      <li>East: Jordan Lee, <code>Top 5% = 2</code> rows, max <code>1600</code></li>
+      <li>East: Jordan Lee, <code>High = 9</code> rows, max <code>1449</code></li>
+      <li>East: Casey Nguyen, <code>High = 4</code> rows, max <code>1417</code></li>
+    </ul>
+    <div class="memory">CUME_DIST creates relative position. CASE creates business bands. WHERE selects the review queue. GROUP BY summarizes ownership.</div>
+
+    <h3>Exercise 46 — Create owner-level priority score</h3>
+    <p>Sean assigned weights to row bands:</p>
+    <ul>
+      <li><code>Top 5%</code> row = <code>3</code> points</li>
+      <li><code>High</code> row = <code>1</code> point</li>
+    </ul>
+    <pre><code>WITH revenue_positions AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+
+  FROM sales_events
+),
+
+revenue_bands AS (
+  SELECT
+    sale_id,
+    region,
+    salesperson,
+    revenue,
+    ROUND(revenue_cume_dist::numeric, 4) AS revenue_cume_dist,
+
+    CASE
+      WHEN revenue_cume_dist >= 0.95 THEN 'Top 5%'
+      WHEN revenue_cume_dist >= 0.80 THEN 'High'
+      WHEN revenue_cume_dist >= 0.20 THEN 'Middle'
+      ELSE 'Low'
+    END AS revenue_band
+
+  FROM revenue_positions
+),
+
+priority_by_salesperson AS (
+  SELECT
+    region,
+    salesperson,
+
+    SUM(CASE WHEN revenue_band = 'Top 5%' THEN 1 ELSE 0 END) AS top_5_count,
+    SUM(CASE WHEN revenue_band = 'High' THEN 1 ELSE 0 END) AS high_count,
+
+    3 * SUM(CASE WHEN revenue_band = 'Top 5%' THEN 1 ELSE 0 END)
+    +
+    SUM(CASE WHEN revenue_band = 'High' THEN 1 ELSE 0 END) AS priority_score,
+
+    MAX(revenue) AS max_revenue
+
+  FROM revenue_bands
+  WHERE revenue_band IN ('Top 5%', 'High')
+  GROUP BY
+    region,
+    salesperson
+)
+
+SELECT
+  region,
+  salesperson,
+  top_5_count,
+  high_count,
+  priority_score,
+  max_revenue
+FROM priority_by_salesperson
+ORDER BY
+  region ASC,
+  priority_score DESC,
+  top_5_count DESC,
+  high_count DESC,
+  max_revenue DESC,
+  salesperson ASC;</code></pre>
+    <p>Observed examples:</p>
+    <ul>
+      <li>North / Morgan Diaz = <code>5 Top 5%</code> rows and <code>5 High</code> rows = <code>20</code> score</li>
+      <li>East / Casey Nguyen = <code>4 Top 5%</code> rows and <code>4 High</code> rows = <code>16</code> score</li>
+      <li>East / Jordan Lee = <code>2 Top 5%</code> rows and <code>9 High</code> rows = <code>15</code> score</li>
+    </ul>
+    <p>Casey ranks above Jordan in East because <code>Top 5%</code> rows have heavier weight.</p>
+    <div class="memory">Banding creates categories. Weights create urgency. GROUP BY turns row-level urgency into owner-level priority.</div>
+
+    <h3>Exercise 47 — Rank owners by priority score</h3>
+    <p>Sean ranked salespeople inside each region using <code>RANK</code> over the owner-level priority result.</p>
+    <p>Final SQL should include a <code>ranked_priority</code> CTE:</p>
+    <pre><code>ranked_priority AS (
+  SELECT
+    region,
+    salesperson,
+    top_5_count,
+    high_count,
+    priority_score,
+    max_revenue,
+
+    RANK() OVER (
+      PARTITION BY region
+      ORDER BY
+        priority_score DESC,
+        top_5_count DESC,
+        max_revenue DESC
+    ) AS priority_rank
+
+  FROM priority_by_salesperson
+)</code></pre>
+    <p>Final SELECT:</p>
+    <pre><code>SELECT
+  region,
+  priority_rank,
+  salesperson,
+  top_5_count,
+  high_count,
+  priority_score,
+  max_revenue
+FROM ranked_priority
+ORDER BY
+  region ASC,
+  priority_rank ASC,
+  salesperson ASC;</code></pre>
+    <p>Observed result:</p>
+    <ul>
+      <li>East: Rank 1 Casey Nguyen, score <code>16</code>; Rank 2 Jordan Lee, score <code>15</code></li>
+      <li>North: Rank 1 Morgan Diaz, score <code>20</code>; Rank 2 Alex Kim, score <code>9</code></li>
+      <li>South: Rank 1 Riley Brooks, score <code>16</code>; Rank 2 Sam Patel, score <code>13</code></li>
+      <li>West: Rank 1 Taylor Chen, score <code>20</code>; Rank 2 Jamie Clark, score <code>9</code></li>
+    </ul>
+    <div class="memory">Percentile band = row-level signal. Priority score = owner-level urgency. RANK = management order.</div>
+
+    <h3>Exercise 47B — Keep only rank 1 owner per region</h3>
+    <p>Sean filtered to the top priority owner per region.</p>
+    <p>Final SELECT over <code>ranked_priority</code>:</p>
+    <pre><code>SELECT
+  region,
+  priority_rank,
+  salesperson,
+  top_5_count,
+  high_count,
+  priority_score,
+  max_revenue
+FROM ranked_priority
+WHERE priority_rank = 1
+ORDER BY
+  region ASC;</code></pre>
+    <p>Observed result:</p>
+    <ul>
+      <li>East -> Casey Nguyen</li>
+      <li>North -> Morgan Diaz</li>
+      <li>South -> Riley Brooks</li>
+      <li>West -> Taylor Chen</li>
+    </ul>
+    <div class="memory">Build ranking in a CTE. Filter the rank in the outer query.</div>
+
+    <h3>Exercise 48 — Add final recommended_action label</h3>
+    <p>Sean added final business recommendation language to the rank 1 result.</p>
+    <p>Recommendation rules:</p>
+    <ul>
+      <li><code>priority_score &gt;= 20</code> -> <code>Immediate focus</code></li>
+      <li><code>priority_score &gt;= 15</code> -> <code>High priority</code></li>
+      <li>else -> <code>Monitor</code></li>
+    </ul>
+    <p>Final SELECT:</p>
+    <pre><code>SELECT
+  region,
+  priority_rank,
+  salesperson,
+  top_5_count,
+  high_count,
+  priority_score,
+  max_revenue,
+  CASE
+    WHEN priority_score >= 20 THEN 'Immediate focus'
+    WHEN priority_score >= 15 THEN 'High priority'
+    ELSE 'Monitor'
+  END AS recommended_action
+FROM ranked_priority
+WHERE priority_rank = 1
+ORDER BY
+  region ASC;</code></pre>
+    <p>Observed result:</p>
+    <ul>
+      <li>East / Casey Nguyen = <code>High priority</code></li>
+      <li>North / Morgan Diaz = <code>Immediate focus</code></li>
+      <li>South / Riley Brooks = <code>High priority</code></li>
+      <li>West / Taylor Chen = <code>Immediate focus</code></li>
+    </ul>
+
+    <h3>Exercise 49 — Interview translation: explain the owner-priority pipeline</h3>
+    <p>Purpose: capture the plain-English explanation Sean can use in an interview or manager conversation.</p>
+    <div class="callout">
+      <strong>Full spoken version</strong><br><br>
+      I built a SQL pipeline that starts with raw sales rows and turns them into a management recommendation.<br><br>
+      First, I used <code>CUME_DIST</code> to compare each sale against other sales in the same region. That means each region is judged fairly against its own sales distribution, instead of using one global revenue cutoff.<br><br>
+      Then I converted each sale into a business band: Top 5%, High, Middle, or Low.<br><br>
+      After that, I filtered only the important bands - Top 5% and High - into a review queue. That gave me the rows that deserve attention.<br><br>
+      Then I grouped those review rows by salesperson and region. I counted how many Top 5% and High rows each salesperson had.<br><br>
+      To make the score more meaningful, I gave Top 5% rows more weight than High rows. In this case, Top 5% counted as 3 points and High counted as 1 point.<br><br>
+      Then I ranked the salespeople inside each region by that priority score.<br><br>
+      Finally, I added a recommendation label, such as Immediate focus or High priority.<br><br>
+      So the main idea is:<br><br>
+      raw sales rows became row-level signals,<br>
+      row-level signals became owner-level scores,<br>
+      and owner-level scores became ranked business recommendations.
+    </div>
+    <div class="memory">
+      <strong>Shorter interview version</strong><br><br>
+      I used window functions to turn raw sales rows into a priority report. <code>CUME_DIST</code> gave each sale a relative position within its region. I used <code>CASE</code> to convert those positions into bands like Top 5% and High. Then I filtered the important bands, grouped them by salesperson, applied a weighted score, ranked the owners inside each region, and added a final recommended action. The result was a management-friendly report showing who deserved attention first in each region.
+    </div>
+    <p><strong>Memory line:</strong><br>Raw rows -> signals -> scores -> ranked recommendations.</p>
+
+    <h3>Final cluster summary</h3>
+    <ul>
+      <li>Raw values become percentile positions.</li>
+      <li>Percentile positions become business bands.</li>
+      <li>Business bands become review queues.</li>
+      <li>Review queues can be summarized by owner.</li>
+      <li>Weighted scoring turns row-level signals into owner-level urgency.</li>
+      <li>RANK inside each region creates a management order.</li>
+      <li>CASE at the end creates readable recommendations.</li>
+      <li>Interview translation matters because SQL work must be explainable.</li>
+      <li>The pipeline is not just syntax; it is analytics design.</li>
+      <li>This pattern applies to sales, finance, fraud, customer risk, observability, incident triage, and capacity prioritization.</li>
+    </ul>
+
+    <a class="back" href="#top">↑ back to top</a>
+  </div>
+  <div class="section" id="s20">
+    <h2>Final Oral Defense Q&amp;A — Window Functions, Percentiles, and Priority Scoring</h2>
+    <p>Purpose: give Sean a compact interview-style review section he can read out loud. This should be easy to rehearse when tired.</p>
+
+    <h3>A) Window function foundations</h3>
+    <p><strong>Q1. What is the difference between GROUP BY and PARTITION BY?</strong></p>
+    <p><strong>Answer:</strong><br>GROUP BY collapses rows into summary rows. PARTITION BY creates groups for a window calculation but keeps the original detail rows visible.</p>
+    <div class="memory">GROUP BY collapses. PARTITION BY keeps detail rows.</div>
+
+    <p><strong>Q2. What does ORDER BY inside OVER do?</strong></p>
+    <p><strong>Answer:</strong><br>ORDER BY inside OVER creates the sequence used by the window function. For aggregate windows like SUM or COUNT, adding ORDER BY usually changes a full-partition value into a running value.</p>
+    <div class="memory">No ORDER BY inside OVER = whole group.<br>ORDER BY inside OVER = row-by-row journey.</div>
+
+    <p><strong>Q3. What is the difference between ORDER BY inside OVER and final ORDER BY?</strong></p>
+    <p><strong>Answer:</strong><br>ORDER BY inside OVER affects the calculation. Final ORDER BY affects only how the result is displayed.</p>
+    <div class="memory">Window ORDER BY calculates. Final ORDER BY displays.</div>
+
+    <h3>B) Ranking functions</h3>
+    <p><strong>Q4. When do I use ROW_NUMBER?</strong></p>
+    <p><strong>Answer:</strong><br>Use ROW_NUMBER when the business wants one exact row position, such as the single third salesperson in each department. ROW_NUMBER never preserves ties.</p>
+
+    <p><strong>Q5. When do I use RANK?</strong></p>
+    <p><strong>Answer:</strong><br>Use RANK when the business wants competition-style ranking and tied values should share the same rank. RANK can skip numbers after a tie.</p>
+
+    <p><strong>Q6. When do I use DENSE_RANK?</strong></p>
+    <p><strong>Answer:</strong><br>Use DENSE_RANK when the business wants distinct value tiers without gaps. Tied values share the same rank, but the next distinct value gets the next rank number.</p>
+
+    <p><strong>Q7. Why should I avoid adding a unique tie-breaker to RANK or DENSE_RANK?</strong></p>
+    <p><strong>Answer:</strong><br>A unique tie-breaker, such as sale_id or salesperson, can destroy the tie. If the business wants ties preserved, rank only by the value that defines the tie.</p>
+    <div class="memory">ROW_NUMBER can use tie-breakers. RANK and DENSE_RANK often should not.</div>
+
+    <h3>C) LAG and LEAD</h3>
+    <p><strong>Q8. What does LAG do?</strong></p>
+    <p><strong>Answer:</strong><br>LAG brings a value from a previous row into the current row. It is useful for comparing the current value to a prior value.</p>
+
+    <p><strong>Q9. What does LEAD do?</strong></p>
+    <p><strong>Answer:</strong><br>LEAD brings a value from a future row into the current row. It is useful for comparing the current value to the next value.</p>
+    <div class="memory">LAG is the rearview mirror. LEAD is the windshield.</div>
+
+    <p><strong>Q10. Why does the first LAG row return NULL?</strong></p>
+    <p><strong>Answer:</strong><br>The first row in a partition has no previous row, so NULL is the truthful result.</p>
+
+    <p><strong>Q11. Why use NULLIF in percent-change math?</strong></p>
+    <p><strong>Answer:</strong><br>NULLIF prevents division by zero. If the previous value is zero, NULLIF turns it into NULL so the query does not fail or produce misleading math.</p>
+
+    <h3>D) FIRST_VALUE and LAST_VALUE</h3>
+    <p><strong>Q12. Why is FIRST_VALUE usually straightforward?</strong></p>
+    <p><strong>Answer:</strong><br>FIRST_VALUE returns the first value in the ordered window. The default frame usually includes the first row, so it behaves as expected.</p>
+
+    <p><strong>Q13. Why is LAST_VALUE tricky?</strong></p>
+    <p><strong>Answer:</strong><br>LAST_VALUE often returns the current row because the default frame usually ends at the current row. To get the true last value in the partition, use a full frame.</p>
+
+    <p><strong>Q14. What is the safe full-frame pattern for LAST_VALUE?</strong></p>
+    <p><strong>Answer:</strong><br>Use:</p>
+    <pre><code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code></pre>
+    <div class="memory">LAST_VALUE needs the full frame when you want the true last row.</div>
+
+    <h3>E) Window frames and moving calculations</h3>
+    <p><strong>Q15. What does ROWS BETWEEN 2 PRECEDING AND CURRENT ROW mean?</strong></p>
+    <p><strong>Answer:</strong><br>It means the current row plus the previous two physical rows. That creates a three-row trailing window.</p>
+
+    <p><strong>Q16. What is a previous-only frame?</strong></p>
+    <p><strong>Answer:</strong><br>A previous-only frame compares the current row against history without including the current row in its own benchmark. Example:</p>
+    <pre><code>ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING</code></pre>
+
+    <p><strong>Q17. What is the difference between ROWS and RANGE?</strong></p>
+    <p><strong>Answer:</strong><br>ROWS moves by physical rows. RANGE moves by peer groups based on the ORDER BY value. If multiple rows share the same date, RANGE can jump by all rows on that date.</p>
+    <div class="memory">ROWS = physical rows. RANGE = value peers.</div>
+
+    <p><strong>Q18. When would Pandas or Spark be better than SQL?</strong></p>
+    <p><strong>Answer:</strong><br>SQL is strong for basic moving windows and aggregation. Pandas or Spark can be cleaner for richer feature engineering, weighted moving averages, exponential smoothing, and model-ready time-series features.</p>
+
+    <h3>F) NTILE, P95, CUME_DIST, and PERCENT_RANK</h3>
+    <p><strong>Q19. What does NTILE do?</strong></p>
+    <p><strong>Answer:</strong><br>NTILE splits ordered rows into roughly equal buckets. It gives each row a bucket number. It does not calculate an exact cutoff value.</p>
+
+    <p><strong>Q20. What does percentile_cont / P95 do?</strong></p>
+    <p><strong>Answer:</strong><br>P95 calculates a value cutoff. It answers: what value separates the lower 95 percent from the top 5 percent?</p>
+    <div class="memory">NTILE is a bucket label. P95 is a cutoff value.</div>
+
+    <p><strong>Q21. Why does percentile_cont use WITHIN GROUP instead of OVER in this workbook?</strong></p>
+    <p><strong>Answer:</strong><br>In this workbook, percentile_cont is used as an ordered aggregate. WITHIN GROUP sorts values inside the aggregate calculation. GROUP BY region then returns one P95 cutoff per region.</p>
+
+    <p><strong>Q22. Why did NTILE(100) return no bucket 100?</strong></p>
+    <p><strong>Answer:</strong><br>Each region had only 90 rows. NTILE(100) cannot populate 100 buckets from only 90 rows, so bucket 100 may not exist.</p>
+
+    <p><strong>Q23. What does CUME_DIST mean?</strong></p>
+    <p><strong>Answer:</strong><br>CUME_DIST tells what fraction of rows are at or below the current value. It is coverage-based.</p>
+
+    <p><strong>Q24. What does PERCENT_RANK mean?</strong></p>
+    <p><strong>Answer:</strong><br>PERCENT_RANK tells where the current value starts on the ranking ladder. It is rank-start based.</p>
+
+    <p><strong>Q25. Why can CUME_DIST and PERCENT_RANK differ around ties?</strong></p>
+    <p><strong>Answer:</strong><br>CUME_DIST counts through the end of the tie group. PERCENT_RANK uses where the tie group starts.</p>
+    <div class="memory">CUME_DIST looks after the tie group. PERCENT_RANK looks at where the tie group starts.</div>
+
+    <p><strong>Q26. Which is easier for top-percent business flags: CUME_DIST, PERCENT_RANK, or P95?</strong></p>
+    <p><strong>Answer:</strong><br>P95 and CUME_DIST are usually easier for top-percent flags. P95 gives a cutoff value. CUME_DIST gives row-level coverage. PERCENT_RANK is useful, but it can be less intuitive near tied boundaries.</p>
+
+    <h3>G) Owner-priority pipeline</h3>
+    <p><strong>Q27. What was the final owner-priority pipeline?</strong></p>
+    <p><strong>Answer:</strong><br>Raw revenue rows were converted into percentile positions. Percentile positions were converted into bands. The important bands became a review queue. The review queue was grouped by salesperson. Top 5% rows were weighted more heavily than High rows. Salespeople were ranked by priority score inside each region. Finally, a recommended action label was added.</p>
+    <div class="memory">Raw rows -&gt; signals -&gt; scores -&gt; ranked recommendations.</div>
+
+    <p><strong>Q28. Why did we use CUME_DIST before creating revenue_band?</strong></p>
+    <p><strong>Answer:</strong><br>CUME_DIST gave each row a relative position inside its own region. That let each region be judged against its own distribution instead of one global revenue cutoff.</p>
+
+    <p><strong>Q29. Why did we filter only Top 5% and High rows?</strong></p>
+    <p><strong>Answer:</strong><br>Those rows formed the review queue. They were the rows important enough to drive management attention.</p>
+
+    <p><strong>Q30. Why did Top 5% get 3 points and High get 1 point?</strong></p>
+    <p><strong>Answer:</strong><br>Top 5% rows were stronger signals than High rows. The weighting made the priority score reflect urgency, not just row count.</p>
+
+    <p><strong>Q31. Why did Casey rank above Jordan in East even though Jordan had more High rows?</strong></p>
+    <p><strong>Answer:</strong><br>Casey had more Top 5% rows, and Top 5% rows had heavier weight. The score prioritized stronger signals over simple volume.</p>
+
+    <p><strong>Q32. What did recommended_action add?</strong></p>
+    <p><strong>Answer:</strong><br>recommended_action translated the numeric priority score into readable business language such as Immediate focus, High priority, or Monitor.</p>
+    <div class="memory">CASE at the end turns analytics into a business recommendation.</div>
+
+    <h3>H) Interview-ready final answer</h3>
+    <div class="callout warn">
+      <strong>If an interviewer asks what I built here, I would say:</strong><br><br>
+      I built a SQL analytics pipeline using window functions and CTEs. I started with raw sales rows, used CUME_DIST to place each sale relative to other sales inside its region, and converted those positions into business bands such as Top 5%, High, Middle, and Low.<br><br>
+      Then I filtered the most important bands into a review queue, grouped that queue by salesperson, and applied a weighted priority score where Top 5% signals counted more than High signals. After that, I ranked the salespeople inside each region and added a final recommended action label.<br><br>
+      The business value is that raw detail rows became a management-friendly priority report. The same pattern could apply to sales performance, fraud signals, customer risk, observability alerts, incident triage, or capacity prioritization.
+    </div>
+
+    <h3>I) Self-test checklist</h3>
+    <p>Before I call Course 05 stable, I should be able to explain:</p>
+    <ul>
+      <li>GROUP BY vs PARTITION BY</li>
+      <li>ORDER BY inside OVER vs final ORDER BY</li>
+      <li>ROW_NUMBER vs RANK vs DENSE_RANK</li>
+      <li>why rank aliases need a CTE before filtering</li>
+      <li>LAG vs LEAD</li>
+      <li>FIRST_VALUE vs LAST_VALUE</li>
+      <li>why LAST_VALUE needs a full frame</li>
+      <li>moving averages with ROWS BETWEEN</li>
+      <li>ROWS vs RANGE</li>
+      <li>NTILE vs P95</li>
+      <li>WITHIN GROUP vs OVER</li>
+      <li>CUME_DIST vs PERCENT_RANK</li>
+      <li>P95 cutoff and join-back pattern</li>
+      <li>review queue pattern</li>
+      <li>weighted owner-priority scoring</li>
+      <li>final recommended_action label</li>
+    </ul>
+
+    <a class="back" href="#top">↑ back to top</a>
+  </div>
+</div>
+<footer class="footer muted">Workbook generated for local muscle-memory practice documentation.</footer>
+</body>
+</html>
+

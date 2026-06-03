@@ -1,0 +1,3105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Window Functions — The Complete PostgreSQL Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #79c0ff;
+    --green: #56d364;
+    --green-bg: #0d2818;
+    --yellow: #e3b341;
+    --yellow-bg: #2d1d00;
+    --red: #ff7b72;
+    --red-bg: #2d0d0d;
+    --purple: #bc8cff;
+    --purple-bg: #1e1235;
+    --teal: #39d0d8;
+    --teal-bg: #03242a;
+    --orange: #ffa657;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* === HEADER === */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 0 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--purple), var(--teal));
+  }
+
+  .header-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green);
+    background: var(--green-bg);
+    border: 1px solid var(--green);
+    border-radius: 4px;
+    padding: 3px 10px;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  header p {
+    color: var(--muted);
+    font-size: 1rem;
+    font-family: var(--mono);
+  }
+
+  /* === LAYOUT === */
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* === TOC === */
+  .toc-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 2.5rem 0;
+    overflow: hidden;
+  }
+
+  .toc-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+
+  .toc-header span {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--yellow);
+    letter-spacing: 0.1em;
+  }
+
+  .toc-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .d-red   { background: #ff5f56; }
+  .d-yellow{ background: #ffbd2e; }
+  .d-green { background: #27c93f; }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .toc-section {
+    padding: 1.25rem 1.5rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .toc-section:nth-child(even) { border-right: none; }
+
+  .toc-section h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .toc-section ul { list-style: none; }
+
+  .toc-section ul li { margin-bottom: 0.35rem; }
+
+  .toc-section ul li a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
+    font-family: var(--mono);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    transition: color 0.15s;
+  }
+
+  .toc-section ul li a:hover { color: var(--accent2); }
+
+  .toc-section ul li a .num {
+    color: var(--muted);
+    font-size: 11px;
+    min-width: 22px;
+  }
+
+  /* === SECTION === */
+  .section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 80px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--bg);
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 3px 8px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  .section-num.grn  { background: var(--green); }
+  .section-num.ylw  { background: var(--yellow); color: #000; }
+  .section-num.red  { background: var(--red); }
+  .section-num.prp  { background: var(--purple); color: #000; }
+  .section-num.tel  { background: var(--teal); color: #000; }
+  .section-num.org  { background: var(--orange); color: #000; }
+
+  .section h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .section p, .section li {
+    color: #c9d1d9;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .section ul, .section ol {
+    padding-left: 1.5rem;
+    margin: 0.75rem 0;
+  }
+
+  .section li { margin-bottom: 0.35rem; }
+
+  /* === CODE === */
+  pre {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin: 1.25rem 0;
+    position: relative;
+  }
+
+  pre .label {
+    position: absolute;
+    top: 0; right: 0;
+    background: var(--bg3);
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-radius: 0 6px 0 4px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    padding: 3px 8px;
+    letter-spacing: 0.08em;
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #e6edf3;
+  }
+
+  /* SQL syntax highlights */
+  .kw  { color: #ff7b72; }   /* keywords: SELECT, FROM, OVER, etc */
+  .fn  { color: #d2a8ff; }   /* functions: SUM, ROW_NUMBER, etc */
+  .cl  { color: #79c0ff; }   /* columns */
+  .st  { color: #a5d6ff; }   /* strings */
+  .cm  { color: #6e7681; font-style: italic; } /* comments */
+  .op  { color: #ff7b72; }   /* operators */
+  .num { color: #f0883e; }   /* numbers */
+
+  /* === NUGGET === */
+  .nugget {
+    background: var(--teal-bg);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--teal);
+    line-height: 1.7;
+  }
+
+  .nugget .label-tag {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--teal);
+    opacity: 0.6;
+    margin-bottom: 5px;
+  }
+
+  /* === CALLOUT BOX === */
+  .callout {
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .callout.info {
+    background: #051d2c;
+    border: 1px solid #1d5a8a;
+    color: var(--accent2);
+  }
+
+  .callout.warn {
+    background: var(--yellow-bg);
+    border: 1px solid var(--yellow);
+    color: var(--yellow);
+  }
+
+  .callout.danger {
+    background: var(--red-bg);
+    border: 1px solid var(--red);
+    color: var(--red);
+  }
+
+  .callout.success {
+    background: var(--green-bg);
+    border: 1px solid var(--green);
+    color: var(--green);
+  }
+
+  .callout strong {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+
+  /* === VISUAL DIAGRAM === */
+  .diagram {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+  }
+
+  .diagram-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  /* Table visual */
+  .vtable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .vtable th {
+    background: var(--bg3);
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  .vtable td {
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .vtable tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .vtable .hl-blue td { background: rgba(88,166,255,0.08); }
+  .vtable .hl-green td { background: rgba(86,211,100,0.08); }
+
+  .cell-accent  { color: var(--accent); font-weight: 600; }
+  .cell-green   { color: var(--green);  }
+  .cell-yellow  { color: var(--yellow); }
+  .cell-red     { color: var(--red);    }
+  .cell-purple  { color: var(--purple); }
+  .cell-muted   { color: var(--muted);  }
+
+  /* === COMPARE GRID === */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+
+  .compare-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .compare-card .card-head {
+    padding: 0.75rem 1rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-card .card-head.blue { background: rgba(88,166,255,0.12); color: var(--accent); border-color: rgba(88,166,255,0.3); }
+  .compare-card .card-head.grn  { background: rgba(86,211,100,0.10); color: var(--green);  border-color: rgba(86,211,100,0.3); }
+  .compare-card .card-head.ylw  { background: rgba(227,179,65,0.10); color: var(--yellow); border-color: rgba(227,179,65,0.3); }
+  .compare-card .card-head.red  { background: rgba(255,123,114,0.10); color: var(--red);   border-color: rgba(255,123,114,0.3); }
+
+  .compare-card pre { margin: 0; border: none; border-radius: 0; }
+
+  /* === FRAME VISUAL === */
+  .frame-visual {
+    font-family: var(--mono);
+    font-size: 12px;
+    margin: 1rem 0;
+  }
+
+  .frame-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-left: 2px solid var(--border);
+    padding-left: 12px;
+    color: var(--muted);
+  }
+
+  .frame-row.active {
+    border-left-color: var(--accent);
+    color: var(--text);
+  }
+
+  .frame-row.current {
+    border-left-color: var(--yellow);
+    color: var(--yellow);
+  }
+
+  .frame-marker {
+    display: inline-block;
+    width: 24px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .frame-val {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 2px 8px;
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .frame-row.active .frame-val  { border-color: var(--accent); color: var(--accent); }
+  .frame-row.current .frame-val { border-color: var(--yellow); color: var(--yellow); }
+
+  /* === CHEATSHEET === */
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1.25rem 0;
+  }
+
+  .cheat-cell {
+    background: var(--bg2);
+    padding: 1rem;
+  }
+
+  .cheat-cell .fn-name {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--purple);
+    margin-bottom: 4px;
+  }
+
+  .cheat-cell .fn-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .cheat-cell .fn-example {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+    padding: 4px 8px;
+    background: var(--bg3);
+    border-radius: 3px;
+    border-left: 2px solid var(--border);
+  }
+
+  /* === NAV BACK === */
+  .back-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-top: 2rem;
+    transition: all 0.15s;
+  }
+
+  .back-top:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* === FOOTER === */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: 4rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* === INLINE CODE === */
+  p code, li code {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 13px;
+    color: var(--orange);
+  }
+
+  /* === INTERVIEW BOX === */
+  .interview-box {
+    background: var(--purple-bg);
+    border: 1px solid rgba(188,140,255,0.4);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .interview-box .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--purple);
+    opacity: 0.7;
+    margin-bottom: 8px;
+  }
+
+  .interview-box p {
+    font-size: 16px;
+    color: var(--purple);
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  /* === DIVIDER === */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.5rem 0;
+  }
+
+  /* === ANATOMY === */
+  .anatomy {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+  }
+
+  .anatomy .line { display: block; line-height: 2; }
+  .anatomy .indent { padding-left: 2ch; }
+  .anatomy .indent2 { padding-left: 4ch; }
+  .anatomy .indent3 { padding-left: 6ch; }
+  .anatomy .ann {
+    display: inline-block;
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: 2ch;
+    border-left: 1px solid var(--border);
+    padding-left: 1ch;
+    font-style: italic;
+  }
+
+  @media (max-width: 700px) {
+    .toc-grid { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .cheat-grid { grid-template-columns: 1fr 1fr; }
+    header h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-badge">POSTGRESQL · WINDOW FUNCTIONS · COMPLETE FIELD GUIDE</div>
+    <h1>SQL <span>Window Functions</span></h1>
+    <p>Everything from OVER() to percentile_cont — the Sean way</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ===== TOC ===== -->
+  <a id="top"></a>
+  <div class="toc-wrap">
+    <div class="toc-header">
+      <div class="toc-dot d-red"></div>
+      <div class="toc-dot d-yellow"></div>
+      <div class="toc-dot d-green"></div>
+      <span>TABLE OF CONTENTS</span>
+    </div>
+    <div class="toc-grid">
+      <div class="toc-section">
+        <h4>Foundations</h4>
+        <ul>
+          <li><a href="#s01"><span class="num">01</span> The Big Idea — What is a Window?</a></li>
+          <li><a href="#s02"><span class="num">02</span> OVER() — The Magic Clause</a></li>
+          <li><a href="#s03"><span class="num">03</span> GROUP BY vs PARTITION BY</a></li>
+          <li><a href="#s04"><span class="num">04</span> ORDER BY Inside OVER</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Ranking Functions</h4>
+        <ul>
+          <li><a href="#s05"><span class="num">05</span> ROW_NUMBER()</a></li>
+          <li><a href="#s06"><span class="num">06</span> RANK()</a></li>
+          <li><a href="#s07"><span class="num">07</span> DENSE_RANK()</a></li>
+          <li><a href="#s08"><span class="num">08</span> Ranking Comparison Table</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Offset / Fetching Functions</h4>
+        <ul>
+          <li><a href="#s09"><span class="num">09</span> LAG() — Look Backward</a></li>
+          <li><a href="#s10"><span class="num">10</span> LEAD() — Look Forward</a></li>
+          <li><a href="#s11"><span class="num">11</span> LAG/LEAD with CTE Pattern</a></li>
+          <li><a href="#s12"><span class="num">12</span> FIRST_VALUE / LAST_VALUE</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Aggregate Windows and Frames</h4>
+        <ul>
+          <li><a href="#s13"><span class="num">13</span> SUM / AVG / MIN / MAX / COUNT</a></li>
+          <li><a href="#s14"><span class="num">14</span> Running Totals</a></li>
+          <li><a href="#s15"><span class="num">15</span> Moving Averages and Moving Totals</a></li>
+          <li><a href="#s16"><span class="num">16</span> Percent of Total</a></li>
+          <li><a href="#s17"><span class="num">17</span> ROWS vs RANGE</a></li>
+          <li><a href="#s18"><span class="num">18</span> Frame Boundaries Explained</a></li>
+          <li><a href="#s19"><span class="num">19</span> Named WINDOW Clause</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Buckets and Percentiles</h4>
+        <ul>
+          <li><a href="#s20"><span class="num">20</span> NTILE() — Bucketing</a></li>
+          <li><a href="#s21"><span class="num">21</span> percentile_cont vs percentile_disc</a></li>
+          <li><a href="#s21a"><span class="num">21A</span> CUME_DIST and PERCENT_RANK</a></li>
+          <li><a href="#s21b"><span class="num">21B</span> P95 Cutoff vs CUME_DIST Coverage</a></li>
+          <li><a href="#s21c"><span class="num">21C</span> Percentile Banding and Review Queues</a></li>
+          <li><a href="#s21d"><span class="num">21D</span> Owner Priority Scoring Pipeline</a></li>
+          <li><a href="#s22"><span class="num">22</span> CTE + Subquery Patterns</a></li>
+          <li><a href="#s23"><span class="num">23</span> NULLIF &amp; Safe Division</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Reporting and Reshaping</h4>
+        <ul>
+          <li><a href="#s24"><span class="num">24</span> CROSSTAB / Pivoting</a></li>
+          <li><a href="#s25"><span class="num">25</span> Multi-Measure Pivot: FILTER / CASE</a></li>
+          <li><a href="#s26"><span class="num">26</span> ROLLUP</a></li>
+          <li><a href="#s27"><span class="num">27</span> CUBE</a></li>
+          <li><a href="#s28"><span class="num">28</span> COALESCE</a></li>
+          <li><a href="#s29"><span class="num">29</span> CASE Statements — General Syntax</a></li>
+          <li><a href="#s30"><span class="num">30</span> CASE Ordering for Totals</a></li>
+          <li><a href="#s31"><span class="num">31</span> STRING_AGG</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Course Closeout</h4>
+        <ul>
+          <li><a href="#s32"><span class="num">32</span> Course 05 Final Map</a></li>
+          <li><a href="#s33"><span class="num">33</span> Interview Translation</a></li>
+          <li><a href="#s34"><span class="num">34</span> Common Traps</a></li>
+          <li><a href="#s35"><span class="num">35</span> Flashcard Review</a></li>
+          <li><a href="#s36"><span class="num">36</span> Final Oral Defense Q&amp;A</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ===== S01 ===== -->
+  <div class="section" id="s01">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2>The Big Idea — What is a Window?</h2>
+    </div>
+
+    <p>A <strong>window function</strong> calculates across a set of rows <em>related to the current row</em> — but unlike <code>GROUP BY</code>, it <strong>does not collapse</strong> those rows into one output row. Every original row stays visible. The function just attaches extra context to each one.</p>
+
+    <p>Think of it like a sliding pane of glass moving across your result set. The function "looks through the window" at nearby rows and computes something, then stamps that result onto the current row — and moves on.</p>
+
+    <div class="callout info">
+      <strong>CORE MENTAL MODEL</strong>
+      GROUP BY collapses rows. Window functions keep rows — they only <em>add</em> columns.
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">// WHAT A WINDOW FUNCTION DOES TO YOUR DATA</div>
+      <table class="vtable">
+        <thead>
+          <tr><th>sale_date</th><th>event_id</th><th>revenue</th><th>total_rev_that_day <span style="color:var(--teal)">(window column)</span></th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2025-01-01</td><td>E001</td><td class="cell-green">900</td><td class="cell-accent">2700</td></tr>
+          <tr><td>2025-01-01</td><td>E002</td><td class="cell-green">700</td><td class="cell-accent">2700</td></tr>
+          <tr><td>2025-01-01</td><td>E003</td><td class="cell-green">700</td><td class="cell-accent">2700</td></tr>
+          <tr><td>2025-01-01</td><td>E004</td><td class="cell-green">400</td><td class="cell-accent">2700</td></tr>
+          <tr><td>2025-01-02</td><td>E005</td><td class="cell-yellow">810</td><td class="cell-purple">3200</td></tr>
+          <tr><td>2025-01-02</td><td>E006</td><td class="cell-yellow">740</td><td class="cell-purple">3200</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Every sale row is preserved. The window function just adds the daily total as a new column — each row can see its own group's aggregate.</p>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      Window function = keep all rows + attach group-level context to each row.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S02 ===== -->
+  <div class="section" id="s02">
+    <div class="section-header">
+      <div class="section-num grn">02</div>
+      <h2>OVER() — The Magic Clause</h2>
+    </div>
+
+    <p>The <code>OVER()</code> clause is what turns any function into a window function. Without <code>OVER()</code>, <code>SUM()</code> is a regular aggregate that collapses rows. With <code>OVER()</code>, it becomes a window calculation that keeps rows.</p>
+
+    <div class="anatomy">
+      <span class="line"><span class="fn">SUM</span><span class="op">(</span><span class="cl">revenue</span><span class="op">)</span> <span class="kw">OVER</span> <span class="op">(</span> <span class="ann">← OVER() turns this into a window function</span></span>
+      <span class="line indent"><span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>  <span class="ann">← define the buckets (optional)</span></span>
+      <span class="line indent"><span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>      <span class="ann">← sort within each bucket (optional)</span></span>
+      <span class="line indent"><span class="kw">ROWS BETWEEN</span> <span class="kw">UNBOUNDED PRECEDING</span>  <span class="ann">← frame boundaries (optional)</span></span>
+      <span class="line indent2"><span class="kw">AND</span> <span class="kw">CURRENT ROW</span></span>
+      <span class="line"><span class="op">)</span></span>
+    </div>
+
+    <p>All three clauses inside <code>OVER()</code> are optional. An empty <code>OVER()</code> means: apply across the <em>entire result set</em>.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head red">WITHOUT OVER → aggregate</div>
+        <pre><code><span class="kw">SELECT</span>
+  <span class="cl">sale_date</span>,
+  <span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">AS</span> <span class="cl">total</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">GROUP BY</span> <span class="cl">sale_date</span>;
+<span class="cm">-- One row per date. Detail gone.</span></code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">WITH OVER → window</div>
+        <pre><code><span class="kw">SELECT</span>
+  <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+  <span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+    <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+  ) <span class="kw">AS</span> <span class="cl">total</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>;
+<span class="cm">-- All rows kept. Total attached.</span></code></pre>
+      </div>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      OVER() is the switch. It says: "don't collapse — slide a window instead."
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S03 ===== -->
+  <div class="section" id="s03">
+    <div class="section-header">
+      <div class="section-num ylw">03</div>
+      <h2>GROUP BY vs PARTITION BY</h2>
+    </div>
+
+    <p>These two look similar but they have fundamentally different output shapes.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head ylw">GROUP BY — collapses</div>
+        <pre><code><span class="kw">SELECT</span>
+  <span class="cl">sale_date</span>,
+  <span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">AS</span> <span class="cl">daily_rev</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">GROUP BY</span> <span class="cl">sale_date</span>;</code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head blue">PARTITION BY — keeps all rows</div>
+        <pre><code><span class="kw">SELECT</span>
+  <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+  <span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+    <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+  ) <span class="kw">AS</span> <span class="cl">daily_rev</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>;</code></pre>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">// OUTPUT SHAPE COMPARISON</div>
+      <table class="vtable">
+        <thead>
+          <tr><th>Approach</th><th>Output rows</th><th>event_id visible?</th><th>revenue visible?</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="cell-yellow">GROUP BY sale_date</td><td>1 per date</td><td class="cell-red">No — gone</td><td class="cell-red">No — gone</td></tr>
+          <tr><td class="cell-accent">PARTITION BY sale_date</td><td>All original rows</td><td class="cell-green">Yes</td><td class="cell-green">Yes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <strong>KEY INSIGHT</strong>
+      PARTITION BY is the windowing equivalent of GROUP BY — it defines the "group" for the calculation. But it never removes rows from your output.
+    </div>
+
+    <p><strong>What happens without PARTITION BY?</strong> The window spans the <em>entire result set</em>. One giant bucket. Example: <code>SUM(revenue) OVER ()</code> gives the grand total on every row.</p>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      PARTITION BY is bucketing without collapsing.<br>
+      GROUP BY is bucketing that collapses.<br>
+      That is the entire difference.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S04 ===== -->
+  <div class="section" id="s04">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2>ORDER BY Inside OVER — Two Jobs, One Keyword</h2>
+    </div>
+
+    <p>There are <strong>two</strong> places you can write <code>ORDER BY</code> in a window query. They do completely different things and beginners constantly mix them up.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head blue">ORDER BY inside OVER()</div>
+        <pre><code><span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (
+  <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>
+)</code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">ORDER BY at end of query</div>
+        <pre><code><span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">ORDER BY</span> <span class="cl">sale_date</span>;</code></pre>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">// WHO DOES WHAT</div>
+      <table class="vtable">
+        <thead><tr><th>Location</th><th>Controls</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-accent">ORDER BY inside OVER()</td><td>Calculation order</td><td>How the window function counts/sums/ranks</td></tr>
+          <tr><td class="cell-green">ORDER BY at end of SELECT</td><td>Display order</td><td>How rows appear on screen — has zero effect on window calc</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">region</span>, <span class="cl">sale_date</span>, <span class="cl">revenue</span>,
+    <span class="fn">NTILE</span>(<span class="num">4</span>) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">region</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>  <span class="cm">-- ← CALCULATION: quartile is built by revenue rank</span>
+    ) <span class="kw">AS</span> <span class="cl">quartile</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">ORDER BY</span> <span class="cl">sale_date</span>;           <span class="cm">-- ← DISPLAY: rows show up sorted by date</span></code></pre>
+
+    <p>The quartile was calculated by revenue order. But the screen shows rows sorted by date. Those are independent operations.</p>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      ORDER BY inside OVER = "how to calculate".<br>
+      ORDER BY at the end = "how to display".<br>
+      They never interfere with each other.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S05 ===== -->
+  <div class="section" id="s05">
+    <div class="section-header">
+      <div class="section-num red">05</div>
+      <h2>ROW_NUMBER() — Unique Position for Every Row</h2>
+    </div>
+
+    <p><code>ROW_NUMBER()</code> assigns a unique sequential integer to each row within the window. It <strong>never produces ties</strong> — if two rows look identical to the sort, it picks an arbitrary but stable winner.</p>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+    <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>  <span class="cm">-- tie breaker!</span>
+    ) <span class="kw">AS</span> <span class="cl">row_num_inside_day</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">ORDER BY</span> <span class="cl">sale_date</span>, <span class="cl">row_num_inside_day</span>;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// RESULT: numbering resets per sale_date partition</div>
+      <table class="vtable">
+        <thead><tr><th>sale_date</th><th>event_id</th><th>revenue</th><th>row_num_inside_day</th></tr></thead>
+        <tbody>
+          <tr><td>2025-01-01</td><td>E001</td><td>900</td><td class="cell-accent">1</td></tr>
+          <tr><td>2025-01-01</td><td>E002</td><td>700</td><td class="cell-accent">2</td></tr>
+          <tr><td>2025-01-01</td><td>E003</td><td>700</td><td class="cell-accent">3</td></tr>
+          <tr><td>2025-01-01</td><td>E004</td><td>400</td><td class="cell-accent">4</td></tr>
+          <tr style="border-top:2px solid var(--border)"><td>2025-01-02</td><td>E005</td><td>810</td><td class="cell-green">1</td></tr>
+          <tr><td>2025-01-02</td><td>E006</td><td>740</td><td class="cell-green">2</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <strong>TIE BREAKER RULE</strong>
+      For ROW_NUMBER, always add a unique column (like event_id) as a secondary sort key. Without it, tied revenue values get arbitrary ordering — your results become non-deterministic.
+    </div>
+
+    <p><strong>Classic use case:</strong> Get the single top earner per day (de-duplication pattern):</p>
+
+    <pre><code><span class="kw">WITH</span> <span class="cl">ranked</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> <span class="op">*</span>,
+        <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (
+            <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+            <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>
+        ) <span class="kw">AS</span> <span class="cl">rn</span>
+    <span class="kw">FROM</span> <span class="cl">sales</span>
+)
+<span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="cl">ranked</span> <span class="kw">WHERE</span> <span class="cl">rn</span> <span class="op">=</span> <span class="num">1</span>;</code></pre>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      ROW_NUMBER never ties. If you need the #1 per group, ROW_NUMBER + CTE + WHERE rn = 1 is the pattern.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S06 ===== -->
+  <div class="section" id="s06">
+    <div class="section-header">
+      <div class="section-num prp">06</div>
+      <h2>RANK() — Ties Get Same Rank, Gaps Happen</h2>
+    </div>
+
+    <p><code>RANK()</code> handles ties by giving them the same rank number. But it then <em>skips</em> the next rank — leaving a gap.</p>
+
+    <p>Think of the Olympics: two silver medalists means there's no bronze.</p>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+    <span class="fn">RANK</span>() <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>
+        <span class="cm">-- DO NOT add event_id here — that breaks the tie</span>
+    ) <span class="kw">AS</span> <span class="cl">rank_num</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">WHERE</span> <span class="cl">sale_date</span> <span class="op">=</span> <span class="st">'2025-01-01'</span>;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// revenues: 900, 700, 700, 400</div>
+      <table class="vtable">
+        <thead><tr><th>revenue</th><th>RANK()</th><th>note</th></tr></thead>
+        <tbody>
+          <tr><td>900</td><td class="cell-yellow">1</td><td>🥇 Gold</td></tr>
+          <tr><td>700</td><td class="cell-accent">2</td><td>🥈 Silver</td></tr>
+          <tr><td>700</td><td class="cell-accent">2</td><td>🥈 Silver (tie)</td></tr>
+          <tr><td>400</td><td class="cell-red">4</td><td>← rank 3 is <strong>skipped</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      RANK() = medals. Two silvers means no bronze. Gaps are intentional — they represent the "missing" positions.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S07 ===== -->
+  <div class="section" id="s07">
+    <div class="section-header">
+      <div class="section-num tel">07</div>
+      <h2>DENSE_RANK() — Ties Get Same Rank, No Gaps</h2>
+    </div>
+
+    <p><code>DENSE_RANK()</code> is like <code>RANK()</code> — ties share the same number — but it never leaves gaps. The next distinct value always gets the next consecutive rank.</p>
+
+    <p>Same Olympics scenario, but now bronze gets assigned even after two silvers.</p>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+    <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>
+    ) <span class="kw">AS</span> <span class="cl">dense_rank_num</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">WHERE</span> <span class="cl">sale_date</span> <span class="op">=</span> <span class="st">'2025-01-01'</span>;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// revenues: 900, 700, 700, 400</div>
+      <table class="vtable">
+        <thead><tr><th>revenue</th><th>DENSE_RANK()</th><th>note</th></tr></thead>
+        <tbody>
+          <tr><td>900</td><td class="cell-yellow">1</td><td>🥇 Gold</td></tr>
+          <tr><td>700</td><td class="cell-accent">2</td><td>🥈 Silver</td></tr>
+          <tr><td>700</td><td class="cell-accent">2</td><td>🥈 Silver (tie)</td></tr>
+          <tr><td>400</td><td class="cell-green">3</td><td>🥉 Bronze — no gap!</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <strong>WHEN TO USE WHICH</strong>
+      Use RANK() when gaps matter semantically (e.g. leaderboard positions). Use DENSE_RANK() when you want "how many distinct tiers above this row" — like pricing tiers, loyalty levels, or product categories.
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      DENSE_RANK = the count of distinct better values above you. That's it. No gaps, ever.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S08 ===== -->
+  <div class="section" id="s08">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <h2>Ranking Comparison — All Three Side by Side</h2>
+    </div>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+    <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span> <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>
+    ) <span class="kw">AS</span> <span class="cl">row_num</span>,
+    <span class="fn">RANK</span>() <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span> <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>
+    ) <span class="kw">AS</span> <span class="cl">rank_num</span>,
+    <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span> <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>
+    ) <span class="kw">AS</span> <span class="cl">dense_rank_num</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">WHERE</span> <span class="cl">sale_date</span> <span class="op">=</span> <span class="st">'2025-01-01'</span>
+<span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// SIDE-BY-SIDE for revenues: 900, 700, 700, 400</div>
+      <table class="vtable">
+        <thead>
+          <tr><th>revenue</th><th>ROW_NUMBER</th><th>RANK</th><th>DENSE_RANK</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>900</td><td class="cell-accent">1</td><td class="cell-accent">1</td><td class="cell-accent">1</td></tr>
+          <tr><td>700</td><td class="cell-accent">2</td><td class="cell-green">2</td><td class="cell-green">2</td></tr>
+          <tr><td>700</td><td class="cell-accent">3</td><td class="cell-green">2</td><td class="cell-green">2</td></tr>
+          <tr><td>400</td><td class="cell-accent">4</td><td class="cell-red">4 ← gap</td><td class="cell-yellow">3 ← no gap</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <strong>CRITICAL: DON'T ADD event_id TO RANK/DENSE_RANK</strong>
+      Adding a unique tie-breaker to RANK() or DENSE_RANK() ORDER BY kills all the ties. Suddenly every row has a different rank — and the tie behavior disappears. Only use a tie-breaker with ROW_NUMBER where you explicitly want no ties.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S09 ===== -->
+  <div class="section" id="s09">
+    <div class="section-header">
+      <div class="section-num org">09</div>
+      <h2>LAG() — Look at the Previous Row</h2>
+    </div>
+
+    <p><code>LAG()</code> fetches a value from a <em>previous</em> row in the window. The default offset is 1 (one row back). The first row in each partition gets <code>NULL</code> because there's nothing before it.</p>
+
+    <pre><code><span class="fn">LAG</span>(<span class="cl">column</span>)         <span class="kw">OVER</span> (...)   <span class="cm">-- default: 1 row back</span>
+<span class="fn">LAG</span>(<span class="cl">column</span>, <span class="num">2</span>)      <span class="kw">OVER</span> (...)   <span class="cm">-- 2 rows back</span>
+<span class="fn">LAG</span>(<span class="cl">column</span>, <span class="num">1</span>, <span class="num">0</span>)   <span class="kw">OVER</span> (...)   <span class="cm">-- 1 row back, default 0 if NULL</span></code></pre>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+    <span class="fn">LAG</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>
+    ) <span class="kw">AS</span> <span class="cl">previous_revenue</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">WHERE</span> <span class="cl">sale_date</span> <span class="op">=</span> <span class="st">'2025-01-01'</span>;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// LAG RESULT — revenues: 900, 700, 700, 400</div>
+      <table class="vtable">
+        <thead><tr><th>revenue</th><th>previous_revenue (LAG)</th></tr></thead>
+        <tbody>
+          <tr><td>900</td><td class="cell-muted">NULL ← nothing before it</td></tr>
+          <tr><td>700</td><td class="cell-accent">900</td></tr>
+          <tr><td>700</td><td class="cell-accent">700</td></tr>
+          <tr><td>400</td><td class="cell-accent">700</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      LAG brings a value from behind. First row always gets NULL — there's no "behind" for it.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S10 ===== -->
+  <div class="section" id="s10">
+    <div class="section-header">
+      <div class="section-num grn">10</div>
+      <h2>LEAD() — Look at the Next Row</h2>
+    </div>
+
+    <p><code>LEAD()</code> is the forward mirror of <code>LAG()</code>. It fetches a value from a <em>future</em> row in the window. The last row gets <code>NULL</code>.</p>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+    <span class="fn">LEAD</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>
+    ) <span class="kw">AS</span> <span class="cl">next_revenue</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">WHERE</span> <span class="cl">sale_date</span> <span class="op">=</span> <span class="st">'2025-01-01'</span>;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// LEAD RESULT — revenues: 900, 700, 700, 400</div>
+      <table class="vtable">
+        <thead><tr><th>revenue</th><th>next_revenue (LEAD)</th></tr></thead>
+        <tbody>
+          <tr><td>900</td><td class="cell-accent">700</td></tr>
+          <tr><td>700</td><td class="cell-accent">700</td></tr>
+          <tr><td>700</td><td class="cell-accent">400</td></tr>
+          <tr><td>400</td><td class="cell-muted">NULL ← nothing after it</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head blue">LAG — backward</div>
+        <pre><code><span class="fn">LAG</span>(<span class="cl">col</span>) <span class="kw">OVER</span> (...)
+<span class="cm">-- Current row looks BACK</span>
+<span class="cm">-- First row = NULL</span></code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">LEAD — forward</div>
+        <pre><code><span class="fn">LEAD</span>(<span class="cl">col</span>) <span class="kw">OVER</span> (...)
+<span class="cm">-- Current row looks FORWARD</span>
+<span class="cm">-- Last row = NULL</span></code></pre>
+      </div>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      LAG = rearview mirror. LEAD = windshield. One looks back, one looks forward.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S11 ===== -->
+  <div class="section" id="s11">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <h2>LAG/LEAD with CTE — The Percent Change Pattern</h2>
+    </div>
+
+    <p>You can't reference a window function alias inside the same SELECT. So the pattern is: compute LAG in a CTE, then use that column in the outer query for further math.</p>
+
+    <pre><code><span class="kw">WITH</span> <span class="cl">revenue_with_lag</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+        <span class="fn">LAG</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+            <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+            <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>
+        ) <span class="kw">AS</span> <span class="cl">previous_revenue</span>
+    <span class="kw">FROM</span> <span class="cl">sales</span>
+    <span class="kw">WHERE</span> <span class="cl">sale_date</span> <span class="op">=</span> <span class="st">'2025-01-01'</span>
+)
+
+<span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+    <span class="cl">previous_revenue</span>,
+    <span class="fn">ROUND</span>(
+        <span class="num">100.0</span> <span class="op">*</span> (<span class="cl">revenue</span> <span class="op">-</span> <span class="cl">previous_revenue</span>)
+            <span class="op">/</span> <span class="fn">NULLIF</span>(<span class="cl">previous_revenue</span>, <span class="num">0</span>),
+        <span class="num">2</span>
+    ) <span class="kw">AS</span> <span class="cl">pct_change</span>
+<span class="kw">FROM</span> <span class="cl">revenue_with_lag</span>
+<span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>;</code></pre>
+
+    <div class="callout info">
+      <strong>WHY CTE IS NECESSARY HERE</strong>
+      You cannot write <code>... / NULLIF(previous_revenue, 0)</code> in the same SELECT that defines <code>previous_revenue</code>. SQL evaluates all SELECT expressions in parallel — column aliases aren't visible to other columns in the same SELECT. The CTE materializes the result first, then the outer query can reference it.
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      CTE → compute LAG once. Outer query → reuse the result. Never try to reference a window alias in the same SELECT.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S12 ===== -->
+  <div class="section" id="s12">
+    <div class="section-header">
+      <div class="section-num prp">12</div>
+      <h2>FIRST_VALUE() / LAST_VALUE() — Boundary Anchors</h2>
+    </div>
+
+    <p>These functions grab the first or last value of a column within the window frame. Useful for "distance from the leader" or "how far from the bottom" calculations.</p>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+
+    <span class="fn">FIRST_VALUE</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>
+    ) <span class="kw">AS</span> <span class="cl">max_rev_that_day</span>,   <span class="cm">-- first in DESC = highest</span>
+
+    <span class="fn">LAST_VALUE</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>
+        <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING</span>
+             <span class="kw">AND UNBOUNDED FOLLOWING</span>   <span class="cm">-- CRITICAL for LAST_VALUE!</span>
+    ) <span class="kw">AS</span> <span class="cl">min_rev_that_day</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>;</code></pre>
+
+    <div class="callout danger">
+      <strong>LAST_VALUE GOTCHA — the default frame</strong>
+      LAST_VALUE with the default frame (RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) only looks back to the current row — so it returns the current row's own value for most rows. Always add ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING to see the true last value in the partition.
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      FIRST_VALUE is safe by default. LAST_VALUE needs an explicit full-range frame — otherwise it lies.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S13 ===== -->
+  <div class="section" id="s13">
+    <div class="section-header">
+      <div class="section-num ylw">13</div>
+      <h2>Aggregate Window Functions — SUM, AVG, MIN, MAX, COUNT</h2>
+    </div>
+
+    <p>Every standard aggregate function can become a window function by adding <code>OVER()</code>. The behavior changes based on whether you include <code>ORDER BY</code> inside the window.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head ylw">No ORDER BY → full group total</div>
+        <pre><code><span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+  <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+)
+<span class="cm">-- Every row in the same day
+-- gets the SAME total (2700)</span></code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head blue">With ORDER BY → running total</div>
+        <pre><code><span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+  <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+  <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>
+)
+<span class="cm">-- Each row gets cumulative
+-- sum up to that row</span></code></pre>
+      </div>
+    </div>
+
+    <p>All five aggregates follow the same pattern:</p>
+
+    <div class="diagram">
+      <div class="diagram-title">// AGGREGATE WINDOW FUNCTION BEHAVIOR</div>
+      <table class="vtable">
+        <thead><tr><th>Function</th><th>Without ORDER BY</th><th>With ORDER BY</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-purple">SUM()</td><td>Group total (same for all rows)</td><td>Running total</td></tr>
+          <tr><td class="cell-purple">AVG()</td><td>Group average</td><td>Running average</td></tr>
+          <tr><td class="cell-purple">MIN()</td><td>Group minimum</td><td>Running minimum</td></tr>
+          <tr><td class="cell-purple">MAX()</td><td>Group maximum</td><td>Running maximum</td></tr>
+          <tr><td class="cell-purple">COUNT()</td><td>Group count</td><td>Running count</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      Same function — completely different meaning depending on whether ORDER BY is present inside OVER(). ORDER BY is the switch between "snapshot" and "running" mode.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S14 ===== -->
+  <div class="section" id="s14">
+    <div class="section-header">
+      <div class="section-num red">14</div>
+      <h2>Running Totals</h2>
+    </div>
+
+    <p>A running total accumulates: each row = its own value + all previous row values in the ordered window. This is the canonical use of <code>SUM() OVER(ORDER BY ...)</code>.</p>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+    <span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>
+        <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
+    ) <span class="kw">AS</span> <span class="cl">running_revenue</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">WHERE</span> <span class="cl">sale_date</span> <span class="op">=</span> <span class="st">'2025-01-01'</span>
+<span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// RUNNING TOTAL — visualized</div>
+      <div class="frame-visual">
+        <div class="frame-row active"><span class="frame-marker">row 1</span><span class="frame-val">900</span><span style="color:var(--muted);margin-left:8px">→ running: 900</span></div>
+        <div class="frame-row active"><span class="frame-marker">row 2</span><span class="frame-val">700</span><span style="color:var(--muted);margin-left:8px">→ running: 1600</span></div>
+        <div class="frame-row active"><span class="frame-marker">row 3</span><span class="frame-val">700</span><span style="color:var(--muted);margin-left:8px">→ running: 2300</span></div>
+        <div class="frame-row current"><span class="frame-marker">row 4</span><span class="frame-val">400</span><span style="color:var(--yellow);margin-left:8px">→ running: 2700 ← full total</span></div>
+      </div>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      Running total = all rows from the start of the partition through the current row. The last row's running total always equals the group total.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S15 ===== -->
+  <div class="section" id="s15">
+    <div class="section-header">
+      <div class="section-num grn">15</div>
+      <h2>Moving Averages</h2>
+    </div>
+
+    <p>A moving average smooths noisy data by averaging over a <em>sliding window</em> of N rows. Unlike running totals (which always look back to the beginning), moving averages look back only N rows.</p>
+
+    <pre><code><span class="cm">-- 3-row moving average (current row + 2 preceding)</span>
+<span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+    <span class="fn">ROUND</span>(
+        <span class="fn">AVG</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+            <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+            <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>, <span class="cl">event_id</span>
+            <span class="kw">ROWS BETWEEN</span> <span class="num">2</span> <span class="kw">PRECEDING AND CURRENT ROW</span>
+        ),
+        <span class="num">2</span>
+    ) <span class="kw">AS</span> <span class="cl">moving_avg_3</span>
+<span class="kw">FROM</span> <span class="cl">sales</span>;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// SLIDING WINDOW for revenues: 900, 700, 700, 400</div>
+      <table class="vtable">
+        <thead><tr><th>row</th><th>revenue</th><th>window includes</th><th>moving_avg_3</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>900</td><td>[900]</td><td class="cell-accent">900.00</td></tr>
+          <tr><td>2</td><td>700</td><td>[900, 700]</td><td class="cell-accent">800.00</td></tr>
+          <tr><td>3</td><td>700</td><td>[900, 700, 700]</td><td class="cell-accent">766.67</td></tr>
+          <tr><td>4</td><td>400</td><td>[700, 700, 400] ← slides, drops 900</td><td class="cell-accent">600.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Two-level pattern:</strong> compute daily averages first, then moving average over those daily numbers — a real telemetry/BI pattern.</p>
+
+    <pre><code><span class="kw">WITH</span> <span class="cl">daily_revenue</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        <span class="cl">sale_date</span>,
+        <span class="fn">AVG</span>(<span class="cl">revenue</span>) <span class="kw">AS</span> <span class="cl">avg_revenue_that_day</span>
+    <span class="kw">FROM</span> <span class="cl">sales</span>
+    <span class="kw">GROUP BY</span> <span class="cl">sale_date</span>
+)
+<span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>,
+    <span class="fn">ROUND</span>(<span class="cl">avg_revenue_that_day</span>, <span class="num">2</span>) <span class="kw">AS</span> <span class="cl">avg_daily</span>,
+    <span class="fn">ROUND</span>(
+        <span class="fn">AVG</span>(<span class="cl">avg_revenue_that_day</span>) <span class="kw">OVER</span> (
+            <span class="kw">ORDER BY</span> <span class="cl">sale_date</span>
+            <span class="kw">ROWS BETWEEN</span> <span class="num">2</span> <span class="kw">PRECEDING AND CURRENT ROW</span>
+        ),
+        <span class="num">2</span>
+    ) <span class="kw">AS</span> <span class="cl">moving_avg_3_days</span>
+<span class="kw">FROM</span> <span class="cl">daily_revenue</span>
+<span class="kw">ORDER BY</span> <span class="cl">sale_date</span>;</code></pre>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      Running total = frame starts at the beginning. Moving average = frame slides with you. The frame clause is the only difference.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S16 ===== -->
+  <div class="section" id="s16">
+    <div class="section-header">
+      <div class="section-num">16</div>
+      <h2>Percent of Total</h2>
+    </div>
+
+    <p>A window function lets each row compare itself to its own group total — without a separate subquery or join.</p>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+
+    <span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>
+    ) <span class="kw">AS</span> <span class="cl">total_rev_that_day</span>,
+
+    <span class="fn">ROUND</span>(
+        <span class="num">100.0</span> <span class="op">*</span> <span class="cl">revenue</span>
+            <span class="op">/</span> <span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="cl">sale_date</span>),
+        <span class="num">2</span>
+    ) <span class="kw">AS</span> <span class="cl">pct_of_day_revenue</span>
+
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">ORDER BY</span> <span class="cl">sale_date</span>, <span class="cl">revenue</span> <span class="kw">DESC</span>;</code></pre>
+
+    <p>Change what you partition by to change the reference group:</p>
+
+    <div class="diagram">
+      <div class="diagram-title">// PARTITION BY IS THE DENOMINATOR</div>
+      <table class="vtable">
+        <thead><tr><th>PARTITION BY</th><th>Percent of ...</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-accent"><code>sale_date</code></td><td>that day's total</td></tr>
+          <tr><td class="cell-accent"><code>region</code></td><td>that region's total</td></tr>
+          <tr><td class="cell-accent"><code>salesperson</code></td><td>that salesperson's total</td></tr>
+          <tr><td class="cell-accent"><code>product_category</code></td><td>that category's total</td></tr>
+          <tr><td class="cell-muted">(no partition)</td><td>grand total of everything</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      Change the PARTITION BY, change the denominator. The formula stays exactly the same.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S17 ===== -->
+  <div class="section" id="s17">
+    <div class="section-header">
+      <div class="section-num red">17</div>
+      <h2>ROWS vs RANGE — Frame Modes</h2>
+    </div>
+
+    <p>The frame clause has two modes: <code>ROWS</code> and <code>RANGE</code>. They look similar but behave differently with ties.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head blue">ROWS mode</div>
+        <pre><code><span class="kw">ROWS BETWEEN</span> <span class="num">2</span> <span class="kw">PRECEDING</span>
+    <span class="kw">AND CURRENT ROW</span>
+<span class="cm">-- Physical row count.
+-- "the 2 rows before this one"
+-- Exact, deterministic.</span></code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head ylw">RANGE mode</div>
+        <pre><code><span class="kw">RANGE BETWEEN UNBOUNDED PRECEDING</span>
+    <span class="kw">AND CURRENT ROW</span>
+<span class="cm">-- Logical value range.
+-- Includes ALL rows with
+-- same ORDER BY value.</span></code></pre>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <strong>DEFAULT FRAME TRAP</strong>
+      When you write ORDER BY inside OVER() but no frame clause, PostgreSQL defaults to: <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code>. This means tied values are all included in the frame. Use explicit ROWS BETWEEN for predictable behavior.
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">// ROWS vs RANGE with duplicate values</div>
+      <table class="vtable">
+        <thead><tr><th>revenue</th><th>ROWS mode result</th><th>RANGE mode result</th></tr></thead>
+        <tbody>
+          <tr><td>900</td><td class="cell-accent">900</td><td class="cell-accent">900</td></tr>
+          <tr><td>700</td><td class="cell-accent">1600</td><td class="cell-green">2300 ← includes both 700s</td></tr>
+          <tr><td>700</td><td class="cell-accent">2300</td><td class="cell-green">2300</td></tr>
+          <tr><td>400</td><td class="cell-accent">2700</td><td class="cell-accent">2700</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      ROWS = physical positions. RANGE = logical value boundaries. For running totals and moving averages, always use ROWS — it's precise and predictable.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S18 ===== -->
+  <div class="section" id="s18">
+    <div class="section-header">
+      <div class="section-num prp">18</div>
+      <h2>Frame Boundaries — The Full Map</h2>
+    </div>
+
+    <p>The <code>BETWEEN ... AND ...</code> clause inside the frame has five boundary keywords:</p>
+
+    <div class="diagram">
+      <div class="diagram-title">// FRAME BOUNDARY KEYWORDS</div>
+      <table class="vtable">
+        <thead><tr><th>Boundary</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-accent"><code>UNBOUNDED PRECEDING</code></td><td>First row of the partition — the very beginning</td></tr>
+          <tr><td class="cell-accent"><code>N PRECEDING</code></td><td>N rows before the current row</td></tr>
+          <tr><td class="cell-yellow"><code>CURRENT ROW</code></td><td>The current row itself</td></tr>
+          <tr><td class="cell-green"><code>N FOLLOWING</code></td><td>N rows after the current row</td></tr>
+          <tr><td class="cell-green"><code>UNBOUNDED FOLLOWING</code></td><td>Last row of the partition — the very end</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Common frame combinations and what they produce:</p>
+
+    <pre><code><span class="cm">-- Running total (beginning to here)</span>
+<span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
+
+<span class="cm">-- Full group total (entire partition)</span>
+<span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</span>
+
+<span class="cm">-- 3-row moving average (centered)</span>
+<span class="kw">ROWS BETWEEN</span> <span class="num">1</span> <span class="kw">PRECEDING AND</span> <span class="num">1</span> <span class="kw">FOLLOWING</span>
+
+<span class="cm">-- Current row only</span>
+<span class="kw">ROWS BETWEEN CURRENT ROW AND CURRENT ROW</span>
+
+<span class="cm">-- Trailing 7-day window</span>
+<span class="kw">ROWS BETWEEN</span> <span class="num">6</span> <span class="kw">PRECEDING AND CURRENT ROW</span></code></pre>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      The frame clause is a range dial: UNBOUNDED = whole partition, N = sliding window, CURRENT ROW = the anchor. Combine them to get exactly the rows you want in each calculation.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S19 ===== -->
+  <div class="section" id="s19">
+    <div class="section-header">
+      <div class="section-num tel">19</div>
+      <h2>Named WINDOW Clause — DRY Windows</h2>
+    </div>
+
+    <p>If you use the same <code>PARTITION BY / ORDER BY / frame</code> combination in multiple functions, you can name it once with the <code>WINDOW</code> clause and reference it everywhere. The function still goes in the <code>SELECT</code> — the <code>WINDOW</code> clause only stores the window definition.</p>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">region</span>, <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+
+    <span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> <span class="cl">region_window</span>     <span class="kw">AS</span> <span class="cl">total_for_region</span>,
+    <span class="fn">AVG</span>(<span class="cl">revenue</span>) <span class="kw">OVER</span> <span class="cl">region_window</span>     <span class="kw">AS</span> <span class="cl">avg_for_region</span>,
+    <span class="fn">COUNT</span>(<op>*</op>) <span class="kw">OVER</span> <span class="cl">region_window</span>         <span class="kw">AS</span> <span class="cl">count_for_region</span>,
+    <span class="fn">RANK</span>() <span class="kw">OVER</span> <span class="cl">region_ordered_window</span>    <span class="kw">AS</span> <span class="cl">rank_in_region</span>
+
+<span class="kw">FROM</span> <span class="cl">sales</span>
+
+<span class="kw">WINDOW</span>
+    <span class="cl">region_window</span> <span class="kw">AS</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">region</span>
+    ),
+    <span class="cl">region_ordered_window</span> <span class="kw">AS</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">region</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>
+    )
+
+<span class="kw">ORDER BY</span> <span class="cl">region</span>, <span class="cl">revenue</span> <span class="kw">DESC</span>;</code></pre>
+
+    <div class="callout warn">
+      <strong>WINDOW STORES THE DEFINITION — NOT THE FUNCTION</strong>
+      You still write SUM(), AVG(), RANK() etc. in the SELECT. WINDOW only stores the PARTITION BY / ORDER BY / frame. You can reuse the same window with different functions.
+    </div>
+
+    <div class="callout info">
+      <strong>CAUTION: ORDER BY AND AGGREGATES</strong>
+      Adding ORDER BY to a window definition turns aggregate functions into running calculations. <code>SUM() OVER region_window</code> (no order) gives group total. <code>SUM() OVER region_ordered_window</code> (with order) gives running total. Same function, different window definition, different result.
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      WINDOW clause = give a name to the OVER() definition. Reuse it across multiple functions. Keeps queries DRY and readable.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S20 ===== -->
+  <div class="section" id="s20">
+    <div class="section-header">
+      <div class="section-num org">20</div>
+      <h2>NTILE() — Bucket Assignment</h2>
+    </div>
+
+    <p><code>NTILE(N)</code> splits the ordered rows in a partition into N roughly equal buckets and assigns each row a bucket number from 1 to N. It labels rows — it does not compute percentile values.</p>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">region</span>, <span class="cl">sale_date</span>, <span class="cl">event_id</span>, <span class="cl">revenue</span>,
+
+    <span class="fn">NTILE</span>(<span class="num">4</span>) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="cl">region</span>
+        <span class="kw">ORDER BY</span> <span class="cl">revenue</span> <span class="kw">DESC</span>
+    ) <span class="kw">AS</span> <span class="cl">revenue_quartile</span>
+
+<span class="kw">FROM</span> <span class="cl">sales</span>
+<span class="kw">WHERE</span> <span class="cl">region</span> <span class="op">=</span> <span class="st">'South'</span>
+<span class="kw">ORDER BY</span> <span class="cl">sale_date</span>, <span class="cl">event_id</span>;</code></pre>
+
+    <div class="callout warn">
+      <strong>DISPLAY ORDER VS CALCULATION ORDER</strong>
+      The NTILE is calculated by revenue ORDER BY inside OVER (DESC = high to low, bucket 1 = top). But the final display ORDER BY is by sale_date. So you may see bucket 2, 4, 1 in the date-ordered output — that's correct. The bucket was assigned by revenue rank, not by date.
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head grn">NTILE(4) — quartiles</div>
+        <pre><code><span class="cm">-- bucket 1 = top 25%
+-- bucket 2 = next 25%
+-- bucket 3 = next 25%
+-- bucket 4 = bottom 25%</span>
+<span class="fn">NTILE</span>(<span class="num">4</span>) <span class="kw">OVER</span> (
+  <span class="kw">ORDER BY</span> <span class="cl">cpu_pct</span>
+)</code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head blue">NTILE(100) — percentile buckets</div>
+        <pre><code><span class="cm">-- bucket 1 = bottom 1%
+-- bucket 95 = rows in 95th percentile
+-- bucket 100 = top 1%</span>
+<span class="fn">NTILE</span>(<span class="num">100</span>) <span class="kw">OVER</span> (
+  <span class="kw">ORDER BY</span> <span class="cl">cpu_pct</span>
+)</code></pre>
+      </div>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      NTILE labels buckets. It does NOT give you the percentile value. For the actual P95 CPU value, you need percentile_cont — next section.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S21 ===== -->
+  <div class="section" id="s21">
+    <div class="section-header">
+      <div class="section-num">21</div>
+      <h2>percentile_cont vs percentile_disc — True Percentiles</h2>
+    </div>
+
+    <p>These are <em>ordered-set aggregate functions</em> — not window functions, but they live in the same analytical toolbox. They give you the actual value at a percentile threshold.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head blue">percentile_cont — interpolated</div>
+        <pre><code><span class="fn">percentile_cont</span>(<span class="num">0.95</span>)
+    <span class="kw">WITHIN GROUP</span> (
+        <span class="kw">ORDER BY</span> <span class="cl">cpu_pct</span>
+    ) <span class="kw">AS</span> <span class="cl">cpu_p95</span>
+
+<span class="cm">-- May interpolate between
+-- two actual data values.
+-- Continuous math.</span></code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">percentile_disc — discrete</div>
+        <pre><code><span class="fn">percentile_disc</span>(<span class="num">0.95</span>)
+    <span class="kw">WITHIN GROUP</span> (
+        <span class="kw">ORDER BY</span> <span class="cl">cpu_pct</span>
+    ) <span class="kw">AS</span> <span class="cl">cpu_p95</span>
+
+<span class="cm">-- Always returns an actual
+-- observed value from the data.</span></code></pre>
+      </div>
+    </div>
+
+    <p>P95 by region and environment (real telemetry pattern):</p>
+
+    <pre><code><span class="kw">SELECT</span>
+    <span class="cl">region</span>,
+    <span class="cl">env</span>,
+    <span class="fn">COUNT</span>(<op>*</op>)                                            <span class="kw">AS</span> <span class="cl">sample_count</span>,
+    <span class="fn">ROUND</span>(
+        <span class="fn">percentile_cont</span>(<span class="num">0.95</span>)
+            <span class="kw">WITHIN GROUP</span> (<span class="kw">ORDER BY</span> <span class="cl">cpu_pct</span>)::<span class="kw">numeric</span>,
+        <span class="num">2</span>
+    )                                                    <span class="kw">AS</span> <span class="cl">cpu_p95</span>,
+    <span class="fn">ROUND</span>(
+        <span class="fn">percentile_cont</span>(<span class="num">0.50</span>)
+            <span class="kw">WITHIN GROUP</span> (<span class="kw">ORDER BY</span> <span class="cl">cpu_pct</span>)::<span class="kw">numeric</span>,
+        <span class="num">2</span>
+    )                                                    <span class="kw">AS</span> <span class="cl">cpu_median</span>
+<span class="kw">FROM</span> <span class="cl">lab.telemetry_cpu_raw</span>
+<span class="kw">GROUP BY</span> <span class="cl">region</span>, <span class="cl">env</span>
+<span class="kw">ORDER BY</span> <span class="cl">cpu_p95</span> <span class="kw">DESC</span>;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// NTILE(100) vs percentile_cont — the difference</div>
+      <table class="vtable">
+        <thead><tr><th>Approach</th><th>Output type</th><th>Use for</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-yellow"><code>NTILE(100)</code></td><td>Bucket label (1–100) per row</td><td>Labeling rows: "this row is in the 95th percentile bucket"</td></tr>
+          <tr><td class="cell-green"><code>percentile_cont(0.95)</code></td><td>Single value (the P95 threshold)</td><td>Finding the value: "P95 CPU is 87.3%"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      NTILE labels rows into buckets. percentile_cont computes the actual threshold value. At Citi, you want percentile_cont for SLA reporting (P99 latency = 420ms), not NTILE.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S21A ===== -->
+  <div class="section" id="s21a">
+    <div class="section-header">
+      <div class="section-num tel">21A</div>
+      <h2>CUME_DIST and PERCENT_RANK — Row Position Functions</h2>
+    </div>
+
+    <p><code>CUME_DIST</code> and <code>PERCENT_RANK</code> are row-position functions. They use <code>OVER</code> because every row gets a relative position inside its own partition.</p>
+
+    <ul>
+      <li><code>CUME_DIST</code> = fraction of rows at or below the current value.</li>
+      <li><code>PERCENT_RANK</code> = where the current value starts on the ranking ladder.</li>
+      <li>Use them when every row needs relative position inside its group.</li>
+    </ul>
+
+    <div class="nugget">
+      <span class="label-tag">// MEMORY LINES</span>
+      CUME_DIST = coverage so far. PERCENT_RANK = rank-start position. CUME_DIST looks after the tie group. PERCENT_RANK looks at where the tie group starts.
+    </div>
+
+<pre><code>WITH revenue_positions AS (
+  SELECT
+    region,
+    sale_date,
+    event_id,
+    revenue,
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist,
+    PERCENT_RANK() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_percent_rank
+  FROM sales_events
+)
+SELECT
+  region,
+  sale_date,
+  event_id,
+  revenue,
+  ROUND(revenue_cume_dist::numeric, 4) AS revenue_cume_dist,
+  ROUND(revenue_percent_rank::numeric, 4) AS revenue_percent_rank
+FROM revenue_positions
+ORDER BY region ASC, revenue DESC, event_id ASC;</code></pre>
+
+    <p>Ties explain the difference. <code>CUME_DIST</code> counts through the end of the tie group. <code>PERCENT_RANK</code> uses where the tie group starts.</p>
+
+    <div class="interview-box">
+      <div class="tag">// INTERVIEW SENTENCE</div>
+      <p>“CUME_DIST is coverage-based row positioning. PERCENT_RANK is rank-start positioning. They are both useful, but they answer slightly different percentile-position questions around ties.”</p>
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S21B ===== -->
+  <div class="section" id="s21b">
+    <div class="section-header">
+      <div class="section-num prp">21B</div>
+      <h2>P95 Cutoff vs CUME_DIST Coverage</h2>
+    </div>
+
+    <p>P95 and <code>CUME_DIST</code> are not competing versions of the same thing. They produce different outputs for different jobs.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">// METHOD COMPARISON</div>
+      <table class="vtable">
+        <thead><tr><th>Method</th><th>Output</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr><td><code>P95 / percentile_cont</code></td><td>One cutoff value per group</td><td>SLA thresholds, telemetry cutoffs, join-back labeling</td></tr>
+          <tr><td><code>CUME_DIST</code></td><td>One relative-coverage value per row</td><td>Row-level top-percent flags</td></tr>
+          <tr><td><code>PERCENT_RANK</code></td><td>One rank-start value per row</td><td>Ranking ladder position</td></tr>
+          <tr><td><code>NTILE</code></td><td>One bucket label per row</td><td>Quartiles, thirds, paging</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      Percentile gives the cutoff. Join attaches the cutoff. CASE labels the row.
+    </div>
+
+<pre><code>WITH region_p95 AS (
+  SELECT
+    region,
+    percentile_cont(0.95) WITHIN GROUP (ORDER BY revenue) AS p95_revenue
+  FROM sales_events
+  GROUP BY region
+)
+SELECT
+  s.region,
+  s.sale_date,
+  s.event_id,
+  s.revenue,
+  p.p95_revenue,
+  CASE
+    WHEN s.revenue &gt;= p.p95_revenue THEN 'At or above P95'
+    ELSE 'Below P95'
+  END AS p95_band
+FROM sales_events AS s
+JOIN region_p95 AS p
+  ON s.region = p.region
+ORDER BY s.region ASC, s.revenue DESC, s.event_id ASC;</code></pre>
+
+<pre><code>WITH revenue_positions AS (
+  SELECT
+    region,
+    revenue,
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+  FROM sales_events
+),
+region_p95 AS (
+  SELECT
+    region,
+    percentile_cont(0.95) WITHIN GROUP (ORDER BY revenue) AS p95_revenue
+  FROM sales_events
+  GROUP BY region
+),
+compare_methods AS (
+  SELECT
+    r.region,
+    CASE
+      WHEN r.revenue_cume_dist &gt;= 0.95 THEN 'Top 5%'
+      ELSE 'Below Top 5%'
+    END AS cume_dist_band,
+    CASE
+      WHEN r.revenue &gt;= p.p95_revenue THEN 'Top 5%'
+      ELSE 'Below Top 5%'
+    END AS p95_band
+  FROM revenue_positions AS r
+  JOIN region_p95 AS p
+    ON r.region = p.region
+)
+SELECT
+  cume_dist_band,
+  p95_band,
+  COUNT(*) AS row_count
+FROM compare_methods
+GROUP BY cume_dist_band, p95_band
+ORDER BY cume_dist_band, p95_band;</code></pre>
+
+    <p>Zero disagreements is okay. It just means the data and the business definition lined up neatly.</p>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S21C ===== -->
+  <div class="section" id="s21c">
+    <div class="section-header">
+      <div class="section-num grn">21C</div>
+      <h2>Percentile Banding and Review Queues</h2>
+    </div>
+
+    <p>This pattern turns row-level math into business triage:</p>
+
+    <pre><code>raw value -> relative position -> business band -> review queue</code></pre>
+
+<pre><code>WITH revenue_positions AS (
+  SELECT
+    region,
+    sale_date,
+    event_id,
+    salesperson,
+    revenue,
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+  FROM sales_events
+),
+revenue_bands AS (
+  SELECT
+    region,
+    sale_date,
+    event_id,
+    salesperson,
+    revenue,
+    CASE
+      WHEN revenue_cume_dist &gt;= 0.95 THEN 'Top 5%'
+      WHEN revenue_cume_dist &gt;= 0.80 THEN 'High'
+      WHEN revenue_cume_dist &gt;= 0.20 THEN 'Middle'
+      ELSE 'Low'
+    END AS revenue_band
+  FROM revenue_positions
+)
+SELECT
+  region,
+  sale_date,
+  event_id,
+  salesperson,
+  revenue,
+  revenue_band
+FROM revenue_bands
+WHERE revenue_band IN ('Top 5%', 'High')
+ORDER BY
+  region ASC,
+  CASE
+    WHEN revenue_band = 'Top 5%' THEN 1
+    WHEN revenue_band = 'High' THEN 2
+    ELSE 3
+  END,
+  revenue DESC,
+  event_id ASC;</code></pre>
+
+    <ul>
+      <li><code>CASE</code> creates business bands.</li>
+      <li><code>WHERE</code> selects the review queue.</li>
+      <li>Final <code>ORDER BY</code> controls urgency on screen.</li>
+    </ul>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head blue">Summary report</div>
+        <p>GROUP BY the band and count rows.</p>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">Review queue</div>
+        <p>Filter only the important bands and keep detail rows visible.</p>
+      </div>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// INTERVIEW SENTENCE</div>
+      <p>“I turned row-level percentile positions into business bands, then filtered the bands that deserved attention into a review queue.”</p>
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S21D ===== -->
+  <div class="section" id="s21d">
+    <div class="section-header">
+      <div class="section-num org">21D</div>
+      <h2>Owner Priority Scoring Pipeline</h2>
+    </div>
+
+    <p>This is the owner-priority pipeline:</p>
+
+    <pre><code>raw rows -> CUME_DIST -> revenue_band -> review queue -> owner summary -> weighted priority_score -> priority_rank -> recommended_action</code></pre>
+
+<pre><code>WITH revenue_positions AS (
+  SELECT
+    region,
+    salesperson,
+    revenue,
+    CUME_DIST() OVER (
+      PARTITION BY region
+      ORDER BY revenue ASC
+    ) AS revenue_cume_dist
+  FROM sales_events
+),
+revenue_bands AS (
+  SELECT
+    region,
+    salesperson,
+    revenue,
+    CASE
+      WHEN revenue_cume_dist &gt;= 0.95 THEN 'Top 5%'
+      WHEN revenue_cume_dist &gt;= 0.80 THEN 'High'
+      WHEN revenue_cume_dist &gt;= 0.20 THEN 'Middle'
+      ELSE 'Low'
+    END AS revenue_band
+  FROM revenue_positions
+),
+priority_by_salesperson AS (
+  SELECT
+    region,
+    salesperson,
+    SUM(CASE WHEN revenue_band = 'Top 5%' THEN 1 ELSE 0 END) AS top_5_count,
+    SUM(CASE WHEN revenue_band = 'High' THEN 1 ELSE 0 END) AS high_count,
+    SUM(
+      CASE
+        WHEN revenue_band = 'Top 5%' THEN 3
+        WHEN revenue_band = 'High' THEN 1
+        ELSE 0
+      END
+    ) AS weighted_priority_score
+  FROM revenue_bands
+  WHERE revenue_band IN ('Top 5%', 'High')
+  GROUP BY region, salesperson
+),
+ranked_priority AS (
+  SELECT
+    region,
+    salesperson,
+    top_5_count,
+    high_count,
+    weighted_priority_score,
+    RANK() OVER (
+      PARTITION BY region
+      ORDER BY weighted_priority_score DESC, salesperson ASC
+    ) AS priority_rank
+  FROM priority_by_salesperson
+)
+SELECT
+  region,
+  salesperson,
+  top_5_count,
+  high_count,
+  weighted_priority_score,
+  priority_rank,
+  CASE
+    WHEN weighted_priority_score &gt;= 20 THEN 'Immediate focus'
+    WHEN weighted_priority_score &gt;= 15 THEN 'High priority'
+    ELSE 'Monitor'
+  END AS recommended_action
+FROM ranked_priority
+ORDER BY region ASC, priority_rank ASC, salesperson ASC;</code></pre>
+
+    <ul>
+      <li>Conditional <code>SUM</code> counts row-level signals by band.</li>
+      <li>Weights create urgency.</li>
+      <li><code>GROUP BY</code> turns row-level urgency into owner-level priority.</li>
+      <li><code>RANK</code> creates management order inside each region.</li>
+      <li>CASE at the end turns analytics into a business recommendation.</li>
+    </ul>
+
+    <div class="nugget">
+      <span class="label-tag">// MEMORY LINES</span>
+      Banding creates categories. Weights create urgency. GROUP BY turns row-level urgency into owner-level priority. Raw rows -> signals -> scores -> ranked recommendations.
+    </div>
+
+    <p>This pattern translates cleanly to sales performance, fraud, customer risk, observability alerts, incident triage, and capacity prioritization.</p>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S22 ===== -->
+  <div class="section" id="s22">
+    <div class="section-header">
+      <div class="section-num ylw">22</div>
+      <h2>CTE and Subquery Patterns</h2>
+    </div>
+
+    <p>Window functions operate on the rows they receive. If you need to pre-process those rows first (deduplicate, summarize, filter), do it in a CTE or subquery <em>before</em> applying the window function.</p>
+
+    <p><strong>Pattern 1: Deduplicate first, then number</strong></p>
+
+    <pre><code><span class="kw">WITH</span> <span class="cl">years</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT DISTINCT</span> <span class="cl">year</span>
+    <span class="kw">FROM</span> <span class="cl">summer_medals</span>
+)
+<span class="kw">SELECT</span>
+    <span class="cl">year</span>,
+    <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (
+        <span class="kw">ORDER BY</span> <span class="cl">year</span> <span class="kw">ASC</span>
+    ) <span class="kw">AS</span> <span class="cl">row_n</span>
+<span class="kw">FROM</span> <span class="cl">years</span>
+<span class="kw">ORDER BY</span> <span class="cl">year</span>;</code></pre>
+
+    <p>Without the CTE, <code>ROW_NUMBER()</code> would number each individual medal row — not each unique year.</p>
+
+    <p><strong>Pattern 2: Daily summary first, then trend</strong></p>
+
+    <pre><code><span class="kw">WITH</span> <span class="cl">daily</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> <span class="cl">sale_date</span>, <span class="fn">SUM</span>(<span class="cl">revenue</span>) <span class="kw">AS</span> <span class="cl">daily_rev</span>
+    <span class="kw">FROM</span> <span class="cl">sales</span>
+    <span class="kw">GROUP BY</span> <span class="cl">sale_date</span>
+)
+<span class="kw">SELECT</span>
+    <span class="cl">sale_date</span>, <span class="cl">daily_rev</span>,
+    <span class="fn">AVG</span>(<span class="cl">daily_rev</span>) <span class="kw">OVER</span> (
+        <span class="kw">ORDER BY</span> <span class="cl">sale_date</span>
+        <span class="kw">ROWS BETWEEN</span> <span class="num">6</span> <span class="kw">PRECEDING AND CURRENT ROW</span>
+    ) <span class="kw">AS</span> <span class="cl">rolling_7d_avg</span>
+<span class="kw">FROM</span> <span class="cl">daily</span>;</code></pre>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      Window functions number/rank/aggregate the rows they receive. Control what rows they receive. Use GROUP BY first when the question is at a summary level. Use DISTINCT first when you want one row per entity.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S23 ===== -->
+  <div class="section" id="s23">
+    <div class="section-header">
+      <div class="section-num red">23</div>
+      <h2>NULLIF() and Safe Division</h2>
+    </div>
+
+    <p>Whenever you divide inside a window calculation, you risk division by zero. The defense is <code>NULLIF(denominator, 0)</code>.</p>
+
+    <pre><code><span class="cm">-- NULLIF(x, 0) means:</span>
+<span class="cm">-- "if x is 0, return NULL; otherwise return x"</span>
+<span class="cm">-- NULL / anything = NULL (no crash)</span>
+<span class="cm">-- 0 / anything = crash</span>
+
+<span class="fn">ROUND</span>(
+    <span class="num">100.0</span> <span class="op">*</span> (<span class="cl">revenue</span> <span class="op">-</span> <span class="cl">previous_revenue</span>)
+        <span class="op">/</span> <span class="fn">NULLIF</span>(<span class="cl">previous_revenue</span>, <span class="num">0</span>),
+    <span class="num">2</span>
+) <span class="kw">AS</span> <span class="cl">pct_change</span></code></pre>
+
+    <p><strong>Why not just WHERE previous_revenue != 0?</strong> Because filtering rows out of your result changes your window. The window function might recalculate with different rows. <code>NULLIF</code> keeps the row in the result with a <code>NULL</code> value instead of exploding the query.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head red">DANGEROUS</div>
+        <pre><code><span class="cl">revenue</span> <span class="op">/</span> <span class="cl">previous_revenue</span>
+<span class="cm">-- Crashes if previous_revenue = 0</span></code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">SAFE</div>
+        <pre><code><span class="cl">revenue</span> <span class="op">/</span> <span class="fn">NULLIF</span>(<span class="cl">previous_revenue</span>, <span class="num">0</span>)
+<span class="cm">-- Returns NULL instead of crash</span></code></pre>
+      </div>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      NULLIF(x, 0) is your divide-by-zero airbag. Always use it when dividing by a column that could be zero. NULL is survivable; divide-by-zero crashes the query.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+
+
+  <!-- ===== S24 ===== -->
+  <div class="section" id="s24">
+    <div class="section-header">
+      <div class="section-num org">24</div>
+      <h2>CROSSTAB / Pivoting</h2>
+    </div>
+
+    <p><code>CROSSTAB</code> is PostgreSQL's pivot tool from the <code>tablefunc</code> extension. It is a reporting/reshaping tool, not a window function. Window functions calculate values; <code>CROSSTAB</code> changes the shape of the result.</p>
+
+    <div class="callout info">
+      <strong>PLAIN ENGLISH</strong>
+      CROSSTAB turns tall rows into wide columns. It is like saying: “take the values from one column, such as Year, and make those values become report columns.”
+    </div>
+
+    <p>Before using it in PostgreSQL, enable the extension:</p>
+<pre><code>CREATE EXTENSION IF NOT EXISTS tablefunc;</code></pre>
+
+    <p>The simple form expects a source query with exactly three meaningful columns:</p>
+
+    <div class="diagram">
+      <div class="diagram-title">// CROSSTAB 3-COLUMN INPUT RULE</div>
+      <table class="vtable">
+        <thead><tr><th>Position</th><th>Meaning</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-accent">1</td><td>Row identifier</td><td><code>Gender</code></td></tr>
+          <tr><td class="cell-yellow">2</td><td>Pivot category — values become output columns</td><td><code>Year</code> → <code>"2008"</code>, <code>"2012"</code></td></tr>
+          <tr><td class="cell-green">3</td><td>Cell value — what goes inside the pivoted cells</td><td><code>Country</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head blue">Before: tall result</div>
+        <pre><code>Gender   Year   Country
+Men      2008   AUS
+Men      2012   FRA
+Women    2008   RUS
+Women    2012   USA</code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">After: wide report</div>
+        <pre><code>Gender   2008   2012
+Men      AUS    FRA
+Women    RUS    USA</code></pre>
+      </div>
+    </div>
+
+    <p>The output columns <code>"2008"</code> and <code>"2012"</code> come from values in the <code>Year</code> column, but <code>CROSSTAB</code> does not create them automatically. You declare the final shape manually in <code>AS ct (...)</code>.</p>
+
+    <div class="callout warn">
+      <strong>DOLLAR QUOTING</strong>
+      The <code>$$</code> markers start and end a PostgreSQL dollar-quoted string. CROSSTAB receives the inner SQL query as text. StudyBook style: do not put a semicolon inside <code>$$</code>; put the semicolon after the full outer query. DataCamp may accept either style, but this guide uses the cleaner version.
+    </div>
+
+<pre><code>CREATE EXTENSION IF NOT EXISTS tablefunc;
+
+SELECT *
+FROM CROSSTAB($$
+  SELECT
+    Gender,
+    Year,
+    Country
+  FROM Summer_Medals
+  WHERE Year IN (2008, 2012)
+    AND Medal = &#x27;Gold&#x27;
+    AND Event = &#x27;Pole Vault&#x27;
+  ORDER BY Gender ASC, Year ASC
+$$) AS ct (
+  Gender VARCHAR,
+  &quot;2008&quot; VARCHAR,
+  &quot;2012&quot; VARCHAR
+)
+ORDER BY Gender ASC;</code></pre>
+
+    <p>For a pivoted ranking report, calculate the ranking first, then pivot the ranked result:</p>
+<pre><code>CREATE EXTENSION IF NOT EXISTS tablefunc;
+
+SELECT *
+FROM CROSSTAB($$
+  WITH Country_Awards AS (
+    SELECT
+      Country,
+      Year,
+      COUNT(*) AS Awards
+    FROM Summer_Medals
+    WHERE Country IN (&#x27;FRA&#x27;, &#x27;GBR&#x27;, &#x27;GER&#x27;)
+      AND Year IN (2004, 2008, 2012)
+      AND Medal = &#x27;Gold&#x27;
+    GROUP BY Country, Year
+  )
+
+  SELECT
+    Country,
+    Year,
+    RANK() OVER (
+      PARTITION BY Year
+      ORDER BY Awards DESC
+    )::INTEGER AS rank_n
+  FROM Country_Awards
+  ORDER BY Country ASC, Year ASC
+$$) AS ct (
+  Country VARCHAR,
+  &quot;2004&quot; INTEGER,
+  &quot;2008&quot; INTEGER,
+  &quot;2012&quot; INTEGER
+)
+ORDER BY Country ASC;</code></pre>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      Simple CROSSTAB reads: row key, pivot category, cell value. The category values fill the manually declared output columns in order.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S25 ===== -->
+  <div class="section" id="s25">
+    <div class="section-header">
+      <div class="section-num ylw">25</div>
+      <h2>Multi-Measure Pivot: FILTER / CASE</h2>
+    </div>
+
+    <p>Basic <code>CROSSTAB</code> is best when each row/category intersection has <strong>one cell value</strong>.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">// ONE VALUE VS MULTIPLE VALUES</div>
+      <table class="vtable">
+        <thead><tr><th>Shape</th><th>Good fit?</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td><code>country + year → medals</code></td><td class="cell-green">Good</td><td>One value goes in each cell.</td></tr>
+          <tr><td><code>country + year → rank</code></td><td class="cell-green">Good</td><td>One value goes in each cell.</td></tr>
+          <tr><td><code>country + year → medals and rank</code></td><td class="cell-yellow">Awkward</td><td>CROSSTAB wants one cell value, not two measures.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>When you need multiple measures, use one of these patterns:</p>
+    <ul>
+      <li>Run separate pivots and join them.</li>
+      <li>Use manual pivoting with <code>FILTER</code>.</li>
+      <li>Use manual pivoting with <code>CASE</code> for portability.</li>
+      <li>Use one combined text cell only for a quick display, not for analytics.</li>
+    </ul>
+
+    <p>In PostgreSQL, <code>FILTER</code> is clean and readable:</p>
+<pre><code>WITH country_medals AS (
+  SELECT
+    year,
+    country,
+    COUNT(*) AS medals
+  FROM summer_medals
+  WHERE country IN (&#x27;CHN&#x27;, &#x27;KOR&#x27;, &#x27;JPN&#x27;)
+    AND medal = &#x27;Gold&#x27;
+    AND year IN (2004, 2008, 2012)
+  GROUP BY year, country
+),
+
+country_ranks AS (
+  SELECT
+    year,
+    country,
+    medals,
+    RANK() OVER (
+      PARTITION BY year
+      ORDER BY medals DESC
+    ) AS rank_n
+  FROM country_medals
+)
+
+SELECT
+  country,
+
+  MAX(medals) FILTER (WHERE year = 2004) AS medals_2004,
+  MAX(rank_n) FILTER (WHERE year = 2004) AS rank_2004,
+
+  MAX(medals) FILTER (WHERE year = 2008) AS medals_2008,
+  MAX(rank_n) FILTER (WHERE year = 2008) AS rank_2008,
+
+  MAX(medals) FILTER (WHERE year = 2012) AS medals_2012,
+  MAX(rank_n) FILTER (WHERE year = 2012) AS rank_2012
+
+FROM country_ranks
+GROUP BY country
+ORDER BY country;</code></pre>
+
+    <p>The portable <code>CASE</code> version uses the same idea:</p>
+<pre><code>MAX(CASE WHEN year = 2004 THEN medals END) AS medals_2004,
+MAX(CASE WHEN year = 2004 THEN rank_n END) AS rank_2004</code></pre>
+
+    <div class="interview-box">
+      <div class="tag">// INTERVIEW SENTENCE</div>
+      <p>“For a simple pivot I need row key, pivot category, and one cell value. If I need multiple measures like medals and rank, I usually use conditional aggregation with FILTER or CASE because it is clearer than forcing multiple values into CROSSTAB.”</p>
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S26 ===== -->
+  <div class="section" id="s26">
+    <div class="section-header">
+      <div class="section-num tel">26</div>
+      <h2>ROLLUP</h2>
+    </div>
+
+    <p><code>ROLLUP</code> is a <code>GROUP BY</code> extension, not a window function. It adds subtotal rows to a normal grouped result.</p>
+
+    <div class="callout info">
+      <strong>MENTAL MODEL</strong>
+      ROLLUP is like spreadsheet subtotals. It works best when your columns have a hierarchy, such as Year → Quarter → Month or Country → Gender.
+    </div>
+
+    <p>This version keeps the country fixed and rolls up gender inside each country:</p>
+<pre><code>SELECT
+  Country,
+  Gender,
+  COUNT(*) AS Gold_Awards
+FROM Summer_Medals
+WHERE Year = 2004
+  AND Medal = &#x27;Gold&#x27;
+  AND Country IN (&#x27;DEN&#x27;, &#x27;NOR&#x27;, &#x27;SWE&#x27;)
+GROUP BY Country, ROLLUP(Gender)
+ORDER BY Country ASC, Gender ASC;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// GROUP BY Country, ROLLUP(Gender)</div>
+      <table class="vtable">
+        <thead><tr><th>Country</th><th>Gender</th><th>Gold_Awards</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>DEN</td><td>Men</td><td>4</td><td>Detail row</td></tr>
+          <tr><td>DEN</td><td>Women</td><td>15</td><td>Detail row</td></tr>
+          <tr><td>DEN</td><td class="cell-muted">NULL</td><td>19</td><td class="cell-yellow">Denmark subtotal</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><code>ROLLUP(Country, Gender)</code> goes one level further: detail rows, country subtotal rows, and a grand total row.</p>
+
+<pre><code>SELECT
+  Country,
+  Gender,
+  COUNT(*) AS Gold_Awards
+FROM Summer_Medals
+WHERE Year = 2004
+  AND Medal = &#x27;Gold&#x27;
+  AND Country IN (&#x27;DEN&#x27;, &#x27;NOR&#x27;, &#x27;SWE&#x27;)
+GROUP BY ROLLUP(Country, Gender)
+ORDER BY Country ASC, Gender ASC;</code></pre>
+
+    <div class="callout warn">
+      <strong>NULL DOES NOT ALWAYS MEAN MISSING</strong>
+      In ROLLUP output, NULL often means “subtotal” or “grand total.” Use COALESCE later to show readable labels.
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      ROLLUP is hierarchical. Column order matters because it decides which subtotal levels are created.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S27 ===== -->
+  <div class="section" id="s27">
+    <div class="section-header">
+      <div class="section-num grn">27</div>
+      <h2>CUBE</h2>
+    </div>
+
+    <p><code>CUBE</code> is also a <code>GROUP BY</code> extension, not a window function. Unlike <code>ROLLUP</code>, it is not hierarchical. It creates all subtotal combinations.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">// CUBE(Gender, Medal) CREATES ALL THESE LEVELS</div>
+      <table class="vtable">
+        <thead><tr><th>Level</th><th>Example row</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>Gender + Medal</td><td>Men / Gold</td><td>Men’s gold medals</td></tr>
+          <tr><td>Gender only</td><td>Men / NULL</td><td>All medal types for Men</td></tr>
+          <tr><td>Medal only</td><td>NULL / Gold</td><td>Gold medals across all genders</td></tr>
+          <tr><td>Grand total</td><td>NULL / NULL</td><td>All medals</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+<pre><code>SELECT
+  Gender,
+  Medal,
+  COUNT(*) AS Awards
+FROM Summer_Medals
+WHERE Year = 2012
+  AND Country = &#x27;RUS&#x27;
+GROUP BY CUBE(Gender, Medal)
+ORDER BY Gender ASC, Medal ASC;</code></pre>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head blue">Use ROLLUP when...</div>
+        <pre><code>Columns are hierarchical:
+Year → Quarter → Month
+Country → Gender
+Department → Team</code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">Use CUBE when...</div>
+        <pre><code>All subtotal angles matter:
+Gender totals
+Medal totals
+Gender + Medal detail
+Grand total</code></pre>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <strong>BUSINESS MEANING WARNING</strong>
+      CUBE on Year and Quarter would include “Q1 total across all years.” That may or may not mean anything. For date hierarchies, ROLLUP is usually safer.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S28 ===== -->
+  <div class="section" id="s28">
+    <div class="section-header">
+      <div class="section-num prp">28</div>
+      <h2>COALESCE</h2>
+    </div>
+
+    <p><code>COALESCE()</code> returns the first non-null value from left to right.</p>
+
+<pre><code>SELECT COALESCE(NULL, &#x27;Total&#x27;);
+-- Result: Total</code></pre>
+
+    <p>In plain English, <code>COALESCE(gender, 'Total')</code> means: show <code>gender</code> if it exists; otherwise show <code>Total</code>.</p>
+
+    <p>With <code>ROLLUP</code> and <code>CUBE</code>, this is especially useful because subtotal rows appear as <code>NULL</code>.</p>
+
+<pre><code>SELECT
+  COALESCE(Country, &#x27;All countries&#x27;) AS Country,
+  COALESCE(Gender, &#x27;All genders&#x27;) AS Gender,
+  COUNT(*) AS Awards
+FROM Summer_Medals
+WHERE Year = 2004
+  AND Medal = &#x27;Gold&#x27;
+  AND Country IN (&#x27;DEN&#x27;, &#x27;NOR&#x27;, &#x27;SWE&#x27;)
+GROUP BY ROLLUP(Country, Gender)
+ORDER BY Country ASC, Gender ASC;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// WHAT COALESCE CHANGES</div>
+      <table class="vtable">
+        <thead><tr><th>Before COALESCE</th><th>After COALESCE</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>DEN / NULL</td><td>DEN / All genders</td><td>Country subtotal</td></tr>
+          <tr><td>NULL / NULL</td><td>All countries / All genders</td><td>Grand total</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <strong>DISPLAY ONLY</strong>
+      COALESCE does not create totals. ROLLUP/CUBE create the subtotal rows. COALESCE only changes how the NULL labels appear.
+    </div>
+
+    <p>COALESCE is also handy when <code>LAG</code>, <code>LEAD</code>, or a pivot returns missing values.</p>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S29 ===== -->
+  <div class="section" id="s29">
+    <div class="section-header">
+      <div class="section-num org">29</div>
+      <h2>CASE Statements — General Syntax</h2>
+    </div>
+
+    <p><code>CASE</code> is SQL's built-in conditional expression. It lets you create a new value based on rules, similar to “if / else if / else” logic in programming.</p>
+
+    <div class="callout info">
+      <strong>PLAIN ENGLISH</strong>
+      Read CASE as: “When this condition is true, return this value. Otherwise, try the next condition. If nothing matches, return the ELSE value.”
+    </div>
+
+    <p>The most common form is the <strong>searched CASE</strong>. This is the flexible version because each <code>WHEN</code> can test a full condition.</p>
+
+<pre><code>CASE
+  WHEN condition_1 THEN result_1
+  WHEN condition_2 THEN result_2
+  WHEN condition_3 THEN result_3
+  ELSE fallback_result
+END</code></pre>
+
+    <p>Example: convert raw medal counts into business-friendly buckets:</p>
+
+<pre><code>SELECT
+  Country,
+  COUNT(*) AS Gold_Awards,
+  CASE
+    WHEN COUNT(*) &gt;= 20 THEN &#x27;High&#x27;
+    WHEN COUNT(*) &gt;= 10 THEN &#x27;Medium&#x27;
+    WHEN COUNT(*) &gt; 0 THEN &#x27;Low&#x27;
+    ELSE &#x27;None&#x27;
+  END AS award_band
+FROM Summer_Medals
+WHERE Year = 2012
+  AND Medal = &#x27;Gold&#x27;
+GROUP BY Country
+ORDER BY Gold_Awards DESC;</code></pre>
+
+    <div class="diagram">
+      <div class="diagram-title">// CASE EVALUATION ORDER</div>
+      <table class="vtable">
+        <thead><tr><th>Step</th><th>What SQL checks</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-accent">1</td><td><code>WHEN COUNT(*) &gt;= 20</code></td><td>If true, returns <code>High</code> and stops.</td></tr>
+          <tr><td class="cell-accent">2</td><td><code>WHEN COUNT(*) &gt;= 10</code></td><td>Only checked if step 1 was false.</td></tr>
+          <tr><td class="cell-accent">3</td><td><code>WHEN COUNT(*) &gt; 0</code></td><td>Only checked if steps 1 and 2 were false.</td></tr>
+          <tr><td class="cell-yellow">4</td><td><code>ELSE &#x27;None&#x27;</code></td><td>Used only when no WHEN condition matches.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <strong>ORDER MATTERS</strong>
+      CASE returns the first matching WHEN. Put the most specific or highest-priority condition first. If you put <code>WHEN COUNT(*) &gt; 0</code> before <code>WHEN COUNT(*) &gt;= 20</code>, every positive count would become <code>Low</code>.
+    </div>
+
+    <p>You will usually see <code>CASE</code> in four places:</p>
+
+    <div class="diagram">
+      <div class="diagram-title">// WHERE CASE IS COMMONLY USED</div>
+      <table class="vtable">
+        <thead><tr><th>Location</th><th>Use case</th><th>Example idea</th></tr></thead>
+        <tbody>
+          <tr><td class="cell-purple"><code>SELECT</code></td><td>Create a new calculated label/column.</td><td><code>risk_band</code>, <code>award_band</code>, <code>status_label</code></td></tr>
+          <tr><td class="cell-purple"><code>ORDER BY</code></td><td>Force business sorting instead of alphabetic sorting.</td><td><code>Men</code>, <code>Women</code>, <code>Total</code></td></tr>
+          <tr><td class="cell-purple">Conditional aggregation</td><td>Count or sum only rows that match a condition.</td><td><code>SUM(CASE WHEN ... THEN 1 ELSE 0 END)</code></td></tr>
+          <tr><td class="cell-purple">Manual pivot</td><td>Turn categories into separate columns.</td><td><code>MAX(CASE WHEN year = 2012 THEN medals END)</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>CASE in SELECT:</strong> create readable categories:</p>
+
+<pre><code>SELECT
+  Country,
+  Medals,
+  CASE
+    WHEN Medals &gt;= 20 THEN &#x27;High performer&#x27;
+    WHEN Medals &gt;= 10 THEN &#x27;Medium performer&#x27;
+    ELSE &#x27;Watch list&#x27;
+  END AS performance_label
+FROM Country_Medals;</code></pre>
+
+    <p><strong>CASE for conditional aggregation:</strong> count rows by condition without filtering away the other rows:</p>
+
+<pre><code>SELECT
+  Country,
+  SUM(CASE WHEN Medal = &#x27;Gold&#x27; THEN 1 ELSE 0 END) AS gold_count,
+  SUM(CASE WHEN Medal = &#x27;Silver&#x27; THEN 1 ELSE 0 END) AS silver_count,
+  SUM(CASE WHEN Medal = &#x27;Bronze&#x27; THEN 1 ELSE 0 END) AS bronze_count
+FROM Summer_Medals
+GROUP BY Country;</code></pre>
+
+    <p><strong>CASE for manual pivoting:</strong> turn row values into report columns:</p>
+
+<pre><code>SELECT
+  Country,
+  MAX(CASE WHEN Year = 2004 THEN Medals END) AS medals_2004,
+  MAX(CASE WHEN Year = 2008 THEN Medals END) AS medals_2008,
+  MAX(CASE WHEN Year = 2012 THEN Medals END) AS medals_2012
+FROM Country_Medals
+GROUP BY Country;</code></pre>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head blue">Searched CASE</div>
+        <pre><code>CASE
+  WHEN revenue &gt;= 1000 THEN &#x27;High&#x27;
+  WHEN revenue &gt;= 500 THEN &#x27;Medium&#x27;
+  ELSE &#x27;Low&#x27;
+END</code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">Simple CASE</div>
+        <pre><code>CASE medal
+  WHEN &#x27;Gold&#x27; THEN 3
+  WHEN &#x27;Silver&#x27; THEN 2
+  WHEN &#x27;Bronze&#x27; THEN 1
+  ELSE 0
+END</code></pre>
+      </div>
+    </div>
+
+    <div class="callout danger">
+      <strong>ELSE IS OPTIONAL BUT IMPORTANT</strong>
+      If no WHEN matches and you did not write ELSE, CASE returns NULL. That may be fine in a manual pivot, but it can surprise you in labels, counts, and report columns.
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// INTERVIEW SENTENCE</div>
+      <p>“I use CASE when I need conditional logic inside SQL — for readable labels, business sort order, conditional aggregation, and manual pivot-style reporting. The key is that CASE checks conditions from top to bottom and returns the first match.”</p>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      CASE = SQL if/else. It returns one value per row or per aggregate group. Put rules in priority order and add ELSE when NULL would be confusing.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S30 ===== -->
+  <div class="section" id="s30">
+    <div class="section-header">
+      <div class="section-num red">30</div>
+      <h2>CASE Ordering for Totals</h2>
+    </div>
+
+    <p>Sometimes the data is correct, but the display order is ugly. For example, alphabetical sorting can show this:</p>
+
+    <pre><code>Men
+Total
+Women</code></pre>
+
+    <p>The desired business order is usually:</p>
+
+    <pre><code>Men
+Women
+Total</code></pre>
+
+    <p>Use <code>COALESCE</code> for the label and <code>CASE</code> in <code>ORDER BY</code> for the position.</p>
+
+<pre><code>SELECT
+  Country,
+  COALESCE(Gender, &#x27;Total&#x27;) AS Gender,
+  COUNT(*) AS Gold_Awards
+FROM Summer_Medals
+WHERE Year = 2004
+  AND Medal = &#x27;Gold&#x27;
+  AND Country IN (&#x27;DEN&#x27;, &#x27;NOR&#x27;, &#x27;SWE&#x27;)
+GROUP BY Country, ROLLUP(Gender)
+ORDER BY
+  Country ASC,
+  CASE
+    WHEN Gender = &#x27;Men&#x27; THEN 1
+    WHEN Gender = &#x27;Women&#x27; THEN 2
+    WHEN Gender IS NULL THEN 3
+  END;</code></pre>
+
+    <div class="nugget">
+      <span class="label-tag">// NUGGET</span>
+      COALESCE controls what the user sees. CASE in ORDER BY controls where it appears.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S31 ===== -->
+  <div class="section" id="s31">
+    <div class="section-header">
+      <div class="section-num">31</div>
+      <h2>STRING_AGG</h2>
+    </div>
+
+    <p><code>STRING_AGG</code> compresses many rows into one text list. It is useful after ranking when the report wants one row instead of many rows.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head blue">Before</div>
+        <pre><code>Country   Rank
+USA       1
+RUS       2
+AUS       3</code></pre>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">After</div>
+        <pre><code>USA, RUS, AUS</code></pre>
+      </div>
+    </div>
+
+<pre><code>WITH Country_Medals AS (
+  SELECT
+    Country,
+    COUNT(*) AS Medals
+  FROM Summer_Medals
+  WHERE Year = 2000
+    AND Medal = &#x27;Gold&#x27;
+  GROUP BY Country
+),
+
+Country_Ranks AS (
+  SELECT
+    Country,
+    RANK() OVER (
+      ORDER BY Medals DESC
+    ) AS Rank
+  FROM Country_Medals
+)
+
+SELECT
+  STRING_AGG(Country, &#x27;, &#x27; ORDER BY Rank) AS Top_Countries
+FROM Country_Ranks
+WHERE Rank &lt;= 3;</code></pre>
+
+    <p>The pattern is:</p>
+    <ul>
+      <li><code>RANK()</code> creates the order.</li>
+      <li><code>WHERE Rank &lt;= 3</code> filters the top rows.</li>
+      <li><code>STRING_AGG(... ORDER BY Rank)</code> compresses them into one ordered list.</li>
+    </ul>
+
+    <div class="callout warn">
+      <strong>ORDER MATTERS</strong>
+      If you omit <code>ORDER BY</code> inside <code>STRING_AGG</code>, the list order may not be reliable.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S32 ===== -->
+  <div class="section" id="s32">
+    <div class="section-header">
+      <div class="section-num grn">32</div>
+      <h2>Course 05 Final Map</h2>
+    </div>
+
+    <p>This course ended as more than “window functions.” It became a map of analytical SQL patterns: calculate, rank, compare, bucket, reshape, subtotal, clean, and compress.</p>
+
+    <div class="cheat-grid">
+      <div class="cheat-cell"><div class="fn-name">Window functions</div><div class="fn-desc">Keep detail rows and add context columns.</div><div class="fn-example">SUM(x) OVER (...)</div></div>
+      <div class="cheat-cell"><div class="fn-name">Ranking</div><div class="fn-desc">Assign row position or tier.</div><div class="fn-example">ROW_NUMBER / RANK / DENSE_RANK</div></div>
+      <div class="cheat-cell"><div class="fn-name">Fetching</div><div class="fn-desc">Bring other row values into the current row.</div><div class="fn-example">LAG / LEAD / FIRST_VALUE / LAST_VALUE</div></div>
+      <div class="cheat-cell"><div class="fn-name">Aggregate windows</div><div class="fn-desc">Running totals, max so far, moving average, moving total.</div><div class="fn-example">SUM(...) OVER (ORDER BY ...)</div></div>
+      <div class="cheat-cell"><div class="fn-name">Frames</div><div class="fn-desc">Choose which rows around the current row are visible.</div><div class="fn-example">ROWS BETWEEN 2 PRECEDING AND CURRENT ROW</div></div>
+      <div class="cheat-cell"><div class="fn-name">NTILE</div><div class="fn-desc">Assign bucket labels, not percentile thresholds.</div><div class="fn-example">NTILE(4)</div></div>
+      <div class="cheat-cell"><div class="fn-name">percentile_cont/disc</div><div class="fn-desc">Calculate true percentile threshold values.</div><div class="fn-example">percentile_cont(0.95)</div></div>
+      <div class="cheat-cell"><div class="fn-name">CROSSTAB</div><div class="fn-desc">Reshape tall data into wide reports.</div><div class="fn-example">row key, category, value</div></div>
+      <div class="cheat-cell"><div class="fn-name">ROLLUP</div><div class="fn-desc">Hierarchical subtotal rows.</div><div class="fn-example">GROUP BY ROLLUP(country, gender)</div></div>
+      <div class="cheat-cell"><div class="fn-name">CUBE</div><div class="fn-desc">All subtotal combinations.</div><div class="fn-example">GROUP BY CUBE(gender, medal)</div></div>
+      <div class="cheat-cell"><div class="fn-name">COALESCE</div><div class="fn-desc">Clean NULL labels.</div><div class="fn-example">COALESCE(gender, 'Total')</div></div>
+      <div class="cheat-cell"><div class="fn-name">CASE statements</div><div class="fn-desc">Conditional SQL logic for labels, buckets, aggregation, and pivots.</div><div class="fn-example">CASE WHEN ... THEN ... ELSE ... END</div></div>
+      <div class="cheat-cell"><div class="fn-name">CASE ordering</div><div class="fn-desc">Force business display order.</div><div class="fn-example">Men, Women, Total</div></div>
+      <div class="cheat-cell"><div class="fn-name">STRING_AGG</div><div class="fn-desc">Compress rows into a list.</div><div class="fn-example">STRING_AGG(country, ', ' ORDER BY rank)</div></div>
+      <div class="cheat-cell"><div class="fn-name">FILTER / CASE pivot</div><div class="fn-desc">Manual pivot for multiple measures.</div><div class="fn-example">MAX(x) FILTER (WHERE year = 2004)</div></div>
+      <div class="cheat-cell"><div class="fn-name">CTE pattern</div><div class="fn-desc">Prepare grain first, then calculate.</div><div class="fn-example">aggregate → rank → filter</div></div>
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S33 ===== -->
+  <div class="section" id="s33">
+    <div class="section-header">
+      <div class="section-num ylw">33</div>
+      <h2>Interview Translation</h2>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// WINDOW FUNCTIONS</div>
+      <p>“Window functions let me calculate rankings, previous/next comparisons, running totals, moving averages, and percent-of-total metrics while keeping the original detail rows visible. GROUP BY collapses rows; window functions add analytical context without losing granularity.”</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// THIRD SALESPERSON BY DEPARTMENT</div>
+      <p>“I aggregate sales by salesperson and department first, then rank inside each department, then filter rank = 3. ROW_NUMBER gives exactly one third row, RANK includes tied third-place people, and DENSE_RANK returns the third distinct sales tier.”</p>
+    </div>
+
+<pre><code>WITH salesperson_sales AS (
+  SELECT
+    department,
+    salesperson,
+    SUM(sales_amount) AS total_sales
+  FROM sales
+  GROUP BY department, salesperson
+),
+
+ranked_salespeople AS (
+  SELECT
+    department,
+    salesperson,
+    total_sales,
+    ROW_NUMBER() OVER (
+      PARTITION BY department
+      ORDER BY total_sales DESC, salesperson ASC
+    ) AS sales_rank
+  FROM salesperson_sales
+)
+
+SELECT
+  department,
+  salesperson,
+  total_sales
+FROM ranked_salespeople
+WHERE sales_rank = 3
+ORDER BY department;</code></pre>
+
+    <div class="interview-box">
+      <div class="tag">// REPORTING AND PIVOTING</div>
+      <p>“For reporting, I may calculate rankings in a vertical query first, then pivot with CROSSTAB if the report needs years as columns. For multiple measures in a pivot, I prefer conditional aggregation with FILTER or CASE because it is clearer.”</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// SUBTOTALS AND CLEANUP</div>
+      <p>“ROLLUP and CUBE are GROUP BY extensions for subtotal rows, not window functions. COALESCE is useful for replacing subtotal NULLs with labels like Total. STRING_AGG is useful when a ranked result needs to be compressed into one readable row.”</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// CUME_DIST / P95</div>
+      <p>“CUME_DIST gave each row a relative position inside its own region, so every region was judged against its own distribution instead of one global revenue cutoff. P95 gave me a threshold value. If I needed row-level flags from P95, I calculated the cutoff, joined it back to the rows, and then labeled them with CASE.”</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// OWNER-PRIORITY PIPELINE</div>
+      <p>“I used window functions to turn raw sales rows into a priority report. CUME_DIST created row-level signals, CASE turned them into bands, the review queue kept only important rows, GROUP BY created owner-level priority, weighting made the score meaningful, RANK ordered the owners, and recommended_action turned the output into a management recommendation.”</p>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// MEMORY LINE</span>
+      Raw rows -&gt; signals -&gt; scores -&gt; ranked recommendations.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S34 ===== -->
+  <div class="section" id="s34">
+    <div class="section-header">
+      <div class="section-num red">34</div>
+      <h2>Common Traps</h2>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">// COURSE 05 TRAPS TO REMEMBER</div>
+      <table class="vtable">
+        <thead><tr><th>Trap</th><th>Correction</th></tr></thead>
+        <tbody>
+          <tr><td>Putting placeholder text like “source query here” inside CROSSTAB</td><td>Use a real SELECT query inside the dollar-quoted body.</td></tr>
+          <tr><td>Broken dollar quoting like <code>CROSSTAB($ ... $)</code></td><td>Use <code>CROSSTAB($$ ... $$)</code>.</td></tr>
+          <tr><td>Thinking CROSSTAB creates columns automatically</td><td>Declare output columns manually in <code>AS ct (...)</code>.</td></tr>
+          <tr><td>Missing pivot categories in simple CROSSTAB</td><td>Can misalign values; use safer category listing or manual pivot in production.</td></tr>
+          <tr><td>Forcing multiple measures into CROSSTAB</td><td>Use separate pivots or FILTER/CASE manual pivot.</td></tr>
+          <tr><td>ROLLUP/CUBE NULLs treated as missing data</td><td>They often mean subtotal or grand total.</td></tr>
+          <tr><td>COALESCE misunderstood as creating totals</td><td>It only changes display labels.</td></tr>
+          <tr><td>CASE rules ordered too broadly first</td><td>Put the most specific or highest-priority WHEN conditions first.</td></tr>
+          <tr><td>CASE without ELSE returns unexpected NULLs</td><td>Add ELSE when a missing value would confuse the report.</td></tr>
+          <tr><td>Total appears before Women</td><td>Use CASE in ORDER BY.</td></tr>
+          <tr><td>STRING_AGG without ORDER BY</td><td>List order may not be reliable.</td></tr>
+          <tr><td>Naming a moving total <code>Medals_MA</code></td><td>Use <code>Medals_MT</code> or <code>Moving_Total</code>.</td></tr>
+          <tr><td>Confusing NTILE bucket labels with P95 value</td><td>Use <code>percentile_cont</code> or <code>percentile_disc</code> for true percentile thresholds.</td></tr>
+          <tr><td>Using <code>NTILE(100)</code> on fewer than 100 rows per group</td><td>Some labels may never appear. Bucket math depends on row count.</td></tr>
+          <tr><td>Thinking <code>percentile_cont</code> labels each row</td><td>It returns a cutoff value. Join it back, then label rows with CASE.</td></tr>
+          <tr><td>Treating <code>CUME_DIST</code> and <code>PERCENT_RANK</code> as identical</td><td>Tie behavior differs. CUME_DIST looks after the tie group. PERCENT_RANK looks at where the tie group starts.</td></tr>
+          <tr><td>Forgetting the business definition for top-percent logic</td><td>Decide whether you need a cutoff, a coverage label, or a bucket label before choosing the function.</td></tr>
+          <tr><td>Creating a score but not translating it</td><td>Add <code>recommended_action</code> so the output tells the business what to do next.</td></tr>
+          <tr><td>Trusting polished sample data too much</td><td>Correct window output can look artificial if sample data is too smooth.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+
+  <!-- ===== S35 ===== -->
+  <div class="section" id="s35">
+    <div class="section-header">
+      <div class="section-num org">35</div>
+      <h2>Flashcard Review</h2>
+    </div>
+
+    <div class="cheat-grid">
+      <div class="cheat-cell"><div class="fn-name">GROUP BY vs PARTITION BY</div><div class="fn-desc">GROUP BY collapses. PARTITION BY keeps rows.</div><div class="fn-example">GROUP BY date vs OVER(PARTITION BY date)</div></div>
+      <div class="cheat-cell"><div class="fn-name">ORDER BY locations</div><div class="fn-desc">Inside OVER calculates. Final ORDER BY displays.</div><div class="fn-example">OVER(ORDER BY revenue) vs ORDER BY date</div></div>
+      <div class="cheat-cell"><div class="fn-name">ROW_NUMBER vs RANK</div><div class="fn-desc">ROW_NUMBER never ties. RANK ties and gaps.</div><div class="fn-example">1,2,3 vs 1,2,2,4</div></div>
+      <div class="cheat-cell"><div class="fn-name">DENSE_RANK</div><div class="fn-desc">Ties but no gaps.</div><div class="fn-example">1,2,2,3</div></div>
+      <div class="cheat-cell"><div class="fn-name">LAG vs LEAD</div><div class="fn-desc">LAG looks backward. LEAD looks forward.</div><div class="fn-example">previous / next row</div></div>
+      <div class="cheat-cell"><div class="fn-name">FIRST vs LAST</div><div class="fn-desc">LAST_VALUE needs a full frame.</div><div class="fn-example">UNBOUNDED FOLLOWING</div></div>
+      <div class="cheat-cell"><div class="fn-name">ROWS vs RANGE</div><div class="fn-desc">ROWS counts physical rows. RANGE includes peers.</div><div class="fn-example">Prefer ROWS for moving windows.</div></div>
+      <div class="cheat-cell"><div class="fn-name">AVG vs SUM frame</div><div class="fn-desc">AVG makes moving average. SUM makes moving total.</div><div class="fn-example">Medals_MA vs Medals_MT</div></div>
+      <div class="cheat-cell"><div class="fn-name">NTILE vs percentile</div><div class="fn-desc">NTILE labels buckets. percentile_cont gives threshold value.</div><div class="fn-example">NTILE(100) ≠ P95 value</div></div>
+      <div class="cheat-cell"><div class="fn-name">CROSSTAB 3 columns</div><div class="fn-desc">Row identifier, pivot category, cell value.</div><div class="fn-example">Gender, Year, Country</div></div>
+      <div class="cheat-cell"><div class="fn-name">Dollar quoting</div><div class="fn-desc">Use $$ to pass a query as text.</div><div class="fn-example">CROSSTAB($$ SELECT ... $$)</div></div>
+      <div class="cheat-cell"><div class="fn-name">ROLLUP vs CUBE</div><div class="fn-desc">ROLLUP hierarchy. CUBE all combinations.</div><div class="fn-example">ROLLUP(year, qtr) vs CUBE(gender, medal)</div></div>
+      <div class="cheat-cell"><div class="fn-name">COALESCE</div><div class="fn-desc">First non-null value. Great for subtotal labels.</div><div class="fn-example">COALESCE(gender, 'Total')</div></div>
+      <div class="cheat-cell"><div class="fn-name">CASE statements</div><div class="fn-desc">SQL if/else logic. First matching WHEN wins.</div><div class="fn-example">CASE WHEN x THEN y ELSE z END</div></div>
+      <div class="cheat-cell"><div class="fn-name">CASE ordering</div><div class="fn-desc">Sort in business order.</div><div class="fn-example">Men → Women → Total</div></div>
+      <div class="cheat-cell"><div class="fn-name">STRING_AGG</div><div class="fn-desc">Compress rows into a list.</div><div class="fn-example">STRING_AGG(country, ', ' ORDER BY rank)</div></div>
+      <div class="cheat-cell"><div class="fn-name">FILTER pivot</div><div class="fn-desc">Manual pivot for multiple measures.</div><div class="fn-example">MAX(x) FILTER (WHERE year=2004)</div></div>
+      <div class="cheat-cell"><div class="fn-name">CUME_DIST</div><div class="fn-desc">Coverage-based row position inside a partition.</div><div class="fn-example">CUME_DIST = coverage so far</div></div>
+      <div class="cheat-cell"><div class="fn-name">PERCENT_RANK</div><div class="fn-desc">Rank-start position inside a partition.</div><div class="fn-example">Tie group starts here</div></div>
+      <div class="cheat-cell"><div class="fn-name">P95</div><div class="fn-desc">True percentile cutoff value.</div><div class="fn-example">percentile_cont(0.95)</div></div>
+      <div class="cheat-cell"><div class="fn-name">Review queue</div><div class="fn-desc">Keep only the important bands and preserve detail rows.</div><div class="fn-example">WHERE revenue_band IN ('Top 5%', 'High')</div></div>
+      <div class="cheat-cell"><div class="fn-name">Weighted priority score</div><div class="fn-desc">Score strong signals more heavily than weaker ones.</div><div class="fn-example">Top 5% = 3, High = 1</div></div>
+      <div class="cheat-cell"><div class="fn-name">recommended_action</div><div class="fn-desc">Translate analytics into Immediate focus, High priority, or Monitor.</div><div class="fn-example">CASE on weighted_priority_score</div></div>
+      <div class="cheat-cell"><div class="fn-name">Oral defense</div><div class="fn-desc">Explain why the pipeline shape makes business sense.</div><div class="fn-example">Raw rows -> signals -> scores -> ranked recommendations</div></div>
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <!-- ===== S36 ===== -->
+  <!-- Final Oral Defense Q&A -->
+  <div class="section" id="s36">
+    <div class="section-header">
+      <div class="section-num tel">36</div>
+      <h2>Final Oral Defense Q&amp;A</h2>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q1</div>
+      <p><strong>GROUP BY vs PARTITION BY?</strong> GROUP BY collapses rows. PARTITION BY keeps detail rows and calculates inside buckets.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q2</div>
+      <p><strong>What does ORDER BY inside OVER do?</strong> Window ORDER BY calculates. Final ORDER BY displays.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q3</div>
+      <p><strong>Why do ranking aliases need a CTE before filtering?</strong> Because the window result is created after the select list. Calculate first, filter second.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q4</div>
+      <p><strong>Why avoid unique tie-breakers in RANK and DENSE_RANK?</strong> Because they break real ties and create fake uniqueness.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q5</div>
+      <p><strong>What is the LAST_VALUE trap?</strong> LAST_VALUE needs the full frame. Without it, the default frame often stops at the current row.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q6</div>
+      <p><strong>ROWS vs RANGE?</strong> ROWS = physical rows. RANGE = value peers.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q7</div>
+      <p><strong>NTILE vs P95?</strong> NTILE creates bucket labels. P95 creates a cutoff value.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q8</div>
+      <p><strong>Why does percentile_cont use WITHIN GROUP?</strong> Because it is an ordered-set aggregate and needs an ordered value list.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q9</div>
+      <p><strong>What does CUME_DIST mean?</strong> It means coverage so far: what fraction of rows are at or below this value.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q10</div>
+      <p><strong>What does PERCENT_RANK mean?</strong> It means rank-start position: where the current value starts on the ranking ladder.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q11</div>
+      <p><strong>Why do CUME_DIST and PERCENT_RANK differ around ties?</strong> CUME_DIST looks after the tie group. PERCENT_RANK looks at where the tie group starts.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q12</div>
+      <p><strong>What was the final owner-priority pipeline?</strong> Row-level percentile signals became business bands, bands became a review queue, review rows became weighted owner-level priority, and CASE turned the output into a management recommendation.</p>
+    </div>
+
+    <div class="interview-box">
+      <div class="tag">// Q13</div>
+      <p><strong>Shortest memory line?</strong> Raw rows -> signals -> scores -> ranked recommendations.</p>
+    </div>
+
+    <div class="nugget">
+      <span class="label-tag">// WRAP-UP</span>
+      Interview translation matters because SQL work must be explainable. The pipeline is not just syntax; it is analytics design. This pattern can transfer to sales, finance, fraud, customer risk, observability, incident triage, and capacity prioritization.
+    </div>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+</div>
+<footer>
+  <div class="container">
+    <p>SQL Window Functions · PostgreSQL Field Guide · Simplicity and clarity is Gold.</p>
+    <p style="margin-top:6px"><a href="#top">↑ back to top</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
