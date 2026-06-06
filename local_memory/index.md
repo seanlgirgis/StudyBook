@@ -18,3 +18,4 @@
 
 ## Captures
 - [chat_captures/](chat_captures/)
+- [chat_captures/youtube/BqBsT6ZjurA/memory/memory_note_en.md](chat_captures/youtube/BqBsT6ZjurA/memory/memory_note_en.md)

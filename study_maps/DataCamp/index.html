@@ -5,46 +5,347 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DataCamp StudyBook</title>
   <style>
-    body { font-family: Segoe UI, Arial, sans-serif; margin: 0; background: #f6f8fb; color: #1f2937; }
-    main { max-width: 960px; margin: 0 auto; padding: 24px; }
-    section { background: #ffffff; border: 1px solid #dbe2ea; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    h1, h2 { margin-top: 0; }
-    code { background: #eef2f7; padding: 2px 6px; border-radius: 6px; }
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --blue: #58a6ff;
+      --amber: #d29922;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #071d2d 0%, #0d2434 52%, #112b3d 100%);
+      border: 1px solid #24445a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.35rem);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.05rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .button-primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: #496273;
+    }
+
+    .section { margin-top: 24px; }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.45rem;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      margin: 6px 0 8px;
+      font-size: 1.18rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .label {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(88, 166, 255, 0.12);
+      color: var(--blue);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .label.active {
+      background: rgba(3, 239, 98, 0.12);
+      color: var(--green);
+    }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 16px;
+      color: var(--green);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .card-link:hover { text-decoration: underline; }
+
+    .course-card {
+      border-color: #2d6a46;
+      background:
+        linear-gradient(180deg, rgba(3, 239, 98, 0.07), transparent 65%),
+        var(--panel);
+    }
+
+    .path {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #0d1117;
+      border: 1px solid #26313d;
+      color: #b8c4cf;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.82rem;
+      overflow-wrap: anywhere;
+    }
+
+    .note {
+      margin-top: 24px;
+      border-left: 4px solid var(--amber);
+      background: rgba(210, 153, 34, 0.08);
+      border-radius: 10px;
+      padding: 16px 18px;
+      color: #d6c8a7;
+    }
+
+    footer {
+      margin-top: 30px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 820px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .hero { padding: 28px 22px; }
+      .section-heading {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <section>
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">StudyBook Learning Hub</p>
       <h1>DataCamp StudyBook</h1>
-      <p>This is the new canonical DataCamp learning root.</p>
-      <p>Content is being migrated from <code>DataCamp.old</code> bite by bite.</p>
+      <p>
+        Open DataCamp tracks, reusable course packages, and projects from one place.
+        Track pages own course ordering; canonical course folders use stable names.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button button-primary" href="skill_tracks/01_sql_fundamentals/index.html">
+          Open SQL Fundamentals
+        </a>
+        <a class="button button-secondary" href="career_tracks/01_associate_data_analyst_in_sql/index.html">
+          Open Associate Data Analyst in SQL
+        </a>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Primary Tracks</h2>
+          <p>Start with SQL Fundamentals, then reuse the same course packages in the career track.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <article class="card">
+          <span class="label active">Current focus</span>
+          <h3>SQL Fundamentals</h3>
+          <p>
+            The first track being rebuilt from top to bottom. It provides a compact path through
+            the core SQL courses, projects, and assessment.
+          </p>
+          <a class="card-link" href="skill_tracks/01_sql_fundamentals/index.html">Open skill track →</a>
+        </article>
+
+        <article class="card">
+          <span class="label">Career track</span>
+          <h3>Associate Data Analyst in SQL</h3>
+          <p>
+            A broader career path that reuses canonical SQL course packages without duplicating course content.
+          </p>
+          <a class="card-link" href="career_tracks/01_associate_data_analyst_in_sql/index.html">Open career track →</a>
+        </article>
+      </div>
     </section>
-    <section>
-      <h2>Current migration status</h2>
-      <p>Clean shell created. The first project slice has been migrated, and more content will follow bite by bite.</p>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Model Course Package</h2>
+          <p>The current example for the reusable no-number course-folder design.</p>
+        </div>
+      </div>
+
+      <article class="card course-card">
+        <span class="label active">Canonical course</span>
+        <h3>Functions for Manipulating Data in PostgreSQL</h3>
+        <p>
+          Course landing page, accumulated Field Guide, chapter Field Guides,
+          Quick Lookup, source material, Lab Guide, and runnable SQL practice.
+        </p>
+        <div class="path">courses/functions_for_manipulating_data_in_postgresql</div>
+        <a class="card-link" href="courses/functions_for_manipulating_data_in_postgresql/index.html">
+          Open course landing page →
+        </a>
+      </article>
     </section>
-    <section>
-      <h2>Tracks</h2>
-      <p>Track playlists and pointers are now split into career tracks and skill tracks.</p>
-      <p><a href="career_tracks/index.html">Open Career Tracks</a></p>
-      <p><a href="skill_tracks/index.html">Open Skill Tracks</a></p>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Libraries</h2>
+          <p>Browse the reusable parts of the DataCamp learning system.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <article class="card">
+          <span class="label">Tracks</span>
+          <h3>Career Tracks</h3>
+          <p>Role-oriented playlists that own their own course ordering.</p>
+          <a class="card-link" href="career_tracks/index.html">Browse career tracks →</a>
+        </article>
+
+        <article class="card">
+          <span class="label">Tracks</span>
+          <h3>Skill Tracks</h3>
+          <p>Focused learning paths for SQL, Python, Power BI, Databricks, PySpark, and more.</p>
+          <a class="card-link" href="skill_tracks/index.html">Browse skill tracks →</a>
+        </article>
+
+        <article class="card">
+          <span class="label">Library</span>
+          <h3>Courses</h3>
+          <p>Canonical reusable course packages, independent of track position.</p>
+          <a class="card-link" href="courses/index.html">Browse courses →</a>
+        </article>
+
+        <article class="card">
+          <span class="label">Library</span>
+          <h3>Projects</h3>
+          <p>Reusable DataCamp project packages and their study material.</p>
+          <a class="card-link" href="projects/index.html">Browse projects →</a>
+        </article>
+      </div>
     </section>
-    <section>
-      <h2>Courses</h2>
-      <p>Reusable course packages live under the courses area.</p>
-      <p><a href="courses/index.html">Open Courses Landing Page</a></p>
-      <p><a href="courses/05_postgresql_summary_stats_and_window_functions/index.html">05_postgresql_summary_stats_and_window_functions</a></p>
-    </section>
-    <section>
-      <h2>Projects</h2>
-      <p>Reusable project packages live under the projects area.</p>
-      <p><a href="projects/index.html">Open Projects Landing Page</a></p>
-      <p><a href="projects/03_analyzing_students_mental_health/index.html">03_analyzing_students_mental_health</a></p>
-    </section>
-    <section>
-      <h2>Notes</h2>
-      <p>Runnable labs remain under <code>tutorials\DataCamp</code>.</p>
-    </section>
+
+    <aside class="note">
+      <strong>Legacy reference:</strong>
+      older numbered course folders may remain temporarily as source material.
+      They are not promoted as canonical course packages until rebuilt or reconciled.
+    </aside>
+
+    <footer>
+      DataCamp StudyBook · Track pages own ordering · Course folders use stable reusable slugs
+    </footer>
   </main>
 </body>
 </html>

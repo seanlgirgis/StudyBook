@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 1 Field Guide — PostgreSQL Data Types and Arrays</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg2: #121a30;
+      --bg3: #18233f;
+      --panel: #0f172a;
+      --border: #2b3b63;
+      --text: #e6edf7;
+      --muted: #9fb0d1;
+      --accent: #76b7ff;
+      --accent-2: #9ad0ff;
+      --good: #8ee6a5;
+      --warn: #ffd479;
+      --danger: #ff9a9a;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(118, 183, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, #09101d 0%, #0b1020 100%);
+      color: var(--text);
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--accent-2);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+
+    code,
+    pre,
+    .mono {
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 96px;
+    }
+
+    .hero {
+      background: linear-gradient(180deg, rgba(24, 35, 63, 0.95), rgba(15, 23, 42, 0.96));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid rgba(118, 183, 255, 0.35);
+      background: rgba(118, 183, 255, 0.1);
+      border-radius: 999px;
+      color: var(--accent-2);
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0 0 12px;
+      line-height: 1.25;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+    }
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+    }
+
+    p {
+      margin: 0 0 14px;
+      color: var(--text);
+    }
+
+    .subtitle {
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .hero-links,
+    .pill-links,
+    .quick-nav,
+    .section-nav,
+    .floating-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-links a,
+    .pill-links a,
+    .quick-nav a,
+    .section-nav a,
+    .floating-nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--accent-2);
+      border-radius: 999px;
+      font-size: 0.92rem;
+      text-decoration: none;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .hero-links a:hover,
+    .pill-links a:hover,
+    .quick-nav a:hover,
+    .section-nav a:hover,
+    .floating-nav a:hover {
+      transform: translateY(-1px);
+      border-color: rgba(118, 183, 255, 0.45);
+      background: rgba(24, 35, 63, 0.95);
+      text-decoration: none;
+    }
+
+    .search-wrap,
+    .toc-wrap,
+    .section {
+      margin-top: 22px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .search-wrap {
+      padding: 20px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .search-tip,
+    .search-count,
+    .muted {
+      color: var(--muted);
+    }
+
+    .search-tip {
+      margin-top: 10px;
+      font-size: 0.94rem;
+    }
+
+    .search-count {
+      margin-top: 8px;
+      font-size: 0.94rem;
+    }
+
+    .quick-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      margin-top: 14px;
+      padding: 12px 16px;
+      background: rgba(9, 16, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    .toc-wrap {
+      padding: 22px;
+    }
+
+    .toc-grid,
+    .cards-2,
+    .cards-3,
+    .compare-grid,
+    .cheat-grid,
+    .qa-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .toc-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-top: 18px;
+    }
+
+    .toc-card,
+    .card,
+    .compare-card,
+    .nugget,
+    .qa-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(24, 35, 63, 0.72), rgba(18, 26, 48, 0.92));
+    }
+
+    .toc-card h3,
+    .card h3,
+    .compare-card h3,
+    .qa-card h3 {
+      margin-bottom: 8px;
+    }
+
+    .toc-card ul,
+    .plain-list,
+    .tight-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .tight-list li {
+      margin-bottom: 6px;
+    }
+
+    .section {
+      padding: 24px;
+      scroll-margin-top: 88px;
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .section-num {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    .callout,
+    .diagram {
+      border-left: 4px solid var(--accent);
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(118, 183, 255, 0.08);
+      margin: 18px 0;
+    }
+
+    .diagram {
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+      white-space: pre-wrap;
+    }
+
+    .cards-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+
+    .cards-3,
+    .qa-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+
+    .compare-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+
+    .cheat-grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin-top: 16px;
+    }
+
+    .cheat-cell {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(24, 35, 63, 0.66);
+    }
+
+    pre {
+      margin: 14px 0;
+      padding: 14px;
+      border-radius: 16px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      background: #0a1224;
+      color: #d8e5ff;
+      font-size: 0.94rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(24, 35, 63, 0.9);
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+
+    td {
+      background: rgba(12, 19, 36, 0.92);
+    }
+
+    .section-nav {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(43, 59, 99, 0.7);
+    }
+
+    .floating-nav {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(9, 16, 29, 0.95);
+      box-shadow: var(--shadow);
+      max-width: min(320px, calc(100vw - 24px));
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(118, 183, 255, 0.25);
+      background: rgba(118, 183, 255, 0.08);
+      color: var(--accent-2);
+      font-size: 0.85rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .good { color: var(--good); }
+    .warn { color: var(--warn); }
+    .danger { color: var(--danger); }
+
+    .search-item[hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 760px) {
+      .container {
+        width: min(100% - 20px, 1180px);
+      }
+
+      .hero,
+      .search-wrap,
+      .toc-wrap,
+      .section {
+        border-radius: 18px;
+      }
+
+      .quick-nav,
+      .section-nav,
+      .floating-nav,
+      .hero-links,
+      .pill-links {
+        gap: 8px;
+      }
+
+      .quick-nav a,
+      .section-nav a,
+      .floating-nav a,
+      .hero-links a {
+        flex: 1 1 auto;
+      }
+
+      .floating-nav {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        justify-content: center;
+      }
+
+      .cards-2,
+      .cards-3,
+      .qa-grid,
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="top">
+    <header class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="badge">Chapter 1 Pilot Guide</div>
+          <h1>Chapter 1 Field Guide — PostgreSQL Data Types and Arrays</h1>
+          <p class="subtitle">Use cases, syntax patterns, examples, traps, and practical decisions for PostgreSQL data types.</p>
+        </div>
+        <div class="hero-links" aria-label="Guide links">
+          <a href="field_guide.html">Open Main Field Guide</a>
+          <a href="sql_function_quick_lookup.html">Open Quick Lookup</a>
+          <a href="../lab/lab_guide.html">Open Lab Guide</a>
+        </div>
+      </div>
+      <div class="pill-links" aria-label="Page questions">
+        <span class="tag">What data type should I use?</span>
+        <span class="tag">How do I inspect an existing column type?</span>
+        <span class="tag">How do I work with arrays?</span>
+        <span class="tag">What mistakes should I avoid?</span>
+      </div>
+    </header>
+
+    <div class="search-wrap">
+      <label for="lookupSearch" class="mono">Search this chapter guide</label>
+      <input
+        id="lookupSearch"
+        class="search-input"
+        type="search"
+        placeholder="Search type, use case, example, trap, or keyword..."
+        aria-label="Search type, use case, example, trap, or keyword"
+      />
+      <div class="search-tip">Aliases included: fixed text, variable text, long text, money, decimal, whole number, date only, timestamp, duration, array, first array item, contains, metadata, column type, information schema, custom type, user-defined type, enum, enumerated type, controlled values, create type, dayofweek, pg_type, typname, typcategory, enum category, user-defined column, udt_name, mpaa_rating, lookup table.</div>
+      <div id="searchCount" class="search-count" aria-live="polite">Showing all Chapter 1 items</div>
+    </div>
+
+    <nav class="quick-nav" aria-label="Quick page navigation">
+      <a href="#top">Top</a>
+      <a href="#problem-lookup">Problems</a>
+      <a href="#text-types">Text</a>
+      <a href="#numeric-types">Numeric</a>
+      <a href="#date-time-types">Date/Time</a>
+      <a href="#array-types">Arrays</a>
+      <a href="#metadata-discovery">Metadata</a>
+      <a href="#user-defined-types">UDTs</a>
+      <a href="#mistakes">Mistakes</a>
+      <a href="#interview-qa">Q&amp;A</a>
+    </nav>
+
+    <section class="toc-wrap">
+      <h2>Table of Contents</h2>
+      <p class="muted">Use the grouped links if you want to study in order, then jump back later with the sticky navigation.</p>
+      <div class="toc-grid">
+        <div class="toc-card">
+          <h3>Start Here</h3>
+          <ul>
+            <li><a href="#how-to-use">How to Use</a></li>
+            <li><a href="#chapter-map">Chapter Map</a></li>
+            <li><a href="#problem-lookup">Problem-Based Lookup</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Core Data Types</h3>
+          <ul>
+            <li><a href="#text-types">Text Types</a></li>
+            <li><a href="#numeric-types">Numeric Types</a></li>
+            <li><a href="#date-time-types">Date/Time Types</a></li>
+            <li><a href="#array-types">Array Types</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Database Discovery</h3>
+          <ul>
+            <li><a href="#metadata-discovery">Metadata Discovery</a></li>
+            <li><a href="#user-defined-types">User-Defined Types</a></li>
+            <li><a href="#type-selection">Type Selection Guide</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Review</h3>
+          <ul>
+            <li><a href="#combined-examples">Combined Examples</a></li>
+            <li><a href="#mistakes">Common Mistakes</a></li>
+            <li><a href="#interview-qa">Interview Q&amp;A</a></li>
+            <li><a href="#memory-review">Memory Review</a></li>
+            <li><a href="#related-guides">Related Guides</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how-to-use">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 1</div>
+          <h2>How to Use This Guide</h2>
+        </div>
+      </div>
+      <div class="cards-3">
+        <div class="card search-item" data-search="search by function type name char varchar text integer numeric timestamp array metadata column type">
+          <h3>1. Search by function or type name</h3>
+          <p>Type a data type, operator, or metadata term into the search box to narrow the page down to the relevant rows and cards.</p>
+        </div>
+        <div class="card search-item" data-search="search by problem store money first array item contains long text duration metadata inspect type">
+          <h3>2. Search by problem</h3>
+          <p>Use real goals such as <span class="mono">store money</span>, <span class="mono">find first array item</span>, or <span class="mono">inspect column type</span> to jump straight into a decision.</p>
+        </div>
+        <div class="card search-item" data-search="study chapter in order toc chapter map lookup text numeric date time arrays mistakes review">
+          <h3>3. Study in order</h3>
+          <p>Follow the table of contents from chapter map to review if you want the chapter explained as a learning path rather than a lookup page.</p>
+        </div>
+      </div>
+      <div class="compare-grid">
+        <div class="compare-card search-item" data-search="quick lookup smallest syntax reminder">
+          <h3>Quick Lookup</h3>
+          <p>Smallest syntax reminder when you already know the idea and just need the pattern.</p>
+        </div>
+        <div class="compare-card search-item" data-search="main field guide whole course summary">
+          <h3>Main Field Guide</h3>
+          <p>Whole-course summary with compact coverage across all chapters.</p>
+        </div>
+        <div class="compare-card search-item" data-search="chapter field guide detailed use cases examples traps">
+          <h3>Chapter Field Guide</h3>
+          <p>Detailed use cases, examples, traps, and decisions for one chapter only.</p>
+        </div>
+        <div class="compare-card search-item" data-search="lab guide practiced evidence observed output">
+          <h3>Lab Guide</h3>
+          <p>Practiced evidence, observed output, and what actually happened during exercises.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#top">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#chapter-map">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="chapter-map">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 2</div>
+          <h2>Chapter Map</h2>
+        </div>
+      </div>
+      <div class="diagram search-item" data-search="understand business value inspect existing type choose correct data type transform query safely validate output">
+Understand the business value
+→ inspect the existing type
+→ choose the correct data type
+→ transform/query safely
+→ validate the output
+      </div>
+      <table class="search-item" data-search="text char varchar text numeric int numeric decimal date time timestamp interval arrays array indexing any contains cardinality metadata information_schema columns custom create type">
+        <thead>
+          <tr>
+            <th>Area</th>
+            <th>Main question</th>
+            <th>Common tools</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Text</td>
+            <td>What kind of string is this?</td>
+            <td><span class="mono">CHAR</span>, <span class="mono">VARCHAR</span>, <span class="mono">TEXT</span></td>
+          </tr>
+          <tr>
+            <td>Numeric</td>
+            <td>Whole or exact decimal?</td>
+            <td><span class="mono">INT</span>, <span class="mono">NUMERIC</span>, <span class="mono">DECIMAL</span></td>
+          </tr>
+          <tr>
+            <td>Date/time</td>
+            <td>Day, clock time, event time, or duration?</td>
+            <td><span class="mono">DATE</span>, <span class="mono">TIME</span>, <span class="mono">TIMESTAMP</span>, <span class="mono">INTERVAL</span></td>
+          </tr>
+          <tr>
+            <td>Arrays</td>
+            <td>One value or multiple values in one column?</td>
+            <td><span class="mono">ARRAY</span>, indexing, <span class="mono">ANY</span>, <span class="mono">@&gt;</span>, <span class="mono">CARDINALITY</span></td>
+          </tr>
+          <tr>
+            <td>Metadata</td>
+            <td>What type does this column already use?</td>
+            <td><span class="mono">information_schema.columns</span></td>
+          </tr>
+          <tr>
+            <td>Custom types</td>
+            <td>Does the database need a controlled reusable type?</td>
+            <td><span class="mono">CREATE TYPE</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#how-to-use">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#problem-lookup">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="problem-lookup">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 3</div>
+          <h2>Problem-Based Lookup</h2>
+        </div>
+      </div>
+      <p class="muted">This is the fastest section when you know the business problem but not the PostgreSQL feature yet.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>I need to...</th>
+            <th>Use</th>
+            <th>Tiny example</th>
+            <th>Why</th>
+            <th>Trap</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="search-item" data-search="store whole number count integer count quantity whole number">
+            <td>store a whole-number count</td>
+            <td><span class="mono">INTEGER</span></td>
+            <td><span class="mono">42::INTEGER</span></td>
+            <td>Counts should be whole numbers.</td>
+            <td>Do not use integer if fractions matter later.</td>
+          </tr>
+          <tr class="search-item" data-search="store exact money value numeric decimal money exact">
+            <td>store an exact money value</td>
+            <td><span class="mono">NUMERIC(12,2)</span></td>
+            <td><span class="mono">19.95::NUMERIC(12,2)</span></td>
+            <td>Money needs exact decimal precision.</td>
+            <td>Floating point is not exact money.</td>
+          </tr>
+          <tr class="search-item" data-search="store free form long text text description comment document long text">
+            <td>store free-form long text</td>
+            <td><span class="mono">TEXT</span></td>
+            <td><span class="mono">document_body TEXT</span></td>
+            <td>Flexible length for comments and documents.</td>
+            <td>Validation must come from another rule.</td>
+          </tr>
+          <tr class="search-item" data-search="enforce maximum text length varchar controlled label max length">
+            <td>enforce a maximum text length</td>
+            <td><span class="mono">VARCHAR(n)</span></td>
+            <td><span class="mono">short_label VARCHAR(50)</span></td>
+            <td>The limit can reflect a business rule.</td>
+            <td>Do not pick limits with no business reason.</td>
+          </tr>
+          <tr class="search-item" data-search="fixed width code char fixed text code state code">
+            <td>store a fixed-width code</td>
+            <td><span class="mono">CHAR(n)</span></td>
+            <td><span class="mono">CAST('AB' AS CHAR(4))</span></td>
+            <td>Useful for legacy fixed-width formats.</td>
+            <td>Padding can surprise comparisons and display.</td>
+          </tr>
+          <tr class="search-item" data-search="calendar date only date birth date invoice date">
+            <td>store only a calendar date</td>
+            <td><span class="mono">DATE</span></td>
+            <td><span class="mono">CURRENT_DATE</span></td>
+            <td>You only care about the day.</td>
+            <td>Do not store a timestamp if time never matters.</td>
+          </tr>
+          <tr class="search-item" data-search="time of day only time clock opening time">
+            <td>store only a time of day</td>
+            <td><span class="mono">TIME</span></td>
+            <td><span class="mono">CURRENT_TIME</span></td>
+            <td>Useful for recurring daily times.</td>
+            <td>TIME alone is not a full event moment.</td>
+          </tr>
+          <tr class="search-item" data-search="full event timestamp timestamp datetime local event">
+            <td>store a full event timestamp</td>
+            <td><span class="mono">TIMESTAMP</span></td>
+            <td><span class="mono">CURRENT_TIMESTAMP</span></td>
+            <td>Stores date plus time together.</td>
+            <td>Consider <span class="mono">TIMESTAMPTZ</span> if time zones matter.</td>
+          </tr>
+          <tr class="search-item" data-search="represent duration interval offset days hours">
+            <td>represent a duration</td>
+            <td><span class="mono">INTERVAL</span></td>
+            <td><span class="mono">INTERVAL '5 days'</span></td>
+            <td>Intervals express offsets and elapsed spans.</td>
+            <td>An interval is not a timestamp value.</td>
+          </tr>
+          <tr class="search-item" data-search="add several days to timestamp interval date math rental">
+            <td>add several days to a timestamp</td>
+            <td><span class="mono">timestamp + INTERVAL</span></td>
+            <td><span class="mono">rental_date + INTERVAL '5 days'</span></td>
+            <td>Type-safe time arithmetic.</td>
+            <td>Do not cast away time detail too early.</td>
+          </tr>
+          <tr class="search-item" data-search="inspect table column types information_schema columns data type metadata">
+            <td>inspect a table's column types</td>
+            <td><span class="mono">information_schema.columns</span></td>
+            <td><span class="mono">WHERE table_name = 'lab_rentals'</span></td>
+            <td>Shows type metadata before guessing.</td>
+            <td>Filtering only by table name can be ambiguous across schemas.</td>
+          </tr>
+          <tr class="search-item" data-search="find table outside public schema schema table location">
+            <td>find a table outside the public schema</td>
+            <td><span class="mono">table_schema</span> filter</td>
+            <td><span class="mono">WHERE table_schema = 'course06_functions_lab'</span></td>
+            <td>Real lab tables may live in course schemas.</td>
+            <td>Filtering only <span class="mono">public</span> can hide the real table.</td>
+          </tr>
+          <tr class="search-item" data-search="identify postgresql internal type udt_name base type">
+            <td>identify the PostgreSQL internal type</td>
+            <td><span class="mono">udt_name</span></td>
+            <td><span class="mono">SELECT data_type, udt_name</span></td>
+            <td>Useful when PostgreSQL-specific detail matters.</td>
+            <td><span class="mono">data_type</span> and <span class="mono">udt_name</span> are not always identical.</td>
+          </tr>
+          <tr class="search-item" data-search="store multiple text tags in one column array tags">
+            <td>store multiple text tags in one column</td>
+            <td><span class="mono">TEXT[]</span> or <span class="mono">ARRAY[...]</span></td>
+            <td><span class="mono">ARRAY['sql','analytics']</span></td>
+            <td>Good for small simple lists that travel together.</td>
+            <td>Use a child table if the list becomes relational.</td>
+          </tr>
+          <tr class="search-item" data-search="get first array value first array item one based">
+            <td>get the first array value</td>
+            <td><span class="mono">array_col[1]</span></td>
+            <td><span class="mono">favorite_tags[1]</span></td>
+            <td>PostgreSQL arrays are one-based.</td>
+            <td><span class="mono">[0]</span> is the common mistake.</td>
+          </tr>
+          <tr class="search-item" data-search="get second array value second array item">
+            <td>get the second array value</td>
+            <td><span class="mono">array_col[2]</span></td>
+            <td><span class="mono">favorite_tags[2]</span></td>
+            <td>Direct indexing can be convenient for small lists.</td>
+            <td>Do not assume the array always has two values.</td>
+          </tr>
+          <tr class="search-item" data-search="search array for one value any contains search">
+            <td>search an array for one value</td>
+            <td><span class="mono">'sql' = ANY(array_col)</span></td>
+            <td><span class="mono">'sql' = ANY(favorite_tags)</span></td>
+            <td>Reads like "does any element match?"</td>
+            <td>Do not confuse <span class="mono">ANY</span> with <span class="mono">@&gt;</span>.</td>
+          </tr>
+          <tr class="search-item" data-search="require multiple array values contains all values array operator">
+            <td>require multiple array values</td>
+            <td><span class="mono">array_col @&gt; ARRAY['a','b']</span></td>
+            <td><span class="mono">favorite_tags @&gt; ARRAY['sql','postgres']</span></td>
+            <td>The left array must contain all requested values.</td>
+            <td>The right side must be an array literal.</td>
+          </tr>
+          <tr class="search-item" data-search="count array values cardinality number of elements">
+            <td>count array values</td>
+            <td><span class="mono">CARDINALITY(array_col)</span></td>
+            <td><span class="mono">CARDINALITY(favorite_tags)</span></td>
+            <td>Returns the number of elements in the array.</td>
+            <td>Cardinality is element count, not string length.</td>
+          </tr>
+          <tr class="search-item" data-search="define controlled list of values create type enum status">
+            <td>define a controlled list of values</td>
+            <td><span class="mono">CREATE TYPE ... AS ENUM</span></td>
+            <td><span class="mono">CREATE TYPE rental_status AS ENUM (...)</span></td>
+            <td>Restricts a column to approved values.</td>
+            <td>Schema changes are needed when the list evolves.</td>
+          </tr>
+          <tr class="search-item" data-search="create controlled list of values create type enum user defined type">
+            <td>create a controlled list of values</td>
+            <td><span class="mono">CREATE TYPE ... AS ENUM</span></td>
+            <td><span class="mono">CREATE TYPE dayofweek AS ENUM (...)</span></td>
+            <td>Good for small stable business labels.</td>
+            <td>Pick a lookup table when values need metadata.</td>
+          </tr>
+          <tr class="search-item" data-search="define enum postgresql enum allowed labels">
+            <td>define an enum</td>
+            <td><span class="mono">CREATE TYPE ... AS ENUM</span></td>
+            <td><span class="mono">CREATE TYPE dayofweek AS ENUM ('Monday', ...)</span></td>
+            <td>Creates a reusable custom type name.</td>
+            <td>Enum values belong to the type definition, not the column alone.</td>
+          </tr>
+          <tr class="search-item" data-search="restrict column to allowed values enum column constraint">
+            <td>restrict a column to allowed values</td>
+            <td>column uses an enum type</td>
+            <td><span class="mono">meeting_day dayofweek</span></td>
+            <td>Only declared enum labels are valid.</td>
+            <td>Invalid labels fail at insert time.</td>
+          </tr>
+          <tr class="search-item" data-search="inspect custom type pg_type enum metadata">
+            <td>inspect a custom type in <span class="mono">pg_type</span></td>
+            <td><span class="mono">pg_type</span></td>
+            <td><span class="mono">SELECT typname, typcategory FROM pg_type ...</span></td>
+            <td>Shows PostgreSQL's type catalog entry.</td>
+            <td><span class="mono">pg_type</span> includes built-ins too.</td>
+          </tr>
+          <tr class="search-item" data-search="find name of custom type typname">
+            <td>find the name of a custom type</td>
+            <td><span class="mono">typname</span></td>
+            <td><span class="mono">SELECT typname FROM pg_type ...</span></td>
+            <td><span class="mono">typname</span> is the actual PostgreSQL type name.</td>
+            <td>Do not confuse type name with category code.</td>
+          </tr>
+          <tr class="search-item" data-search="identify enum types typcategory e enum category">
+            <td>identify enum types</td>
+            <td><span class="mono">typcategory = 'E'</span></td>
+            <td><span class="mono">WHERE typcategory = 'E'</span></td>
+            <td>Filters catalog rows to enum-category types.</td>
+            <td><span class="mono">'E'</span> is category code, not a type value.</td>
+          </tr>
+          <tr class="search-item" data-search="inspect user defined column information schema user-defined">
+            <td>inspect a user-defined column</td>
+            <td><span class="mono">information_schema.columns</span></td>
+            <td><span class="mono">SELECT data_type, udt_name ...</span></td>
+            <td>Broad type label plus PostgreSQL-specific detail.</td>
+            <td><span class="mono">USER-DEFINED</span> means look deeper.</td>
+          </tr>
+          <tr class="search-item" data-search="find underlying udt name internal type name user-defined column">
+            <td>find the underlying UDT name</td>
+            <td><span class="mono">udt_name</span></td>
+            <td><span class="mono">SELECT udt_name FROM information_schema.columns</span></td>
+            <td>Tells you the real PostgreSQL type name.</td>
+            <td><span class="mono">data_type</span> alone may stay broad.</td>
+          </tr>
+          <tr class="search-item" data-search="decide between lookup table and enum custom type">
+            <td>decide between a normal lookup table and a custom enum</td>
+            <td>Use enum for small stable lists; lookup table for flexible relational values</td>
+            <td><span class="mono">status_id</span> child table when metadata grows</td>
+            <td>Choose based on change rate and relational needs.</td>
+            <td>Enums are less flexible than lookup tables.</td>
+          </tr>
+          <tr class="search-item" data-search="choose enum versus lookup table custom type relational metadata changing values">
+            <td>choose enum versus lookup table</td>
+            <td>enum for stable labels; lookup table for changing relational entities</td>
+            <td><span class="mono">mpaa_rating</span> vs <span class="mono">status_lookup</span></td>
+            <td>Enums are compact; lookup tables are more flexible.</td>
+            <td>Need descriptions or flags? Use a table.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#chapter-map">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#text-types">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="text-types">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 4</div>
+          <h2>Text Types</h2>
+        </div>
+      </div>
+      <p class="search-item" data-search="char varchar text fixed text variable text long text product code state code email description comment document">Chapter 1 starts with the core string choices: fixed-width <span class="mono">CHAR</span>, variable text with a length limit using <span class="mono">VARCHAR</span>, and flexible text using <span class="mono">TEXT</span>.</p>
+      <table class="search-item" data-search="char varchar text comparison table fixed padded variable flexible use cases caution">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Length behavior</th>
+            <th>Good for</th>
+            <th>Main caution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mono">CHAR(n)</span></td>
+            <td>fixed/padded mindset</td>
+            <td>legacy fixed codes</td>
+            <td>padding can surprise</td>
+          </tr>
+          <tr>
+            <td><span class="mono">VARCHAR(n)</span></td>
+            <td>variable with limit</td>
+            <td>controlled labels</td>
+            <td>limit must reflect business rule</td>
+          </tr>
+          <tr>
+            <td><span class="mono">TEXT</span></td>
+            <td>flexible variable length</td>
+            <td>descriptions and documents</td>
+            <td>validation must come from other rules</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="cards-3">
+        <div class="card search-item" data-search="char fixed text padded product code state code legacy plain english syntax trap interview memory">
+          <h3><span class="mono">CHAR(n)</span></h3>
+          <p><strong>Plain English:</strong> fixed-width text with a padded mindset.</p>
+          <p><strong>Best use cases:</strong> product code, state code, or legacy fixed-length identifiers.</p>
+          <p><strong>When not to use it:</strong> names, emails, descriptions, or any value with naturally variable length.</p>
+          <p><strong>Generic syntax:</strong> <span class="mono">column_name CHAR(4)</span></p>
+          <pre><code>SELECT
+  CAST('AB' AS CHAR(4)) AS fixed_code;</code></pre>
+          <pre><code>CREATE TABLE state_lookup (
+  state_code CHAR(2)
+);</code></pre>
+          <p><strong>Common trap:</strong> PostgreSQL pads to the declared width, so display and comparisons can feel surprising if you forget the fixed-width mindset.</p>
+          <p><strong>Interview translation:</strong> use <span class="mono">CHAR</span> only when the business meaning is fixed-width, not just because the values are short today.</p>
+          <p><strong>Memory line:</strong> <span class="mono">CHAR</span> = fixed/padded mindset.</p>
+        </div>
+        <div class="card search-item" data-search="varchar variable text optional limit customer name email short label plain english syntax trap interview memory">
+          <h3><span class="mono">VARCHAR(n)</span></h3>
+          <p><strong>Plain English:</strong> variable text with a rule-based maximum length.</p>
+          <p><strong>Best use cases:</strong> short labels, customer names, controlled email fields, and input constrained by the business.</p>
+          <p><strong>When not to use it:</strong> long descriptions or when you do not have a meaningful length rule.</p>
+          <p><strong>Generic syntax:</strong> <span class="mono">column_name VARCHAR(50)</span></p>
+          <pre><code>CREATE TABLE customer_notes (
+  short_label VARCHAR(50)
+);</code></pre>
+          <pre><code>CREATE TABLE contacts (
+  email_address VARCHAR(320)
+);</code></pre>
+          <p><strong>Common trap:</strong> choosing a length limit because it looks neat instead of because the business actually requires it.</p>
+          <p><strong>Interview translation:</strong> choose <span class="mono">VARCHAR(n)</span> when the maximum size is part of the business rule and worth enforcing at the schema layer.</p>
+          <p><strong>Memory line:</strong> <span class="mono">VARCHAR</span> = variable text with optional limit.</p>
+        </div>
+        <div class="card search-item" data-search="text long text flexible comment description document plain english syntax trap interview memory">
+          <h3><span class="mono">TEXT</span></h3>
+          <p><strong>Plain English:</strong> flexible variable-length text for content that can grow.</p>
+          <p><strong>Best use cases:</strong> descriptions, comments, notes, and document text.</p>
+          <p><strong>When not to use it:</strong> fields that need a strict maximum length enforced by the database.</p>
+          <p><strong>Generic syntax:</strong> <span class="mono">column_name TEXT</span></p>
+          <pre><code>CREATE TABLE documents (
+  document_body TEXT
+);</code></pre>
+          <pre><code>CREATE TABLE product_notes (
+  note_body TEXT
+);</code></pre>
+          <p><strong>Common trap:</strong> assuming flexibility means no validation is needed. You still may need application rules, trimming, or formatting checks.</p>
+          <p><strong>Interview translation:</strong> <span class="mono">TEXT</span> is often the simplest choice when content length is genuinely open-ended.</p>
+          <p><strong>Memory line:</strong> <span class="mono">TEXT</span> = flexible long text.</p>
+        </div>
+      </div>
+      <div class="callout search-item" data-search="product code state code customer name email description comment document text use cases">
+        Product code and state code lean toward fixed or limited text. Customer names and emails usually fit <span class="mono">VARCHAR</span> when a meaningful limit exists. Descriptions, comments, and document text are natural <span class="mono">TEXT</span> cases.
+      </div>
+      <div class="section-nav">
+        <a href="#problem-lookup">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#numeric-types">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="numeric-types">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 5</div>
+          <h2>Numeric Types</h2>
+        </div>
+      </div>
+      <p class="search-item" data-search="smallint integer bigint numeric decimal floating point exact money whole number percentage measurement average">The key numeric decision is whether you need whole numbers or exact decimals. That choice usually matters more than the exact numeric family name.</p>
+      <pre class="search-item" data-search="integer numeric exact price item count"><code>SELECT
+  42::INTEGER AS item_count,
+  19.95::NUMERIC(10,2) AS exact_price;</code></pre>
+      <pre class="search-item" data-search="payments bigint numeric money"><code>CREATE TABLE payments (
+  payment_id BIGINT,
+  amount NUMERIC(12,2)
+);</code></pre>
+      <div class="compare-grid">
+        <div class="compare-card search-item" data-search="smallint integer bigint whole number row id quantity age count">
+          <h3>Whole-number family</h3>
+          <p><span class="mono">SMALLINT</span>, <span class="mono">INTEGER</span>, and <span class="mono">BIGINT</span> are for counts, identifiers, quantities, and ages.</p>
+        </div>
+        <div class="compare-card search-item" data-search="numeric decimal exact money percentage">
+          <h3>Exact decimal family</h3>
+          <p><span class="mono">NUMERIC</span> and <span class="mono">DECIMAL</span> are the go-to choices for exact money, exact percentages, and controlled decimal precision.</p>
+        </div>
+        <div class="compare-card search-item" data-search="float approximate scientific measurement calculated averages">
+          <h3>Approximate measurement</h3>
+          <p>Floating-point types are acceptable for approximate scientific measurements or calculations where tiny binary rounding differences are acceptable.</p>
+        </div>
+      </div>
+      <table class="search-item" data-search="business value suggested type decision table">
+        <thead>
+          <tr>
+            <th>Business value</th>
+            <th>Suggested type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>small count</td><td><span class="mono">INTEGER</span></td></tr>
+          <tr><td>very large identifier</td><td><span class="mono">BIGINT</span></td></tr>
+          <tr><td>exact money</td><td><span class="mono">NUMERIC(p,s)</span></td></tr>
+          <tr><td>exact percentage</td><td><span class="mono">NUMERIC(p,s)</span></td></tr>
+          <tr><td>approximate scientific measurement</td><td>floating-point type</td></tr>
+        </tbody>
+      </table>
+      <div class="callout search-item" data-search="integer fractional float exact money trap">
+        <span class="danger">Trap:</span> Do not use an integer when fractional values matter. Do not assume floating-point values are exact money values.
+      </div>
+      <div class="section-nav">
+        <a href="#text-types">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#date-time-types">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="date-time-types">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 6</div>
+          <h2>Date/Time Types</h2>
+        </div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="date time timestamp timestamptz interval day clock moment duration">
+          <h3>Core meanings</h3>
+          <p><span class="mono">DATE</span> = calendar day</p>
+          <p><span class="mono">TIME</span> = clock time</p>
+          <p><span class="mono">TIMESTAMP</span> = date and time without timezone interpretation</p>
+          <p><span class="mono">TIMESTAMPTZ</span> = moment in time with timezone-aware storage/display behavior</p>
+          <p><span class="mono">INTERVAL</span> = duration or relative offset</p>
+        </div>
+        <div class="card search-item" data-search="birth date invoice date store opening time global event elapsed time future deadline">
+          <h3>Common use cases</h3>
+          <p>Birth date, invoice date, store opening time, local event timestamp, global event timestamp, allowed rental duration, elapsed time, and future deadline calculations.</p>
+        </div>
+      </div>
+      <pre class="search-item" data-search="current_date current_time current_timestamp interval 5 days"><code>SELECT
+  CURRENT_DATE AS today,
+  CURRENT_TIME AS current_clock,
+  CURRENT_TIMESTAMP AS current_moment,
+  INTERVAL '5 days' AS five_day_duration;</code></pre>
+      <pre class="search-item" data-search="rental_date interval 5 days expected return date"><code>SELECT
+  rental_date + INTERVAL '5 days' AS expected_return_date;</code></pre>
+      <table class="search-item" data-search="need type decision table date time timestamp timestamptz interval">
+        <thead>
+          <tr>
+            <th>Need</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>calendar day only</td><td><span class="mono">DATE</span></td></tr>
+          <tr><td>time of day only</td><td><span class="mono">TIME</span></td></tr>
+          <tr><td>local date and time</td><td><span class="mono">TIMESTAMP</span></td></tr>
+          <tr><td>absolute moment across time zones</td><td><span class="mono">TIMESTAMPTZ</span></td></tr>
+          <tr><td>duration or offset</td><td><span class="mono">INTERVAL</span></td></tr>
+        </tbody>
+      </table>
+      <div class="compare-grid">
+        <div class="compare-card search-item" data-search="mixing date only timestamp logic trap">
+          <h3>Trap: date-only vs timestamp</h3>
+          <p>If time detail matters, avoid converting to <span class="mono">DATE</span> too early.</p>
+        </div>
+        <div class="compare-card search-item" data-search="timezone implications trap timestamptz">
+          <h3>Trap: timezone assumptions</h3>
+          <p>When events cross regions, think in terms of moments, not just local clock labels.</p>
+        </div>
+        <div class="compare-card search-item" data-search="interval is not timestamp trap">
+          <h3>Trap: interval confusion</h3>
+          <p>An <span class="mono">INTERVAL</span> is not the same thing as a stored timestamp value.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#numeric-types">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#array-types">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="array-types">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 7</div>
+          <h2>Array Types</h2>
+        </div>
+      </div>
+      <p class="search-item" data-search="postgresql arrays multiple values one column one based indexing first array item second array item contains">PostgreSQL arrays let one column hold multiple simple values. They display like ordered lists, and indexing starts at <span class="mono">1</span>, not <span class="mono">0</span>.</p>
+      <pre class="search-item" data-search="create array tags sql analytics postgres"><code>SELECT ARRAY['sql', 'analytics', 'postgres'] AS tags;</code></pre>
+      <pre class="search-item" data-search="first second item favorite_tags indexing"><code>SELECT
+  favorite_tags[1] AS first_tag,
+  favorite_tags[2] AS second_tag
+FROM lab_customers;</code></pre>
+      <pre class="search-item" data-search="any search sql array"><code>SELECT *
+FROM lab_customers
+WHERE 'sql' = ANY(favorite_tags);</code></pre>
+      <pre class="search-item" data-search="contains one value array operator"><code>SELECT *
+FROM lab_customers
+WHERE favorite_tags @> ARRAY['sql'];</code></pre>
+      <pre class="search-item" data-search="contains multiple values array operator sql postgres"><code>SELECT *
+FROM lab_customers
+WHERE favorite_tags @> ARRAY['sql', 'postgres'];</code></pre>
+      <pre class="search-item" data-search="cardinality count items"><code>SELECT
+  favorite_tags,
+  CARDINALITY(favorite_tags) AS tag_count
+FROM lab_customers;</code></pre>
+      <pre class="search-item" data-search="array use case report first_name primary interest interested in sql"><code>SELECT
+  first_name,
+  favorite_tags,
+  favorite_tags[1] AS primary_interest,
+  CARDINALITY(favorite_tags) AS interest_count,
+  'sql' = ANY(favorite_tags) AS interested_in_sql
+FROM lab_customers
+ORDER BY first_name;</code></pre>
+      <table class="search-item" data-search="array operator comparison first item any contains cardinality">
+        <thead>
+          <tr>
+            <th>Need</th>
+            <th>Pattern</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>first item</td><td><span class="mono">array_col[1]</span></td></tr>
+          <tr><td>one searched value appears</td><td><span class="mono">'value' = ANY(array_col)</span></td></tr>
+          <tr><td>array contains one requested value</td><td><span class="mono">array_col @&gt; ARRAY['value']</span></td></tr>
+          <tr><td>array contains all requested values</td><td><span class="mono">array_col @&gt; ARRAY['a','b']</span></td></tr>
+          <tr><td>count elements</td><td><span class="mono">CARDINALITY(array_col)</span></td></tr>
+        </tbody>
+      </table>
+      <div class="cards-2">
+        <div class="card search-item" data-search="array mistakes zero indexing any contains operator array literal">
+          <h3>Common array mistakes</h3>
+          <ul class="tight-list">
+            <li>Using <span class="mono">[0]</span> instead of <span class="mono">[1]</span></li>
+            <li>Confusing <span class="mono">ANY()</span> and <span class="mono">@&gt;</span></li>
+            <li>Forgetting the right side of <span class="mono">@&gt;</span> must be an array</li>
+            <li>Using arrays where a relational child table is more appropriate</li>
+          </ul>
+        </div>
+        <div class="card search-item" data-search="how arrays display ordered list simple values">
+          <h3>How arrays help</h3>
+          <p>They are handy when the list is small, simple, and usually retrieved with the parent row. They are less ideal when each element needs its own attributes, joins, or lifecycle.</p>
+        </div>
+      </div>
+      <div class="compare-grid">
+        <div class="compare-card search-item" data-search="use array when small simple values travel together">
+          <h3>Use an array when</h3>
+          <ul class="tight-list">
+            <li>the list is small</li>
+            <li>values are simple</li>
+            <li>values usually travel together</li>
+            <li>complex joins are not required</li>
+          </ul>
+        </div>
+        <div class="compare-card search-item" data-search="prefer child table relational referential integrity analytics">
+          <h3>Prefer a child table when</h3>
+          <ul class="tight-list">
+            <li>values need their own attributes</li>
+            <li>values change independently</li>
+            <li>referential integrity matters</li>
+            <li>many-to-many relationships are needed</li>
+            <li>detailed analytics are required</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#date-time-types">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#metadata-discovery">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="metadata-discovery">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 8</div>
+          <h2>Metadata Discovery</h2>
+        </div>
+      </div>
+      <p class="search-item" data-search="information_schema columns table_schema table_name column_name data_type udt_name ordinal_position metadata discovery">Before guessing a type, inspect the database. PostgreSQL gives you a reliable map through <span class="mono">information_schema.columns</span>.</p>
+      <div class="diagram search-item" data-search="metadata workflow find schema inspect tables inspect columns inspect data_type inspect udt_name">
+Find schema
+→ inspect tables
+→ inspect columns
+→ inspect data_type
+→ inspect udt_name when PostgreSQL-specific detail matters
+      </div>
+      <pre class="search-item" data-search="inspect one table lab_rentals information_schema columns"><code>SELECT
+  table_schema,
+  table_name,
+  column_name,
+  data_type,
+  udt_name
+FROM information_schema.columns
+WHERE table_name = 'lab_rentals'
+ORDER BY ordinal_position;</code></pre>
+      <pre class="search-item" data-search="inspect one schema course06_functions_lab"><code>SELECT
+  table_name,
+  column_name,
+  data_type,
+  udt_name
+FROM information_schema.columns
+WHERE table_schema = 'course06_functions_lab'
+ORDER BY table_name, ordinal_position;</code></pre>
+      <pre class="search-item" data-search="find array columns data_type array"><code>SELECT
+  table_schema,
+  table_name,
+  column_name,
+  data_type,
+  udt_name
+FROM information_schema.columns
+WHERE data_type = 'ARRAY'
+ORDER BY table_schema, table_name, ordinal_position;</code></pre>
+      <div class="cards-3">
+        <div class="card search-item" data-search="table_schema schema matters find outside public">
+          <h3><span class="mono">table_schema</span></h3>
+          <p>Critical for finding tables outside <span class="mono">public</span>, especially in course or app-specific schemas.</p>
+        </div>
+        <div class="card search-item" data-search="data_type readable type">
+          <h3><span class="mono">data_type</span></h3>
+          <p>Human-readable category such as <span class="mono">integer</span>, <span class="mono">text</span>, or <span class="mono">ARRAY</span>.</p>
+        </div>
+        <div class="card search-item" data-search="udt_name internal type detail base type">
+          <h3><span class="mono">udt_name</span></h3>
+          <p>Shows PostgreSQL internal or base type detail, which helps when <span class="mono">data_type</span> is broad.</p>
+        </div>
+      </div>
+      <div class="callout search-item" data-search="trap filtering only public hides real table">
+        <span class="warn">Common trap:</span> filtering only <span class="mono">public</span> can hide the real table.
+      </div>
+      <div class="section-nav">
+        <a href="#array-types">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#user-defined-types">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="user-defined-types">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 9</div>
+          <h2>User-Defined Types</h2>
+        </div>
+      </div>
+      <p class="search-item" data-search="create type enum controlled values custom type user-defined type enumerated type dayofweek">A user-defined type is registered in PostgreSQL and can be used anywhere PostgreSQL expects a type name. An enum is a user-defined type containing a controlled list of allowed values.</p>
+      <div class="callout search-item" data-search="video lesson coverage create type pg_type information_schema columns user-defined udt_name">
+        <strong>Video lesson coverage</strong>
+        <p><span class="mono">CREATE TYPE</span> registers the type, <span class="mono">pg_type</span> shows the catalog entry, and <span class="mono">information_schema.columns</span> uses <span class="mono">data_type = 'USER-DEFINED'</span> plus <span class="mono">udt_name</span> to reveal the actual PostgreSQL type name on a column.</p>
+      </div>
+      <pre class="search-item" data-search="create type dayofweek enum monday tuesday wednesday thursday friday saturday sunday"><code>CREATE TYPE dayofweek AS ENUM (
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+);</code></pre>
+      <div class="callout search-item" data-search="dayofweek type name enum explanation controlled values">
+        The new type is named <span class="mono">dayofweek</span>.
+        <br>
+        A column using this type may contain only one of the values listed in the enum definition.
+      </div>
+      <pre class="search-item" data-search="create table class_schedule class_day dayofweek"><code>CREATE TABLE class_schedule (
+  class_id integer,
+  class_day dayofweek
+);</code></pre>
+      <pre class="search-item" data-search="insert into class_schedule monday valid enum insert"><code>INSERT INTO class_schedule (
+  class_id,
+  class_day
+)
+VALUES (
+  1,
+  'Monday'
+);</code></pre>
+      <p class="search-item" data-search="invalid enum value holiday fail">An attempt to store a value that is not in the enum list, such as <span class="mono">'Holiday'</span>, will fail.</p>
+      <div class="cards-2">
+        <div class="card search-item" data-search="when an enum is useful stable status values days of the week controlled categories validated by database unlikely to change often">
+          <h3>When an enum is useful</h3>
+          <ul class="tight-list">
+            <li>stable status values</li>
+            <li>days of the week</li>
+            <li>controlled categories</li>
+            <li>values that should be validated by the database</li>
+            <li>values that are unlikely to change often</li>
+          </ul>
+        </div>
+        <div class="card search-item" data-search="never going to change idealized teaching phrase enum caution schema work careful deployment">
+          <h3>Important caution</h3>
+          <p><span class="mono">"Never going to change"</span> is an idealized teaching phrase.</p>
+          <p>In real systems, enum values can change, but changing them requires schema work and careful deployment.</p>
+        </div>
+      </div>
+      <table class="search-item" data-search="enum versus lookup table small stable list foreign key attributes relational entity">
+        <thead>
+          <tr>
+            <th>Need</th>
+            <th>Enum</th>
+            <th>Lookup table</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>small stable list</td><td>strong choice</td><td>also possible</td></tr>
+          <tr><td>values change often</td><td>less flexible</td><td>better choice</td></tr>
+          <tr><td>values need descriptions or attributes</td><td>weak choice</td><td>better choice</td></tr>
+          <tr><td>foreign-key relationships required</td><td>not ideal</td><td>better choice</td></tr>
+          <tr><td>database-level value restriction</td><td>built in</td><td>provided through foreign key</td></tr>
+          <tr><td>application-readable controlled vocabulary</td><td>useful</td><td>useful</td></tr>
+        </tbody>
+      </table>
+      <p class="search-item" data-search="enum controlled type value lookup table controlled relational entity"><strong>Memory line:</strong> Enum = controlled type value<br>Lookup table = controlled relational entity</p>
+      <div class="cards-2">
+        <div class="card search-item" data-search="pg_type system catalog typname typcategory e enum category">
+          <h3>Inspecting user-defined types with <span class="mono">pg_type</span></h3>
+          <p><span class="mono">pg_type</span> is a PostgreSQL system catalog containing built-in and user-defined type information.</p>
+          <pre><code>SELECT
+  typname,
+  typcategory
+FROM pg_type
+WHERE typname = 'dayofweek';</code></pre>
+          <p><strong>typname</strong> = the PostgreSQL type name</p>
+          <p><strong>typcategory</strong> = a one-character category code used internally by PostgreSQL</p>
+          <p><strong>E</strong> = enum category</p>
+        </div>
+        <div class="card search-item" data-search="find enum types typcategory e current database catalogs order by typname">
+          <h3>Find enum types</h3>
+          <pre><code>SELECT
+  typname,
+  typcategory
+FROM pg_type
+WHERE typcategory = 'E'
+ORDER BY typname;</code></pre>
+          <p>This finds enum types visible in the current database catalogs.</p>
+        </div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="film rating information_schema columns data_type user-defined udt_name mpaa_rating">
+          <h3>Inspect a known user-defined column</h3>
+          <pre><code>SELECT
+  table_schema,
+  table_name,
+  column_name,
+  data_type,
+  udt_name
+FROM information_schema.columns
+WHERE table_name = 'film'
+  AND column_name = 'rating';</code></pre>
+          <p><span class="mono">data_type = USER-DEFINED</span></p>
+          <p><span class="mono">udt_name = mpaa_rating</span></p>
+          <p><span class="mono">data_type</span> tells us that the column uses a custom PostgreSQL type.</p>
+          <p><span class="mono">udt_name</span> tells us the actual underlying user-defined type name.</p>
+        </div>
+        <div class="card search-item" data-search="all user-defined columns information_schema columns data_type user-defined ordinal_position">
+          <h3>Find user-defined columns broadly</h3>
+          <pre><code>SELECT
+  table_schema,
+  table_name,
+  column_name,
+  data_type,
+  udt_name
+FROM information_schema.columns
+WHERE data_type = 'USER-DEFINED'
+ORDER BY
+  table_schema,
+  table_name,
+  ordinal_position;</code></pre>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#metadata-discovery">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#type-selection">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="type-selection">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 10</div>
+          <h2>Type Selection Guide</h2>
+        </div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="type selection questions text numeric date time multi valued precision timezone length controlled vocabulary joins">
+          <h3>Ask these questions first</h3>
+          <ul class="tight-list">
+            <li>Is the value text, numeric, date/time, or multi-valued?</li>
+            <li>Does exact precision matter?</li>
+            <li>Does time zone matter?</li>
+            <li>Does the value need a length constraint?</li>
+            <li>Does the value need a controlled vocabulary?</li>
+            <li>Will the multi-valued data need joins or its own attributes?</li>
+          </ul>
+        </div>
+        <div class="card search-item" data-search="phone numbers are text not numeric">
+          <h3>One important habit</h3>
+          <p>Phone numbers are usually text, not numeric values. They are identifiers with formatting, leading zeros, country codes, and symbols, not values you calculate with.</p>
+        </div>
+      </div>
+      <table class="search-item" data-search="customer id first name email description payment amount quantity birth date rental timestamp global event timestamp elapsed duration product code tags phone number percentage status decision table">
+        <thead>
+          <tr>
+            <th>Example value</th>
+            <th>Suggested type</th>
+            <th>Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>customer ID</td><td><span class="mono">BIGINT</span> or <span class="mono">INTEGER</span></td><td>Identifier size depends on system scale.</td></tr>
+          <tr><td>first name</td><td><span class="mono">VARCHAR</span> or <span class="mono">TEXT</span></td><td>Human text with variable length.</td></tr>
+          <tr><td>email</td><td><span class="mono">VARCHAR</span> or <span class="mono">TEXT</span></td><td>Text, not a numeric value.</td></tr>
+          <tr><td>description</td><td><span class="mono">TEXT</span></td><td>Length can vary widely.</td></tr>
+          <tr><td>payment amount</td><td><span class="mono">NUMERIC(12,2)</span></td><td>Exact decimal precision matters.</td></tr>
+          <tr><td>quantity</td><td><span class="mono">INTEGER</span></td><td>Whole-number business count.</td></tr>
+          <tr><td>birth date</td><td><span class="mono">DATE</span></td><td>Calendar day only.</td></tr>
+          <tr><td>rental timestamp</td><td><span class="mono">TIMESTAMP</span></td><td>Stores date and time together.</td></tr>
+          <tr><td>global event timestamp</td><td><span class="mono">TIMESTAMPTZ</span></td><td>Represents an absolute moment across time zones.</td></tr>
+          <tr><td>elapsed duration</td><td><span class="mono">INTERVAL</span></td><td>Stores an offset or duration.</td></tr>
+          <tr><td>product code</td><td><span class="mono">CHAR(n)</span> or <span class="mono">VARCHAR(n)</span></td><td>Depends on whether the width is truly fixed.</td></tr>
+          <tr><td>tags</td><td><span class="mono">TEXT[]</span></td><td>Small simple multi-valued text list.</td></tr>
+          <tr><td>phone number</td><td><span class="mono">TEXT</span> or <span class="mono">VARCHAR</span></td><td>Formatting and leading zeros matter.</td></tr>
+          <tr><td>percentage</td><td><span class="mono">NUMERIC(p,s)</span></td><td>Exact decimal arithmetic.</td></tr>
+          <tr><td>status</td><td>enum or lookup table</td><td>Choose based on stability and relational needs.</td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#user-defined-types">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#combined-examples">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="combined-examples">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 11</div>
+          <h2>Combined Examples</h2>
+        </div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="customer data shape favorite_tags primary_tag cardinality">
+          <h3>Example 1: Customer data shape</h3>
+          <p><strong>Business question:</strong> What does customer tag data look like at the row level?</p>
+          <pre><code>SELECT
+  customer_id,
+  first_name,
+  last_name,
+  favorite_tags,
+  favorite_tags[1] AS primary_tag,
+  CARDINALITY(favorite_tags) AS tag_count
+FROM lab_customers;</code></pre>
+          <p><strong>What to notice:</strong> arrays can be shown, indexed, and counted in the same query.</p>
+          <p><strong>Likely mistake:</strong> trying <span class="mono">favorite_tags[0]</span>.</p>
+        </div>
+        <div class="card search-item" data-search="inspect before querying metadata information_schema columns lab_customers">
+          <h3>Example 2: Inspect before querying</h3>
+          <p><strong>Business question:</strong> What are the real column types before I write logic?</p>
+          <pre><code>SELECT
+  column_name,
+  data_type,
+  udt_name
+FROM information_schema.columns
+WHERE table_schema = 'course06_functions_lab'
+  AND table_name = 'lab_customers'
+ORDER BY ordinal_position;</code></pre>
+          <p><strong>What to notice:</strong> <span class="mono">table_schema</span>, <span class="mono">data_type</span>, and <span class="mono">udt_name</span> together prevent blind guessing.</p>
+          <p><strong>Likely mistake:</strong> filtering only <span class="mono">public</span> and missing the table.</p>
+        </div>
+        <div class="card search-item" data-search="find sql oriented customers any favorite_tags">
+          <h3>Example 3: Find SQL-oriented customers</h3>
+          <p><strong>Business question:</strong> Which customers are interested in SQL?</p>
+          <pre><code>SELECT
+  customer_id,
+  first_name,
+  favorite_tags
+FROM lab_customers
+WHERE 'sql' = ANY(favorite_tags)
+ORDER BY customer_id;</code></pre>
+          <p><strong>What to notice:</strong> <span class="mono">ANY</span> checks whether one searched value appears in the array.</p>
+          <p><strong>Likely mistake:</strong> confusing this with <span class="mono">@&gt;</span> containment syntax.</p>
+        </div>
+        <div class="card search-item" data-search="type safe date time calculation rental_date interval 3 days">
+          <h3>Example 4: Type-safe date/time calculation</h3>
+          <p><strong>Business question:</strong> What is the expected return date if rentals last three days?</p>
+          <pre><code>SELECT
+  rental_id,
+  rental_date,
+  rental_date + INTERVAL '3 days' AS expected_return_date
+FROM lab_rentals;</code></pre>
+          <p><strong>What to notice:</strong> <span class="mono">INTERVAL</span> keeps the calculation in the date/time family.</p>
+          <p><strong>Likely mistake:</strong> converting to <span class="mono">DATE</span> before the calculation when time still matters.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#type-selection">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#mistakes">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="mistakes">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 12</div>
+          <h2>Common Mistakes</h2>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Mistake</th>
+            <th>Why it happens</th>
+            <th>Correction</th>
+            <th>Memory line</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="search-item" data-search="arrays start at 0 zero indexing">
+            <td>Assuming arrays start at 0</td>
+            <td>Many programming languages train that reflex.</td>
+            <td>Use <span class="mono">[1]</span> for the first PostgreSQL array element.</td>
+            <td>PostgreSQL arrays start at 1.</td>
+          </tr>
+          <tr class="search-item" data-search="filtering metadata only public schema">
+            <td>Filtering metadata only to <span class="mono">public</span></td>
+            <td>People expect every table to live there.</td>
+            <td>Inspect <span class="mono">table_schema</span> and use the real schema name.</td>
+            <td><span class="mono">table_schema</span> matters.</td>
+          </tr>
+          <tr class="search-item" data-search="phone numbers numeric">
+            <td>Treating phone numbers as numeric</td>
+            <td>They look number-like at a glance.</td>
+            <td>Store them as text because formatting and leading zeros matter.</td>
+            <td>Phone numbers are identifiers, not arithmetic.</td>
+          </tr>
+          <tr class="search-item" data-search="integer for money">
+            <td>Using integer for money</td>
+            <td>Whole-number types feel simple and familiar.</td>
+            <td>Use <span class="mono">NUMERIC(p,s)</span> when cents matter.</td>
+            <td>Money is usually exact decimal.</td>
+          </tr>
+          <tr class="search-item" data-search="float exact money">
+            <td>Using floating point for exact money</td>
+            <td>Decimals look natural in floating-point syntax.</td>
+            <td>Use <span class="mono">NUMERIC</span> for exact currency values.</td>
+            <td>Float is approximate, not exact money.</td>
+          </tr>
+          <tr class="search-item" data-search="char padding fixed width">
+            <td>Using <span class="mono">CHAR</span> without understanding padding</td>
+            <td>Fixed-width behavior is easy to underestimate.</td>
+            <td>Choose <span class="mono">VARCHAR</span> unless fixed-width meaning is intentional.</td>
+            <td><span class="mono">CHAR</span> = fixed/padded mindset.</td>
+          </tr>
+          <tr class="search-item" data-search="casting timestamp to date too early">
+            <td>Casting timestamp to date too early</td>
+            <td>People want a neat display before finishing logic.</td>
+            <td>Keep full timestamp detail until the calculation is complete.</td>
+            <td>Do not drop time detail before you are done.</td>
+          </tr>
+          <tr class="search-item" data-search="timestamp interval confusion">
+            <td>Confusing <span class="mono">TIMESTAMP</span> with <span class="mono">INTERVAL</span></td>
+            <td>Both are part of date/time work.</td>
+            <td><span class="mono">TIMESTAMP</span> is a moment; <span class="mono">INTERVAL</span> is a duration or offset.</td>
+            <td>Moment versus duration.</td>
+          </tr>
+          <tr class="search-item" data-search="arrays for complex relational data">
+            <td>Using arrays for complex relational data</td>
+            <td>Arrays feel faster than designing child tables.</td>
+            <td>Use a child table when elements need joins, attributes, or integrity rules.</td>
+            <td>Simple list: array. Relational list: child table.</td>
+          </tr>
+          <tr class="search-item" data-search="ignoring timezone needs timestamptz">
+            <td>Ignoring timezone needs</td>
+            <td>Local development can hide global reality.</td>
+            <td>Use <span class="mono">TIMESTAMPTZ</span> when you care about the absolute moment across regions.</td>
+            <td>Cross-region events need moment-aware thinking.</td>
+          </tr>
+          <tr class="search-item" data-search="ui labels instead of metadata inspect schema">
+            <td>Relying only on file or UI labels instead of inspecting metadata</td>
+            <td>Names can sound trustworthy.</td>
+            <td>Query <span class="mono">information_schema.columns</span> before assuming types.</td>
+            <td>Inspect first, guess second.</td>
+          </tr>
+          <tr class="search-item" data-search="data_type udt_name identical">
+            <td>Assuming <span class="mono">data_type</span> and <span class="mono">udt_name</span> are identical</td>
+            <td>Both appear in the same metadata result.</td>
+            <td>Use <span class="mono">data_type</span> for broad category and <span class="mono">udt_name</span> for PostgreSQL-specific detail.</td>
+            <td>Broad label versus internal detail.</td>
+          </tr>
+          <tr class="search-item" data-search="user-defined actual type name mistake">
+            <td>Assuming <span class="mono">USER-DEFINED</span> is the actual type name</td>
+            <td>The broad metadata label looks descriptive enough.</td>
+            <td>Check <span class="mono">udt_name</span> to see the real PostgreSQL type such as <span class="mono">mpaa_rating</span>.</td>
+            <td><span class="mono">USER-DEFINED</span> means keep digging.</td>
+          </tr>
+          <tr class="search-item" data-search="every controlled list should be enum mistake">
+            <td>Assuming every controlled list should be an enum</td>
+            <td>Enums look tidy and strongly typed.</td>
+            <td>Use a lookup table when values need attributes, ordering, or frequent change.</td>
+            <td>Stable labels = enum; relational values = table.</td>
+          </tr>
+          <tr class="search-item" data-search="enums can never change mistake">
+            <td>Assuming enums can never change</td>
+            <td>People hear "stable list" and infer total immutability.</td>
+            <td>Enums can change, but schema changes need care and should not replace flexible lookup-table design.</td>
+            <td>Possible to change, expensive to treat casually.</td>
+          </tr>
+          <tr class="search-item" data-search="querying only data_type not udt_name mistake">
+            <td>Querying only <span class="mono">information_schema.columns.data_type</span></td>
+            <td>The first type column looks complete.</td>
+            <td>Inspect <span class="mono">udt_name</span> too when PostgreSQL-specific type detail matters.</td>
+            <td>Broad label plus internal name.</td>
+          </tr>
+          <tr class="search-item" data-search="pg_type only custom types mistake">
+            <td>Assuming <span class="mono">pg_type</span> contains only custom types</td>
+            <td>The catalog name sounds like a special-purpose list.</td>
+            <td>Remember it includes built-in and user-defined PostgreSQL types.</td>
+            <td>Catalogs usually contain the whole family.</td>
+          </tr>
+          <tr class="search-item" data-search="typcategory e means enum value mistake">
+            <td>Assuming <span class="mono">typcategory = 'E'</span> is the enum value itself</td>
+            <td>Single-letter codes can look like data values.</td>
+            <td>Treat it as a category marker that means "enum type."</td>
+            <td><span class="mono">'E'</span> = enum category, not enum label.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#combined-examples">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#interview-qa">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="interview-qa">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 13</div>
+          <h2>Interview Q&amp;A</h2>
+        </div>
+      </div>
+      <div class="qa-grid">
+        <div class="qa-card search-item" data-search="discover column type interview">
+          <h3>How do you discover a PostgreSQL column type?</h3>
+          <p>Query <span class="mono">information_schema.columns</span> and inspect <span class="mono">table_schema</span>, <span class="mono">column_name</span>, <span class="mono">data_type</span>, and <span class="mono">udt_name</span>.</p>
+        </div>
+        <div class="qa-card search-item" data-search="varchar vs text interview">
+          <h3>What is the difference between VARCHAR and TEXT?</h3>
+          <p><span class="mono">VARCHAR(n)</span> adds a length rule. <span class="mono">TEXT</span> is flexible when no meaningful limit is needed.</p>
+        </div>
+        <div class="qa-card search-item" data-search="numeric vs integer interview">
+          <h3>When would you use NUMERIC instead of INTEGER?</h3>
+          <p>Use <span class="mono">NUMERIC</span> when exact decimal values matter, such as money or exact percentages.</p>
+        </div>
+        <div class="qa-card search-item" data-search="why money numeric interview">
+          <h3>Why should money normally use NUMERIC?</h3>
+          <p>Because money needs exact decimal precision, and floating point can introduce approximation errors.</p>
+        </div>
+        <div class="qa-card search-item" data-search="date vs timestamp interview">
+          <h3>What is the difference between DATE and TIMESTAMP?</h3>
+          <p><span class="mono">DATE</span> stores the day only. <span class="mono">TIMESTAMP</span> stores both date and time.</p>
+        </div>
+        <div class="qa-card search-item" data-search="what is interval interview">
+          <h3>What is INTERVAL?</h3>
+          <p>An <span class="mono">INTERVAL</span> is a duration or offset used in date/time calculations.</p>
+        </div>
+        <div class="qa-card search-item" data-search="what is postgresql array interview">
+          <h3>What is a PostgreSQL array?</h3>
+          <p>It is a column value that can hold multiple ordered elements of the same base type.</p>
+        </div>
+        <div class="qa-card search-item" data-search="array indexing trap interview">
+          <h3>What is the array indexing trap?</h3>
+          <p>People expect zero-based indexing, but PostgreSQL arrays start at <span class="mono">1</span>.</p>
+        </div>
+        <div class="qa-card search-item" data-search="any vs contains interview">
+          <h3>What is the difference between ANY and @&gt;?</h3>
+          <p><span class="mono">ANY</span> checks whether one searched value appears. <span class="mono">@&gt;</span> checks whether the left array contains the requested array.</p>
+        </div>
+        <div class="qa-card search-item" data-search="avoid array interview">
+          <h3>When would you avoid an array?</h3>
+          <p>Avoid arrays when elements need joins, their own attributes, referential integrity, or many-to-many analytics.</p>
+        </div>
+        <div class="qa-card search-item" data-search="udt_name tells you interview">
+          <h3>What does udt_name tell you?</h3>
+          <p>It gives PostgreSQL-specific internal or base type detail beyond the broad <span class="mono">data_type</span> label.</p>
+        </div>
+        <div class="qa-card search-item" data-search="user defined type interview">
+          <h3>What is a PostgreSQL user-defined type?</h3>
+          <p>It is a type you register in PostgreSQL so it can be reused anywhere a type name is expected, such as a custom enum.</p>
+        </div>
+        <div class="qa-card search-item" data-search="what is enum interview">
+          <h3>What is an enum?</h3>
+          <p>An enum is a type with a controlled list of allowed labels, such as days of the week or a stable status list.</p>
+        </div>
+        <div class="qa-card search-item" data-search="create enum interview">
+          <h3>How do you create an enum?</h3>
+          <p>Use <span class="mono">CREATE TYPE type_name AS ENUM (...)</span> and then assign that type to a column.</p>
+        </div>
+        <div class="qa-card search-item" data-search="inspect type through pg_type interview">
+          <h3>How do you inspect a type through <span class="mono">pg_type</span>?</h3>
+          <p>Query <span class="mono">pg_type</span> and inspect fields like <span class="mono">typname</span> and <span class="mono">typcategory</span>.</p>
+        </div>
+        <div class="qa-card search-item" data-search="typname meaning interview">
+          <h3>What does <span class="mono">typname</span> mean?</h3>
+          <p>It is the PostgreSQL type name stored in the system catalog.</p>
+        </div>
+        <div class="qa-card search-item" data-search="typcategory e meaning interview">
+          <h3>What does <span class="mono">typcategory = 'E'</span> mean?</h3>
+          <p>It means the type belongs to PostgreSQL's enum category.</p>
+        </div>
+        <div class="qa-card search-item" data-search="data_type user-defined meaning interview">
+          <h3>What does <span class="mono">data_type = 'USER-DEFINED'</span> mean?</h3>
+          <p>It means the broad metadata label is not enough and you should inspect <span class="mono">udt_name</span> for the actual PostgreSQL type name.</p>
+        </div>
+        <div class="qa-card search-item" data-search="enum good choice interview">
+          <h3>When is an enum a good choice?</h3>
+          <p>When the allowed labels are small, stable, and do not need extra relational attributes.</p>
+        </div>
+        <div class="qa-card search-item" data-search="lookup table better than enum interview">
+          <h3>When might a lookup table be better than an enum?</h3>
+          <p>When values change often or need descriptions, ordering, flags, or other relational attributes.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#mistakes">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#memory-review">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="memory-review">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 14</div>
+          <h2>Memory Review</h2>
+        </div>
+      </div>
+      <div class="cheat-grid">
+        <div class="cheat-cell search-item" data-search="char varchar text memory nuggets">
+          <strong>Text</strong>
+          <p class="muted">CHAR = fixed/padded mindset<br>VARCHAR = variable text with optional limit<br>TEXT = flexible long text</p>
+        </div>
+        <div class="cheat-cell search-item" data-search="integer numeric memory nuggets">
+          <strong>Numeric</strong>
+          <p class="muted">INTEGER = whole number<br>NUMERIC = exact decimal</p>
+        </div>
+        <div class="cheat-cell search-item" data-search="date time timestamp interval memory nuggets">
+          <strong>Date/Time</strong>
+          <p class="muted">DATE = day<br>TIME = clock<br>TIMESTAMP = date plus time<br>INTERVAL = duration</p>
+        </div>
+        <div class="cheat-cell search-item" data-search="arrays any contains cardinality memory nuggets">
+          <strong>Arrays</strong>
+          <p class="muted">PostgreSQL arrays start at 1<br>ANY = one searched value<br>@&gt; = left array contains requested array<br>CARDINALITY = number of elements</p>
+        </div>
+        <div class="cheat-cell search-item" data-search="information_schema columns table_schema udt_name memory nuggets">
+          <strong>Metadata</strong>
+          <p class="muted">information_schema.columns = inspect metadata<br>table_schema matters<br>udt_name shows PostgreSQL internal/base type detail</p>
+        </div>
+        <div class="cheat-cell search-item" data-search="create type enum pg_type typname typcategory e user-defined memory nuggets">
+          <strong>User-Defined Types</strong>
+          <p class="muted">CREATE TYPE ... AS ENUM = controlled type<br>pg_type = PostgreSQL type catalog<br>typname = actual type name<br>typcategory = 'E' means enum category</p>
+        </div>
+        <div class="cheat-cell search-item" data-search="user-defined udt_name enum lookup table memory nuggets">
+          <strong>Enum vs Lookup</strong>
+          <p class="muted">data_type = USER-DEFINED = broad label only<br>udt_name = real PostgreSQL type name<br>Enum = controlled type value<br>Lookup table = controlled relational entity</p>
+        </div>
+      </div>
+      <div class="card search-item" data-search="self check review questions">
+        <h3>Five-question self-check</h3>
+        <ol class="tight-list">
+          <li>When is <span class="mono">VARCHAR(n)</span> better than <span class="mono">TEXT</span>?</li>
+          <li>Why is <span class="mono">NUMERIC</span> safer than float for money?</li>
+          <li>When should you choose <span class="mono">TIMESTAMPTZ</span> over <span class="mono">TIMESTAMP</span>?</li>
+          <li>What is the difference between <span class="mono">ANY</span> and <span class="mono">@&gt;</span> for arrays?</li>
+          <li>Which metadata fields would you inspect before trusting a column label?</li>
+        </ol>
+      </div>
+      <div class="section-nav">
+        <a href="#interview-qa">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#related-guides">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="related-guides">
+      <div class="section-header">
+        <div>
+          <div class="section-num">Section 15</div>
+          <h2>Related Guides</h2>
+        </div>
+      </div>
+      <div class="hero-links" aria-label="Related guide links">
+        <a href="field_guide.html">Open Main Field Guide</a>
+        <a href="sql_function_quick_lookup.html">Open Quick Lookup</a>
+        <a href="../lab/lab_guide.html">Open Lab Guide</a>
+      </div>
+      <div class="section-nav">
+        <a href="#memory-review">Previous section</a>
+        <a href="#top">Back to top</a>
+      </div>
+    </section>
+
+    <div class="floating-nav" aria-label="Floating page navigation">
+      <a href="#top">Top</a>
+      <a href="#problem-lookup">Problems</a>
+      <a href="#array-types">Arrays</a>
+      <a href="#metadata-discovery">Metadata</a>
+      <a href="#mistakes">Mistakes</a>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const input = document.getElementById('lookupSearch');
+      const count = document.getElementById('searchCount');
+      const items = Array.from(document.querySelectorAll('.search-item'));
+
+      function updateSearch() {
+        const query = input.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        items.forEach((item) => {
+          const haystack = ((item.dataset.search || '') + ' ' + item.textContent).toLowerCase();
+          const matches = !query || haystack.includes(query);
+          item.hidden = !matches;
+          if (matches) {
+            visibleCount += 1;
+          }
+        });
+
+        if (!query) {
+          count.textContent = 'Showing all Chapter 1 items';
+        } else {
+          count.textContent = 'Showing ' + visibleCount + ' matching items';
+        }
+      }
+
+      input.addEventListener('input', updateSearch);
+      updateSearch();
+    }());
+  </script>
+</body>
+</html>

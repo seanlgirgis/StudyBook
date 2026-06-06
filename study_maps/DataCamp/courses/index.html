@@ -3,31 +3,429 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DataCamp Courses</title>
+  <title>DataCamp Courses | StudyBook</title>
   <style>
-    body { font-family: Segoe UI, Arial, sans-serif; margin: 0; background: #f6f8fb; color: #1f2937; }
-    main { max-width: 900px; margin: 0 auto; padding: 24px; }
-    section { background: #fff; border: 1px solid #dbe2ea; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    a { color: #0a5db1; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.58;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 50px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #071d2d 0%, #0d2a40 58%, #153b50 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 800px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .section {
+      margin-top: 24px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card.featured {
+      border-color: #2f7a4c;
+      background:
+        linear-gradient(180deg, rgba(3,239,98,0.07), transparent 68%),
+        var(--panel);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .badge.complete {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .badge.track {
+      background: var(--blue-soft);
+      color: var(--blue);
+      margin-left: 6px;
+    }
+
+    .card h3 {
+      margin: 12px 0 8px;
+      font-size: 1.18rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .meta {
+      display: grid;
+      gap: 7px;
+      margin-top: 15px;
+      color: #c9d3dc;
+      font-size: 0.88rem;
+    }
+
+    .meta span strong {
+      color: var(--text);
+    }
+
+    .path {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border: 1px solid #2b3642;
+      border-radius: 8px;
+      background: #0f141a;
+      color: #b8c4cf;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.82rem;
+      overflow-wrap: anywhere;
+    }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 16px;
+      color: var(--green);
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .card-link:hover { text-decoration: underline; }
+
+    .note {
+      margin-top: 24px;
+      padding: 15px 17px;
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      background: var(--amber-soft);
+      color: #d7c9a8;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .nav-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 18px;
+    }
+
+    .nav-card h3 {
+      margin: 0 0 7px;
+      font-size: 1rem;
+    }
+
+    .nav-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .nav-card a {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--green);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    footer {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 800px) {
+      .grid, .nav-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading {
+        flex-direction: column;
+        align-items: start;
+      }
+
+      .hero {
+        padding: 28px 22px;
+      }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <section>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <span>Courses</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Canonical Course Library</p>
       <h1>DataCamp Courses</h1>
-      <p>Canonical reusable course packages live here.</p>
+      <p>
+        Reusable course packages live here independently of track position.
+        Track pages own ordering; course folders use stable, number-free slugs.
+      </p>
+    </header>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Completed Canonical Courses</h2>
+          <p>Courses already rebuilt using the current StudyBook model.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <article class="card featured">
+          <div>
+            <span class="badge complete">Complete</span>
+            <span class="badge track">SQL Fundamentals · Course 1</span>
+          </div>
+
+          <h3>Introduction to SQL</h3>
+          <p>
+            Relational databases, tables, rows and columns, identifiers, data types,
+            schemas, basic queries, DISTINCT, aliases, views, and SQL flavors.
+          </p>
+
+          <div class="meta">
+            <span><strong>Chapters:</strong> 2</span>
+            <span><strong>Lab:</strong> Lightweight by design</span>
+            <span><strong>Status:</strong> Wrapped and ready for review</span>
+          </div>
+
+          <div class="path">courses/introduction_to_sql</div>
+          <a class="card-link" href="introduction_to_sql/index.html">Open course →</a>
+        </article>
+
+        <article class="card featured">
+          <div>
+            <span class="badge complete">Complete</span>
+            <span class="badge track">SQL Fundamentals · Course 6</span>
+          </div>
+
+          <h3>Functions for Manipulating Data in PostgreSQL</h3>
+          <p>
+            PostgreSQL data types, arrays, date/time functions, text manipulation,
+            full-text search, extensions, and fuzzy string matching.
+          </p>
+
+          <div class="meta">
+            <span><strong>Chapters:</strong> 4</span>
+            <span><strong>Lab:</strong> Course-local runnable SQL</span>
+            <span><strong>Status:</strong> Platform passed; review ongoing</span>
+          </div>
+
+          <div class="path">courses/functions_for_manipulating_data_in_postgresql</div>
+          <a class="card-link" href="functions_for_manipulating_data_in_postgresql/index.html">Open course →</a>
+        </article>
+
+        <article class="card featured">
+          <div>
+            <span class="badge complete">Complete</span>
+            <span class="badge track">SQL Fundamentals · Course 3</span>
+          </div>
+
+          <h3>Joining Data in SQL</h3>
+          <p>
+            Inner and outer joins, cross and self joins, set operations,
+            semi joins, anti joins, and subqueries.
+          </p>
+
+          <div class="meta">
+            <span><strong>Chapters:</strong> 4</span>
+            <span><strong>Lab:</strong> Integrated PostgreSQL course lab</span>
+            <span><strong>Status:</strong> Platform passed; documentation complete</span>
+          </div>
+
+          <div class="path">courses/joining_data_in_sql</div>
+          <a class="card-link" href="joining_data_in_sql/index.html">Open course →</a>
+        </article>
+
+
+        <article class="card featured">
+          <div>
+            <span class="badge complete">Complete</span>
+            <span class="badge track">SQL Fundamentals · Course 4</span>
+          </div>
+
+          <h3>Data Manipulation in SQL</h3>
+          <p>
+            CASE expressions, conditional aggregation, scalar and list subqueries,
+            correlated queries, nested queries, common table expressions, and window functions.
+          </p>
+
+          <div class="meta">
+            <span><strong>Chapters:</strong> 4</span>
+            <span><strong>Lab:</strong> Course-local PostgreSQL lab and final challenge</span>
+            <span><strong>Status:</strong> Platform passed; documentation complete</span>
+          </div>
+
+          <div class="path">courses/data_manipulation_in_sql</div>
+          <a class="card-link" href="data_manipulation_in_sql/index.html">Open course →</a>
+        </article>
+      </div>
     </section>
-    <section>
-      <h2>Available Courses</h2>
-      <ul>
-        <li><a href="05_postgresql_summary_stats_and_window_functions/index.html">05_postgresql_summary_stats_and_window_functions</a></li>
-      </ul>
+
+    <aside class="note">
+      <strong>Legacy folders:</strong>
+      older numbered course folders may remain temporarily for reference, but they are not listed here
+      as canonical packages until they are rebuilt or reconciled.
+    </aside>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Navigation</h2>
+          <p>Move between the course library and the active tracks.</p>
+        </div>
+      </div>
+
+      <div class="nav-grid">
+        <article class="nav-card">
+          <h3>SQL Fundamentals</h3>
+          <p>Open the active skill track and its ordered curriculum.</p>
+          <a href="../skill_tracks/01_sql_fundamentals/index.html">Open skill track →</a>
+        </article>
+
+        <article class="nav-card">
+          <h3>Skill Tracks</h3>
+          <p>Browse all focused DataCamp skill-track pages.</p>
+          <a href="../skill_tracks/index.html">Browse skill tracks →</a>
+        </article>
+
+        <article class="nav-card">
+          <h3>DataCamp Home</h3>
+          <p>Return to the main StudyBook navigation dashboard.</p>
+          <a href="../index.html">Open DataCamp home →</a>
+        </article>
+      </div>
     </section>
-    <section>
-      <h2>Navigation</h2>
-      <p><a href="../index.html">Back to DataCamp StudyBook</a></p>
-    </section>
+
+    <footer>
+      DataCamp StudyBook · Canonical reusable course library
+    </footer>
   </main>
 </body>
 </html>

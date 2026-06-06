@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Intermediate SQL — Quick Lookup</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3,239,98,.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88,166,255,.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210,153,34,.12);
+      --danger: #ff7b72;
+      --shadow: 0 12px 30px rgba(0,0,0,.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3,239,98,.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 50px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d, #0d2a40 58%, #14384e);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), #bc8cff);
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.05rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 40px;
+      padding: 0 15px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      border: 1px solid #486274;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+      border-color: transparent;
+    }
+
+    .search-wrap {
+      margin-top: 18px;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #3b4a58;
+      border-radius: 10px;
+      background: #0f141a;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .search-wrap input:focus {
+      outline: 2px solid rgba(88,166,255,.35);
+      border-color: var(--blue);
+    }
+
+    .section {
+      margin-top: 22px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.35rem;
+    }
+
+    .lookup-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .lookup-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 15px;
+    }
+
+    .lookup-card h3 {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 1rem;
+    }
+
+    .lookup-card p {
+      margin: 0 0 9px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .lookup-card pre {
+      margin: 10px 0;
+      padding: 11px;
+      border: 1px solid #33404d;
+      border-radius: 8px;
+      background: #0f141a;
+      color: #dce6ef;
+      overflow-x: auto;
+      font-size: .84rem;
+      line-height: 1.45;
+    }
+
+    .trap {
+      margin-top: 10px;
+      padding: 9px 10px;
+      border-left: 3px solid var(--amber);
+      border-radius: 7px;
+      background: var(--amber-soft);
+      color: #d8caaa;
+      font-size: .84rem;
+    }
+
+    .callout {
+      margin-top: 14px;
+      padding: 13px 15px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .diagram {
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #10161d;
+      white-space: pre;
+      overflow-x: auto;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 980px) {
+      .lookup-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 650px) {
+      .lookup-grid { grid-template-columns: 1fr; }
+      .hero { padding: 26px 20px; }
+      .section { padding: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Intermediate SQL</a>
+      <span>›</span>
+      <span>SQL Quick Lookup</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Intermediate SQL · Quick Reference</p>
+      <h1>SQL Quick Lookup</h1>
+      <p>
+        Find the smallest useful syntax pattern, what it does, and the trap most likely
+        to cause a mistake.
+      </p>
+
+      <div class="actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button" href="field_guide.html">Main Field Guide</a>
+        <a class="button" href="../lab/lab_run_book.md">Lab Run Book</a>
+      </div>
+
+      <div class="search-wrap">
+        <input id="lookupSearch" type="search"
+               placeholder="Search: COUNT, NULL, GROUP BY, HAVING, ROUND..."
+               aria-label="Search quick lookup">
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Selecting and Counting</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>SELECT</h3>
+          <p>Choose output columns or expressions.</p>
+          <pre><code>SELECT title, country
+FROM films;</code></pre>
+          <div class="trap">Trap: <code>SELECT *</code> is convenient but often too broad.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>FROM</h3>
+          <p>Choose the source table.</p>
+          <pre><code>SELECT title
+FROM films;</code></pre>
+          <div class="trap">Trap: SQL must identify the source before it can return fields.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>DISTINCT</h3>
+          <p>Remove duplicate result rows.</p>
+          <pre><code>SELECT DISTINCT country
+FROM films;</code></pre>
+          <div class="trap">Trap: with several columns, it applies to the full combination.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>COUNT(*)</h3>
+          <p>Count rows.</p>
+          <pre><code>SELECT COUNT(*)
+FROM films;</code></pre>
+          <div class="trap">Trap: this is the safest total-row count.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>COUNT(column)</h3>
+          <p>Count non-NULL values.</p>
+          <pre><code>SELECT COUNT(budget)
+FROM films;</code></pre>
+          <div class="trap">Trap: NULL values are skipped.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>COUNT(DISTINCT column)</h3>
+          <p>Count unique non-NULL values.</p>
+          <pre><code>SELECT COUNT(DISTINCT country)
+FROM films;</code></pre>
+          <div class="trap">Trap: both duplicates and NULL are ignored.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Filtering</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>WHERE</h3>
+          <p>Keep rows matching a condition.</p>
+          <pre><code>SELECT title
+FROM films
+WHERE release_year = 2020;</code></pre>
+          <div class="trap">Trap: aggregate conditions normally belong in HAVING.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Comparison operators</h3>
+          <p>Compare numbers, text, or dates.</p>
+          <pre><code>=  !=  &lt;&gt;
+&gt;  &gt;=
+&lt;  &lt;=</code></pre>
+          <div class="trap">Trap: text values use single quotes.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>AND</h3>
+          <p>Require every condition to be true.</p>
+          <pre><code>WHERE country = 'Canada'
+  AND imdb_score &gt;= 7.0</code></pre>
+          <div class="trap">Memory: AND narrows.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>OR</h3>
+          <p>Require at least one condition to be true.</p>
+          <pre><code>WHERE country = 'Canada'
+   OR country = 'Germany'</code></pre>
+          <div class="trap">Memory: OR broadens.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>BETWEEN</h3>
+          <p>Filter an inclusive range.</p>
+          <pre><code>WHERE release_year
+BETWEEN 2018 AND 2021</code></pre>
+          <div class="trap">Trap: both endpoints are included.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>IN</h3>
+          <p>Match one value from a list.</p>
+          <pre><code>WHERE country IN
+('Canada', 'Germany')</code></pre>
+          <div class="trap">Trap: cleaner than repeated OR conditions.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>NOT IN</h3>
+          <p>Exclude values from a list.</p>
+          <pre><code>WHERE certification NOT IN
+('R', 'PG-13')</code></pre>
+          <div class="trap">Trap: NULL inside a list or subquery can produce surprising results.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Text Patterns and NULL</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>LIKE</h3>
+          <p>Case-sensitive pattern matching in PostgreSQL.</p>
+          <pre><code>WHERE title LIKE 'B%'</code></pre>
+          <div class="trap"><code>%</code> = many characters; <code>_</code> = one character.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>NOT LIKE</h3>
+          <p>Exclude rows matching a pattern.</p>
+          <pre><code>WHERE title NOT LIKE '%Film%'</code></pre>
+          <div class="trap">Trap: use LIKE operators, not <code>=</code>, with wildcards.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>ILIKE</h3>
+          <p>PostgreSQL case-insensitive pattern matching.</p>
+          <pre><code>WHERE title ILIKE '%market%'</code></pre>
+          <div class="trap">Trap: PostgreSQL-specific.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>IS NULL</h3>
+          <p>Find missing values.</p>
+          <pre><code>WHERE budget IS NULL</code></pre>
+          <div class="trap">Trap: never use <code>= NULL</code>.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>IS NOT NULL</h3>
+          <p>Find known values.</p>
+          <pre><code>WHERE imdb_score IS NOT NULL</code></pre>
+          <div class="trap">Trap: NULL is not zero or an empty string.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Aggregate Functions and Arithmetic</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>SUM</h3>
+          <p>Add numeric values.</p>
+          <pre><code>SELECT SUM(gross)
+FROM films;</code></pre>
+          <div class="trap">Trap: NULL values are ignored.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>AVG</h3>
+          <p>Calculate the arithmetic mean.</p>
+          <pre><code>SELECT AVG(duration)
+FROM films;</code></pre>
+          <div class="trap">Trap: NULL values are not treated as zero.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>MIN</h3>
+          <p>Return the smallest value.</p>
+          <pre><code>SELECT MIN(release_year)
+FROM films;</code></pre>
+          <div class="trap">Trap: text values use lexical ordering.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>MAX</h3>
+          <p>Return the largest value.</p>
+          <pre><code>SELECT MAX(imdb_score)
+FROM films;</code></pre>
+          <div class="trap">Trap: cast text when the meaning is numeric.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>ROUND(value, places)</h3>
+          <p>Control numeric precision.</p>
+          <pre><code>ROUND(AVG(budget), -3)</code></pre>
+          <div class="trap">Positive = right of decimal; negative = left.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Arithmetic</h3>
+          <p>Create derived values.</p>
+          <pre><code>SELECT gross - budget AS profit
+FROM films;</code></pre>
+          <div class="trap">Trap: arithmetic with NULL returns NULL.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Safe division</h3>
+          <p>Protect against division by zero.</p>
+          <pre><code>gross / NULLIF(budget, 0)</code></pre>
+          <div class="trap">Trap: integer division can discard decimals.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Alias</h3>
+          <p>Give a result expression a readable name.</p>
+          <pre><code>SELECT AVG(duration)
+       AS average_duration
+FROM films;</code></pre>
+          <div class="trap">Trap: aliases do not rename stored columns.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>CAST</h3>
+          <p>Convert a value to another data type.</p>
+          <pre><code>year_text::integer
+
+CAST(year_text AS integer)</code></pre>
+          <div class="trap">Trap: dirty text can make the cast fail.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Sorting and Grouping</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>ORDER BY</h3>
+          <p>Sort the final result.</p>
+          <pre><code>ORDER BY release_year</code></pre>
+          <div class="trap">Trap: without ORDER BY, row order is not guaranteed.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>ASC</h3>
+          <p>Ascending sort direction.</p>
+          <pre><code>ORDER BY release_year ASC</code></pre>
+          <div class="trap">Trap: ASC is the default.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>DESC</h3>
+          <p>Descending sort direction.</p>
+          <pre><code>ORDER BY imdb_score DESC</code></pre>
+          <div class="trap">Trap: direction applies to each expression separately.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Multiple ORDER BY fields</h3>
+          <p>Use later fields as tie-breakers.</p>
+          <pre><code>ORDER BY release_year ASC,
+         imdb_score DESC</code></pre>
+          <div class="trap">Trap: priority is left to right.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>GROUP BY</h3>
+          <p>Create one group per unique value or combination.</p>
+          <pre><code>SELECT country, COUNT(*)
+FROM films
+GROUP BY country;</code></pre>
+          <div class="trap">Trap: every non-aggregate selected field must be grouped.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>HAVING</h3>
+          <p>Filter grouped aggregate results.</p>
+          <pre><code>GROUP BY country
+HAVING COUNT(*) &gt;= 2</code></pre>
+          <div class="trap">Trap: HAVING filters groups; WHERE filters rows.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>WHERE vs HAVING</h3>
+          <p>Filter at different stages.</p>
+          <pre><code>WHERE release_year &gt;= 2019
+GROUP BY country
+HAVING COUNT(*) &gt;= 2</code></pre>
+          <div class="trap">Trap: execution order determines which clause is valid.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Logical Execution Order</h2>
+
+      <div class="diagram">1. FROM
+2. WHERE
+3. GROUP BY
+4. HAVING
+5. SELECT
+6. DISTINCT
+7. ORDER BY
+8. LIMIT</div>
+
+      <div class="callout">
+        This order explains why aggregates cannot normally be filtered in
+        <code>WHERE</code>, why aliases are often available in <code>ORDER BY</code>,
+        and why <code>LIMIT</code> is applied last.
+      </div>
+    </section>
+
+    <footer>
+      <span>Intermediate SQL · SQL Quick Lookup</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="../lab/lab_run_book.md">Lab Run Book</a>
+      </span>
+    </footer>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById("lookupSearch");
+    const cards = Array.from(document.querySelectorAll(".lookup-card"));
+
+    searchInput.addEventListener("input", function () {
+      const term = this.value.trim().toLowerCase();
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.classList.toggle("hidden", term && !text.includes(term));
+      });
+    });
+  </script>
+</body>
+</html>

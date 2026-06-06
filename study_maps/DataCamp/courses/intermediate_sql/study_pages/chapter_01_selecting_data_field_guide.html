@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 1 — Selecting Data | Intermediate SQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 880px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Intermediate SQL</a>
+      <span>›</span>
+      <span>Chapter 1: Selecting Data</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Intermediate SQL · Chapter 1</p>
+      <h1>Selecting Data</h1>
+      <p>
+        Query a films database, choose the fields needed to answer a question,
+        count rows, remove duplicate results, understand logical query execution,
+        debug common errors, and format SQL so it is easier to read and maintain.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_filtering_records_field_guide.html">Next Chapter</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Chapter Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#select">2. SELECT and FROM</a>
+        <a href="#count">3. COUNT()</a>
+        <a href="#distinct">4. DISTINCT</a>
+        <a href="#execution">5. Query execution</a>
+        <a href="#debugging">6. Debugging errors</a>
+        <a href="#style">7. SQL style</a>
+        <a href="#formatting">8. Formatting</a>
+        <a href="#nonstandard">9. Non-standard fields</a>
+        <a href="#mistakes">10. Common mistakes</a>
+        <a href="#interview">11. Interview translation</a>
+        <a href="#review">12. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>
+            Selecting data means asking the database to return only the columns or
+            summary values needed to answer a question. The central pattern is still
+            <code>SELECT ... FROM ...</code>, but this chapter adds counting, duplicate removal,
+            logical execution order, debugging, and clean SQL style.
+          </p>
+
+          <div class="diagram">Business question
+      ↓
+Choose the source table
+      ↓
+Choose fields or expressions
+      ↓
+Execute the SQL query
+      ↓
+Inspect and validate the result</div>
+
+          <div class="callout green">
+            <strong>Core idea:</strong> do not begin by selecting everything. Begin by asking,
+            “Which table contains the data, and which fields answer the question?”
+          </div>
+        </section>
+
+        <section class="section" id="select">
+          <h2>2. Querying a Database with SELECT and FROM</h2>
+          <p>
+            <code>SELECT</code> defines what appears in the result. <code>FROM</code> identifies
+            the source table.
+          </p>
+
+          <h3>Select one field</h3>
+          <pre><code>SELECT title
+FROM films;</code></pre>
+
+          <h3>Select several fields</h3>
+          <pre><code>SELECT title,
+       release_year,
+       country
+FROM films;</code></pre>
+
+          <h3>Select all fields</h3>
+          <pre><code>SELECT *
+FROM films;</code></pre>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Purpose</th>
+                <th>Question answered</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>SELECT</code></td>
+                <td>Chooses columns or expressions</td>
+                <td>What should appear?</td>
+              </tr>
+              <tr>
+                <td><code>FROM</code></td>
+                <td>Chooses the source table</td>
+                <td>Where should SQL read from?</td>
+              </tr>
+              <tr>
+                <td><code>;</code></td>
+                <td>Terminates the statement</td>
+                <td>Where does the statement end?</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout amber">
+            <strong>Production habit:</strong> use named columns instead of <code>*</code> when
+            the query will be reused. Named columns are clearer and less fragile when table
+            structures change.
+          </div>
+        </section>
+
+        <section class="section" id="count">
+          <h2>3. Counting Rows with COUNT()</h2>
+          <p>
+            <code>COUNT()</code> is an aggregate function. It returns one summarized value rather
+            than returning every matching row.
+          </p>
+
+          <h3>Count all rows</h3>
+          <pre><code>SELECT COUNT(*)
+FROM films;</code></pre>
+
+          <h3>Count non-NULL values in one field</h3>
+          <pre><code>SELECT COUNT(budget)
+FROM films;</code></pre>
+
+          <h3>Count unique non-NULL values</h3>
+          <pre><code>SELECT COUNT(DISTINCT country)
+FROM films;</code></pre>
+
+          <h3>Count a non-NULL expression</h3>
+          <pre><code>SELECT COUNT(budget + gross) AS films_with_both_values
+FROM films;</code></pre>
+
+          <p>
+            The expression is counted only when its result is not NULL. If either
+            <code>budget</code> or <code>gross</code> is NULL, then
+            <code>budget + gross</code> is also NULL and that row is skipped.
+          </p>
+
+          <h3>Conditional count with CASE</h3>
+          <pre><code>SELECT COUNT(
+         CASE
+           WHEN country = 'Canada' THEN 1
+         END
+       ) AS canadian_films
+FROM films;</code></pre>
+
+          <p>
+            The <code>CASE</code> expression returns <code>1</code> for Canadian films and
+            NULL for all other rows. Because <code>COUNT(expression)</code> ignores NULL,
+            only the matching rows are counted.
+          </p>
+
+          <h3>Conditional count with PostgreSQL FILTER</h3>
+          <pre><code>SELECT COUNT(*) FILTER (
+         WHERE country = 'Canada'
+       ) AS canadian_films
+FROM films;</code></pre>
+
+          <p>
+            PostgreSQL's <code>FILTER</code> clause is often the clearest way to write
+            conditional aggregates.
+          </p>
+
+          <h3>Count distinct combinations in PostgreSQL</h3>
+          <pre><code>SELECT COUNT(DISTINCT (country, language))
+       AS unique_country_language_pairs
+FROM films;</code></pre>
+
+          <p>
+            This counts unique row combinations such as
+            <code>(Canada, English)</code> and <code>(Canada, French)</code>.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Expression</th>
+                <th>What it counts</th>
+                <th>NULL behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>COUNT(*)</code></td>
+                <td>Rows</td>
+                <td>Counts every row</td>
+              </tr>
+              <tr>
+                <td><code>COUNT(field)</code></td>
+                <td>Non-NULL values in the field</td>
+                <td>Ignores NULL</td>
+              </tr>
+              <tr>
+                <td><code>COUNT(DISTINCT field)</code></td>
+                <td>Unique non-NULL field values</td>
+                <td>Ignores NULL and duplicates</td>
+              </tr>
+              <tr>
+                <td><code>COUNT(expression)</code></td>
+                <td>Non-NULL expression results</td>
+                <td>Skips rows where the expression evaluates to NULL</td>
+              </tr>
+              <tr>
+                <td><code>COUNT(CASE WHEN ...)</code></td>
+                <td>Rows meeting a condition</td>
+                <td>Counts non-NULL CASE results</td>
+              </tr>
+              <tr>
+                <td><code>COUNT(*) FILTER (WHERE ...)</code></td>
+                <td>Rows meeting a condition</td>
+                <td>PostgreSQL conditional aggregate form</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            <strong>Memory rule:</strong> <code>COUNT(*)</code> counts rows;
+            <code>COUNT(column)</code> counts known values in that column.
+          </div>
+        </section>
+
+        <section class="section" id="distinct">
+          <h2>4. Removing Duplicate Results with DISTINCT</h2>
+          <p>
+            <code>DISTINCT</code> removes duplicate rows from the selected result.
+          </p>
+
+          <h3>Unique values from one field</h3>
+          <pre><code>SELECT DISTINCT country
+FROM films;</code></pre>
+
+          <h3>Unique combinations across multiple fields</h3>
+          <pre><code>SELECT DISTINCT country,
+                language
+FROM films;</code></pre>
+
+          <div class="callout amber">
+            With several selected fields, <code>DISTINCT</code> applies to the complete row
+            combination. It does not make each field independently unique.
+          </div>
+
+          <h3>DISTINCT versus COUNT(DISTINCT ...)</h3>
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3><code>SELECT DISTINCT country</code></h3>
+              <p>Returns the list of unique countries.</p>
+            </article>
+            <article class="mini-card">
+              <h3><code>COUNT(DISTINCT country)</code></h3>
+              <p>Returns one number: how many unique countries exist.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="execution">
+          <h2>5. Written Order versus Logical Query Execution</h2>
+          <p>
+            SQL is written in a human-friendly order, but the database logically evaluates major
+            clauses in a different order.
+          </p>
+
+          <h3>Written order</h3>
+          <pre><code>SELECT title
+FROM films;</code></pre>
+
+          <h3>Logical execution order for this basic query</h3>
+          <div class="diagram">1. FROM films
+   Locate the source table and make its fields available.
+
+2. SELECT title
+   Return the requested field from that source.</div>
+
+          <div class="callout green">
+            <strong>Punchline:</strong> SQL must find the table before it can return a field from it.
+          </div>
+
+          <p>
+            This distinction becomes more important as queries add <code>WHERE</code>,
+            <code>GROUP BY</code>, <code>HAVING</code>, and <code>ORDER BY</code>.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Written clause</th>
+                <th>Simplified logical position</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>FROM</code></td>
+                <td>First</td>
+                <td>Identify the source data</td>
+              </tr>
+              <tr>
+                <td><code>SELECT</code></td>
+                <td>Later</td>
+                <td>Choose final output fields or expressions</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="debugging">
+          <h2>6. Debugging SQL Errors</h2>
+          <p>
+            SQL errors are usually easier to solve when you read the message, locate the indicated
+            position, and inspect the nearby syntax instead of rewriting the entire query.
+          </p>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Missing comma</strong>
+              <pre><code>-- Incorrect
+SELECT title release_year
+FROM films;
+
+-- Correct
+SELECT title,
+       release_year
+FROM films;</code></pre>
+            </article>
+
+            <article class="qa-item">
+              <strong>Misspelled keyword</strong>
+              <pre><code>-- Incorrect
+SELEC title
+FROM films;
+
+-- Correct
+SELECT title
+FROM films;</code></pre>
+            </article>
+
+            <article class="qa-item">
+              <strong>Wrong table or field name</strong>
+              Confirm the schema and spelling. SQL cannot return a field that does not exist in the
+              selected source table.
+            </article>
+
+            <article class="qa-item">
+              <strong>Missing quote or delimiter</strong>
+              An opening quote, parenthesis, or identifier delimiter must have a matching closing one.
+            </article>
+          </div>
+
+          <div class="callout">
+            <strong>Debugging workflow:</strong> read the error → inspect the marked location →
+            check the token immediately before it → reduce the query to the smallest working form.
+          </div>
+        </section>
+
+        <section class="section" id="style">
+          <h2>7. SQL Style and Best Practices</h2>
+          <p>
+            SQL style does not normally change the result, but it strongly affects readability,
+            reviewability, and maintenance.
+          </p>
+
+          <ul>
+            <li>Write SQL keywords consistently, commonly in uppercase.</li>
+            <li>Write table and field names consistently, commonly in lowercase.</li>
+            <li>Place major clauses on separate lines.</li>
+            <li>Put one selected field per line when the list becomes long.</li>
+            <li>Indent continuation lines consistently.</li>
+            <li>Use a semicolon to mark the end of the statement.</li>
+            <li>Prefer descriptive aliases and names over cryptic abbreviations.</li>
+          </ul>
+
+          <h3>Hard to scan</h3>
+          <pre><code>select title,release_year,country from films;</code></pre>
+
+          <h3>Easier to scan</h3>
+          <pre><code>SELECT title,
+       release_year,
+       country
+FROM films;</code></pre>
+
+          <div class="callout green">
+            Consistency matters more than arguing over one perfect formatting style.
+          </div>
+        </section>
+
+        <section class="section" id="formatting">
+          <h2>8. Formatting Longer SELECT Lists</h2>
+
+          <h3>Recommended pattern</h3>
+          <pre><code>SELECT title,
+       director,
+       release_year,
+       duration,
+       budget,
+       gross
+FROM films;</code></pre>
+
+          <h3>Why this helps</h3>
+          <ul>
+            <li>Missing commas become easier to spot.</li>
+            <li>Source-control changes are easier to review.</li>
+            <li>Fields can be added or removed without rewriting the entire line.</li>
+            <li>Long queries remain readable on smaller screens.</li>
+          </ul>
+
+          <div class="callout amber">
+            The final selected field normally has no trailing comma. A comma immediately before
+            <code>FROM</code> is a common syntax error.
+          </div>
+        </section>
+
+        <section class="section" id="nonstandard">
+          <h2>9. Non-Standard Field Names</h2>
+          <p>
+            Field names containing spaces, punctuation, reserved words, or unusual capitalization
+            may require identifier delimiters. In PostgreSQL, double quotes delimit identifiers.
+          </p>
+
+          <pre><code>SELECT "release year",
+       "Language"
+FROM films;</code></pre>
+
+          <div class="callout danger">
+            Single quotes represent text values, not identifiers. Use
+            <code>'English'</code> for a string value and <code>"Language"</code> only when referring
+            to a quoted identifier.
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Form</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>'English'</code></td>
+                <td>A text/string value</td>
+              </tr>
+              <tr>
+                <td><code>"Language"</code></td>
+                <td>A quoted PostgreSQL identifier</td>
+              </tr>
+              <tr>
+                <td><code>language</code></td>
+                <td>A normal unquoted identifier</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            <strong>Best prevention:</strong> use simple lowercase names with underscores, such as
+            <code>release_year</code>, whenever you control the schema.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>10. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Confusing COUNT(*) and COUNT(column)</strong>
+              The first counts rows. The second ignores NULL values in the named column.
+            </article>
+
+            <article class="qa-item">
+              <strong>Expecting DISTINCT to make each field separately unique</strong>
+              With multiple fields, it removes duplicate combinations of the full selected row.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming SQL executes in the order it is written</strong>
+              The source table is logically processed before the selected output.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using single quotes around a field name</strong>
+              Single quotes create a string literal. PostgreSQL uses double quotes for unusual identifiers.
+            </article>
+
+            <article class="qa-item">
+              <strong>Leaving a comma before FROM</strong>
+              The final item in a SELECT list should not normally end with a comma.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using SELECT * without purpose</strong>
+              It may return unnecessary data and hides which fields the query truly depends on.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>11. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is the difference between COUNT(*) and COUNT(column)?</strong>
+              <code>COUNT(*)</code> counts rows, while <code>COUNT(column)</code> counts only
+              non-NULL values in that column.
+            </article>
+
+            <article class="qa-item">
+              <strong>What can COUNT accept besides * or a column?</strong>
+              It can count non-NULL expression results, distinct values, conditional
+              <code>CASE</code> results, and in PostgreSQL it can use
+              <code>FILTER (WHERE ...)</code> for conditional counting.
+            </article>
+
+            <article class="qa-item">
+              <strong>What does DISTINCT do?</strong>
+              It removes duplicate rows from the query result based on the complete set of selected fields.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why is SQL execution order important?</strong>
+              It explains when tables, filters, grouping, selected expressions, and sorting become available,
+              which helps with both query design and debugging.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you debug a syntax error?</strong>
+              I read the database error, inspect the indicated token and the token immediately before it,
+              then reduce the query to a small working version and rebuild it incrementally.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why does SQL formatting matter?</strong>
+              Consistent formatting improves readability, code review, troubleshooting, and long-term maintenance
+              without changing the query result.
+            </article>
+
+            <article class="qa-item">
+              <strong>How does PostgreSQL distinguish strings from quoted identifiers?</strong>
+              String values use single quotes, while quoted identifiers use double quotes.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>12. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Seven-sentence chapter summary</strong>
+            <ol>
+              <li><code>SELECT</code> chooses the output fields or expressions.</li>
+              <li><code>FROM</code> identifies the source table.</li>
+              <li><code>COUNT(*)</code> counts rows.</li>
+              <li><code>COUNT(column)</code> counts non-NULL values.</li>
+              <li><code>DISTINCT</code> removes duplicate result rows or combinations.</li>
+              <li>Logical execution begins with the source before producing the selected output.</li>
+              <li>Readable formatting and careful debugging make SQL easier to maintain.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you select three fields from <code>films</code>?</li>
+            <li>Can you explain the difference between <code>COUNT(*)</code> and <code>COUNT(budget)</code>?</li>
+            <li>Can you return a list of unique film countries?</li>
+            <li>Can you explain why <code>FROM</code> is logically processed before <code>SELECT</code>?</li>
+            <li>Can you spot a missing comma or trailing comma?</li>
+            <li>Can you distinguish <code>'text value'</code> from <code>"quoted identifier"</code>?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision for Chapter 1:</strong> no separate chapter-only lab is needed.
+            The material is short and the DataCamp exercises already provide direct practice.
+            Preserve the examples in the chapter guide and Quick Lookup.
+          </div>
+
+          <div class="callout green">
+            <strong>Course-level lab decision:</strong> a small local lab is warranted for the full
+            Intermediate SQL course once filtering, aggregate functions, sorting, grouping, and
+            <code>HAVING</code> are included. One compact films dataset can support all four chapters;
+            there is no need for a large or separate lab per chapter.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Intermediate SQL · Chapter 1 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_filtering_records_field_guide.html">Next Chapter</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

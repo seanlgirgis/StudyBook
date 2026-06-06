@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Data Manipulation in SQL — Field Guide</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--soft:#1c232d;--border:#30363d;--text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;--amber:#d29922;--purple:#bc8cff;--danger:#ff7b72;--shadow:0 12px 30px rgba(0,0,0,.24)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);color:var(--text);line-height:1.62}a{color:inherit}code,pre{font-family:Consolas,"Courier New",monospace}.page{width:min(1180px,calc(100% - 32px));margin:auto;padding:24px 0 52px}.breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}.breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}.hero:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}.eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}.hero p{max-width:920px;margin:14px 0 0;color:#c8d4df;font-size:1.03rem}.actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:9px;border:1px solid #486274;background:rgba(255,255,255,.04);font-weight:850;text-decoration:none}.button.primary{background:var(--green);color:#03130a;border-color:transparent}.status-grid,.chapter-grid,.cheat-grid,.compare-grid{display:grid;gap:14px}.status-grid{grid-template-columns:repeat(5,minmax(0,1fr));margin-top:20px}.chapter-grid,.compare-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cheat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.status-card,.chapter-card,.cheat-card,.compare-card{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:16px}.status-card strong,.chapter-card h3,.cheat-card h3,.compare-card h3{display:block;margin:0 0 7px;color:var(--green)}.status-card span,.chapter-card p,.cheat-card p,.compare-card p{margin:0;color:var(--muted);font-size:.92rem}.layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:22px;margin-top:24px}.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}.toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);font-size:.9rem;text-decoration:none}.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}.section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow)}.section h2{margin:0 0 12px;font-size:1.45rem}.section h3{margin:22px 0 8px;font-size:1.08rem}.section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{margin:8px 0 0;padding-left:22px;color:#c9d3dc}.section li+li{margin-top:7px}pre{overflow-x:auto;margin:14px 0;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;color:#dce6ef;font-size:.9rem;line-height:1.5}.callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:rgba(88,166,255,.12);color:#cfdcec}.green{border-left-color:var(--green);background:rgba(3,239,98,.12)}.amber{border-left-color:var(--amber);background:rgba(210,153,34,.12);color:#d8caaa}.danger{border-left-color:var(--danger);background:rgba(255,123,114,.10);color:#efc3bf}.diagram{margin:16px 0;padding:18px;border:1px solid #33404d;border-radius:11px;background:#10161d;font-family:Consolas,"Courier New",monospace;color:#d6e0e9;overflow-x:auto;white-space:pre}table{width:100%;margin:14px 0;border-collapse:collapse;font-size:.92rem}th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}th{background:#1f2933}td{background:#121820;color:#cbd5de}.qa{display:grid;gap:12px}.qa-item{padding:15px;border:1px solid var(--border);border-radius:10px;background:#121820}.qa-item strong{display:block;margin-bottom:6px;color:var(--green)}footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}footer a{color:var(--blue);text-decoration:none}@media(max-width:1000px){.status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cheat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}@media(max-width:680px){.status-grid,.chapter-grid,.cheat-grid,.compare-grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+</style>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumbs"><a href="../../../index.html">DataCamp</a><span>›</span><a href="../index.html">Data Manipulation in SQL</a><span>›</span><span>Main Field Guide</span></nav>
+<header class="hero">
+<p class="eyebrow">DataCamp · Data Manipulation in SQL</p>
+<h1>Data Manipulation in SQL Field Guide</h1>
+<p>Whole-course memory map for conditional logic, subqueries, correlated queries, CTEs, and window functions.</p>
+<div class="actions">
+<a class="button primary" href="../index.html">Course Home</a>
+<a class="button" href="field_guide.md">Markdown Guide</a>
+<a class="button" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+<a class="button" href="../lab/lab_guide.html">Lab Guide</a>
+</div>
+<div class="status-grid">
+<div class="status-card"><strong>COMPLETE</strong><span>Platform status</span></div>
+<div class="status-card"><strong>COMPLETE</strong><span>Documentation</span></div>
+<div class="status-card"><strong>DEVELOPING</strong><span>Lab coverage</span></div>
+<div class="status-card"><strong>DEVELOPING</strong><span>Recall confidence</span></div>
+<div class="status-card"><strong>NEEDS REPETITION</strong><span>Interview readiness</span></div>
+</div>
+</header>
+
+<div class="layout">
+<aside class="toc">
+<h2>Guide Contents</h2>
+<a href="#chapters">1. Chapter guides</a>
+<a href="#big-picture">2. Course big picture</a>
+<a href="#concepts">3. Core concepts</a>
+<a href="#patterns">4. Core patterns</a>
+<a href="#decisions">5. Decision guide</a>
+<a href="#mistakes">6. Common mistakes</a>
+<a href="#interview">7. Interview translation</a>
+<a href="#lab">8. Lab coverage</a>
+<a href="#memory">9. Memory nuggets</a>
+</aside>
+
+<div>
+<section class="section" id="chapters">
+<h2>1. Chapter Guides</h2>
+<div class="chapter-grid">
+<article class="chapter-card"><h3><a href="chapter_01_well_take_the_case_field_guide.html">Chapter 1 — We'll Take the CASE</a></h3><p>Conditional categories, flags, counts, sums, fractions, and percentages.</p></article>
+<article class="chapter-card"><h3><a href="chapter_02_short_and_simple_subqueries_field_guide.html">Chapter 2 — Short and Simple Subqueries</a></h3><p>Scalar, list, FROM, and SELECT subqueries.</p></article>
+<article class="chapter-card"><h3><a href="chapter_03_correlated_queries_nested_queries_and_common_table_expressions_field_guide.html">Chapter 3 — Correlated Queries, Nested Queries, and CTEs</a></h3><p>Outer references, nested logic, and named processing stages.</p></article>
+<article class="chapter-card"><h3><a href="chapter_04_window_functions_field_guide.html">Chapter 4 — Window Functions</a></h3><p>Partitioned metrics, moving frames, ranking, and running totals.</p></article>
+</div>
+</section>
+
+<section class="section" id="big-picture">
+<h2>2. Course Big Picture</h2>
+<p>The course moves from row-level conditional logic to multi-stage SQL and finally to analytics that preserve detail rows.</p>
+<div class="diagram">CASE
+  ↓ conditional values and aggregates
+Subqueries
+  ↓ inner results used by outer queries
+Correlated queries and CTEs
+  ↓ row-dependent logic and named stages
+Window functions
+  ↓ group context without losing detail rows</div>
+<div class="callout green"><strong>Course punchline:</strong> choose the technique by the required result shape: a value, a list, a temporary table, a named stage, or a calculation across preserved detail rows.</div>
+</section>
+
+<section class="section" id="concepts">
+<h2>3. Core Concepts</h2>
+<div class="cheat-grid">
+<article class="cheat-card"><h3>CASE</h3><p>Creates categories, flags, and conditional values.</p></article>
+<article class="cheat-card"><h3>Scalar subquery</h3><p>Returns exactly one value for comparison or display.</p></article>
+<article class="cheat-card"><h3>Derived table</h3><p>A subquery in FROM that behaves like a temporary table.</p></article>
+<article class="cheat-card"><h3>Correlated subquery</h3><p>References the current outer row.</p></article>
+<article class="cheat-card"><h3>CTE</h3><p>A named query step defined with WITH.</p></article>
+<article class="cheat-card"><h3>Window function</h3><p>Adds group context while preserving row-level detail.</p></article>
+</div>
+</section>
+
+<section class="section" id="patterns">
+<h2>4. Core Syntax and Patterns</h2>
+
+<h3>Conditional aggregation</h3>
+<pre><code>SUM(CASE WHEN condition THEN 1 ELSE 0 END) AS matching_count
+
+AVG(CASE WHEN condition THEN 1.0 ELSE 0.0 END) AS matching_fraction</code></pre>
+
+<h3>Correlated comparison</h3>
+<pre><code>SELECT main.*
+FROM match AS main
+WHERE main.home_goal + main.away_goal &gt; (
+    SELECT AVG(sub.home_goal + sub.away_goal)
+    FROM match AS sub
+    WHERE sub.country_id = main.country_id
+      AND sub.season = main.season
+);</code></pre>
+
+<h3>Window calculation</h3>
+<pre><code>SUM(value) OVER (
+    PARTITION BY group_column
+    ORDER BY date, id
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+)</code></pre>
+</section>
+
+<section class="section" id="decisions">
+<h2>5. Comparisons and Decision Rules</h2>
+<div class="compare-grid">
+<article class="compare-card"><h3>GROUP BY</h3><p>Collapses rows into one result per group.</p></article>
+<article class="compare-card"><h3>PARTITION BY</h3><p>Defines groups for a window calculation while retaining detail rows.</p></article>
+</div>
+<table>
+<thead><tr><th>Need</th><th>Starting technique</th><th>Reason</th></tr></thead>
+<tbody>
+<tr><td>Create categories or conditional metrics</td><td><code>CASE</code></td><td>Expresses row-level conditions.</td></tr>
+<tr><td>Use a calculated value or list to filter</td><td>Subquery</td><td>The outer query consumes an inner result.</td></tr>
+<tr><td>Compare each row with its own group</td><td>Correlated subquery or window</td><td>The result depends on group context.</td></tr>
+<tr><td>Organize several query stages</td><td>CTE</td><td>Names and separates logical steps.</td></tr>
+<tr><td>Add group metrics without losing rows</td><td>Window function</td><td>Preserves the original grain.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="section" id="mistakes">
+<h2>6. Common Mistakes</h2>
+<div class="qa">
+<div class="qa-item"><strong>COUNT with ELSE 0</strong><code>COUNT()</code> counts zero because it is non-NULL. Omit ELSE or use <code>SUM</code>.</div>
+<div class="qa-item"><strong>Using = for a list subquery</strong>Use <code>IN</code> when the inner query can return multiple rows.</div>
+<div class="qa-item"><strong>NOT IN with NULL</strong>A NULL in the list can invalidate the comparison. Filter NULLs or use <code>NOT EXISTS</code>.</div>
+<div class="qa-item"><strong>Wrong league join key</strong>Join soccer league and match data using their shared <code>country_id</code>.</div>
+<div class="qa-item"><strong>LEFT JOIN filtered in WHERE</strong>A right-side WHERE condition can remove unmatched rows.</div>
+<div class="qa-item"><strong>Window without deterministic order</strong>Use a tie-breaker such as <code>ORDER BY date, id</code>.</div>
+</div>
+</section>
+
+<section class="section" id="interview">
+<h2>7. Interview Translation</h2>
+<div class="qa">
+<div class="qa-item"><strong>What is conditional aggregation?</strong>It places a CASE expression inside an aggregate so one grouped query can calculate metrics for selected rows.</div>
+<div class="qa-item"><strong>What is a correlated subquery?</strong>It references values from the current outer row and is evaluated in that row's context.</div>
+<div class="qa-item"><strong>Why use a CTE?</strong>To name intermediate logic, break a complex query into testable stages, and improve maintainability.</div>
+<div class="qa-item"><strong>What is a window function?</strong>It calculates across related rows while preserving one output row per input row.</div>
+</div>
+</section>
+
+<section class="section" id="lab">
+<h2>8. Local Lab Coverage</h2>
+<table>
+<thead><tr><th>Area</th><th>Lab coverage</th></tr></thead>
+<tbody>
+<tr><td>CASE</td><td>Classification, conditional counts, and tie fractions.</td></tr>
+<tr><td>Subqueries</td><td>Scalar, list, FROM, and SELECT forms.</td></tr>
+<tr><td>Correlated queries and CTEs</td><td>Country-group comparisons, staged filtering, and lookup alternatives.</td></tr>
+<tr><td>Window functions</td><td>Partitioned averages, running totals, moving averages, and ranking.</td></tr>
+</tbody>
+</table>
+<div class="callout green">The final challenge creates a Manchester United season report using CASE, home/away CTEs, UNION ALL, RANK(), goal difference, and running points. <a href="../lab/lab_guide.html">Open the Lab Guide.</a></div>
+</section>
+
+<section class="section" id="memory">
+<h2>9. Quick Memory Nuggets</h2>
+<pre><code>CASE creates values.
+WHERE removes rows.</code></pre>
+<pre><code>Scalar = one value.
+List = one column, many rows.
+FROM subquery = temporary table.</code></pre>
+<pre><code>Correlated = references outer row.
+CTE = named stage.
+Window = group context without losing detail.</code></pre>
+<div class="callout amber"><strong>Final review:</strong> practice choosing the technique before writing syntax. Start with the desired output grain and the shape of the intermediate result.</div>
+</section>
+</div>
+</div>
+
+<footer>
+<span>Data Manipulation in SQL · Main Field Guide</span>
+<span><a href="../index.html">Course Home</a> · <a href="field_guide.md">Markdown Guide</a> · <a href="sql_quick_lookup.html">Quick Lookup</a> · <a href="../lab/lab_guide.html">Lab Guide</a></span>
+</footer>
+</main>
+</body>
+</html>

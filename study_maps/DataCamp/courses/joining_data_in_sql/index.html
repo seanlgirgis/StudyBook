@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Joining Data in SQL | DataCamp StudyBook</title>
+  <style>
+    :root {
+      --bg:#0d1117;
+      --panel:#161b22;
+      --panel-soft:#1c232d;
+      --border:#30363d;
+      --text:#e6edf3;
+      --muted:#9da7b3;
+      --green:#03ef62;
+      --green-soft:rgba(3,239,98,.12);
+      --blue:#58a6ff;
+      --amber:#d29922;
+      --purple:#bc8cff;
+      --shadow:0 12px 30px rgba(0,0,0,.24);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:"Segoe UI",Arial,sans-serif;
+      background:radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    a{color:inherit}
+    code{font-family:Consolas,"Courier New",monospace}
+    .page{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:24px 0 52px}
+
+    .breadcrumbs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin-bottom:16px;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    .breadcrumbs a{color:var(--muted);text-decoration:none}
+    .breadcrumbs a:hover{color:var(--green)}
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(135deg,#061d2d 0%,#0d2a40 58%,#14384e 100%);
+      border:1px solid #28506a;
+      border-radius:18px;
+      padding:36px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:5px;
+      background:linear-gradient(90deg,var(--green),var(--blue),var(--purple));
+    }
+
+    .eyebrow{
+      margin:0 0 7px;
+      color:var(--green);
+      font-size:.76rem;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(2.15rem,4vw,3.35rem);
+      line-height:1.08;
+    }
+
+    .hero p{
+      max-width:900px;
+      margin:14px 0 0;
+      color:#c8d4df;
+      font-size:1.04rem;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:11px;
+      margin-top:22px;
+    }
+
+    .button{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:42px;
+      padding:0 16px;
+      border-radius:9px;
+      border:1px solid transparent;
+      font-weight:850;
+      text-decoration:none;
+    }
+
+    .button.primary{background:var(--green);color:#03130a}
+    .button.secondary{background:rgba(255,255,255,.04);border-color:#486274}
+
+    .status-grid{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:10px;
+      margin-top:20px;
+    }
+
+    .status-card{
+      padding:12px;
+      border:1px solid #3a4a58;
+      border-radius:9px;
+      background:rgba(255,255,255,.04);
+    }
+
+    .status-card strong{
+      display:block;
+      color:var(--green);
+      font-size:.75rem;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .status-card span{color:#d6e0e8;font-size:.9rem}
+
+    .section{
+      margin-top:22px;
+      padding:22px;
+      background:linear-gradient(180deg,var(--panel),#141920);
+      border:1px solid var(--border);
+      border-radius:14px;
+      box-shadow:var(--shadow);
+    }
+
+    .section h2{margin:0 0 12px;font-size:1.45rem}
+    .section p{color:#c9d3dc}
+
+    .start-grid,.chapter-grid,.resource-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-top:14px;
+    }
+
+    .card{
+      display:block;
+      padding:18px;
+      background:var(--panel-soft);
+      border:1px solid var(--border);
+      border-radius:11px;
+      text-decoration:none;
+    }
+
+    .card:hover{border-color:var(--green);transform:translateY(-1px)}
+    .card strong{display:block;margin-bottom:6px;color:var(--green)}
+    .card span{color:var(--muted);font-size:.92rem}
+
+    .callout{
+      margin:16px 0 0;
+      padding:14px 16px;
+      border-left:4px solid var(--green);
+      border-radius:9px;
+      background:var(--green-soft);
+      color:#cfdcec;
+    }
+
+    .study-path{
+      margin:0;
+      padding-left:22px;
+      color:#c9d3dc;
+    }
+
+    .study-path li+li{margin-top:8px}
+
+    footer{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:28px;
+      padding-top:18px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:.88rem;
+    }
+
+    footer a{color:var(--blue);text-decoration:none}
+
+    @media(max-width:1000px){
+      .status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media(max-width:680px){
+      .status-grid,.start-grid,.chapter-grid,.resource-grid{grid-template-columns:1fr}
+      .hero{padding:29px 21px}
+      .section{padding:18px}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../../skill_tracks/01_sql_fundamentals/index.html">SQL Fundamentals</a>
+      <span>›</span>
+      <span>Joining Data in SQL</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp · SQL Fundamentals</p>
+      <h1>Joining Data in SQL</h1>
+      <p>
+        Learn to combine related tables, preserve unmatched rows, compare query
+        results with set operators, and use subqueries for membership, exclusion,
+        staged calculations, and existence tests.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="study_pages/field_guide.html">Open Main Field Guide</a>
+        <a class="button secondary" href="study_pages/sql_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="lab/lab_guide.html">Integrated Lab</a>
+        <a class="button secondary" href="README.md">Course README</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card"><strong>Platform</strong><span>Passed</span></div>
+        <div class="status-card"><strong>Documentation</strong><span>Complete</span></div>
+        <div class="status-card"><strong>Lab</strong><span>Developing</span></div>
+        <div class="status-card"><strong>Recall</strong><span>Developing</span></div>
+        <div class="status-card"><strong>Interview</strong><span>Needs repetition</span></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Start Here</h2>
+      <div class="start-grid">
+        <a class="card" href="study_pages/field_guide.html">
+          <strong>Main Field Guide</strong>
+          <span>Whole-course memory map, decision guide, patterns, traps, and interview review.</span>
+        </a>
+
+        <a class="card" href="study_pages/sql_quick_lookup.html">
+          <strong>SQL Quick Lookup</strong>
+          <span>Searchable syntax patterns, direction rules, and common mistakes.</span>
+        </a>
+
+        <a class="card" href="lab/lab_guide.html">
+          <strong>Integrated PostgreSQL Lab</strong>
+          <span>One compact lab covering all four chapters with reusable SQL files.</span>
+        </a>
+
+        <a class="card" href="lab/sql/07_course_challenges.sql">
+          <strong>Course Challenges</strong>
+          <span>Final exercises without step-by-step DataCamp hints.</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Chapter Field Guides</h2>
+      <div class="chapter-grid">
+        <a class="card" href="study_pages/chapter_01_introducing_inner_joins_field_guide.html">
+          <strong>Chapter 1 — Introducing Inner Joins</strong>
+          <span>INNER JOIN, aliases, ON versus USING, relationships, and multi-table joins.</span>
+        </a>
+
+        <a class="card" href="study_pages/chapter_02_outer_cross_and_self_joins_field_guide.html">
+          <strong>Chapter 2 — Outer, Cross, and Self Joins</strong>
+          <span>Row preservation, reconciliation, combinations, filter placement, and self comparison.</span>
+        </a>
+
+        <a class="card" href="study_pages/chapter_03_set_theory_for_sql_joins_field_guide.html">
+          <strong>Chapter 3 — Set Theory for SQL Joins</strong>
+          <span>UNION, UNION ALL, INTERSECT, EXCEPT, compatibility, and ordering.</span>
+        </a>
+
+        <a class="card" href="study_pages/chapter_04_subqueries_field_guide.html">
+          <strong>Chapter 4 — Subqueries</strong>
+          <span>Semi joins, anti joins, WHERE, SELECT, FROM, and correlated subqueries.</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Recommended Study Path</h2>
+      <ol class="study-path">
+        <li>Review the Main Field Guide for the full course map.</li>
+        <li>Open a chapter guide when a concept needs deeper review.</li>
+        <li>Keep the SQL Quick Lookup open while writing queries.</li>
+        <li>Run the integrated lab SQL files in numerical order.</li>
+        <li>Complete the course challenges without copying the examples.</li>
+        <li>Repeat the interview questions aloud.</li>
+      </ol>
+
+      <div class="callout">
+        <strong>Course principle:</strong> choose joins by row preservation,
+        set operators by result-set comparison, and subqueries by the shape
+        of the inner result.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Course Resources</h2>
+      <div class="resource-grid">
+        <a class="card" href="study_pages/field_guide.md">
+          <strong>Field Guide Markdown</strong>
+          <span>Portable source version of the accumulated course guide.</span>
+        </a>
+
+        <a class="card" href="lab/lab_run_book.md">
+          <strong>Lab Run Book</strong>
+          <span>Practice checkpoints, dataset intent, and completion evidence.</span>
+        </a>
+
+        <a class="card" href="docs/BILL_OF_MATERIALS.md">
+          <strong>Bill of Materials</strong>
+          <span>Course coverage inventory and source-material status.</span>
+        </a>
+
+        <a class="card" href="source_material/course_curriculum_outline.md">
+          <strong>Curriculum Outline</strong>
+          <span>Source evidence for chapters and lessons.</span>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <span>Joining Data in SQL · Canonical course package</span>
+      <span>
+        <a href="../../skill_tracks/01_sql_fundamentals/index.html">SQL Fundamentals</a>
+        &nbsp;·&nbsp;
+        <a href="../../index.html">DataCamp Home</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

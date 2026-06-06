@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analyzing Students' Mental Health — Project Field Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1f2630;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #3fb950;
+      --green-soft: rgba(63, 185, 80, 0.14);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.13);
+      --amber: #d29922;
+      --red: #f85149;
+      --code: #0b0f14;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 85% 8%, rgba(88,166,255,.08), transparent 28rem),
+        radial-gradient(circle at 8% 18%, rgba(63,185,80,.07), transparent 26rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Inter, Arial, sans-serif;
+      line-height: 1.65;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    header {
+      border-top: 4px solid transparent;
+      border-image: linear-gradient(90deg, var(--green), var(--blue)) 1;
+      background: rgba(13, 17, 23, 0.94);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr .8fr;
+      gap: 28px;
+      align-items: center;
+      padding: 42px 0 34px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 5px 10px;
+      border: 1px solid rgba(63,185,80,.45);
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: #79d889;
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(2rem, 5vw, 3.45rem);
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      max-width: 72ch;
+      font-size: 1.08rem;
+    }
+
+    .hero img {
+      width: 100%;
+      max-height: 270px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .breadcrumb {
+      padding-top: 18px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    main { padding: 28px 0 54px; }
+
+    .nav-grid,
+    .summary-grid,
+    .concept-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .nav-grid { grid-template-columns: repeat(4, 1fr); margin-bottom: 28px; }
+    .summary-grid { grid-template-columns: repeat(4, 1fr); }
+    .concept-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .card,
+    .section,
+    .toc {
+      background: linear-gradient(180deg, rgba(31,38,48,.96), rgba(22,27,34,.96));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card { padding: 18px; }
+    .card strong { display: block; font-size: 1.22rem; margin-bottom: 3px; }
+    .card span { color: var(--muted); font-size: .9rem; }
+
+    .toc {
+      padding: 20px;
+      margin: 0 0 28px;
+    }
+
+    .toc-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .dots { display: flex; gap: 7px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dot:nth-child(1) { background: var(--red); }
+    .dot:nth-child(2) { background: var(--amber); }
+    .dot:nth-child(3) { background: var(--green); }
+
+    .toc-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px 18px;
+    }
+
+    .toc-links a {
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.025);
+      border: 1px solid rgba(255,255,255,.04);
+    }
+
+    .section {
+      margin: 22px 0;
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-num {
+      min-width: 34px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 10px;
+      color: #9be9a8;
+      background: var(--green-soft);
+      border: 1px solid rgba(63,185,80,.35);
+      font-weight: 800;
+    }
+
+    .section h2 { margin: 0; font-size: 1.35rem; }
+    .section-body { padding: 22px; }
+
+    .callout {
+      margin: 16px 0;
+      padding: 16px 18px;
+      border-left: 4px solid var(--blue);
+      border-radius: 8px;
+      background: var(--blue-soft);
+    }
+
+    .nugget {
+      margin: 16px 0;
+      padding: 16px 18px;
+      border: 1px solid rgba(63,185,80,.35);
+      border-radius: 12px;
+      background: var(--green-soft);
+    }
+
+    code {
+      font-family: Consolas, "Cascadia Code", monospace;
+      color: #c9d1d9;
+      background: rgba(110,118,129,.16);
+      border-radius: 5px;
+      padding: .12rem .35rem;
+    }
+
+    pre {
+      margin: 16px 0;
+      padding: 18px;
+      overflow-x: auto;
+      background: var(--code);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      line-height: 1.5;
+    }
+
+    pre code { padding: 0; background: transparent; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    th, td {
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { background: rgba(88,166,255,.1); }
+    td { background: rgba(255,255,255,.015); }
+
+    ul, ol { padding-left: 1.3rem; }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 16px 0;
+    }
+
+    .flow span {
+      padding: 8px 11px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+    }
+
+    .arrow { color: var(--green); font-weight: 800; }
+
+    .back-top {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: .9rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      padding: 26px 0 40px;
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; }
+      .nav-grid, .summary-grid { grid-template-columns: repeat(2, 1fr); }
+      .toc-links, .concept-grid { grid-template-columns: 1fr; }
+      .hero img { max-height: 220px; }
+    }
+
+    @media (max-width: 520px) {
+      .nav-grid, .summary-grid { grid-template-columns: 1fr; }
+      .container { width: min(100% - 20px, 1120px); }
+      .section-body, .section-header { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Project Home</a> › Project Field Guide
+      </div>
+
+      <div class="hero">
+        <div>
+          <span class="badge">DataCamp SQL Project</span>
+          <h1>Analyzing Students' Mental Health</h1>
+          <p class="subtitle">
+            A practical guide to the project question, the dataset, the SQL reasoning,
+            the final query, and the meaning of the result.
+          </p>
+        </div>
+        <img src="../mentalhealth.jpg" alt="Illustration representing mental health and student well-being">
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="nav-grid" aria-label="Project navigation">
+      <a class="card" href="../index.html">
+        <strong>Project Home</strong>
+        <span>Main landing page</span>
+      </a>
+      <a class="card" href="sql_quick_lookup.html">
+        <strong>SQL Quick Lookup</strong>
+        <span>Syntax at a glance</span>
+      </a>
+      <a class="card" href="../lab/lab_guide.html">
+        <strong>Lab Guide</strong>
+        <span>Run the project locally</span>
+      </a>
+      <a class="card" href="../lab/sql/02_project_solution.sql">
+        <strong>Final SQL</strong>
+        <span>Open the solution file</span>
+      </a>
+    </nav>
+
+    <section class="toc">
+      <div class="toc-head">
+        <strong>Contents</strong>
+        <div class="dots" aria-hidden="true">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+      </div>
+      <div class="toc-links">
+        <a href="#project-question">1. Project question</a>
+        <a href="#dataset">2. Dataset</a>
+        <a href="#logic">3. SQL logic</a>
+        <a href="#build">4. Build the query</a>
+        <a href="#solution">5. Final solution</a>
+        <a href="#results">6. Results</a>
+        <a href="#meaning">7. Interpretation</a>
+        <a href="#mistakes">8. Common mistakes</a>
+        <a href="#interview">9. Interview translation</a>
+      </div>
+    </section>
+
+    <div class="summary-grid">
+      <div class="card"><strong>286</strong><span>Rows in the source table</span></div>
+      <div class="card"><strong>201</strong><span>International rows analyzed</span></div>
+      <div class="card"><strong>9</strong><span>Length-of-stay groups</span></div>
+      <div class="card"><strong>5</strong><span>Columns in the final result</span></div>
+    </div>
+
+    <section class="section" id="project-question">
+      <div class="section-header">
+        <span class="section-num">1</span>
+        <h2>The project question</h2>
+      </div>
+      <div class="section-body">
+        <p>
+          The project asks whether the amount of time an international student has
+          stayed in the host country is associated with three mental-health measures.
+        </p>
+
+        <div class="callout">
+          <strong>Plain-English version:</strong><br>
+          Group international students by how many years they have stayed, then compare
+          their average depression, social-connectedness, and acculturative-stress scores.
+        </div>
+
+        <div class="flow" aria-label="Project analysis flow">
+          <span>Students table</span><span class="arrow">→</span>
+          <span>International students</span><span class="arrow">→</span>
+          <span>Group by stay</span><span class="arrow">→</span>
+          <span>Count and average</span><span class="arrow">→</span>
+          <span>9 result rows</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="dataset">
+      <div class="section-header">
+        <span class="section-num">2</span>
+        <h2>The columns that matter</h2>
+      </div>
+      <div class="section-body">
+        <p>The table contains many fields, but this project needs only five:</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Column</th>
+              <th>Meaning</th>
+              <th>Role in the query</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>inter_dom</code></td>
+              <td>International or domestic student</td>
+              <td>Filter to <code>'Inter'</code></td>
+            </tr>
+            <tr>
+              <td><code>stay</code></td>
+              <td>Length of stay in years</td>
+              <td>Grouping column</td>
+            </tr>
+            <tr>
+              <td><code>todep</code></td>
+              <td>Total depression score</td>
+              <td>Average PHQ result</td>
+            </tr>
+            <tr>
+              <td><code>tosc</code></td>
+              <td>Total social-connectedness score</td>
+              <td>Average SCS result</td>
+            </tr>
+            <tr>
+              <td><code>toas</code></td>
+              <td>Total acculturative-stress score</td>
+              <td>Average AS result</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="nugget">
+          <strong>Memory rule:</strong> <code>stay</code> creates the groups.
+          <code>COUNT()</code> tells us group size. <code>AVG()</code> summarizes the scores.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="logic">
+      <div class="section-header">
+        <span class="section-num">3</span>
+        <h2>The SQL logic</h2>
+      </div>
+      <div class="section-body concept-grid">
+        <div class="card">
+          <strong>1. Clean</strong>
+          <span>Remove rows that are missing a field needed by the analysis.</span>
+        </div>
+        <div class="card">
+          <strong>2. Filter</strong>
+          <span>Keep only rows where <code>inter_dom = 'Inter'</code>.</span>
+        </div>
+        <div class="card">
+          <strong>3. Group</strong>
+          <span>Put students into buckets based on <code>stay</code>.</span>
+        </div>
+        <div class="card">
+          <strong>4. Summarize</strong>
+          <span>Count rows and calculate the three averages.</span>
+        </div>
+        <div class="card">
+          <strong>5. Round</strong>
+          <span>Keep two decimal places for readable results.</span>
+        </div>
+        <div class="card">
+          <strong>6. Sort</strong>
+          <span>Show the longest stays first with <code>DESC</code>.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="build">
+      <div class="section-header">
+        <span class="section-num">4</span>
+        <h2>Build the query in small steps</h2>
+      </div>
+      <div class="section-body">
+        <h3>Step A — inspect the needed columns</h3>
+        <pre><code>SELECT
+    inter_dom,
+    stay,
+    todep,
+    tosc,
+    toas
+FROM students;</code></pre>
+
+        <h3>Step B — keep international students only</h3>
+        <pre><code>SELECT
+    stay,
+    todep,
+    tosc,
+    toas
+FROM students
+WHERE inter_dom = 'Inter';</code></pre>
+
+        <h3>Step C — create one row per stay group</h3>
+        <pre><code>SELECT
+    stay,
+    COUNT(*) AS count_int
+FROM students
+WHERE inter_dom = 'Inter'
+GROUP BY stay
+ORDER BY stay DESC;</code></pre>
+
+        <h3>Step D — add the averages</h3>
+        <pre><code>SELECT
+    stay,
+    COUNT(*) AS count_int,
+    ROUND(AVG(todep), 2) AS average_phq,
+    ROUND(AVG(tosc), 2) AS average_scs,
+    ROUND(AVG(toas), 2) AS average_as
+FROM students
+WHERE inter_dom = 'Inter'
+GROUP BY stay
+ORDER BY stay DESC;</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="solution">
+      <div class="section-header">
+        <span class="section-num">5</span>
+        <h2>The final project solution</h2>
+      </div>
+      <div class="section-body">
+        <p>
+          The final version uses a common table expression, or CTE, to separate
+          data cleaning from the analysis.
+        </p>
+
+        <pre><code>WITH clean_students AS (
+    SELECT
+        inter_dom,
+        stay,
+        todep,
+        tosc,
+        toas
+    FROM students
+    WHERE inter_dom IS NOT NULL
+      AND stay IS NOT NULL
+      AND todep IS NOT NULL
+      AND tosc IS NOT NULL
+      AND toas IS NOT NULL
+)
+SELECT
+    stay,
+    COUNT(*) AS count_int,
+    ROUND(AVG(todep), 2) AS average_phq,
+    ROUND(AVG(tosc), 2) AS average_scs,
+    ROUND(AVG(toas), 2) AS average_as
+FROM clean_students
+WHERE inter_dom = 'Inter'
+GROUP BY stay
+ORDER BY stay DESC;</code></pre>
+
+        <div class="callout">
+          The CTE is not required for this small query, but it makes the two stages
+          easy to see: first clean the rows, then analyze them.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="results">
+      <div class="section-header">
+        <span class="section-num">6</span>
+        <h2>Validated local result</h2>
+      </div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th>stay</th>
+              <th>count_int</th>
+              <th>average_phq</th>
+              <th>average_scs</th>
+              <th>average_as</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>10</td><td>1</td><td>13.00</td><td>32.00</td><td>50.00</td></tr>
+            <tr><td>8</td><td>1</td><td>10.00</td><td>44.00</td><td>65.00</td></tr>
+            <tr><td>7</td><td>1</td><td>4.00</td><td>48.00</td><td>45.00</td></tr>
+            <tr><td>6</td><td>3</td><td>6.00</td><td>38.00</td><td>58.67</td></tr>
+            <tr><td>5</td><td>1</td><td>0.00</td><td>34.00</td><td>91.00</td></tr>
+            <tr><td>4</td><td>14</td><td>8.57</td><td>33.93</td><td>87.71</td></tr>
+            <tr><td>3</td><td>46</td><td>9.09</td><td>37.13</td><td>78.00</td></tr>
+            <tr><td>2</td><td>39</td><td>8.28</td><td>37.08</td><td>77.67</td></tr>
+            <tr><td>1</td><td>95</td><td>7.48</td><td>38.11</td><td>72.80</td></tr>
+          </tbody>
+        </table>
+
+        <p>
+          Validation confirmed <strong>201 international students</strong>,
+          <strong>9 stay groups</strong>, and a final output of
+          <strong>9 rows by 5 columns</strong>.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="meaning">
+      <div class="section-header">
+        <span class="section-num">7</span>
+        <h2>How to interpret the result safely</h2>
+      </div>
+      <div class="section-body">
+        <p>
+          The result is descriptive. It shows average scores within each stay group.
+          It does not prove that length of stay caused any score to rise or fall.
+        </p>
+
+        <div class="callout">
+          Groups with long stays contain very few students. For example, several groups
+          contain only one student. Their averages are therefore not stable enough for
+          strong conclusions.
+        </div>
+
+        <p>
+          The largest and more dependable groups are the one-, two-, and three-year
+          groups. Even there, this project should be described as an exploratory SQL
+          analysis rather than a causal study.
+        </p>
+
+        <div class="nugget">
+          <strong>Safe conclusion:</strong> The query summarizes how mental-health scores
+          vary across length-of-stay groups among international students. Further
+          statistical analysis would be required to determine whether the differences
+          are meaningful.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="mistakes">
+      <div class="section-header">
+        <span class="section-num">8</span>
+        <h2>Common mistakes</h2>
+      </div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Mistake</th>
+              <th>Why it is a problem</th>
+              <th>Correction</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Forgetting <code>WHERE inter_dom = 'Inter'</code></td>
+              <td>Domestic students would be mixed into the result.</td>
+              <td>Filter before grouping.</td>
+            </tr>
+            <tr>
+              <td>Selecting <code>stay</code> without grouping it</td>
+              <td>PostgreSQL rejects a non-aggregated selected column.</td>
+              <td>Add <code>GROUP BY stay</code>.</td>
+            </tr>
+            <tr>
+              <td>Using <code>COUNT(stay)</code> without understanding nulls</td>
+              <td>It ignores rows where <code>stay</code> is null.</td>
+              <td>Clean first, then use <code>COUNT(*)</code>.</td>
+            </tr>
+            <tr>
+              <td>Leaving averages unrounded</td>
+              <td>The output contains unnecessary decimal precision.</td>
+              <td>Use <code>ROUND(AVG(column), 2)</code>.</td>
+            </tr>
+            <tr>
+              <td>Claiming causation</td>
+              <td>The query only summarizes observational data.</td>
+              <td>Say “associated with” or “varies by,” not “caused by.”</td>
+            </tr>
+            <tr>
+              <td>Ignoring group size</td>
+              <td>An average based on one student can be misleading.</td>
+              <td>Always read <code>count_int</code> with the averages.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="interview">
+      <div class="section-header">
+        <span class="section-num">9</span>
+        <h2>Interview translation</h2>
+      </div>
+      <div class="section-body">
+        <p><strong>How would you explain this project?</strong></p>
+        <div class="callout">
+          I analyzed a student mental-health dataset in PostgreSQL. I filtered to
+          international students, removed incomplete records for the fields used in
+          the analysis, grouped the data by length of stay, and calculated group counts
+          and average depression, social-connectedness, and acculturative-stress scores.
+          I also validated the local result against the expected nine stay groups.
+        </div>
+
+        <p><strong>What SQL skills did the project demonstrate?</strong></p>
+        <ul>
+          <li>Filtering with <code>WHERE</code></li>
+          <li>Data-quality checks with <code>IS NOT NULL</code></li>
+          <li>Common table expressions with <code>WITH</code></li>
+          <li>Grouping with <code>GROUP BY</code></li>
+          <li>Aggregation with <code>COUNT()</code> and <code>AVG()</code></li>
+          <li>Output formatting with <code>ROUND()</code></li>
+          <li>Sorting with <code>ORDER BY ... DESC</code></li>
+          <li>Interpreting results without overclaiming</li>
+        </ul>
+
+        <p><strong>What would you improve in a production analysis?</strong></p>
+        <ul>
+          <li>Profile all missing values and confirm the intended null policy.</li>
+          <li>Use a data dictionary to verify score ranges and meanings.</li>
+          <li>Flag or suppress groups with very small sample sizes.</li>
+          <li>Add statistical tests or confidence intervals before drawing conclusions.</li>
+          <li>Document dataset lineage, ethics, and privacy controls.</li>
+        </ul>
+
+        <a class="back-top" href="#top">Back to top ↑</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      DataCamp Project StudyBook · Analyzing Students' Mental Health
+    </div>
+  </footer>
+</body>
+</html>

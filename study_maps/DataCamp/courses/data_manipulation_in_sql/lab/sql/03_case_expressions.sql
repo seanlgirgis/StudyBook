@@ -1,0 +1,1 @@
+﻿-- Chapter 1 practice: CASE expressions and conditional aggregation.

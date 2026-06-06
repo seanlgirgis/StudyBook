@@ -10,23 +10,23 @@ SET search_path TO <SchemaA, SchemaB>;
 ```
 
 Known value:
-- course05 practice schema: course05_muscle
+- current search path: intermediate_sql, public
 
 Current practice override:
 
 ```sql
-SET search_path TO course05_muscle;
+SET search_path TO intermediate_sql, public;
 ```
 
 Memory rule:
-When asked for the schema during the active Course 05 practice, return both:
+When asked for the current search path, return both:
 - the general template command
-- the current practice command for `course05_muscle`
+- the current practice command for `intermediate_sql, public`
 
-After the Course 05 practice is no longer active, fall back to the general template command.
+If no current override is active, fall back to the general template command.
 
 Tags:
-#postgresql #prompt #schema #sql #course05
+#postgresql #prompt #schema #sql #search_path
 
 # How do I check the schema set for current session?
 

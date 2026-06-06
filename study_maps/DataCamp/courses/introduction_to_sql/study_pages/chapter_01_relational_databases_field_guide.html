@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 1 — Relational Databases | Introduction to SQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+
+    code, pre {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 850px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .content {
+      min-width: 0;
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: rgba(255, 123, 114, 0.1);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 10px;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Introduction to SQL</a>
+      <span>›</span>
+      <span>Chapter 1: Relational Databases</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Introduction to SQL · Chapter 1</p>
+      <h1>Relational Databases</h1>
+      <p>
+        Understand what a database is, how relational data is organized into tables,
+        how rows and columns work, why identifiers matter, and how data types and schemas
+        keep stored data consistent.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_querying_field_guide.html">Next Chapter</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Chapter Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#database">2. What is a database?</a>
+        <a href="#relational">3. Relational organization</a>
+        <a href="#tables">4. Tables, rows, and columns</a>
+        <a href="#naming">5. Naming rules</a>
+        <a href="#keys">6. Unique identifiers</a>
+        <a href="#types">7. Data types</a>
+        <a href="#schema">8. Schemas</a>
+        <a href="#servers">9. Servers</a>
+        <a href="#mistakes">10. Common mistakes</a>
+        <a href="#interview">11. Interview translation</a>
+        <a href="#review">12. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>
+            A database is an organized place for storing data so that software and people can retrieve,
+            update, and analyze it reliably. SQL is the language used to communicate with many relational databases.
+          </p>
+
+          <div class="diagram">User or application
+        ↓ SQL
+Database management system
+        ↓
+Tables stored on a server</div>
+
+          <div class="callout green">
+            <strong>Core idea:</strong> SQL is not the database itself. SQL is the language used to ask the database
+            management system to read or change stored data.
+          </div>
+        </section>
+
+        <section class="section" id="database">
+          <h2>2. What Is a Database?</h2>
+          <p>
+            A database is a structured collection of related data. In the course example, a library database
+            can contain information about patrons, books, and checkouts.
+          </p>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Patrons</h3>
+              <p>People who use the library, including their card number, name, membership year, and fines.</p>
+            </article>
+
+            <article class="mini-card">
+              <h3>Books</h3>
+              <p>Books available in the library, including title, author, genre, and publication year.</p>
+            </article>
+
+            <article class="mini-card">
+              <h3>Checkouts</h3>
+              <p>Transactions connecting a patron to a book, including checkout and due dates.</p>
+            </article>
+
+            <article class="mini-card">
+              <h3>Relationships</h3>
+              <p>Shared identifiers connect separate tables without placing everything into one oversized table.</p>
+            </article>
+          </div>
+
+          <div class="callout">
+            Databases are powerful because they store many related tables and allow SQL to combine the needed data later.
+          </div>
+        </section>
+
+        <section class="section" id="relational">
+          <h2>3. Relational Data Organization</h2>
+          <p>
+            A relational database organizes data into tables. Each table represents one main subject or event.
+            Tables can then be related through matching identifiers.
+          </p>
+
+          <div class="diagram">patrons
+  card_num  ───────────────┐
+  name                     │
+  member_year              │
+  total_fine               │
+                           │
+checkouts                  │
+  id                       │
+  card_num  ◀──────────────┘
+  book_id   ───────────────┐
+  start_date               │
+  due_date                 │
+                           │
+books                      │
+  id       ◀───────────────┘
+  title
+  author
+  genre
+  pub_year</div>
+
+          <p>
+            This separation reduces repeated data. A patron's name is stored once in the patrons table,
+            while many checkout records can refer to that patron by card number.
+          </p>
+        </section>
+
+        <section class="section" id="tables">
+          <h2>4. Tables, Rows, Columns, Records, and Fields</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Term</th>
+                <th>Meaning</th>
+                <th>Library example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Table</td>
+                <td>A structured set of related data</td>
+                <td><code>patrons</code></td>
+              </tr>
+              <tr>
+                <td>Row / record</td>
+                <td>One individual item or observation</td>
+                <td>One patron</td>
+              </tr>
+              <tr>
+                <td>Column / field</td>
+                <td>One attribute stored for every row</td>
+                <td><code>member_year</code></td>
+              </tr>
+              <tr>
+                <td>Cell</td>
+                <td>One value at the intersection of a row and column</td>
+                <td><code>2022</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            <strong>Memory sentence:</strong> A row represents one thing; a column describes one attribute of that thing.
+          </div>
+        </section>
+
+        <section class="section" id="naming">
+          <h2>5. Table and Field Naming</h2>
+
+          <h3>Good table names</h3>
+          <ul>
+            <li>Are clear and descriptive.</li>
+            <li>Refer directly to the data being stored.</li>
+            <li>Use one consistent naming convention across the database.</li>
+          </ul>
+
+          <h3>Good field names</h3>
+          <ul>
+            <li>Use lowercase letters.</li>
+            <li>Use underscores instead of spaces.</li>
+            <li>Prefer singular names for individual attributes.</li>
+            <li>Remain distinct from the table name and from other fields.</li>
+          </ul>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Better</th>
+                <th>Avoid</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>member_year</code></td>
+                <td><code>Member Year</code></td>
+                <td>Spaces complicate queries and mixed capitalization is inconsistent.</td>
+              </tr>
+              <tr>
+                <td><code>total_fine</code></td>
+                <td><code>total fine</code></td>
+                <td>Underscores make multiword names readable and query-friendly.</td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td><code>patrons</code></td>
+                <td>A field name should describe the attribute, not repeat the table name.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="keys">
+          <h2>6. Unique Identifiers and Keys</h2>
+          <p>
+            A unique identifier distinguishes one row from every other row in a table.
+            In a patrons table, <code>card_num</code> can serve as the unique identifier.
+          </p>
+
+          <div class="callout">
+            A unique identifier is often called a <strong>key</strong>. When it uniquely identifies each row in its own table,
+            it is commonly used as the table's primary key.
+          </div>
+
+          <h3>Why keys matter</h3>
+          <ul>
+            <li>They prevent ambiguity between rows.</li>
+            <li>They help connect related tables.</li>
+            <li>They support accurate updates and deletes.</li>
+            <li>They make relationships easier to define and query.</li>
+          </ul>
+
+          <div class="callout danger">
+            Names are usually poor identifiers because two people can have the same name and names can change.
+          </div>
+        </section>
+
+        <section class="section" id="types">
+          <h2>7. Data Types</h2>
+          <p>
+            A data type tells the database what kind of value a column is allowed to store.
+            Data types protect consistency and affect which operations are valid.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Data type family</th>
+                <th>Typical PostgreSQL example</th>
+                <th>Library example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Integer</td>
+                <td><code>INT</code></td>
+                <td>Card number, publication year, book ID</td>
+              </tr>
+              <tr>
+                <td>Text</td>
+                <td><code>VARCHAR</code></td>
+                <td>Name, title, author, genre</td>
+              </tr>
+              <tr>
+                <td>Decimal number</td>
+                <td><code>NUMERIC</code></td>
+                <td>Total fine such as <code>9.86</code></td>
+              </tr>
+              <tr>
+                <td>Date</td>
+                <td><code>DATE</code></td>
+                <td>Checkout date and due date</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Choosing a data type</h3>
+          <ul>
+            <li>Choose a type that matches the real meaning of the data.</li>
+            <li>Use numeric types for values that need arithmetic.</li>
+            <li>Use dates for calendar values rather than storing them as plain text.</li>
+            <li>Use text for names and labels.</li>
+            <li>Avoid storing unrelated formats in the same column.</li>
+          </ul>
+
+          <div class="callout amber">
+            A value may look numeric without behaving like a number. For example, an ID may be stored as text
+            if leading zeros matter or if arithmetic has no meaning.
+          </div>
+        </section>
+
+        <section class="section" id="schema">
+          <h2>8. Database Schema</h2>
+          <p>
+            A schema describes the database structure: tables, columns, data types, and relationships.
+            It acts like a blueprint for how the data is organized.
+          </p>
+
+          <div class="diagram">patrons
+  card_num    INT
+  name        VARCHAR
+  member_year INT
+  total_fine  NUMERIC
+
+books
+  id          INT
+  title       VARCHAR
+  author      VARCHAR
+  genre       VARCHAR
+  pub_year    INT
+
+checkouts
+  id          INT
+  start_date  DATE
+  due_date    DATE
+  card_num    INT
+  book_id     INT</div>
+
+          <div class="callout green">
+            A schema is not the data itself. It is the definition of how the data is structured.
+          </div>
+        </section>
+
+        <section class="section" id="servers">
+          <h2>9. Understanding Servers</h2>
+          <p>
+            Database data is typically stored and managed on a server. The server runs database software,
+            receives SQL requests, applies rules, and returns results.
+          </p>
+
+          <div class="diagram">Your computer or application
+           │
+           │ sends SQL
+           ▼
+Database server
+           │
+           │ reads or changes
+           ▼
+Stored database tables</div>
+
+          <p>
+            PostgreSQL and SQL Server are examples of database management systems that can run on servers.
+            They both use SQL, although some syntax and features differ.
+          </p>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>10. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Mistake: Treating SQL as the database</strong>
+              SQL is the language. PostgreSQL, SQL Server, and similar systems are database management systems.
+            </article>
+
+            <article class="qa-item">
+              <strong>Mistake: Thinking rows and columns mean the same thing</strong>
+              A row is one record. A column is one attribute shared across records.
+            </article>
+
+            <article class="qa-item">
+              <strong>Mistake: Using names as unique IDs</strong>
+              Names may repeat or change. Use a stable identifier such as a card number or generated ID.
+            </article>
+
+            <article class="qa-item">
+              <strong>Mistake: Choosing a data type only by appearance</strong>
+              Consider meaning and future operations. An ID that looks numeric may still belong in a text field.
+            </article>
+
+            <article class="qa-item">
+              <strong>Mistake: Placing every subject in one giant table</strong>
+              Separate distinct subjects such as patrons, books, and checkouts, then connect them through keys.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>11. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is a relational database?</strong>
+              A relational database stores structured data in tables and connects those tables through shared keys.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is the difference between a row and a column?</strong>
+              A row represents one record, while a column represents one attribute of all records in the table.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why are primary keys important?</strong>
+              They uniquely identify rows and provide a reliable way to connect tables and target specific records.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why do data types matter?</strong>
+              They define valid values, protect data quality, influence storage, and determine which operations are possible.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is a schema?</strong>
+              A schema is the structural blueprint of a database, including tables, columns, data types, and relationships.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>12. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Five-sentence chapter summary</strong>
+            <ol>
+              <li>A database stores organized data.</li>
+              <li>A relational database stores data in related tables.</li>
+              <li>Rows are records and columns are attributes.</li>
+              <li>Keys uniquely identify rows and connect tables.</li>
+              <li>Data types and schemas define valid structure.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you explain why SQL is not the database itself?</li>
+            <li>Can you identify a row, column, key, and data type in a table?</li>
+            <li>Can you explain why patrons and checkouts should be separate tables?</li>
+            <li>Can you choose between text, integer, decimal, and date for a sample field?</li>
+            <li>Can you describe what a schema shows?</li>
+          </ul>
+
+          <div class="callout green">
+            <strong>Lab decision:</strong> no separate lab is required yet. This chapter is conceptual.
+            A small table-design exercise can be added later only if the course exercises reveal a gap.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Introduction to SQL · Chapter 1 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_querying_field_guide.html">Next Chapter</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

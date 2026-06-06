@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 2 — Filtering Records | Intermediate SQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 880px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Intermediate SQL</a>
+      <span>›</span>
+      <span>Chapter 2: Filtering Records</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Intermediate SQL · Chapter 2</p>
+      <h1>Filtering Records</h1>
+      <p>
+        Narrow a result set with <code>WHERE</code>, compare numbers and text,
+        combine conditions with <code>AND</code> and <code>OR</code>, use
+        <code>BETWEEN</code>, <code>LIKE</code>, <code>NOT LIKE</code>, and
+        <code>IN</code>, and handle missing values correctly with
+        <code>IS NULL</code> and <code>IS NOT NULL</code>.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="chapter_01_selecting_data_field_guide.html">Previous Chapter</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="chapter_03_aggregate_functions_field_guide.html">Next Chapter</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Chapter Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#where">2. WHERE basics</a>
+        <a href="#numbers">3. Filtering numbers</a>
+        <a href="#text">4. Filtering text</a>
+        <a href="#and-or">5. AND and OR</a>
+        <a href="#between">6. BETWEEN</a>
+        <a href="#like">7. LIKE and NOT LIKE</a>
+        <a href="#in">8. IN and NOT IN</a>
+        <a href="#combine">9. Combining filters</a>
+        <a href="#null">10. NULL values</a>
+        <a href="#mistakes">11. Common mistakes</a>
+        <a href="#interview">12. Interview translation</a>
+        <a href="#review">13. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>
+            Filtering reduces a table to only the rows that meet a condition.
+            The <code>WHERE</code> clause is logically evaluated after
+            <code>FROM</code> and before <code>SELECT</code>.
+          </p>
+
+          <div class="diagram">FROM films
+    ↓
+WHERE condition
+    ↓
+SELECT requested fields
+    ↓
+Return matching rows</div>
+
+          <div class="callout green">
+            <strong>Core idea:</strong> <code>SELECT</code> chooses columns;
+            <code>WHERE</code> chooses rows.
+          </div>
+        </section>
+
+        <section class="section" id="where">
+          <h2>2. WHERE Basics</h2>
+          <p>
+            A <code>WHERE</code> clause keeps only rows for which its condition evaluates to true.
+          </p>
+
+          <pre><code>SELECT title,
+       release_year
+FROM films
+WHERE release_year = 2020;</code></pre>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Operator</th>
+                <th>Meaning</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>=</code></td><td>Equal to</td><td><code>release_year = 2020</code></td></tr>
+              <tr><td><code>&lt;&gt;</code> or <code>!=</code></td><td>Not equal to</td><td><code>country &lt;&gt; 'Canada'</code></td></tr>
+              <tr><td><code>&gt;</code></td><td>Greater than</td><td><code>duration &gt; 120</code></td></tr>
+              <tr><td><code>&gt;=</code></td><td>Greater than or equal to</td><td><code>imdb_score &gt;= 7.5</code></td></tr>
+              <tr><td><code>&lt;</code></td><td>Less than</td><td><code>budget &lt; 10000000</code></td></tr>
+              <tr><td><code>&lt;=</code></td><td>Less than or equal to</td><td><code>release_year &lt;= 2018</code></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="numbers">
+          <h2>3. Filtering Numbers</h2>
+
+          <h3>Exact numeric match</h3>
+          <pre><code>SELECT title,
+       release_year
+FROM films
+WHERE release_year = 2019;</code></pre>
+
+          <h3>Range with comparison operators</h3>
+          <pre><code>SELECT title,
+       imdb_score
+FROM films
+WHERE imdb_score >= 7.5;</code></pre>
+
+          <h3>Exclude one numeric value</h3>
+          <pre><code>SELECT title,
+       duration
+FROM films
+WHERE duration &lt;&gt; 120;</code></pre>
+
+          <div class="callout amber">
+            Numeric literals are not placed in quotes. Write <code>2020</code>,
+            not <code>'2020'</code>, when the field is numeric.
+          </div>
+        </section>
+
+        <section class="section" id="text">
+          <h2>4. Filtering Text</h2>
+          <p>
+            Text values use single quotes.
+          </p>
+
+          <pre><code>SELECT title,
+       country
+FROM films
+WHERE country = 'Canada';</code></pre>
+
+          <pre><code>SELECT title,
+       language
+FROM films
+WHERE language &lt;&gt; 'English';</code></pre>
+
+          <div class="callout danger">
+            Double quotes are for identifiers in PostgreSQL. Single quotes are for text values.
+          </div>
+        </section>
+
+        <section class="section" id="and-or">
+          <h2>5. Combining Conditions with AND and OR</h2>
+
+          <h3>AND: every condition must be true</h3>
+          <pre><code>SELECT title,
+       country,
+       imdb_score
+FROM films
+WHERE country = 'Canada'
+  AND imdb_score >= 7.0;</code></pre>
+
+          <h3>OR: at least one condition must be true</h3>
+          <pre><code>SELECT title,
+       country
+FROM films
+WHERE country = 'Canada'
+   OR country = 'Germany';</code></pre>
+
+          <h3>Use parentheses when mixing AND and OR</h3>
+          <pre><code>SELECT title,
+       country,
+       release_year
+FROM films
+WHERE (country = 'Canada' OR country = 'Germany')
+  AND release_year >= 2019;</code></pre>
+
+          <div class="callout green">
+            <strong>Memory rule:</strong> <code>AND</code> narrows;
+            <code>OR</code> broadens.
+          </div>
+        </section>
+
+        <section class="section" id="between">
+          <h2>6. Filtering Ranges with BETWEEN</h2>
+          <p>
+            <code>BETWEEN</code> is inclusive of both endpoints.
+          </p>
+
+          <pre><code>SELECT title,
+       release_year
+FROM films
+WHERE release_year BETWEEN 2018 AND 2021;</code></pre>
+
+          <p>This is equivalent to:</p>
+
+          <pre><code>SELECT title,
+       release_year
+FROM films
+WHERE release_year >= 2018
+  AND release_year <= 2021;</code></pre>
+
+          <div class="callout amber">
+            <strong>Important:</strong> <code>BETWEEN 2018 AND 2021</code>
+            includes both 2018 and 2021.
+          </div>
+        </section>
+
+        <section class="section" id="like">
+          <h2>7. Pattern Matching with LIKE and NOT LIKE</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Wildcard</th>
+                <th>Meaning</th>
+                <th>Example pattern</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>%</code></td><td>Zero or more characters</td><td><code>'M%'</code></td></tr>
+              <tr><td><code>_</code></td><td>Exactly one character</td><td><code>'_a%'</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3>Starts with</h3>
+          <pre><code>SELECT title
+FROM films
+WHERE title LIKE 'B%';</code></pre>
+
+          <h3>Contains</h3>
+          <pre><code>SELECT title
+FROM films
+WHERE title LIKE '%Market%';</code></pre>
+
+          <h3>Does not match a pattern</h3>
+          <pre><code>SELECT title
+FROM films
+WHERE title NOT LIKE '%Film%';</code></pre>
+
+          <h3>Case-insensitive PostgreSQL search</h3>
+          <pre><code>SELECT title
+FROM films
+WHERE title ILIKE '%market%';</code></pre>
+
+          <div class="callout">
+            <code>ILIKE</code> is PostgreSQL-specific and performs case-insensitive pattern matching.
+          </div>
+        </section>
+
+        <section class="section" id="in">
+          <h2>8. Matching a List with IN and NOT IN</h2>
+
+          <pre><code>SELECT title,
+       country
+FROM films
+WHERE country IN ('Canada', 'Germany', 'France');</code></pre>
+
+          <p>This is cleaner than repeating several <code>OR</code> conditions.</p>
+
+          <pre><code>SELECT title,
+       certification
+FROM films
+WHERE certification NOT IN ('R', 'PG-13');</code></pre>
+
+          <div class="callout amber">
+            Be careful when a <code>NOT IN</code> list or subquery contains NULL.
+            NULL can make the comparison evaluate to unknown rather than true.
+          </div>
+        </section>
+
+        <section class="section" id="combine">
+          <h2>9. Combining Filtering and Selecting</h2>
+          <p>
+            Choose only the needed columns and then filter the source rows.
+          </p>
+
+          <pre><code>SELECT title,
+       country,
+       release_year,
+       imdb_score
+FROM films
+WHERE release_year >= 2020
+  AND country IN ('Canada', 'United States', 'United Kingdom')
+  AND imdb_score >= 7.0;</code></pre>
+
+          <div class="callout green">
+            A strong query answers a specific question with only the necessary rows and columns.
+          </div>
+        </section>
+
+        <section class="section" id="null">
+          <h2>10. Understanding and Filtering NULL Values</h2>
+          <p>
+            NULL means a value is missing, unknown, or not applicable. It is not zero,
+            not an empty string, and not the text <code>'NULL'</code>.
+          </p>
+
+          <h3>Find missing values</h3>
+          <pre><code>SELECT title,
+       budget
+FROM films
+WHERE budget IS NULL;</code></pre>
+
+          <h3>Find known values</h3>
+          <pre><code>SELECT title,
+       imdb_score
+FROM films
+WHERE imdb_score IS NOT NULL;</code></pre>
+
+          <div class="callout danger">
+            Do not write <code>budget = NULL</code> or <code>budget &lt;&gt; NULL</code>.
+            Comparisons with NULL evaluate to unknown. Use <code>IS NULL</code>
+            or <code>IS NOT NULL</code>.
+          </div>
+
+          <h3>NULL and COUNT</h3>
+          <pre><code>SELECT COUNT(*) AS total_rows,
+       COUNT(budget) AS known_budgets
+FROM films;</code></pre>
+
+          <p>
+            <code>COUNT(*)</code> counts all rows. <code>COUNT(budget)</code>
+            counts only non-NULL budget values.
+          </p>
+
+          <h3>Three-valued logic</h3>
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>TRUE</h3>
+              <p>The row passes the WHERE filter.</p>
+            </article>
+            <article class="mini-card">
+              <h3>FALSE</h3>
+              <p>The row is removed.</p>
+            </article>
+            <article class="mini-card">
+              <h3>UNKNOWN</h3>
+              <p>The row is also removed. NULL comparisons often produce UNKNOWN.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>11. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Using double quotes for text</strong>
+              PostgreSQL uses single quotes for string values:
+              <code>country = 'Canada'</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using = NULL</strong>
+              Use <code>IS NULL</code> or <code>IS NOT NULL</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Forgetting BETWEEN is inclusive</strong>
+              Both boundary values are included.
+            </article>
+
+            <article class="qa-item">
+              <strong>Mixing AND and OR without parentheses</strong>
+              Parentheses make the intended logic explicit and prevent precedence surprises.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using = with wildcard characters</strong>
+              Use <code>LIKE</code>, not <code>=</code>, when using <code>%</code> or <code>_</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming LIKE is always case-insensitive</strong>
+              In PostgreSQL, <code>LIKE</code> is case-sensitive and <code>ILIKE</code> is case-insensitive.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>12. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is the purpose of WHERE?</strong>
+              It filters source rows so only records satisfying the condition remain.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is the difference between AND and OR?</strong>
+              <code>AND</code> requires all conditions to be true, while <code>OR</code>
+              requires at least one condition to be true.
+            </article>
+
+            <article class="qa-item">
+              <strong>Is BETWEEN inclusive?</strong>
+              Yes. It includes both the lower and upper boundary.
+            </article>
+
+            <article class="qa-item">
+              <strong>What do % and _ mean in LIKE?</strong>
+              <code>%</code> matches zero or more characters; <code>_</code> matches exactly one character.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you test for NULL?</strong>
+              Use <code>IS NULL</code> or <code>IS NOT NULL</code>, not equality operators.
+            </article>
+
+            <article class="qa-item">
+              <strong>What does NULL mean?</strong>
+              It represents missing, unknown, or not-applicable data and participates in three-valued logic.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>13. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Eight-sentence chapter summary</strong>
+            <ol>
+              <li><code>WHERE</code> filters rows.</li>
+              <li>Numeric values are normally unquoted.</li>
+              <li>Text values use single quotes.</li>
+              <li><code>AND</code> narrows and <code>OR</code> broadens.</li>
+              <li><code>BETWEEN</code> includes both endpoints.</li>
+              <li><code>LIKE</code> uses <code>%</code> and <code>_</code> wildcards.</li>
+              <li><code>IN</code> matches against a list of values.</li>
+              <li>NULL requires <code>IS NULL</code> or <code>IS NOT NULL</code>.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you return films released from 2018 through 2021?</li>
+            <li>Can you filter for Canadian or German films?</li>
+            <li>Can you find titles beginning with <code>B</code>?</li>
+            <li>Can you find films with missing budgets?</li>
+            <li>Can you explain why <code>= NULL</code> fails?</li>
+            <li>Can you explain when parentheses are needed with AND and OR?</li>
+          </ul>
+
+          <div class="callout green">
+            <strong>Lab decision:</strong> Chapter 2 strongly benefits from local practice.
+            Use the existing <code>intermediate_sql.films</code> table to practice
+            comparison operators, compound conditions, pattern matching, lists, and NULL handling.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Intermediate SQL · Chapter 2 Field Guide</span>
+      <span>
+        <a href="chapter_01_selecting_data_field_guide.html">Previous Chapter</a>
+        &nbsp;·&nbsp;
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_03_aggregate_functions_field_guide.html">Next Chapter</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

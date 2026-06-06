@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Intermediate SQL — Field Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .cheat-grid,
+    .compare-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cheat-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .compare-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .cheat-card,
+    .compare-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .cheat-card h3,
+    .compare-card h3 {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .cheat-card p,
+    .compare-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul,
+    .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cheat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .status-grid,
+      .chapter-grid,
+      .cheat-grid,
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Intermediate SQL</a>
+      <span>›</span>
+      <span>Main Field Guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp · Intermediate SQL</p>
+      <h1>Intermediate SQL Field Guide</h1>
+      <p>
+        A whole-course memory map covering selection, filtering, aggregate functions,
+        sorting, grouping, HAVING, NULL behavior, logical query execution, and the
+        evidence recorded from the local PostgreSQL lab.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.md">Markdown Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="../lab/lab_run_book.md">Lab Run Book</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card"><strong>PASSED</strong><span>Platform status</span></div>
+        <div class="status-card"><strong>COMPLETE</strong><span>Documentation</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Lab coverage</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Recall confidence</span></div>
+        <div class="status-card"><strong>NEEDS REPETITION</strong><span>Interview readiness</span></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Guide Contents</h2>
+        <a href="#chapters">1. Chapter guides</a>
+        <a href="#selecting">2. Selecting data</a>
+        <a href="#filtering">3. Filtering records</a>
+        <a href="#aggregates">4. Aggregate functions</a>
+        <a href="#grouping">5. Sorting and grouping</a>
+        <a href="#execution">6. Execution order</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#lab">9. Local lab evidence</a>
+        <a href="#memory">10. Memory nuggets</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="chapters">
+          <h2>1. Chapter Guides</h2>
+
+          <div class="chapter-grid">
+            <article class="chapter-card">
+              <h3><a href="chapter_01_selecting_data_field_guide.html">Chapter 1 — Selecting Data</a></h3>
+              <p>SELECT, FROM, DISTINCT, COUNT forms, query execution, debugging, and SQL style.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_02_filtering_records_field_guide.html">Chapter 2 — Filtering Records</a></h3>
+              <p>WHERE, comparison operators, AND, OR, BETWEEN, LIKE, IN, and NULL handling.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_03_aggregate_functions_field_guide.html">Chapter 3 — Aggregate Functions</a></h3>
+              <p>COUNT, SUM, AVG, MIN, MAX, ROUND, arithmetic, aliases, casts, and NULL behavior.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_04_sorting_and_grouping_field_guide.html">Chapter 4 — Sorting and Grouping</a></h3>
+              <p>ORDER BY, GROUP BY, HAVING, multi-column sorting, grouped summaries, and execution order.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="selecting">
+          <h2>2. Selecting Data</h2>
+
+          <div class="cheat-grid">
+            <article class="cheat-card">
+              <h3>SELECT and FROM</h3>
+              <p><code>SELECT</code> chooses output columns. <code>FROM</code> chooses the source table.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>DISTINCT</h3>
+              <p>Removes duplicate result rows based on the complete selected column set.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>COUNT(*)</h3>
+              <p>Counts rows, including rows that contain NULL in individual columns.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>COUNT(column)</h3>
+              <p>Counts only non-NULL values in the selected column or expression.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>COUNT(DISTINCT column)</h3>
+              <p>Counts unique non-NULL values.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>PostgreSQL FILTER</h3>
+              <p>Performs concise conditional aggregation.</p>
+            </article>
+          </div>
+
+          <pre><code>SELECT COUNT(*) AS total_films,
+       COUNT(budget) AS known_budgets,
+       COUNT(DISTINCT country) AS country_count
+FROM films;</code></pre>
+
+          <div class="callout green">
+            Local evidence: 16 rows, 15 known budgets, and 10 distinct countries.
+          </div>
+        </section>
+
+        <section class="section" id="filtering">
+          <h2>3. Filtering Records</h2>
+
+          <div class="compare-grid">
+            <article class="compare-card">
+              <h3>AND</h3>
+              <p>Every condition must be true. It usually narrows the result.</p>
+            </article>
+
+            <article class="compare-card">
+              <h3>OR</h3>
+              <p>At least one condition must be true. It usually broadens the result.</p>
+            </article>
+          </div>
+
+          <pre><code>SELECT title,
+       country,
+       release_year
+FROM films
+WHERE (country = 'Canada' OR country = 'Germany')
+  AND release_year >= 2019;</code></pre>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Pattern</th>
+                <th>Purpose</th>
+                <th>Key trap</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>BETWEEN</code></td><td>Inclusive range</td><td>Both endpoints are included</td></tr>
+              <tr><td><code>LIKE</code></td><td>Pattern matching</td><td><code>%</code> and <code>_</code> are wildcards</td></tr>
+              <tr><td><code>ILIKE</code></td><td>Case-insensitive PostgreSQL pattern matching</td><td>PostgreSQL-specific</td></tr>
+              <tr><td><code>IN</code></td><td>Match a list</td><td>Cleaner than repeated OR conditions</td></tr>
+              <tr><td><code>IS NULL</code></td><td>Find missing values</td><td>Do not use <code>= NULL</code></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="aggregates">
+          <h2>4. Aggregate Functions</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>COUNT</code></td><td>Count rows or known values</td></tr>
+              <tr><td><code>SUM</code></td><td>Add numeric values</td></tr>
+              <tr><td><code>AVG</code></td><td>Calculate the arithmetic mean</td></tr>
+              <tr><td><code>MIN</code></td><td>Return the smallest value</td></tr>
+              <tr><td><code>MAX</code></td><td>Return the largest value</td></tr>
+            </tbody>
+          </table>
+
+          <pre><code>SELECT ROUND(AVG(duration), 2) AS average_duration,
+       SUM(gross) AS total_gross,
+       MAX(imdb_score) AS highest_score
+FROM films;</code></pre>
+
+          <h3>Rounding left of the decimal</h3>
+
+          <pre><code>SELECT ROUND(AVG(budget), -3)
+       AS avg_budget_rounded_to_thousands
+FROM films;</code></pre>
+
+          <div class="callout">
+            Positive precision rounds to decimal places. Negative precision rounds to tens,
+            hundreds, thousands, and larger positions.
+          </div>
+
+          <h3>Arithmetic and safe division</h3>
+
+          <pre><code>SELECT title,
+       gross - budget AS profit,
+       ROUND((gross / NULLIF(budget, 0)) * 100, 2)
+         AS gross_as_percent_of_budget
+FROM films;</code></pre>
+
+          <div class="callout amber">
+            PostgreSQL integer division truncates the fractional portion:
+            <code>5 / 2 = 2</code>, while <code>5.0 / 2 = 2.5</code>.
+          </div>
+        </section>
+
+        <section class="section" id="grouping">
+          <h2>5. Sorting and Grouping</h2>
+
+          <h3>Multi-column sorting</h3>
+
+          <pre><code>SELECT title,
+       release_year,
+       imdb_score
+FROM films
+ORDER BY release_year ASC,
+         imdb_score DESC;</code></pre>
+
+          <p>
+            SQL sorts by the first expression, then uses later expressions as tie-breakers.
+          </p>
+
+          <h3>Grouped summaries</h3>
+
+          <pre><code>SELECT country,
+       COUNT(*) AS film_count
+FROM films
+GROUP BY country
+ORDER BY film_count DESC,
+         country ASC;</code></pre>
+
+          <h3>WHERE versus HAVING</h3>
+
+          <div class="compare-grid">
+            <article class="compare-card">
+              <h3>WHERE</h3>
+              <p>Filters individual rows before grouping.</p>
+            </article>
+
+            <article class="compare-card">
+              <h3>HAVING</h3>
+              <p>Filters completed groups after aggregation.</p>
+            </article>
+          </div>
+
+          <pre><code>SELECT country,
+       COUNT(*) AS recent_film_count
+FROM films
+WHERE release_year >= 2019
+GROUP BY country
+HAVING COUNT(*) >= 2
+ORDER BY recent_film_count DESC,
+         country;</code></pre>
+
+          <div class="callout danger">
+            Every selected non-aggregate expression must appear in <code>GROUP BY</code>.
+          </div>
+        </section>
+
+        <section class="section" id="execution">
+          <h2>6. Logical Query Execution Order</h2>
+
+          <div class="diagram">1. FROM
+2. WHERE
+3. GROUP BY
+4. HAVING
+5. SELECT
+6. DISTINCT
+7. ORDER BY
+8. LIMIT</div>
+
+          <div class="callout green">
+            This order explains why row filters belong in <code>WHERE</code>,
+            aggregate filters belong in <code>HAVING</code>, and selected aliases
+            can often be used in <code>ORDER BY</code>.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Using COUNT(column) as a total row count</strong>
+              It ignores NULL values. Use <code>COUNT(*)</code> for total rows.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using = NULL</strong>
+              Use <code>IS NULL</code> or <code>IS NOT NULL</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Mixing AND and OR without parentheses</strong>
+              Parentheses make the intended condition grouping explicit.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using WHERE with aggregate conditions</strong>
+              Use <code>HAVING</code> after grouping.
+            </article>
+
+            <article class="qa-item">
+              <strong>Unexpected integer division</strong>
+              Cast one operand or use a decimal literal.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming rows are naturally ordered</strong>
+              Use <code>ORDER BY</code> whenever output order matters.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>COUNT(*) versus COUNT(column)</strong>
+              <code>COUNT(*)</code> counts rows. <code>COUNT(column)</code> counts only non-NULL values.
+            </article>
+
+            <article class="qa-item">
+              <strong>WHERE versus HAVING</strong>
+              <code>WHERE</code> filters rows before grouping; <code>HAVING</code> filters grouped results.
+            </article>
+
+            <article class="qa-item">
+              <strong>ORDER BY versus GROUP BY</strong>
+              <code>ORDER BY</code> changes result order; <code>GROUP BY</code> changes result granularity.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why logical execution order matters</strong>
+              It explains when rows, groups, aliases, sorting, and limits become available.
+            </article>
+
+            <article class="qa-item">
+              <strong>How aggregates handle NULL</strong>
+              Most ignore NULL values; <code>COUNT(*)</code> counts rows regardless of individual NULL fields.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="lab">
+          <h2>9. Local PostgreSQL Lab Evidence</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Validated result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Chapter 1</td><td>16 total rows, 15 known budgets, 10 distinct countries</td></tr>
+              <tr><td>Chapter 2</td><td>Filtering, pattern matching, NULL checks, and compound conditions passed</td></tr>
+              <tr><td>Chapter 3</td><td>Aggregates, rounding, arithmetic, NULL behavior, and integer division passed</td></tr>
+              <tr><td>Chapter 4</td><td>Sorting, grouping, HAVING, and execution-order patterns passed</td></tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            The course lab used the local <code>intermediate_sql</code> schema and the
+            <code>films</code> dataset. Lab coverage is strong.
+          </div>
+        </section>
+
+        <section class="section" id="memory">
+          <h2>10. Quick Memory Nuggets</h2>
+
+          <pre><code>SELECT chooses columns.
+WHERE chooses rows.
+GROUP BY creates categories.
+HAVING filters categories.
+ORDER BY sorts final output.
+LIMIT restricts final rows.</code></pre>
+
+          <pre><code>COUNT(*) counts rows.
+COUNT(column) counts known values.
+COUNT(DISTINCT column) counts unique known values.</code></pre>
+
+          <pre><code>AND narrows.
+OR broadens.
+BETWEEN is inclusive.
+LIKE uses % and _.</code></pre>
+
+          <pre><code>WHERE happens before GROUP BY.
+HAVING happens after GROUP BY.</code></pre>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Intermediate SQL · Main Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.md">Markdown Guide</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">SQL Quick Lookup</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

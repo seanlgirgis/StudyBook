@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 3 — Aggregate Functions | Intermediate SQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 880px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Intermediate SQL</a>
+      <span>›</span>
+      <span>Chapter 3: Aggregate Functions</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Intermediate SQL · Chapter 3</p>
+      <h1>Aggregate Functions</h1>
+      <p>
+        Summarize complete datasets and filtered subsets with <code>AVG</code>,
+        <code>SUM</code>, <code>MIN</code>, <code>MAX</code>, and <code>COUNT</code>;
+        combine aggregates with <code>WHERE</code>; round results; use aliases; and
+        perform arithmetic safely inside SQL expressions.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="chapter_02_filtering_records_field_guide.html">Previous Chapter</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="chapter_04_sorting_and_grouping_field_guide.html">Next Chapter</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Chapter Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#aggregates">2. Core aggregates</a>
+        <a href="#types">3. Data types</a>
+        <a href="#subsets">4. Summarizing subsets</a>
+        <a href="#round">5. ROUND()</a>
+        <a href="#negative-round">6. Negative rounding</a>
+        <a href="#arithmetic">7. Arithmetic</a>
+        <a href="#aliases">8. Aliasing results</a>
+        <a href="#nulls">9. NULL behavior</a>
+        <a href="#mistakes">10. Common mistakes</a>
+        <a href="#interview">11. Interview translation</a>
+        <a href="#lab-evidence">12. Validated lab evidence</a>
+        <a href="#review">13. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>
+            Aggregate functions compress many input rows into one summary result.
+            They help answer questions such as total revenue, average film duration,
+            highest score, lowest budget, or number of known values.
+          </p>
+
+          <div class="diagram">Many rows
+   ↓
+Aggregate function
+   ↓
+One summary value</div>
+
+          <div class="callout green">
+            <strong>Core idea:</strong> aggregates summarize a set of rows.
+            <code>WHERE</code> controls which rows enter that set.
+          </div>
+        </section>
+
+        <section class="section" id="aggregates">
+          <h2>2. Core Aggregate Functions</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>Purpose</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>COUNT()</code></td>
+                <td>Count rows or known values</td>
+                <td><code>COUNT(*)</code></td>
+              </tr>
+              <tr>
+                <td><code>SUM()</code></td>
+                <td>Add numeric values</td>
+                <td><code>SUM(gross)</code></td>
+              </tr>
+              <tr>
+                <td><code>AVG()</code></td>
+                <td>Calculate an arithmetic mean</td>
+                <td><code>AVG(duration)</code></td>
+              </tr>
+              <tr>
+                <td><code>MIN()</code></td>
+                <td>Return the smallest value</td>
+                <td><code>MIN(release_year)</code></td>
+              </tr>
+              <tr>
+                <td><code>MAX()</code></td>
+                <td>Return the largest value</td>
+                <td><code>MAX(imdb_score)</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <pre><code>SELECT AVG(duration) AS average_duration,
+       MIN(duration) AS shortest_duration,
+       MAX(duration) AS longest_duration
+FROM films;</code></pre>
+
+          <div class="callout">
+            Multiple aggregate expressions can appear in the same <code>SELECT</code>
+            because each summarizes the same input set.
+          </div>
+        </section>
+
+        <section class="section" id="types">
+          <h2>3. Aggregate Functions and Data Types</h2>
+          <p>
+            Aggregate functions have data-type requirements.
+          </p>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Numeric-friendly</h3>
+              <p><code>SUM</code> and <code>AVG</code> require numeric input.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Broader comparison</h3>
+              <p><code>MIN</code> and <code>MAX</code> can work with numbers, dates, and often text.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Counting</h3>
+              <p><code>COUNT</code> can count rows, values, expressions, or distinct values.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Returned type</h3>
+              <p>The result type depends on the function and input data type.</p>
+            </article>
+          </div>
+
+          <pre><code>SELECT MIN(title) AS alphabetically_first_title,
+       MAX(title) AS alphabetically_last_title
+FROM films;</code></pre>
+
+          <div class="callout amber">
+            Text <code>MIN</code> and <code>MAX</code> follow the database's collation and sorting rules.
+          </div>
+
+          <h3>Useful extension: cast text before numeric aggregation</h3>
+          <p>
+            If a value is conceptually numeric but stored as text, cast it before using
+            numeric comparisons or aggregation.
+          </p>
+
+          <pre><code>SELECT MIN(year_text::integer) AS earliest_year,
+       MAX(year_text::integer) AS latest_year
+FROM your_table;</code></pre>
+
+          <p>The standard SQL form is:</p>
+
+          <pre><code>SELECT MIN(CAST(year_text AS integer)) AS earliest_year,
+       MAX(CAST(year_text AS integer)) AS latest_year
+FROM your_table;</code></pre>
+
+          <div class="callout danger">
+            Do not cast dirty text blindly. Values such as <code>'Unknown'</code>,
+            an empty string, or <code>'202A'</code> will cause the cast to fail.
+          </div>
+
+          <pre><code>SELECT MAX(
+         CASE
+           WHEN year_text ~ '^\d{4}$'
+           THEN year_text::integer
+         END
+       ) AS latest_valid_year
+FROM your_table;</code></pre>
+
+          <div class="callout green">
+            <strong>Memory rule:</strong> text MIN/MAX use lexical ordering;
+            numeric MIN/MAX use numeric ordering.
+          </div>
+        </section>
+
+        <section class="section" id="subsets">
+          <h2>4. Summarizing Subsets with WHERE</h2>
+          <p>
+            <code>WHERE</code> filters rows before the aggregate function summarizes them.
+          </p>
+
+          <pre><code>SELECT AVG(imdb_score) AS average_canadian_score
+FROM films
+WHERE country = 'Canada';</code></pre>
+
+          <pre><code>SELECT SUM(gross) AS total_recent_gross
+FROM films
+WHERE release_year >= 2020;</code></pre>
+
+          <pre><code>SELECT MAX(budget) AS largest_action_budget
+FROM films
+WHERE genre = 'Action';</code></pre>
+
+          <div class="diagram">FROM films
+    ↓
+WHERE country = 'Canada'
+    ↓
+AVG(imdb_score)
+    ↓
+One result</div>
+
+          <div class="callout green">
+            <strong>Execution rule:</strong> filter first, aggregate second.
+          </div>
+        </section>
+
+        <section class="section" id="round">
+          <h2>5. Rounding Results with ROUND()</h2>
+          <p>
+            <code>ROUND()</code> changes the displayed numeric precision.
+          </p>
+
+          <h3>Round to the nearest whole number</h3>
+          <pre><code>SELECT ROUND(AVG(duration)) AS rounded_average_duration
+FROM films;</code></pre>
+
+          <h3>Round to two decimal places</h3>
+          <pre><code>SELECT ROUND(AVG(imdb_score), 2) AS average_score
+FROM films;</code></pre>
+
+          <div class="callout">
+            In PostgreSQL, the two-argument form of <code>ROUND(value, places)</code>
+            is most naturally used with <code>NUMERIC</code>. Some expressions may need a cast.
+          </div>
+
+          <pre><code>SELECT ROUND(AVG(duration)::numeric, 2) AS average_duration
+FROM films;</code></pre>
+        </section>
+
+        <section class="section" id="negative-round">
+          <h2>6. ROUND() with a Negative Parameter</h2>
+          <p>
+            A negative second argument rounds to positions left of the decimal point.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Expression</th>
+                <th>Meaning</th>
+                <th>Example result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ROUND(12345, -1)</code></td>
+                <td>Nearest ten</td>
+                <td><code>12350</code></td>
+              </tr>
+              <tr>
+                <td><code>ROUND(12345, -2)</code></td>
+                <td>Nearest hundred</td>
+                <td><code>12300</code></td>
+              </tr>
+              <tr>
+                <td><code>ROUND(12345, -3)</code></td>
+                <td>Nearest thousand</td>
+                <td><code>12000</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <pre><code>SELECT ROUND(AVG(budget), -3)
+       AS avg_budget_rounded_to_thousands
+FROM films;</code></pre>
+
+          <div class="callout green">
+            Positive places move right of the decimal; negative places move left.
+            In the local lab, this returned <code>21033000</code>, which is the
+            average known budget rounded to the nearest thousand.
+          </div>
+        </section>
+
+        <section class="section" id="arithmetic">
+          <h2>7. Arithmetic in SQL</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Operator</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>+</code></td><td>Addition</td></tr>
+              <tr><td><code>-</code></td><td>Subtraction</td></tr>
+              <tr><td><code>*</code></td><td>Multiplication</td></tr>
+              <tr><td><code>/</code></td><td>Division</td></tr>
+              <tr><td><code>%</code></td><td>Remainder/modulo</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Calculate profit</h3>
+          <pre><code>SELECT title,
+       gross - budget AS profit
+FROM films;</code></pre>
+
+          <h3>Calculate a percentage</h3>
+          <pre><code>SELECT title,
+       ROUND((gross / NULLIF(budget, 0)) * 100, 2)
+         AS gross_as_percent_of_budget
+FROM films;</code></pre>
+
+          <div class="callout danger">
+            Integer division may discard the fractional portion. Use a decimal or cast
+            when a precise ratio is required.
+          </div>
+
+          <pre><code>SELECT 5 / 2;          -- integer result in PostgreSQL
+SELECT 5.0 / 2;        -- decimal result
+SELECT 5::numeric / 2; -- decimal result</code></pre>
+
+          <div class="callout amber">
+            Arithmetic involving NULL returns NULL. Division by zero raises an error;
+            <code>NULLIF(denominator, 0)</code> can safely turn a zero denominator into NULL.
+          </div>
+        </section>
+
+        <section class="section" id="aliases">
+          <h2>8. Aliasing Aggregate and Arithmetic Results</h2>
+          <p>
+            Calculated expressions should usually have clear aliases.
+          </p>
+
+          <pre><code>SELECT AVG(duration) AS average_duration,
+       SUM(gross) AS total_gross,
+       MAX(imdb_score) AS highest_score
+FROM films;</code></pre>
+
+          <pre><code>SELECT title,
+       gross - budget AS profit
+FROM films;</code></pre>
+
+          <div class="callout green">
+            <strong>Memory rule:</strong> aliases make output understandable,
+            but they do not rename stored columns.
+          </div>
+        </section>
+
+        <section class="section" id="nulls">
+          <h2>9. Aggregate Functions and NULL</h2>
+          <p>
+            Most aggregate functions ignore NULL values.
+          </p>
+
+          <pre><code>SELECT COUNT(*) AS total_films,
+       COUNT(budget) AS known_budgets,
+       AVG(budget) AS average_known_budget
+FROM films;</code></pre>
+
+          <p>
+            The average uses only rows where <code>budget</code> is not NULL.
+          </p>
+
+          <div class="callout amber">
+            This can be correct or misleading depending on the question. Always know whether
+            missing values were excluded from the calculation.
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>Typical NULL behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>COUNT(*)</code></td><td>Counts all rows</td></tr>
+              <tr><td><code>COUNT(column)</code></td><td>Ignores NULL</td></tr>
+              <tr><td><code>SUM(column)</code></td><td>Ignores NULL</td></tr>
+              <tr><td><code>AVG(column)</code></td><td>Ignores NULL</td></tr>
+              <tr><td><code>MIN(column)</code></td><td>Ignores NULL</td></tr>
+              <tr><td><code>MAX(column)</code></td><td>Ignores NULL</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>10. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Assuming AVG includes NULL as zero</strong>
+              It does not. NULL values are excluded from both the sum and the count used by the average.
+            </article>
+
+            <article class="qa-item">
+              <strong>Forgetting to alias a calculated expression</strong>
+              The query still works, but the result column may be difficult to understand.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using SUM or AVG on text</strong>
+              These functions require numeric-compatible input.
+            </article>
+
+            <article class="qa-item">
+              <strong>Rounding too early</strong>
+              Perform the full calculation first, then round the final result unless the business rule says otherwise.
+            </article>
+
+            <article class="qa-item">
+              <strong>Unexpected integer division</strong>
+              Cast or use a decimal operand when the fractional result matters.
+            </article>
+
+            <article class="qa-item">
+              <strong>Ignoring division by zero</strong>
+              Protect denominators with <code>NULLIF(value, 0)</code> when zero is possible.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>11. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is an aggregate function?</strong>
+              It summarizes a set of rows into a single value, such as a count, sum, average, minimum, or maximum.
+            </article>
+
+            <article class="qa-item">
+              <strong>How does WHERE interact with aggregates?</strong>
+              <code>WHERE</code> filters the source rows before the aggregate function calculates its result.
+            </article>
+
+            <article class="qa-item">
+              <strong>How does AVG handle NULL?</strong>
+              It ignores NULL values and divides the sum of known values by the count of known values.
+            </article>
+
+            <article class="qa-item">
+              <strong>What does ROUND(value, -2) do?</strong>
+              It rounds the value to the nearest hundred.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why alias an aggregate expression?</strong>
+              A meaningful alias makes the result self-explanatory for reports, downstream queries, and reviewers.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you avoid integer division?</strong>
+              Cast one operand to a decimal type or use a decimal literal before dividing.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="lab-evidence">
+          <h2>12. Validated Local Lab Evidence</h2>
+          <p>
+            The Chapter 3 queries were executed successfully against the local
+            <code>intermediate_sql.films</code> table.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Check</th>
+                <th>Observed result</th>
+                <th>What it proves</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>AVG(duration)</code></td>
+                <td><code>112.4375000000000000</code></td>
+                <td>Aggregate averages can return high precision.</td>
+              </tr>
+              <tr>
+                <td><code>ROUND(AVG(duration), 2)</code></td>
+                <td><code>112.44</code></td>
+                <td>Positive precision rounds to decimal places.</td>
+              </tr>
+              <tr>
+                <td><code>ROUND(AVG(budget), -3)</code></td>
+                <td><code>21033000</code></td>
+                <td>Negative precision rounds left of the decimal.</td>
+              </tr>
+              <tr>
+                <td><code>SUM(gross)</code> for films from 2020 onward</td>
+                <td><code>686900000.00</code></td>
+                <td><code>WHERE</code> filters before aggregation.</td>
+              </tr>
+              <tr>
+                <td>Highest Canadian IMDb score</td>
+                <td><code>7.3</code></td>
+                <td><code>MAX</code> can summarize a filtered subset.</td>
+              </tr>
+              <tr>
+                <td><code>COUNT(*)</code> versus <code>COUNT(budget)</code></td>
+                <td><code>16</code> versus <code>15</code></td>
+                <td><code>COUNT(column)</code> ignores NULL.</td>
+              </tr>
+              <tr>
+                <td><code>AVG(budget)</code></td>
+                <td><code>21033333.333333333333</code></td>
+                <td>The average uses the 15 known budget values.</td>
+              </tr>
+              <tr>
+                <td><code>5 / 2</code> versus <code>5.0 / 2</code></td>
+                <td><code>2</code> versus <code>2.5</code></td>
+                <td>Integer division drops the fractional portion.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            <strong>Chapter status:</strong> DataCamp chapter complete, local lab passed,
+            and aggregate behavior verified.
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>13. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Eight-sentence chapter summary</strong>
+            <ol>
+              <li>Aggregate functions summarize many rows.</li>
+              <li><code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, and <code>MAX</code> are the core functions.</li>
+              <li><code>WHERE</code> filters rows before aggregation.</li>
+              <li>Most aggregates ignore NULL values.</li>
+              <li><code>ROUND(value, places)</code> controls precision.</li>
+              <li>A negative rounding parameter rounds left of the decimal point.</li>
+              <li>Arithmetic can create useful derived measures.</li>
+              <li>Aliases make calculated output readable.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you calculate the average film duration?</li>
+            <li>Can you find the highest IMDb score among Canadian films?</li>
+            <li>Can you round an average budget to the nearest million?</li>
+            <li>Can you calculate <code>gross - budget</code> and alias it as profit?</li>
+            <li>Can you explain why AVG ignores NULL?</li>
+            <li>Can you prevent division by zero?</li>
+          </ul>
+
+          <div class="callout green">
+            <strong>Lab decision:</strong> Chapter 3 deserves a compact lab because aggregate behavior,
+            NULL handling, rounding, and numeric division are best learned by inspecting actual results.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Intermediate SQL · Chapter 3 Field Guide</span>
+      <span>
+        <a href="chapter_02_filtering_records_field_guide.html">Previous Chapter</a>
+        &nbsp;·&nbsp;
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_04_sorting_and_grouping_field_guide.html">Next Chapter</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Joining Data in SQL | Field Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 920px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .status-card {
+      padding: 11px 12px;
+      border: 1px solid #3a4a58;
+      border-radius: 9px;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .status-card strong {
+      display: block;
+      color: var(--green);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .status-card span {
+      color: #d5dee7;
+      font-size: 0.9rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .chapter-card {
+      display: block;
+      padding: 18px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      text-decoration: none;
+    }
+
+    .chapter-card:hover {
+      border-color: var(--green);
+      transform: translateY(-1px);
+    }
+
+    .chapter-card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--green);
+    }
+
+    .chapter-card span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid, .chapter-grid, .status-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Joining Data in SQL</a>
+      <span>›</span>
+      <span>Main Field Guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp · Joining Data in SQL</p>
+      <h1>Joining Data in SQL Field Guide</h1>
+      <p>
+        The whole-course memory map for inner and outer joins, cross and self joins,
+        set operations, semi and anti joins, and subqueries. Use this page for review,
+        decision support, interview rehearsal, and navigation to the detailed chapter guides.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="sql_join_quick_lookup.html">SQL Join Quick Lookup</a>
+        <a class="button secondary" href="../lab/lab_guide.html">Integrated Lab Guide</a>
+        <a class="button secondary" href="chapter_01_introducing_inner_joins_field_guide.html">Start Chapter 1</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card"><strong>Platform</strong><span>Passed</span></div>
+        <div class="status-card"><strong>Documentation</strong><span>Complete</span></div>
+        <div class="status-card"><strong>Lab</strong><span>Developing</span></div>
+        <div class="status-card"><strong>Recall</strong><span>Developing</span></div>
+        <div class="status-card"><strong>Interview</strong><span>Needs repetition</span></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Field Guide Contents</h2>
+        <a href="#big-picture">1. Course big picture</a>
+        <a href="#chapters">2. Chapter navigation</a>
+        <a href="#decision-guide">3. Decision guide</a>
+        <a href="#inner-joins">4. Inner joins</a>
+        <a href="#outer-joins">5. Outer, cross, self</a>
+        <a href="#set-theory">6. Set operations</a>
+        <a href="#subqueries">7. Subqueries</a>
+        <a href="#patterns">8. Core patterns</a>
+        <a href="#traps">9. Common traps</a>
+        <a href="#interview">10. Interview translation</a>
+        <a href="#memory">11. Memory nuggets</a>
+        <a href="#lab">12. Course lab</a>
+        <a href="#checklist">13. Final checklist</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Course Big Picture</h2>
+          <p>
+            This course teaches four major ways to combine or compare data:
+            joins, outer-join preservation, set operations, and subqueries.
+          </p>
+
+          <div class="diagram">Need related fields side by side?
+      → JOIN
+
+Need unmatched rows preserved?
+      → OUTER JOIN
+
+Need compatible rows stacked or compared?
+      → SET OPERATION
+
+Need one query to feed another?
+      → SUBQUERY</div>
+
+          <div class="callout green">
+            <strong>Core question:</strong> what result population do I need, which rows
+            must survive, and what shape should the final result have?
+          </div>
+        </section>
+
+        <section class="section" id="chapters">
+          <h2>2. Chapter Navigation</h2>
+
+          <div class="chapter-grid">
+            <a class="chapter-card" href="chapter_01_introducing_inner_joins_field_guide.html">
+              <strong>Chapter 1 — Introducing Inner Joins</strong>
+              <span>INNER JOIN, aliases, ON versus USING, keys, relationships, and multi-table joins.</span>
+            </a>
+
+            <a class="chapter-card" href="chapter_02_outer_cross_and_self_joins_field_guide.html">
+              <strong>Chapter 2 — Outer, Cross, and Self Joins</strong>
+              <span>Row preservation, reconciliation, combinations, self comparison, and filter placement.</span>
+            </a>
+
+            <a class="chapter-card" href="chapter_03_set_theory_for_sql_joins_field_guide.html">
+              <strong>Chapter 3 — Set Theory for SQL Joins</strong>
+              <span>UNION, UNION ALL, INTERSECT, EXCEPT, compatibility, and result ordering.</span>
+            </a>
+
+            <a class="chapter-card" href="chapter_04_subqueries_field_guide.html">
+              <strong>Chapter 4 — Subqueries</strong>
+              <span>Semi joins, anti joins, WHERE, SELECT, FROM, correlation, and subquery shapes.</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="section" id="decision-guide">
+          <h2>3. Join and Query Selection Guide</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Business need</th>
+                <th>Best starting pattern</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Keep only matching rows</td><td><code>INNER JOIN</code></td></tr>
+              <tr><td>Keep every row from the main table</td><td><code>LEFT JOIN</code></td></tr>
+              <tr><td>Keep every row from both tables</td><td><code>FULL JOIN</code></td></tr>
+              <tr><td>Generate every combination</td><td><code>CROSS JOIN</code></td></tr>
+              <tr><td>Compare rows from the same table</td><td>Self join</td></tr>
+              <tr><td>Stack rows and remove duplicates</td><td><code>UNION</code></td></tr>
+              <tr><td>Stack rows and preserve duplicates</td><td><code>UNION ALL</code></td></tr>
+              <tr><td>Keep rows found in both results</td><td><code>INTERSECT</code></td></tr>
+              <tr><td>Keep first-result rows absent from the second</td><td><code>EXCEPT</code></td></tr>
+              <tr><td>Keep rows when a related row exists</td><td><code>IN</code> or <code>EXISTS</code></td></tr>
+              <tr><td>Keep rows when no related row exists</td><td><code>NOT EXISTS</code></td></tr>
+              <tr><td>Compare each row with one summary value</td><td>Scalar subquery</td></tr>
+              <tr><td>Create an intermediate result table</td><td>Subquery in <code>FROM</code></td></tr>
+            </tbody>
+          </table>
+
+          <div class="callout">
+            <strong>Decision sequence:</strong> identify the output population → decide which
+            unmatched rows must remain → confirm the real key → inspect cardinality →
+            estimate row multiplication → choose the pattern → validate.
+          </div>
+        </section>
+
+        <section class="section" id="inner-joins">
+          <h2>4. Introducing Inner Joins</h2>
+
+          <h3>Basic INNER JOIN</h3>
+          <pre><code>SELECT c.name,
+       p.year,
+       p.population
+FROM countries AS c
+INNER JOIN populations AS p
+  ON c.code = p.country_code;</code></pre>
+
+          <h3>ON versus USING</h3>
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3><code>ON</code></h3>
+              <p>Use when key names differ or the relationship needs several conditions.</p>
+            </article>
+            <article class="mini-card">
+              <h3><code>USING</code></h3>
+              <p>Use when both tables share the same key-column name.</p>
+            </article>
+          </div>
+
+          <h3>Composite relationship</h3>
+          <pre><code>SELECT c.name,
+       p.year,
+       p.size,
+       e.gdp_percapita
+FROM countries AS c
+INNER JOIN populations AS p
+  ON c.code = p.country_code
+INNER JOIN economies AS e
+  ON c.code = e.country_code
+ AND p.year = e.year;</code></pre>
+
+          <div class="callout amber">
+            Omitting <code>year</code> can combine values from unrelated periods.
+          </div>
+        </section>
+
+        <section class="section" id="outer-joins">
+          <h2>5. Outer, Cross, and Self Joins</h2>
+
+          <h3>LEFT JOIN preservation</h3>
+          <pre><code>SELECT c.name,
+       e.year,
+       e.gdp_percapita
+FROM countries AS c
+LEFT JOIN economies AS e
+  ON c.code = e.country_code;</code></pre>
+
+          <h3>ON versus WHERE</h3>
+          <p>
+            A right-side filter in <code>WHERE</code> can remove unmatched left rows.
+            Put the filter in <code>ON</code> when it controls eligible matches but the
+            left population must remain.
+          </p>
+
+          <h3>FULL JOIN reconciliation</h3>
+          <pre><code>SELECT c.code AS country_code,
+       e.country_code AS economy_code
+FROM countries AS c
+FULL JOIN economies AS e
+  ON c.code = e.country_code;</code></pre>
+
+          <h3>CROSS JOIN size rule</h3>
+          <div class="diagram">result rows = left rows × right rows</div>
+
+          <h3>Self join for two years</h3>
+          <pre><code>SELECT p1.country_code,
+       p1.size AS size2010,
+       p2.size AS size2015
+FROM populations AS p1
+INNER JOIN populations AS p2
+  ON p1.country_code = p2.country_code
+ AND p1.year = 2010
+ AND p2.year = 2015;</code></pre>
+
+          <div class="callout green">
+            Conditional aggregation may be cleaner than a self join when the task is only
+            to place fixed years side by side.
+          </div>
+        </section>
+
+        <section class="section" id="set-theory">
+          <h2>6. Set Theory for SQL Joins</h2>
+
+          <p>
+            Set operations align fields by position. Each SELECT must return the same number
+            of fields with compatible data types and logically comparable values.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Operator</th>
+                <th>Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>UNION</code></td><td>Append rows and remove duplicates.</td></tr>
+              <tr><td><code>UNION ALL</code></td><td>Append every row and preserve duplicates.</td></tr>
+              <tr><td><code>INTERSECT</code></td><td>Keep rows present in both results.</td></tr>
+              <tr><td><code>EXCEPT</code></td><td>Keep rows from the first result absent from the second.</td></tr>
+            </tbody>
+          </table>
+
+          <h3>INTERSECT versus INNER JOIN</h3>
+          <pre><code>SELECT name
+FROM cities
+
+INTERSECT
+
+SELECT name
+FROM countries;</code></pre>
+
+          <p>
+            An equivalent inner join may require <code>DISTINCT</code> because joins can
+            reproduce duplicate matches.
+          </p>
+
+          <div class="callout danger">
+            <strong>Direction matters:</strong> <code>A EXCEPT B</code> is not the same as
+            <code>B EXCEPT A</code>.
+          </div>
+        </section>
+
+        <section class="section" id="subqueries">
+          <h2>7. Subqueries, Semi Joins, and Anti Joins</h2>
+
+          <h3>Semi join</h3>
+          <pre><code>SELECT c.name
+FROM countries AS c
+WHERE EXISTS (
+  SELECT 1
+  FROM economies AS e
+  WHERE e.country_code = c.code
+);</code></pre>
+
+          <h3>Anti join</h3>
+          <pre><code>SELECT c.name
+FROM countries AS c
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM economies AS e
+  WHERE e.country_code = c.code
+);</code></pre>
+
+          <h3>Scalar subquery</h3>
+          <pre><code>SELECT name,
+       population
+FROM cities
+WHERE population &gt; (
+  SELECT AVG(population)
+  FROM cities
+);</code></pre>
+
+          <h3>FROM subquery</h3>
+          <pre><code>SELECT region,
+       AVG(country_population)
+FROM (
+  SELECT region,
+         population AS country_population
+  FROM countries
+) AS country_data
+GROUP BY region;</code></pre>
+
+          <div class="callout danger">
+            Prefer <code>NOT EXISTS</code> to <code>NOT IN</code> when NULL may appear
+            in the inner result.
+          </div>
+        </section>
+
+        <section class="section" id="patterns">
+          <h2>8. Core SQL Patterns</h2>
+
+          <h3>Preserve the main population</h3>
+          <pre><code>SELECT ...
+FROM main_table AS m
+LEFT JOIN detail_table AS d
+  ON m.key = d.key;</code></pre>
+
+          <h3>Find missing relationships</h3>
+          <pre><code>SELECT m.key
+FROM main_table AS m
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM detail_table AS d
+  WHERE d.key = m.key
+);</code></pre>
+
+          <h3>Append all rows</h3>
+          <pre><code>SELECT ...
+FROM source_a
+
+UNION ALL
+
+SELECT ...
+FROM source_b;</code></pre>
+
+          <h3>Shared rows</h3>
+          <pre><code>SELECT key
+FROM source_a
+
+INTERSECT
+
+SELECT key
+FROM source_b;</code></pre>
+
+          <h3>First-only rows</h3>
+          <pre><code>SELECT key
+FROM source_a
+
+EXCEPT
+
+SELECT key
+FROM source_b;</code></pre>
+        </section>
+
+        <section class="section" id="traps">
+          <h2>9. Common Traps and Corrections</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Trap</th>
+                <th>Correction</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Joining on only part of a key</td><td>Include every key field, such as entity plus year.</td></tr>
+              <tr><td>Assuming LEFT JOIN keeps the exact left row count</td><td>Check right-side uniqueness and one-to-many matches.</td></tr>
+              <tr><td>Filtering right fields in WHERE</td><td>Move match filters into ON when unmatched left rows must remain.</td></tr>
+              <tr><td>Running CROSS JOIN without estimating size</td><td>Calculate left rows × right rows first.</td></tr>
+              <tr><td>Self joining without role restrictions</td><td>Add year, role, hierarchy, or inequality conditions.</td></tr>
+              <tr><td>Using UNION when duplicates matter</td><td>Use UNION ALL.</td></tr>
+              <tr><td>Reversing EXCEPT</td><td>State the first population explicitly.</td></tr>
+              <tr><td>Using = with a multi-row subquery</td><td>Use IN, EXISTS, or reduce the result to one row.</td></tr>
+              <tr><td>Using NOT IN with possible NULL</td><td>Use NOT EXISTS.</td></tr>
+              <tr><td>Forgetting a FROM-subquery alias</td><td>Add <code>AS alias_name</code>.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>10. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>How do you choose between INNER JOIN and LEFT JOIN?</strong>
+              I start from the required output population. If unmatched rows should be excluded,
+              I use INNER JOIN. If every row from the primary population must remain, I use LEFT JOIN.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why can a join increase row count?</strong>
+              One key may match several rows. One-to-many and many-to-many relationships create
+              one output row for each valid combination.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is a common LEFT JOIN bug?</strong>
+              Filtering a right-side field in WHERE can remove NULL-extended rows and produce
+              inner-join behavior.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is the difference between UNION and UNION ALL?</strong>
+              UNION removes duplicate rows. UNION ALL preserves all rows and usually performs less work.
+            </article>
+
+            <article class="qa-item">
+              <strong>How does INTERSECT differ from INNER JOIN?</strong>
+              INTERSECT compares compatible result sets and returns common rows. INNER JOIN matches
+              tables through a condition and may return fields from both sides.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is a semi join?</strong>
+              It keeps rows from the first table when at least one related row exists, without
+              returning fields from the second table.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why is NOT EXISTS safer than NOT IN?</strong>
+              NOT IN can behave unexpectedly when NULL appears in the inner result. NOT EXISTS
+              checks for matching rows directly.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is a correlated subquery?</strong>
+              It is a subquery that references the outer query and is evaluated logically in the
+              context of each outer row.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="memory">
+          <h2>11. Memory Nuggets</h2>
+
+          <div class="memory-box">
+            <strong>Fifteen quick rules</strong>
+            <ol>
+              <li>INNER JOIN keeps matches only.</li>
+              <li>LEFT JOIN preserves the left population.</li>
+              <li>FULL JOIN preserves both populations.</li>
+              <li>CROSS JOIN multiplies row counts.</li>
+              <li>A self join means one table with multiple roles.</li>
+              <li>UNION removes duplicates.</li>
+              <li>UNION ALL preserves duplicates.</li>
+              <li>INTERSECT means common rows.</li>
+              <li>EXCEPT means first result minus second result.</li>
+              <li>IN tests list membership.</li>
+              <li>EXISTS tests whether a related row exists.</li>
+              <li>NOT EXISTS is the safest common anti-join pattern.</li>
+              <li>A scalar subquery must return one value.</li>
+              <li>A FROM subquery acts like a temporary table.</li>
+              <li>Always validate row counts after joins.</li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="section" id="lab">
+          <h2>12. Integrated Course Lab</h2>
+
+          <p>
+            The course lab provides local PostgreSQL practice across all four chapters.
+          </p>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Join practice</h3>
+              <p>INNER, LEFT, FULL, CROSS, self joins, and composite conditions.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Set practice</h3>
+              <p>UNION, UNION ALL, INTERSECT, EXCEPT, and row-count comparison.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Subquery practice</h3>
+              <p>Semi joins, anti joins, scalar subqueries, and FROM subqueries.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Validation practice</h3>
+              <p>Unmatched rows, duplicate growth, NULL behavior, and result checking.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Open the lab:</strong>
+            <a href="../lab/lab_guide.html">Integrated Lab Guide</a>
+          </div>
+        </section>
+
+        <section class="section" id="checklist">
+          <h2>13. Final Review Checklist</h2>
+
+          <ul>
+            <li>I can explain how joins differ from set operations.</li>
+            <li>I can choose between INNER, LEFT, FULL, and CROSS JOIN.</li>
+            <li>I can explain ON versus WHERE with a LEFT JOIN.</li>
+            <li>I can detect accidental row multiplication.</li>
+            <li>I can write and explain a self join.</li>
+            <li>I can use conditional aggregation instead of a self join when appropriate.</li>
+            <li>I can choose between UNION and UNION ALL.</li>
+            <li>I understand the direction of EXCEPT.</li>
+            <li>I can explain INTERSECT versus INNER JOIN.</li>
+            <li>I can write semi joins and anti joins.</li>
+            <li>I understand the NOT IN and NULL problem.</li>
+            <li>I can use subqueries in WHERE, SELECT, and FROM.</li>
+            <li>I can validate a query using row counts, key checks, and duplicate checks.</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Closeout status:</strong> platform passed, documentation complete,
+            lab created, recall developing, interview readiness needs repetition.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Joining Data in SQL · Main Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="sql_join_quick_lookup.html">SQL Join Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="../lab/lab_guide.html">Integrated Lab</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

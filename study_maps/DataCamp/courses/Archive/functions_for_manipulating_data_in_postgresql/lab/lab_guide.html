@@ -1,0 +1,3712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PostgreSQL Functions — Lab Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #79c0ff;
+    --green: #56d364;
+    --green-bg: #0d2818;
+    --yellow: #e3b341;
+    --yellow-bg: #2d1d00;
+    --red: #ff7b72;
+    --red-bg: #2d0d0d;
+    --purple: #bc8cff;
+    --purple-bg: #1e1235;
+    --teal: #39d0d8;
+    --teal-bg: #03242a;
+    --orange: #ffa657;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 0 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--purple), var(--teal));
+  }
+  .header-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green);
+    background: var(--green-bg);
+    border: 1px solid var(--green);
+    border-radius: 4px;
+    padding: 3px 10px;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+  header h1 span { color: var(--accent); }
+  header p {
+    color: var(--muted);
+    font-size: 1rem;
+    font-family: var(--mono);
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  .toc-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 2.5rem 0;
+    overflow: hidden;
+  }
+  .toc-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+  .toc-header span {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--yellow);
+    letter-spacing: 0.1em;
+  }
+  .toc-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .d-red { background: #ff5f56; }
+  .d-yellow { background: #ffbd2e; }
+  .d-green { background: #27c93f; }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .toc-section {
+    padding: 1.25rem 1.5rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .toc-section:nth-child(even) { border-right: none; }
+  .toc-section h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .toc-section ul { list-style: none; }
+  .toc-section ul li { margin-bottom: 0.35rem; }
+  .toc-section ul li a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
+    font-family: var(--mono);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .toc-section ul li a:hover { color: var(--accent2); }
+  .toc-section ul li a .num {
+    color: var(--muted);
+    font-size: 11px;
+    min-width: 22px;
+  }
+  .section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 80px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--bg);
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 3px 8px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+  .section-num.grn { background: var(--green); }
+  .section-num.ylw { background: var(--yellow); color: #000; }
+  .section-num.prp { background: var(--purple); color: #000; }
+  .section-num.tel { background: var(--teal); color: #000; }
+  .section-num.red { background: var(--red); }
+  .section h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .section h3 {
+    font-size: 1.05rem;
+    margin: 1.4rem 0 0.7rem;
+    color: var(--text);
+  }
+  .section p, .section li {
+    color: #c9d1d9;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .section ul, .section ol {
+    padding-left: 1.5rem;
+    margin: 0.75rem 0;
+  }
+  .section li { margin-bottom: 0.35rem; }
+  pre {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin: 1.25rem 0;
+    position: relative;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  pre .label {
+    position: absolute;
+    top: 0; right: 0;
+    background: var(--bg3);
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-radius: 0 6px 0 4px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    padding: 3px 8px;
+    letter-spacing: 0.08em;
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #e6edf3;
+  }
+  p code, li code, td code {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 13px;
+    color: var(--orange);
+  }
+  .callout {
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .callout.info {
+    background: #051d2c;
+    border: 1px solid #1d5a8a;
+    color: var(--accent2);
+  }
+  .callout.warn {
+    background: var(--yellow-bg);
+    border: 1px solid var(--yellow);
+    color: var(--yellow);
+  }
+  .callout.success {
+    background: var(--green-bg);
+    border: 1px solid var(--green);
+    color: var(--green);
+  }
+  .callout strong {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+  .nugget {
+    background: var(--teal-bg);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--teal);
+    line-height: 1.7;
+  }
+  .nugget .label-tag {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--teal);
+    opacity: 0.6;
+    margin-bottom: 5px;
+  }
+  .note-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    margin: 1rem 0;
+  }
+  .note-card h4 {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  .note-card ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .note-card li {
+    padding: 0.2rem 0;
+  }
+  .vtable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 13px;
+    margin: 1.25rem 0;
+  }
+  .vtable th {
+    background: var(--bg3);
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  .vtable td {
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  .vtable tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .back-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-top: 2rem;
+  }
+  .back-top:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: 4rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 700px) {
+    .toc-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <div class="header-badge">POSTGRESQL · DATA FUNCTIONS · LAB GUIDE</div>
+    <h1>PostgreSQL <span>Functions Lab Guide</span></h1>
+    <p>Run notes, practice checkpoints, mistakes, and reusable SQL patterns</p>
+  </div>
+</header>
+
+<div class="container">
+  <a id="top"></a>
+
+  <div class="toc-wrap">
+    <div class="toc-header">
+      <div class="toc-dot d-red"></div>
+      <div class="toc-dot d-yellow"></div>
+      <div class="toc-dot d-green"></div>
+      <span>TABLE OF CONTENTS</span>
+    </div>
+    <div class="toc-grid">
+      <div class="toc-section">
+        <h4>Setup</h4>
+        <ul>
+          <li><a href="#s01"><span class="num">01</span> How to Use This Lab Guide</a></li>
+          <li><a href="#s02"><span class="num">02</span> Current Lab Setup</a></li>
+          <li><a href="#s03"><span class="num">03</span> Lab Progress Tracker</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Chapter 1</h4>
+        <ul>
+          <li><a href="#s04"><span class="num">04</span> Data Types and Arrays</a></li>
+          <li><a href="#chapter1-4-1"><span class="num">4.1</span> Metadata and data types</a></li>
+          <li><a href="#chapter1-4-2"><span class="num">4.2</span> Working with ARRAYs</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Chapter 2</h4>
+        <ul>
+          <li><a href="#s05"><span class="num">05</span> Date/Time Functions</a></li>
+          <li><a href="#chapter2-5-1"><span class="num">5.1</span> Rental return analysis</a></li>
+          <li><a href="#chapter2-5-2"><span class="num">5.2</span> EXTRACT vs DATE_TRUNC</a></li>
+          <li><a href="#chapter2-5-3"><span class="num">5.3</span> DATE_PART vs EXTRACT</a></li>
+          <li><a href="#chapter2-5-4"><span class="num">5.4</span> Current date/time</a></li>
+          <li><a href="#chapter2-5-5"><span class="num">5.5</span> Cast timestamp to date</a></li>
+          <li><a href="#chapter2-5-6"><span class="num">5.6</span> Rental duration</a></li>
+          <li><a href="#chapter2-5-7"><span class="num">5.7</span> Concepts covered</a></li>
+          <li><a href="#chapter2-5-8"><span class="num">5.8</span> Direct practice</a></li>
+          <li><a href="#chapter2-5-9"><span class="num">5.9</span> COALESCE reporting</a></li>
+          <li><a href="#chapter2-5-10"><span class="num">5.10</span> Duration bands</a></li>
+          <li><a href="#chapter2-5-11"><span class="num">5.11</span> Reusable reporting</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Chapter 3</h4>
+        <ul>
+          <li><a href="#s06"><span class="num">06</span> Text Functions</a></li>
+          <li><a href="#chapter3-6-1"><span class="num">6.1</span> Inspect and clean dirty text</a></li>
+          <li><a href="#chapter3-6-2"><span class="num">6.2</span> Concatenate and format report text</a></li>
+          <li><a href="#chapter3-6-3"><span class="num">6.3</span> Length and data-quality flags</a></li>
+          <li><a href="#chapter3-6-4"><span class="num">6.4</span> Find and extract text pieces</a></li>
+          <li><a href="#chapter3-6-5"><span class="num">6.5</span> Transform text</a></li>
+          <li><a href="#chapter3-regexp-replace"><span class="num">6.x</span> REGEXP_REPLACE whitespace collapse</a></li>
+          <li><a href="#chapter3-6-6"><span class="num">6.6</span> Pattern matching and parsing text</a></li>
+          <li><a href="#chapter3-6-7"><span class="num">6.7</span> Chapter 3 closing mini-pipeline</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Chapter 4</h4>
+        <ul>
+          <li><a href="#s07"><span class="num">07</span> Full-text Search and Extensions</a></li>
+          <li><a href="#chapter4-7-1"><span class="num">7.1</span> Inspect searchable text</a></li>
+          <li><a href="#chapter4-7-2"><span class="num">7.2</span> to_tsvector searchable document</a></li>
+          <li><a href="#chapter4-7-3"><span class="num">7.3</span> to_tsquery and @@ matching</a></li>
+          <li><a href="#chapter4-7-4"><span class="num">7.4</span> ILIKE vs full-text search</a></li>
+          <li><a href="#chapter4-7-5"><span class="num">7.5</span> Full-text boolean operators</a></li>
+          <li><a href="#chapter4-7-6"><span class="num">7.6</span> Search title and description together</a></li>
+          <li><a href="#chapter4-7-7"><span class="num">7.7</span> plainto_tsquery user-style search</a></li>
+          <li><a href="#chapter4-7-8"><span class="num">7.8</span> Stemming surprises and prefix search</a></li>
+          <li><a href="#chapter4-7-9"><span class="num">7.9</span> CREATE EXTENSION fuzzystrmatch</a></li>
+          <li><a href="#chapter4-7-10"><span class="num">7.10</span> levenshtein edit distance</a></li>
+          <li><a href="#chapter4-7-11"><span class="num">7.11</span> levenshtein thresholds and fuzzy title matching</a></li>
+          <li><a href="#chapter4-7-12"><span class="num">7.12</span> soundex sound-alike codes</a></li>
+          <li><a href="#chapter4-7-13"><span class="num">7.13</span> difference sound similarity score</a></li>
+          <li><a href="#chapter4-7-14"><span class="num">7.14</span> Combined fuzzy candidate report</a></li>
+          <li><a href="#chapter4-7-15"><span class="num">7.15</span> CREATE EXTENSION pg_trgm</a></li>
+          <li><a href="#chapter4-7-16"><span class="num">7.16</span> similarity() trigram score</a></li>
+          <li><a href="#chapter4-7-17"><span class="num">7.17</span> similarity threshold filtering</a></li>
+          <li><a href="#chapter4-7-18"><span class="num">7.18</span> pg_trgm percent operator</a></li>
+          <li><a href="#chapter4-7-19"><span class="num">7.19</span> pg_trgm threshold and set_limit()</a></li>
+          <li><a href="#chapter4-7-20"><span class="num">7.20</span> word_similarity()</a></li>
+          <li><a href="#chapter4-7-21"><span class="num">7.21</span> trigram distance operator</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Review</h4>
+        <ul>
+          <li><a href="#s08"><span class="num">08</span> Mistakes</a></li>
+          <li><a href="#s09"><span class="num">09</span> Update Cadence</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s01">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2>How to Use This Lab Guide</h2>
+    </div>
+    <p>This guide grows while doing the course and lab work.</p>
+    <div class="callout info">
+      <strong>CAPTURE LOOP</strong>
+      For each small lab or DataCamp exercise, capture the topic, goal, SQL attempted, corrected SQL if needed, expected result, mistake or pattern learned, and the Field Guide reference.
+    </div>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s02">
+    <div class="section-header">
+      <div class="section-num grn">02</div>
+      <h2>Current Lab Setup</h2>
+    </div>
+    <div class="nugget">
+      <span class="label-tag">// COURSE-LOCAL LAB</span>
+      The active runnable lab materials now live under the canonical course folder.
+    </div>
+    <p>Course-local lab folder:</p>
+    <pre><span class="label">TEXT</span><code>lab\</code></pre>
+    <p>Current setup SQL files:</p>
+    <pre><span class="label">TEXT</span><code>lab\sql\00_create_schema.sql
+lab\sql\01_create_tables.sql
+lab\sql\02_insert_sample_data.sql</code></pre>
+    <p>Run order:</p>
+    <pre><span class="label">TEXT</span><code>1. lab\sql\00_create_schema.sql
+2. lab\sql\01_create_tables.sql
+3. lab\sql\02_insert_sample_data.sql</code></pre>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s03">
+    <div class="section-header">
+      <div class="section-num ylw">03</div>
+      <h2>Lab Progress Tracker</h2>
+    </div>
+    <table class="vtable">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Topic</th>
+          <th>Source</th>
+          <th>SQL / File</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>TODO</td><td>Lab setup SQL</td><td>local lab</td><td><code>00_create_schema.sql</code></td><td>verify schema creation</td></tr>
+        <tr><td>TODO</td><td>Lab setup tables</td><td>local lab</td><td><code>01_create_tables.sql</code></td><td>verify tables</td></tr>
+        <tr><td>TODO</td><td>Lab sample data</td><td>local lab</td><td><code>02_insert_sample_data.sql</code></td><td>verify seed data</td></tr>
+        <tr><td>DONE</td><td>Expected return date</td><td>local lab</td><td><code>lab_rentals</code></td><td>added 3-day INTERVAL</td></tr>
+        <tr><td>DONE</td><td>Late-by interval</td><td>local lab</td><td><code>lab_rentals</code></td><td>compared return_date to expected_return_date</td></tr>
+        <tr><td>DONE</td><td>Return status CASE label</td><td>local lab</td><td><code>lab_rentals</code></td><td>labeled Late / Not returned / On time or early</td></tr>
+        <tr><td>DONE</td><td>Return status summary</td><td>local lab</td><td><code>lab_rentals</code></td><td>counted rentals by status</td></tr>
+        <tr><td>DONE</td><td>EXTRACT vs DATE_TRUNC</td><td>local lab</td><td><code>lab_rentals</code></td><td>compared numeric month part to month bucket</td></tr>
+        <tr><td>DONE</td><td>Monthly rental grouping</td><td>local lab</td><td><code>lab_rentals</code></td><td>counted rentals by DATE_TRUNC month bucket</td></tr>
+        <tr><td>DONE</td><td>DATE_PART vs EXTRACT</td><td>local lab</td><td><code>lab_rentals</code></td><td>both returned Q1 for sample data</td></tr>
+        <tr><td>DONE</td><td>Current date/time functions</td><td>local lab</td><td><code>current functions</code></td><td>compared CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP, NOW()</td></tr>
+        <tr><td>DONE</td><td>CURRENT_TIMESTAMP precision</td><td>local lab</td><td><code>current functions</code></td><td>tested full, 0, and 2 fractional-second precision</td></tr>
+        <tr><td>DONE</td><td>Cast timestamp to date</td><td>local lab</td><td><code>lab_rentals</code></td><td>compared ::date and CAST(... AS date)</td></tr>
+        <tr><td>DONE</td><td>Rental duration</td><td>local lab</td><td><code>lab_rentals</code></td><td>calculated return_date - rental_date</td></tr>
+        <tr><td>DONE</td><td>DATE minus DATE</td><td>local lab</td><td><code>lab_rentals</code></td><td>cast timestamps to date and calculated integer calendar days</td></tr>
+        <tr><td>DONE</td><td>DATE plus integer</td><td>local lab</td><td><code>lab_rentals</code></td><td>confirmed DATE + integer means date plus that many days</td></tr>
+        <tr><td>DONE</td><td>Clear INTERVAL version of DATE + integer</td><td>local lab</td><td><code>lab_rentals</code></td><td>compared DATE + 3 to INTERVAL '3 days' and cast-back-to-date style</td></tr>
+        <tr><td>DONE</td><td>AGE()</td><td>local lab</td><td><code>lab_rentals</code></td><td>compared AGE(return_date, rental_date) to direct timestamp subtraction</td></tr>
+        <tr><td>DONE</td><td>AGE() argument order</td><td>local lab</td><td><code>lab_rentals</code></td><td>confirmed reversed arguments produce negative intervals</td></tr>
+        <tr><td>DONE</td><td>COALESCE display label</td><td>local lab</td><td><code>lab_rentals</code></td><td>replaced NULL return_date display with Not returned yet</td></tr>
+        <tr><td>DONE</td><td>COALESCE elapsed-so-far</td><td>local lab</td><td><code>lab_rentals</code></td><td>used return_date or CURRENT_TIMESTAMP as effective end time</td></tr>
+        <tr><td>DONE</td><td>CASE + COALESCE open/closed report</td><td>local lab</td><td><code>lab_rentals</code></td><td>labeled Open/Closed and calculated elapsed time</td></tr>
+        <tr><td>DONE</td><td>Open rental overdue flag</td><td>local lab</td><td><code>lab_rentals</code></td><td>compared effective end time to expected return deadline</td></tr>
+        <tr><td>DONE</td><td>EXTRACT interval parts</td><td>local lab</td><td><code>lab_rentals</code></td><td>extracted day and hour components from rental duration</td></tr>
+        <tr><td>DONE</td><td>Total duration hours with EPOCH</td><td>local lab</td><td><code>lab_rentals</code></td><td>used EXTRACT(EPOCH) divided by 3600 for total hours</td></tr>
+        <tr><td>DONE</td><td>Rounded duration hours</td><td>local lab</td><td><code>lab_rentals</code></td><td>rounded total duration hours to 2 decimal places</td></tr>
+        <tr><td>DONE</td><td>Duration risk bands</td><td>local lab</td><td><code>lab_rentals</code></td><td>classified rentals as Normal, Long, or Very long</td></tr>
+        <tr><td>DONE</td><td>CASE order trap</td><td>local lab</td><td><code>lab_rentals</code></td><td>checked &gt; 120 before &gt; 72 so Very long is not swallowed by Long</td></tr>
+        <tr><td>DONE</td><td>CTE reusable duration feature</td><td>local lab</td><td><code>lab_rentals</code></td><td>calculated total_hours once and reused it for rounding and banding</td></tr>
+        <tr><td>DONE</td><td>Summary by duration band</td><td>local lab</td><td><code>lab_rentals</code></td><td>counted rentals and averaged total hours by duration band</td></tr>
+        <tr><td>DONE</td><td>Business-order sorting</td><td>local lab</td><td><code>lab_rentals</code></td><td>used CASE in ORDER BY to sort Very long, Long, Normal</td></tr>
+        <tr><td>DONE</td><td>Hidden GROUP BY helper column</td><td>local lab</td><td><code>lab_rentals</code></td><td>grouped and ordered by band_priority without displaying it</td></tr>
+        <tr><td>DONE</td><td>information_schema.columns metadata</td><td>local lab</td><td><code>course06_functions_lab</code></td><td>listed table, column, data_type, and udt_name</td></tr>
+        <tr><td>DONE</td><td>Schema-specific metadata filter</td><td>local lab</td><td><code>course06_functions_lab</code></td><td>found course lab tables outside public schema</td></tr>
+        <tr><td>DONE</td><td>Data type discovery</td><td>local lab</td><td><code>course06_functions_lab</code></td><td>identified integer, varchar, text, date, timestamp, numeric, and ARRAY columns</td></tr>
+        <tr><td>DONE</td><td>ARRAY display</td><td>local lab</td><td><code>lab_customers / lab_films</code></td><td>observed PostgreSQL arrays with curly-brace display</td></tr>
+        <tr><td>DONE</td><td>ARRAY indexing</td><td>local lab</td><td><code>lab_customers / lab_films</code></td><td>accessed array items with [1] and [2]</td></tr>
+        <tr><td>DONE</td><td>ARRAY 1-based indexing trap</td><td>local lab</td><td><code>lab_customers</code></td><td>confirmed [0] returns NULL while [1] returns first item</td></tr>
+        <tr><td>DONE</td><td>ANY() array search</td><td>local lab</td><td><code>lab_customers / lab_films</code></td><td>searched for one value inside an array</td></tr>
+        <tr><td>DONE</td><td>@&gt; array contains one value</td><td>local lab</td><td><code>lab_customers</code></td><td>checked whether favorite_tags contains ARRAY['sql']</td></tr>
+        <tr><td>DONE</td><td>@&gt; array contains multiple values</td><td>local lab</td><td><code>lab_customers / lab_films</code></td><td>required multiple array values to be present</td></tr>
+        <tr><td>DONE</td><td>CARDINALITY() array count</td><td>local lab</td><td><code>lab_customers / lab_films</code></td><td>counted number of items inside arrays</td></tr>
+        <tr><td>DONE</td><td>Inspect dirty text</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>reviewed raw_text, raw_code, and comparison_text</td></tr>
+        <tr><td>DONE</td><td>TRIM / LTRIM / RTRIM</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>removed outside padding from text</td></tr>
+        <tr><td>DONE</td><td>UPPER / LOWER / INITCAP</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>standardized text casing after trimming</td></tr>
+        <tr><td>DONE</td><td>String concatenation</td><td>local lab</td><td><code>lab_customers</code></td><td>built full_name with <code>||</code> and <code>CONCAT()</code></td></tr>
+        <tr><td>DONE</td><td>LPAD / RPAD</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>padded text codes to fixed widths</td></tr>
+        <tr><td>DONE</td><td>LENGTH and trimmed length</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>compared raw length to cleaned length</td></tr>
+        <tr><td>DONE</td><td>Padding quality flag</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>used LENGTH comparison to flag outside padding</td></tr>
+        <tr><td>DONE</td><td>POSITION / STRPOS</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>found substring positions and observed 0 when not found</td></tr>
+        <tr><td>DONE</td><td>LEFT / RIGHT</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>extracted prefixes and suffixes</td></tr>
+        <tr><td>DONE</td><td>SUBSTRING / SUBSTR</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>extracted middle string pieces using 1-based positions</td></tr>
+        <tr><td>DONE</td><td>REPLACE</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>replaced exact matching text</td></tr>
+        <tr><td>DONE</td><td>REVERSE</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>reversed text strings</td></tr>
+        <tr><td>DONE</td><td>Clean report label</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>combined LPAD, INITCAP, TRIM, and <code>||</code> into a report label</td></tr>
+        <tr><td>DONE</td><td>REGEXP_REPLACE whitespace collapse</td><td>inline VALUES demo</td><td><code>text examples</code></td><td>collapsed repeated internal spaces without relying on TRIM</td></tr>
+        <tr><td>DONE</td><td>LIKE starts-with wildcard</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>used LIKE 'G%' to find comparison_text values starting with G</td></tr>
+        <tr><td>DONE</td><td>LIKE contains wildcard</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>used LIKE '%BO%' to find comparison_text values containing BO</td></tr>
+        <tr><td>DONE</td><td>LIKE single-character wildcard</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>used LIKE 'G_MBO' where <code>_</code> matched exactly one character</td></tr>
+        <tr><td>DONE</td><td>LIKE case sensitivity</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>proved LIKE '%CASE%' matched but LIKE '%case%' did not</td></tr>
+        <tr><td>DONE</td><td>ILIKE case-insensitive search</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>used ILIKE '%case%' to match mixed CASE value</td></tr>
+        <tr><td>DONE</td><td>TRIM + ILIKE cleaned search</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>searched cleaned raw_text for padded values</td></tr>
+        <tr><td>DONE</td><td>SPLIT_PART words</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>split cleaned raw_text into first, second, and third words</td></tr>
+        <tr><td>DONE</td><td>SPLIT_PART generated code</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>split generated code values like 7-GAMBOL into code and text parts</td></tr>
+        <tr><td>DONE</td><td>CTE parse-and-clean pipeline</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>generated code, split it, padded code part, and title-cased text part</td></tr>
+        <tr><td>DONE</td><td>Chapter 3 final mini-pipeline</td><td>local lab</td><td><code>lab_dirty_text</code></td><td>combined TRIM, INITCAP, LPAD, <code>||</code>, ILIKE, CASE, and CTE</td></tr>
+        <tr><td>DONE</td><td>Inspect searchable film text</td><td>local lab</td><td><code>lab_films</code></td><td>reviewed title and description as searchable text fields</td></tr>
+        <tr><td>DONE</td><td>to_tsvector searchable document</td><td>local lab</td><td><code>lab_films.description</code></td><td>converted description text into searchable English tokens</td></tr>
+        <tr><td>DONE</td><td>to_tsquery match with @@</td><td>local lab</td><td><code>lab_films.description</code></td><td>matched searchable descriptions against full-text search queries</td></tr>
+        <tr><td>DONE</td><td>Full-text stemming</td><td>local lab</td><td><code>lab_films.description</code></td><td>searched astounded and matched Astounding through English stemming</td></tr>
+        <tr><td>DONE</td><td>ILIKE vs full-text search</td><td>local lab</td><td><code>lab_films.description</code></td><td>compared exact character matching to normalized word-token matching</td></tr>
+        <tr><td>DONE</td><td>Full-text AND operator</td><td>local lab</td><td><code>lab_films.description</code></td><td>used elf &amp; search to require both tokens</td></tr>
+        <tr><td>DONE</td><td>Full-text OR operator</td><td>local lab</td><td><code>lab_films.description</code></td><td>used elf | sean to match either token</td></tr>
+        <tr><td>DONE</td><td>Full-text NOT operator</td><td>local lab</td><td><code>lab_films.description</code></td><td>used elf &amp; !search to exclude search matches</td></tr>
+        <tr><td>DONE</td><td>Combined title and description search</td><td>local lab</td><td><code>lab_films</code></td><td>searched one document built from title <code>||</code> ' ' <code>||</code> description</td></tr>
+        <tr><td>DONE</td><td>plainto_tsquery user-style search</td><td>local lab</td><td><code>lab_films</code></td><td>converted plain words into a safe full-text query</td></tr>
+        <tr><td>DONE</td><td>Full-text stop-word removal</td><td>local lab</td><td><code>plainto_tsquery</code></td><td>showed a and and were removed from a postgres and database</td></tr>
+        <tr><td>DONE</td><td>Full-text normalization check</td><td>local lab</td><td><code>plainto_tsquery</code></td><td>compared elf to elves and saw different query tokens</td></tr>
+        <tr><td>DONE</td><td>Full-text prefix search</td><td>local lab</td><td><code>lab_films</code></td><td>used el:* to match tokens starting with el</td></tr>
+        <tr><td>DONE</td><td>CREATE EXTENSION fuzzystrmatch</td><td>local lab</td><td><code>fuzzystrmatch</code></td><td>enabled fuzzy text functions with IF NOT EXISTS safety</td></tr>
+        <tr><td>DONE</td><td>levenshtein edit distance</td><td>local lab</td><td><code>fuzzystrmatch</code></td><td>measured string distance as the number of edits required</td></tr>
+        <tr><td>DONE</td><td>levenshtein threshold filtering</td><td>local lab</td><td><code>lab_films.title</code></td><td>filtered likely title matches by small edit distance</td></tr>
+        <tr><td>DONE</td><td>soundex sound-alike codes</td><td>local lab</td><td><code>fuzzystrmatch</code></td><td>compared phonetic codes for similar-sounding words</td></tr>
+        <tr><td>DONE</td><td>difference sound similarity score</td><td>local lab</td><td><code>fuzzystrmatch</code></td><td>used the 0-to-4 sound similarity score</td></tr>
+        <tr><td>DONE</td><td>Combined sound and edit-distance fuzzy candidate report</td><td>local lab</td><td><code>lab_customers.first_name</code></td><td>combined difference and levenshtein to rank fuzzy name candidates</td></tr>
+        <tr><td>DONE</td><td>CREATE EXTENSION pg_trgm</td><td>local lab</td><td><code>pg_trgm</code></td><td>enabled trigram text similarity functions</td></tr>
+        <tr><td>DONE</td><td>pg_trgm extension schema check</td><td>local lab</td><td><code>pg_extension</code></td><td>verified pg_trgm lives in course06_functions_lab</td></tr>
+        <tr><td>DONE</td><td>similarity basic score</td><td>local lab</td><td><code>pg_trgm</code></td><td>compared POSTGRES HERO against typo and unrelated text</td></tr>
+        <tr><td>DONE</td><td>similarity title ranking</td><td>local lab</td><td><code>lab_films.title</code></td><td>ranked film titles by trigram similarity</td></tr>
+        <tr><td>DONE</td><td>similarity threshold filtering</td><td>local lab</td><td><code>lab_films.title</code></td><td>kept only rows with similarity &gt;= 0.3</td></tr>
+        <tr><td>DONE</td><td>pg_trgm CTE label</td><td>local lab</td><td><code>lab_films.title</code></td><td>calculated title similarity once and labeled match strength</td></tr>
+        <tr><td>DONE</td><td>pg_trgm percent operator</td><td>local lab</td><td><code>lab_films.title</code></td><td>used title % search_text as similar-enough shortcut</td></tr>
+        <tr><td>DONE</td><td>pg_trgm threshold inspection</td><td>local lab</td><td><code>SHOW pg_trgm.similarity_threshold</code></td><td>confirmed default threshold was 0.3</td></tr>
+        <tr><td>DONE</td><td>show_limit() threshold check</td><td>local lab</td><td><code>show_limit()</code></td><td>confirmed active similarity threshold</td></tr>
+        <tr><td>DONE</td><td>set_limit threshold test</td><td>local lab</td><td><code>set_limit()</code></td><td>temporarily raised threshold to 0.8 and reset to 0.3</td></tr>
+        <tr><td>DONE</td><td>word_similarity clean vs sentence input</td><td>local lab</td><td><code>pg_trgm</code></td><td>showed word_similarity stays strong when search text is buried in a longer sentence</td></tr>
+        <tr><td>DONE</td><td>word_similarity candidate report</td><td>local lab</td><td><code>lab_films.title</code></td><td>found POSTGRES HERO from a longer user-style phrase</td></tr>
+        <tr><td>DONE</td><td>trigram distance ranking</td><td>local lab</td><td><code>lab_films.title</code></td><td>used &lt;-&gt; distance operator to rank closest matches first</td></tr>
+      </tbody>
+    </table>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s04">
+    <div class="section-header">
+      <div class="section-num prp">04</div>
+      <h2>Chapter 1 Lab Notes — Data Types and Arrays</h2>
+    </div>
+    <div class="callout info">
+      <strong>CHAPTER 1 WORKFLOW</strong>
+      Chapter 1 is about understanding what data types exist in the database and how PostgreSQL handles arrays.
+    </div>
+    <div class="nugget">
+      <span class="label-tag">// PRACTICAL FLOW</span>
+      database metadata -&gt; table/column discovery -&gt; data type recognition -&gt; array display -&gt; array indexing -&gt; array search
+    </div>
+    <div class="note-card" id="chapter1-4-1">
+      <h4>4.1 Completed lab topic: database metadata and data types</h4>
+    </div>
+    <div class="note-card">
+      <h4>information_schema.columns metadata</h4>
+      <ul>
+        <li>Goal: List tables, columns, SQL data types, and PostgreSQL internal type names.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  table_name,
+  column_name,
+  data_type,
+  udt_name
+FROM information_schema.columns
+WHERE table_schema = 'public'
+ORDER BY table_name, ordinal_position;</code></pre>
+      <ul>
+        <li>Observed result notes: This returned public-schema tables like <code>course05_sales_events</code>, <code>smoke_test</code>, and <code>students</code>.</li>
+        <li>Observed result notes: It showed columns with types such as integer, text, date, numeric, and timestamp with time zone.</li>
+        <li>Observed result notes: It did not show <code>lab_rentals</code> because <code>lab_rentals</code> is not in the public schema.</li>
+        <li>Pattern learned: <code>information_schema.columns</code> is a metadata table that describes database tables and columns.</li>
+        <li>Memory line: <code>information_schema.columns</code> tells you what tables and columns exist.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Schema-specific metadata filter</h4>
+      <ul>
+        <li>Goal: Find the actual schema for <code>lab_rentals</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  table_schema,
+  table_name,
+  column_name,
+  data_type,
+  udt_name
+FROM information_schema.columns
+WHERE table_name = 'lab_rentals'
+ORDER BY ordinal_position;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>lab_rentals</code> lives in schema <code>course06_functions_lab</code>.</li>
+        <li>Observed result notes: Full table name is <code>course06_functions_lab.lab_rentals</code>.</li>
+        <li>Observed result notes: Columns found were <code>rental_id integer / int4</code>, <code>customer_id integer / int4</code>, <code>film_id integer / int4</code>, <code>rental_date timestamp without time zone / timestamp</code>, and <code>return_date timestamp without time zone / timestamp</code>.</li>
+        <li>Pattern learned: A table may not live in <code>public</code>. Use <code>table_schema</code> to understand where it lives.</li>
+        <li>Memory line: <code>database -&gt; schema -&gt; table -&gt; column</code>.</li>
+        <li>Common trap: Filtering only <code>table_schema = 'public'</code> can hide course or lab tables that live in a different schema.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Course lab data type discovery</h4>
+      <ul>
+        <li>Goal: Inspect all <code>course06_functions_lab</code> tables and column types.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  table_name,
+  column_name,
+  data_type,
+  udt_name
+FROM information_schema.columns
+WHERE table_schema = 'course06_functions_lab'
+ORDER BY table_name, ordinal_position;</code></pre>
+      <ul>
+        <li>Tables found: <code>lab_customers</code>, <code>lab_dirty_text</code>, <code>lab_films</code>, <code>lab_payments</code>, and <code>lab_rentals</code>.</li>
+        <li>Important data types found: <code>integer -&gt; int4</code>, <code>character varying -&gt; varchar</code>, <code>text -&gt; text</code>, <code>date -&gt; date</code>, <code>timestamp without time zone -&gt; timestamp</code>, <code>numeric -&gt; numeric</code>, and <code>ARRAY -&gt; _text</code>.</li>
+        <li>Array columns found: <code>lab_customers.favorite_tags ARRAY / _text</code> and <code>lab_films.special_features ARRAY / _text</code>.</li>
+        <li>Pattern learned: <code>data_type</code> is the friendly SQL type. <code>udt_name</code> is PostgreSQL's internal/base type name.</li>
+        <li>Memory line: <code>ARRAY</code> with <code>udt_name _text</code> means text array.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter1-4-2">
+      <h4>4.2 Completed lab topic: working with ARRAYs</h4>
+    </div>
+    <div class="note-card">
+      <h4>ARRAY display</h4>
+      <ul>
+        <li>Goal: View text array columns in lab tables.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  customer_id,
+  first_name,
+  last_name,
+  favorite_tags
+FROM lab_customers
+ORDER BY customer_id;</code></pre>
+      <ul>
+        <li>Observed result: <code>Sean: {sql,analytics,postgres}</code>, <code>Anna: {python,dashboard}</code>, <code>Brian: {strategy,sql}</code>, <code>Maya: {reporting,postgres}</code>, <code>Omar: {data,quality}</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  special_features
+FROM lab_films
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>ELF ADVENTURE: {Trailers,"Deleted Scenes"}</code>, <code>DATA DETECTIVE: {Commentaries,"Behind the Scenes"}</code>, <code>POSTGRES HERO: {Trailers,Commentaries}</code>, <code>CLEAN TEXT CLUB: {"Deleted Scenes"}</code>, <code>THE FUZZY ELF: {Trailers,"Behind the Scenes"}</code>, <code>ARRAY GAMES: {Commentaries}</code>.</li>
+        <li>Pattern learned: PostgreSQL displays arrays with curly braces. Values with spaces are quoted.</li>
+        <li>Memory line: ARRAY columns store multiple values in one column.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>ARRAY indexing</h4>
+      <ul>
+        <li>Goal: Access individual array elements.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  customer_id,
+  first_name,
+  favorite_tags,
+  favorite_tags[1] AS first_tag,
+  favorite_tags[2] AS second_tag
+FROM lab_customers
+ORDER BY customer_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>Sean first_tag sql, second_tag analytics</code>, <code>Anna first_tag python, second_tag dashboard</code>, <code>Brian first_tag strategy, second_tag sql</code>, <code>Maya first_tag reporting, second_tag postgres</code>, <code>Omar first_tag data, second_tag quality</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  special_features,
+  special_features[1] AS first_feature
+FROM lab_films
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>ELF ADVENTURE first_feature Trailers</code>, <code>DATA DETECTIVE first_feature Commentaries</code>, <code>CLEAN TEXT CLUB first_feature Deleted Scenes</code>, <code>ARRAY GAMES first_feature Commentaries</code>.</li>
+        <li>Pattern learned: PostgreSQL array indexes start at 1.</li>
+        <li>Memory line: <code>ARRAY[1]</code> = first item. <code>ARRAY[2]</code> = second item.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>ARRAY 1-based indexing trap</h4>
+      <ul>
+        <li>Goal: Prove that PostgreSQL arrays are not zero-based.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  customer_id,
+  first_name,
+  favorite_tags,
+  favorite_tags[0] AS zero_index_tag,
+  favorite_tags[1] AS first_tag
+FROM lab_customers
+ORDER BY customer_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>favorite_tags[0]</code> returned NULL or blank. <code>favorite_tags[1]</code> returned the first real array item.</li>
+        <li>Pattern learned: PostgreSQL arrays are 1-based, unlike Python lists.</li>
+        <li>Common trap: Do not use <code>[0]</code> expecting the first item.</li>
+        <li>Memory line: <code>[0] = NULL / not useful in this lab. [1] = first item.</code></li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>ANY() array search</h4>
+      <ul>
+        <li>Goal: Find rows where an array contains one searched value.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  customer_id,
+  first_name,
+  favorite_tags
+FROM lab_customers
+WHERE 'sql' = ANY(favorite_tags)
+ORDER BY customer_id;</code></pre>
+      <ul>
+        <li>Observed result: <code>Sean: {sql,analytics,postgres}</code> and <code>Brian: {strategy,sql}</code>.</li>
+        <li>Pattern learned: <code>'value' = ANY(array_column)</code> is true when the value appears anywhere in the array.</li>
+        <li>Memory line: <code>ANY</code> checks one searched value against array items.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>@&gt; contains one value</h4>
+      <ul>
+        <li>Goal: Use PostgreSQL's array contains operator.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  customer_id,
+  first_name,
+  favorite_tags
+FROM lab_customers
+WHERE favorite_tags @&gt; ARRAY['sql']
+ORDER BY customer_id;</code></pre>
+      <ul>
+        <li>Observed result: <code>Sean: {sql,analytics,postgres}</code> and <code>Brian: {strategy,sql}</code>.</li>
+        <li>Pattern learned: <code>array_column @&gt; ARRAY['value']</code> checks whether the left array contains the right array.</li>
+        <li>Memory line: <code>@&gt;</code> means the left array contains the requested array.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>@&gt; contains multiple required values</h4>
+      <ul>
+        <li>Goal: Require multiple array values to be present.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  customer_id,
+  first_name,
+  favorite_tags
+FROM lab_customers
+WHERE favorite_tags @&gt; ARRAY['sql', 'postgres']
+ORDER BY customer_id;</code></pre>
+      <ul>
+        <li>Observed result: <code>Sean only: {sql,analytics,postgres}</code>.</li>
+        <li>Pattern learned: <code>ARRAY['sql', 'postgres']</code> means both values must be present.</li>
+        <li>Memory line: <code>@&gt; ARRAY['a', 'b']</code> means contains a AND b.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>ANY() and @&gt; on film special_features</h4>
+      <ul>
+        <li>Goal: Compare one-value ANY search with multi-value @&gt; search on films.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  special_features
+FROM lab_films
+WHERE 'Trailers' = ANY(special_features)
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result: <code>101 ELF ADVENTURE</code>, <code>103 POSTGRES HERO</code>, and <code>105 THE FUZZY ELF</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  special_features
+FROM lab_films
+WHERE special_features @&gt; ARRAY['Trailers', 'Behind the Scenes']
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result: <code>105 THE FUZZY ELF</code> only.</li>
+        <li>Pattern learned: <code>ANY</code> checks one searched value. <code>@&gt; ARRAY[...]</code> can require all listed values.</li>
+        <li>Memory line: <code>ANY = one searched value appears in the array.</code> <code>@&gt; ARRAY[...] = all requested values are present.</code></li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>CARDINALITY() array count</h4>
+      <ul>
+        <li>Goal: Count how many items are inside an array.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  customer_id,
+  first_name,
+  favorite_tags,
+  CARDINALITY(favorite_tags) AS tag_count
+FROM lab_customers
+ORDER BY customer_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>Sean tag_count 3</code>, <code>Anna tag_count 2</code>, <code>Brian tag_count 2</code>, <code>Maya tag_count 2</code>, <code>Omar tag_count 2</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  special_features,
+  CARDINALITY(special_features) AS feature_count
+FROM lab_films
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>ELF ADVENTURE feature_count 2</code>, <code>CLEAN TEXT CLUB feature_count 1</code>, <code>ARRAY GAMES feature_count 1</code>.</li>
+        <li>Pattern learned: <code>CARDINALITY(array_column)</code> returns the number of items in the array.</li>
+        <li>Memory line: <code>CARDINALITY(array_column) = number of items inside the array.</code></li>
+      </ul>
+    </div>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s05">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2>Chapter 2 Lab Notes — Date/Time Functions</h2>
+    </div>
+    <div class="callout success">
+      <strong>CURRENT ACTIVE AREA</strong>
+      This is the section most likely to grow first during live DataCamp and local lab work.
+    </div>
+    <a id="chapter2-quick-jumps"></a>
+    <div class="note-card">
+      <h4>Chapter 2 Quick Jumps</h4>
+      <ul>
+        <li><a href="#chapter2-5-1">5.1 Rental return analysis</a></li>
+        <li><a href="#chapter2-5-2">5.2 EXTRACT vs DATE_TRUNC</a></li>
+        <li><a href="#chapter2-5-3">5.3 DATE_PART vs EXTRACT</a></li>
+        <li><a href="#chapter2-5-4">5.4 Current date/time functions</a></li>
+        <li><a href="#chapter2-5-5">5.5 Casting timestamp to date</a></li>
+        <li><a href="#chapter2-5-6">5.6 Rental duration</a></li>
+        <li><a href="#chapter2-5-7">5.7 Concepts already covered</a></li>
+        <li><a href="#chapter2-5-8">5.8 Direct-practice topics</a></li>
+        <li><a href="#chapter2-5-9">5.9 COALESCE and open-record reporting</a></li>
+        <li><a href="#chapter2-5-10">5.10 Interval features and duration bands</a></li>
+        <li><a href="#chapter2-5-11">5.11 Reusable duration-band reporting</a></li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter2-5-1">
+      <h4>5.1 Completed lab mini-pipeline: rental return analysis</h4>
+      <div class="nugget">
+        <span class="label-tag">// MEMORY LINE</span>
+        Raw timestamps -&gt; calculated deadline -&gt; interval difference -&gt; business label -&gt; summary count.
+      </div>
+    </div>
+    <div class="note-card">
+      <h4>Expected return date</h4>
+      <ul>
+        <li>Goal: Calculate an expected return timestamp by adding a 3-day allowed rental window to <code>rental_date</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  return_date,
+  rental_date + INTERVAL '3 days' AS expected_return_date
+FROM lab_rentals;</code></pre>
+      <ul>
+        <li>Expected result: A calculated timestamp deadline for each rental that stays aligned to the original time of day.</li>
+        <li>Pattern learned: <code>TIMESTAMP + INTERVAL</code> creates a shifted timestamp and preserves time of day.</li>
+        <li>Common trap: <code>DATE + integer</code> can work for date-only math, but <code>TIMESTAMP + INTERVAL</code> is the better habit for timestamp calculations.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Late by interval</h4>
+      <ul>
+        <li>Goal: Compare actual <code>return_date</code> to <code>expected_return_date</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  return_date,
+  rental_date + INTERVAL '3 days' AS expected_return_date,
+  return_date - (rental_date + INTERVAL '3 days') AS late_by
+FROM lab_rentals;</code></pre>
+      <ul>
+        <li>Expected result: Positive <code>late_by</code> means late. Negative <code>late_by</code> means early. <code>NULL late_by</code> means <code>return_date</code> is missing.</li>
+        <li>Observed examples: <code>rental_id 1002</code> was late by <code>2 days 02:45:00</code>. <code>rental_id 1006</code> was late by <code>5 days</code>. <code>rental_id 1005</code> had <code>NULL late_by</code> because <code>return_date</code> was <code>NULL</code>.</li>
+        <li>Pattern learned: <code>TIMESTAMP - TIMESTAMP</code> returns an <code>INTERVAL</code>.</li>
+        <li>Common trap: A missing <code>return_date</code> keeps the interval result <code>NULL</code>, so unfinished rentals need explicit handling later.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Return status label with CASE</h4>
+      <ul>
+        <li>Goal: Turn raw interval logic into a readable business label.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  return_date,
+  rental_date + INTERVAL '3 days' AS expected_return_date,
+  return_date - (rental_date + INTERVAL '3 days') AS late_by,
+  CASE
+    WHEN return_date IS NULL THEN 'Not returned'
+    WHEN return_date > rental_date + INTERVAL '3 days' THEN 'Late'
+    ELSE 'On time or early'
+  END AS return_status
+FROM lab_rentals;</code></pre>
+      <ul>
+        <li>Expected result: Each rental gets a readable status label instead of raw timestamp logic only.</li>
+        <li>Pattern learned: <code>CASE</code> turns technical timestamp logic into business-readable categories.</li>
+        <li>Common trap: Check <code>return_date IS NULL</code> first. If you compare <code>NULL</code> to a timestamp, the result is unknown, not true or false.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Count by return status</h4>
+      <ul>
+        <li>Goal: Summarize row-level status labels into a group-level count.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH rental_status AS (
+  SELECT
+    rental_id,
+    CASE
+      WHEN return_date IS NULL THEN 'Not returned'
+      WHEN return_date > rental_date + INTERVAL '3 days' THEN 'Late'
+      ELSE 'On time or early'
+    END AS return_status
+  FROM lab_rentals
+)
+SELECT
+  return_status,
+  COUNT(*) AS rental_count
+FROM rental_status
+GROUP BY return_status
+ORDER BY rental_count DESC;</code></pre>
+      <ul>
+        <li>Expected result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>return_status     | rental_count
+------------------+-------------
+On time or early  | 4
+Late              | 3
+Not returned      | 1</code></pre>
+      <ul>
+        <li>Pattern learned: Use a CTE to create row-level labels first, then aggregate those labels.</li>
+        <li>Common trap: Trying to jump straight into grouped counts before naming the row-level business rule can make the query harder to debug.</li>
+      </ul>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <div class="note-card" id="chapter2-5-2">
+      <h4>5.2 Completed lab topic: EXTRACT vs DATE_TRUNC</h4>
+      <div class="nugget">
+        <span class="label-tag">// MEMORY LINE</span>
+        EXTRACT gives a number. DATE_TRUNC gives a timestamp bucket.
+      </div>
+    </div>
+    <div class="note-card">
+      <h4>EXTRACT vs DATE_TRUNC</h4>
+      <ul>
+        <li>Goal: Compare extracting a numeric month part with creating a monthly timestamp bucket.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  EXTRACT(month FROM rental_date) AS rental_month_number,
+  DATE_TRUNC('month', rental_date) AS rental_month_bucket
+FROM lab_rentals
+ORDER BY rental_date;</code></pre>
+      <ul>
+        <li>Expected result: January rentals returned <code>rental_month_number = 1</code>. February rentals returned <code>rental_month_number = 2</code>. March rentals returned <code>rental_month_number = 3</code>.</li>
+        <li>Observed buckets: <code>2026-01-01 00:00:00</code>, <code>2026-02-01 00:00:00</code>, and <code>2026-03-01 00:00:00</code>.</li>
+        <li>Pattern learned: <code>EXTRACT()</code> gives a number. <code>DATE_TRUNC()</code> gives a timestamp bucket.</li>
+        <li>Common trap: Do not use <code>EXTRACT(month FROM rental_date)</code> alone for cross-year monthly grouping, because January 2025 and January 2026 would both be month <code>1</code>. Use <code>DATE_TRUNC('month', rental_date)</code> for timeline grouping.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Monthly rental grouping</h4>
+      <ul>
+        <li>Goal: Count rentals by month using a timestamp bucket.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  DATE_TRUNC('month', rental_date) AS rental_month,
+  COUNT(*) AS rental_count
+FROM lab_rentals
+GROUP BY DATE_TRUNC('month', rental_date)
+ORDER BY rental_month;</code></pre>
+      <ul>
+        <li>Expected result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>rental_month         | rental_count
+---------------------+-------------
+2026-01-01 00:00:00  | 3
+2026-02-01 00:00:00  | 3
+2026-03-01 00:00:00  | 2</code></pre>
+      <ul>
+        <li>Pattern learned: Raw timestamp -&gt; monthly bucket -&gt; <code>GROUP BY</code> bucket -&gt; trend count.</li>
+        <li>Common trap: Grouping by raw timestamps will fragment the data into individual moments instead of monthly summaries.</li>
+        <li>Cleaner CTE pattern:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH rental_months AS (
+  SELECT
+    rental_id,
+    DATE_TRUNC('month', rental_date) AS rental_month
+  FROM lab_rentals
+)
+SELECT
+  rental_month,
+  COUNT(*) AS rental_count
+FROM rental_months
+GROUP BY rental_month
+ORDER BY rental_month;</code></pre>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <div class="note-card" id="chapter2-5-3">
+      <h4>5.3 Completed lab topic: DATE_PART vs EXTRACT</h4>
+      <div class="nugget">
+        <span class="label-tag">// MEMORY LINE</span>
+        <code>EXTRACT(part FROM timestamp)</code> and <code>DATE_PART('part', timestamp)</code> both pull numeric date/time parts.
+      </div>
+    </div>
+    <div class="note-card">
+      <h4>DATE_PART vs EXTRACT</h4>
+      <ul>
+        <li>Goal: Show that <code>DATE_PART()</code> and <code>EXTRACT()</code> can both pull numeric parts from a timestamp.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  EXTRACT(quarter FROM rental_date) AS quarter_extract,
+  DATE_PART('quarter', rental_date) AS quarter_date_part
+FROM lab_rentals
+ORDER BY rental_date;</code></pre>
+      <ul>
+        <li>Expected result: All current sample rentals are in Q1. Both <code>quarter_extract</code> and <code>quarter_date_part</code> returned <code>1</code> for every row.</li>
+        <li>Pattern learned: <code>EXTRACT(part FROM timestamp)</code> and <code>DATE_PART('part', timestamp)</code> both pull a numeric date/time part. The syntax is different, but the purpose is similar.</li>
+        <li>Common trap: Mixing up numeric-part extraction with time bucketing. These functions return values like quarter or month number, not truncated timestamps.</li>
+      </ul>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <div class="note-card" id="chapter2-5-4">
+      <h4>5.4 Completed lab topic: current date/time functions</h4>
+      <div class="callout info">
+        <strong>KEY DISTINCTIONS</strong>
+        <code>CURRENT_DATE</code> returns date only. <code>CURRENT_TIME</code> returns clock time only. <code>CURRENT_TIMESTAMP</code> returns date plus time. <code>NOW()</code> returned the same timestamp value in this query. <code>CURRENT_TIMESTAMP(n)</code> controls fractional-second precision, and <code>CURRENT_TIMESTAMP(0)</code> may round up.
+      </div>
+    </div>
+    <div class="note-card">
+      <h4>Current date and time functions</h4>
+      <ul>
+        <li>Goal: Compare current date, current time, current timestamp, and <code>NOW()</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  CURRENT_DATE AS today_date,
+  CURRENT_TIME AS current_clock_time,
+  CURRENT_TIMESTAMP AS current_timestamp_value,
+  NOW() AS now_value;</code></pre>
+      <ul>
+        <li>Expected result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>today_date | current_clock_time | current_timestamp_value      | now_value
+-----------+--------------------+------------------------------+------------------------------
+2026-06-04 | 00:00:14.547425+00 | 2026-06-04 00:00:14.547425+00 | 2026-06-04 00:00:14.547425+00</code></pre>
+      <ul>
+        <li>Pattern learned: <code>CURRENT_DATE</code> returns date only. <code>CURRENT_TIME</code> returns clock time only. <code>CURRENT_TIMESTAMP</code> returns date plus time. <code>NOW()</code> returned the same timestamp value in this query.</li>
+        <li>Common trap: Assuming all current-time functions return the same shape. They are related, but one returns date only and another returns time only.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>CURRENT_TIMESTAMP precision</h4>
+      <ul>
+        <li>Goal: Control fractional-second precision in current timestamp output.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  CURRENT_TIMESTAMP AS full_timestamp,
+  CURRENT_TIMESTAMP(0) AS timestamp_0_precision,
+  CURRENT_TIMESTAMP(2) AS timestamp_2_precision;</code></pre>
+      <ul>
+        <li>Expected result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>full_timestamp               | timestamp_0_precision  | timestamp_2_precision
+-----------------------------+------------------------+---------------------------
+2026-06-04 00:01:23.580534+00 | 2026-06-04 00:01:24+00 | 2026-06-04 00:01:23.58+00</code></pre>
+      <ul>
+        <li>Pattern learned: <code>CURRENT_TIMESTAMP(n)</code> controls fractional-second precision.</li>
+        <li>Common trap: <code>CURRENT_TIMESTAMP(0)</code> rounds to whole seconds. It may round up.</li>
+      </ul>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <div class="note-card" id="chapter2-5-5">
+      <h4>5.5 Completed lab topic: casting timestamp to date</h4>
+      <div class="nugget">
+        <span class="label-tag">// MEMORY LINE</span>
+        <code>::date</code> is PostgreSQL shorthand. <code>CAST(... AS date)</code> is more standard SQL style.
+      </div>
+    </div>
+    <div class="note-card">
+      <h4>Casting timestamp to date</h4>
+      <ul>
+        <li>Goal: Remove the time part from a timestamp.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  rental_date::date AS rental_day,
+  CAST(rental_date AS date) AS rental_day_cast
+FROM lab_rentals
+ORDER BY rental_date;</code></pre>
+      <ul>
+        <li>Expected result: Both <code>rental_date::date</code> and <code>CAST(rental_date AS date)</code> returned the same date-only value. Example: <code>2026-01-02 10:15:00</code> became <code>2026-01-02</code>.</li>
+        <li>Pattern learned: <code>::date</code> is PostgreSQL shorthand. <code>CAST(rental_date AS date)</code> is standard SQL style. Both remove the time part.</li>
+        <li>Common trap: Casting to <code>date</code> removes time detail permanently in the result, so do it only when date-only output is actually what you need.</li>
+        <li>Interview translation: Use PostgreSQL shorthand when working directly in PostgreSQL, but use <code>CAST()</code> when portability across SQL systems matters.</li>
+      </ul>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <div class="note-card" id="chapter2-5-6">
+      <h4>5.6 Completed lab topic: rental duration</h4>
+      <div class="nugget">
+        <span class="label-tag">// MEMORY LINE</span>
+        Subtract timestamps when you want duration. Add intervals when you want a future or past timestamp.
+      </div>
+    </div>
+    <div class="note-card">
+      <h4>Rental duration</h4>
+      <ul>
+        <li>Goal: Calculate how long each rental lasted.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  return_date,
+  return_date - rental_date AS rental_duration
+FROM lab_rentals
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Expected result: <code>rental_id 1001</code> duration: <code>2 days 23:15:00</code>. <code>rental_id 1002</code> duration: <code>5 days 02:45:00</code>. <code>rental_id 1005</code> duration: <code>NULL</code> because <code>return_date</code> is missing. <code>rental_id 1006</code> duration: <code>8 days</code>.</li>
+        <li>Pattern learned: <code>TIMESTAMP - TIMESTAMP = INTERVAL</code>.</li>
+        <li>Common trap: If <code>return_date</code> is <code>NULL</code>, duration will also be <code>NULL</code>, so open rentals need special handling in reporting.</li>
+        <li>Memory line: Subtract timestamps when you want duration. Add intervals when you want a future or past timestamp.</li>
+      </ul>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <div class="note-card" id="chapter2-5-7">
+      <h4>5.7 Concepts already covered by completed labs</h4>
+      <table class="vtable">
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Covered where</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>TIMESTAMP + INTERVAL</code></td><td>expected return date</td><td>covered</td></tr>
+          <tr><td><code>TIMESTAMP - TIMESTAMP</code></td><td>late_by interval and rental duration</td><td>covered</td></tr>
+          <tr><td><code>INTERVAL arithmetic</code></td><td>expected return date and late_by interval</td><td>covered</td></tr>
+          <tr><td><code>CASE with date logic</code></td><td>return status label</td><td>covered</td></tr>
+          <tr><td><code>GROUP BY date bucket</code></td><td>monthly rental grouping</td><td>covered</td></tr>
+          <tr><td><code>EXTRACT()</code></td><td>EXTRACT vs DATE_TRUNC and DATE_PART vs EXTRACT</td><td>covered</td></tr>
+          <tr><td><code>DATE_PART()</code></td><td>DATE_PART vs EXTRACT</td><td>covered</td></tr>
+          <tr><td><code>DATE_TRUNC()</code></td><td>monthly bucket and monthly grouping</td><td>covered</td></tr>
+          <tr><td><code>CURRENT_DATE</code></td><td>current date/time functions</td><td>covered</td></tr>
+          <tr><td><code>CURRENT_TIME</code></td><td>current date/time functions</td><td>covered</td></tr>
+          <tr><td><code>CURRENT_TIMESTAMP</code></td><td>current date/time functions and precision</td><td>covered</td></tr>
+          <tr><td><code>NOW()</code></td><td>current date/time functions</td><td>covered</td></tr>
+          <tr><td><code>CAST and ::</code></td><td>casting timestamp to date</td><td>covered</td></tr>
+          <tr><td><code>DATE - DATE</code></td><td>DATE minus DATE</td><td>covered</td></tr>
+          <tr><td><code>DATE + integer</code></td><td>DATE plus integer</td><td>covered</td></tr>
+          <tr><td><code>DATE + INTERVAL</code></td><td>Clearer INTERVAL version of DATE + integer</td><td>covered</td></tr>
+          <tr><td><code>AGE()</code></td><td>AGE() and AGE() argument order</td><td>covered</td></tr>
+          <tr><td><code>COALESCE()</code></td><td>COALESCE display label and elapsed-so-far</td><td>covered</td></tr>
+          <tr><td><code>COALESCE with CURRENT_TIMESTAMP</code></td><td>elapsed-so-far and open overdue flag</td><td>covered</td></tr>
+          <tr><td><code>CASE with COALESCE</code></td><td>open/closed report and timing_status</td><td>covered</td></tr>
+          <tr><td><code>open-record reporting</code></td><td>CASE + COALESCE open/closed report</td><td>covered</td></tr>
+          <tr><td><code>overdue flag logic</code></td><td>open rental overdue flag</td><td>covered</td></tr>
+          <tr><td><code>EXTRACT from interval</code></td><td>EXTRACT interval parts</td><td>covered</td></tr>
+          <tr><td><code>EXTRACT(EPOCH FROM interval)</code></td><td>Total duration hours with EPOCH</td><td>covered</td></tr>
+          <tr><td><code>ROUND()</code></td><td>Rounded duration hours</td><td>covered</td></tr>
+          <tr><td><code>CASE threshold bands</code></td><td>Duration risk bands</td><td>covered</td></tr>
+          <tr><td><code>CASE order matters</code></td><td>CASE order trap</td><td>covered</td></tr>
+          <tr><td><code>CTE reusable feature</code></td><td>CTE reusable duration feature</td><td>covered</td></tr>
+          <tr><td><code>GROUP BY business band</code></td><td>Summary by duration band</td><td>covered</td></tr>
+          <tr><td><code>AVG() with grouped bands</code></td><td>Summary by duration band</td><td>covered</td></tr>
+          <tr><td><code>CASE in ORDER BY</code></td><td>Business-order sorting</td><td>covered</td></tr>
+          <tr><td><code>hidden GROUP BY column</code></td><td>Hidden GROUP BY helper column</td><td>covered</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <div class="note-card" id="chapter2-5-8">
+      <h4>5.8 Completed direct-practice topics</h4>
+    </div>
+    <div class="note-card">
+      <h4>DATE minus DATE</h4>
+      <ul>
+        <li>Goal: Show that subtracting one <code>DATE</code> from another <code>DATE</code> returns an integer count of calendar days.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date::date AS rental_day,
+  return_date::date AS return_day,
+  return_date::date - rental_date::date AS rental_days
+FROM lab_rentals
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Expected result: <code>rental_id 1001</code>: <code>2026-01-05 - 2026-01-02 = 3</code>. <code>rental_id 1002</code> returned 5 calendar days. <code>rental_id 1006</code> returned 8 calendar days. <code>rental_id 1005</code> returned <code>NULL</code> because <code>return_date</code> is <code>NULL</code>.</li>
+        <li>Pattern learned: <code>DATE - DATE</code> returns integer days.</li>
+        <li>Common trap: This is different from <code>TIMESTAMP - TIMESTAMP</code>. Timestamp subtraction preserves hours/minutes/seconds and returns an <code>INTERVAL</code>.</li>
+        <li>Memory line: <code>TIMESTAMP - TIMESTAMP = INTERVAL</code>. <code>DATE - DATE = integer days</code>.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>DATE plus integer</h4>
+      <ul>
+        <li>Goal: Show that adding an integer to a <code>DATE</code> adds that many calendar days.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date::date AS rental_day,
+  rental_date::date + 3 AS expected_return_day
+FROM lab_rentals
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Expected result: <code>rental_id 1001</code>: <code>2026-01-02 + 3 = 2026-01-05</code>. <code>rental_id 1002</code>: <code>2026-01-03 + 3 = 2026-01-06</code>. <code>rental_id 1005</code>: <code>2026-02-05 + 3 = 2026-02-08</code>. <code>rental_id 1008</code>: <code>2026-03-15 + 3 = 2026-03-18</code>.</li>
+        <li>Pattern learned: In PostgreSQL, <code>DATE + integer</code> means add that many days.</li>
+        <li>Common trap: The integer is not hours, months, or years. PostgreSQL defines <code>DATE + integer</code> as day arithmetic.</li>
+        <li>Memory line: <code>DATE + integer = date plus that many days</code>.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Clearer INTERVAL version of DATE + integer</h4>
+      <ul>
+        <li>Goal: Answer Sean's question: how does PostgreSQL know <code>rental_date::date + 3</code> means 3 days, and is there a clearer way?</li>
+        <li>Explanation: PostgreSQL has a built-in operator where <code>DATE + integer</code> means add integer days. A clearer, more human-readable version is to use <code>INTERVAL</code>.</li>
+        <li>SQL option 1 - explicit INTERVAL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date::date AS rental_day,
+  rental_date::date + INTERVAL '3 days' AS expected_return_timestamp
+FROM lab_rentals
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: The result became timestamp-like and showed midnight: <code>2026-01-05 00:00:00</code>. This happened because <code>rental_date::date</code> removed the time first. A <code>DATE</code> behaves like midnight when converted into timestamp-style interval math.</li>
+        <li>SQL option 2 - explicit INTERVAL, then cast back to DATE:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date::date AS rental_day,
+  (rental_date::date + INTERVAL '3 days')::date AS expected_return_day
+FROM lab_rentals
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: This returned date-only results again: <code>2026-01-05</code>, <code>2026-01-06</code>, <code>2026-01-13</code>, etc.</li>
+        <li>Pattern learned: <code>rental_date + INTERVAL '3 days'</code> keeps original timestamp time of day. <code>rental_date::date + INTERVAL '3 days'</code> resets the time to midnight. <code>(rental_date::date + INTERVAL '3 days')::date</code> gives an explicit date-only due day.</li>
+        <li>Common trap: Casting to <code>DATE</code> first removes time-of-day detail. If exact timestamp deadlines matter, use <code>rental_date + INTERVAL '3 days'</code>, not <code>rental_date::date</code>.</li>
+        <li>Best practical rule:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>For exact timestamp deadlines:
+rental_date + INTERVAL '3 days'
+
+For date-only due days:
+rental_date::date + 3
+
+For very explicit date-only due days:
+(rental_date::date + INTERVAL '3 days')::date</code></pre>
+    </div>
+    <div class="note-card">
+      <h4>AGE()</h4>
+      <ul>
+        <li>Goal: Compare <code>AGE()</code> to direct timestamp subtraction.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  return_date,
+  return_date - rental_date AS direct_duration,
+  AGE(return_date, rental_date) AS age_duration
+FROM lab_rentals
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: For this dataset, <code>direct_duration</code> and <code>age_duration</code> looked the same. <code>rental_id 1001</code> returned <code>2 days 23:15:00</code> for both. <code>rental_id 1002</code> returned <code>5 days 02:45:00</code> for both. <code>rental_id 1005</code> returned <code>NULL</code> because <code>return_date</code> is <code>NULL</code>. <code>rental_id 1006</code> returned <code>8 days</code> for both.</li>
+        <li>Pattern learned: For simple day/hour differences, <code>AGE()</code> and direct subtraction may look similar.</li>
+        <li>Conceptual difference:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>timestamp - timestamp = direct interval math
+AGE(later, earlier)   = human-style elapsed interval</code></pre>
+      <ul>
+        <li>Common trap: <code>AGE()</code> argument order matters.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>AGE() argument order</h4>
+      <ul>
+        <li>Goal: Show that reversing <code>AGE()</code> arguments produces negative intervals.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  AGE(return_date, rental_date) AS correct_age,
+  AGE(rental_date, return_date) AS reversed_age
+FROM lab_rentals
+WHERE return_date IS NOT NULL
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>correct_age</code> was positive. <code>reversed_age</code> was negative. <code>rental_id 1001</code>: <code>correct_age: 2 days 23:15:00</code>, <code>reversed_age: -2 days -23:15:00</code>. <code>rental_id 1006</code>: <code>correct_age: 8 days</code>, <code>reversed_age: -8 days</code>.</li>
+        <li>Pattern learned: <code>AGE(later, earlier)</code> gives positive elapsed time. <code>AGE(earlier, later)</code> gives negative elapsed time.</li>
+        <li>Memory line: <code>AGE(later, earlier) = positive elapsed time</code>. <code>AGE(earlier, later) = negative elapsed time</code>.</li>
+      </ul>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <div class="note-card" id="chapter2-5-9">
+      <h4>5.9 Completed lab topic: COALESCE and open-record reporting</h4>
+    </div>
+    <div class="note-card">
+      <h4>COALESCE display label</h4>
+      <ul>
+        <li>Goal: Replace a NULL return_date display with a readable fallback label.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  return_date,
+  COALESCE(return_date::text, 'Not returned yet') AS return_date_display
+FROM lab_rentals
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: Returned rentals showed their <code>return_date</code> as text. <code>rental_id 1005</code> had NULL <code>return_date</code> and displayed <code>Not returned yet</code>.</li>
+        <li>Pattern learned: COALESCE checks values from left to right and returns the first non-NULL value.</li>
+        <li>Common trap: COALESCE arguments should be compatible types. We used <code>return_date::text</code> because the fallback value <code>'Not returned yet'</code> is text.</li>
+        <li>Memory line: <code>COALESCE(value, fallback) = use value unless it is NULL</code>.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>COALESCE elapsed-so-far</h4>
+      <ul>
+        <li>Goal: Calculate elapsed time for both closed and still-open rentals.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  COALESCE(return_date, CURRENT_TIMESTAMP) - rental_date AS elapsed_so_far
+FROM lab_rentals
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: Returned rentals used <code>return_date</code>. Open rental 1005 used <code>CURRENT_TIMESTAMP</code>. <code>rental_id 1005</code> showed an <code>elapsed_so_far</code> value over 118 days at the time of the run.</li>
+        <li>Pattern learned: COALESCE can supply a substitute endpoint for open records.</li>
+        <li>Memory line: <code>COALESCE(return_date, CURRENT_TIMESTAMP) - rental_date</code> = elapsed time for both closed and still-open records.</li>
+        <li>Use cases: open tickets, open incidents, open rentals, open orders, unresolved alerts.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>CASE + COALESCE open/closed report</h4>
+      <ul>
+        <li>Goal: Label each rental as Open or Closed and calculate elapsed time safely.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  return_date,
+  CASE
+    WHEN return_date IS NULL THEN 'Open'
+    ELSE 'Closed'
+  END AS rental_state,
+  COALESCE(return_date, CURRENT_TIMESTAMP) - rental_date AS elapsed_so_far
+FROM lab_rentals
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>rental_id 1005</code> was labeled <code>Open</code>. All other rentals were labeled <code>Closed</code>. Closed rentals used actual rental duration. Open rental 1005 used a running duration from <code>rental_date</code> to <code>CURRENT_TIMESTAMP</code>.</li>
+        <li>Pattern learned: CASE labels the state. COALESCE fills the missing endpoint. Timestamp subtraction calculates elapsed time.</li>
+        <li>Memory line: CASE labels the state. COALESCE fills the missing endpoint. Subtract timestamps to get elapsed time.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Open rental overdue flag</h4>
+      <ul>
+        <li>Goal: Create a production-style timing report for both returned and open rentals.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  rental_date,
+  return_date,
+  CASE
+    WHEN return_date IS NULL THEN 'Open'
+    ELSE 'Closed'
+  END AS rental_state,
+  rental_date + INTERVAL '3 days' AS expected_return_date,
+  COALESCE(return_date, CURRENT_TIMESTAMP) AS effective_end_time,
+  COALESCE(return_date, CURRENT_TIMESTAMP)
+    - (rental_date + INTERVAL '3 days') AS overdue_by,
+  CASE
+    WHEN COALESCE(return_date, CURRENT_TIMESTAMP)
+           > rental_date + INTERVAL '3 days'
+      THEN 'Overdue or late'
+    ELSE 'On time'
+  END AS timing_status
+FROM lab_rentals
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>rental_id 1005</code> was Open and Overdue or late. <code>rental_id 1005</code> used <code>CURRENT_TIMESTAMP</code> as <code>effective_end_time</code>. <code>rental_id 1005</code> was overdue by more than 115 days at the time of the run. <code>rental_ids 1002, 1006, and 1007</code> were Closed but Overdue or late. <code>rental_ids 1001, 1003, 1004, and 1008</code> were On time. Negative <code>overdue_by</code> means returned before the expected deadline. Positive <code>overdue_by</code> means overdue or late.</li>
+        <li>Pattern learned: Use an effective end time to handle both completed and still-open records in one query.</li>
+        <li>Memory line:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>effective_end_time = COALESCE(actual_end, current_time)
+deadline           = start_time + allowed_interval
+overdue_by         = effective_end_time - deadline</code></pre>
+      <ul>
+        <li>Common trap: If you only compare <code>return_date</code> to the deadline, open records with NULL <code>return_date</code> will not be evaluated properly. Use COALESCE when the business question requires treating open records as still running.</li>
+      </ul>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <div class="note-card" id="chapter2-5-10">
+      <h4>5.10 Completed lab topic: interval features and duration bands</h4>
+    </div>
+    <div class="note-card">
+      <h4>EXTRACT day/hour parts from interval</h4>
+      <ul>
+        <li>Goal: Show that EXTRACT can pull individual parts from an interval.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  return_date - rental_date AS rental_duration,
+  EXTRACT(day FROM return_date - rental_date) AS duration_days_part,
+  EXTRACT(hour FROM return_date - rental_date) AS duration_hours_part
+FROM lab_rentals
+WHERE return_date IS NOT NULL
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>rental_id 1001</code> had <code>rental_duration 2 days 23:15:00</code>, <code>duration_days_part 2</code>, and <code>duration_hours_part 23</code>. <code>rental_id 1002</code> had <code>rental_duration 5 days 02:45:00</code>, <code>duration_days_part 5</code>, and <code>duration_hours_part 2</code>. <code>rental_id 1006</code> had <code>rental_duration 8 days</code>, <code>duration_days_part 8</code>, and <code>duration_hours_part 0</code>.</li>
+        <li>Pattern learned: <code>EXTRACT(day FROM interval)</code> returns the day component. <code>EXTRACT(hour FROM interval)</code> returns the hour component after days are separated.</li>
+        <li>Common trap: <code>EXTRACT(hour FROM interval)</code> does not return total hours.</li>
+        <li>Memory line:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>EXTRACT(day FROM interval)  = day piece
+EXTRACT(hour FROM interval) = hour piece</code></pre>
+    </div>
+    <div class="note-card">
+      <h4>Total duration hours with EPOCH</h4>
+      <ul>
+        <li>Goal: Convert an interval into total hours.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  return_date - rental_date AS rental_duration,
+  EXTRACT(EPOCH FROM return_date - rental_date) / 3600
+    AS total_duration_hours
+FROM lab_rentals
+WHERE return_date IS NOT NULL
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>rental_id 1001</code> total_duration_hours was <code>71.2500000000000000</code>. <code>rental_id 1002</code> total_duration_hours was <code>122.7500000000000000</code>. <code>rental_id 1003</code> total_duration_hours was <code>50.8333333333333333</code>. <code>rental_id 1006</code> total_duration_hours was <code>192.0000000000000000</code>.</li>
+        <li>Pattern learned: <code>EXTRACT(EPOCH FROM interval)</code> returns total seconds. Divide by 3600 to get total hours.</li>
+        <li>Common trap: For <code>5 days 02:45:00</code>, <code>EXTRACT(hour FROM interval)</code> returns <code>2</code>, but <code>EXTRACT(EPOCH FROM interval) / 3600</code> returns <code>122.75</code>.</li>
+        <li>Memory line:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>EXTRACT(hour FROM interval) = hour component only
+EXTRACT(EPOCH FROM interval) / 3600 = total hours</code></pre>
+    </div>
+    <div class="note-card">
+      <h4>Rounded duration hours</h4>
+      <ul>
+        <li>Goal: Make total duration hours report-friendly.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  return_date - rental_date AS rental_duration,
+  ROUND(
+    EXTRACT(EPOCH FROM return_date - rental_date) / 3600,
+    2
+  ) AS total_duration_hours
+FROM lab_rentals
+WHERE return_date IS NOT NULL
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>rental_id 1001</code> rounded to <code>71.25</code>. <code>rental_id 1002</code> rounded to <code>122.75</code>. <code>rental_id 1003</code> rounded to <code>50.83</code>. <code>rental_id 1004</code> rounded to <code>48.50</code>. <code>rental_id 1006</code> rounded to <code>192.00</code>. <code>rental_id 1007</code> rounded to <code>74.25</code>. <code>rental_id 1008</code> rounded to <code>48.83</code>.</li>
+        <li>Pattern learned: Use <code>ROUND(..., 2)</code> to make calculated numeric duration values easier to read in reports.</li>
+        <li>Memory line:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>Use EXTRACT(EPOCH) for total duration.
+Use ROUND(..., 2) for report-friendly numbers.</code></pre>
+    </div>
+    <div class="note-card">
+      <h4>Duration risk bands</h4>
+      <ul>
+        <li>Goal: Classify rentals by total duration hours.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  rental_id,
+  return_date - rental_date AS rental_duration,
+  ROUND(
+    EXTRACT(EPOCH FROM return_date - rental_date) / 3600,
+    2
+  ) AS total_duration_hours,
+  CASE
+    WHEN EXTRACT(EPOCH FROM return_date - rental_date) / 3600 > 120
+      THEN 'Very long'
+    WHEN EXTRACT(EPOCH FROM return_date - rental_date) / 3600 > 72
+      THEN 'Long'
+    ELSE 'Normal'
+  END AS duration_band
+FROM lab_rentals
+WHERE return_date IS NOT NULL
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>rental_id 1002</code> had <code>122.75</code> hours and was labeled <code>Very long</code>. <code>rental_id 1006</code> had <code>192.00</code> hours and was labeled <code>Very long</code>. <code>rental_id 1007</code> had <code>74.25</code> hours and was labeled <code>Long</code>. <code>rental_ids 1001, 1003, 1004, and 1008</code> were labeled <code>Normal</code>.</li>
+        <li>Pattern learned: Raw interval -&gt; numeric feature -&gt; rounded report value -&gt; business band.</li>
+        <li>Memory line:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>interval -&gt; total numeric hours -&gt; rounded report value -&gt; business band</code></pre>
+      <ul>
+        <li>Interview / real-world translation:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>raw metric -&gt; calculated feature -&gt; threshold/risk band -&gt; business label</code></pre>
+    </div>
+    <div class="note-card">
+      <h4>CASE order trap</h4>
+      <ul>
+        <li>Goal: Explain why the order of CASE conditions matters when thresholds overlap.</li>
+        <li>Explanation: The duration band query checks <code>&gt; 120</code> before <code>&gt; 72</code>.</li>
+        <li>Correct order:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>CASE
+  WHEN hours &gt; 120 THEN 'Very long'
+  WHEN hours &gt; 72 THEN 'Long'
+  ELSE 'Normal'
+END</code></pre>
+      <ul>
+        <li>Reason: A value like <code>122.75</code> is greater than both 120 and 72. If the <code>&gt; 72</code> condition is checked first, then <code>122.75</code> becomes <code>Long</code> instead of <code>Very long</code>.</li>
+        <li>Pattern learned: Put the most specific or highest threshold first when CASE conditions overlap.</li>
+        <li>Common trap: CASE stops at the first matching WHEN condition.</li>
+        <li>Memory line:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>When thresholds overlap, order CASE from most severe/specific to least severe/general.</code></pre>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <div class="note-card" id="chapter2-5-11">
+      <h4>5.11 Completed lab topic: reusable duration-band reporting</h4>
+      <div class="nugget">
+        <span class="label-tag">// MEMORY LINE</span>
+        Calculate once, then label and report many times.
+      </div>
+    </div>
+    <div class="note-card">
+      <h4>CTE to avoid repeated duration formula</h4>
+      <ul>
+        <li>Goal: Avoid repeating the same total-hours expression multiple times.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH rental_hours AS (
+  SELECT
+    rental_id,
+    return_date - rental_date AS rental_duration,
+    EXTRACT(EPOCH FROM return_date - rental_date) / 3600
+      AS total_hours
+  FROM lab_rentals
+  WHERE return_date IS NOT NULL
+)
+SELECT
+  rental_id,
+  rental_duration,
+  ROUND(total_hours, 2) AS total_duration_hours,
+  CASE
+    WHEN total_hours &gt; 120 THEN 'Very long'
+    WHEN total_hours &gt; 72 THEN 'Long'
+    ELSE 'Normal'
+  END AS duration_band
+FROM rental_hours
+ORDER BY rental_id;</code></pre>
+      <ul>
+        <li>Observed result notes: The output matched the prior duration-band report. <code>rental_id 1002</code> was <code>122.75</code> hours and <code>Very long</code>. <code>rental_id 1006</code> was <code>192.00</code> hours and <code>Very long</code>. <code>rental_id 1007</code> was <code>74.25</code> hours and <code>Long</code>. Other returned rentals were <code>Normal</code>.</li>
+        <li>Pattern learned: Use a CTE when a calculated feature is reused.</li>
+        <li>Memory line: Calculate once, then label and report many times.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Summarize by duration band</h4>
+      <ul>
+        <li>Goal: Move from row-level duration labels to a grouped summary report.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH rental_hours AS (
+  SELECT
+    rental_id,
+    EXTRACT(EPOCH FROM return_date - rental_date) / 3600
+      AS total_hours
+  FROM lab_rentals
+  WHERE return_date IS NOT NULL
+),
+rental_bands AS (
+  SELECT
+    rental_id,
+    total_hours,
+    CASE
+      WHEN total_hours &gt; 120 THEN 'Very long'
+      WHEN total_hours &gt; 72 THEN 'Long'
+      ELSE 'Normal'
+    END AS duration_band
+  FROM rental_hours
+)
+SELECT
+  duration_band,
+  COUNT(*) AS rental_count,
+  ROUND(AVG(total_hours), 2) AS avg_duration_hours
+FROM rental_bands
+GROUP BY duration_band
+ORDER BY avg_duration_hours DESC;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>duration_band | rental_count | avg_duration_hours
+--------------+--------------+-------------------
+Very long     | 2            | 157.38
+Long          | 1            | 74.25
+Normal        | 4            | 54.85</code></pre>
+      <ul>
+        <li>Pattern learned: Calculate feature -&gt; assign band -&gt; summarize by band.</li>
+        <li>Interview / real-world translation: Raw event timestamps -&gt; duration feature -&gt; threshold band -&gt; grouped operational summary.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Sort bands by business order</h4>
+      <ul>
+        <li>Goal: Sort labels by business meaning instead of alphabetic order.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH rental_hours AS (
+  SELECT
+    rental_id,
+    EXTRACT(EPOCH FROM return_date - rental_date) / 3600
+      AS total_hours
+  FROM lab_rentals
+  WHERE return_date IS NOT NULL
+),
+rental_bands AS (
+  SELECT
+    rental_id,
+    total_hours,
+    CASE
+      WHEN total_hours &gt; 120 THEN 'Very long'
+      WHEN total_hours &gt; 72 THEN 'Long'
+      ELSE 'Normal'
+    END AS duration_band
+  FROM rental_hours
+)
+SELECT
+  duration_band,
+  COUNT(*) AS rental_count,
+  ROUND(AVG(total_hours), 2) AS avg_duration_hours
+FROM rental_bands
+GROUP BY duration_band
+ORDER BY
+  CASE duration_band
+    WHEN 'Very long' THEN 1
+    WHEN 'Long' THEN 2
+    WHEN 'Normal' THEN 3
+    ELSE 99
+  END;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>Very long
+Long
+Normal</code></pre>
+      <ul>
+        <li>Pattern learned: Use CASE in ORDER BY when labels need business priority order.</li>
+        <li>Memory line: Do not trust alphabetic order for business labels.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Hidden GROUP BY helper column</h4>
+      <ul>
+        <li>Goal: Use a numeric priority column for ordering without displaying it.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH rental_hours AS (
+  SELECT
+    rental_id,
+    EXTRACT(EPOCH FROM return_date - rental_date) / 3600
+      AS total_hours
+  FROM lab_rentals
+  WHERE return_date IS NOT NULL
+),
+rental_bands AS (
+  SELECT
+    rental_id,
+    total_hours,
+    CASE
+      WHEN total_hours &gt; 120 THEN 'Very long'
+      WHEN total_hours &gt; 72 THEN 'Long'
+      ELSE 'Normal'
+    END AS duration_band,
+    CASE
+      WHEN total_hours &gt; 120 THEN 1
+      WHEN total_hours &gt; 72 THEN 2
+      ELSE 3
+    END AS band_priority
+  FROM rental_hours
+)
+SELECT
+  duration_band,
+  COUNT(*) AS rental_count,
+  ROUND(AVG(total_hours), 2) AS avg_duration_hours
+FROM rental_bands
+GROUP BY
+  duration_band,
+  band_priority
+ORDER BY band_priority;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>duration_band | rental_count | avg_duration_hours
+--------------+--------------+-------------------
+Very long     | 2            | 157.38
+Long          | 1            | 74.25
+Normal        | 4            | 54.85</code></pre>
+      <ul>
+        <li>Pattern learned: GROUP BY can use a helper column that is not displayed in SELECT.</li>
+        <li>Important rule: GROUP BY controls how SQL forms the piles. SELECT controls what SQL displays from each pile. ORDER BY controls how SQL sorts the final result.</li>
+        <li>Memory line: GROUP BY can use hidden helper columns. SELECT must only show grouped columns or aggregates.</li>
+        <li>Common trap: A non-aggregate column shown in SELECT must be included in GROUP BY.</li>
+        <li>Good:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  duration_band,
+  COUNT(*)
+FROM rental_bands
+GROUP BY duration_band;</code></pre>
+      <ul>
+        <li>Bad:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  duration_band,
+  band_priority,
+  COUNT(*)
+FROM rental_bands
+GROUP BY duration_band;</code></pre>
+      <ul>
+        <li>Why bad: <code>band_priority</code> is displayed, but it is not grouped or aggregated.</li>
+      </ul>
+    </div>
+    <a href="#chapter2-quick-jumps" class="back-top">↑ back to Chapter 2 jumps</a>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s06">
+    <div class="section-header">
+      <div class="section-num tel">06</div>
+      <h2>Chapter 3 Lab Notes — Text Functions</h2>
+    </div>
+    <div class="callout info">
+      <strong>CHAPTER 3 WORKFLOW</strong>
+      Chapter 3 is about turning messy text into clean, searchable, report-friendly values.
+    </div>
+    <div class="nugget">
+      <span class="label-tag">// PRACTICAL FLOW</span>
+      messy text -&gt; trim -&gt; standardize case -&gt; inspect length -&gt; parse pieces -&gt; replace or transform text -&gt; build clean labels
+    </div>
+    <div class="note-card">
+      <h4>Chapter 3 Quick Jumps</h4>
+      <ul>
+        <li><a href="#chapter3-6-1">6.1 Inspect and clean dirty text</a></li>
+        <li><a href="#chapter3-6-2">6.2 Concatenate and format report text</a></li>
+        <li><a href="#chapter3-6-3">6.3 Length and data-quality flags</a></li>
+        <li><a href="#chapter3-6-4">6.4 Find and extract text pieces</a></li>
+        <li><a href="#chapter3-6-5">6.5 Transform text</a></li>
+        <li><a href="#chapter3-regexp-replace">REGEXP_REPLACE whitespace collapse</a></li>
+        <li><a href="#chapter3-6-6">6.6 Pattern matching and parsing text</a></li>
+        <li><a href="#chapter3-6-7">6.7 Chapter 3 closing mini-pipeline</a></li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter3-6-1">
+      <h4>6.1 Completed lab topic: inspect and clean dirty text</h4>
+    </div>
+    <div class="note-card">
+      <h4>Inspect dirty text</h4>
+      <ul>
+        <li>Goal: View the raw practice table for Chapter 3 text functions.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_text,
+  raw_code,
+  comparison_text
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>raw_text</code> includes padded and mixed-case text.</li>
+        <li>Observed result notes: <code>raw_code</code> contains numeric-looking codes stored as text.</li>
+        <li>Observed result notes: <code>comparison_text</code> contains words used for string search and parsing practice.</li>
+        <li>Example rows: <code>dirty_id 1</code> had padded text, raw_code <code>7</code>, comparison_text <code>GAMBOL</code>. <code>dirty_id 2</code> had mixed CASE value, raw_code <code>42</code>, comparison_text <code>GUMBO</code>. <code>dirty_id 3</code> had <code>A Astounding example</code>, raw_code <code>305</code>, comparison_text <code>ELF</code>. <code>dirty_id 4</code> had left padded only, raw_code <code>9</code>, comparison_text <code>ELVES</code>. <code>dirty_id 5</code> had right padded only, raw_code <code>1234</code>, comparison_text <code>POSTGRES</code>.</li>
+        <li>Pattern learned: Before cleaning text, inspect the raw values and identify the kind of mess.</li>
+        <li>Memory line: Inspect first, then clean.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>TRIM / LTRIM / RTRIM</h4>
+      <ul>
+        <li>Goal: Remove outside spaces from <code>raw_text</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_text,
+  TRIM(raw_text) AS trim_both_sides,
+  LTRIM(raw_text) AS trim_left_side,
+  RTRIM(raw_text) AS trim_right_side
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>TRIM</code> removed spaces from both sides. <code>LTRIM</code> removed spaces from the left side only. <code>RTRIM</code> removed spaces from the right side only.</li>
+        <li>Observed result notes: <code>dirty_id 1</code> changed from padded raw text to padded text. <code>dirty_id 4</code> showed the left-padding cleanup clearly. <code>dirty_id 5</code> showed the right-padding cleanup clearly.</li>
+        <li>Pattern learned: TRIM cleans outside padding, not spaces inside the sentence.</li>
+        <li>Memory line: <code>TRIM()</code> removes both sides. <code>LTRIM()</code> removes left. <code>RTRIM()</code> removes right.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>UPPER / LOWER / INITCAP</h4>
+      <ul>
+        <li>Goal: Standardize text case after trimming.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_text,
+  TRIM(raw_text) AS cleaned_text,
+  UPPER(TRIM(raw_text)) AS upper_text,
+  LOWER(TRIM(raw_text)) AS lower_text,
+  INITCAP(TRIM(raw_text)) AS title_case_text
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>padded text</code> became <code>PADDED TEXT</code>, <code>padded text</code>, and <code>Padded Text</code>.</li>
+        <li>Observed result notes: <code>mixed CASE value</code> became <code>MIXED CASE VALUE</code>, <code>mixed case value</code>, and <code>Mixed Case Value</code>.</li>
+        <li>Observed result notes: <code>A Astounding example</code> became <code>A ASTOUNDING EXAMPLE</code>, <code>a astounding example</code>, and <code>A Astounding Example</code>.</li>
+        <li>Pattern learned: Clean first, then format.</li>
+        <li>Memory line: TRIM removes outside padding. UPPER, LOWER, and INITCAP standardize case.</li>
+      </ul>
+    </div>
+    <a href="#s06" class="back-top">↑ back to Chapter 3 start</a>
+    <div class="note-card" id="chapter3-6-2">
+      <h4>6.2 Completed lab topic: concatenate and format report text</h4>
+    </div>
+    <div class="note-card">
+      <h4>String concatenation with || and CONCAT()</h4>
+      <ul>
+        <li>Goal: Build full customer names from <code>first_name</code> and <code>last_name</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  customer_id,
+  first_name,
+  last_name,
+  first_name || ' ' || last_name AS full_name_pipe,
+  CONCAT(first_name, ' ', last_name) AS full_name_concat
+FROM lab_customers
+ORDER BY customer_id;</code></pre>
+      <ul>
+        <li>Observed result notes: Both methods produced the same readable names: <code>Sean Girgis</code>, <code>Anna Rivera</code>, <code>Brian Piccolo</code>, <code>Maya Chen</code>, and <code>Omar Hassan</code>.</li>
+        <li>Pattern learned: Use <code>||</code> or <code>CONCAT()</code> to build report-friendly text labels.</li>
+        <li>Memory line: <code>||</code> is PostgreSQL string join syntax. <code>CONCAT()</code> is function-style string joining.</li>
+        <li>Common trap: <code>CONCAT()</code> is often friendlier when NULLs may appear. The <code>||</code> operator can produce NULL if one joined value is NULL.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>LPAD / RPAD</h4>
+      <ul>
+        <li>Goal: Format raw codes to fixed widths.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_code,
+  LPAD(raw_code, 4, '0') AS code_padded_left,
+  RPAD(raw_code, 6, '-') AS code_padded_right
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>7</code> became <code>0007</code> with LPAD. <code>42</code> became <code>0042</code>. <code>305</code> became <code>0305</code>. <code>9</code> became <code>0009</code>. <code>1234</code> stayed <code>1234</code> with LPAD to length 4. RPAD examples included <code>7-----</code>, <code>42----</code>, and <code>1234--</code>.</li>
+        <li>Pattern learned: LPAD adds characters to the left until the target length is reached. RPAD adds characters to the right until the target length is reached.</li>
+        <li>Memory line: <code>LPAD(text, length, fill)</code> pads left. <code>RPAD(text, length, fill)</code> pads right.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Clean report label</h4>
+      <ul>
+        <li>Goal: Combine multiple text functions into one report-friendly label.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_text,
+  raw_code,
+  LPAD(raw_code, 4, '0') || ' - ' || INITCAP(TRIM(raw_text))
+    AS clean_report_label
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | clean_report_label
+---------+-----------------------------
+1        | 0007 - Padded Text
+2        | 0042 - Mixed Case Value
+3        | 0305 - A Astounding Example
+4        | 0009 - Left Padded Only
+5        | 1234 - Right Padded Only</code></pre>
+      <ul>
+        <li>Pattern learned: A useful reporting label can combine code padding, text cleanup, case formatting, and concatenation.</li>
+        <li>Memory line: <code>dirty text + raw code -&gt; trim -&gt; title case -&gt; pad code -&gt; concatenate</code>.</li>
+      </ul>
+    </div>
+    <a href="#s06" class="back-top">↑ back to Chapter 3 start</a>
+    <div class="note-card" id="chapter3-6-3">
+      <h4>6.3 Completed lab topic: length and data-quality flags</h4>
+    </div>
+    <div class="note-card">
+      <h4>LENGTH and trimmed length</h4>
+      <ul>
+        <li>Goal: Compare raw text length to cleaned text length.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_text,
+  LENGTH(raw_text) AS raw_length,
+  LENGTH(TRIM(raw_text)) AS trimmed_length
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>dirty_id 1</code> raw_length <code>15</code>, trimmed_length <code>11</code>. <code>dirty_id 2</code> raw_length <code>16</code>, trimmed_length <code>16</code>. <code>dirty_id 4</code> raw_length <code>18</code>, trimmed_length <code>16</code>. <code>dirty_id 5</code> raw_length <code>19</code>, trimmed_length <code>17</code>.</li>
+        <li>Pattern learned: <code>LENGTH(raw_text)</code> counts characters as stored, including outside spaces. <code>LENGTH(TRIM(raw_text))</code> counts characters after outside padding is removed.</li>
+        <li>Memory line: If raw_length is greater than trimmed_length, the value has outside spaces.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>Padding quality flag</h4>
+      <ul>
+        <li>Goal: Turn the length comparison into a readable data-quality flag.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_text,
+  LENGTH(raw_text) AS raw_length,
+  LENGTH(TRIM(raw_text)) AS trimmed_length,
+  CASE
+    WHEN LENGTH(raw_text) &gt; LENGTH(TRIM(raw_text))
+      THEN 'Has outside padding'
+    ELSE 'Clean length'
+  END AS padding_status
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>dirty_id 1</code>, <code>dirty_id 4</code>, and <code>dirty_id 5</code> were flagged <code>Has outside padding</code>. <code>dirty_id 2</code> and <code>dirty_id 3</code> were <code>Clean length</code>.</li>
+        <li>Pattern learned: Raw value -&gt; cleaned value -&gt; compare lengths -&gt; data quality flag.</li>
+        <li>Memory line: <code>LENGTH(raw_text) &gt; LENGTH(TRIM(raw_text))</code> means outside padding exists.</li>
+      </ul>
+    </div>
+    <a href="#s06" class="back-top">↑ back to Chapter 3 start</a>
+    <div class="note-card" id="chapter3-6-4">
+      <h4>6.4 Completed lab topic: find and extract text pieces</h4>
+    </div>
+    <div class="note-card">
+      <h4>POSITION / STRPOS</h4>
+      <ul>
+        <li>Goal: Find where a substring begins inside another string.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  comparison_text,
+  POSITION('ELF' IN comparison_text) AS elf_position,
+  STRPOS(comparison_text, 'ELF') AS elf_strpos
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>ELF</code> returned position <code>1</code>. <code>GAMBOL</code>, <code>GUMBO</code>, <code>ELVES</code>, and <code>POSTGRES</code> returned <code>0</code>. <code>ELVES</code> returned <code>0</code> because it starts with <code>ELV</code>, not <code>ELF</code>.</li>
+        <li>Pattern learned: POSITION and STRPOS both return where a substring begins. If not found, they return 0.</li>
+        <li>Memory line: <code>POSITION('x' IN text)</code> and <code>STRPOS(text, 'x')</code> find where text begins.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>LEFT / RIGHT</h4>
+      <ul>
+        <li>Goal: Extract prefixes and suffixes from <code>comparison_text</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  comparison_text,
+  LEFT(comparison_text, 3) AS first_3_chars,
+  RIGHT(comparison_text, 3) AS last_3_chars
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>GAMBOL -&gt; GAM / BOL</code>. <code>GUMBO -&gt; GUM / MBO</code>. <code>ELF -&gt; ELF / ELF</code>. <code>ELVES -&gt; ELV / VES</code>. <code>POSTGRES -&gt; POS / RES</code>.</li>
+        <li>Pattern learned: <code>LEFT(text, n)</code> gets the first n characters. <code>RIGHT(text, n)</code> gets the last n characters.</li>
+        <li>Memory line: LEFT is prefix. RIGHT is suffix.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>SUBSTRING / SUBSTR</h4>
+      <ul>
+        <li>Goal: Extract a piece from the middle of a string.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  comparison_text,
+  SUBSTRING(comparison_text FROM 2 FOR 3) AS middle_piece,
+  SUBSTR(comparison_text, 2, 3) AS middle_piece_substr
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>GAMBOL -&gt; AMB</code>. <code>GUMBO -&gt; UMB</code>. <code>ELF -&gt; LF</code>. <code>ELVES -&gt; LVE</code>. <code>POSTGRES -&gt; OST</code>.</li>
+        <li>Pattern learned: <code>SUBSTRING(text FROM start FOR length)</code> and <code>SUBSTR(text, start, length)</code> both pull a string piece. String positions are 1-based.</li>
+        <li>Memory line: SUBSTRING and SUBSTR extract a piece of text using start position and length.</li>
+      </ul>
+    </div>
+    <a href="#s06" class="back-top">↑ back to Chapter 3 start</a>
+    <div class="note-card" id="chapter3-6-5">
+      <h4>6.5 Completed lab topic: transform text</h4>
+    </div>
+    <div class="note-card">
+      <h4>REPLACE</h4>
+      <ul>
+        <li>Goal: Replace exact matching text.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  comparison_text,
+  REPLACE(comparison_text, 'ELF', 'ORC') AS replaced_text
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>ELF</code> became <code>ORC</code>. <code>ELVES</code> stayed <code>ELVES</code> because the text contains <code>ELV</code>, not <code>ELF</code>. <code>GAMBOL</code>, <code>GUMBO</code>, and <code>POSTGRES</code> were unchanged.</li>
+        <li>Pattern learned: <code>REPLACE(text, old_text, new_text)</code> replaces exact matching text wherever it appears.</li>
+        <li>Memory line: REPLACE changes matching text, not similar-looking text.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>REVERSE</h4>
+      <ul>
+        <li>Goal: Reverse characters in a string.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  comparison_text,
+  REVERSE(comparison_text) AS reversed_text
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result notes: <code>GAMBOL -&gt; LOBMAG</code>. <code>GUMBO -&gt; OBMUG</code>. <code>ELF -&gt; FLE</code>. <code>ELVES -&gt; SEVLE</code>. <code>POSTGRES -&gt; SERGTSOP</code>.</li>
+        <li>Pattern learned: <code>REVERSE(text)</code> returns the characters in backward order.</li>
+        <li>Memory line: REVERSE flips the string backward.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter3-regexp-replace">
+      <h4>REGEXP_REPLACE: collapse repeated internal spaces</h4>
+      <ul>
+        <li>Goal: Show how to collapse repeated whitespace inside text into one normal space.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  sample_id,
+  messy_text,
+  REGEXP_REPLACE(messy_text, '\s+', ' ', 'g') AS collapsed_spaces
+FROM (
+  VALUES
+    (1, 'padded     text'),
+    (2, 'mixed      CASE      value'),
+    (3, 'A     Astounding      example'),
+    (4, 'left   padded   only'),
+    (5, 'right       padded       only')
+) AS examples(sample_id, messy_text)
+ORDER BY sample_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>sample_id | messy_text                    | collapsed_spaces
+----------+-------------------------------+----------------------
+1         | padded     text               | padded text
+2         | mixed      CASE      value    | mixed CASE value
+3         | A     Astounding      example | A Astounding example
+4         | left   padded   only          | left padded only
+5         | right       padded       only | right padded only</code></pre>
+      <ul>
+        <li>Pattern learned: <code>REGEXP_REPLACE</code> can normalize repeated whitespace inside a string.</li>
+        <li>Memory line: <code>TRIM</code> handles outside spaces. <code>REGEXP_REPLACE('\s+', ' ', 'g')</code> handles repeated internal spaces.</li>
+        <li>Explanation: <code>\s+</code> means one or more whitespace characters. <code>' '</code> is the replacement: one normal space. <code>'g'</code> means global replacement, so every repeated-space run is replaced, not just the first one.</li>
+        <li>Common trap: Do not confuse <code>TRIM</code> with whitespace collapsing. <code>TRIM</code> removes outside padding. It does not collapse repeated spaces inside the text.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter3-6-6">
+      <h4>6.6 Completed lab topic: pattern matching and parsing text</h4>
+    </div>
+    <div class="note-card">
+      <h4>LIKE with % wildcard</h4>
+      <ul>
+        <li>Goal: Find text values using wildcard pattern matching.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  comparison_text
+FROM lab_dirty_text
+WHERE comparison_text LIKE 'G%'
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | comparison_text
+---------+----------------
+1        | GAMBOL
+2        | GUMBO</code></pre>
+      <ul>
+        <li>Pattern learned: <code>LIKE 'G%'</code> finds values that start with G.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  comparison_text
+FROM lab_dirty_text
+WHERE comparison_text LIKE '%BO%'
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | comparison_text
+---------+----------------
+1        | GAMBOL
+2        | GUMBO</code></pre>
+      <ul>
+        <li>Pattern learned: <code>LIKE '%BO%'</code> finds values that contain BO anywhere.</li>
+        <li>Memory line: <code>%</code> means any number of characters.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>LIKE with _ wildcard</h4>
+      <ul>
+        <li>Goal: Use the single-character wildcard.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  comparison_text
+FROM lab_dirty_text
+WHERE comparison_text LIKE 'G_MBO'
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | comparison_text
+---------+----------------
+2        | GUMBO</code></pre>
+      <ul>
+        <li>Pattern learned: The underscore wildcard <code>_</code> means exactly one character.</li>
+        <li>Memory line: <code>% = any number of characters.</code> <code>_ = exactly one character.</code></li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>LIKE case sensitivity and ILIKE</h4>
+      <ul>
+        <li>Goal: Prove that LIKE is case-sensitive in PostgreSQL and ILIKE is case-insensitive.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_text
+FROM lab_dirty_text
+WHERE raw_text LIKE '%CASE%'
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | raw_text
+---------+------------------
+2        | mixed CASE value</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_text
+FROM lab_dirty_text
+WHERE raw_text LIKE '%case%'
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>0 rows</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_text
+FROM lab_dirty_text
+WHERE raw_text ILIKE '%case%'
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | raw_text
+---------+------------------
+2        | mixed CASE value</code></pre>
+      <ul>
+        <li>Pattern learned: LIKE is case-sensitive. ILIKE ignores case.</li>
+        <li>Memory line: <code>LIKE = case-sensitive pattern match.</code> <code>ILIKE = case-insensitive pattern match.</code></li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>TRIM + ILIKE cleaned search</h4>
+      <ul>
+        <li>Goal: Search after cleaning outside padding.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_text,
+  TRIM(raw_text) AS cleaned_text
+FROM lab_dirty_text
+WHERE TRIM(raw_text) ILIKE '%padded%'
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | raw_text              | cleaned_text
+---------+-----------------------+-------------------
+1        |   padded text         | padded text
+4        |   left padded only    | left padded only
+5        | right padded only     | right padded only</code></pre>
+      <ul>
+        <li>Pattern learned: Clean first, then search.</li>
+        <li>Memory line: <code>TRIM</code> cleans outside spaces. <code>ILIKE</code> searches without caring about case.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>SPLIT_PART words</h4>
+      <ul>
+        <li>Goal: Split cleaned text into word pieces.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  TRIM(raw_text) AS cleaned_text,
+  SPLIT_PART(TRIM(raw_text), ' ', 1) AS first_word,
+  SPLIT_PART(TRIM(raw_text), ' ', 2) AS second_word,
+  SPLIT_PART(TRIM(raw_text), ' ', 3) AS third_word
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | cleaned_text          | first_word | second_word | third_word
+---------+-----------------------+------------+-------------+-----------
+1        | padded text           | padded     | text        |
+2        | mixed CASE value      | mixed      | CASE        | value
+3        | A Astounding example  | A          | Astounding  | example
+4        | left padded only      | left       | padded      | only
+5        | right padded only     | right      | padded      | only</code></pre>
+      <ul>
+        <li>Pattern learned: <code>SPLIT_PART(text, delimiter, part_number)</code> returns the requested piece.</li>
+        <li>Memory line: <code>SPLIT_PART</code> is 1-based. Part 1 is the first piece.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>SPLIT_PART generated code</h4>
+      <ul>
+        <li>Goal: Generate a delimited code and split it back apart.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  dirty_id,
+  raw_code || '-' || comparison_text AS generated_code,
+  SPLIT_PART(raw_code || '-' || comparison_text, '-', 1) AS code_part,
+  SPLIT_PART(raw_code || '-' || comparison_text, '-', 2) AS text_part
+FROM lab_dirty_text
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | generated_code | code_part | text_part
+---------+----------------+-----------+----------
+1        | 7-GAMBOL       | 7         | GAMBOL
+2        | 42-GUMBO       | 42        | GUMBO
+3        | 305-ELF        | 305       | ELF
+4        | 9-ELVES        | 9         | ELVES
+5        | 1234-POSTGRES  | 1234      | POSTGRES</code></pre>
+      <ul>
+        <li>Pattern learned: <code>SPLIT_PART</code> can parse simple delimited strings.</li>
+        <li>Memory line: Build code -&gt; split code -&gt; use the pieces.</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h4>CTE parse-and-clean pipeline</h4>
+      <ul>
+        <li>Goal: Generate a code, split it, and clean each part.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH generated AS (
+  SELECT
+    dirty_id,
+    raw_code || '-' || comparison_text AS generated_code
+  FROM lab_dirty_text
+)
+SELECT
+  dirty_id,
+  generated_code,
+  LPAD(SPLIT_PART(generated_code, '-', 1), 4, '0') AS padded_code_part,
+  INITCAP(LOWER(SPLIT_PART(generated_code, '-', 2))) AS clean_text_part
+FROM generated
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | generated_code | padded_code_part | clean_text_part
+---------+----------------+------------------+----------------
+1        | 7-GAMBOL       | 0007             | Gambol
+2        | 42-GUMBO       | 0042             | Gumbo
+3        | 305-ELF        | 0305             | Elf
+4        | 9-ELVES        | 0009             | Elves
+5        | 1234-POSTGRES  | 1234             | Postgres</code></pre>
+      <ul>
+        <li>Pattern learned: Use a CTE to create the generated string once, then split and format it in the outer query.</li>
+        <li>Memory line: raw combined string -&gt; split into fields -&gt; clean each field -&gt; produce report columns.</li>
+      </ul>
+    </div>
+    <a href="#s06" class="back-top">↑ back to Chapter 3 start</a>
+    <div class="note-card" id="chapter3-6-7">
+      <h4>6.7 Chapter 3 closing mini-pipeline</h4>
+    </div>
+    <div class="note-card">
+      <h4>Chapter 3 final mini-pipeline</h4>
+      <ul>
+        <li>Goal: Combine the major Chapter 3 skills into one compact report query.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH cleaned AS (
+  SELECT
+    dirty_id,
+    raw_text,
+    raw_code,
+    comparison_text,
+    TRIM(raw_text) AS trimmed_text,
+    INITCAP(TRIM(raw_text)) AS title_text,
+    LPAD(raw_code, 4, '0') AS padded_code
+  FROM lab_dirty_text
+)
+SELECT
+  dirty_id,
+  padded_code || ' - ' || title_text AS report_label,
+  comparison_text,
+  CASE
+    WHEN comparison_text ILIKE 'G%' THEN 'Starts with G'
+    WHEN comparison_text ILIKE '%EL%' THEN 'Elf-like text'
+    ELSE 'Other'
+  END AS text_family
+FROM cleaned
+ORDER BY dirty_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>dirty_id | report_label                | comparison_text | text_family
+---------+-----------------------------+-----------------+--------------
+1        | 0007 - Padded Text          | GAMBOL          | Starts with G
+2        | 0042 - Mixed Case Value     | GUMBO           | Starts with G
+3        | 0305 - A Astounding Example | ELF             | Elf-like text
+4        | 0009 - Left Padded Only     | ELVES           | Elf-like text
+5        | 1234 - Right Padded Only    | POSTGRES        | Other</code></pre>
+      <ul>
+        <li>Pattern learned: A reusable text-cleaning report can clean once in a CTE, build a label, and classify text with business rules.</li>
+        <li>Memory line: clean once in a CTE -&gt; build report label -&gt; classify text with pattern rules.</li>
+      </ul>
+    </div>
+    <div class="callout success">
+      <strong>CHAPTER 3 COMPLETE</strong>
+      For this lab-learning pass, Chapter 3 is complete. It covered text inspection, trimming, case normalization, concatenation, code padding, length checks, data-quality flags, substring position, prefix/suffix extraction, substring extraction, replacement, reversing, regex whitespace collapse, LIKE / ILIKE pattern matching, SPLIT_PART parsing, CTE-based text cleanup pipelines, and final report-label and text-family classification.
+    </div>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s07">
+    <div class="section-header">
+      <div class="section-num prp">07</div>
+      <h2>Chapter 4 Lab Notes — Full-text Search and Extensions</h2>
+    </div>
+    <div class="callout info">
+      <strong>CHAPTER 4 START</strong>
+      Chapter 4 starts with PostgreSQL full-text search. This is different from simple LIKE / ILIKE pattern matching.
+    </div>
+    <div class="nugget">
+      <span class="label-tag">// PRACTICAL WORKFLOW</span>
+      normal text -&gt; searchable document with <code>to_tsvector()</code><br>
+      search words -&gt; tsquery with <code>to_tsquery()</code> or <code>plainto_tsquery()</code><br>
+      document <code>@@</code> query -&gt; matching rows
+    </div>
+    <div class="note-card">
+      <h4>Chapter 4 Quick Jumps</h4>
+      <ul>
+        <li><a href="#chapter4-7-1">7.1 Inspect searchable text</a></li>
+        <li><a href="#chapter4-7-2">7.2 to_tsvector searchable document</a></li>
+        <li><a href="#chapter4-7-3">7.3 to_tsquery and @@ matching</a></li>
+        <li><a href="#chapter4-7-4">7.4 ILIKE vs full-text search</a></li>
+        <li><a href="#chapter4-7-5">7.5 Full-text boolean operators</a></li>
+        <li><a href="#chapter4-7-6">7.6 Search title and description together</a></li>
+        <li><a href="#chapter4-7-7">7.7 plainto_tsquery user-style search</a></li>
+        <li><a href="#chapter4-7-8">7.8 Stemming surprises and prefix search</a></li>
+        <li><a href="#chapter4-7-9">7.9 CREATE EXTENSION fuzzystrmatch</a></li>
+        <li><a href="#chapter4-7-10">7.10 levenshtein edit distance</a></li>
+        <li><a href="#chapter4-7-11">7.11 levenshtein thresholds and fuzzy title matching</a></li>
+        <li><a href="#chapter4-7-12">7.12 soundex sound-alike codes</a></li>
+        <li><a href="#chapter4-7-13">7.13 difference sound similarity score</a></li>
+        <li><a href="#chapter4-7-14">7.14 Combined fuzzy candidate report</a></li>
+        <li><a href="#chapter4-7-15">7.15 CREATE EXTENSION pg_trgm</a></li>
+        <li><a href="#chapter4-7-16">7.16 similarity() trigram score</a></li>
+        <li><a href="#chapter4-7-17">7.17 similarity threshold filtering</a></li>
+        <li><a href="#chapter4-7-18">7.18 pg_trgm percent operator</a></li>
+        <li><a href="#chapter4-7-19">7.19 pg_trgm similarity threshold and set_limit()</a></li>
+        <li><a href="#chapter4-7-20">7.20 word_similarity()</a></li>
+        <li><a href="#chapter4-7-21">7.21 trigram distance operator</a></li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-1">
+      <h4>7.1 Inspect searchable text</h4>
+      <ul>
+        <li>Goal: Identify which film text columns are useful for search.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title           | description
+--------+-----------------+--------------------------------------------------------------
+101     | ELF ADVENTURE   | A Astounding story about a helpful elf and a winter journey.
+102     | DATA DETECTIVE  | A data analyst solves messy customer records with SQL.
+103     | POSTGRES HERO   | A database engineer learns timestamp and interval logic.
+104     | CLEAN TEXT CLUB | A team fixes padded strings, bad case, and strange codes.
+105     | THE FUZZY ELF   | An elf, elven helper, and elves appear in a search story.
+106     | ARRAY GAMES     | A fun look at lists, tags, and special features.</code></pre>
+      <ul>
+        <li>Pattern learned: <code>title</code> and <code>description</code> are searchable text fields.</li>
+        <li>Memory line: Inspect the text before building full-text search logic.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-2">
+      <h4>7.2 to_tsvector searchable document</h4>
+      <ul>
+        <li>Goal: Convert normal description text into searchable full-text tokens.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  to_tsvector('english', description) AS searchable_description
+FROM lab_films
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result notes for film 101:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>A Astounding story about a helpful elf and a winter journey.</code></pre>
+      <ul>
+        <li>Became searchable tokens like:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>'astound':2 'elf':7 'help':6 'journey':11 'stori':3 'winter':10</code></pre>
+      <ul>
+        <li>Observed result notes for film 105:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>An elf, elven helper, and elves appear in a search story.</code></pre>
+      <ul>
+        <li>Became searchable tokens like:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>'appear':7 'elf':2 'elv':6 'elven':3 'helper':4 'search':10 'stori':11</code></pre>
+      <ul>
+        <li>Pattern learned: <code>to_tsvector('english', text)</code> turns normal English text into searchable tokens.</li>
+        <li>Important behavior:</li>
+        <li>Common words such as <code>a</code>, <code>and</code>, and <code>about</code> may be removed.</li>
+        <li>Useful words may be stemmed or normalized.</li>
+        <li>Token positions are stored.</li>
+        <li>Memory line: <code>to_tsvector()</code> prepares the searchable document.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-3">
+      <h4>7.3 to_tsquery and @@ matching</h4>
+      <ul>
+        <li>Goal: Match a searchable document against a full-text search query.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf')
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+101     | ELF ADVENTURE
+105     | THE FUZZY ELF</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'astound')
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+101     | ELF ADVENTURE</code></pre>
+      <ul>
+        <li>Pattern learned: <code>to_tsvector()</code> prepares the document. <code>to_tsquery()</code> prepares the search query. <code>@@</code> checks whether they match.</li>
+        <li>Memory line: <code>tsvector @@ tsquery</code> means: does this searchable document match this search query?</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-4">
+      <h4>7.4 ILIKE vs full-text search</h4>
+      <ul>
+        <li>Goal: Compare character-pattern matching to normalized word-token matching.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE description ILIKE '%astounded%'
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>0 rows</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE description ILIKE '%astound%'
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+101     | ELF ADVENTURE</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'astounded')
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+101     | ELF ADVENTURE</code></pre>
+      <ul>
+        <li>Pattern learned: <code>ILIKE</code> searches exact character patterns. Full-text search uses normalized word tokens.</li>
+        <li>Memory line: <code>ILIKE</code> asks: do these letters appear? Full-text search asks: does this searchable word concept appear?</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-5">
+      <h4>7.5 Full-text boolean operators</h4>
+      <ul>
+        <li>Goal: Use AND, OR, and NOT logic inside <code>to_tsquery()</code>.</li>
+        <li>AND with <code>&amp;</code>:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf &amp; search')
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+105     | THE FUZZY ELF</code></pre>
+      <ul>
+        <li>Pattern learned: <code>&amp;</code> means AND. The description must match both <code>elf</code> and <code>search</code>.</li>
+        <li>OR with <code>|</code>:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf | sean')
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+101     | ELF ADVENTURE
+105     | THE FUZZY ELF</code></pre>
+      <ul>
+        <li>Pattern learned: <code>|</code> means OR. The description can match either <code>elf</code> or <code>sean</code>.</li>
+        <li>NOT with <code>!</code>:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf &amp; !search')
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+101     | ELF ADVENTURE</code></pre>
+      <ul>
+        <li>Pattern learned: <code>!</code> means NOT. The description must match <code>elf</code> and must not match <code>search</code>.</li>
+        <li>Memory line:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>&amp; = AND
+| = OR
+! = NOT</code></pre>
+    </div>
+    <div class="note-card" id="chapter4-7-6">
+      <h4>7.6 Search title and description together</h4>
+      <ul>
+        <li>Goal: Build one searchable document from multiple text columns.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', title || ' ' || description)
+      @@ to_tsquery('english', 'postgres | database')
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+103     | POSTGRES HERO</code></pre>
+      <ul>
+        <li>Pattern learned: <code>title || ' ' || description</code> combines both fields into one searchable text value.</li>
+        <li>Memory line: <code>to_tsvector('english', title || ' ' || description)</code> = searchable document built from multiple columns.</li>
+        <li>Also document this alias lesson.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title || ' ' || description
+FROM lab_films
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed note: PostgreSQL displayed the calculated column as <code>?column?</code> because no alias was given.</li>
+        <li>Better SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title || ' ' || description AS searchable_text
+FROM lab_films
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Pattern learned: Always alias calculated columns.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-7">
+      <h4>7.7 plainto_tsquery user-style search</h4>
+      <ul>
+        <li>Goal: Use normal user-style search words instead of manual tsquery syntax.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', title || ' ' || description)
+      @@ plainto_tsquery('english', 'postgres database')
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+103     | POSTGRES HERO</code></pre>
+      <ul>
+        <li>Pattern learned: <code>plainto_tsquery('english', 'postgres database')</code> converts plain words into a safe full-text search query.</li>
+        <li>Memory line: <code>plainto_tsquery()</code> is friendlier for normal user search input. <code>to_tsquery()</code> is for manual full-text-search expressions.</li>
+        <li>Show query shape comparison:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  plainto_tsquery('english', 'postgres database') AS plain_query,
+  to_tsquery('english', 'postgres &amp; database') AS manual_query;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>plain_query          | manual_query
+---------------------+---------------------
+'postgr' &amp; 'databas' | 'postgr' &amp; 'databas'</code></pre>
+      <ul>
+        <li>Pattern learned: Both produced the same final query shape, but <code>plainto_tsquery</code> accepted normal words while <code>to_tsquery</code> required the <code>&amp;</code> operator.</li>
+      </ul>
+      <div class="note-card">
+        <h4>Stop-word removal</h4>
+        <ul>
+          <li>SQL:</li>
+        </ul>
+        <pre><span class="label">SQL</span><code>SELECT
+  plainto_tsquery('english', 'a postgres and database') AS plain_query;</code></pre>
+        <ul>
+          <li>Observed result:</li>
+        </ul>
+        <pre><span class="label">TEXT</span><code>plain_query
+---------------------
+'postgr' &amp; 'databas'</code></pre>
+        <ul>
+          <li>Pattern learned: English stop words such as <code>a</code> and <code>and</code> were removed.</li>
+          <li>Memory line: <code>plainto_tsquery()</code> removes weak/common words, stems useful words, and connects remaining words with AND.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note-card" id="chapter4-7-8">
+      <h4>7.8 Stemming surprises and prefix search</h4>
+      <ul>
+        <li>Goal: Show that full-text search is smarter than ILIKE but does not always match every word form the way a human expects.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', title || ' ' || description)
+      @@ plainto_tsquery('english', 'elves')
+ORDER BY film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+105     | THE FUZZY ELF</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  plainto_tsquery('english', 'elf') AS elf_query,
+  plainto_tsquery('english', 'elves') AS elves_query;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>elf_query | elves_query
+----------+-------------
+'elf'     | 'elv'</code></pre>
+      <ul>
+        <li>Pattern learned: PostgreSQL normalized <code>elf</code> and <code>elves</code> to different query tokens in this English dictionary.</li>
+        <li>Memory line: Do not assume singular/plural always collapse together. Check the tsquery shape when behavior surprises you.</li>
+      </ul>
+      <div class="note-card">
+        <h4>Prefix search with :*</h4>
+        <ul>
+          <li>Goal: Use prefix matching when stemming does not line up exactly.</li>
+          <li>SQL:</li>
+        </ul>
+        <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', title || ' ' || description)
+      @@ to_tsquery('english', 'el:*')
+ORDER BY film_id;</code></pre>
+        <ul>
+          <li>Observed result:</li>
+        </ul>
+        <pre><span class="label">TEXT</span><code>film_id | title
+--------+---------------
+101     | ELF ADVENTURE
+105     | THE FUZZY ELF</code></pre>
+        <ul>
+          <li>SQL:</li>
+        </ul>
+        <pre><span class="label">SQL</span><code>SELECT
+  to_tsquery('english', 'el:*') AS prefix_query,
+  plainto_tsquery('english', 'elves') AS plain_elves_query;</code></pre>
+        <ul>
+          <li>Observed result:</li>
+        </ul>
+        <pre><span class="label">TEXT</span><code>prefix_query | plain_elves_query
+-------------+-------------------
+'el':*       | 'elv'</code></pre>
+        <ul>
+          <li>Pattern learned: <code>:*</code> means prefix match in tsquery. <code>'el:*'</code> matches tokens that start with <code>el</code>.</li>
+          <li>Memory line: <code>plainto_tsquery()</code> = safer user-style word search. <code>to_tsquery()</code> = manual search syntax. <code>:*</code> = prefix search.</li>
+        </ul>
+      </div>
+    </div>
+      <div class="note-card" id="chapter4-7-9">
+        <h4>7.9 CREATE EXTENSION fuzzystrmatch</h4>
+        <ul>
+          <li>Goal: Enable the <code>fuzzystrmatch</code> extension so fuzzy text functions are available in the database.</li>
+          <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;</code></pre>
+      <ul>
+        <li>Verification SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  extname
+FROM pg_extension
+WHERE extname = 'fuzzystrmatch';</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>extname
+--------------
+fuzzystrmatch</code></pre>
+      <ul>
+          <li>Pattern learned: <code>CREATE EXTENSION IF NOT EXISTS</code> safely enables an extension without failing if it is already present.</li>
+          <li>Memory line: Enable the extension first, then call the fuzzy helper functions.</li>
+        </ul>
+      </div>
+      <div class="note-card">
+        <h4>Practiced video extension flow</h4>
+        <ul>
+          <li>Goal: Match the course video flow for discovering extensions, enabling <code>fuzzystrmatch</code>, and comparing the same sample strings.</li>
+          <li>SQL:</li>
+        </ul>
+        <pre><span class="label">SQL</span><code>SELECT name
+  FROM pg_available_extensions;
+
+SELECT extname
+  FROM pg_extension;
+
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+
+SELECT extname
+  FROM pg_extension;
+
+SELECT levenshtein('GUMBO', 'GAMBOL');
+
+SELECT similarity('GUMBO', 'GAMBOL');</code></pre>
+        <ul>
+          <li>Observed result notes: <code>levenshtein('GUMBO', 'GAMBOL')</code> returned <code>2</code>.</li>
+          <li>Observed result notes: <code>similarity('GUMBO', 'GAMBOL')</code> returned <code>0.181818</code>.</li>
+          <li>Memory line: <code>pg_available_extensions</code> = can install. <code>pg_extension</code> = installed now.</li>
+        </ul>
+      </div>
+    <div class="note-card" id="chapter4-7-10">
+      <h4>7.10 levenshtein edit distance</h4>
+      <ul>
+        <li>Goal: Measure how many edits are required to turn one string into another.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  levenshtein('GUMBO', 'GAMBOL') AS edit_distance;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>edit_distance
+--------------
+2</code></pre>
+      <ul>
+        <li>Pattern learned: <code>levenshtein()</code> returns the number of insertions, deletions, or substitutions needed for a perfect match.</li>
+        <li>Memory line: Smaller distance = closer spelling match.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-11">
+      <h4>7.11 levenshtein thresholds and fuzzy title matching</h4>
+      <ul>
+        <li>Goal: Use a small edit-distance threshold to find likely title typo matches in <code>lab_films</code>.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH input_title AS (
+  SELECT 'ELF ADVENTUR' AS raw_title
+)
+SELECT
+  f.film_id,
+  f.title,
+  levenshtein(LOWER(i.raw_title), LOWER(f.title)) AS edit_distance
+FROM lab_films AS f
+CROSS JOIN input_title AS i
+WHERE levenshtein(LOWER(i.raw_title), LOWER(f.title)) &lt;= 2
+ORDER BY edit_distance, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title           | edit_distance
+--------+-----------------+---------------
+101     | ELF ADVENTURE   | 1</code></pre>
+      <ul>
+        <li>Pattern learned: A threshold like <code>&lt;= 2</code> can turn raw edit distance into a practical fuzzy-match filter.</li>
+        <li>Common trap: Distance thresholds are data-shape dependent. A good threshold for short titles may be too loose for long titles.</li>
+        <li>Memory line: typo input -&gt; compute distance -&gt; keep only close candidates.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-12">
+      <h4>7.12 soundex sound-alike codes</h4>
+      <ul>
+        <li>Goal: Compare words by rough pronunciation instead of exact spelling.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  soundex('Hero') AS hero_code,
+  soundex('Hiro') AS hiro_code,
+  soundex('Array') AS array_code;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>hero_code | hiro_code | array_code
+----------+-----------+-----------
+H600      | H600      | A600</code></pre>
+      <ul>
+        <li>Pattern learned: <code>soundex()</code> maps similar-sounding words to the same coarse phonetic code.</li>
+        <li>Memory line: Different spelling can still share one sound code.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-13">
+      <h4>7.13 difference sound similarity score</h4>
+      <ul>
+        <li>Goal: Turn soundex comparison into a small similarity score.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  difference('Hero', 'Hiro') AS close_sound_score,
+  difference('Sean', 'Postgres') AS far_sound_score;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>close_sound_score | far_sound_score
+------------------+----------------
+4                 | 0</code></pre>
+      <ul>
+        <li>Pattern learned: <code>difference()</code> returns a 0-to-4 score based on how similar the two soundex codes are.</li>
+        <li>Common trap: <code>difference()</code> is a coarse phonetic score, not an edit-distance score.</li>
+        <li>Memory line: <code>4</code> = very close sound. <code>0</code> = very different sound.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-14">
+      <h4>7.14 Combined sound and edit-distance fuzzy candidate report</h4>
+      <ul>
+        <li>Goal: Combine phonetic similarity and edit distance into one practical typo-candidate report.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH input_title AS (
+  SELECT 'POSTGRES HRO' AS raw_title
+)
+SELECT
+  f.film_id,
+  f.title,
+  levenshtein(LOWER(i.raw_title), LOWER(f.title)) AS edit_distance,
+  difference(i.raw_title, f.title) AS sound_score
+FROM lab_films AS f
+CROSS JOIN input_title AS i
+WHERE difference(i.raw_title, f.title) &gt;= 2
+   OR levenshtein(LOWER(i.raw_title), LOWER(f.title)) &lt;= 3
+ORDER BY edit_distance, sound_score DESC, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title           | edit_distance | sound_score
+--------+-----------------+---------------+------------
+103     | POSTGRES HERO   | 1             | 4</code></pre>
+      <ul>
+        <li>Pattern learned: <code>levenshtein()</code> and <code>difference()</code> work well together: one checks spelling closeness and the other checks sound similarity.</li>
+        <li>Memory line: spelling distance + sound score = stronger fuzzy candidate report.</li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-15">
+      <h4>7.15 CREATE EXTENSION pg_trgm</h4>
+      <ul>
+        <li>Goal: Install PostgreSQL's trigram similarity extension.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>CREATE EXTENSION IF NOT EXISTS pg_trgm;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>CREATE EXTENSION</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  extname,
+  extnamespace::regnamespace AS extension_schema
+FROM pg_extension
+WHERE extname = 'pg_trgm';</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>extname | extension_schema
+--------+------------------------
+pg_trgm | course06_functions_lab</code></pre>
+      <ul>
+        <li>Pattern learned: <code>pg_trgm</code> is available in the current database. Its extension objects live in the <code>course06_functions_lab</code> schema.</li>
+        <li>Memory line: <code>pg_trgm = PostgreSQL trigram similarity extension.</code></li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-16">
+      <h4>7.16 similarity() trigram score</h4>
+      <ul>
+        <li>Goal: Use <code>similarity()</code> to compare how alike two strings are by shared trigram chunks.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  similarity('POSTGRES HERO', 'POSTGRES HER0') AS hero_zero_similarity,
+  similarity('POSTGRES HERO', 'POSTGRES HEROES') AS heroes_similarity,
+  similarity('POSTGRES HERO', 'ELF ADVENTURE') AS elf_similarity;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>hero_zero_similarity | heroes_similarity | elf_similarity
+---------------------+-------------------+---------------
+0.75                 | 0.8125            | 0</code></pre>
+      <ul>
+        <li>Pattern learned: <code>similarity()</code> returns a score from 0 to 1. Higher is better. <code>0</code> means no useful trigram similarity. <code>1</code> means exact or extremely close similarity.</li>
+        <li>Important comparison:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>levenshtein:
+lower is better
+
+similarity:
+higher is better</code></pre>
+      <ul>
+        <li>Memory line: <code>similarity() = shared text chunk score.</code></li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-17">
+      <h4>7.17 similarity threshold filtering</h4>
+      <ul>
+        <li>Goal: Rank and filter film titles by trigram similarity.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  similarity(title, 'POSTGRES HER0') AS title_similarity
+FROM lab_films
+ORDER BY title_similarity DESC, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title           | title_similarity
+--------+-----------------+-----------------
+103     | POSTGRES HERO   | 0.75
+106     | ARRAY GAMES     | 0.04
+101     | ELF ADVENTURE   | 0
+102     | DATA DETECTIVE  | 0
+104     | CLEAN TEXT CLUB | 0
+105     | THE FUZZY ELF   | 0</code></pre>
+      <ul>
+        <li>Pattern learned: <code>ORDER BY similarity(...) DESC</code> puts the closest trigram match first.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  similarity(title, 'POSTGRES HER0') AS title_similarity
+FROM lab_films
+WHERE similarity(title, 'POSTGRES HER0') &gt;= 0.3
+ORDER BY title_similarity DESC, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title         | title_similarity
+--------+---------------+-----------------
+103     | POSTGRES HERO | 0.75</code></pre>
+      <ul>
+        <li>Pattern learned: <code>WHERE similarity(...) &gt;= threshold</code> removes weak/noisy matches.</li>
+        <li>CTE and label version:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH title_similarity AS (
+  SELECT
+    film_id,
+    title,
+    similarity(title, 'POSTGRES HER0') AS title_similarity
+  FROM lab_films
+)
+SELECT
+  film_id,
+  title,
+  title_similarity,
+  CASE
+    WHEN title_similarity &gt;= 0.7 THEN 'Strong trigram match'
+    WHEN title_similarity &gt;= 0.3 THEN 'Possible trigram match'
+    ELSE 'Weak / no match'
+  END AS similarity_label
+FROM title_similarity
+ORDER BY title_similarity DESC, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title           | title_similarity | similarity_label
+--------+-----------------+------------------+---------------------
+103     | POSTGRES HERO   | 0.75             | Strong trigram match
+106     | ARRAY GAMES     | 0.04             | Weak / no match
+101     | ELF ADVENTURE   | 0                | Weak / no match
+102     | DATA DETECTIVE  | 0                | Weak / no match
+104     | CLEAN TEXT CLUB | 0                | Weak / no match
+105     | THE FUZZY ELF   | 0                | Weak / no match</code></pre>
+      <ul>
+        <li>Final useful candidate report:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH title_similarity AS (
+  SELECT
+    film_id,
+    title,
+    similarity(title, 'POSTGRES HER0') AS title_similarity
+  FROM lab_films
+)
+SELECT
+  film_id,
+  title,
+  title_similarity,
+  CASE
+    WHEN title_similarity &gt;= 0.7 THEN 'Strong trigram match'
+    WHEN title_similarity &gt;= 0.3 THEN 'Possible trigram match'
+  END AS similarity_label
+FROM title_similarity
+WHERE title_similarity &gt;= 0.3
+ORDER BY title_similarity DESC, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title         | title_similarity | similarity_label
+--------+---------------+------------------+---------------------
+103     | POSTGRES HERO | 0.75             | Strong trigram match</code></pre>
+      <ul>
+        <li>Memory line: <code>similarity score -&gt; threshold filter -&gt; business label.</code></li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-18">
+      <h4>7.18 pg_trgm percent operator</h4>
+      <ul>
+        <li>Goal: Use the pg_trgm percent operator as a similar-enough shortcut.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  similarity(title, 'POSTGRES HER0') AS title_similarity
+FROM lab_films
+WHERE title % 'POSTGRES HER0'
+ORDER BY title_similarity DESC, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title         | title_similarity
+--------+---------------+-----------------
+103     | POSTGRES HERO | 0.75</code></pre>
+      <ul>
+        <li>Pattern learned: The <code>%</code> operator is not percent math in this context. In <code>pg_trgm</code>, <code>%</code> means similar enough using the current trigram threshold.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SHOW pg_trgm.similarity_threshold;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>pg_trgm.similarity_threshold
+----------------------------
+0.3</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  similarity(title, 'POSTGRES HER0') AS title_similarity,
+  similarity(title, 'POSTGRES HER0') &gt;= 0.3 AS passes_manual_threshold,
+  title % 'POSTGRES HER0' AS passes_pg_trgm_operator
+FROM lab_films
+ORDER BY title_similarity DESC, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title           | title_similarity | passes_manual_threshold | passes_pg_trgm_operator
+--------+-----------------+------------------+-------------------------+------------------------
+103     | POSTGRES HERO   | 0.75             | t                       | t
+106     | ARRAY GAMES     | 0.04             | f                       | f
+101     | ELF ADVENTURE   | 0                | f                       | f
+102     | DATA DETECTIVE  | 0                | f                       | f
+104     | CLEAN TEXT CLUB | 0                | f                       | f
+105     | THE FUZZY ELF   | 0                | f                       | f</code></pre>
+      <ul>
+        <li>Pattern learned: <code>similarity()</code> shows the numeric score. <code>%</code> returns true/false based on the active <code>pg_trgm</code> threshold.</li>
+        <li>Memory line: <code>similarity() = score.</code> <code>% = pass/fail using pg_trgm threshold.</code></li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-19">
+      <h4>7.19 pg_trgm similarity threshold and set_limit()</h4>
+      <ul>
+        <li>Goal: Inspect and temporarily change the trigram similarity threshold.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  title,
+  similarity(title, 'POSTGRES HER0') AS score
+FROM lab_films
+WHERE title % 'POSTGRES HER0'
+ORDER BY score DESC;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>title         | score
+--------------+------
+POSTGRES HERO | 0.75</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  show_limit() AS current_similarity_threshold;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>current_similarity_threshold
+----------------------------
+0.3</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT set_limit(0.8);</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>set_limit
+---------
+0.8</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  title,
+  similarity(title, 'POSTGRES HER0') AS score,
+  title % 'POSTGRES HER0' AS passes_pg_trgm_operator
+FROM lab_films
+ORDER BY score DESC;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>title           | score | passes_pg_trgm_operator
+----------------+-------+------------------------
+POSTGRES HERO   | 0.75  | f
+ARRAY GAMES     | 0.04  | f
+ELF ADVENTURE   | 0     | f
+DATA DETECTIVE  | 0     | f
+CLEAN TEXT CLUB | 0     | f
+THE FUZZY ELF   | 0     | f</code></pre>
+      <ul>
+        <li>Pattern learned: The similarity score did not change. The pass/fail cutoff changed. At threshold 0.8, a score of 0.75 no longer passes.</li>
+        <li>Reset SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT set_limit(0.3);
+
+SHOW pg_trgm.similarity_threshold;</code></pre>
+      <ul>
+        <li>Observed result after reset:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>pg_trgm.similarity_threshold
+----------------------------
+0.3</code></pre>
+      <ul>
+        <li>Verification SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  title,
+  similarity(title, 'POSTGRES HER0') AS score,
+  title % 'POSTGRES HER0' AS passes_pg_trgm_operator
+FROM lab_films
+ORDER BY score DESC;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>title           | score | passes_pg_trgm_operator
+----------------+-------+------------------------
+POSTGRES HERO   | 0.75  | t
+ARRAY GAMES     | 0.04  | f
+ELF ADVENTURE   | 0     | f
+DATA DETECTIVE  | 0     | f
+CLEAN TEXT CLUB | 0     | f
+THE FUZZY ELF   | 0     | f</code></pre>
+      <ul>
+        <li>Memory line: <code>similarity() = measurement.</code> <code>% = pass/fail based on threshold.</code> <code>set_limit() = changes the threshold.</code></li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-20">
+      <h4>7.20 word_similarity()</h4>
+      <ul>
+        <li>Goal: Compare whole-string similarity with word-level trigram similarity.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  similarity('POSTGRES HERO', 'POSTGRES HER0') AS regular_similarity,
+  word_similarity('POSTGRES HERO', 'POSTGRES HER0') AS word_similarity_score;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>regular_similarity | word_similarity_score
+-------------------+----------------------
+0.75               | 0.85714287</code></pre>
+      <ul>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  similarity(
+    'POSTGRES HERO',
+    'please find POSTGRES HER0 for me'
+  ) AS regular_similarity,
+  word_similarity(
+    'POSTGRES HERO',
+    'please find POSTGRES HER0 for me'
+  ) AS word_similarity_score;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>regular_similarity | word_similarity_score
+-------------------+----------------------
+0.36363637         | 0.85714287</code></pre>
+      <ul>
+        <li>Pattern learned: <code>similarity()</code> compares whole text to whole text. <code>word_similarity()</code> can find a strong match inside a longer text phrase.</li>
+        <li>Table ranking SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  word_similarity(
+    title,
+    'please find POSTGRES HER0 for me'
+  ) AS word_score
+FROM lab_films
+ORDER BY word_score DESC, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title           | word_score
+--------+-----------------+------------
+103     | POSTGRES HERO   | 0.85714287
+106     | ARRAY GAMES     | 0.083333336
+104     | CLEAN TEXT CLUB | 0.071428575
+105     | THE FUZZY ELF   | 0.071428575
+101     | ELF ADVENTURE   | 0
+102     | DATA DETECTIVE  | 0</code></pre>
+      <ul>
+        <li>Filtered report SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  film_id,
+  title,
+  word_similarity(
+    title,
+    'please find POSTGRES HER0 for me'
+  ) AS word_score
+FROM lab_films
+WHERE word_similarity(
+    title,
+    'please find POSTGRES HER0 for me'
+  ) &gt;= 0.3
+ORDER BY word_score DESC, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title         | word_score
+--------+---------------+------------
+103     | POSTGRES HERO | 0.85714287</code></pre>
+      <ul>
+        <li>CTE and label version:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>WITH word_scores AS (
+  SELECT
+    film_id,
+    title,
+    word_similarity(
+      title,
+      'please find POSTGRES HER0 for me'
+    ) AS word_score
+  FROM lab_films
+)
+SELECT
+  film_id,
+  title,
+  word_score,
+  CASE
+    WHEN word_score &gt;= 0.7 THEN 'Strong word trigram match'
+    WHEN word_score &gt;= 0.3 THEN 'Possible word trigram match'
+    ELSE 'Weak / no match'
+  END AS word_similarity_label
+FROM word_scores
+WHERE word_score &gt;= 0.3
+ORDER BY word_score DESC, film_id;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>film_id | title         | word_score | word_similarity_label
+--------+---------------+------------+---------------------------
+103     | POSTGRES HERO | 0.85714287 | Strong word trigram match</code></pre>
+      <ul>
+        <li>Side-by-side comparison SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  title,
+  similarity(title, 'POSTGRES HER0') AS clean_input_score,
+  word_similarity(
+    title,
+    'please find POSTGRES HER0 for me'
+  ) AS sentence_input_score
+FROM lab_films
+ORDER BY sentence_input_score DESC, clean_input_score DESC;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>title           | clean_input_score | sentence_input_score
+----------------+-------------------+---------------------
+POSTGRES HERO   | 0.75              | 0.85714287
+ARRAY GAMES     | 0.04              | 0.083333336
+CLEAN TEXT CLUB | 0                 | 0.071428575
+THE FUZZY ELF   | 0                 | 0.071428575
+ELF ADVENTURE   | 0                 | 0
+DATA DETECTIVE  | 0                 | 0</code></pre>
+      <ul>
+        <li>Memory line: <code>similarity() = clean string vs clean string.</code> <code>word_similarity() = stored value vs longer user sentence.</code></li>
+      </ul>
+    </div>
+    <div class="note-card" id="chapter4-7-21">
+      <h4>7.21 trigram distance operator</h4>
+      <ul>
+        <li>Goal: Use the pg_trgm distance operator to rank closest matches.</li>
+        <li>SQL:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  title,
+  similarity(title, 'POSTGRES HER0') AS similarity_score,
+  title &lt;-&gt; 'POSTGRES HER0' AS trigram_distance
+FROM lab_films
+ORDER BY trigram_distance ASC, title;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>title           | similarity_score | trigram_distance
+----------------+------------------+-----------------
+POSTGRES HERO   | 0.75             | 0.25
+ARRAY GAMES     | 0.04             | 0.96
+CLEAN TEXT CLUB | 0                | 1
+DATA DETECTIVE  | 0                | 1
+ELF ADVENTURE   | 0                | 1
+THE FUZZY ELF   | 0                | 1</code></pre>
+      <ul>
+        <li>Pattern learned: similarity high is good. distance low is good.</li>
+        <li>Relationship:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>distance = 1 - similarity</code></pre>
+      <ul>
+        <li>Example:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>POSTGRES HERO:
+similarity = 0.75
+distance   = 0.25</code></pre>
+      <ul>
+        <li>Final useful distance report:</li>
+      </ul>
+      <pre><span class="label">SQL</span><code>SELECT
+  title,
+  similarity(title, 'POSTGRES HER0') AS similarity_score,
+  title &lt;-&gt; 'POSTGRES HER0' AS trigram_distance
+FROM lab_films
+WHERE title % 'POSTGRES HER0'
+ORDER BY trigram_distance ASC, title;</code></pre>
+      <ul>
+        <li>Observed result:</li>
+      </ul>
+      <pre><span class="label">TEXT</span><code>title         | similarity_score | trigram_distance
+--------------+------------------+-----------------
+POSTGRES HERO | 0.75             | 0.25</code></pre>
+      <ul>
+        <li>Pattern learned: Use <code>%</code> to filter trigram candidates. Use <code>similarity()</code> to show the score. Use <code>&lt;-&gt;</code> to rank closest distance first.</li>
+        <li>Memory line: <code>similarity high = good.</code> <code>distance low = good.</code></li>
+      </ul>
+    </div>
+    <div class="callout success">
+      <strong>PARTIAL CHAPTER 4 COMPLETE</strong>
+      Do NOT mark all Chapter 4 complete yet. Chapter 4 first full-text-search block complete. Chapter 4 fuzzystrmatch block complete. Chapter 4 pg_trgm block complete.
+    </div>
+    <div class="note-card">
+      <h4>Remaining Chapter 4 topics may include</h4>
+      <ul>
+        <li>full-text ranking with ts_rank()</li>
+        <li>indexes for full-text search</li>
+        <li>indexes for pg_trgm</li>
+        <li>performance notes</li>
+      </ul>
+    </div>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s08">
+    <div class="section-header">
+      <div class="section-num red">08</div>
+      <h2>Mistakes Captured During Live Work</h2>
+    </div>
+    <table class="vtable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Topic</th>
+          <th>Mistake</th>
+          <th>Correction</th>
+          <th>Reusable pattern</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>2026-06-04</td><td>Schema filtering</td><td>Filtering only <code>table_schema = 'public'</code> missed <code>lab_rentals</code></td><td>Query by <code>table_name</code> or filter <code>table_schema = 'course06_functions_lab'</code></td><td>Always check <code>table_schema</code> when metadata results look incomplete</td></tr>
+        <tr><td>2026-06-04</td><td>PostgreSQL array indexing</td><td>Expecting <code>[0]</code> to return the first array item</td><td>Use <code>[1]</code> for the first item</td><td>PostgreSQL arrays are 1-based</td></tr>
+        <tr><td>2026-06-04</td><td>ANY vs @&gt;</td><td>Treating <code>ANY</code> and <code>@&gt;</code> as identical</td><td><code>ANY</code> checks one searched value; <code>@&gt;</code> checks whether one array contains another array</td><td>Use <code>@&gt;</code> when multiple required values must all be present</td></tr>
+        <tr><td>2026-06-04</td><td>COALESCE type compatibility</td><td><code>COALESCE(return_date, 'Not returned yet')</code> would mix timestamp and text</td><td>Cast <code>return_date</code> to text before using a text fallback</td><td>COALESCE arguments should be compatible types</td></tr>
+        <tr><td>2026-06-04</td><td>Open records with NULL dates</td><td><code>return_date - rental_date</code> returns NULL for open rentals</td><td>Use <code>COALESCE(return_date, CURRENT_TIMESTAMP)</code> before subtracting</td><td>Fill missing endpoint before duration math</td></tr>
+        <tr><td>2026-06-04</td><td>Interval part vs total duration</td><td><code>EXTRACT(hour FROM interval)</code> returns only the hour component, not total hours</td><td>Use <code>EXTRACT(EPOCH FROM interval) / 3600</code> for total hours</td><td>Use EPOCH when you need total duration</td></tr>
+        <tr><td>2026-06-04</td><td>CASE threshold order</td><td>Checking <code>&gt; 72</code> before <code>&gt; 120</code> would classify 122.75 hours as Long instead of Very long</td><td>Check <code>&gt; 120</code> first, then <code>&gt; 72</code></td><td>Order overlapping CASE thresholds from most severe to least severe</td></tr>
+        <tr><td>2026-06-04</td><td>Repeated formula in SELECT and CASE</td><td>Repeating <code>EXTRACT(EPOCH FROM interval) / 3600</code> makes the query noisy</td><td>Calculate <code>total_hours</code> once in a CTE and reuse it</td><td>Calculate once, reuse many times</td></tr>
+        <tr><td>2026-06-04</td><td>Business label sorting</td><td>Sorting labels alphabetically may not match business priority</td><td>Use CASE in ORDER BY or a numeric priority column</td><td>Sort business labels by priority, not alphabetically</td></tr>
+        <tr><td>2026-06-04</td><td>GROUP BY helper column confusion</td><td>It feels strange to GROUP BY a column not shown in SELECT</td><td>GROUP BY may use hidden helper columns; SELECT only displays chosen grouped columns and aggregates</td><td>GROUP BY forms piles; SELECT displays final columns</td></tr>
+        <tr><td>2026-06-04</td><td>Text cleanup order</td><td>Formatting messy text before removing padding can produce inconsistent labels</td><td>TRIM first, then apply <code>UPPER</code>, <code>LOWER</code>, or <code>INITCAP</code></td><td>Clean first, then format</td></tr>
+        <tr><td>2026-06-04</td><td>Padding detection</td><td>Looking at text visually may hide leading or trailing spaces</td><td>Compare <code>LENGTH(raw_text)</code> to <code>LENGTH(TRIM(raw_text))</code></td><td>Use length difference as a data-quality flag</td></tr>
+        <tr><td>2026-06-04</td><td>POSITION / STRPOS not found</td><td>Expecting not-found substring searches to return NULL</td><td><code>POSITION</code> and <code>STRPOS</code> return 0 when the substring is not found</td><td>0 means not found</td></tr>
+        <tr><td>2026-06-04</td><td>String positions</td><td>Assuming string positions start at 0 like some programming languages</td><td>PostgreSQL string functions use 1-based positions</td><td>Position 1 is the first character</td></tr>
+        <tr><td>2026-06-04</td><td>REPLACE exact match</td><td>Expecting <code>REPLACE(comparison_text, 'ELF', 'ORC')</code> to change <code>ELVES</code></td><td>REPLACE only changes exact matching text</td><td>Similar-looking text is not the same as matching text</td></tr>
+        <tr><td>2026-06-04</td><td>REGEXP_REPLACE value demonstration</td><td>Using rows with mostly outside padding made whitespace collapse hard to see</td><td>Use an inline <code>VALUES</code> example with repeated internal spaces</td><td>Match the demo data to the function being taught</td></tr>
+        <tr><td>2026-06-04</td><td>LIKE wildcard meaning</td><td>Treating <code>%</code> and <code>_</code> as the same wildcard</td><td><code>%</code> means any number of characters; <code>_</code> means exactly one character</td><td>Pick wildcard based on whether length is flexible or fixed</td></tr>
+        <tr><td>2026-06-04</td><td>LIKE case sensitivity</td><td>Expecting <code>LIKE '%case%'</code> to match <code>CASE</code></td><td>Use <code>ILIKE</code> for case-insensitive matching in PostgreSQL</td><td>LIKE is case-sensitive; ILIKE ignores case</td></tr>
+        <tr><td>2026-06-04</td><td>SPLIT_PART indexing</td><td>Assuming <code>SPLIT_PART</code> uses zero-based positions</td><td>Use <code>part_number 1</code> for the first piece</td><td><code>SPLIT_PART</code> is 1-based</td></tr>
+        <tr><td>2026-06-04</td><td>Parsing before cleaning</td><td>Building labels directly from messy raw values can produce inconsistent output</td><td>Clean and format in a CTE, then build the report label</td><td>Clean once, reuse in the final report</td></tr>
+        <tr><td>2026-06-04</td><td>ILIKE vs full-text search</td><td>Expecting <code>ILIKE</code> to match related word forms such as <code>astounded</code> and <code>Astounding</code></td><td>Use full-text search when word normalization matters</td><td><code>ILIKE</code> matches characters; full-text search matches normalized word tokens</td></tr>
+        <tr><td>2026-06-04</td><td>Calculated column alias</td><td>Selecting <code>title || ' ' || description</code> without an alias displayed <code>?column?</code></td><td>Add <code>AS searchable_text</code></td><td>Always alias calculated report columns</td></tr>
+        <tr><td>2026-06-04</td><td>Full-text boolean syntax</td><td>Treating full-text AND/OR/NOT like normal English words</td><td>Use <code>&amp;</code>, <code>|</code>, and <code>!</code> inside <code>to_tsquery()</code></td><td><code>to_tsquery()</code> uses full-text query operators</td></tr>
+        <tr><td>2026-06-04</td><td>Stemming assumptions</td><td>Assuming <code>elf</code> and <code>elves</code> normalize to the same token</td><td>Inspect <code>plainto_tsquery</code> output and use prefix search when appropriate</td><td>Check query shape before assuming singular/plural behavior</td></tr>
+        <tr><td>2026-06-04</td><td>plainto_tsquery vs to_tsquery</td><td>Using <code>to_tsquery</code> when the input is normal user text</td><td>Use <code>plainto_tsquery</code> for normal search words and <code>to_tsquery</code> for manual expressions</td><td>Choose query builder based on input style</td></tr>
+        <tr><td>2026-06-04</td><td>CREATE EXTENSION first</td><td>Trying fuzzy functions before enabling the extension would fail</td><td>Run <code>CREATE EXTENSION IF NOT EXISTS fuzzystrmatch</code> before calling <code>levenshtein</code>, <code>soundex</code>, or <code>difference</code></td><td>Extension functions must be enabled before use</td></tr>
+        <tr><td>2026-06-04</td><td>levenshtein threshold tuning</td><td>Treating edit distance 2 as universally good can overmatch longer titles or undermatch short ones</td><td>Pick thresholds based on text length and candidate quality</td><td>Fuzzy thresholds are tuning knobs, not universal truths</td></tr>
+        <tr><td>2026-06-04</td><td>soundex expectations</td><td>Assuming <code>soundex</code> is a spelling matcher</td><td>Use <code>soundex</code> for rough pronunciation grouping, not exact typo counting</td><td><code>soundex</code> is phonetic, not letter-by-letter</td></tr>
+        <tr><td>2026-06-04</td><td>difference score meaning</td><td>Reading <code>difference()</code> like an edit count</td><td>Treat <code>difference()</code> as a 0-to-4 phonetic similarity score</td><td><code>difference()</code> measures sound-code closeness, not character edits</td></tr>
+        <tr><td>2026-06-04</td><td>Combined fuzzy scoring</td><td>Relying on only sound similarity or only edit distance can miss better candidates</td><td>Use both phonetic and edit-distance checks when ranking fuzzy text candidates</td><td>Combine multiple weak signals into one stronger fuzzy match report</td></tr>
+        <tr><td>2026-06-04</td><td>pg_trgm operator meaning</td><td>Reading <code>%</code> as percent math</td><td>In <code>pg_trgm</code>, <code>%</code> means similar enough using the active trigram threshold</td><td><code>similarity()</code> shows score; <code>%</code> gives pass/fail</td></tr>
+        <tr><td>2026-06-04</td><td>Threshold direction</td><td>Treating <code>similarity</code> like <code>levenshtein</code> distance</td><td><code>similarity</code> is better when higher; <code>levenshtein</code> is better when lower</td><td><code>levenshtein &lt;= cutoff</code>; <code>similarity &gt;= cutoff</code></td></tr>
+        <tr><td>2026-06-04</td><td>Threshold state</td><td>Raising <code>pg_trgm</code> threshold to 0.8 and leaving it high</td><td>Reset with <code>set_limit(0.3)</code> and verify with <code>SHOW pg_trgm.similarity_threshold</code></td><td>Always reset temporary threshold changes</td></tr>
+        <tr><td>2026-06-04</td><td>psql paste issue</td><td>Accidentally pasting explanatory output text into <code>psql</code></td><td>Paste only SQL statements, or comment explanatory text with <code>--</code></td><td>Only SQL belongs at the <code>psql</code> prompt</td></tr>
+        <tr><td>2026-06-04</td><td>word_similarity use case</td><td>Expecting <code>similarity()</code> to stay high for long user sentences</td><td>Use <code>word_similarity()</code> when the match is buried inside longer text</td><td><code>similarity</code> for clean values; <code>word_similarity</code> for longer phrases</td></tr>
+        <tr><td>2026-06-04</td><td>distance direction</td><td>Sorting trigram distance the wrong way would rank worse matches first</td><td>ORDER BY <code>&lt;-&gt;</code> distance ASC because lower distance is better</td><td><code>similarity</code> DESC; <code>distance</code> ASC</td></tr>
+      </tbody>
+    </table>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s09">
+    <div class="section-header">
+      <div class="section-num grn">09</div>
+      <h2>Update Cadence</h2>
+    </div>
+    <div class="nugget">
+      <span class="label-tag">// MAINTENANCE RHYTHM</span>
+      After every 2–4 meaningful lab/exercise items, pause and update this Lab Guide and the Field Guide if needed.
+    </div>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>PostgreSQL Functions for Manipulating Data · Lab Guide · Styled for live DataCamp and local lab work.</p>
+    <p style="margin-top:6px"><a href="#top">↑ back to top</a></p>
+  </div>
+</footer>
+</body>
+</html>

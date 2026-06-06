@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 4 — Sorting and Grouping | Intermediate SQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 880px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Intermediate SQL</a>
+      <span>›</span>
+      <span>Chapter 4: Sorting and Grouping</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Intermediate SQL · Chapter 4</p>
+      <h1>Sorting and Grouping</h1>
+      <p>
+        Sort rows with <code>ORDER BY</code>, group records with <code>GROUP BY</code>,
+        filter aggregate results with <code>HAVING</code>, and combine these clauses to answer
+        practical business questions about film performance, durations, budgets, and trends.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="chapter_03_aggregate_functions_field_guide.html">Previous Chapter</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Chapter Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#order-by">2. ORDER BY</a>
+        <a href="#multiple-sort">3. Multiple sort fields</a>
+        <a href="#group-by">4. GROUP BY</a>
+        <a href="#multiple-group">5. Multiple group fields</a>
+        <a href="#business">6. Business questions</a>
+        <a href="#having">7. HAVING</a>
+        <a href="#having-sort">8. HAVING and sorting</a>
+        <a href="#execution">9. Execution order</a>
+        <a href="#mistakes">10. Common mistakes</a>
+        <a href="#interview">11. Interview translation</a>
+        <a href="#review">12. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>
+            Sorting changes the order in which rows appear. Grouping changes the level of detail by
+            collapsing rows into categories and calculating summaries for each category.
+          </p>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>ORDER BY</h3>
+              <p>Rearranges rows without changing how many rows exist.</p>
+            </article>
+            <article class="mini-card">
+              <h3>GROUP BY</h3>
+              <p>Combines rows into groups and usually returns one row per group.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Core idea:</strong> sorting changes presentation; grouping changes granularity.
+          </div>
+        </section>
+
+        <section class="section" id="order-by">
+          <h2>2. Sorting Results with ORDER BY</h2>
+          <p>
+            <code>ORDER BY</code> sorts the final result set.
+          </p>
+
+          <h3>Ascending order</h3>
+          <pre><code>SELECT title,
+       release_year
+FROM films
+ORDER BY release_year;</code></pre>
+
+          <p><code>ASC</code> is the default:</p>
+
+          <pre><code>SELECT title,
+       release_year
+FROM films
+ORDER BY release_year ASC;</code></pre>
+
+          <h3>Descending order</h3>
+          <pre><code>SELECT title,
+       imdb_score
+FROM films
+ORDER BY imdb_score DESC;</code></pre>
+
+          <div class="callout amber">
+            Without <code>ORDER BY</code>, row order is not guaranteed.
+          </div>
+        </section>
+
+        <section class="section" id="multiple-sort">
+          <h2>3. Sorting by Multiple Fields</h2>
+          <p>
+            SQL sorts by the first expression, then uses the second expression to break ties.
+          </p>
+
+          <pre><code>SELECT title,
+       release_year,
+       imdb_score
+FROM films
+ORDER BY release_year ASC,
+         imdb_score DESC;</code></pre>
+
+          <div class="diagram">Primary sort: release_year ascending
+        ↓
+Tie-breaker: imdb_score descending</div>
+
+          <h3>Mixing directions</h3>
+          <pre><code>SELECT title,
+       country,
+       release_year
+FROM films
+ORDER BY country ASC,
+         release_year DESC;</code></pre>
+
+          <div class="callout green">
+            <strong>Memory rule:</strong> sort priority follows the left-to-right order of expressions.
+          </div>
+        </section>
+
+        <section class="section" id="group-by">
+          <h2>4. Grouping Data with GROUP BY</h2>
+          <p>
+            <code>GROUP BY</code> creates one group for each unique value and allows an aggregate
+            function to summarize each group.
+          </p>
+
+          <pre><code>SELECT country,
+       COUNT(*) AS film_count
+FROM films
+GROUP BY country;</code></pre>
+
+          <pre><code>SELECT genre,
+       ROUND(AVG(imdb_score), 2) AS average_score
+FROM films
+GROUP BY genre;</code></pre>
+
+          <div class="callout danger">
+            In a grouped query, every selected expression must either be aggregated or appear in
+            <code>GROUP BY</code>.
+          </div>
+
+          <h3>Invalid pattern</h3>
+          <pre><code>SELECT country,
+       title,
+       COUNT(*)
+FROM films
+GROUP BY country;</code></pre>
+
+          <p>
+            The database cannot choose one title to represent an entire country group.
+          </p>
+        </section>
+
+        <section class="section" id="multiple-group">
+          <h2>5. GROUP BY Multiple Fields</h2>
+          <p>
+            Grouping by multiple fields creates one group per unique combination.
+          </p>
+
+          <pre><code>SELECT country,
+       language,
+       COUNT(*) AS film_count
+FROM films
+GROUP BY country,
+         language;</code></pre>
+
+          <p>
+            <code>(Canada, English)</code> and <code>(Canada, French)</code> are separate groups.
+          </p>
+
+          <pre><code>SELECT release_year,
+       genre,
+       AVG(duration) AS average_duration
+FROM films
+GROUP BY release_year,
+         genre;</code></pre>
+
+          <div class="callout green">
+            More grouping columns produce more detailed groups and usually more output rows.
+          </div>
+        </section>
+
+        <section class="section" id="business">
+          <h2>6. Answering Business Questions</h2>
+
+          <h3>Which countries produced the most films?</h3>
+          <pre><code>SELECT country,
+       COUNT(*) AS film_count
+FROM films
+GROUP BY country
+ORDER BY film_count DESC;</code></pre>
+
+          <h3>Which genre has the highest average score?</h3>
+          <pre><code>SELECT genre,
+       ROUND(AVG(imdb_score), 2) AS average_score
+FROM films
+GROUP BY genre
+ORDER BY average_score DESC;</code></pre>
+
+          <h3>How did average duration change over time?</h3>
+          <pre><code>SELECT release_year,
+       ROUND(AVG(duration), 2) AS average_duration
+FROM films
+GROUP BY release_year
+ORDER BY release_year;</code></pre>
+
+          <div class="callout">
+            Grouped SQL is powerful because it translates business categories into one summary row per category.
+          </div>
+        </section>
+
+        <section class="section" id="having">
+          <h2>7. Filtering Grouped Data with HAVING</h2>
+          <p>
+            <code>WHERE</code> filters individual rows before grouping.
+            <code>HAVING</code> filters groups after aggregation.
+          </p>
+
+          <pre><code>SELECT country,
+       COUNT(*) AS film_count
+FROM films
+GROUP BY country
+HAVING COUNT(*) >= 2;</code></pre>
+
+          <pre><code>SELECT genre,
+       AVG(imdb_score) AS average_score
+FROM films
+GROUP BY genre
+HAVING AVG(imdb_score) >= 7.5;</code></pre>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>WHERE</h3>
+              <p>Filters rows before they enter groups.</p>
+            </article>
+            <article class="mini-card">
+              <h3>HAVING</h3>
+              <p>Filters completed groups using aggregate conditions.</p>
+            </article>
+          </div>
+
+          <h3>Using both WHERE and HAVING</h3>
+          <pre><code>SELECT country,
+       COUNT(*) AS recent_film_count
+FROM films
+WHERE release_year >= 2019
+GROUP BY country
+HAVING COUNT(*) >= 2;</code></pre>
+        </section>
+
+        <section class="section" id="having-sort">
+          <h2>8. Combining HAVING and ORDER BY</h2>
+          <pre><code>SELECT country,
+       COUNT(*) AS film_count,
+       ROUND(AVG(imdb_score), 2) AS average_score
+FROM films
+WHERE imdb_score IS NOT NULL
+GROUP BY country
+HAVING COUNT(*) >= 2
+ORDER BY average_score DESC,
+         film_count DESC;</code></pre>
+
+          <div class="callout green">
+            First form the groups, then filter the groups, then sort the remaining output.
+          </div>
+
+          <h3>Using aliases in ORDER BY</h3>
+          <p>
+            PostgreSQL allows selected aliases in <code>ORDER BY</code> because sorting occurs after
+            the select list has been produced.
+          </p>
+
+          <pre><code>SELECT country,
+       COUNT(*) AS film_count
+FROM films
+GROUP BY country
+ORDER BY film_count DESC;</code></pre>
+        </section>
+
+        <section class="section" id="execution">
+          <h2>9. Logical Query Execution Order</h2>
+
+          <div class="diagram">1. FROM
+2. WHERE
+3. GROUP BY
+4. HAVING
+5. SELECT
+6. DISTINCT
+7. ORDER BY
+8. LIMIT</div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Clause</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>FROM</code></td><td>Identify source rows</td></tr>
+              <tr><td><code>WHERE</code></td><td>Filter individual rows</td></tr>
+              <tr><td><code>GROUP BY</code></td><td>Build groups</td></tr>
+              <tr><td><code>HAVING</code></td><td>Filter groups</td></tr>
+              <tr><td><code>SELECT</code></td><td>Produce result expressions</td></tr>
+              <tr><td><code>ORDER BY</code></td><td>Sort final results</td></tr>
+              <tr><td><code>LIMIT</code></td><td>Restrict returned rows</td></tr>
+            </tbody>
+          </table>
+
+          <div class="callout amber">
+            This order explains why aggregate conditions usually belong in <code>HAVING</code>, not <code>WHERE</code>.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>10. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Assuming rows are naturally ordered</strong>
+              Use <code>ORDER BY</code> whenever output order matters.
+            </article>
+
+            <article class="qa-item">
+              <strong>Forgetting the sort direction applies per expression</strong>
+              Each sort field may have its own <code>ASC</code> or <code>DESC</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Selecting a non-aggregated field that is not grouped</strong>
+              Every non-aggregate selected expression must appear in <code>GROUP BY</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using WHERE with an aggregate function</strong>
+              Use <code>HAVING</code> to filter aggregate results.
+            </article>
+
+            <article class="qa-item">
+              <strong>Grouping by too many fields</strong>
+              Extra grouping fields increase granularity and may prevent the intended summarization.
+            </article>
+
+            <article class="qa-item">
+              <strong>Forgetting NULL behavior in aggregates</strong>
+              Most aggregates ignore NULL values, so grouped averages and counts may use different denominators.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>11. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is the difference between ORDER BY and GROUP BY?</strong>
+              <code>ORDER BY</code> changes result order, while <code>GROUP BY</code> changes result granularity by combining rows into categories.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is the difference between WHERE and HAVING?</strong>
+              <code>WHERE</code> filters rows before grouping; <code>HAVING</code> filters groups after aggregation.
+            </article>
+
+            <article class="qa-item">
+              <strong>How does multi-column sorting work?</strong>
+              SQL sorts by the first expression, then uses later expressions as tie-breakers.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why must non-aggregate selected columns appear in GROUP BY?</strong>
+              Each output row represents a group, so SQL needs a single defined value for every selected non-aggregate expression.
+            </article>
+
+            <article class="qa-item">
+              <strong>What happens when you add another GROUP BY column?</strong>
+              The grouping becomes more detailed, producing one group for each unique combination of grouping values.
+            </article>
+
+            <article class="qa-item">
+              <strong>Can an alias be used in ORDER BY?</strong>
+              In PostgreSQL, yes, because <code>ORDER BY</code> is logically evaluated after the select list.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>12. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Eight-sentence chapter summary</strong>
+            <ol>
+              <li><code>ORDER BY</code> sorts results.</li>
+              <li><code>ASC</code> is the default and <code>DESC</code> reverses the direction.</li>
+              <li>Multiple sort expressions are applied from left to right.</li>
+              <li><code>GROUP BY</code> creates one group per unique value or combination.</li>
+              <li>Aggregates summarize each group.</li>
+              <li><code>WHERE</code> filters rows before grouping.</li>
+              <li><code>HAVING</code> filters groups after aggregation.</li>
+              <li><code>ORDER BY</code> can sort the grouped output.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you sort films by year ascending and score descending?</li>
+            <li>Can you count films per country?</li>
+            <li>Can you calculate average score per genre?</li>
+            <li>Can you return only countries with at least two films?</li>
+            <li>Can you explain WHERE versus HAVING?</li>
+            <li>Can you state the logical order from FROM through LIMIT?</li>
+          </ul>
+
+          <div class="callout green">
+            <strong>Lab decision:</strong> Chapter 4 requires local practice because grouping,
+            HAVING, multi-column sorting, and execution order are central SQL patterns.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Intermediate SQL · Chapter 4 Field Guide</span>
+      <span>
+        <a href="chapter_03_aggregate_functions_field_guide.html">Previous Chapter</a>
+        &nbsp;·&nbsp;
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

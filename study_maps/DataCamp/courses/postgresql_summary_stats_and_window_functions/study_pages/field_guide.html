@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PostgreSQL Window Functions Field Guide</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3; --muted:#9da7b3; --accent:#58a6ff; --good:#3fb950; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+    header { border-top:4px solid var(--accent); border-bottom:1px solid var(--line); background:#010409; }
+    .container { width:min(1100px,92%); margin:auto; padding:28px 0; }
+    .badge { display:inline-block; padding:4px 10px; border:1px solid var(--good); border-radius:999px; color:var(--good); font-size:.82rem; }
+    nav, section { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px; margin:18px 0; }
+    a { color:var(--accent); }
+    code, pre { font-family:Consolas,monospace; }
+    pre { overflow:auto; background:#010409; border:1px solid var(--line); border-radius:8px; padding:16px; }
+    .muted { color:var(--muted); }
+  </style>
+</head>
+<body>
+<header><div class="container"><span class="badge">DataCamp Course</span><h1>PostgreSQL Window Functions Field Guide</h1></div></header>
+<main class="container">
+<nav><a href="../index.html">Course Home</a> | <a href="sql_quick_lookup.html">Quick Lookup</a> | <a href="../lab/lab_guide.html">Lab Guide</a></nav>
+<section><h2>Core mental model</h2><p>A window function calculates over related rows while retaining every detail row.</p></section>
+<section><h2>Essential syntax</h2><pre><code>function_expression OVER (
+  PARTITION BY grouping_column
+  ORDER BY ordering_column
+  ROWS BETWEEN frame_start AND frame_end
+)</code></pre></section>
+<section><h2>Course chapters</h2><ol><li>Window foundations</li><li>Fetching, ranking, and paging</li><li>Aggregate windows and frames</li><li>Beyond window functions</li></ol></section>
+<section><h2>Interview translation</h2><p>I use window functions for ranking, row-to-row comparisons, running totals, and moving statistics without collapsing detailed rows.</p></section>
+</main>
+</body>
+</html>

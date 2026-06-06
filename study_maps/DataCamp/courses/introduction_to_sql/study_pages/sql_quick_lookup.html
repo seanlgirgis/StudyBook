@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Introduction to SQL | Quick Lookup</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 13px 0 0;
+      color: #c8d4df;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 15px;
+      border-radius: 8px;
+      border: 1px solid #486274;
+      background: rgba(255,255,255,0.04);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: #03130a;
+    }
+
+    .search-box {
+      width: 100%;
+      margin-top: 18px;
+      padding: 13px 14px;
+      border: 1px solid #486274;
+      border-radius: 9px;
+      background: #0f141a;
+      color: var(--text);
+      font: inherit;
+    }
+
+    .search-box::placeholder { color: #7f8a96; }
+
+    .section {
+      margin-top: 22px;
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.35rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 17px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .card p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    pre {
+      overflow-x: auto;
+      margin: 10px 0 0;
+      padding: 13px;
+      border: 1px solid #33404d;
+      border-radius: 9px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .trap {
+      margin-top: 11px;
+      padding: 10px 12px;
+      border-left: 3px solid var(--amber);
+      border-radius: 7px;
+      background: var(--amber-soft);
+      color: #d8caaa;
+      font-size: 0.86rem;
+    }
+
+    .rule {
+      margin-top: 11px;
+      padding: 10px 12px;
+      border-left: 3px solid var(--green);
+      border-radius: 7px;
+      background: var(--green-soft);
+      color: #cae9d7;
+      font-size: 0.86rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 10px 11px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 760px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero { padding: 26px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Introduction to SQL</a>
+      <span>›</span>
+      <span>SQL Quick Lookup</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Fast Reference</p>
+      <h1>Introduction to SQL Quick Lookup</h1>
+      <p>
+        Find the smallest useful syntax pattern, the key rule, and the most common beginner trap.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button" href="field_guide.html">Main Field Guide</a>
+        <a class="button" href="chapter_01_relational_databases_field_guide.html">Chapter 1</a>
+        <a class="button" href="chapter_02_querying_field_guide.html">Chapter 2</a>
+      </div>
+
+      <input
+        id="search"
+        class="search-box"
+        type="search"
+        placeholder="Search SELECT, DISTINCT, alias, view, LIMIT, data type..."
+        aria-label="Search quick lookup">
+    </header>
+
+    <section class="section lookup-section">
+      <h2>Database Structure</h2>
+      <div class="grid">
+        <article class="card lookup-card" data-search="database relational table row record column field">
+          <h3>Database, Table, Row, Column</h3>
+          <p>Use these words precisely.</p>
+          <table>
+            <tr><th>Term</th><th>Meaning</th></tr>
+            <tr><td>Database</td><td>Organized collection of related data</td></tr>
+            <tr><td>Table</td><td>Rows and columns about one main subject</td></tr>
+            <tr><td>Row / record</td><td>One item or observation</td></tr>
+            <tr><td>Column / field</td><td>One attribute stored for every row</td></tr>
+          </table>
+          <div class="rule">Row = one thing. Column = one attribute.</div>
+        </article>
+
+        <article class="card lookup-card" data-search="key primary key identifier unique id relationship">
+          <h3>Unique Identifier / Key</h3>
+          <p>A stable value that distinguishes one row.</p>
+          <div class="rule">Use keys to identify rows and connect tables.</div>
+          <div class="trap">Do not rely on a person’s name as a unique ID.</div>
+        </article>
+
+        <article class="card lookup-card" data-search="data types int varchar numeric date text integer decimal">
+          <h3>Common Data Types</h3>
+          <table>
+            <tr><th>Need</th><th>Type</th></tr>
+            <tr><td>Whole number</td><td><code>INT</code></td></tr>
+            <tr><td>Text</td><td><code>VARCHAR</code></td></tr>
+            <tr><td>Decimal value</td><td><code>NUMERIC</code></td></tr>
+            <tr><td>Calendar date</td><td><code>DATE</code></td></tr>
+          </table>
+          <div class="trap">Choose by meaning, not appearance.</div>
+        </article>
+
+        <article class="card lookup-card" data-search="schema blueprint structure tables columns types relationships">
+          <h3>Schema</h3>
+          <p>The structural blueprint of a database.</p>
+          <div class="rule">Schema = tables + columns + types + relationships.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section lookup-section">
+      <h2>Basic Query Patterns</h2>
+      <div class="grid">
+        <article class="card lookup-card" data-search="select from one column basic query">
+          <h3>Select One Column</h3>
+          <pre><code>SELECT title
+FROM books;</code></pre>
+          <div class="rule"><code>SELECT</code> chooses columns; <code>FROM</code> chooses the table.</div>
+        </article>
+
+        <article class="card lookup-card" data-search="select multiple columns comma">
+          <h3>Select Multiple Columns</h3>
+          <pre><code>SELECT title, author, pub_year
+FROM books;</code></pre>
+          <div class="trap">Separate columns with commas.</div>
+        </article>
+
+        <article class="card lookup-card" data-search="select star all columns wildcard">
+          <h3>Select All Columns</h3>
+          <pre><code>SELECT *
+FROM books;</code></pre>
+          <div class="trap">Good for exploration; avoid it in reusable production queries.</div>
+        </article>
+
+        <article class="card lookup-card" data-search="sql style formatting uppercase semicolon indentation">
+          <h3>Readable SQL Style</h3>
+          <pre><code>SELECT title,
+       author,
+       pub_year
+FROM books;</code></pre>
+          <div class="rule">Uppercase keywords, separate clauses, end with a semicolon.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section lookup-section">
+      <h2>Useful Modifiers</h2>
+      <div class="grid">
+        <article class="card lookup-card" data-search="distinct unique values duplicates">
+          <h3>Unique Values</h3>
+          <pre><code>SELECT DISTINCT genre
+FROM books;</code></pre>
+          <div class="trap">With multiple columns, DISTINCT returns unique combinations.</div>
+        </article>
+
+        <article class="card lookup-card" data-search="alias as rename output column">
+          <h3>Alias a Column</h3>
+          <pre><code>SELECT name AS patron_name
+FROM patrons;</code></pre>
+          <div class="rule"><code>AS</code> changes the result label, not the stored column.</div>
+        </article>
+
+        <article class="card lookup-card" data-search="view create view saved query reusable">
+          <h3>Create a View</h3>
+          <pre><code>CREATE VIEW patron_names AS
+SELECT card_num,
+       name
+FROM patrons;</code></pre>
+          <div class="rule">A view is a named saved query.</div>
+        </article>
+
+        <article class="card lookup-card" data-search="query view select from view">
+          <h3>Query a View</h3>
+          <pre><code>SELECT *
+FROM patron_names;</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="section lookup-section">
+      <h2>SQL Flavor Differences</h2>
+      <div class="grid">
+        <article class="card lookup-card" data-search="postgresql limit rows">
+          <h3>PostgreSQL: Limit Rows</h3>
+          <pre><code>SELECT title
+FROM books
+LIMIT 5;</code></pre>
+        </article>
+
+        <article class="card lookup-card" data-search="sql server top rows t-sql">
+          <h3>SQL Server: Limit Rows</h3>
+          <pre><code>SELECT TOP 5 title
+FROM books;</code></pre>
+        </article>
+
+        <article class="card lookup-card" data-search="sql flavor dialect postgresql sql server">
+          <h3>SQL Flavor / Dialect</h3>
+          <p>A database-specific variation of SQL.</p>
+          <div class="rule">Core SQL transfers well; some functions and syntax differ.</div>
+        </article>
+
+        <article class="card lookup-card" data-search="limit order by meaningful first rows">
+          <h3>Limiting Without Ordering</h3>
+          <p><code>LIMIT</code> or <code>TOP</code> restricts row count.</p>
+          <div class="trap">Without <code>ORDER BY</code>, “first” rows are not guaranteed to be meaningful.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section lookup-section">
+      <h2>Fast Interview Answers</h2>
+      <div class="grid">
+        <article class="card lookup-card" data-search="interview relational database answer">
+          <h3>Relational Database</h3>
+          <p>Stores structured data in tables and connects those tables through shared keys.</p>
+        </article>
+
+        <article class="card lookup-card" data-search="interview select answer">
+          <h3>SELECT</h3>
+          <p>Specifies which columns or expressions appear in the query result.</p>
+        </article>
+
+        <article class="card lookup-card" data-search="interview distinct answer">
+          <h3>DISTINCT</h3>
+          <p>Removes duplicate result rows based on all selected columns.</p>
+        </article>
+
+        <article class="card lookup-card" data-search="interview view answer">
+          <h3>View</h3>
+          <p>A named saved query used to simplify or reuse data-access logic.</p>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <span>Introduction to SQL · Quick Lookup</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+      </span>
+    </footer>
+  </main>
+
+  <script>
+    const search = document.getElementById("search");
+    const cards = [...document.querySelectorAll(".lookup-card")];
+    const sections = [...document.querySelectorAll(".lookup-section")];
+
+    search.addEventListener("input", () => {
+      const term = search.value.trim().toLowerCase();
+
+      cards.forEach(card => {
+        const text = `${card.textContent} ${card.dataset.search || ""}`.toLowerCase();
+        card.classList.toggle("hidden", term && !text.includes(term));
+      });
+
+      sections.forEach(section => {
+        const visibleCards = section.querySelectorAll(".lookup-card:not(.hidden)");
+        section.classList.toggle("hidden", term && visibleCards.length === 0);
+      });
+    });
+  </script>
+</body>
+</html>

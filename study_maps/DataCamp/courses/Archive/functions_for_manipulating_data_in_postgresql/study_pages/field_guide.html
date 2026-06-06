@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PostgreSQL Functions — Field Guide Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #79c0ff;
+    --green: #56d364;
+    --green-bg: #0d2818;
+    --yellow: #e3b341;
+    --yellow-bg: #2d1d00;
+    --red: #ff7b72;
+    --red-bg: #2d0d0d;
+    --purple: #bc8cff;
+    --purple-bg: #1e1235;
+    --teal: #39d0d8;
+    --teal-bg: #03242a;
+    --orange: #ffa657;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.7; }
+  header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 2.5rem 0 2rem; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--purple), var(--teal)); }
+  .header-badge { display: inline-block; font-family: var(--mono); font-size: 11px; color: var(--green); background: var(--green-bg); border: 1px solid var(--green); border-radius: 4px; padding: 3px 10px; letter-spacing: 0.08em; margin-bottom: 1rem; }
+  header h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text); margin-bottom: 0.4rem; }
+  header h1 span { color: var(--accent); }
+  header p { color: var(--muted); font-size: 1rem; font-family: var(--mono); }
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+  .toc-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; margin: 2.5rem 0; overflow: hidden; }
+  .toc-header { display: flex; align-items: center; gap: 10px; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--bg3); }
+  .toc-header span { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--yellow); letter-spacing: 0.1em; }
+  .toc-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .d-red { background: #ff5f56; }
+  .d-yellow { background: #ffbd2e; }
+  .d-green { background: #27c93f; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .toc-section { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .toc-section:nth-child(even) { border-right: none; }
+  .toc-section h4 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.75rem; }
+  .toc-section ul { list-style: none; }
+  .toc-section ul li { margin-bottom: 0.35rem; }
+  .toc-section ul li a { color: var(--accent); text-decoration: none; font-size: 14px; font-family: var(--mono); display: flex; align-items: baseline; gap: 6px; transition: color 0.15s; }
+  .toc-section ul li a:hover { color: var(--accent2); }
+  .toc-section ul li a .num { color: var(--muted); font-size: 11px; min-width: 22px; }
+  .section { margin-bottom: 4rem; scroll-margin-top: 80px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+  .section-num { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--bg); background: var(--accent); border-radius: 4px; padding: 3px 8px; letter-spacing: 0.05em; flex-shrink: 0; }
+  .section-num.grn { background: var(--green); }
+  .section-num.ylw { background: var(--yellow); color: #000; }
+  .section-num.red { background: var(--red); }
+  .section-num.prp { background: var(--purple); color: #000; }
+  .section-num.tel { background: var(--teal); color: #000; }
+  .section h2 { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.01em; color: var(--text); }
+  .section h3 { font-size: 1.05rem; margin-bottom: 0.7rem; color: var(--text); margin-top: 1.3rem; }
+  .section p, .section li { color: #c9d1d9; font-size: 15px; line-height: 1.8; }
+  .section ul, .section ol { padding-left: 1.5rem; margin: 0.75rem 0; }
+  .section li { margin-bottom: 0.35rem; }
+  pre { background: #010409; border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem 1.5rem; overflow-x: auto; margin: 1.25rem 0; position: relative; white-space: pre-wrap; word-break: break-word; }
+  pre .label { position: absolute; top: 0; right: 0; background: var(--bg3); border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); border-radius: 0 6px 0 4px; font-family: var(--mono); font-size: 10px; color: var(--muted); padding: 3px 8px; letter-spacing: 0.08em; }
+  code { font-family: var(--mono); font-size: 13.5px; line-height: 1.6; color: #e6edf3; }
+  p code, li code, td code { background: var(--bg3); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; font-size: 13px; color: var(--orange); }
+  .callout { border-radius: 6px; padding: 1rem 1.25rem; margin: 1.25rem 0; font-size: 14px; line-height: 1.7; }
+  .callout.info { background: #051d2c; border: 1px solid #1d5a8a; color: var(--accent2); }
+  .callout.warn { background: var(--yellow-bg); border: 1px solid var(--yellow); color: var(--yellow); }
+  .callout.success { background: var(--green-bg); border: 1px solid var(--green); color: var(--green); }
+  .callout strong { display: block; font-weight: 600; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.1em; opacity: 0.7; }
+  .nugget { background: var(--teal-bg); border-left: 3px solid var(--teal); border-radius: 0 6px 6px 0; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: var(--mono); font-size: 13px; color: var(--teal); line-height: 1.7; }
+  .nugget .label-tag { display: block; font-size: 10px; letter-spacing: 0.1em; color: var(--teal); opacity: 0.6; margin-bottom: 5px; }
+  .diagram { background: #010409; border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.25rem 0; overflow-x: auto; }
+  .diagram-title { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .vtable { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; }
+  .vtable th { background: var(--bg3); color: var(--muted); font-size: 11px; letter-spacing: 0.08em; padding: 8px 12px; text-align: left; border: 1px solid var(--border); }
+  .vtable td { padding: 7px 12px; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  .vtable tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.25rem 0; }
+  .compare-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .compare-card .card-head { padding: 0.75rem 1rem; font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; border-bottom: 1px solid var(--border); }
+  .compare-card .card-head.blue { background: rgba(88,166,255,0.12); color: var(--accent); border-color: rgba(88,166,255,0.3); }
+  .compare-card .card-head.grn { background: rgba(86,211,100,0.10); color: var(--green); border-color: rgba(86,211,100,0.3); }
+  .cheat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1.25rem 0; }
+  .cheat-cell { background: var(--bg2); padding: 1rem; }
+  .cheat-cell .fn-name { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--purple); margin-bottom: 4px; }
+  .cheat-cell .fn-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .cheat-cell .fn-example { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 6px; padding: 4px 8px; background: var(--bg3); border-radius: 3px; border-left: 2px solid var(--border); }
+  .interview-box { background: var(--purple-bg); border: 1px solid rgba(188,140,255,0.4); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+  .interview-box .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--purple); opacity: 0.7; margin-bottom: 8px; }
+  .interview-box p { font-size: 16px; color: var(--purple); font-style: italic; line-height: 1.7; }
+  .back-top { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; padding: 5px 10px; border: 1px solid var(--border); border-radius: 4px; margin-top: 2rem; transition: all 0.15s; }
+  .back-top:hover { color: var(--accent); border-color: var(--accent); }
+  footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  footer a { color: var(--accent); text-decoration: none; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+  @media (max-width: 700px) { .toc-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } .cheat-grid { grid-template-columns: 1fr 1fr; } header h1 { font-size: 1.5rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-badge">POSTGRESQL · DATA FUNCTIONS · FIELD GUIDE</div>
+    <h1>PostgreSQL <span>Functions for Manipulating Data</span></h1>
+    <p>Data types, date/time, strings, full-text search, and extensions</p>
+  </div>
+</header>
+
+<div class="container">
+  <a id="top"></a>
+  <div class="toc-wrap">
+    <div class="toc-header">
+      <div class="toc-dot d-red"></div>
+      <div class="toc-dot d-yellow"></div>
+      <div class="toc-dot d-green"></div>
+      <span>TABLE OF CONTENTS</span>
+    </div>
+    <div class="toc-grid">
+      <div class="toc-section">
+        <h4>Foundations</h4>
+        <ul>
+          <li><a href="#s01"><span class="num">01</span> How to Use This Guide</a></li>
+          <li><a href="#s02"><span class="num">02</span> Course Big Picture</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Chapter 1</h4>
+        <ul>
+          <li><a href="#s03"><span class="num">03</span> Common Data Types</a></li>
+          <li><a href="#s03"><span class="num">03A</span> Text / Numeric / Date-Time / Arrays</a></li>
+          <li><a href="#s03"><span class="num">03B</span> INFORMATION_SCHEMA</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Chapter 2</h4>
+        <ul>
+          <li><a href="#s04"><span class="num">04</span> DATE/TIME Functions and Operators</a></li>
+          <li><a href="#s04"><span class="num">04A</span> INTERVAL arithmetic</a></li>
+          <li><a href="#s04"><span class="num">04B</span> CURRENT_DATE / CURRENT_TIMESTAMP</a></li>
+          <li><a href="#s04"><span class="num">04C</span> EXTRACT / DATE_PART / DATE_TRUNC</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Chapter 3</h4>
+        <ul>
+          <li><a href="#s05"><span class="num">05</span> Text parsing and manipulation</a></li>
+          <li><a href="#s05"><span class="num">05A</span> CONCAT / case functions / REPLACE</a></li>
+          <li><a href="#s05"><span class="num">05B</span> LENGTH / POSITION / SUBSTRING</a></li>
+          <li><a href="#s05"><span class="num">05C</span> TRIM / LPAD / RPAD</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Chapter 4</h4>
+        <ul>
+          <li><a href="#s06"><span class="num">06</span> Full-text search</a></li>
+          <li><a href="#s06"><span class="num">06A</span> LIKE</a></li>
+          <li><a href="#s06"><span class="num">06B</span> to_tsvector / to_tsquery / @@</a></li>
+          <li><a href="#s06"><span class="num">06C</span> extensions / fuzzystrmatch / pg_trgm</a></li>
+        </ul>
+      </div>
+      <div class="toc-section">
+        <h4>Review</h4>
+        <ul>
+          <li><a href="#s07"><span class="num">07</span> SQL Pattern Index</a></li>
+          <li><a href="#s08"><span class="num">08</span> Interview Q&amp;A Bank</a></li>
+          <li><a href="#s09"><span class="num">09</span> Mistakes and Corrections</a></li>
+          <li><a href="#s10"><span class="num">10</span> What to Slow Down On</a></li>
+          <li><a href="#s11"><span class="num">11</span> Next Fill-In Pass</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="section" id="s01">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2>How to Use This Guide</h2>
+    </div>
+    <p>This guide collects the reusable ideas, SQL patterns, mistakes, and interview translation for the course. It is a clean reusable cheat sheet built from the completed lab work.</p>
+    <div class="callout info">
+      <strong>HOW TO USE IT</strong>
+      Use this page as a fast browser-side cheat sheet while working through DataCamp or hands-on PostgreSQL practice. Treat it as a lookup page, not a textbook.
+    </div>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s02">
+    <div class="section-header">
+      <div class="section-num grn">02</div>
+      <h2>Course Big Picture</h2>
+    </div>
+    <ul>
+      <li>PostgreSQL built-in functions help transform and prepare data.</li>
+      <li>The course uses the Sakila / DVD Rental database.</li>
+      <li>The course moves from data types to date/time functions, text functions, full-text search, and extensions.</li>
+    </ul>
+    <div class="diagram">
+      <div class="diagram-title">// COURSE FLOW</div>
+      <table class="vtable">
+        <thead><tr><th>Stage</th><th>Focus</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td>Chapter 1</td><td>Data types and arrays</td><td>Know what kind of data you are transforming.</td></tr>
+          <tr><td>Chapter 2</td><td>Date/time functions</td><td>Prepare time-based analysis and reporting.</td></tr>
+          <tr><td>Chapter 3</td><td>Text parsing and cleanup</td><td>Turn raw strings into usable features.</td></tr>
+          <tr><td>Chapter 4</td><td>Search and extensions</td><td>Extend PostgreSQL beyond basic exact matching.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s03">
+    <div class="section-header">
+      <div class="section-num ylw">03</div>
+      <h2>Chapter 1 — Common Data Types</h2>
+    </div>
+    <div class="cheat-grid">
+      <div class="cheat-cell"><div class="fn-name">Text types</div><div class="fn-desc">CHAR, VARCHAR, TEXT</div><div class="fn-example">type choice should match business constraints</div></div>
+      <div class="cheat-cell"><div class="fn-name">Numeric types</div><div class="fn-desc">INT, DECIMAL, NUMERIC</div><div class="fn-example">whole numbers versus exact decimals</div></div>
+      <div class="cheat-cell"><div class="fn-name">Date/time types</div><div class="fn-desc">DATE, TIME, TIMESTAMP, INTERVAL</div><div class="fn-example">day, clock, event time, duration</div></div>
+      <div class="cheat-cell"><div class="fn-name">ARRAY types</div><div class="fn-desc">One-based indexing and search patterns</div><div class="fn-example">ANY(), @&gt;, CARDINALITY()</div></div>
+      <div class="cheat-cell"><div class="fn-name">INFORMATION_SCHEMA</div><div class="fn-desc">Discover column data types</div><div class="fn-example">metadata before transformations</div></div>
+      <div class="cheat-cell"><div class="fn-name">User-defined types preview</div><div class="fn-desc">Bridge into extensibility topics</div><div class="fn-example">CREATE TYPE mindset</div></div>
+    </div>
+
+    <h3>Text types: CHAR, VARCHAR, TEXT</h3>
+    <ul>
+      <li>Plain English: <code>CHAR</code> is a fixed-length-ish text type with padding behavior, <code>VARCHAR</code> stores variable-length text with an optional limit, and <code>TEXT</code> is the flexible general-purpose long-text type.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  CAST('AB' AS CHAR(4)) AS char_value,
+  CAST('Postgres' AS VARCHAR(20)) AS varchar_value,
+  CAST('Longer free-form note' AS TEXT) AS text_value;</code></pre>
+    <p>Common trap: Choosing text types without thinking about constraints, cleanup rules, and how padded or long values should behave downstream.</p>
+    <p>Interview translation: Pick the text type that matches the business rule. Use <code>VARCHAR(n)</code> when a limit matters, <code>TEXT</code> when flexibility matters, and be careful with <code>CHAR</code> when padding could confuse comparisons or presentation.</p>
+
+    <h3>Numeric types: INT, DECIMAL</h3>
+    <ul>
+      <li>Plain English: <code>INT</code> is for whole numbers. <code>DECIMAL</code> or <code>NUMERIC</code> is for exact decimal values such as money, scores, or calculated amounts that should not lose precision.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  42::INT AS quantity,
+  19.95::DECIMAL(10,2) AS price,
+  amount_paid::NUMERIC(12,2) AS normalized_amount
+FROM some_table;</code></pre>
+    <p>Common trap: Assuming integer math will behave like decimal math. Division, rounding, and exactness assumptions can change the result.</p>
+    <p>Interview translation: Use integers for counts and IDs. Use exact decimal types when fractional precision matters and rounding mistakes would hurt reporting or finance logic.</p>
+
+    <h3>Date/time types: DATE, TIME, TIMESTAMP, INTERVAL</h3>
+    <ul>
+      <li>Plain English: <code>DATE</code> is a calendar day, <code>TIME</code> is a clock time, <code>TIMESTAMP</code> is date plus time, and <code>INTERVAL</code> is a duration or relative offset such as 3 days or 2 hours.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  CURRENT_DATE AS today_date,
+  CURRENT_TIME AS current_clock_time,
+  CURRENT_TIMESTAMP AS current_ts,
+  CURRENT_TIMESTAMP + INTERVAL '3 days' AS ts_plus_3_days;</code></pre>
+    <p>Common trap: Mixing date-only logic and timestamp logic as if they return the same type or level of detail.</p>
+    <p>Interview translation: Choose the type based on the question. Use <code>DATE</code> for day-based rules, <code>TIMESTAMP</code> for event timing, and <code>INTERVAL</code> for relative time math.</p>
+
+    <h3>ARRAY types</h3>
+    <ul>
+      <li>Plain English: PostgreSQL arrays hold multiple values in one column. They are useful for simple multi-value storage, but they use PostgreSQL-specific syntax and 1-based indexing.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  tag_array,
+  tag_array[1] AS first_tag,
+  'sql' = ANY(tag_array) AS has_sql,
+  tag_array @&gt; ARRAY['sql', 'postgres'] AS has_both,
+  CARDINALITY(tag_array) AS tag_count
+FROM some_table;</code></pre>
+    <p>Common trap: Using <code>[0]</code> like Python. PostgreSQL arrays start at <code>[1]</code>, not <code>[0]</code>.</p>
+    <p>Interview translation: Arrays are convenient for light multi-value storage and search patterns, but you need to know <code>ANY()</code>, <code>@&gt;</code>, and <code>CARDINALITY()</code>, plus the 1-based indexing rule.</p>
+
+    <h3>Discovering column types with INFORMATION_SCHEMA</h3>
+    <ul>
+      <li>Plain English: <code>information_schema.columns</code> is the metadata table that tells you what tables and columns exist and what types they use.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  table_schema,
+  table_name,
+  column_name,
+  data_type,
+  udt_name
+FROM information_schema.columns
+WHERE table_schema = 'course06_functions_lab'
+ORDER BY table_name, ordinal_position;</code></pre>
+    <p>Common trap: Filtering only <code>public</code> and missing course or lab schemas that hold the real practice tables.</p>
+    <p>Interview translation: Inspect metadata first. <code>information_schema.columns</code> is often the fastest way to understand table shape before writing transformations.</p>
+
+    <h3>User-defined types preview</h3>
+    <ul>
+      <li>Plain English: <code>CREATE TYPE</code> can define custom PostgreSQL types or structured reusable values, but it is a more advanced tool than the basics in this course.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>CREATE TYPE mood AS ENUM ('low', 'medium', 'high');</code></pre>
+    <p>Common trap: Reaching for custom types when a simple table design or constraint would be clearer and easier to maintain.</p>
+    <p>Interview translation: Know that PostgreSQL supports custom types, but use them deliberately. Most day-to-day analytics work still relies more on base types and good schema design.</p>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s04">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2>Chapter 2 — DATE/TIME Functions and Operators</h2>
+    </div>
+    <div class="callout.success">
+      <strong>LIVE STUDY AREA</strong>
+      This is the most expanded section because the live lab work heavily covered Chapter 2 date/time practice.
+    </div>
+
+    <h3>Date subtraction</h3>
+    <ul>
+      <li>Plain English: Subtracting one <code>DATE</code> from another returns an integer count of days between them.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT end_date - start_date AS day_gap
+FROM some_table;</code></pre>
+    <div class="interview-box">
+      <div class="tag">// INTERVIEW TRANSLATION</div>
+      <p>Know which date/time operations return a scalar count versus an interval value. <code>DATE - DATE</code> is a days-gap calculation, not a timestamp-duration expression.</p>
+    </div>
+    <div class="callout.warn">
+      <strong>COMMON TRAP</strong>
+      Expecting an <code>INTERVAL</code> here. <code>DATE - DATE</code> returns a whole-number day difference, not hours/minutes/seconds detail.
+    </div>
+
+    <h3>Date plus integer</h3>
+    <ul>
+      <li>Plain English: Adding an integer to a <code>DATE</code> moves the date forward by that many days.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT start_date + 7 AS next_week_date
+FROM some_table;</code></pre>
+    <div class="nugget">
+      <span class="label-tag">// MEMORY LINE</span>
+      DATE plus integer = date plus that many days.
+    </div>
+    <p>Common trap: Forgetting that PostgreSQL treats the integer as days when the left side is a <code>DATE</code>.</p>
+    <p>Interview translation: This is a compact way to compute due dates, renewal dates, or fixed-day offsets from a baseline date.</p>
+
+    <h3>Timestamp arithmetic</h3>
+    <ul>
+      <li>Plain English: Subtracting one <code>TIMESTAMP</code> from another returns an <code>INTERVAL</code>.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT finished_at - started_at AS elapsed_interval
+FROM some_table;</code></pre>
+    <p>Common trap: Assuming the result is a number. <code>TIMESTAMP - TIMESTAMP</code> preserves time-unit detail as an interval.</p>
+    <p>Interview translation: Use timestamp arithmetic when you need duration precision rather than just day counts.</p>
+
+    <h3>INTERVAL arithmetic</h3>
+    <ul>
+      <li>Plain English: <code>INTERVAL</code> values are best for relative time calculations like "plus 3 days" or "plus 2 hours."</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT event_ts + INTERVAL '3 days' AS shifted_ts,
+       event_ts + 7 * INTERVAL '1 day' AS shifted_ts_alt
+FROM some_table;</code></pre>
+    <p>Common trap: Mixing integers and timestamps directly; use <code>INTERVAL</code> when you need timestamp-safe relative offsets.</p>
+    <p>Interview translation: <code>INTERVAL</code> arithmetic is the portable mental model for scheduling, expiry logic, and time-window transformations.</p>
+
+    <h3>AGE()</h3>
+    <ul>
+      <li>Plain English: <code>AGE()</code> returns the difference between two timestamps as an <code>INTERVAL</code>.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT AGE(later_ts, earlier_ts) AS age_interval
+FROM some_table;</code></pre>
+    <p>Common trap: Treating <code>AGE()</code> as just another numeric diff. It returns an interval-like elapsed time expression.</p>
+    <p>Interview translation: <code>AGE()</code> is useful when you want a readable time gap between two timestamp values.</p>
+
+    <h3>NOW()</h3>
+    <ul>
+      <li>Plain English: <code>NOW()</code> returns the current timestamp value, typically with timezone and high precision.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT NOW() AS current_ts;</code></pre>
+    <p>Common trap: Forgetting that you may want to cast away timezone or precision depending on the downstream use.</p>
+    <p>Interview translation: <code>NOW()</code> is a standard PostgreSQL way to anchor queries to current system time.</p>
+
+    <h3>CURRENT_TIMESTAMP</h3>
+    <ul>
+      <li>Plain English: <code>CURRENT_TIMESTAMP</code> also returns the current timestamp value and can accept a precision parameter.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT CURRENT_TIMESTAMP AS current_ts,
+       CURRENT_TIMESTAMP(0) AS rounded_current_ts;</code></pre>
+    <p>Common trap: Missing that <code>CURRENT_TIMESTAMP(precision)</code> can round fractional seconds.</p>
+    <p>Interview translation: Use this when you want standard-style SQL syntax or when precision control matters.</p>
+
+    <h3>CURRENT_DATE</h3>
+    <ul>
+      <li>Plain English: <code>CURRENT_DATE</code> returns the current date only, without a time component.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT CURRENT_DATE AS today_date;</code></pre>
+    <p>Common trap: Expecting timestamp precision from a date-only function.</p>
+    <p>Interview translation: This is ideal for day-based filters, reporting dates, and comparisons that do not need time-of-day detail.</p>
+
+    <h3>CURRENT_TIME</h3>
+    <ul>
+      <li>Plain English: <code>CURRENT_TIME</code> returns the current time only, without the date portion.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT CURRENT_TIME AS current_clock_time;</code></pre>
+    <p>Common trap: Forgetting that this is time-only output, so it is not enough by itself for full event ordering across dates.</p>
+    <p>Interview translation: Use <code>CURRENT_TIME</code> when the business question is about clock time rather than calendar date.</p>
+
+    <h3>CAST and ::</h3>
+    <ul>
+      <li>Plain English: Both <code>CAST()</code> and <code>::</code> convert a value from one data type to another; <code>::</code> is PostgreSQL-specific and <code>CAST()</code> is more standard SQL style.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT NOW()::timestamp AS ts_no_tz,
+       CAST(NOW() AS timestamp) AS ts_no_tz_standard;</code></pre>
+    <p>Common trap: Using <code>::</code> in contexts where cross-database SQL portability matters.</p>
+    <p>Interview translation: Explain both forms and when you would prefer standard SQL syntax over PostgreSQL shorthand.</p>
+
+    <h3>EXTRACT()</h3>
+    <ul>
+      <li>Plain English: <code>EXTRACT()</code> pulls a numeric date/time part such as year, month, quarter, or dow from a timestamp, time, or interval.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT EXTRACT(YEAR FROM event_ts) AS event_year,
+       EXTRACT(MONTH FROM event_ts) AS event_month
+FROM some_table;</code></pre>
+    <p>Common trap: Confusing extracted numeric parts with truncated timestamps; <code>EXTRACT()</code> gives numbers, not time buckets.</p>
+    <p>Interview translation: This is how you derive grouping keys or model features from raw temporal data.</p>
+
+    <h3>Extracting day of week</h3>
+    <ul>
+      <li>Plain English: <code>EXTRACT(dow FROM date_or_timestamp)</code> returns the weekday number using PostgreSQL numbering.</li>
+    </ul>
+    <pre><span class="label">TEXT</span><code>0 = Sunday
+1 = Monday
+2 = Tuesday
+3 = Wednesday
+4 = Thursday
+5 = Friday
+6 = Saturday</code></pre>
+    <ul>
+      <li><code>EXTRACT(isodow FROM date_or_timestamp)</code> returns ISO weekday numbering.</li>
+    </ul>
+    <pre><span class="label">TEXT</span><code>1 = Monday
+2 = Tuesday
+3 = Wednesday
+4 = Thursday
+5 = Friday
+6 = Saturday
+7 = Sunday</code></pre>
+    <ul>
+      <li>SQL:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  rental_date,
+  EXTRACT(day FROM rental_date) AS day_of_month,
+  EXTRACT(dow FROM rental_date) AS postgres_day_of_week,
+  EXTRACT(isodow FROM rental_date) AS iso_day_of_week
+FROM rental;</code></pre>
+    <ul>
+      <li>Generic SQL example:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  EXTRACT(dow FROM DATE '2026-06-07') AS postgres_dow,
+  EXTRACT(isodow FROM DATE '2026-06-07') AS iso_dow;</code></pre>
+    <ul>
+      <li>Expected idea:</li>
+    </ul>
+    <pre><span class="label">TEXT</span><code>For a Sunday:
+dow    = 0
+isodow = 7</code></pre>
+    <div class="callout.warn">
+      <strong>COMMON TRAP</strong>
+      <code>EXTRACT(day FROM some_date)</code> does not mean day of week. It means day of month.
+    </div>
+    <div class="interview-box">
+      <div class="tag">// INTERVIEW TRANSLATION</div>
+      <p>Use <code>dow</code> when PostgreSQL's Sunday-zero numbering is acceptable. Use <code>isodow</code> when Monday-through-Sunday numbering is clearer for business reporting.</p>
+    </div>
+    <div class="nugget">
+      <span class="label-tag">// MEMORY NUGGET</span>
+      day = day of month
+      dow = Sunday 0 through Saturday 6
+      isodow = Monday 1 through Sunday 7
+    </div>
+
+    <h3>DATE_PART()</h3>
+    <ul>
+      <li>Plain English: <code>DATE_PART()</code> is a close alternative to <code>EXTRACT()</code> and also returns numeric date/time parts.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT DATE_PART('quarter', event_ts) AS event_quarter,
+       DATE_PART('dow', event_ts) AS event_dow
+FROM some_table;</code></pre>
+    <ul>
+      <li>Matching weekday example:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  DATE_PART('dow', rental_date) AS postgres_day_of_week,
+  DATE_PART('isodow', rental_date) AS iso_day_of_week
+FROM rental;</code></pre>
+    <p>Common trap: Assuming it returns a truncated date object. Like <code>EXTRACT()</code>, it returns numeric parts.</p>
+    <p>Interview translation: Be ready to explain that <code>DATE_PART()</code> and <code>EXTRACT()</code> often solve the same problem with slightly different syntax.</p>
+    <p>Extra note: <code>DATE_PART()</code> and <code>EXTRACT()</code> return the same weekday numbering when using the same field.</p>
+
+    <h3>DATE_TRUNC()</h3>
+    <ul>
+      <li>Plain English: <code>DATE_TRUNC()</code> rounds a timestamp or interval down to a named bucket such as month, year, week, day, or hour.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT DATE_TRUNC('month', event_ts) AS event_month_bucket,
+       DATE_TRUNC('week', event_ts) AS event_week_bucket
+FROM some_table;</code></pre>
+    <div class="nugget">
+      <span class="label-tag">// MEMORY LINE</span>
+      <code>EXTRACT()</code> and <code>DATE_PART()</code> return numbers. <code>DATE_TRUNC()</code> returns a bucketed timestamp or interval value.
+    </div>
+    <p>Common trap: Thinking it returns only a number. <code>DATE_TRUNC()</code> returns a bucketed timestamp or interval value.</p>
+    <p>Interview translation: <code>DATE_TRUNC()</code> is the go-to function for time-based grouping in dashboards, reporting, and trend analysis.</p>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s05">
+    <div class="section-header">
+      <div class="section-num prp">05</div>
+      <h2>Chapter 3 — Parsing and Manipulating Text</h2>
+    </div>
+    <div class="cheat-grid">
+      <div class="cheat-cell"><div class="fn-name">Concatenation with ||</div><div class="fn-desc">joins strings into labels or searchable text</div><div class="fn-example">first_name || ' ' || last_name</div></div>
+      <div class="cheat-cell"><div class="fn-name">CONCAT()</div><div class="fn-desc">function-style concatenation</div><div class="fn-example">CONCAT(first_name, ' ', last_name)</div></div>
+      <div class="cheat-cell"><div class="fn-name">UPPER / LOWER / INITCAP</div><div class="fn-desc">case normalization after cleanup</div><div class="fn-example">INITCAP(TRIM(raw_text))</div></div>
+      <div class="cheat-cell"><div class="fn-name">REPLACE()</div><div class="fn-desc">exact text replacement</div><div class="fn-example">REPLACE(text_col, 'ELF', 'ORC')</div></div>
+      <div class="cheat-cell"><div class="fn-name">REVERSE()</div><div class="fn-desc">reverse character order</div><div class="fn-example">REVERSE(raw_code)</div></div>
+      <div class="cheat-cell"><div class="fn-name">CHAR_LENGTH / LENGTH</div><div class="fn-desc">measure string size and hidden padding</div><div class="fn-example">LENGTH(raw_text) - LENGTH(TRIM(raw_text))</div></div>
+      <div class="cheat-cell"><div class="fn-name">POSITION / STRPOS</div><div class="fn-desc">find delimiter or substring location</div><div class="fn-example">STRPOS(comparison_text, 'BO')</div></div>
+      <div class="cheat-cell"><div class="fn-name">LEFT / RIGHT</div><div class="fn-desc">fixed prefix or suffix extraction</div><div class="fn-example">LEFT(raw_code, 3)</div></div>
+      <div class="cheat-cell"><div class="fn-name">SUBSTRING / SUBSTR</div><div class="fn-desc">mid-string extraction using 1-based positions</div><div class="fn-example">SUBSTR(raw_code, 2, 4)</div></div>
+      <div class="cheat-cell"><div class="fn-name">TRIM / LTRIM / RTRIM</div><div class="fn-desc">outside whitespace cleanup</div><div class="fn-example">TRIM(raw_text)</div></div>
+      <div class="cheat-cell"><div class="fn-name">LPAD / RPAD</div><div class="fn-desc">pad codes and fixed-width labels</div><div class="fn-example">LPAD(code_text, 4, '0')</div></div>
+      <div class="cheat-cell"><div class="fn-name">REGEXP_REPLACE()</div><div class="fn-desc">pattern-based cleanup</div><div class="fn-example">REGEXP_REPLACE(text_col, '\s+', ' ', 'g')</div></div>
+    </div>
+
+    <h3>Concatenation with ||</h3>
+    <ul>
+      <li>Plain English: The <code>||</code> operator joins strings together and is a common way to build report labels or search documents.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT first_name || ' ' || last_name AS full_name
+FROM some_table;</code></pre>
+    <p>Common trap: If one side is <code>NULL</code>, the whole concatenated result can become <code>NULL</code>.</p>
+    <p>Interview translation: <code>||</code> is the compact operator form for string concatenation and works well when you control the inputs and null behavior.</p>
+
+    <h3>CONCAT()</h3>
+    <ul>
+      <li>Plain English: <code>CONCAT()</code> is the function-style way to join strings and is often friendlier around <code>NULL</code> values.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT CONCAT(first_name, ' ', last_name) AS full_name
+FROM some_table;</code></pre>
+    <p>Common trap: Assuming <code>CONCAT()</code> behaves exactly like <code>||</code> for null handling.</p>
+    <p>Interview translation: Use <code>CONCAT()</code> when you want readable function-style concatenation and safer default handling for missing pieces.</p>
+
+    <h3>UPPER(), LOWER(), INITCAP()</h3>
+    <ul>
+      <li>Plain English: These functions normalize text case. <code>UPPER()</code> makes everything uppercase, <code>LOWER()</code> makes everything lowercase, and <code>INITCAP()</code> title-cases each word.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  UPPER(TRIM(raw_text)) AS upper_text,
+  LOWER(TRIM(raw_text)) AS lower_text,
+  INITCAP(TRIM(raw_text)) AS title_text
+FROM some_table;</code></pre>
+    <p>Common trap: Formatting dirty text before cleaning it first.</p>
+    <p>Interview translation: Clean first, then format. Case functions help standardize inconsistent text for comparison, display, and downstream logic.</p>
+
+    <h3>REPLACE()</h3>
+    <ul>
+      <li>Plain English: <code>REPLACE()</code> swaps exact matching text for new text.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT REPLACE(comparison_text, 'ELF', 'ORC') AS replaced_text
+FROM some_table;</code></pre>
+    <p>Common trap: Expecting fuzzy replacement. <code>ELVES</code> does not exactly match <code>ELF</code>.</p>
+    <p>Interview translation: <code>REPLACE()</code> is exact text substitution, not pattern matching or fuzzy cleanup.</p>
+
+    <h3>REVERSE()</h3>
+    <ul>
+      <li>Plain English: <code>REVERSE()</code> flips the character order in a string.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT REVERSE(raw_code) AS reversed_code
+FROM some_table;</code></pre>
+    <p>Common trap: Treating it as a normal cleanup function. It is more niche and is usually for practice or special parsing tricks.</p>
+    <p>Interview translation: <code>REVERSE()</code> is useful when you need to inspect suffix-based patterns or demonstrate string transformation logic.</p>
+
+    <h3>CHAR_LENGTH() and LENGTH()</h3>
+    <ul>
+      <li>Plain English: These functions count how long a string is. In this lab, comparing <code>LENGTH(raw_text)</code> to <code>LENGTH(TRIM(raw_text))</code> exposed outside padding.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  LENGTH(raw_text) AS raw_len,
+  LENGTH(TRIM(raw_text)) AS trimmed_len
+FROM some_table;</code></pre>
+    <p>Common trap: Padding can be hard to see by eye, but length checks make it obvious.</p>
+    <p>Interview translation: Length comparisons are a simple data-quality check for detecting hidden spaces or unexpected text growth.</p>
+
+    <h3>POSITION() and STRPOS()</h3>
+    <ul>
+      <li>Plain English: <code>POSITION()</code> and <code>STRPOS()</code> find where a substring appears inside a larger string.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  POSITION('BO' IN comparison_text) AS pos_via_position,
+  STRPOS(comparison_text, 'BO') AS pos_via_strpos
+FROM some_table;</code></pre>
+    <p>Common trap: They return <code>0</code> when not found, and positions are 1-based, not 0-based.</p>
+    <p>Interview translation: Use these when you need delimiter discovery or fixed-position parsing logic.</p>
+
+    <h3>LEFT() and RIGHT()</h3>
+    <ul>
+      <li>Plain English: <code>LEFT()</code> returns a fixed prefix and <code>RIGHT()</code> returns a fixed suffix.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  LEFT(raw_code, 3) AS code_prefix,
+  RIGHT(raw_code, 2) AS code_suffix
+FROM some_table;</code></pre>
+    <p>Common trap: They are best for known fixed-width slices, not arbitrary free-form parsing.</p>
+    <p>Interview translation: <code>LEFT()</code> and <code>RIGHT()</code> are simple, readable tools for extracting codes, prefixes, and suffixes.</p>
+
+    <h3>SUBSTRING() and SUBSTR()</h3>
+    <ul>
+      <li>Plain English: <code>SUBSTRING()</code> and <code>SUBSTR()</code> extract part of a string from a start position for a given length.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  SUBSTRING(raw_code FROM 2 FOR 4) AS middle_piece,
+  SUBSTR(raw_code, 2, 4) AS middle_piece_alt
+FROM some_table;</code></pre>
+    <p>Common trap: Positions are 1-based, so starting point assumptions from programming languages can be off by one.</p>
+    <p>Interview translation: Use these when the text shape is known and you need to carve out specific pieces by position.</p>
+
+    <h3>TRIM(), LTRIM(), RTRIM()</h3>
+    <ul>
+      <li>Plain English: <code>TRIM()</code> removes outside spaces on both sides, <code>LTRIM()</code> removes left-side padding, and <code>RTRIM()</code> removes right-side padding.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  TRIM(raw_text) AS cleaned_text,
+  LTRIM(raw_text) AS left_cleaned,
+  RTRIM(raw_text) AS right_cleaned
+FROM some_table;</code></pre>
+    <p>Common trap: <code>TRIM()</code> does not collapse repeated internal spaces.</p>
+    <p>Interview translation: Trimming is outside cleanup. If internal whitespace is messy, use regex cleanup instead.</p>
+
+    <h3>LPAD() and RPAD()</h3>
+    <ul>
+      <li>Plain English: <code>LPAD()</code> and <code>RPAD()</code> pad text to a target width and are useful for fixed-width display or code formatting.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  LPAD(code_text, 4, '0') AS left_padded_code,
+  RPAD(code_text, 8, '.') AS right_padded_code
+FROM some_table;</code></pre>
+    <p>Common trap: If the target length is shorter than the original string, padding functions can truncate.</p>
+    <p>Interview translation: Padding functions help standardize IDs and fixed-width labels, but always verify target length behavior.</p>
+
+    <h3>REGEXP_REPLACE()</h3>
+    <ul>
+      <li>Plain English: <code>REGEXP_REPLACE()</code> does pattern-based text replacement. A key cleanup example is collapsing repeated whitespace.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT REGEXP_REPLACE(text_col, '\s+', ' ', 'g') AS normalized_text
+FROM some_table;</code></pre>
+    <p>Common trap: Without the <code>'g'</code> flag, only the first matching pattern is replaced.</p>
+    <p>Interview translation: Use regex replacement when simple exact replacement is not enough and you need pattern-aware cleanup.</p>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s06">
+    <div class="section-header">
+      <div class="section-num tel">06</div>
+      <h2>Chapter 4 — Full-text Search and PostgreSQL Extensions</h2>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="card-head blue">FULL-TEXT SEARCH</div>
+        <div class="nugget">
+          <span class="label-tag">// SEARCH MINDSET</span>
+          Character matching and full-text search solve different problems. <code>LIKE</code> looks at raw character shapes. Full-text search turns text into searchable lexemes and matches concepts more intelligently.
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="card-head grn">EXTENSIONS</div>
+        <div class="nugget">
+          <span class="label-tag">// EXTENSION MINDSET</span>
+          Extensions such as <code>fuzzystrmatch</code> and <code>pg_trgm</code> enable extra database functions. Inspect installed state with <code>pg_extension</code> and available options with <code>pg_available_extensions</code>.
+        </div>
+      </div>
+    </div>
+
+    <h3>LIKE</h3>
+    <ul>
+      <li>Plain English: <code>LIKE</code> does character-pattern matching.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT *
+FROM some_table
+WHERE comparison_text LIKE 'G%';</code></pre>
+    <p>Common trap: It matches character shapes, not normalized word meaning.</p>
+    <p>Interview translation: <code>LIKE</code> is useful for simple starts-with, contains, or shape matching, but it is not full-text search.</p>
+
+    <h3>LIKE wildcards: % and _</h3>
+    <ul>
+      <li>Plain English: In <code>LIKE</code>, <code>%</code> means any number of characters and <code>_</code> means exactly one character.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT *
+FROM some_table
+WHERE comparison_text LIKE '%BO%'
+   OR comparison_text LIKE 'G_MBO';</code></pre>
+    <p>Common trap: Treating <code>%</code> and <code>_</code> as interchangeable.</p>
+    <p>Interview translation: Use <code>%</code> when length is flexible and <code>_</code> when exactly one character should vary.</p>
+
+    <h3>LIKE case sensitivity</h3>
+    <ul>
+      <li>Plain English: <code>LIKE</code> is case-sensitive in PostgreSQL. <code>ILIKE</code> is the case-insensitive version.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT *
+FROM some_table
+WHERE comparison_text LIKE '%CASE%'
+   OR comparison_text ILIKE '%case%';</code></pre>
+    <p>Common trap: Expecting <code>LIKE</code> to ignore case automatically.</p>
+    <p>Interview translation: Reach for <code>ILIKE</code> when user-facing search should ignore case differences.</p>
+
+    <h3>to_tsvector()</h3>
+    <ul>
+      <li>Plain English: <code>to_tsvector()</code> converts raw text into searchable lexemes for full-text search.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT to_tsvector('english', title || ' ' || description) AS searchable_document
+FROM some_table;</code></pre>
+    <p>Common trap: Expecting the original text to stay unchanged in meaning and shape. Common words may be removed and useful words may be normalized.</p>
+    <p>Interview translation: <code>to_tsvector()</code> is the document-preparation step in PostgreSQL full-text search.</p>
+
+    <h3>to_tsquery()</h3>
+    <ul>
+      <li>Plain English: <code>to_tsquery()</code> builds a full-text search query and supports operators like <code>&amp;</code>, <code>|</code>, and <code>!</code>.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT to_tsquery('english', 'postgres &amp; database') AS search_query;</code></pre>
+    <p>Common trap: Using <code>to_tsquery()</code> for raw user text when the input is not already in full-text syntax.</p>
+    <p>Interview translation: <code>to_tsquery()</code> is best when you want explicit search logic and control over AND, OR, NOT, and prefix search.</p>
+
+    <h3>plainto_tsquery()</h3>
+    <ul>
+      <li>Plain English: <code>plainto_tsquery()</code> converts normal user-style words into a safe full-text query and removes stop words.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT plainto_tsquery('english', 'postgres database') AS plain_search_query;</code></pre>
+    <p>Common trap: Forgetting that stop words can disappear and the final query may not look like the raw phrase.</p>
+    <p>Interview translation: Use <code>plainto_tsquery()</code> when the input is ordinary search text rather than manual tsquery syntax.</p>
+
+    <h3>@@ match operator</h3>
+    <ul>
+      <li>Plain English: <code>@@</code> tests whether a <code>tsvector</code> document matches a <code>tsquery</code>.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT *
+FROM some_table
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf');</code></pre>
+    <p>Common trap: Thinking <code>@@</code> is just another comparison operator. It specifically connects full-text documents and full-text queries.</p>
+    <p>Interview translation: <code>@@</code> is the core full-text match operator in PostgreSQL.</p>
+
+    <h3>lexemes</h3>
+    <ul>
+      <li>Plain English: Lexemes are normalized searchable tokens inside PostgreSQL full-text search.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT to_tsvector('english', 'A story about a database') AS searchable_document;</code></pre>
+    <p>Common trap: Assuming the stored lexemes will always look exactly like the original words. For example, <code>story</code> can become <code>stori</code> and <code>database</code> can become <code>databas</code>.</p>
+    <p>Interview translation: Lexemes are why full-text search can match normalized word forms instead of raw character strings.</p>
+
+    <h3>CREATE TYPE</h3>
+    <ul>
+      <li>Plain English: <code>CREATE TYPE</code> defines a custom PostgreSQL type. It is useful to know about, but it is not the main workhorse of this course.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>CREATE TYPE priority_level AS ENUM ('low', 'medium', 'high');</code></pre>
+    <p>Common trap: Using custom types where a simple constraint or reference table would be easier to evolve.</p>
+    <p>Interview translation: Know the capability, but explain that many analytics workflows do not need custom types every day.</p>
+
+    <h3>CREATE FUNCTION</h3>
+    <ul>
+      <li>Plain English: <code>CREATE FUNCTION</code> defines reusable SQL or procedural logic inside the database.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>CREATE FUNCTION add_one(x INT)
+RETURNS INT
+LANGUAGE SQL
+AS $$
+  SELECT x + 1;
+$$;</code></pre>
+    <p>Common trap: Overbuilding custom database functions when a one-off query expression would be simpler.</p>
+    <p>Interview translation: Functions are useful for reusable business logic, but you should justify the maintenance cost.</p>
+
+    <h3>CREATE EXTENSION</h3>
+    <ul>
+      <li>Plain English: <code>CREATE EXTENSION</code> enables extension-provided objects and functions in the current database.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;</code></pre>
+    <p>Common trap: Assuming the feature is available before the extension is enabled.</p>
+    <p>Interview translation: Extensions are opt-in database capabilities. Enable them first, then inspect installed metadata if needed.</p>
+
+    <h3>pg_available_extensions</h3>
+    <ul>
+      <li>Plain English: <code>pg_available_extensions</code> shows which extensions are available to install.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT name, default_version
+FROM pg_available_extensions
+ORDER BY name;</code></pre>
+    <p>Common trap: Confusing available extensions with already installed extensions.</p>
+    <p>Interview translation: Use this catalog when you need to discover what the PostgreSQL instance can enable.</p>
+
+    <h3>pg_extension</h3>
+    <ul>
+      <li>Plain English: <code>pg_extension</code> shows which extensions are installed and what schema their objects live in.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  extname,
+  extnamespace::regnamespace AS extension_schema
+FROM pg_extension
+ORDER BY extname;</code></pre>
+    <p>Common trap: Thinking the extension story is only global. The extension is enabled in a database, and its objects live in a schema.</p>
+    <p>Interview translation: <code>pg_extension</code> is the catalog table for installed extension state and schema placement.</p>
+
+    <h3>fuzzystrmatch</h3>
+    <ul>
+      <li>Plain English: <code>fuzzystrmatch</code> is the extension that provides fuzzy string comparison helpers such as <code>levenshtein()</code>, <code>soundex()</code>, and <code>difference()</code>.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;</code></pre>
+    <p>Common trap: Calling fuzzy functions before enabling the extension.</p>
+    <p>Interview translation: This extension helps with typo tolerance and sound-alike matching when exact string comparison is too strict.</p>
+
+    <h3>levenshtein()</h3>
+    <ul>
+      <li>Plain English: <code>levenshtein()</code> measures edit distance, or how many single-character edits it takes to change one string into another.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT levenshtein(LOWER(input_text), LOWER(stored_text)) AS edit_distance
+FROM some_table
+WHERE levenshtein(LOWER(input_text), LOWER(stored_text)) &lt;= 2;</code></pre>
+    <p>Common trap: Treating larger distance as better. Lower is better, and exact match is <code>0</code>.</p>
+    <p>Interview translation: Use <code>levenshtein()</code> when typo tolerance should be measured by actual character edits.</p>
+
+    <h3>soundex()</h3>
+    <ul>
+      <li>Plain English: <code>soundex()</code> turns strings into rough phonetic codes so similar-sounding values can land together.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT soundex('Smith') AS smith_code,
+       soundex('Smyth') AS smyth_code;</code></pre>
+    <p>Common trap: Assuming it is a spelling-distance function. It is phonetic, not letter-by-letter.</p>
+    <p>Interview translation: <code>soundex()</code> is useful when pronunciation similarity matters more than exact spelling.</p>
+
+    <h3>difference()</h3>
+    <ul>
+      <li>Plain English: <code>difference()</code> compares soundex codes and returns a sound-similarity score from <code>0</code> to <code>4</code>.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT difference('Hero', 'Hiro') AS sound_score;</code></pre>
+    <p>Common trap: Reading it like edit distance. Higher is better here, and <code>4</code> is strongest.</p>
+    <p>Interview translation: <code>difference()</code> is a quick phonetic similarity score, not a precise text-distance measure.</p>
+
+    <h3>pg_trgm</h3>
+    <ul>
+      <li>Plain English: <code>pg_trgm</code> is PostgreSQL's trigram similarity extension. It compares shared text chunks rather than exact strings.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>CREATE EXTENSION IF NOT EXISTS pg_trgm;</code></pre>
+    <p>Common trap: Expecting it to behave like edit distance. Trigram similarity is chunk-based, not character-edit counting.</p>
+    <p>Interview translation: <code>pg_trgm</code> is a strong choice for fuzzy candidate search when near-matches should rank by shared text similarity.</p>
+
+    <h3>similarity()</h3>
+    <ul>
+      <li>Plain English: <code>similarity()</code> returns a trigram similarity score from <code>0</code> to <code>1</code>, where higher is better.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  title,
+  similarity(title, 'POSTGRES HER0') AS similarity_score
+FROM some_table
+WHERE similarity(title, 'POSTGRES HER0') &gt;= 0.3
+ORDER BY similarity_score DESC;</code></pre>
+    <p>Common trap: Treating similarity like distance. <code>similarity()</code> uses higher-is-better logic.</p>
+    <p>Interview translation: Use <code>similarity()</code> when you want a numeric fuzzy-match score that can be ranked or thresholded.</p>
+
+    <h3>word_similarity()</h3>
+    <ul>
+      <li>Plain English: <code>word_similarity()</code> is useful when the clean stored value may be buried inside a longer user-style sentence.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  title,
+  word_similarity(title, 'please find POSTGRES HER0 for me') AS word_score
+FROM some_table
+ORDER BY word_score DESC;</code></pre>
+    <p>Common trap: Expecting whole-string <code>similarity()</code> to stay high for longer noisy input phrases.</p>
+    <p>Interview translation: Use <code>word_similarity()</code> when embedded substring-style fuzzy search matters more than whole-string equality.</p>
+
+    <h3>pg_trgm % operator</h3>
+    <ul>
+      <li>Plain English: In <code>pg_trgm</code>, <code>%</code> is not percent math. It means similar enough using the active trigram similarity threshold.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT *
+FROM some_table
+WHERE title % 'POSTGRES HER0';</code></pre>
+    <p>Common trap: Reading <code>%</code> as arithmetic percent instead of pass/fail fuzzy matching.</p>
+    <p>Interview translation: <code>%</code> is the shortcut operator when you want threshold-based trigram filtering without writing the threshold comparison manually.</p>
+
+    <h3>pg_trgm threshold / show_limit() / set_limit()</h3>
+    <ul>
+      <li>Plain English: <code>show_limit()</code> shows the active trigram threshold and <code>set_limit()</code> changes it for the session.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT show_limit() AS current_similarity_threshold;
+SELECT set_limit(0.8);
+SELECT set_limit(0.3);</code></pre>
+    <p>Common trap: Raising the threshold for a test and forgetting to reset it.</p>
+    <p>Interview translation: Threshold tuning changes pass/fail behavior, not the underlying similarity score. Reset temporary changes after testing.</p>
+
+    <h3>pg_trgm &lt;-&gt; distance operator</h3>
+    <ul>
+      <li>Plain English: <code>&lt;-&gt;</code> returns trigram distance, where lower is better and closer matches should sort first.</li>
+      <li>Generic SQL pattern:</li>
+    </ul>
+    <pre><span class="label">SQL</span><code>SELECT
+  title,
+  title &lt;-&gt; 'POSTGRES HER0' AS trigram_distance
+FROM some_table
+ORDER BY trigram_distance ASC;</code></pre>
+    <p>Common trap: Sorting distance in descending order, which pushes worse matches to the top.</p>
+    <p>Interview translation: Use <code>&lt;-&gt;</code> when you want distance-style ranking. It is roughly <code>1 - similarity</code>, so lower means closer.</p>
+
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s07">
+    <div class="section-header">
+      <div class="section-num grn">07</div>
+      <h2>Reusable SQL Pattern Index</h2>
+    </div>
+    <table class="vtable">
+      <thead>
+        <tr>
+          <th>Pattern</th>
+          <th>Used for</th>
+          <th>Example topic</th>
+          <th>Practice status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Inspect metadata first</td><td>understand tables, columns, and types before querying</td><td>information_schema.columns</td><td>practiced</td></tr>
+        <tr><td>Clean then transform</td><td>avoid formatting dirty text directly</td><td>TRIM + INITCAP</td><td>practiced</td></tr>
+        <tr><td>Calculate once in a CTE</td><td>reuse a derived feature safely</td><td>duration hours, fuzzy scores</td><td>practiced</td></tr>
+        <tr><td>Raw value -&gt; feature -&gt; label</td><td>turn technical values into business labels</td><td>duration bands, fuzzy match labels</td><td>practiced</td></tr>
+        <tr><td>Bucket timestamps</td><td>group events by month, week, day, or hour</td><td>DATE_TRUNC</td><td>practiced</td></tr>
+        <tr><td>Extract numeric date parts</td><td>derive year, month, or quarter features</td><td>EXTRACT / DATE_PART</td><td>practiced</td></tr>
+        <tr><td>Handle open records</td><td>use fallback endpoint for NULL end time</td><td>COALESCE(return_date, CURRENT_TIMESTAMP)</td><td>practiced</td></tr>
+        <tr><td>Pattern match text</td><td>find starts-with, contains, or one-character wildcard values</td><td>LIKE / ILIKE</td><td>practiced</td></tr>
+        <tr><td>Full-text match</td><td>convert text and query into searchable forms</td><td>to_tsvector @@ to_tsquery</td><td>practiced</td></tr>
+        <tr><td>Fuzzy edit-distance match</td><td>typo tolerance by edit count</td><td>levenshtein &lt;= threshold</td><td>practiced</td></tr>
+        <tr><td>Fuzzy sound match</td><td>phonetic matching</td><td>soundex / difference</td><td>practiced</td></tr>
+        <tr><td>Trigram candidate search</td><td>similarity-based fuzzy search</td><td>pg_trgm similarity / % / &lt;-&gt;</td><td>practiced</td></tr>
+      </tbody>
+    </table>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s08">
+    <div class="section-header">
+      <div class="section-num ylw">08</div>
+      <h2>Interview Q&amp;A Bank</h2>
+    </div>
+    <div class="interview-box">
+      <div class="tag">// DATA TYPE QUESTIONS</div>
+      <p>Q: How do you discover column data types in PostgreSQL?<br>A: Use <code>information_schema.columns</code>, filter by <code>table_schema</code> and <code>table_name</code>, and inspect <code>data_type</code> plus <code>udt_name</code>.<br><br>Q: What is a PostgreSQL ARRAY trap?<br>A: Arrays are 1-based, so <code>array_col[1]</code> is the first item and <code>array_col[0]</code> is not the first item.</p>
+    </div>
+    <div class="interview-box">
+      <div class="tag">// DATE/TIME QUESTIONS</div>
+      <p>Q: What is the difference between EXTRACT and DATE_TRUNC?<br>A: <code>EXTRACT</code> returns a numeric part. <code>DATE_TRUNC</code> returns a timestamp bucket.<br><br>Q: What is the difference between DATE - DATE and TIMESTAMP - TIMESTAMP?<br>A: <code>DATE - DATE</code> returns integer days. <code>TIMESTAMP - TIMESTAMP</code> returns an <code>INTERVAL</code>.</p>
+    </div>
+    <div class="interview-box">
+      <div class="tag">// TEXT MANIPULATION QUESTIONS</div>
+      <p>Q: Why clean text before formatting it?<br>A: Cleaning first removes padding or inconsistent casing so formatting functions produce stable report values.<br><br>Q: What is the difference between TRIM and REGEXP_REPLACE whitespace collapse?<br>A: <code>TRIM</code> removes outside spaces. <code>REGEXP_REPLACE</code> with <code>'\s+'</code> can collapse repeated internal whitespace.</p>
+    </div>
+    <div class="interview-box">
+      <div class="tag">// FULL-TEXT SEARCH QUESTIONS</div>
+      <p>Q: How does full-text search differ from LIKE?<br>A: <code>LIKE</code> matches character patterns. Full-text search normalizes text into lexemes and matches search tokens.<br><br>Q: What does @@ do?<br>A: It tests whether a <code>tsvector</code> document matches a <code>tsquery</code>.</p>
+    </div>
+    <div class="interview-box">
+      <div class="tag">// EXTENSION QUESTIONS</div>
+      <p>Q: What does CREATE EXTENSION do?<br>A: It enables extension-provided objects and functions in the current database, usually installed into a schema.<br><br>Q: How do levenshtein and similarity differ?<br>A: <code>levenshtein</code> is edit distance where lower is better; <code>similarity</code> is trigram score where higher is better.<br><br>Q: When would you use word_similarity?<br>A: When the stored value may be embedded inside a longer user-style search phrase.</p>
+    </div>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s09">
+    <div class="section-header">
+      <div class="section-num red">09</div>
+      <h2>Mistakes and Corrections</h2>
+    </div>
+    <table class="vtable">
+      <thead>
+        <tr><th>Topic</th><th>Mistake</th><th>Correction</th><th>Memory line</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ARRAY indexing</td><td>Expecting <code>[0]</code> to return first item</td><td>Use <code>[1]</code> for first item in PostgreSQL arrays</td><td>PostgreSQL arrays are 1-based</td></tr>
+        <tr><td>DATE vs TIMESTAMP math</td><td>Expecting all date math to return the same type</td><td><code>DATE - DATE</code> returns integer days; <code>TIMESTAMP - TIMESTAMP</code> returns <code>INTERVAL</code></td><td>Know the return type</td></tr>
+        <tr><td>DATE_TRUNC vs EXTRACT</td><td>Treating both as bucket functions</td><td><code>EXTRACT</code> returns number; <code>DATE_TRUNC</code> returns timestamp bucket</td><td>Number vs bucket</td></tr>
+        <tr><td>CASE order</td><td>Checking lower threshold before higher threshold</td><td>Put most severe or specific threshold first</td><td>CASE stops at first match</td></tr>
+        <tr><td>TRIM misunderstanding</td><td>Expecting <code>TRIM</code> to fix internal repeated spaces</td><td>Use <code>REGEXP_REPLACE</code> for internal whitespace collapse</td><td>TRIM outside; regex inside</td></tr>
+        <tr><td>LIKE case sensitivity</td><td>Expecting <code>LIKE</code> to ignore case</td><td>Use <code>ILIKE</code> for case-insensitive matching</td><td>LIKE case-sensitive; ILIKE ignores case</td></tr>
+        <tr><td>SPLIT_PART indexing</td><td>Expecting zero-based parts</td><td><code>SPLIT_PART</code> starts at part 1</td><td>SQL text parts are 1-based here</td></tr>
+        <tr><td>Full-text stemming</td><td>Expecting every related word to stem the same way</td><td>Inspect query and vector tokens to verify</td><td>Trust but inspect tokens</td></tr>
+        <tr><td>Extension schema</td><td>Thinking extension is only global</td><td>Check <code>pg_extension</code> and <code>extnamespace::regnamespace</code></td><td>Extension enabled in DB, objects live in schema</td></tr>
+        <tr><td>levenshtein direction</td><td>Treating bigger distance as better</td><td>Lower edit distance is better</td><td>levenshtein lower is better</td></tr>
+        <tr><td>similarity direction</td><td>Treating similarity like distance</td><td>Higher similarity is better</td><td>similarity higher is better</td></tr>
+        <tr><td>pg_trgm % operator</td><td>Reading <code>%</code> as percent math</td><td>In <code>pg_trgm</code>, <code>%</code> means similar enough by threshold</td><td>% is pass/fail fuzzy match</td></tr>
+        <tr><td>pg_trgm threshold</td><td>Raising threshold and forgetting to reset</td><td>Reset with <code>set_limit(0.3)</code> and verify</td><td>Always reset temporary threshold</td></tr>
+        <tr><td>psql paste issue</td><td>Pasting result table text into <code>psql</code></td><td>Paste only SQL, or comment text with <code>--</code></td><td>Only SQL goes at prompt</td></tr>
+      </tbody>
+    </table>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s10">
+    <div class="section-header">
+      <div class="section-num tel">10</div>
+      <h2>What to Slow Down On</h2>
+    </div>
+    <div class="cheat-grid">
+      <div class="cheat-cell"><div class="fn-name">INTERVAL arithmetic</div><div class="fn-desc">relative date/time calculations</div></div>
+      <div class="cheat-cell"><div class="fn-name">DATE_TRUNC vs EXTRACT</div><div class="fn-desc">bucketed timestamp versus numeric part</div></div>
+      <div class="cheat-cell"><div class="fn-name">SUBSTRING with POSITION</div><div class="fn-desc">delimiter-based text parsing</div></div>
+      <div class="cheat-cell"><div class="fn-name">ARRAY one-based indexing</div><div class="fn-desc">PostgreSQL arrays start at 1</div></div>
+      <div class="cheat-cell"><div class="fn-name">full-text search syntax</div><div class="fn-desc">vector, query, and operator interplay</div></div>
+      <div class="cheat-cell"><div class="fn-name">extension metadata tables</div><div class="fn-desc">availability versus installed state</div></div>
+      <div class="cheat-cell"><div class="fn-name">levenshtein vs similarity</div><div class="fn-desc">lower-is-better versus higher-is-better</div></div>
+      <div class="cheat-cell"><div class="fn-name">pg_trgm threshold behavior</div><div class="fn-desc">threshold changes pass/fail, not score</div></div>
+      <div class="cheat-cell"><div class="fn-name">TRIM vs REGEXP_REPLACE</div><div class="fn-desc">outside cleanup versus internal cleanup</div></div>
+      <div class="cheat-cell"><div class="fn-name">full-text lexemes</div><div class="fn-desc">stemming and normalized tokens</div></div>
+      <div class="cheat-cell"><div class="fn-name">extension schema</div><div class="fn-desc">database enablement versus object location</div></div>
+    </div>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+
+  <div class="section" id="s11">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <h2>Next Fill-In Pass</h2>
+    </div>
+    <div class="nugget">
+      <span class="label-tag">// NEXT PASS</span>
+      Next pass should be after the DataCamp course exercises are complete. Use the completed exercises to tighten wording, remove anything beyond the course if needed, and add final examples from the DataCamp screens.
+    </div>
+    <a href="#top" class="back-top">↑ back to top</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>PostgreSQL Functions for Manipulating Data · Field Guide Cheat Sheet · Styled for live DataCamp study.</p>
+    <p style="margin-top:6px"><a href="#top">↑ back to top</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 4 — Window Functions | Data Manipulation in SQL</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--soft:#1c232d;--border:#30363d;--text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;--amber:#d29922;--purple:#bc8cff;--danger:#ff7b72;--shadow:0 12px 30px rgba(0,0,0,.24)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);color:var(--text);line-height:1.62}a{color:inherit}code,pre{font-family:Consolas,"Courier New",monospace}.page{width:min(1180px,calc(100% - 32px));margin:auto;padding:24px 0 52px}.breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}.breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}.hero:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}.eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}.hero p{max-width:920px;margin:14px 0 0;color:#c8d4df;font-size:1.03rem}.actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:9px;border:1px solid #486274;background:rgba(255,255,255,.04);font-weight:850;text-decoration:none}.button.primary{background:var(--green);color:#03130a;border-color:transparent}.layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:22px;margin-top:24px}.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}.toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);font-size:.9rem;text-decoration:none}.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}.section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow)}.section h2{margin:0 0 12px;font-size:1.45rem}.section h3{margin:22px 0 8px;font-size:1.08rem}.section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{margin:8px 0 0;padding-left:22px;color:#c9d3dc}.section li+li{margin-top:7px}pre{overflow-x:auto;margin:14px 0;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;color:#dce6ef;font-size:.92rem;line-height:1.55}.callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:rgba(88,166,255,.12);color:#cfdcec}.green{border-left-color:var(--green);background:rgba(3,239,98,.12)}.amber{border-left-color:var(--amber);background:rgba(210,153,34,.12);color:#d8caaa}.danger{border-left-color:var(--danger);background:rgba(255,123,114,.10);color:#efc3bf}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}.card{padding:16px;background:var(--soft);border:1px solid var(--border);border-radius:11px}.card h3{margin:0 0 8px;color:var(--green);font-size:1rem}.card p{margin:0;color:var(--muted);font-size:.92rem}.diagram{margin:16px 0;padding:18px;border:1px solid #33404d;border-radius:11px;background:#10161d;font-family:Consolas,"Courier New",monospace;color:#d6e0e9;overflow-x:auto;white-space:pre}table{width:100%;margin:14px 0;border-collapse:collapse;font-size:.92rem}th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}th{background:#1f2933}td{background:#121820;color:#cbd5de}.qa{display:grid;gap:12px}.qa-item{padding:15px;border:1px solid var(--border);border-radius:10px;background:#121820}.qa-item strong{display:block;margin-bottom:6px;color:var(--green)}.memory{padding:16px;background:rgba(188,140,255,.12);border:1px solid rgba(188,140,255,.34);border-radius:11px}.memory strong{color:var(--purple)}.lessons{display:grid;gap:9px;margin-top:14px}.lesson{display:flex;gap:10px;padding:11px 12px;background:#121820;border:1px solid var(--border);border-radius:9px}.num{min-width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(3,239,98,.12);color:var(--green);font-weight:800;font-size:.84rem}footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}footer a{color:var(--blue);text-decoration:none}@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}@media(max-width:680px){.grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+</style>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumbs"><a href="../../../index.html">DataCamp</a><span>›</span><a href="../index.html">Data Manipulation in SQL</a><span>›</span><span>Chapter 4: Window Functions</span></nav>
+
+<header class="hero">
+<p class="eyebrow">Data Manipulation in SQL · Chapter 4</p>
+<h1>Window Functions</h1>
+<p>Learn how to calculate aggregates across related rows without collapsing detail, partition calculations into groups, define moving frames, and combine CTEs with window functions for richer match analysis.</p>
+<div class="actions">
+<a class="button primary" href="../index.html">Course Home</a>
+<a class="button" href="field_guide.html">Main Field Guide</a>
+<a class="button" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+<a class="button" href="chapter_03_correlated_queries_nested_queries_and_common_table_expressions_field_guide.html">Previous Chapter</a>
+</div>
+</header>
+
+<div class="layout">
+<aside class="toc">
+<h2>Chapter Contents</h2>
+<a href="#scope">1. Chapter scope</a>
+<a href="#big-picture">2. Big picture</a>
+<a href="#over">3. OVER</a>
+<a href="#partition">4. PARTITION BY</a>
+<a href="#multiple-partitions">5. Multiple partition columns</a>
+<a href="#frames">6. Sliding windows</a>
+<a href="#left-right">7. Slide left and right</a>
+<a href="#cte-home">8. Home-team CTE</a>
+<a href="#cte-away">9. Away-team CTE</a>
+<a href="#combine">10. Combine CTEs</a>
+<a href="#add-window">11. Add a window function</a>
+<a href="#worked-example">12. Worked example</a>
+<a href="#validation">13. Validation</a>
+<a href="#mistakes">14. Common mistakes</a>
+<a href="#interview">15. Interview translation</a>
+<a href="#review">16. Memory review</a>
+</aside>
+
+<div>
+<section class="section" id="scope">
+<h2>1. Chapter Scope</h2>
+<div class="lessons">
+<div class="lesson"><span class="num">1</span><span>It's OVER</span></div>
+<div class="lesson"><span class="num">2</span><span>The match is OVER</span></div>
+<div class="lesson"><span class="num">3</span><span>What's OVER here?</span></div>
+<div class="lesson"><span class="num">4</span><span>Flip OVER your results</span></div>
+<div class="lesson"><span class="num">5</span><span>OVER with a PARTITION</span></div>
+<div class="lesson"><span class="num">6</span><span>PARTITION BY a column</span></div>
+<div class="lesson"><span class="num">7</span><span>PARTITION BY multiple columns</span></div>
+<div class="lesson"><span class="num">8</span><span>Sliding windows</span></div>
+<div class="lesson"><span class="num">9</span><span>Slide to the left</span></div>
+<div class="lesson"><span class="num">10</span><span>Slide to the right</span></div>
+<div class="lesson"><span class="num">11</span><span>Bringing it all together</span></div>
+<div class="lesson"><span class="num">12</span><span>Setting up the home team CTE</span></div>
+<div class="lesson"><span class="num">13</span><span>Setting up the away team CTE</span></div>
+<div class="lesson"><span class="num">14</span><span>Putting the CTEs together</span></div>
+<div class="lesson"><span class="num">15</span><span>Add a window function</span></div>
+</div>
+</section>
+
+<section class="section" id="big-picture">
+<h2>2. Big Picture</h2>
+<p>A regular aggregate collapses many rows into fewer rows. A window function calculates across related rows while preserving every original row.</p>
+<div class="diagram">detail rows
+   ↓
+window definition with OVER(...)
+   ↓
+calculate across a group or frame
+   ↓
+return one result per original row</div>
+<div class="grid">
+<article class="card"><h3>OVER()</h3><p>Turns an aggregate or ranking function into a window calculation.</p></article>
+<article class="card"><h3>PARTITION BY</h3><p>Restarts the calculation for each logical group.</p></article>
+<article class="card"><h3>ORDER BY</h3><p>Defines sequence inside the window.</p></article>
+<article class="card"><h3>Frame clause</h3><p>Defines which neighboring rows contribute to the current row's result.</p></article>
+</div>
+<div class="callout green"><strong>Chapter punchline:</strong> window functions add group-level context to detail rows without losing those rows.</div>
+</section>
+
+<section class="section" id="over">
+<h2>3. The OVER Clause</h2>
+<p><code>OVER()</code> tells SQL to calculate across a window of rows rather than collapse them with <code>GROUP BY</code>.</p>
+<pre><code>SELECT
+    date,
+    home_goal,
+    away_goal,
+    AVG(home_goal + away_goal) OVER () AS overall_avg
+FROM match;</code></pre>
+<p>The overall average appears beside each match row.</p>
+<h3>Compare with GROUP BY</h3>
+<table>
+<thead><tr><th>Approach</th><th>Output shape</th><th>Use case</th></tr></thead>
+<tbody>
+<tr><td><code>GROUP BY</code></td><td>One row per group</td><td>Summary report</td></tr>
+<tr><td><code>OVER()</code></td><td>One row per original row</td><td>Detail plus group context</td></tr>
+</tbody>
+</table>
+<div class="callout"><strong>What to notice:</strong> the window result repeats because the row grain is preserved.</div>
+</section>
+
+<section class="section" id="partition">
+<h2>4. OVER with PARTITION BY</h2>
+<p><code>PARTITION BY</code> divides the result set into groups and restarts the window calculation for each group.</p>
+<pre><code>SELECT
+    country_id,
+    date,
+    home_goal,
+    away_goal,
+    AVG(home_goal + away_goal)
+      OVER (PARTITION BY country_id) AS country_avg
+FROM match;</code></pre>
+<p>Every match retains its own values while also showing the average for its country.</p>
+<div class="callout green"><strong>Memory rule:</strong> <code>GROUP BY</code> reduces rows; <code>PARTITION BY</code> labels rows with a group calculation.</div>
+</section>
+
+<section class="section" id="multiple-partitions">
+<h2>5. PARTITION BY Multiple Columns</h2>
+<p>You can partition by more than one column when the comparison group has multiple dimensions.</p>
+<pre><code>SELECT
+    country_id,
+    season,
+    date,
+    home_goal,
+    away_goal,
+    AVG(home_goal + away_goal)
+      OVER (PARTITION BY country_id, season) AS country_season_avg
+FROM match;</code></pre>
+<p>This restarts the average for every country-season combination.</p>
+<div class="callout amber"><strong>Trap:</strong> adding more partition columns makes groups smaller. Confirm that the group definition matches the business question.</div>
+</section>
+
+<section class="section" id="frames">
+<h2>6. Sliding Windows</h2>
+<p>A frame clause narrows an ordered partition to a moving subset around the current row.</p>
+<pre><code>SELECT
+    date,
+    home_goal,
+    SUM(home_goal) OVER (
+        ORDER BY date
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) AS three_match_running_total
+FROM match;</code></pre>
+<p>Each row sees itself and the two previous rows in date order.</p>
+<h3>Common frame boundaries</h3>
+<table>
+<thead><tr><th>Boundary</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>UNBOUNDED PRECEDING</code></td><td>Start at the first row in the partition</td></tr>
+<tr><td><code>n PRECEDING</code></td><td>Include n earlier rows</td></tr>
+<tr><td><code>CURRENT ROW</code></td><td>Use the current row as a boundary</td></tr>
+<tr><td><code>n FOLLOWING</code></td><td>Include n later rows</td></tr>
+<tr><td><code>UNBOUNDED FOLLOWING</code></td><td>Continue to the last row in the partition</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="section" id="left-right">
+<h2>7. Slide to the Left and Right</h2>
+<h3>Previous rows only</h3>
+<pre><code>AVG(home_goal) OVER (
+    ORDER BY date
+    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+)</code></pre>
+
+<h3>Centered window</h3>
+<pre><code>AVG(home_goal) OVER (
+    ORDER BY date
+    ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+)</code></pre>
+
+<h3>Forward-looking window</h3>
+<pre><code>AVG(home_goal) OVER (
+    ORDER BY date
+    ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING
+)</code></pre>
+
+<div class="callout danger"><strong>Order matters:</strong> a sliding frame without a meaningful <code>ORDER BY</code> has no reliable sequence.</div>
+</section>
+
+<section class="section" id="cte-home">
+<h2>8. Setting Up the Home-Team CTE</h2>
+<p>The final exercise begins by normalizing home-team results into a team-centered shape.</p>
+<pre><code>WITH home AS (
+    SELECT
+        m.id,
+        m.date,
+        m.season,
+        m.hometeam_id AS team_id,
+        t.team_long_name AS team,
+        m.home_goal AS goals_for,
+        m.away_goal AS goals_against
+    FROM match AS m
+    LEFT JOIN team AS t
+      ON m.hometeam_id = t.team_api_id
+)
+SELECT *
+FROM home;</code></pre>
+<p>The home CTE renames match columns into team-oriented fields.</p>
+</section>
+
+<section class="section" id="cte-away">
+<h2>9. Setting Up the Away-Team CTE</h2>
+<p>The away-team CTE produces the same column layout so both sets can be combined.</p>
+<pre><code>WITH away AS (
+    SELECT
+        m.id,
+        m.date,
+        m.season,
+        m.awayteam_id AS team_id,
+        t.team_long_name AS team,
+        m.away_goal AS goals_for,
+        m.home_goal AS goals_against
+    FROM match AS m
+    LEFT JOIN team AS t
+      ON m.awayteam_id = t.team_api_id
+)
+SELECT *
+FROM away;</code></pre>
+<div class="callout green"><strong>Design rule:</strong> set operations are easiest when both queries return the same columns in the same order and compatible types.</div>
+</section>
+
+<section class="section" id="combine">
+<h2>10. Putting the CTEs Together</h2>
+<p>Use <code>UNION ALL</code> to stack home and away appearances into one team-match dataset.</p>
+<pre><code>WITH home AS (
+    SELECT
+        m.id,
+        m.date,
+        m.season,
+        m.hometeam_id AS team_id,
+        t.team_long_name AS team,
+        m.home_goal AS goals_for,
+        m.away_goal AS goals_against
+    FROM match AS m
+    LEFT JOIN team AS t
+      ON m.hometeam_id = t.team_api_id
+),
+away AS (
+    SELECT
+        m.id,
+        m.date,
+        m.season,
+        m.awayteam_id AS team_id,
+        t.team_long_name AS team,
+        m.away_goal AS goals_for,
+        m.home_goal AS goals_against
+    FROM match AS m
+    LEFT JOIN team AS t
+      ON m.awayteam_id = t.team_api_id
+),
+team_matches AS (
+    SELECT * FROM home
+    UNION ALL
+    SELECT * FROM away
+)
+SELECT *
+FROM team_matches;</code></pre>
+<div class="callout amber"><strong>Why UNION ALL:</strong> home and away appearances are distinct records; duplicate removal is not needed.</div>
+</section>
+
+<section class="section" id="add-window">
+<h2>11. Add a Window Function</h2>
+<p>Once the team-centered data is assembled, window functions can calculate running totals and team-level averages.</p>
+<pre><code>WITH home AS (...),
+away AS (...),
+team_matches AS (
+    SELECT * FROM home
+    UNION ALL
+    SELECT * FROM away
+)
+SELECT
+    team,
+    season,
+    date,
+    goals_for,
+    SUM(goals_for) OVER (
+        PARTITION BY team_id, season
+        ORDER BY date
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS running_goals,
+    AVG(goals_for) OVER (
+        PARTITION BY team_id, season
+    ) AS season_avg_goals
+FROM team_matches
+ORDER BY team, season, date;</code></pre>
+<div class="callout green"><strong>What this gives you:</strong> one row per team appearance, plus cumulative goals and season-average goals.</div>
+</section>
+
+<section class="section" id="worked-example">
+<h2>12. Worked Example</h2>
+<p>Calculate each match's total goals, the country-season average, and a three-match moving average.</p>
+<pre><code>SELECT
+    country_id,
+    season,
+    date,
+    home_goal + away_goal AS total_goals,
+    AVG(home_goal + away_goal) OVER (
+        PARTITION BY country_id, season
+    ) AS country_season_avg,
+    AVG(home_goal + away_goal) OVER (
+        PARTITION BY country_id, season
+        ORDER BY date
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) AS moving_avg_3
+FROM match
+ORDER BY country_id, season, date;</code></pre>
+<div class="callout green"><strong>Result:</strong> detail rows remain intact while each row receives both a full-partition benchmark and a local moving average.</div>
+</section>
+
+<section class="section" id="validation">
+<h2>13. Validation and Troubleshooting</h2>
+<ul>
+<li>Check that the result row count still matches the detail source unless joins or set operations intentionally changed it.</li>
+<li>Verify partition columns match the intended business group.</li>
+<li>Confirm the window <code>ORDER BY</code> is deterministic; add a tie-breaker when dates can repeat.</li>
+<li>Inspect the first few rows of each partition because partial frames contain fewer rows.</li>
+<li>Compare a window aggregate with a separate grouped query to validate totals.</li>
+<li>Use <code>UNION ALL</code> when stacking distinct home and away appearances.</li>
+</ul>
+<div class="callout danger"><strong>Red flag:</strong> if a running value appears to jump unpredictably, check ordering, duplicate sort values, and accidental row multiplication before the window step.</div>
+</section>
+
+<section class="section" id="mistakes">
+<h2>14. Common Mistakes</h2>
+<div class="qa">
+<div class="qa-item"><strong>Using GROUP BY when detail rows are needed</strong>Use a window function to keep the original row grain.</div>
+<div class="qa-item"><strong>Forgetting OVER</strong>An aggregate without <code>OVER</code> is a regular aggregate and may require grouping.</div>
+<div class="qa-item"><strong>Confusing PARTITION BY with GROUP BY</strong><code>PARTITION BY</code> defines calculation groups but does not collapse rows.</div>
+<div class="qa-item"><strong>Omitting ORDER BY for a running total</strong>Running and moving calculations require a sequence.</div>
+<div class="qa-item"><strong>Relying on non-unique order columns</strong>Add a second ordering column such as match ID when dates tie.</div>
+<div class="qa-item"><strong>Ignoring frame defaults</strong>State the frame explicitly when the intended behavior matters.</div>
+<div class="qa-item"><strong>Using UNION instead of UNION ALL</strong><code>UNION</code> removes duplicates and adds unnecessary work when stacking home and away records.</div>
+</div>
+</section>
+
+<section class="section" id="interview">
+<h2>15. Interview Translation</h2>
+<div class="qa">
+<div class="qa-item"><strong>What is a window function?</strong>A window function calculates across related rows while preserving one output row for each input row.</div>
+<div class="qa-item"><strong>How is PARTITION BY different from GROUP BY?</strong><code>GROUP BY</code> reduces rows to one per group. <code>PARTITION BY</code> defines a group for a window calculation but keeps the detail rows.</div>
+<div class="qa-item"><strong>What does ORDER BY do inside OVER?</strong>It defines row sequence for ranking, running totals, and moving calculations.</div>
+<div class="qa-item"><strong>What is a window frame?</strong>A frame defines the subset of ordered rows around the current row that contributes to the calculation.</div>
+<div class="qa-item"><strong>How do you calculate a running total?</strong>I use <code>SUM(value) OVER (PARTITION BY ... ORDER BY ... ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)</code>.</div>
+<div class="qa-item"><strong>When would you prefer a window function to a correlated subquery?</strong>When I need per-group calculations on every detail row, because the window form is often clearer and may avoid repeated row-by-row subqueries.</div>
+</div>
+</section>
+
+<section class="section" id="review">
+<h2>16. Memory Review</h2>
+<div class="memory">
+<strong>Chapter summary</strong>
+<ol>
+<li><code>OVER()</code> creates a window calculation.</li>
+<li>Window functions preserve detail rows.</li>
+<li><code>PARTITION BY</code> restarts the calculation by group.</li>
+<li><code>ORDER BY</code> defines sequence within the window.</li>
+<li>A frame defines which neighboring rows contribute.</li>
+<li><code>UNBOUNDED PRECEDING</code> to <code>CURRENT ROW</code> creates a running calculation.</li>
+<li>CTEs can prepare data before applying windows.</li>
+</ol>
+</div>
+<h3>Quick self-check</h3>
+<ul>
+<li>Can you explain why a window average repeats across rows?</li>
+<li>Can you partition by country and season?</li>
+<li>Can you write a three-row moving average?</li>
+<li>Can you explain the first-row behavior of a moving frame?</li>
+<li>Can you combine home and away CTEs with <code>UNION ALL</code>?</li>
+<li>Can you add a running total to the combined result?</li>
+</ul>
+<div class="callout amber"><strong>Lab decision:</strong> this chapter merits practice, but the lab should avoid duplicating the full prior window-functions course. Focus on CTE preparation, partitioned averages, and sliding frames in the soccer dataset.</div>
+<div class="callout green"><strong>Completion standard:</strong> preserve row-level detail while calculating partition averages, running totals, and moving windows—and explain each part of the <code>OVER</code> clause.</div>
+</section>
+</div>
+</div>
+
+<footer>
+<span>Data Manipulation in SQL · Chapter 4 Field Guide</span>
+<span><a href="chapter_03_correlated_queries_nested_queries_and_common_table_expressions_field_guide.html">Previous Chapter</a> · <a href="../index.html">Course Home</a> · <a href="field_guide.html">Main Field Guide</a></span>
+</footer>
+</main>
+</body>
+</html>

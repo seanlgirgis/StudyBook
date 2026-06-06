@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 4 — Beyond Window Functions | PostgreSQL Summary Stats and Window Functions</title>
+  <style>
+    :root {
+      --bg:#0d1117; --panel:#161b22; --panel-soft:#1c232d; --border:#30363d;
+      --text:#e6edf3; --muted:#9da7b3; --green:#03ef62; --green-soft:rgba(3,239,98,.12);
+      --blue:#58a6ff; --blue-soft:rgba(88,166,255,.12); --amber:#d29922;
+      --amber-soft:rgba(210,153,34,.12); --purple:#bc8cff;
+      --purple-soft:rgba(188,140,255,.12); --danger:#ff7b72;
+      --danger-soft:rgba(255,123,114,.10); --shadow:0 12px 30px rgba(0,0,0,.24);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:
+      radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);
+      color:var(--text);line-height:1.62}
+    a{color:inherit} code,pre{font-family:Consolas,"Courier New",monospace}
+    .page{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:24px 0 52px}
+    .breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}
+    .breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}
+    .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);
+      border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}
+    .hero:before{content:"";position:absolute;inset:0 0 auto 0;height:5px;
+      background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}
+    .eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+    h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}
+    .hero p{max-width:900px;margin:14px 0 0;color:#c8d4df;font-size:1.03rem}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}
+    .button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;
+      border-radius:9px;border:1px solid #486274;background:rgba(255,255,255,.04);font-weight:850;text-decoration:none}
+    .button.primary{background:var(--green);color:#03130a;border-color:transparent}
+    .layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px;margin-top:24px}
+    .toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);
+      border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+    .toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);
+      font-size:.9rem;text-decoration:none}.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}
+    .section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);
+      border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+    .section h2{margin:0 0 12px;font-size:1.45rem}.section h3{margin:22px 0 8px;font-size:1.08rem}
+    .section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{margin:8px 0 0;padding-left:22px;color:#c9d3dc}
+    .section li+li{margin-top:7px}
+    pre{overflow-x:auto;margin:14px 0;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;
+      color:#dce6ef;font-size:.92rem;line-height:1.55}
+    .callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:var(--blue-soft);color:#cfdcec}
+    .callout.green{border-left-color:var(--green);background:var(--green-soft)}
+    .callout.amber{border-left-color:var(--amber);background:var(--amber-soft);color:#d8caaa}
+    .callout.danger{border-left-color:var(--danger);background:var(--danger-soft);color:#efc3bf}
+    .mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+    .mini-card{padding:16px;background:var(--panel-soft);border:1px solid var(--border);border-radius:11px}
+    .mini-card h3{margin:0 0 8px;font-size:1rem}.mini-card p{margin:0;color:var(--muted);font-size:.92rem}
+    .diagram{margin:16px 0;padding:18px;border:1px solid #33404d;border-radius:11px;background:#10161d;
+      font-family:Consolas,"Courier New",monospace;color:#d6e0e9;overflow-x:auto;white-space:pre}
+    table{width:100%;margin:14px 0;border-collapse:collapse;font-size:.92rem}
+    th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}
+    th{background:#1f2933;color:#dfe8ef} td{background:#121820;color:#cbd5de}
+    .qa{display:grid;gap:12px}.qa-item{padding:15px;border:1px solid var(--border);border-radius:10px;background:#121820}
+    .qa-item strong{display:block;margin-bottom:6px;color:var(--green)}
+    .memory-box{padding:16px;background:var(--purple-soft);border:1px solid rgba(188,140,255,.34);border-radius:11px}
+    .memory-box strong{color:var(--purple)}
+    footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;
+      border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}
+    footer a{color:var(--blue);text-decoration:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}
+    @media(max-width:680px){.mini-grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+  </style>
+</head>
+<body>
+<main class="page">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="../../../index.html">DataCamp</a><span>›</span>
+    <a href="../index.html">PostgreSQL Summary Stats and Window Functions</a><span>›</span>
+    <span>Chapter 4: Beyond Window Functions</span>
+  </nav>
+
+  <header class="hero">
+    <p class="eyebrow">PostgreSQL Summary Stats and Window Functions · Chapter 4</p>
+    <h1>Beyond Window Functions</h1>
+    <p>
+      The final chapter adds supporting PostgreSQL tools that work well with analytical SQL:
+      pivoting with <code>CROSSTAB()</code>, subtotal generation with <code>ROLLUP</code> and
+      <code>CUBE</code>, null cleanup with <code>COALESCE()</code>, and compact summaries with
+      <code>STRING_AGG()</code>.
+    </p>
+    <div class="hero-actions">
+      <a class="button primary" href="../index.html">Course Home</a>
+      <a class="button" href="field_guide.html">Main Field Guide</a>
+      <a class="button" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+      <a class="button" href="chapter_03_aggregate_window_functions_and_frames_field_guide.html">Previous Chapter</a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="toc">
+      <h2>Chapter Contents</h2>
+      <a href="#big-picture">1. Big picture</a>
+      <a href="#pivoting">2. Pivoting</a>
+      <a href="#crosstab">3. CROSSTAB()</a>
+      <a href="#pivot-ranking">4. Pivoting with ranking</a>
+      <a href="#rollup">5. ROLLUP</a>
+      <a href="#cube">6. CUBE</a>
+      <a href="#coalesce">7. COALESCE</a>
+      <a href="#string-agg">8. STRING_AGG</a>
+      <a href="#mistakes">9. Common mistakes</a>
+      <a href="#interview">10. Interview translation</a>
+      <a href="#review">11. Memory review</a>
+    </aside>
+
+    <div class="content">
+      <section class="section" id="big-picture">
+        <h2>1. Big Picture</h2>
+
+        <div class="diagram">analytical result
+    │
+    ├── reshape rows into columns   → CROSSTAB
+    ├── create hierarchical totals → ROLLUP
+    ├── create every subtotal set  → CUBE
+    ├── replace null labels        → COALESCE
+    └── compress many rows         → STRING_AGG</div>
+
+        <div class="mini-grid">
+          <article class="mini-card"><h3>Pivoting</h3><p>Turn category values into output columns.</p></article>
+          <article class="mini-card"><h3>Subtotals</h3><p>Add grouped and grand totals in one query.</p></article>
+          <article class="mini-card"><h3>Null cleanup</h3><p>Replace structural nulls with readable labels.</p></article>
+          <article class="mini-card"><h3>Compression</h3><p>Join multiple text values into one summary field.</p></article>
+        </div>
+
+        <div class="callout green">
+          <strong>Chapter punchline:</strong>
+          Window functions calculate within rows; these PostgreSQL tools help reshape, subtotal, label, and summarize the final result.
+        </div>
+      </section>
+
+      <section class="section" id="pivoting">
+        <h2>2. Pivoting</h2>
+        <p>
+          Pivoting converts distinct row values into columns. A common example is turning Olympic years into
+          separate columns so each country appears once.
+        </p>
+
+        <div class="diagram">Before
+
+Country | Year | Awards
+CHN     | 2008 | 74
+CHN     | 2012 | 56
+RUS     | 2008 | 62
+RUS     | 2012 | 47
+
+After
+
+Country | 2008 | 2012
+CHN     | 74   | 56
+RUS     | 62   | 47</div>
+
+        <div class="callout">
+          <strong>Use case:</strong>
+          Pivoting is useful when reporting tools or readers need categories displayed horizontally rather than vertically.
+        </div>
+      </section>
+
+      <section class="section" id="crosstab">
+        <h2>3. PostgreSQL CROSSTAB()</h2>
+
+        <p><code>CROSSTAB()</code> is provided by PostgreSQL’s <code>tablefunc</code> extension.</p>
+
+        <pre><code>CREATE EXTENSION IF NOT EXISTS tablefunc;</code></pre>
+
+        <h3>Basic source query</h3>
+        <pre><code>SELECT
+    Country,
+    Year,
+    COUNT(*) AS Awards
+FROM Summer_Medals
+WHERE Country IN ('CHN', 'RUS', 'USA')
+  AND Year IN (2008, 2012)
+  AND Medal = 'Gold'
+GROUP BY Country, Year
+ORDER BY Country, Year;</code></pre>
+
+        <h3>Pivot query</h3>
+        <pre><code>SELECT *
+FROM CROSSTAB(
+  $$
+    SELECT
+      Country,
+      Year,
+      COUNT(*) AS Awards
+    FROM Summer_Medals
+    WHERE Country IN ('CHN', 'RUS', 'USA')
+      AND Year IN (2008, 2012)
+      AND Medal = 'Gold'
+    GROUP BY Country, Year
+    ORDER BY Country, Year
+  $$
+) AS ct (
+  Country varchar,
+  "2008" integer,
+  "2012" integer
+)
+ORDER BY Country;</code></pre>
+
+        <div class="callout danger">
+          <strong>Critical rule:</strong>
+          PostgreSQL must know the pivoted output columns and data types in advance. The column definition after
+          <code>AS ct (...)</code> is mandatory.
+        </div>
+      </section>
+
+      <section class="section" id="pivot-ranking">
+        <h2>4. Pivoting with Ranking</h2>
+        <p>
+          Window functions can prepare values before pivoting. For example, rank countries by medal count within each year,
+          then pivot the ranks into separate year columns.
+        </p>
+
+        <pre><code>WITH Country_Awards AS (
+  SELECT
+    Country,
+    Year,
+    COUNT(*) AS Awards
+  FROM Summer_Medals
+  WHERE Country IN ('CHN', 'RUS', 'USA')
+    AND Year IN (2008, 2012)
+    AND Medal = 'Gold'
+  GROUP BY Country, Year
+),
+Country_Ranks AS (
+  SELECT
+    Country,
+    Year,
+    RANK() OVER (
+      PARTITION BY Year
+      ORDER BY Awards DESC
+    )::integer AS Rank
+  FROM Country_Awards
+)
+SELECT *
+FROM CROSSTAB(
+  $$
+    SELECT Country, Year, Rank
+    FROM Country_Ranks
+    ORDER BY Country, Year
+  $$
+) AS ct (
+  Country varchar,
+  "2008" integer,
+  "2012" integer
+);</code></pre>
+
+        <div class="callout green">
+          <strong>Pattern:</strong>
+          Aggregate first, rank second, pivot third.
+        </div>
+      </section>
+
+      <section class="section" id="rollup">
+        <h2>5. ROLLUP</h2>
+        <p>
+          <code>ROLLUP</code> adds hierarchical subtotal rows following the order of the grouped columns.
+        </p>
+
+        <pre><code>SELECT
+  Country,
+  Medal,
+  COUNT(*) AS Awards
+FROM Summer_Medals
+WHERE Year = 2008
+  AND Country IN ('CHN', 'RUS')
+GROUP BY Country, ROLLUP(Medal)
+ORDER BY Country, Medal;</code></pre>
+
+        <p>This returns:</p>
+        <ul>
+          <li>Country + Medal detail totals</li>
+          <li>Country-level subtotal rows where <code>Medal</code> is <code>NULL</code></li>
+        </ul>
+
+        <h3>Hierarchical example</h3>
+        <pre><code>SELECT
+  Year,
+  Quarter,
+  SUM(Sales) AS Sales
+FROM Quarterly_Sales
+GROUP BY ROLLUP(Year, Quarter)
+ORDER BY Year, Quarter;</code></pre>
+
+        <div class="callout">
+          <strong>Decision rule:</strong>
+          Use <code>ROLLUP</code> when the grouping columns form a natural hierarchy such as year → quarter.
+        </div>
+      </section>
+
+      <section class="section" id="cube">
+        <h2>6. CUBE</h2>
+        <p>
+          <code>CUBE</code> returns every possible subtotal combination for the listed grouping columns, plus the grand total.
+        </p>
+
+        <pre><code>SELECT
+  Country,
+  Medal,
+  COUNT(*) AS Awards
+FROM Summer_Medals
+WHERE Year = 2008
+  AND Country IN ('CHN', 'RUS')
+GROUP BY CUBE(Country, Medal)
+ORDER BY Country, Medal;</code></pre>
+
+        <table>
+          <thead><tr><th>Grouping set</th><th>Included by ROLLUP?</th><th>Included by CUBE?</th></tr></thead>
+          <tbody>
+            <tr><td>Country + Medal</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Country only</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Medal only</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Grand total</td><td>Yes</td><td>Yes</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout amber">
+          <strong>Difference:</strong>
+          <code>ROLLUP</code> follows a hierarchy. <code>CUBE</code> returns all subtotal combinations.
+        </div>
+      </section>
+
+      <section class="section" id="coalesce">
+        <h2>7. Cleaning Up Results with COALESCE()</h2>
+        <p>
+          Subtotal and grand-total rows often contain <code>NULL</code> grouping values. <code>COALESCE()</code>
+          returns the first non-null expression and can replace those nulls with readable labels.
+        </p>
+
+        <pre><code>SELECT
+  COALESCE(Country, 'All countries') AS Country,
+  COALESCE(Medal, 'All medals') AS Medal,
+  COUNT(*) AS Awards
+FROM Summer_Medals
+WHERE Year = 2008
+  AND Country IN ('CHN', 'RUS')
+GROUP BY ROLLUP(Country, Medal)
+ORDER BY Country, Medal;</code></pre>
+
+        <pre><code>COALESCE(value_1, value_2, value_3)</code></pre>
+
+        <p>The function searches from left to right and returns the first non-null value.</p>
+
+        <div class="callout">
+          <strong>Other uses:</strong>
+          <code>COALESCE()</code> can also replace nulls returned by <code>LAG()</code>, <code>LEAD()</code>, and pivoted columns.
+        </div>
+      </section>
+
+      <section class="section" id="string-agg">
+        <h2>8. Summarizing Results with STRING_AGG()</h2>
+        <p>
+          <code>STRING_AGG()</code> concatenates values from multiple rows into one delimited string.
+        </p>
+
+        <pre><code>WITH Country_Medals AS (
+  SELECT
+    Country,
+    COUNT(*) AS Medals
+  FROM Summer_Medals
+  WHERE Year = 2012
+    AND Country IN ('CHN', 'RUS', 'USA')
+    AND Medal = 'Gold'
+  GROUP BY Country
+),
+Country_Ranks AS (
+  SELECT
+    Country,
+    RANK() OVER (
+      ORDER BY Medals DESC
+    ) AS Rank
+  FROM Country_Medals
+)
+SELECT
+  STRING_AGG(Country, ', ' ORDER BY Rank) AS Ranked_Countries
+FROM Country_Ranks;</code></pre>
+
+        <p>Example result:</p>
+
+        <div class="diagram">CHN, RUS, USA</div>
+
+        <div class="callout green">
+          <strong>Why useful:</strong>
+          The ranking column may be unnecessary in the final output because the order is encoded in the concatenated list.
+        </div>
+      </section>
+
+      <section class="section" id="mistakes">
+        <h2>9. Common Mistakes</h2>
+
+        <div class="qa">
+          <article class="qa-item">
+            <strong>Forgetting to enable tablefunc</strong>
+            <code>CROSSTAB()</code> is unavailable until the <code>tablefunc</code> extension is enabled.
+          </article>
+
+          <article class="qa-item">
+            <strong>Omitting the CROSSTAB output definition</strong>
+            PostgreSQL requires the output column names and data types after the function call.
+          </article>
+
+          <article class="qa-item">
+            <strong>Using an unstable source-query order</strong>
+            The pivot source must be ordered consistently by row identifier and category.
+          </article>
+
+          <article class="qa-item">
+            <strong>Confusing ROLLUP with CUBE</strong>
+            <code>ROLLUP</code> gives hierarchical subtotals; <code>CUBE</code> gives all combinations.
+          </article>
+
+          <article class="qa-item">
+            <strong>Treating subtotal nulls as missing data</strong>
+            In grouped subtotal output, nulls may identify the aggregation level rather than bad source data.
+          </article>
+
+          <article class="qa-item">
+            <strong>Forgetting STRING_AGG ordering</strong>
+            Add <code>ORDER BY</code> inside <code>STRING_AGG()</code> when the sequence matters.
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="interview">
+        <h2>10. Interview Translation</h2>
+
+        <div class="qa">
+          <article class="qa-item">
+            <strong>What is pivoting?</strong>
+            Pivoting transforms category values stored in rows into separate output columns.
+          </article>
+
+          <article class="qa-item">
+            <strong>What does PostgreSQL CROSSTAB require?</strong>
+            It requires the <code>tablefunc</code> extension, an ordered source query, and an explicit output-column definition.
+          </article>
+
+          <article class="qa-item">
+            <strong>How do ROLLUP and CUBE differ?</strong>
+            <code>ROLLUP</code> follows a hierarchy of grouping columns, while <code>CUBE</code> generates every possible subtotal combination.
+          </article>
+
+          <article class="qa-item">
+            <strong>Why use COALESCE with subtotal queries?</strong>
+            It converts structural nulls in subtotal and grand-total rows into meaningful labels.
+          </article>
+
+          <article class="qa-item">
+            <strong>What does STRING_AGG do?</strong>
+            It combines values from multiple rows into one ordered, delimited string.
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="review">
+        <h2>11. Memory Review</h2>
+
+        <div class="memory-box">
+          <strong>Chapter summary</strong>
+          <ol>
+            <li><code>CROSSTAB()</code> pivots row categories into columns.</li>
+            <li><code>ROLLUP</code> creates hierarchical subtotals.</li>
+            <li><code>CUBE</code> creates all subtotal combinations.</li>
+            <li><code>COALESCE()</code> replaces nulls with readable values.</li>
+            <li><code>STRING_AGG()</code> compresses rows into an ordered text summary.</li>
+          </ol>
+        </div>
+
+        <h3>Quick self-check</h3>
+        <ul>
+          <li>Can you explain why the CROSSTAB output schema must be declared?</li>
+          <li>Can you predict which subtotal rows ROLLUP will produce?</li>
+          <li>Can you explain the extra rows returned by CUBE?</li>
+          <li>Can you distinguish structural subtotal nulls from missing source data?</li>
+          <li>Can you preserve rank order inside STRING_AGG?</li>
+        </ul>
+
+        <div class="callout amber">
+          <strong>Current status:</strong>
+          Chapter structure and video concepts are captured. Add the exact completed DataCamp exercise queries when the chapter exercises are finished.
+        </div>
+
+        <div class="callout green">
+          <strong>Completion standard:</strong>
+          You can pivot analytical results, generate the correct subtotal combinations, clean subtotal labels, and compress ordered results into one summary value.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    <span>PostgreSQL Summary Stats and Window Functions · Chapter 4 Field Guide</span>
+    <span>
+      <a href="chapter_03_aggregate_window_functions_and_frames_field_guide.html">Previous Chapter</a>
+      &nbsp;·&nbsp;
+      <a href="../index.html">Course Home</a>
+      &nbsp;·&nbsp;
+      <a href="field_guide.html">Main Field Guide</a>
+    </span>
+  </footer>
+</main>
+</body>
+</html>

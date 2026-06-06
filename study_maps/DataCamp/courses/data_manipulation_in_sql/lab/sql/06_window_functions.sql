@@ -1,0 +1,1 @@
+﻿-- Chapter 4 practice: window functions, running totals, and partitioned averages.

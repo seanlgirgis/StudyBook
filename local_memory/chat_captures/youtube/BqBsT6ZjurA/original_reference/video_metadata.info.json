@@ -1,0 +1,76 @@
+{
+  "capture_method": "manual_oembed_and_watch_page_scrape",
+  "captured_at": "2026-06-05T00:00:00-05:00",
+  "platform": "YouTube",
+  "video_id": "BqBsT6ZjurA",
+  "canonical_url": "https://www.youtube.com/watch?v=BqBsT6ZjurA",
+  "original_shared_url": "https://youtu.be/BqBsT6ZjurA?si=83CHGjHHDbnTXTqI",
+  "availability_status": "available",
+  "verified_title": "مبروك بقي لو سمحتم ❤️ عمركم صدر ضدكم حكم بالصوريه وفي نفس الوقت الحكم لصالحكم🤔😄Error",
+  "cleaned_arabic_title": "مبروك بقى لو سمحتم ❤️ هل سبق أن صدر ضدكم حكم بالصورية، وفي الوقت نفسه كان الحكم لصالحكم؟",
+  "translated_title_en": "Please congratulate me ❤️ Have you ever had a court judgment declaring a transaction or contract simulated, while at the same time the judgment was in your favor?",
+  "channel_name": "مستشارك القانونى أحمد رزق عطا محام",
+  "channel_url": "https://www.youtube.com/@%D9%85%D8%B3%D8%AA%D8%B4%D8%A7%D8%B1%D9%83%D8%A7%D9%84%D9%82%D8%A7%D9%86%D9%88%D9%86%D9%89%D8%A3%D8%AD%D9%85%D8%AF%D8%B1%D8%B2%D9%82%D8%B9%D8%B7%D8%A7%D9%85%D8%AD%D8%A7%D9%85",
+  "channel_id": "UCqWL0axW50PojPNIDC365og",
+  "provider_name": "YouTube",
+  "upload_date": "2026-06-04T02:48:27-07:00",
+  "duration_seconds": 932,
+  "duration_human": "15m 32s",
+  "view_count": {
+    "value": 317,
+    "observed_at": "2026-06-05T00:00:00-05:00",
+    "volatile": true
+  },
+  "thumbnail": {
+    "url": "https://i.ytimg.com/vi/BqBsT6ZjurA/hqdefault.jpg",
+    "local_file": "original_reference/thumbnail.jpg"
+  },
+  "description": {
+    "status": "not_available_at_capture_time",
+    "source": "watch_page_scrape"
+  },
+  "chapters": {
+    "status": "not_available_at_capture_time"
+  },
+  "tags": {
+    "status": "not_available_at_capture_time"
+  },
+  "subtitles": {
+    "advertised_tracks": [
+      {
+        "language_code": "ar",
+        "label": "Arabic (auto-generated)",
+        "kind": "asr",
+        "translatable": true
+      }
+    ],
+    "english_subtitles": {
+      "status": "not_available_at_capture_time"
+    },
+    "arabic_automatic_captions": {
+      "status": "track_detected_but_not_retrievable_at_capture_time"
+    }
+  },
+  "transcript": {
+    "arabic": {
+      "status": "track_detected_but_not_retrievable_at_capture_time"
+    },
+    "english": {
+      "status": "not_available_at_capture_time"
+    }
+  },
+  "related_people": [
+    {
+      "person_role": "father",
+      "display_name": "Dad",
+      "relationship_to_owner": "father",
+      "relevance": "Dad asked me to remember this video."
+    }
+  ],
+  "reason_for_saving": "Dad asked me to remember this video.",
+  "confidence_notes": [
+    "Title, channel name, channel URL, thumbnail URL, and provider metadata were verified from YouTube oEmbed.",
+    "Channel ID, upload date, duration, view count, and caption-track availability were verified from the YouTube watch page HTML.",
+    "Transcript and description were not retrieved successfully in this environment and should not be inferred."
+  ]
+}

@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Introduction to SQL | Field Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 850px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 16px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--green);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Introduction to SQL</a>
+      <span>›</span>
+      <span>Field Guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Introduction to SQL · Whole-Course Review</p>
+      <h1>Introduction to SQL Field Guide</h1>
+      <p>
+        A compact course memory map covering relational databases, tables, rows and columns,
+        identifiers, data types, schemas, basic queries, aliases, views, SQL flavors, and limiting results.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="chapter_01_relational_databases_field_guide.html">Chapter 1</a>
+        <a class="button secondary" href="chapter_02_querying_field_guide.html">Chapter 2</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Course Contents</h2>
+        <a href="#course-map">1. Course map</a>
+        <a href="#databases">2. Relational databases</a>
+        <a href="#structure">3. Tables and structure</a>
+        <a href="#types">4. Data types and schemas</a>
+        <a href="#queries">5. Basic queries</a>
+        <a href="#distinct">6. DISTINCT and aliases</a>
+        <a href="#views">7. Views</a>
+        <a href="#flavors">8. SQL flavors</a>
+        <a href="#patterns">9. Core patterns</a>
+        <a href="#mistakes">10. Common mistakes</a>
+        <a href="#interview">11. Interview translation</a>
+        <a href="#review">12. Final review</a>
+      </aside>
+
+      <div>
+        <section class="section" id="course-map">
+          <h2>1. Course Map</h2>
+
+          <div class="grid">
+            <article class="card">
+              <h3>Chapter 1 — Relational Databases</h3>
+              <p>Databases, tables, records, fields, identifiers, naming, data types, schemas, and servers.</p>
+              <a href="chapter_01_relational_databases_field_guide.html">Open detailed chapter →</a>
+            </article>
+
+            <article class="card">
+              <h3>Chapter 2 — Querying</h3>
+              <p>SELECT, FROM, DISTINCT, aliases, views, SQL style, SQL flavors, LIMIT, and TOP.</p>
+              <a href="chapter_02_querying_field_guide.html">Open detailed chapter →</a>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Course punchline:</strong> relational databases organize structured data into related tables,
+            and SQL is the language used to retrieve and work with that data.
+          </div>
+        </section>
+
+        <section class="section" id="databases">
+          <h2>2. Relational Databases</h2>
+          <p>
+            A database is an organized collection of data. A relational database separates related subjects
+            into tables and connects those tables through shared identifiers.
+          </p>
+
+          <ul>
+            <li>A library may store patrons, books, and checkouts in separate tables.</li>
+            <li>Separate tables reduce repeated data.</li>
+            <li>Keys allow related rows to be connected later.</li>
+            <li>SQL communicates with the database management system.</li>
+          </ul>
+
+          <div class="callout">
+            SQL is the language. PostgreSQL and SQL Server are database management systems.
+          </div>
+        </section>
+
+        <section class="section" id="structure">
+          <h2>3. Tables and Structure</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Term</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Table</td>
+                <td>A structured collection of related rows and columns.</td>
+              </tr>
+              <tr>
+                <td>Row / record</td>
+                <td>One individual item or observation.</td>
+              </tr>
+              <tr>
+                <td>Column / field</td>
+                <td>One attribute stored for all rows.</td>
+              </tr>
+              <tr>
+                <td>Key</td>
+                <td>A stable identifier used to distinguish rows and connect tables.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            A row represents one thing. A column describes one attribute of that thing.
+          </div>
+        </section>
+
+        <section class="section" id="types">
+          <h2>4. Data Types and Schemas</h2>
+          <p>
+            Data types define the kind of value a column may store. A schema defines the overall database structure.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Purpose</th>
+                <th>Typical type</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Whole numbers</td>
+                <td><code>INT</code></td>
+                <td>Publication year</td>
+              </tr>
+              <tr>
+                <td>Text</td>
+                <td><code>VARCHAR</code></td>
+                <td>Book title</td>
+              </tr>
+              <tr>
+                <td>Decimal values</td>
+                <td><code>NUMERIC</code></td>
+                <td>Fine amount</td>
+              </tr>
+              <tr>
+                <td>Calendar dates</td>
+                <td><code>DATE</code></td>
+                <td>Checkout date</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout amber">
+            Choose a type based on meaning, not appearance. An identifier may look numeric but still belong in text.
+          </div>
+        </section>
+
+        <section class="section" id="queries">
+          <h2>5. Basic Queries</h2>
+
+          <pre><code>SELECT title, author
+FROM books;</code></pre>
+
+          <p>
+            <code>SELECT</code> chooses the output columns. <code>FROM</code> chooses the source table.
+          </p>
+
+          <h3>All columns</h3>
+          <pre><code>SELECT *
+FROM books;</code></pre>
+
+          <div class="callout amber">
+            <code>SELECT *</code> is useful for quick exploration, but named columns are better for reusable queries.
+          </div>
+        </section>
+
+        <section class="section" id="distinct">
+          <h2>6. DISTINCT and Aliases</h2>
+
+          <h3>Return unique values</h3>
+          <pre><code>SELECT DISTINCT genre
+FROM books;</code></pre>
+
+          <h3>Rename a result column</h3>
+          <pre><code>SELECT name AS patron_name
+FROM patrons;</code></pre>
+
+          <ul>
+            <li><code>DISTINCT</code> removes duplicate result rows.</li>
+            <li>With multiple columns, it returns unique combinations.</li>
+            <li><code>AS</code> changes the result label, not the stored column name.</li>
+          </ul>
+        </section>
+
+        <section class="section" id="views">
+          <h2>7. Views</h2>
+          <p>
+            A view is a named saved query that can be queried like a table.
+          </p>
+
+          <pre><code>CREATE VIEW patron_names AS
+SELECT card_num,
+       name
+FROM patrons;</code></pre>
+
+          <pre><code>SELECT *
+FROM patron_names;</code></pre>
+
+          <div class="callout">
+            Views help reuse logic, simplify access, and expose only the columns users need.
+          </div>
+        </section>
+
+        <section class="section" id="flavors">
+          <h2>8. SQL Flavors</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Database system</th>
+                <th>Common dialect detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PostgreSQL</td>
+                <td>Uses <code>LIMIT</code> to restrict rows.</td>
+              </tr>
+              <tr>
+                <td>SQL Server</td>
+                <td>Commonly uses <code>TOP</code> to restrict rows.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <pre><code>-- PostgreSQL
+SELECT title
+FROM books
+LIMIT 5;</code></pre>
+
+          <pre><code>-- SQL Server
+SELECT TOP 5 title
+FROM books;</code></pre>
+        </section>
+
+        <section class="section" id="patterns">
+          <h2>9. Core Syntax Patterns</h2>
+
+          <pre><code>-- One column
+SELECT title
+FROM books;
+
+-- Several columns
+SELECT title, author, pub_year
+FROM books;
+
+-- Unique values
+SELECT DISTINCT genre
+FROM books;
+
+-- Alias
+SELECT name AS patron_name
+FROM patrons;
+
+-- PostgreSQL row limit
+SELECT title
+FROM books
+LIMIT 5;</code></pre>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>10. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Confusing rows and columns</strong>
+              Rows are records; columns are attributes.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using a person’s name as a unique ID</strong>
+              Names can repeat or change. Use a stable identifier.
+            </article>
+
+            <article class="qa-item">
+              <strong>Forgetting commas between selected columns</strong>
+              Write <code>SELECT title, author</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Misunderstanding DISTINCT</strong>
+              It applies to the full selected row combination.
+            </article>
+
+            <article class="qa-item">
+              <strong>Thinking AS permanently renames a column</strong>
+              It creates only a temporary output label.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming SQL syntax is identical everywhere</strong>
+              Core SQL transfers well, but dialect-specific syntax differs.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>11. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is a relational database?</strong>
+              A system that stores structured data in tables and connects those tables through shared keys.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is a primary key?</strong>
+              A column or set of columns that uniquely identifies each row in a table.
+            </article>
+
+            <article class="qa-item">
+              <strong>What does SELECT do?</strong>
+              It specifies the columns or expressions returned by a query.
+            </article>
+
+            <article class="qa-item">
+              <strong>What does DISTINCT do?</strong>
+              It removes duplicate result rows based on all selected columns.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is a view?</strong>
+              A named saved query used to simplify or reuse data-access logic.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>12. Final Course Review</h2>
+
+          <div class="callout green">
+            <strong>Seven things to remember:</strong>
+            database, table, row, column, key, data type, and query.
+          </div>
+
+          <ul>
+            <li>A relational database separates subjects into related tables.</li>
+            <li>Rows are records; columns are attributes.</li>
+            <li>Keys identify rows and connect tables.</li>
+            <li>Data types protect structure and meaning.</li>
+            <li><code>SELECT</code> and <code>FROM</code> form the basic query.</li>
+            <li><code>DISTINCT</code>, aliases, and views improve usefulness and reuse.</li>
+            <li>SQL dialects share a common core but differ in some syntax.</li>
+          </ul>
+
+          <div class="callout amber">
+            This course is complete. No separate lab package is required beyond the DataCamp exercises.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Introduction to SQL · Accumulated Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_01_relational_databases_field_guide.html">Chapter 1</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_querying_field_guide.html">Chapter 2</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

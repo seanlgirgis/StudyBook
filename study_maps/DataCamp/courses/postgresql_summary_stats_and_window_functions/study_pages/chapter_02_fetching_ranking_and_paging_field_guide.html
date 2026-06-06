@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 2 — Fetching, Ranking, and Paging | PostgreSQL Summary Stats and Window Functions</title>
+  <style>
+    :root {
+      --bg:#0d1117; --panel:#161b22; --panel-soft:#1c232d; --border:#30363d;
+      --text:#e6edf3; --muted:#9da7b3; --green:#03ef62; --green-soft:rgba(3,239,98,.12);
+      --blue:#58a6ff; --blue-soft:rgba(88,166,255,.12); --amber:#d29922;
+      --amber-soft:rgba(210,153,34,.12); --purple:#bc8cff;
+      --purple-soft:rgba(188,140,255,.12); --danger:#ff7b72;
+      --danger-soft:rgba(255,123,114,.10); --shadow:0 12px 30px rgba(0,0,0,.24);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:
+      radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);
+      color:var(--text);line-height:1.62}
+    a{color:inherit} code,pre{font-family:Consolas,"Courier New",monospace}
+    .page{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:24px 0 52px}
+    .breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}
+    .breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}
+    .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);
+      border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}
+    .hero:before{content:"";position:absolute;inset:0 0 auto 0;height:5px;
+      background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}
+    .eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+    h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}
+    .hero p{max-width:900px;margin:14px 0 0;color:#c8d4df;font-size:1.03rem}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}
+    .button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;
+      border-radius:9px;border:1px solid #486274;background:rgba(255,255,255,.04);font-weight:850;text-decoration:none}
+    .button.primary{background:var(--green);color:#03130a;border-color:transparent}
+    .layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px;margin-top:24px}
+    .toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);
+      border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+    .toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);
+      font-size:.9rem;text-decoration:none}.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}
+    .section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);
+      border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+    .section h2{margin:0 0 12px;font-size:1.45rem}.section h3{margin:22px 0 8px;font-size:1.08rem}
+    .section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{margin:8px 0 0;padding-left:22px;color:#c9d3dc}
+    .section li+li{margin-top:7px}
+    pre{overflow-x:auto;margin:14px 0;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;
+      color:#dce6ef;font-size:.92rem;line-height:1.55}
+    .callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:var(--blue-soft);color:#cfdcec}
+    .callout.green{border-left-color:var(--green);background:var(--green-soft)}
+    .callout.amber{border-left-color:var(--amber);background:var(--amber-soft);color:#d8caaa}
+    .callout.danger{border-left-color:var(--danger);background:var(--danger-soft);color:#efc3bf}
+    .mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+    .mini-card{padding:16px;background:var(--panel-soft);border:1px solid var(--border);border-radius:11px}
+    .mini-card h3{margin:0 0 8px;font-size:1rem}.mini-card p{margin:0;color:var(--muted);font-size:.92rem}
+    .diagram{margin:16px 0;padding:18px;border:1px solid #33404d;border-radius:11px;background:#10161d;
+      font-family:Consolas,"Courier New",monospace;color:#d6e0e9;overflow-x:auto;white-space:pre}
+    table{width:100%;margin:14px 0;border-collapse:collapse;font-size:.92rem}
+    th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}
+    th{background:#1f2933;color:#dfe8ef} td{background:#121820;color:#cbd5de}
+    .qa{display:grid;gap:12px}.qa-item{padding:15px;border:1px solid var(--border);border-radius:10px;background:#121820}
+    .qa-item strong{display:block;margin-bottom:6px;color:var(--green)}
+    .memory-box{padding:16px;background:var(--purple-soft);border:1px solid rgba(188,140,255,.34);border-radius:11px}
+    .memory-box strong{color:var(--purple)}
+    footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;
+      border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}
+    footer a{color:var(--blue);text-decoration:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}
+    @media(max-width:680px){.mini-grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+  </style>
+</head>
+<body>
+<main class="page">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="../../../index.html">DataCamp</a><span>›</span>
+    <a href="../index.html">PostgreSQL Summary Stats and Window Functions</a><span>›</span>
+    <span>Chapter 2: Fetching, Ranking, and Paging</span>
+  </nav>
+
+  <header class="hero">
+    <p class="eyebrow">PostgreSQL Summary Stats and Window Functions · Chapter 2</p>
+    <h1>Fetching, Ranking, and Paging</h1>
+    <p>
+      This chapter applies window functions to three practical tasks: fetching values from nearby or boundary rows,
+      ranking rows by value, and splitting ordered results into approximately equal groups.
+    </p>
+    <div class="hero-actions">
+      <a class="button primary" href="../index.html">Course Home</a>
+      <a class="button" href="field_guide.html">Main Field Guide</a>
+      <a class="button" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+      <a class="button" href="chapter_01_introduction_to_window_functions_field_guide.html">Previous Chapter</a>
+      <a class="button" href="chapter_03_aggregate_window_functions_and_frames_field_guide.html">Next Chapter</a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="toc">
+      <h2>Chapter Contents</h2>
+      <a href="#big-picture">1. Big picture</a>
+      <a href="#fetching">2. Fetching values</a>
+      <a href="#lead-lag">3. LEAD and LAG</a>
+      <a href="#first-last">4. FIRST_VALUE and LAST_VALUE</a>
+      <a href="#ranking">5. Ranking rows</a>
+      <a href="#rank-compare">6. ROW_NUMBER vs RANK vs DENSE_RANK</a>
+      <a href="#paging">7. Paging with NTILE</a>
+      <a href="#worked-examples">8. Worked examples</a>
+      <a href="#mistakes">9. Common mistakes</a>
+      <a href="#interview">10. Interview translation</a>
+      <a href="#review">11. Memory review</a>
+    </aside>
+
+    <div class="content">
+      <section class="section" id="big-picture">
+        <h2>1. Big Picture</h2>
+        <div class="diagram">ordered rows
+    │
+    ├── fetch another row's value
+    │     LAG / LEAD / FIRST_VALUE / LAST_VALUE
+    │
+    ├── assign position
+    │     ROW_NUMBER / RANK / DENSE_RANK
+    │
+    └── split into buckets
+          NTILE</div>
+
+        <div class="mini-grid">
+          <article class="mini-card"><h3>Fetching</h3><p>Look backward, forward, or to a boundary row.</p></article>
+          <article class="mini-card"><h3>Ranking</h3><p>Assign an ordered position based on values.</p></article>
+          <article class="mini-card"><h3>Paging</h3><p>Split ordered rows into roughly equal groups.</p></article>
+          <article class="mini-card"><h3>Partitioning</h3><p>Apply each calculation independently per group.</p></article>
+        </div>
+
+        <div class="callout green">
+          <strong>Chapter punchline:</strong>
+          Window functions can move across rows, label row position, and divide ordered results without collapsing detail.
+        </div>
+      </section>
+
+      <section class="section" id="fetching">
+        <h2>2. Fetching Values from Other Rows</h2>
+        <p>The chapter introduces four fetching functions:</p>
+
+        <table>
+          <thead><tr><th>Function</th><th>Type</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>LAG(column, n)</code></td><td>Relative</td><td>Returns the value from <em>n</em> rows before the current row.</td></tr>
+            <tr><td><code>LEAD(column, n)</code></td><td>Relative</td><td>Returns the value from <em>n</em> rows after the current row.</td></tr>
+            <tr><td><code>FIRST_VALUE(column)</code></td><td>Absolute</td><td>Returns the first value in the current window or partition.</td></tr>
+            <tr><td><code>LAST_VALUE(column)</code></td><td>Absolute</td><td>Returns the last value in the current frame.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <strong>Key distinction:</strong>
+          <code>LAG()</code> and <code>LEAD()</code> use a relative offset. <code>FIRST_VALUE()</code> and
+          <code>LAST_VALUE()</code> use the first or last row defined by the window frame.
+        </div>
+      </section>
+
+      <section class="section" id="lead-lag">
+        <h2>3. LEAD() and LAG()</h2>
+
+        <h3>Fetch the next Olympic host city</h3>
+        <pre><code>WITH hosts AS (
+    SELECT DISTINCT year, city
+    FROM summer_medals
+)
+SELECT
+    year,
+    city,
+    LEAD(city, 1) OVER (
+        ORDER BY year
+    ) AS next_city,
+    LEAD(city, 2) OVER (
+        ORDER BY year
+    ) AS after_next_city
+FROM hosts
+ORDER BY year;</code></pre>
+
+        <p>
+          The last row returns <code>NULL</code> because there is no following row. The same idea applies to
+          <code>LAG()</code> at the beginning of a partition.
+        </p>
+
+        <h3>Partition before fetching</h3>
+        <pre><code>SELECT
+    year,
+    event,
+    champion,
+    LEAD(champion, 1) OVER (
+        PARTITION BY event
+        ORDER BY year
+    ) AS next_champion
+FROM champions;</code></pre>
+
+        <div class="callout amber">
+          <strong>Common trap:</strong>
+          Without <code>PARTITION BY event</code>, <code>LEAD()</code> may fetch a champion from a different event.
+        </div>
+      </section>
+
+      <section class="section" id="first-last">
+        <h2>4. FIRST_VALUE() and LAST_VALUE()</h2>
+
+        <pre><code>SELECT
+    year,
+    city,
+    FIRST_VALUE(city) OVER (
+        ORDER BY year
+    ) AS first_city,
+    LAST_VALUE(city) OVER (
+        ORDER BY year
+        RANGE BETWEEN
+            UNBOUNDED PRECEDING AND
+            UNBOUNDED FOLLOWING
+    ) AS last_city
+FROM hosts
+ORDER BY year;</code></pre>
+
+        <p>
+          <code>FIRST_VALUE()</code> usually behaves as expected because the default frame starts at the beginning.
+          <code>LAST_VALUE()</code> is different: by default, the frame often ends at the current row, so the result may
+          simply repeat the current value.
+        </p>
+
+        <div class="callout danger">
+          <strong>Critical rule:</strong>
+          To get the true last value of the entire partition, explicitly extend the frame through
+          <code>UNBOUNDED FOLLOWING</code>.
+        </div>
+      </section>
+
+      <section class="section" id="ranking">
+        <h2>5. Ranking Rows</h2>
+        <p>Ranking functions assign a position based on the window order.</p>
+
+        <pre><code>WITH country_games AS (
+    SELECT
+        country,
+        COUNT(DISTINCT year) AS games
+    FROM summer_medals
+    GROUP BY country
+)
+SELECT
+    country,
+    games,
+    ROW_NUMBER() OVER (ORDER BY games DESC) AS row_n,
+    RANK()       OVER (ORDER BY games DESC) AS rank_n,
+    DENSE_RANK() OVER (ORDER BY games DESC) AS dense_rank_n
+FROM country_games
+ORDER BY games DESC, country;</code></pre>
+
+        <p>
+          The ranking value comes from <code>ORDER BY</code> inside <code>OVER()</code>. The final query
+          <code>ORDER BY</code> controls display.
+        </p>
+
+        <h3>Rank independently by country</h3>
+        <pre><code>WITH country_medals AS (
+    SELECT
+        country,
+        athlete,
+        COUNT(*) AS medals
+    FROM summer_medals
+    WHERE country IN ('CHN', 'RUS')
+      AND year = 2012
+    GROUP BY country, athlete
+)
+SELECT
+    country,
+    athlete,
+    medals,
+    DENSE_RANK() OVER (
+        PARTITION BY country
+        ORDER BY medals DESC
+    ) AS athlete_rank
+FROM country_medals
+ORDER BY country, athlete_rank, athlete;</code></pre>
+      </section>
+
+      <section class="section" id="rank-compare">
+        <h2>6. ROW_NUMBER vs RANK vs DENSE_RANK</h2>
+
+        <table>
+          <thead><tr><th>Function</th><th>Ties</th><th>Sequence after a tie</th><th>Best use</th></tr></thead>
+          <tbody>
+            <tr><td><code>ROW_NUMBER()</code></td><td>Always unique</td><td>No ties exist</td><td>Deterministic row sequence or one-row selection</td></tr>
+            <tr><td><code>RANK()</code></td><td>Same rank for ties</td><td>Leaves gaps</td><td>Competition-style ranking</td></tr>
+            <tr><td><code>DENSE_RANK()</code></td><td>Same rank for ties</td><td>No gaps</td><td>Consecutive ranking levels</td></tr>
+          </tbody>
+        </table>
+
+        <div class="diagram">Values: 27, 26, 26, 25
+
+ROW_NUMBER → 1, 2, 3, 4
+RANK       → 1, 2, 2, 4
+DENSE_RANK → 1, 2, 2, 3</div>
+
+        <div class="callout green">
+          <strong>Decision rule:</strong>
+          Use <code>ROW_NUMBER()</code> when every row must receive a unique position, <code>RANK()</code> when
+          gaps should reflect ties, and <code>DENSE_RANK()</code> when ties should not create gaps.
+        </div>
+      </section>
+
+      <section class="section" id="paging">
+        <h2>7. Paging with NTILE()</h2>
+        <p>
+          Paging means splitting ordered data into approximately equal-sized chunks. <code>NTILE(n)</code>
+          assigns each row to one of <em>n</em> buckets.
+        </p>
+
+        <h3>Split disciplines into 15 pages</h3>
+        <pre><code>WITH disciplines AS (
+    SELECT DISTINCT discipline
+    FROM summer_medals
+)
+SELECT
+    discipline,
+    NTILE(15) OVER (
+        ORDER BY discipline
+    ) AS page
+FROM disciplines
+ORDER BY page, discipline;</code></pre>
+
+        <p>
+          If 67 rows are split into 15 pages, the pages will contain approximately four or five rows each.
+        </p>
+
+        <h3>Top, middle, and bottom thirds</h3>
+        <pre><code>WITH country_medals AS (
+    SELECT
+        country,
+        COUNT(*) AS medals
+    FROM summer_medals
+    GROUP BY country
+)
+SELECT
+    country,
+    medals,
+    NTILE(3) OVER (
+        ORDER BY medals DESC
+    ) AS third
+FROM country_medals
+ORDER BY third, medals DESC;</code></pre>
+
+        <table>
+          <thead><tr><th>Bucket</th><th>Interpretation</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Top third</td></tr>
+            <tr><td>2</td><td>Middle third</td></tr>
+            <tr><td>3</td><td>Bottom third</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout amber">
+          <strong>Important:</strong>
+          <code>NTILE()</code> balances row counts, not value ranges. Rows with equal values can land in different buckets.
+        </div>
+      </section>
+
+      <section class="section" id="worked-examples">
+        <h2>8. Worked Examples</h2>
+
+        <h3>Future gold medalists</h3>
+        <pre><code>SELECT
+    year,
+    athlete,
+    LEAD(athlete) OVER (
+        PARTITION BY event
+        ORDER BY year
+    ) AS future_gold_medalist
+FROM summer_medals
+WHERE medal = 'Gold';</code></pre>
+
+        <h3>First athlete alphabetically</h3>
+        <pre><code>SELECT
+    athlete,
+    FIRST_VALUE(athlete) OVER (
+        ORDER BY athlete
+    ) AS first_athlete
+FROM summer_medals;</code></pre>
+
+        <h3>Last country alphabetically</h3>
+        <pre><code>SELECT
+    country,
+    LAST_VALUE(country) OVER (
+        ORDER BY country
+        RANGE BETWEEN
+            UNBOUNDED PRECEDING AND
+            UNBOUNDED FOLLOWING
+    ) AS last_country
+FROM summer_medals;</code></pre>
+
+        <h3>Rank athletes by medals earned</h3>
+        <pre><code>WITH athlete_medals AS (
+    SELECT
+        athlete,
+        COUNT(*) AS medals
+    FROM summer_medals
+    GROUP BY athlete
+)
+SELECT
+    athlete,
+    medals,
+    DENSE_RANK() OVER (
+        ORDER BY medals DESC
+    ) AS medal_rank
+FROM athlete_medals
+ORDER BY medal_rank, athlete;</code></pre>
+      </section>
+
+      <section class="section" id="mistakes">
+        <h2>9. Common Mistakes</h2>
+        <div class="qa">
+          <article class="qa-item">
+            <strong>Using LEAD or LAG without a meaningful order</strong>
+            Relative row position only makes sense when the window has a stable <code>ORDER BY</code>.
+          </article>
+          <article class="qa-item">
+            <strong>Forgetting to partition independent groups</strong>
+            Fetching or ranking can cross from one event, country, or category into another.
+          </article>
+          <article class="qa-item">
+            <strong>Trusting LAST_VALUE() with the default frame</strong>
+            The default frame often stops at the current row. Add <code>UNBOUNDED FOLLOWING</code> for the true final value.
+          </article>
+          <article class="qa-item">
+            <strong>Choosing the wrong ranking function</strong>
+            Decide explicitly whether ties should be unique, tied with gaps, or tied without gaps.
+          </article>
+          <article class="qa-item">
+            <strong>Treating NTILE as equal value ranges</strong>
+            <code>NTILE()</code> creates approximately equal row counts, not equally sized numeric intervals.
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="interview">
+        <h2>10. Interview Translation</h2>
+        <div class="qa">
+          <article class="qa-item">
+            <strong>What is the difference between LAG and LEAD?</strong>
+            <code>LAG()</code> reads a value from a previous row in the window order, while <code>LEAD()</code>
+            reads from a following row.
+          </article>
+          <article class="qa-item">
+            <strong>Why can LAST_VALUE be surprising?</strong>
+            Because it respects the current window frame. With the default frame, the last row is often the current row,
+            so I explicitly extend the frame when I need the partition's true final value.
+          </article>
+          <article class="qa-item">
+            <strong>How do ROW_NUMBER, RANK, and DENSE_RANK differ?</strong>
+            <code>ROW_NUMBER()</code> is always unique, <code>RANK()</code> leaves gaps after ties, and
+            <code>DENSE_RANK()</code> does not leave gaps.
+          </article>
+          <article class="qa-item">
+            <strong>What does NTILE do?</strong>
+            It divides ordered rows into a requested number of approximately equal buckets and assigns each row a bucket number.
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="review">
+        <h2>11. Memory Review</h2>
+        <div class="memory-box">
+          <strong>Chapter summary</strong>
+          <ol>
+            <li><code>LAG</code> looks backward; <code>LEAD</code> looks forward.</li>
+            <li><code>FIRST_VALUE</code> and <code>LAST_VALUE</code> depend on the window frame.</li>
+            <li><code>ROW_NUMBER</code> is unique; <code>RANK</code> gaps; <code>DENSE_RANK</code> does not.</li>
+            <li><code>NTILE(n)</code> creates approximately equal row-count buckets.</li>
+          </ol>
+        </div>
+
+        <h3>Quick self-check</h3>
+        <ul>
+          <li>Can you fetch the next value within each event?</li>
+          <li>Can you explain why <code>LAST_VALUE()</code> may repeat the current row?</li>
+          <li>Can you predict the output of all three ranking functions for ties?</li>
+          <li>Can you explain why equal values may fall into different <code>NTILE()</code> buckets?</li>
+        </ul>
+
+        <div class="callout amber">
+          <strong>Lab decision:</strong>
+          Keep these queries as candidates for the eventual course-wide lab. No separate Chapter 2 lab is required yet.
+        </div>
+
+        <div class="callout green">
+          <strong>Completion standard:</strong>
+          You can fetch nearby and boundary values, select the correct ranking function, and divide ordered rows into buckets.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    <span>PostgreSQL Summary Stats and Window Functions · Chapter 2 Field Guide</span>
+    <span>
+      <a href="chapter_01_introduction_to_window_functions_field_guide.html">Previous Chapter</a>
+      &nbsp;·&nbsp;
+      <a href="../index.html">Course Home</a>
+      &nbsp;·&nbsp;
+      <a href="field_guide.html">Main Field Guide</a>
+      &nbsp;·&nbsp;
+      <a href="chapter_03_aggregate_window_functions_and_frames_field_guide.html">Next Chapter</a>
+    </span>
+  </footer>
+</main>
+</body>
+</html>

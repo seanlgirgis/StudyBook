@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 3 Field Guide — PostgreSQL Text Functions and String Cleanup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg2: #121a30;
+      --bg3: #18233f;
+      --panel: #0f172a;
+      --border: #2b3b63;
+      --text: #e6edf7;
+      --muted: #9fb0d1;
+      --accent: #76b7ff;
+      --accent-2: #9ad0ff;
+      --good: #8ee6a5;
+      --warn: #ffd479;
+      --danger: #ff9a9a;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(118, 183, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, #09101d 0%, #0b1020 100%);
+      color: var(--text);
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: var(--accent-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    a:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+    code, pre, .mono {
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+    }
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 96px;
+    }
+    .hero {
+      background: linear-gradient(180deg, rgba(24, 35, 63, 0.95), rgba(15, 23, 42, 0.96));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid rgba(118, 183, 255, 0.35);
+      background: rgba(118, 183, 255, 0.1);
+      border-radius: 999px;
+      color: var(--accent-2);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    h1, h2, h3, h4 {
+      margin: 0 0 12px;
+      line-height: 1.25;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 2.8rem); }
+    h2 { font-size: 1.6rem; }
+    h3 { font-size: 1.15rem; }
+    p { margin: 0 0 14px; }
+    .subtitle {
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+    .hero-links,
+    .pill-links,
+    .quick-nav,
+    .section-nav,
+    .floating-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .hero-links a,
+    .quick-nav a,
+    .section-nav a,
+    .floating-nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--accent-2);
+      border-radius: 999px;
+      font-size: 0.92rem;
+      text-decoration: none;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .hero-links a:hover,
+    .quick-nav a:hover,
+    .section-nav a:hover,
+    .floating-nav a:hover {
+      transform: translateY(-1px);
+      border-color: rgba(118, 183, 255, 0.45);
+      background: rgba(24, 35, 63, 0.95);
+      text-decoration: none;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(118, 183, 255, 0.25);
+      background: rgba(118, 183, 255, 0.08);
+      color: var(--accent-2);
+      font-size: 0.85rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    .search-wrap,
+    .toc-wrap,
+    .section {
+      margin-top: 22px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+    .search-wrap { padding: 20px; }
+    .search-input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .search-tip,
+    .search-count,
+    .muted { color: var(--muted); }
+    .search-tip,
+    .search-count { font-size: 0.94rem; }
+    .search-tip { margin-top: 10px; }
+    .search-count { margin-top: 8px; }
+    .quick-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      margin-top: 14px;
+      padding: 12px 16px;
+      background: rgba(9, 16, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    .toc-wrap,
+    .section { padding: 22px; }
+    .section { scroll-margin-top: 88px; }
+    .toc-grid,
+    .cards-2,
+    .compare-grid,
+    .qa-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .toc-grid,
+    .cards-2,
+    .compare-grid,
+    .qa-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+    .toc-card,
+    .card,
+    .compare-card,
+    .qa-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(24, 35, 63, 0.72), rgba(18, 26, 48, 0.92));
+    }
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .section-num {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+    .callout,
+    .diagram {
+      border-left: 4px solid var(--accent);
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(118, 183, 255, 0.08);
+      margin: 18px 0;
+    }
+    .diagram {
+      white-space: pre-wrap;
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+    }
+    pre {
+      margin: 14px 0;
+      padding: 14px;
+      border-radius: 16px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      background: #0a1224;
+      color: #d8e5ff;
+      font-size: 0.94rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: rgba(24, 35, 63, 0.9);
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+    td { background: rgba(12, 19, 36, 0.92); }
+    .section-nav {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(43, 59, 99, 0.7);
+    }
+    .floating-nav {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(9, 16, 29, 0.95);
+      box-shadow: var(--shadow);
+      max-width: min(320px, calc(100vw - 24px));
+    }
+    .tight-list { margin: 0; padding-left: 18px; }
+    .tight-list li { margin-bottom: 6px; }
+    .search-item[hidden] { display: none !important; }
+
+    @media (max-width: 760px) {
+      .container { width: min(100% - 20px, 1180px); }
+      .hero,
+      .search-wrap,
+      .toc-wrap,
+      .section { border-radius: 18px; }
+      .quick-nav a,
+      .section-nav a,
+      .floating-nav a,
+      .hero-links a { flex: 1 1 auto; }
+      .toc-grid,
+      .cards-2,
+      .compare-grid,
+      .qa-grid { grid-template-columns: 1fr; }
+      .floating-nav {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="top">
+    <header class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="badge">Chapter 3 Detailed Guide</div>
+          <h1>Chapter 3 Field Guide — PostgreSQL Text Functions and String Cleanup</h1>
+          <p class="subtitle">Use cases, cleanup pipelines, parsing patterns, examples, traps, and practical decisions for PostgreSQL text manipulation.</p>
+        </div>
+        <div class="hero-links" aria-label="Guide links">
+          <a href="field_guide.html">Open Main Field Guide</a>
+          <a href="sql_function_quick_lookup.html">Open Quick Lookup</a>
+          <a href="chapter_01_data_types_field_guide.html">Open Chapter 1 Guide</a>
+          <a href="chapter_02_datetime_functions_field_guide.html">Open Chapter 2 Guide</a>
+          <a href="../lab/lab_guide.html">Open Lab Guide</a>
+        </div>
+      </div>
+      <div class="pill-links" aria-label="Page questions">
+        <span class="tag">How do I clean messy text?</span>
+        <span class="tag">How do I combine strings?</span>
+        <span class="tag">How do I extract part of a string?</span>
+        <span class="tag">How do I build repeatable cleanup pipelines?</span>
+      </div>
+    </header>
+
+    <div class="search-wrap">
+      <label for="lookupSearch" class="mono">Search this chapter guide</label>
+      <input
+        id="lookupSearch"
+        class="search-input"
+        type="search"
+        placeholder="Search function, cleanup problem, parsing pattern, trap, or keyword..."
+        aria-label="Search function, cleanup problem, parsing pattern, trap, or keyword"
+      />
+      <div class="search-tip">Aliases included: combine names, full name, concatenate, uppercase, lowercase, title case, replace word, reverse text, string length, find position, contains substring, left characters, right characters, middle characters, split delimiter, first token, last token, trim spaces, remove leading spaces, remove trailing spaces, pad zeros, fixed width code, collapse repeated spaces, regex cleanup, clean dirty text, normalize text, truncate without cutting word, short description, word boundary, last complete word, text preview, 50 character preview, reverse position left.</div>
+      <div id="searchCount" class="search-count" aria-live="polite">Showing all Chapter 3 items</div>
+    </div>
+
+    <nav class="quick-nav" aria-label="Sticky quick navigation">
+      <a href="#top">Top</a>
+      <a href="#problem-lookup">Problems</a>
+      <a href="#concatenation">Concatenate</a>
+      <a href="#case-conversion">Case</a>
+      <a href="#replacement">Replace</a>
+      <a href="#position-search">Position</a>
+      <a href="#substring-extraction">Substring</a>
+      <a href="#split-part">Split</a>
+      <a href="#trim-functions">Trim</a>
+      <a href="#padding">Pad</a>
+      <a href="#regex-replace">Regex</a>
+      <a href="#cleanup-pipelines">Pipelines</a>
+      <a href="#mistakes">Mistakes</a>
+      <a href="#interview-qa">Q&amp;A</a>
+    </nav>
+
+    <section class="toc-wrap">
+      <h2>Table of Contents</h2>
+      <p class="muted">Use the grouped map when you want the chapter in sequence, then jump by problem when you need the exact tool quickly.</p>
+      <div class="toc-grid">
+        <div class="toc-card">
+          <h3>Start Here</h3>
+          <ul class="tight-list">
+            <li><a href="#how-to-use">How to Use</a></li>
+            <li><a href="#chapter-map">Chapter Map</a></li>
+            <li><a href="#problem-lookup">Problem-Based Lookup</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Build and Normalize Text</h3>
+          <ul class="tight-list">
+            <li><a href="#concatenation">Concatenation</a></li>
+            <li><a href="#case-conversion">Case Conversion</a></li>
+            <li><a href="#replacement">Replacement</a></li>
+            <li><a href="#reverse-length">Reverse and Length</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Find and Extract Text</h3>
+          <ul class="tight-list">
+            <li><a href="#position-search">Position and Search</a></li>
+            <li><a href="#substring-extraction">Substring Extraction</a></li>
+            <li><a href="#split-part">SPLIT_PART()</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Clean and Format Text</h3>
+          <ul class="tight-list">
+            <li><a href="#trim-functions">Trim Functions</a></li>
+            <li><a href="#padding">Padding</a></li>
+            <li><a href="#regex-replace">REGEXP_REPLACE()</a></li>
+            <li><a href="#cleanup-pipelines">Cleanup Pipelines</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Review</h3>
+          <ul class="tight-list">
+            <li><a href="#combined-examples">Combined Examples</a></li>
+            <li><a href="#mistakes">Common Mistakes</a></li>
+            <li><a href="#interview-qa">Interview Q&amp;A</a></li>
+            <li><a href="#memory-review">Memory Review</a></li>
+            <li><a href="#related-guides">Related Guides</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how-to-use">
+      <div class="section-header">
+        <div><div class="section-num">Section 1</div><h2>How to Use This Guide</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="search by function name concatenate trim substring regexp_replace">
+          <h3>Search by function name</h3>
+          <p>Search directly for a function such as <span class="mono">TRIM</span>, <span class="mono">SPLIT_PART</span>, or <span class="mono">REGEXP_REPLACE</span> when you already know the tool name.</p>
+        </div>
+        <div class="card search-item" data-search="search by problem remove extra spaces extract first word clean dirty text">
+          <h3>Search by problem</h3>
+          <p>Search by business-language prompts such as <span class="mono">remove extra spaces</span>, <span class="mono">extract first word</span>, or <span class="mono">clean dirty text</span>.</p>
+        </div>
+        <div class="card search-item" data-search="use toc study chapter in sequence">
+          <h3>Study in sequence</h3>
+          <p>Use the TOC when you want to move from basic text building, to searching and extraction, to cleanup pipelines and review.</p>
+        </div>
+        <div class="card search-item" data-search="artifact roles quick lookup main field guide chapter guide lab guide">
+          <h3>Artifact roles</h3>
+          <p>Quick Lookup = smallest syntax reminder. Main Field Guide = compact whole-course summary. Chapter Guide = detailed use cases and examples. Lab Guide = practiced evidence and observed output.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#top">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#chapter-map">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="chapter-map">
+      <div class="section-header">
+        <div><div class="section-num">Section 2</div><h2>Chapter Map</h2></div>
+      </div>
+      <div class="diagram search-item" data-search="inspect raw text decide combine normalize search extract smallest safe function preserve original validate edge cases reusable cleanup logic">
+Inspect the raw text
+→ decide whether to combine, normalize, search, or extract
+→ apply the smallest safe function
+→ preserve original text when needed
+→ validate edge cases
+→ build reusable cleanup logic
+      </div>
+      <table class="search-item" data-search="need main tools combine values normalize capitalization replace literal inspect shape find location extract characters split structured text remove outside spaces create fixed width output clean repeated patterns">
+        <thead>
+          <tr><th>Need</th><th>Main tools</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>combine values</td><td><span class="mono">||</span>, <span class="mono">CONCAT()</span></td></tr>
+          <tr><td>normalize capitalization</td><td><span class="mono">UPPER()</span>, <span class="mono">LOWER()</span>, <span class="mono">INITCAP()</span></td></tr>
+          <tr><td>replace literal text</td><td><span class="mono">REPLACE()</span></td></tr>
+          <tr><td>inspect shape</td><td><span class="mono">LENGTH()</span>, <span class="mono">CHAR_LENGTH()</span></td></tr>
+          <tr><td>find location</td><td><span class="mono">POSITION()</span>, <span class="mono">STRPOS()</span></td></tr>
+          <tr><td>extract characters</td><td><span class="mono">LEFT()</span>, <span class="mono">RIGHT()</span>, <span class="mono">SUBSTRING()</span>, <span class="mono">SUBSTR()</span></td></tr>
+          <tr><td>split structured text</td><td><span class="mono">SPLIT_PART()</span></td></tr>
+          <tr><td>remove outside spaces</td><td><span class="mono">TRIM()</span>, <span class="mono">LTRIM()</span>, <span class="mono">RTRIM()</span></td></tr>
+          <tr><td>create fixed-width output</td><td><span class="mono">LPAD()</span>, <span class="mono">RPAD()</span></td></tr>
+          <tr><td>clean repeated patterns</td><td><span class="mono">REGEXP_REPLACE()</span></td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#how-to-use">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#problem-lookup">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="problem-lookup">
+      <div class="section-header">
+        <div><div class="section-num">Section 3</div><h2>Problem-Based Lookup</h2></div>
+      </div>
+      <table>
+        <thead><tr><th>I need to...</th><th>Use</th><th>Tiny example</th><th>Why</th><th>Trap</th></tr></thead>
+        <tbody>
+          <tr class="search-item" data-search="combine first and last name full name"><td>combine first and last name</td><td><span class="mono">||</span></td><td><span class="mono">first_name || ' ' || last_name</span></td><td>Simple readable full name</td><td><span class="mono">NULL</span> can null out the whole result</td></tr>
+          <tr class="search-item" data-search="combine text with separator concatenate"><td>combine text with a separator</td><td><span class="mono">CONCAT()</span></td><td><span class="mono">CONCAT(city, ', ', state)</span></td><td>Friendly display labels</td><td>Still add separators intentionally</td></tr>
+          <tr class="search-item" data-search="concatenate while handling null safely"><td>concatenate while handling NULL safely</td><td><span class="mono">CONCAT()</span></td><td><span class="mono">CONCAT(first_name, ' ', last_name)</span></td><td>Treats NULL as empty text</td><td>Do not assume <span class="mono">||</span> behaves the same</td></tr>
+          <tr class="search-item" data-search="uppercase a value"><td>uppercase a value</td><td><span class="mono">UPPER()</span></td><td><span class="mono">UPPER(code_text)</span></td><td>Normalize codes and comparison text</td><td>Uppercasing dirty padded text can keep junk spaces</td></tr>
+          <tr class="search-item" data-search="lowercase a value"><td>lowercase a value</td><td><span class="mono">LOWER()</span></td><td><span class="mono">LOWER(email_text)</span></td><td>Normalize comparison inputs</td><td>Case cleanup does not remove spacing issues</td></tr>
+          <tr class="search-item" data-search="title case a name initcap"><td>title-case a name</td><td><span class="mono">INITCAP()</span></td><td><span class="mono">INITCAP(TRIM(raw_name))</span></td><td>Readable display text</td><td>Not perfect for every personal or brand name</td></tr>
+          <tr class="search-item" data-search="replace one word with another"><td>replace one word with another</td><td><span class="mono">REPLACE()</span></td><td><span class="mono">REPLACE(txt, 'Course', 'Guide')</span></td><td>Literal exact swap</td><td>It does not understand patterns</td></tr>
+          <tr class="search-item" data-search="remove a literal character"><td>remove a literal character</td><td><span class="mono">REPLACE()</span></td><td><span class="mono">REPLACE(phone_text, '-', '')</span></td><td>Quick exact cleanup</td><td>Only removes that exact literal</td></tr>
+          <tr class="search-item" data-search="reverse a string"><td>reverse a string</td><td><span class="mono">REVERSE()</span></td><td><span class="mono">REVERSE(raw_text)</span></td><td>Spot suffix patterns or odd endings</td><td>Niche tool, not general cleanup</td></tr>
+          <tr class="search-item" data-search="count characters length"><td>count characters</td><td><span class="mono">LENGTH()</span></td><td><span class="mono">LENGTH(raw_text)</span></td><td>Measure text shape</td><td>May include unwanted spaces</td></tr>
+          <tr class="search-item" data-search="count characters after trimming"><td>count characters after trimming</td><td><span class="mono">LENGTH(TRIM())</span></td><td><span class="mono">LENGTH(TRIM(raw_text))</span></td><td>Compare dirty versus cleaned length</td><td>TRIM only affects outside spaces</td></tr>
+          <tr class="search-item" data-search="find the position of a substring"><td>find the position of a substring</td><td><span class="mono">POSITION()</span></td><td><span class="mono">POSITION('ELF' IN txt)</span></td><td>One-based location</td><td>0 means not found</td></tr>
+          <tr class="search-item" data-search="check whether a substring exists contains substring"><td>check whether a substring exists</td><td><span class="mono">POSITION() &gt; 0</span></td><td><span class="mono">POSITION('ELF' IN txt) &gt; 0</span></td><td>Boolean contains check</td><td>Do not treat 0 as first character</td></tr>
+          <tr class="search-item" data-search="extract first three characters"><td>extract first three characters</td><td><span class="mono">LEFT()</span></td><td><span class="mono">LEFT(code_text, 3)</span></td><td>Prefix or code family</td><td>Fixed-width assumption</td></tr>
+          <tr class="search-item" data-search="extract last four characters"><td>extract last four characters</td><td><span class="mono">RIGHT()</span></td><td><span class="mono">RIGHT(code_text, 4)</span></td><td>Suffix or tail code</td><td>Fixed-width assumption</td></tr>
+          <tr class="search-item" data-search="extract characters from the middle"><td>extract characters from the middle</td><td><span class="mono">SUBSTRING()</span></td><td><span class="mono">SUBSTRING(txt FROM 2 FOR 5)</span></td><td>Middle slice</td><td>Positions start at 1</td></tr>
+          <tr class="search-item" data-search="extract text from a start position"><td>extract text from a start position</td><td><span class="mono">SUBSTR()</span></td><td><span class="mono">SUBSTR(txt, 2, 5)</span></td><td>Short PostgreSQL syntax</td><td>Same 1-based rule applies</td></tr>
+          <tr class="search-item" data-search="truncate without cutting word short description word boundary last complete word text preview 50 character preview reverse position left"><td>truncate text without cutting the last word</td><td><span class="mono">LEFT() + REVERSE() + POSITION()</span></td><td><span class="mono">LEFT(description, 50 - POSITION(' ' IN REVERSE(LEFT(description, 50))))</span></td><td>Finds the last complete-word boundary inside the first 50 characters</td><td>Assumes a space exists inside the preview</td></tr>
+          <tr class="search-item" data-search="split on a dash"><td>split on a dash</td><td><span class="mono">SPLIT_PART()</span></td><td><span class="mono">SPLIT_PART(code_text, '-', 1)</span></td><td>Parse structured strings</td><td>Part numbers start at 1</td></tr>
+          <tr class="search-item" data-search="extract first token"><td>extract first token</td><td><span class="mono">SPLIT_PART()</span></td><td><span class="mono">SPLIT_PART(full_text, ' ', 1)</span></td><td>First word or first field</td><td>It does not return an array</td></tr>
+          <tr class="search-item" data-search="extract second token"><td>extract second token</td><td><span class="mono">SPLIT_PART()</span></td><td><span class="mono">SPLIT_PART(full_text, ' ', 2)</span></td><td>Second word or field</td><td>Index 0 is invalid for this task</td></tr>
+          <tr class="search-item" data-search="trim spaces from both sides"><td>trim spaces from both sides</td><td><span class="mono">TRIM()</span></td><td><span class="mono">TRIM(raw_text)</span></td><td>Outside whitespace cleanup</td><td>Does not collapse internal spaces</td></tr>
+          <tr class="search-item" data-search="trim only left spaces remove leading spaces"><td>trim only left spaces</td><td><span class="mono">LTRIM()</span></td><td><span class="mono">LTRIM(raw_text)</span></td><td>Fix left padding only</td><td>Right side stays untouched</td></tr>
+          <tr class="search-item" data-search="trim only right spaces remove trailing spaces"><td>trim only right spaces</td><td><span class="mono">RTRIM()</span></td><td><span class="mono">RTRIM(raw_text)</span></td><td>Fix right padding only</td><td>Left side stays untouched</td></tr>
+          <tr class="search-item" data-search="remove a specific leading character"><td>remove a specific leading character</td><td><span class="mono">TRIM(LEADING ...)</span></td><td><span class="mono">TRIM(LEADING '0' FROM txt)</span></td><td>Drop unwanted leading fills</td><td>Only affects the outside edge</td></tr>
+          <tr class="search-item" data-search="remove a specific trailing character"><td>remove a specific trailing character</td><td><span class="mono">TRIM(TRAILING ...)</span></td><td><span class="mono">TRIM(TRAILING '-' FROM txt)</span></td><td>Drop unwanted trailing fills</td><td>Internal characters remain</td></tr>
+          <tr class="search-item" data-search="pad a code with leading zeros fixed width code"><td>pad a code with leading zeros</td><td><span class="mono">LPAD()</span></td><td><span class="mono">LPAD(code_text, 5, '0')</span></td><td>Display fixed-width IDs</td><td>Cast numbers to text first</td></tr>
+          <tr class="search-item" data-search="pad a label on the right"><td>pad a label on the right</td><td><span class="mono">RPAD()</span></td><td><span class="mono">RPAD(label_text, 8, '.')</span></td><td>Consistent visual alignment</td><td>Display formatting only</td></tr>
+          <tr class="search-item" data-search="collapse repeated spaces regex cleanup"><td>collapse repeated spaces</td><td><span class="mono">REGEXP_REPLACE()</span></td><td><span class="mono">REGEXP_REPLACE(txt, '\s+', ' ', 'g')</span></td><td>Fix repeated internal whitespace</td><td>Need the <span class="mono">'g'</span> flag</td></tr>
+          <tr class="search-item" data-search="remove non numeric characters digits only"><td>remove non-numeric characters</td><td><span class="mono">REGEXP_REPLACE()</span></td><td><span class="mono">REGEXP_REPLACE(txt, '[^0-9]', '', 'g')</span></td><td>Keep only digits</td><td>Can remove meaningful formatting</td></tr>
+          <tr class="search-item" data-search="keep only letters"><td>keep only letters</td><td><span class="mono">REGEXP_REPLACE()</span></td><td><span class="mono">REGEXP_REPLACE(txt, '[^A-Za-z]', '', 'g')</span></td><td>Alphabetic cleanup</td><td>Drops spaces and accents too</td></tr>
+          <tr class="search-item" data-search="normalize mixed capitalization"><td>normalize mixed capitalization</td><td><span class="mono">INITCAP(LOWER())</span></td><td><span class="mono">INITCAP(LOWER(TRIM(txt)))</span></td><td>Readable standardized name</td><td>May oversimplify special naming rules</td></tr>
+          <tr class="search-item" data-search="build a cleaned customer name"><td>build a cleaned customer name</td><td><span class="mono">TRIM + REGEXP_REPLACE + INITCAP</span></td><td><span class="mono">INITCAP(REGEXP_REPLACE(TRIM(txt), '\s+', ' ', 'g'))</span></td><td>Repeatable display cleanup</td><td>Preserve raw value too</td></tr>
+          <tr class="search-item" data-search="clean text before comparing"><td>clean text before comparing</td><td><span class="mono">TRIM()</span> and <span class="mono">LOWER()</span></td><td><span class="mono">LOWER(TRIM(txt))</span></td><td>Fairer comparisons</td><td>Comparing raw and dirty text can mislead</td></tr>
+          <tr class="search-item" data-search="clean text before grouping"><td>clean text before grouping</td><td><span class="mono">normalized expression</span></td><td><span class="mono">GROUP BY INITCAP(TRIM(txt))</span></td><td>Avoid duplicate dirty groups</td><td>Raw and clean values can split counts</td></tr>
+          <tr class="search-item" data-search="identify empty strings after trimming"><td>identify empty strings after trimming</td><td><span class="mono">TRIM(txt) = ''</span></td><td><span class="mono">CASE WHEN TRIM(txt) = '' THEN ...</span></td><td>Catch blank-but-not-null values</td><td>Blank is not the same as NULL yet</td></tr>
+          <tr class="search-item" data-search="convert empty strings to null"><td>convert empty strings to NULL</td><td><span class="mono">NULLIF()</span></td><td><span class="mono">NULLIF(TRIM(txt), '')</span></td><td>Normalize blank text</td><td>Do not lose intentional original content without checking</td></tr>
+          <tr class="search-item" data-search="compare raw text with cleaned text"><td>compare raw text with cleaned text</td><td><span class="mono">SELECT both columns</span></td><td><span class="mono">SELECT raw_text, TRIM(raw_text)</span></td><td>Validate cleanup before updates</td><td>Never assume the rule is safe without comparing outputs</td></tr>
+          <tr class="search-item" data-search="build a reusable text cleaning cte cleanup pipeline"><td>build a reusable text-cleaning CTE</td><td><span class="mono">WITH cleaned AS (...)</span></td><td><span class="mono">WITH cleaned AS (SELECT ...)</span></td><td>Calculate once and reuse</td><td>Repeated cleanup logic gets noisy fast</td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#chapter-map">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#concatenation">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="concatenation">
+      <div class="section-header">
+        <div><div class="section-num">Section 4</div><h2>Concatenation</h2></div>
+      </div>
+      <div class="callout search-item" data-search="concatenation build readable labels null behavior strict concatenation">
+        Use concatenation when you need labels, full names, readable report text, or one combined searchable/display field built from multiple source values.
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="pipe operator strict concatenation full name">
+          <h3><span class="mono">||</span> operator</h3>
+          <pre><code>SELECT
+  first_name || ' ' || last_name AS full_name
+FROM customer;</code></pre>
+          <p>Best when strict concatenation is acceptable and you want the classic PostgreSQL operator form.</p>
+        </div>
+        <div class="card search-item" data-search="concat function null friendly full name">
+          <h3><span class="mono">CONCAT()</span></h3>
+          <pre><code>SELECT
+  CONCAT(first_name, ' ', last_name) AS full_name
+FROM customer;</code></pre>
+          <p>Best when NULL-friendly display output matters more than strict null propagation.</p>
+        </div>
+        <div class="card search-item" data-search="customer label separator concatenate">
+          <h3>Readable label</h3>
+          <pre><code>SELECT
+  CONCAT('Customer: ', first_name, ' ', last_name) AS customer_label
+FROM customer;</code></pre>
+          <p>Useful for report labels and exported display strings.</p>
+        </div>
+        <div class="card search-item" data-search="combine text with separator city state">
+          <h3>Separator example</h3>
+          <pre><code>SELECT
+  city || ', ' || state AS city_state
+FROM address_book;</code></pre>
+          <p>Make separators explicit so the output stays readable.</p>
+        </div>
+      </div>
+      <table class="search-item" data-search="null behavior concat versus pipe operator comparison table">
+        <thead><tr><th>Method</th><th>NULL behavior</th><th>Best use</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">||</span></td><td>NULL can make whole result NULL</td><td>strict concatenation</td></tr>
+          <tr><td><span class="mono">CONCAT()</span></td><td>skips NULL as empty text</td><td>friendlier display text</td></tr>
+        </tbody>
+      </table>
+      <div class="callout search-item" data-search="common trap do not assume pipe and concat handle null same way">
+        <strong>Common trap</strong>
+        Do not assume <span class="mono">||</span> and <span class="mono">CONCAT()</span> handle NULL the same way.
+      </div>
+      <div class="section-nav">
+        <a href="#problem-lookup">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#case-conversion">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="case-conversion">
+      <div class="section-header">
+        <div><div class="section-num">Section 5</div><h2>Case Conversion</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="upper lower initcap example">
+          <h3>Core case functions</h3>
+          <pre><code>SELECT
+  UPPER(first_name) AS upper_name,
+  LOWER(first_name) AS lower_name,
+  INITCAP(first_name) AS title_name
+FROM customer;</code></pre>
+          <p>Use these when you need standardized display text or consistent comparison prep.</p>
+        </div>
+        <div class="card search-item" data-search="initcap trim cleaned name dirty text">
+          <h3>Cleanup-first capitalization</h3>
+          <pre><code>SELECT
+  INITCAP(TRIM(raw_text)) AS cleaned_name
+FROM lab_dirty_text;</code></pre>
+          <p>Clean outside spaces before applying capitalization.</p>
+        </div>
+        <div class="card search-item" data-search="normalized comparisons lowercase">
+          <h3>Normalized comparison prep</h3>
+          <pre><code>SELECT
+  LOWER(TRIM(email_text)) AS comparable_email
+FROM customer_import;</code></pre>
+          <p>Lowercasing helps when you want stable text comparison inputs.</p>
+        </div>
+        <div class="card search-item" data-search="cleanup before grouping initcap lower group by">
+          <h3>Cleanup before grouping</h3>
+          <pre><code>SELECT
+  INITCAP(LOWER(TRIM(city_name))) AS clean_city,
+  COUNT(*) AS row_count
+FROM source_data
+GROUP BY INITCAP(LOWER(TRIM(city_name)));</code></pre>
+          <p>Normalize before grouping so dirty case variants do not split counts.</p>
+        </div>
+      </div>
+      <ul class="tight-list search-item" data-search="use cases normalized comparisons display formatting cleanup before grouping case insensitive matching preparation">
+        <li>normalized comparisons</li>
+        <li>display formatting</li>
+        <li>cleanup before grouping</li>
+        <li>case-insensitive matching preparation</li>
+      </ul>
+      <div class="callout search-item" data-search="initcap follows word boundaries mechanically brand personal name capitalization trap">
+        <strong>Trap</strong>
+        <span class="mono">INITCAP()</span> follows word boundaries mechanically and may not preserve special brand or personal-name capitalization.
+      </div>
+      <div class="section-nav">
+        <a href="#concatenation">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#replacement">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="replacement">
+      <div class="section-header">
+        <div><div class="section-num">Section 6</div><h2>Replacement</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="replace exact literal course guide">
+          <h3>Literal replacement</h3>
+          <pre><code>SELECT REPLACE('PostgreSQL Course', 'Course', 'Guide');</code></pre>
+          <p><span class="mono">REPLACE()</span> is for exact literal text replacement.</p>
+        </div>
+        <div class="card search-item" data-search="remove literal character phone dashes">
+          <h3>Remove exact characters</h3>
+          <pre><code>SELECT REPLACE(phone_text, '-', '') AS digits_without_dashes
+FROM contacts;</code></pre>
+          <p>Good when the unwanted character pattern is known and literal.</p>
+        </div>
+        <div class="card search-item" data-search="one pass space cleanup replace double spaces">
+          <h3>One-pass space cleanup</h3>
+          <pre><code>SELECT REPLACE(raw_text, '  ', ' ') AS one_pass_space_cleanup
+FROM lab_dirty_text;</code></pre>
+          <p>This can help in simple cases, but repeated runs may still be needed for messy text.</p>
+        </div>
+        <div class="card search-item" data-search="literal versus regex replacement comparison">
+          <h3>Literal versus pattern</h3>
+          <pre><code>SELECT REPLACE(raw_code, '#', '') AS literal_cleanup
+FROM source_data;</code></pre>
+          <p>Use literal replacement for exact text, not pattern families.</p>
+        </div>
+      </div>
+      <div class="callout search-item" data-search="replace exact literal text it does not understand patterns">
+        <strong>What to remember</strong>
+        <span class="mono">REPLACE()</span> replaces exact literal text. It does not understand patterns.
+      </div>
+      <table class="search-item" data-search="exact literal replacement versus pattern based replacement">
+        <thead><tr><th>Need</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td>exact literal replacement</td><td><span class="mono">REPLACE()</span></td></tr>
+          <tr><td>pattern-based replacement</td><td><span class="mono">REGEXP_REPLACE()</span></td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#case-conversion">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#reverse-length">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="reverse-length">
+      <div class="section-header">
+        <div><div class="section-num">Section 7</div><h2>Reverse and Length</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="reverse text dirty text example">
+          <h3><span class="mono">REVERSE()</span></h3>
+          <pre><code>SELECT
+  raw_text,
+  REVERSE(raw_text) AS reversed_text
+FROM lab_dirty_text;</code></pre>
+          <p>Useful when you need to inspect suffix behavior or odd trailing content.</p>
+        </div>
+        <div class="card search-item" data-search="raw length trimmed length">
+          <h3><span class="mono">LENGTH()</span> versus trimmed length</h3>
+          <pre><code>SELECT
+  raw_text,
+  LENGTH(raw_text) AS raw_length,
+  LENGTH(TRIM(raw_text)) AS trimmed_length
+FROM lab_dirty_text;</code></pre>
+          <p>Great for spotting hidden padding and validating cleanup impact.</p>
+        </div>
+        <div class="card search-item" data-search="char_length string length">
+          <h3><span class="mono">CHAR_LENGTH()</span></h3>
+          <pre><code>SELECT
+  raw_text,
+  CHAR_LENGTH(raw_text) AS character_count
+FROM lab_dirty_text;</code></pre>
+          <p>Use when you want an explicit character-counting name.</p>
+        </div>
+        <div class="card search-item" data-search="validate code length unexpectedly short long values">
+          <h3>Validation example</h3>
+          <pre><code>SELECT
+  raw_code,
+  LENGTH(raw_code) AS code_length
+FROM source_data
+WHERE LENGTH(raw_code) &lt; 4
+   OR LENGTH(raw_code) &gt; 12;</code></pre>
+          <p>Helpful for flagging unexpectedly short or long values before downstream logic.</p>
+        </div>
+      </div>
+      <ul class="tight-list search-item" data-search="validating code length trailing leading junk comparing raw versus cleaned text detecting unexpectedly short or long values">
+        <li>validating code length</li>
+        <li>finding trailing or leading junk</li>
+        <li>comparing raw versus cleaned text</li>
+        <li>detecting unexpectedly short or long values</li>
+      </ul>
+      <div class="callout search-item" data-search="length before trimming may include unwanted spaces trap">
+        <strong>Trap</strong>
+        Length before trimming may include unwanted spaces.
+      </div>
+      <div class="section-nav">
+        <a href="#replacement">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#position-search">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="position-search">
+      <div class="section-header">
+        <div><div class="section-num">Section 8</div><h2>Position and Search</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="position substring in text syntax">
+          <h3><span class="mono">POSITION()</span></h3>
+          <pre><code>SELECT
+  POSITION('ELF' IN comparison_text) AS elf_position
+FROM lab_dirty_text;</code></pre>
+          <p>Uses <span class="mono">POSITION('x' IN text)</span> syntax and returns a one-based position.</p>
+        </div>
+        <div class="card search-item" data-search="strpos text substring syntax">
+          <h3><span class="mono">STRPOS()</span></h3>
+          <pre><code>SELECT
+  STRPOS(comparison_text, 'ELF') AS elf_position
+FROM lab_dirty_text;</code></pre>
+          <p>Uses <span class="mono">STRPOS(text, 'x')</span> syntax and returns the same kind of position result.</p>
+        </div>
+        <div class="card search-item" data-search="contains substring boolean position greater than zero">
+          <h3>Contains check</h3>
+          <pre><code>SELECT
+  comparison_text,
+  POSITION('ELF' IN comparison_text) &gt; 0 AS contains_elf
+FROM lab_dirty_text;</code></pre>
+          <p>Turn the numeric location into an explicit boolean-like check.</p>
+        </div>
+        <div class="card search-item" data-search="strpos not found zero">
+          <h3>Not-found behavior</h3>
+          <pre><code>SELECT
+  comparison_text,
+  STRPOS(comparison_text, 'XYZ') AS xyz_position
+FROM lab_dirty_text;</code></pre>
+          <p>Useful for proving that <span class="mono">0</span> means not found.</p>
+        </div>
+      </div>
+      <table class="search-item" data-search="position versus strpos comparison syntax style">
+        <thead><tr><th>Function</th><th>Syntax style</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">POSITION()</span></td><td><span class="mono">POSITION('x' IN text)</span></td></tr>
+          <tr><td><span class="mono">STRPOS()</span></td><td><span class="mono">STRPOS(text, 'x')</span></td></tr>
+        </tbody>
+      </table>
+      <div class="callout search-item" data-search="string positions start at 1 result of 0 means not found">
+        <strong>Trap</strong>
+        PostgreSQL string positions start at 1. A result of 0 means not found.
+      </div>
+      <div class="section-nav">
+        <a href="#reverse-length">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#substring-extraction">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="substring-extraction">
+      <div class="section-header">
+        <div><div class="section-num">Section 9</div><h2>Substring Extraction</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="left first three characters">
+          <h3><span class="mono">LEFT()</span></h3>
+          <pre><code>SELECT LEFT(comparison_text, 3) AS first_three;</code></pre>
+          <p>Best for prefix-style extraction.</p>
+        </div>
+        <div class="card search-item" data-search="right last four characters">
+          <h3><span class="mono">RIGHT()</span></h3>
+          <pre><code>SELECT RIGHT(comparison_text, 4) AS last_four;</code></pre>
+          <p>Best for suffix-style extraction.</p>
+        </div>
+        <div class="card search-item" data-search="substring from for middle piece">
+          <h3><span class="mono">SUBSTRING()</span></h3>
+          <pre><code>SELECT SUBSTRING(comparison_text FROM 2 FOR 5) AS middle_piece;</code></pre>
+          <p>Readable standard form for middle slices.</p>
+        </div>
+        <div class="card search-item" data-search="substr short syntax middle piece">
+          <h3><span class="mono">SUBSTR()</span></h3>
+          <pre><code>SELECT SUBSTR(comparison_text, 2, 5) AS middle_piece;</code></pre>
+          <p>Short PostgreSQL-friendly version of the same idea.</p>
+        </div>
+        <div class="card search-item" data-search="year portion partial identifiers region codes">
+          <h3>Partial identifier example</h3>
+          <pre><code>SELECT
+  LEFT(order_code, 2) AS region_prefix,
+  RIGHT(order_code, 4) AS serial_suffix
+FROM order_feed;</code></pre>
+          <p>Useful for prefixes, suffixes, and region codes.</p>
+        </div>
+        <div class="card search-item" data-search="masking part of a value">
+          <h3>Masking example</h3>
+          <pre><code>SELECT
+  LEFT(card_token, 4) || '...' || RIGHT(card_token, 4) AS masked_token
+FROM payment_feed;</code></pre>
+          <p>Useful when you want a safe visible slice instead of the full value.</p>
+        </div>
+        <div class="card search-item" data-search="truncate without cutting word short description word boundary last complete word text preview 50 character preview reverse position left">
+          <h3>Truncate text without cutting a word</h3>
+          <p><strong>Business question:</strong> How do I create a short description that ends at the last complete word within the first 50 characters?</p>
+          <pre><code>SELECT
+  title,
+  LEFT(
+    description,
+    50 - POSITION(
+      ' ' IN REVERSE(LEFT(description, 50))
+    )
+  ) AS short_description
+FROM film;</code></pre>
+          <pre><code>SELECT
+  UPPER(c.name) || ': ' || f.title AS film_category,
+  LEFT(
+    f.description,
+    50 - POSITION(
+      ' ' IN REVERSE(LEFT(f.description, 50))
+    )
+  ) AS short_description
+FROM film AS f
+INNER JOIN film_category AS fc
+  ON f.film_id = fc.film_id
+INNER JOIN category AS c
+  ON fc.category_id = c.category_id;</code></pre>
+          <p><strong>Step-by-step:</strong></p>
+          <ol class="tight-list">
+            <li><span class="mono">LEFT(description, 50)</span> takes the first 50 characters.</li>
+            <li><span class="mono">REVERSE(...)</span> reverses that 50-character preview.</li>
+            <li><span class="mono">POSITION(' ' IN reversed_text)</span> finds the first space in the reversed text, which represents the last space in the original preview.</li>
+            <li><span class="mono">50 - that position</span> calculates the safe length ending before the partial final word.</li>
+            <li>The outer <span class="mono">LEFT()</span> returns only complete words.</li>
+          </ol>
+          <div class="diagram">Take first N
+→ reverse
+→ find first space
+→ subtract from N
+→ keep complete words</div>
+          <p><strong>Common trap:</strong> If the first 50 characters contain no space, <span class="mono">POSITION()</span> returns 0, so this expression returns all 50 characters and may still cut a long word.</p>
+          <p><strong>Edge-case note:</strong> This pattern assumes spaces are the desired word separator. For normal descriptions containing multiple words, this pattern works well. For unbroken identifiers or very long single words, add explicit edge-case handling.</p>
+        </div>
+      </div>
+      <ul class="tight-list search-item" data-search="prefixes suffixes region codes year portions partial identifiers masking">
+        <li>prefixes</li>
+        <li>suffixes</li>
+        <li>region codes</li>
+        <li>year portions</li>
+        <li>partial identifiers</li>
+        <li>masking part of a value</li>
+      </ul>
+      <div class="callout search-item" data-search="text positions start at 1 not 0 substring trap">
+        <strong>Trap</strong>
+        Text positions start at 1, not 0.
+      </div>
+      <div class="section-nav">
+        <a href="#position-search">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#split-part">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="split-part">
+      <div class="section-header">
+        <div><div class="section-num">Section 10</div><h2>SPLIT_PART()</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="split part dash first token region">
+          <h3>Delimited region example</h3>
+          <pre><code>SELECT SPLIT_PART('north-america-sales', '-', 1) AS region;</code></pre>
+          <p>First field from a dash-delimited value.</p>
+        </div>
+        <div class="card search-item" data-search="split part second token area">
+          <h3>Second field example</h3>
+          <pre><code>SELECT SPLIT_PART('north-america-sales', '-', 2) AS area;</code></pre>
+          <p>Pull the second token without needing array syntax.</p>
+        </div>
+        <div class="card search-item" data-search="email user split part">
+          <h3>Email user</h3>
+          <pre><code>SELECT SPLIT_PART(email_address, '@', 1) AS email_user
+FROM contacts;</code></pre>
+          <p>Useful for username extraction from structured text.</p>
+        </div>
+        <div class="card search-item" data-search="email domain split part">
+          <h3>Email domain</h3>
+          <pre><code>SELECT SPLIT_PART(email_address, '@', 2) AS email_domain
+FROM contacts;</code></pre>
+          <p>Useful for domain grouping and validation.</p>
+        </div>
+        <div class="card search-item" data-search="generated code split part first second">
+          <h3>Generated code parsing</h3>
+          <pre><code>SELECT
+  SPLIT_PART(raw_code || '-' || comparison_text, '-', 1) AS code_part,
+  SPLIT_PART(raw_code || '-' || comparison_text, '-', 2) AS text_part
+FROM lab_dirty_text;</code></pre>
+          <p>Matches the Chapter 3 live lab parsing pattern.</p>
+        </div>
+        <div class="card search-item" data-search="missing split part index empty result">
+          <h3>Missing part behavior</h3>
+          <pre><code>SELECT SPLIT_PART('alpha-beta', '-', 3) AS third_part;</code></pre>
+          <p>If the requested part does not exist, the result comes back empty.</p>
+        </div>
+      </div>
+      <div class="callout search-item" data-search="split_part positions start at 1 it does not return an array trap">
+        <strong>Trap</strong>
+        <span class="mono">SPLIT_PART</span> positions start at 1. It does not return an array.
+      </div>
+      <div class="section-nav">
+        <a href="#substring-extraction">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#trim-functions">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="trim-functions">
+      <div class="section-header">
+        <div><div class="section-num">Section 11</div><h2>Trim Functions</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="trim both sides outside spaces">
+          <h3><span class="mono">TRIM()</span></h3>
+          <pre><code>SELECT TRIM(raw_text) AS trimmed_text
+FROM lab_dirty_text;</code></pre>
+          <p>Use for outside whitespace on both ends.</p>
+        </div>
+        <div class="card search-item" data-search="ltrim rtrim left right spaces">
+          <h3><span class="mono">LTRIM()</span> and <span class="mono">RTRIM()</span></h3>
+          <pre><code>SELECT
+  LTRIM(raw_text) AS left_trimmed,
+  RTRIM(raw_text) AS right_trimmed
+FROM lab_dirty_text;</code></pre>
+          <p>Use when only one side of the value needs outside cleanup.</p>
+        </div>
+        <div class="card search-item" data-search="trim both specific character clean code">
+          <h3>Specific character trimming</h3>
+          <pre><code>SELECT TRIM(BOTH '-' FROM '--ABC--') AS clean_code;</code></pre>
+          <p>Trimming works with requested outer characters, not just spaces.</p>
+        </div>
+        <div class="card search-item" data-search="trim leading zeros">
+          <h3>Leading character trim</h3>
+          <pre><code>SELECT TRIM(LEADING '0' FROM '000123') AS without_leading_zeros;</code></pre>
+          <p>Useful when imported text values include non-meaningful fill characters.</p>
+        </div>
+      </div>
+      <div class="callout search-item" data-search="trim outside whitespace versus internal whitespace">
+        <strong>Important distinction</strong>
+        <span class="mono">TRIM()</span> removes characters from the outside. It does not collapse repeated spaces inside the string.
+      </div>
+      <table class="search-item" data-search="both sides left only right only internal repeated spaces comparison">
+        <thead><tr><th>Need</th><th>Function</th></tr></thead>
+        <tbody>
+          <tr><td>both sides</td><td><span class="mono">TRIM()</span></td></tr>
+          <tr><td>left only</td><td><span class="mono">LTRIM()</span></td></tr>
+          <tr><td>right only</td><td><span class="mono">RTRIM()</span></td></tr>
+          <tr><td>internal repeated spaces</td><td><span class="mono">REGEXP_REPLACE()</span></td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#split-part">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#padding">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="padding">
+      <div class="section-header">
+        <div><div class="section-num">Section 12</div><h2>Padding</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="lpad target length fill text leading zeros">
+          <h3><span class="mono">LPAD()</span></h3>
+          <pre><code>SELECT LPAD('42', 5, '0') AS padded_code;</code></pre>
+          <p>Good for fixed-width display codes and normalized text output.</p>
+        </div>
+        <div class="card search-item" data-search="rpad target length fill text right dots">
+          <h3><span class="mono">RPAD()</span></h3>
+          <pre><code>SELECT RPAD('SQL', 8, '.') AS padded_label;</code></pre>
+          <p>Good for right-side label fill or visual alignment.</p>
+        </div>
+        <div class="card search-item" data-search="customer id cast text before padding">
+          <h3>Padding numeric-looking IDs</h3>
+          <pre><code>SELECT
+  customer_id,
+  LPAD(customer_id::text, 6, '0') AS display_customer_id
+FROM customer;</code></pre>
+          <p>Cast numeric values to text first so padding behaves as expected.</p>
+        </div>
+        <div class="card search-item" data-search="display formatting not new business key">
+          <h3>Display-only formatting</h3>
+          <pre><code>SELECT
+  raw_code,
+  LPAD(raw_code, 4, '0') AS display_code
+FROM source_data;</code></pre>
+          <p>Useful in reports, but different from changing the underlying business key.</p>
+        </div>
+      </div>
+      <div class="callout search-item" data-search="padding works with text cast numeric values to text when necessary">
+        <strong>Trap</strong>
+        Padding works with text. Cast numeric values to text when necessary.
+      </div>
+      <div class="callout search-item" data-search="padding display formatting underlying business key warning">
+        <strong>Warning</strong>
+        Padding is often display formatting. Do not confuse display formatting with changing the underlying business key.
+      </div>
+      <div class="section-nav">
+        <a href="#trim-functions">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#regex-replace">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="regex-replace">
+      <div class="section-header">
+        <div><div class="section-num">Section 13</div><h2>REGEXP_REPLACE()</h2></div>
+      </div>
+      <div class="callout search-item" data-search="regex replace syntax pattern replacement g flag">
+        <strong>Syntax shape</strong>
+        <span class="mono">REGEXP_REPLACE(text, pattern, replacement, 'g')</span>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="collapse repeated whitespace internal spaces">
+          <h3>Collapse repeated whitespace</h3>
+          <pre><code>SELECT
+  REGEXP_REPLACE(raw_text, '\s+', ' ', 'g') AS collapsed_spaces
+FROM lab_dirty_text;</code></pre>
+          <p>Use this when internal repeated spaces should collapse to one normal space.</p>
+        </div>
+        <div class="card search-item" data-search="digits only remove non numeric characters">
+          <h3>Digits only</h3>
+          <pre><code>SELECT
+  REGEXP_REPLACE(phone_text, '[^0-9]', '', 'g') AS digits_only
+FROM contacts;</code></pre>
+          <p>Handy for phone-style cleanup before validation.</p>
+        </div>
+        <div class="card search-item" data-search="letters only remove non letters">
+          <h3>Letters only</h3>
+          <pre><code>SELECT
+  REGEXP_REPLACE(raw_code, '[^A-Za-z]', '', 'g') AS letters_only
+FROM source_data;</code></pre>
+          <p>Useful when mixed punctuation or numbers should be stripped.</p>
+        </div>
+        <div class="card search-item" data-search="punctuation cleanup punctuation runs">
+          <h3>Punctuation cleanup</h3>
+          <pre><code>SELECT
+  REGEXP_REPLACE(raw_text, '[[:punct:]]+', ' ', 'g') AS punctuation_cleaned
+FROM lab_dirty_text;</code></pre>
+          <p>Helpful when punctuation runs create noise in text columns.</p>
+        </div>
+      </div>
+      <table class="search-item" data-search="pattern idea repeated whitespace anything except digits anything except letters punctuation runs">
+        <thead><tr><th>Need</th><th>Pattern idea</th></tr></thead>
+        <tbody>
+          <tr><td>repeated whitespace</td><td><span class="mono">\s+</span></td></tr>
+          <tr><td>anything except digits</td><td><span class="mono">[^0-9]</span></td></tr>
+          <tr><td>anything except letters</td><td><span class="mono">[^A-Za-z]</span></td></tr>
+          <tr><td>punctuation runs</td><td><span class="mono">[[:punct:]]+</span></td></tr>
+        </tbody>
+      </table>
+      <div class="callout search-item" data-search="without g flag only first matching occurrence replaced">
+        <strong>Important</strong>
+        Without the <span class="mono">g</span> flag, only the first matching occurrence is replaced.
+      </div>
+      <div class="callout search-item" data-search="regex cleanup can remove meaningful characters always compare raw and cleaned output caution">
+        <strong>Caution</strong>
+        Regex cleanup can remove meaningful characters. Always compare raw and cleaned output before updating stored data.
+      </div>
+      <div class="section-nav">
+        <a href="#padding">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#cleanup-pipelines">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="cleanup-pipelines">
+      <div class="section-header">
+        <div><div class="section-num">Section 14</div><h2>Cleanup Pipelines</h2></div>
+      </div>
+      <div class="diagram search-item" data-search="inspect raw text trim outside whitespace collapse internal whitespace normalize capitalization replace remove unwanted characters validate length emptiness">
+inspect raw text
+→ trim outside whitespace
+→ collapse internal whitespace
+→ normalize capitalization
+→ replace or remove unwanted characters
+→ validate length and emptiness
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="clean customer name pipeline business question order matters">
+          <h3>Clean customer name</h3>
+          <p><strong>Business question:</strong> How do I turn messy imported name text into stable display text?</p>
+          <pre><code>SELECT
+  raw_name,
+  INITCAP(
+    REGEXP_REPLACE(
+      TRIM(raw_name),
+      '\s+',
+      ' ',
+      'g'
+    )
+  ) AS cleaned_name
+FROM customer_import;</code></pre>
+          <p><strong>Why the order matters:</strong> trim outside junk first, then collapse internal spacing, then format capitalization.</p>
+          <p><strong>Likely mistake:</strong> applying <span class="mono">INITCAP()</span> before removing extra spaces.</p>
+        </div>
+        <div class="card search-item" data-search="clean and normalize code pipeline upper regex">
+          <h3>Clean and normalize code</h3>
+          <p><strong>Business question:</strong> How do I normalize imported codes before reporting?</p>
+          <pre><code>SELECT
+  raw_code,
+  UPPER(
+    REGEXP_REPLACE(
+      TRIM(raw_code),
+      '[^A-Za-z0-9]',
+      '',
+      'g'
+    )
+  ) AS cleaned_code
+FROM source_data;</code></pre>
+          <p><strong>What to validate:</strong> compare raw and cleaned values so you do not remove meaningful symbols accidentally.</p>
+          <p><strong>Likely mistake:</strong> deleting punctuation without checking whether some symbols carry business meaning.</p>
+        </div>
+        <div class="card search-item" data-search="empty string to null nullif trim">
+          <h3>Empty string to NULL</h3>
+          <p><strong>Business question:</strong> How do I normalize blank text values?</p>
+          <pre><code>SELECT
+  NULLIF(TRIM(raw_text), '') AS normalized_text
+FROM lab_dirty_text;</code></pre>
+          <p><strong>Why the order matters:</strong> values with only spaces should become blank first, then convert to NULL.</p>
+          <p><strong>Likely mistake:</strong> checking for <span class="mono">''</span> before trimming.</p>
+        </div>
+        <div class="card search-item" data-search="cte cleanup pipeline cleaned normalized reusable">
+          <h3>CTE cleanup pipeline</h3>
+          <p><strong>Business question:</strong> How do I build reusable cleanup logic without repeating expressions everywhere?</p>
+          <pre><code>WITH cleaned AS (
+  SELECT
+    id,
+    raw_text,
+    TRIM(raw_text) AS trimmed_text
+  FROM lab_dirty_text
+),
+normalized AS (
+  SELECT
+    id,
+    raw_text,
+    REGEXP_REPLACE(trimmed_text, '\s+', ' ', 'g')
+      AS normalized_text
+  FROM cleaned
+)
+SELECT
+  id,
+  raw_text,
+  normalized_text
+FROM normalized;</code></pre>
+          <p><strong>What to validate:</strong> keep raw and normalized output together in the final SELECT so the transformation is easy to review.</p>
+          <p><strong>Likely mistake:</strong> repeating the same cleanup chain in multiple clauses instead of calculating once.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#regex-replace">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#combined-examples">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="combined-examples">
+      <div class="section-header">
+        <div><div class="section-num">Section 15</div><h2>Combined Examples</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="build full customer name example">
+          <h3>Example 1: Build full customer name</h3>
+          <p><strong>Business question:</strong> How do I join two name columns for display?</p>
+          <pre><code>SELECT
+  first_name || ' ' || last_name AS full_name
+FROM customer;</code></pre>
+          <p><strong>What to notice:</strong> The separator has to be inserted manually.</p>
+          <p><strong>Likely mistake:</strong> Forgetting the space separator.</p>
+        </div>
+        <div class="card search-item" data-search="build label with concat example">
+          <h3>Example 2: Build label with CONCAT()</h3>
+          <p><strong>Business question:</strong> How do I build a readable customer label?</p>
+          <pre><code>SELECT
+  CONCAT('Customer: ', first_name, ' ', last_name) AS customer_label
+FROM customer;</code></pre>
+          <p><strong>What to notice:</strong> NULL values behave more safely for display text.</p>
+          <p><strong>Likely mistake:</strong> Assuming <span class="mono">||</span> would handle NULL the same way.</p>
+        </div>
+        <div class="card search-item" data-search="normalize capitalization example">
+          <h3>Example 3: Normalize capitalization</h3>
+          <p><strong>Business question:</strong> How do I make messy imported names readable?</p>
+          <pre><code>SELECT
+  INITCAP(LOWER(TRIM(raw_text))) AS normalized_name
+FROM lab_dirty_text;</code></pre>
+          <p><strong>What to notice:</strong> Clean spacing before case formatting.</p>
+          <p><strong>Likely mistake:</strong> Leaving padded spaces in the display output.</p>
+        </div>
+        <div class="card search-item" data-search="compare raw and trimmed length example">
+          <h3>Example 4: Compare raw and trimmed length</h3>
+          <p><strong>Business question:</strong> How do I flag hidden padding?</p>
+          <pre><code>SELECT
+  raw_text,
+  LENGTH(raw_text) AS raw_length,
+  LENGTH(TRIM(raw_text)) AS clean_length
+FROM lab_dirty_text;</code></pre>
+          <p><strong>What to notice:</strong> Length difference is a useful quality signal.</p>
+          <p><strong>Likely mistake:</strong> Trusting visual inspection alone.</p>
+        </div>
+        <div class="card search-item" data-search="find substring position example">
+          <h3>Example 5: Find a substring position</h3>
+          <p><strong>Business question:</strong> Does this text contain the token ELF?</p>
+          <pre><code>SELECT
+  comparison_text,
+  POSITION('ELF' IN comparison_text) AS elf_position
+FROM lab_dirty_text;</code></pre>
+          <p><strong>What to notice:</strong> 0 means not found.</p>
+          <p><strong>Likely mistake:</strong> Treating 0 as the first position.</p>
+        </div>
+        <div class="card search-item" data-search="extract code prefix suffix example">
+          <h3>Example 6: Extract code prefix and suffix</h3>
+          <p><strong>Business question:</strong> How do I pull the start and end of a code?</p>
+          <pre><code>SELECT
+  LEFT(order_code, 3) AS prefix_code,
+  RIGHT(order_code, 4) AS suffix_code
+FROM order_feed;</code></pre>
+          <p><strong>What to notice:</strong> Prefix and suffix extraction are simpler than generic substring logic.</p>
+          <p><strong>Likely mistake:</strong> Using fixed-width logic on inconsistent text shapes.</p>
+        </div>
+        <div class="card search-item" data-search="split email address example">
+          <h3>Example 7: Split an email address</h3>
+          <p><strong>Business question:</strong> How do I separate email user and domain?</p>
+          <pre><code>SELECT
+  SPLIT_PART(email_address, '@', 1) AS email_user,
+  SPLIT_PART(email_address, '@', 2) AS email_domain
+FROM contacts;</code></pre>
+          <p><strong>What to notice:</strong> The same delimiter can feed multiple extracted fields.</p>
+          <p><strong>Likely mistake:</strong> Using index 0.</p>
+        </div>
+        <div class="card search-item" data-search="pad customer id example">
+          <h3>Example 8: Pad customer ID</h3>
+          <p><strong>Business question:</strong> How do I make customer IDs fixed-width for display?</p>
+          <pre><code>SELECT
+  customer_id,
+  LPAD(customer_id::text, 6, '0') AS display_customer_id
+FROM customer;</code></pre>
+          <p><strong>What to notice:</strong> Cast to text before padding.</p>
+          <p><strong>Likely mistake:</strong> Treating the padded display string like a new key.</p>
+        </div>
+        <div class="card search-item" data-search="collapse repeated spaces example">
+          <h3>Example 9: Collapse repeated spaces</h3>
+          <p><strong>Business question:</strong> How do I normalize internal spacing?</p>
+          <pre><code>SELECT
+  REGEXP_REPLACE(raw_text, '\s+', ' ', 'g') AS collapsed_spaces
+FROM lab_dirty_text;</code></pre>
+          <p><strong>What to notice:</strong> Regex handles repeated internal whitespace better than TRIM.</p>
+          <p><strong>Likely mistake:</strong> Forgetting the <span class="mono">'g'</span> flag.</p>
+        </div>
+        <div class="card search-item" data-search="full cleanup pipeline example">
+          <h3>Example 10: Full cleanup pipeline</h3>
+          <p><strong>Business question:</strong> How do I produce one stable cleaned display value?</p>
+          <pre><code>SELECT
+  INITCAP(
+    REGEXP_REPLACE(
+      TRIM(raw_text),
+      '\s+',
+      ' ',
+      'g'
+    )
+  ) AS clean_display_text
+FROM lab_dirty_text;</code></pre>
+          <p><strong>What to notice:</strong> Trim first, regex second, case format third.</p>
+          <p><strong>Likely mistake:</strong> Doing the same steps in a less safe order.</p>
+        </div>
+        <div class="card search-item" data-search="convert empty string to null example">
+          <h3>Example 11: Convert empty string to NULL</h3>
+          <p><strong>Business question:</strong> How do I normalize blank text values before loading?</p>
+          <pre><code>SELECT
+  NULLIF(TRIM(raw_text), '') AS normalized_text
+FROM lab_dirty_text;</code></pre>
+          <p><strong>What to notice:</strong> This turns space-only values into NULL too.</p>
+          <p><strong>Likely mistake:</strong> Treating blank strings and NULL as identical without checking.</p>
+        </div>
+        <div class="card search-item" data-search="clean phone number to digits only example">
+          <h3>Example 12: Clean phone number to digits only</h3>
+          <p><strong>Business question:</strong> How do I keep only numbers from messy phone text?</p>
+          <pre><code>SELECT
+  REGEXP_REPLACE(phone_text, '[^0-9]', '', 'g') AS digits_only
+FROM contacts;</code></pre>
+          <p><strong>What to notice:</strong> Regex is safer than chaining many literal replacements for broad cleanup.</p>
+          <p><strong>Likely mistake:</strong> Updating stored values before reviewing the cleaned output in SELECT form.</p>
+        </div>
+        <div class="card search-item" data-search="safe short description preview truncate without cutting word short description word boundary last complete word text preview">
+          <h3>Example 13: Safe short-description preview</h3>
+          <p><strong>Business question:</strong> How do I create a short description that ends at the last complete word within the first 50 characters?</p>
+          <pre><code>SELECT
+  title,
+  LEFT(
+    description,
+    50 - POSITION(
+      ' ' IN REVERSE(LEFT(description, 50))
+    )
+  ) AS short_description
+FROM film;</code></pre>
+          <p><strong>What to notice:</strong> The first <span class="mono">LEFT()</span> limits the search area. <span class="mono">REVERSE()</span> makes the final word boundary easy to locate.</p>
+          <p><strong>Likely mistake:</strong> Using <span class="mono">LEFT(description, 50)</span> alone can cut the last word in half.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#cleanup-pipelines">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#mistakes">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="mistakes">
+      <div class="section-header">
+        <div><div class="section-num">Section 16</div><h2>Common Mistakes</h2></div>
+      </div>
+      <table>
+        <thead><tr><th>Mistake</th><th>Why it happens</th><th>Correction</th><th>Memory line</th></tr></thead>
+        <tbody>
+          <tr class="search-item" data-search="pipe concat null same way"><td>Assuming <span class="mono">||</span> and <span class="mono">CONCAT()</span> handle NULL the same way</td><td>Both combine strings, so they look interchangeable.</td><td><span class="mono">||</span> can return NULL for the whole expression, while <span class="mono">CONCAT()</span> treats NULL as empty text.</td><td>Strict operator versus NULL-friendly function.</td></tr>
+          <tr class="search-item" data-search="forgetting separators in concatenation"><td>Forgetting separators in concatenation</td><td>People focus on columns and forget the human-readable glue.</td><td>Insert spaces, commas, or labels explicitly.</td><td>Strings do not add their own separators.</td></tr>
+          <tr class="search-item" data-search="initcap perfect name normalization"><td>Using <span class="mono">INITCAP()</span> as perfect name normalization</td><td>It looks smart enough to solve all naming cases.</td><td>Treat it as a mechanical formatter, not a cultural naming engine.</td><td>INITCAP is useful, not magical.</td></tr>
+          <tr class="search-item" data-search="replace regex misunderstanding"><td>Expecting <span class="mono">REPLACE()</span> to understand regex</td><td>The word replace sounds broad.</td><td>Use <span class="mono">REGEXP_REPLACE()</span> for patterns.</td><td>REPLACE is literal.</td></tr>
+          <tr class="search-item" data-search="forgetting g flag regex replace"><td>Forgetting the <span class="mono">'g'</span> flag</td><td>It is easy to focus on pattern and replacement only.</td><td>Add <span class="mono">'g'</span> when every match should be replaced.</td><td>No g = first match only.</td></tr>
+          <tr class="search-item" data-search="using trim for internal whitespace"><td>Using <span class="mono">TRIM()</span> for internal whitespace</td><td>TRIM feels like a general spacing tool.</td><td>Use <span class="mono">REGEXP_REPLACE(text, '\s+', ' ', 'g')</span> instead.</td><td>TRIM outside; regex inside.</td></tr>
+          <tr class="search-item" data-search="trimming too early without preserving raw value"><td>Trimming too early without preserving raw value</td><td>People overwrite the problem before validating it.</td><td>Select raw and cleaned values side by side during validation.</td><td>Keep evidence before cleanup decisions.</td></tr>
+          <tr class="search-item" data-search="string positions start at 1"><td>Forgetting string positions start at 1</td><td>Programming-language indexing habits carry over.</td><td>Use one-based thinking for PostgreSQL string functions.</td><td>First character = 1.</td></tr>
+          <tr class="search-item" data-search="zero position first character"><td>Treating zero position as first character</td><td>0 often means first item in other tools.</td><td>In PostgreSQL string search, 0 means not found.</td><td>0 means absent.</td></tr>
+          <tr class="search-item" data-search="position argument order"><td>Confusing <span class="mono">POSITION()</span> argument order</td><td>The syntax differs from many function-call patterns.</td><td>Use <span class="mono">POSITION('x' IN text)</span>.</td><td>POSITION uses IN syntax.</td></tr>
+          <tr class="search-item" data-search="strpos argument order"><td>Confusing <span class="mono">STRPOS()</span> argument order</td><td>It looks close to POSITION but swaps the style.</td><td>Use <span class="mono">STRPOS(text, 'x')</span>.</td><td>STRPOS is text first, substring second.</td></tr>
+          <tr class="search-item" data-search="split_part returns array"><td>Expecting <span class="mono">SPLIT_PART()</span> to return an array</td><td>Split-style names often suggest arrays in programming languages.</td><td>It returns one requested piece directly.</td><td>SPLIT_PART returns one field, not an array.</td></tr>
+          <tr class="search-item" data-search="split part index 0"><td>Using SPLIT_PART index 0</td><td>Zero-based habits are common.</td><td>Use part number 1 for the first field.</td><td>SPLIT_PART is 1-based.</td></tr>
+          <tr class="search-item" data-search="extracting beyond string length without checking"><td>Extracting beyond string length without checking</td><td>Fixed-width assumptions may not hold across messy data.</td><td>Validate text shape with <span class="mono">LENGTH()</span> first when needed.</td><td>Shape check before slicing.</td></tr>
+          <tr class="search-item" data-search="padding numeric values without casting"><td>Padding numeric values without casting</td><td>Padding feels like it should work on anything visible.</td><td>Cast to text first.</td><td>Padding is text formatting.</td></tr>
+          <tr class="search-item" data-search="padded display value new business key"><td>Treating padded display value as a new business key</td><td>Pretty IDs can look more official than raw values.</td><td>Keep display formatting separate from the underlying identifier.</td><td>Display code is not the stored key.</td></tr>
+          <tr class="search-item" data-search="removing meaningful punctuation with regex"><td>Removing meaningful punctuation with regex</td><td>Broad cleanup patterns can feel convenient.</td><td>Compare raw and cleaned outputs before storing changes.</td><td>Regex can remove useful symbols too.</td></tr>
+          <tr class="search-item" data-search="cleaning text without comparing raw and cleaned values"><td>Cleaning text without comparing raw and cleaned values</td><td>People jump to update logic too soon.</td><td>Start with SELECT-based validation and keep both versions visible.</td><td>Validate before mutate.</td></tr>
+          <tr class="search-item" data-search="empty string and null identical"><td>Converting empty string and NULL as though they are identical</td><td>Both feel blank in output.</td><td>Decide whether blank means missing, and normalize intentionally with <span class="mono">NULLIF()</span>.</td><td>Blank text is not NULL until you convert it.</td></tr>
+          <tr class="search-item" data-search="grouping dirty and clean values together without normalization"><td>Grouping dirty and clean values together without normalization</td><td>Counts split because raw text variants stay separate.</td><td>Normalize first, then group on the cleaned expression.</td><td>Clean groups count better.</td></tr>
+          <tr class="search-item" data-search="updates before testing cleanup select"><td>Applying updates before testing cleanup in SELECT</td><td>People rush from idea to mutation.</td><td>Preview every cleanup rule in SELECT form first.</td><td>SELECT first, UPDATE later.</td></tr>
+          <tr class="search-item" data-search="using left text 50 when complete words matter word boundary preview"><td>Using <span class="mono">LEFT(text, 50)</span> when complete words matter</td><td>Fixed character limits are simpler.</td><td>Find the final space inside the preview using <span class="mono">REVERSE()</span> and <span class="mono">POSITION()</span>.</td><td>Character limit plus word boundary.</td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#combined-examples">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#interview-qa">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="interview-qa">
+      <div class="section-header">
+        <div><div class="section-num">Section 17</div><h2>Interview Q&amp;A</h2></div>
+      </div>
+      <div class="qa-grid">
+        <div class="qa-card search-item" data-search="pipe versus concat interview"><h3><span class="mono">||</span> versus <span class="mono">CONCAT()</span>?</h3><p><span class="mono">||</span> is operator-style concatenation and can return NULL for the whole result. <span class="mono">CONCAT()</span> treats NULL values as empty text.</p></div>
+        <div class="qa-card search-item" data-search="null affects concatenation interview"><h3>How does NULL affect concatenation?</h3><p>With <span class="mono">||</span>, a NULL side can null out the full expression. With <span class="mono">CONCAT()</span>, NULL is skipped like empty text.</p></div>
+        <div class="qa-card search-item" data-search="upper versus lower interview"><h3><span class="mono">UPPER()</span> versus <span class="mono">LOWER()</span>?</h3><p>Both normalize case. Use upper when codes or standardized uppercase output is preferred, and lower when comparison-friendly lowercase is preferred.</p></div>
+        <div class="qa-card search-item" data-search="what initcap does interview"><h3>What does <span class="mono">INITCAP()</span> do?</h3><p>It title-cases text mechanically by word boundaries. It is helpful for cleanup, but not perfect for every real-world name.</p></div>
+        <div class="qa-card search-item" data-search="replace versus regexp_replace interview"><h3><span class="mono">REPLACE()</span> versus <span class="mono">REGEXP_REPLACE()</span>?</h3><p><span class="mono">REPLACE()</span> is exact literal replacement. <span class="mono">REGEXP_REPLACE()</span> handles pattern-based replacement.</p></div>
+        <div class="qa-card search-item" data-search="collapse repeated spaces interview"><h3>How do you collapse repeated spaces?</h3><p>Use <span class="mono">REGEXP_REPLACE(text, '\s+', ' ', 'g')</span>.</p></div>
+        <div class="qa-card search-item" data-search="regex g flag means interview"><h3>What does the regex <span class="mono">g</span> flag mean?</h3><p>It means global replacement: replace all matches, not just the first one.</p></div>
+        <div class="qa-card search-item" data-search="postgres string positions numbered interview"><h3>How are PostgreSQL string positions numbered?</h3><p>They are 1-based. Position 1 is the first character, and 0 means not found in search functions.</p></div>
+        <div class="qa-card search-item" data-search="position versus strpos interview"><h3><span class="mono">POSITION()</span> versus <span class="mono">STRPOS()</span>?</h3><p>They solve the same location problem with different syntax styles: <span class="mono">POSITION('x' IN text)</span> versus <span class="mono">STRPOS(text, 'x')</span>.</p></div>
+        <div class="qa-card search-item" data-search="left versus substring interview"><h3><span class="mono">LEFT()</span> versus <span class="mono">SUBSTRING()</span>?</h3><p><span class="mono">LEFT()</span> is best for fixed prefix extraction. <span class="mono">SUBSTRING()</span> is better for middle slices and more flexible extraction.</p></div>
+        <div class="qa-card search-item" data-search="what split_part returns interview"><h3>What does <span class="mono">SPLIT_PART()</span> return?</h3><p>It returns one requested field directly, not an array.</p></div>
+        <div class="qa-card search-item" data-search="trim versus ltrim versus rtrim interview"><h3><span class="mono">TRIM()</span> versus <span class="mono">LTRIM()</span> versus <span class="mono">RTRIM()</span>?</h3><p><span class="mono">TRIM()</span> removes outside characters on both sides, <span class="mono">LTRIM()</span> removes from the left, and <span class="mono">RTRIM()</span> removes from the right.</p></div>
+        <div class="qa-card search-item" data-search="when to use lpad interview"><h3>When do you use <span class="mono">LPAD()</span>?</h3><p>Use it when fixed-width display output matters, especially for leading-zero IDs or report-friendly code formatting.</p></div>
+        <div class="qa-card search-item" data-search="numbers may need casting before padding interview"><h3>Why may numbers need casting before padding?</h3><p>Padding works on text output. Cast numeric values to text first so the format rule applies correctly.</p></div>
+        <div class="qa-card search-item" data-search="normalize empty strings interview"><h3>How do you normalize empty strings?</h3><p>Use <span class="mono">NULLIF(TRIM(text), '')</span> when blank text should become NULL.</p></div>
+        <div class="qa-card search-item" data-search="safe text cleaning pipeline interview"><h3>How do you build a safe text-cleaning pipeline?</h3><p>Inspect raw text, trim outside junk, collapse internal whitespace, normalize case, validate output, and only then consider updates.</p></div>
+        <div class="qa-card search-item" data-search="why raw text preserved interview"><h3>Why should raw text often be preserved?</h3><p>Because cleanup rules can remove meaningful information, and raw text helps validation, auditing, and rollback logic.</p></div>
+        <div class="qa-card search-item" data-search="validate cleanup rule before update interview"><h3>How do you validate a cleanup rule before UPDATE?</h3><p>Run the cleanup as a SELECT that shows raw and cleaned output side by side, then review edge cases before mutating stored data.</p></div>
+        <div class="qa-card search-item" data-search="truncate text without cutting last word interview word boundary short description"><h3>How can you truncate text without cutting the last word?</h3><p>Take the first N characters, reverse that preview, find the first space in the reversed text, subtract that distance from N, and use the result as the final <span class="mono">LEFT()</span> length.</p></div>
+      </div>
+      <div class="section-nav">
+        <a href="#mistakes">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#memory-review">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="memory-review">
+      <div class="section-header">
+        <div><div class="section-num">Section 18</div><h2>Memory Review</h2></div>
+      </div>
+      <div class="diagram search-item" data-search="memory review strict concatenation null friendly concatenation upper lower initcap replace regexp_replace position strpos left right substring substr split_part trim ltrim rtrim lpad rpad nullif trim text">
+|| = strict concatenation
+CONCAT() = NULL-friendly concatenation
+
+UPPER = uppercase
+LOWER = lowercase
+INITCAP = title-style capitalization
+
+REPLACE = literal replacement
+REGEXP_REPLACE = pattern replacement
+
+POSITION and STRPOS return 1-based location
+0 means not found
+
+LEFT = beginning
+RIGHT = ending
+SUBSTRING / SUBSTR = middle
+
+SPLIT_PART positions start at 1
+
+TRIM = both sides
+LTRIM = left side
+RTRIM = right side
+
+LPAD = fill on left
+RPAD = fill on right
+
+REGEXP_REPLACE(..., 'g')
+= replace all matches
+
+TRIM does not fix internal spaces
+
+NULLIF(TRIM(text), '')
+= convert blank text to NULL
+      </div>
+      <div class="card search-item" data-search="self check questions text cleanup review">
+        <h3>Ten self-check questions</h3>
+        <ol class="tight-list">
+          <li>When should you use <span class="mono">CONCAT()</span> instead of <span class="mono">||</span>?</li>
+          <li>What does <span class="mono">INITCAP()</span> do, and what does it not guarantee?</li>
+          <li>Why is <span class="mono">REPLACE()</span> not enough for repeated internal spaces?</li>
+          <li>What does the <span class="mono">'g'</span> flag do in <span class="mono">REGEXP_REPLACE()</span>?</li>
+          <li>What does a position result of <span class="mono">0</span> mean?</li>
+          <li>Why do <span class="mono">LEFT()</span> and <span class="mono">RIGHT()</span> sometimes beat generic substring logic?</li>
+          <li>What does <span class="mono">SPLIT_PART()</span> return?</li>
+          <li>Why does <span class="mono">TRIM()</span> not solve repeated internal spaces?</li>
+          <li>Why should padded display values stay separate from real keys?</li>
+          <li>Why should cleanup rules be validated in SELECT form before updates?</li>
+        </ol>
+      </div>
+      <div class="section-nav">
+        <a href="#interview-qa">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#related-guides">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="related-guides">
+      <div class="section-header">
+        <div><div class="section-num">Section 19</div><h2>Related Guides</h2></div>
+      </div>
+      <div class="hero-links" aria-label="Related guide links">
+        <a href="field_guide.html">Open Main Field Guide</a>
+        <a href="sql_function_quick_lookup.html">Open Quick Lookup</a>
+        <a href="chapter_01_data_types_field_guide.html">Open Chapter 1 Guide</a>
+        <a href="chapter_02_datetime_functions_field_guide.html">Open Chapter 2 Guide</a>
+        <a href="../lab/lab_guide.html">Open Lab Guide</a>
+      </div>
+      <div class="section-nav">
+        <a href="#memory-review">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#top">Next section</a>
+      </div>
+    </section>
+
+    <div class="floating-nav" aria-label="Floating page navigation">
+      <a href="#top">Top</a>
+      <a href="#problem-lookup">Problems</a>
+      <a href="#trim-functions">Trim</a>
+      <a href="#substring-extraction">Substring</a>
+      <a href="#regex-replace">Regex</a>
+      <a href="#mistakes">Mistakes</a>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const input = document.getElementById('lookupSearch');
+      const count = document.getElementById('searchCount');
+      const items = Array.from(document.querySelectorAll('.search-item'));
+
+      function updateSearch() {
+        const query = input.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        items.forEach((item) => {
+          const haystack = ((item.dataset.search || '') + ' ' + item.textContent).toLowerCase();
+          const matches = !query || haystack.includes(query);
+          item.hidden = !matches;
+          if (matches) visibleCount += 1;
+        });
+
+        if (!query) {
+          count.textContent = 'Showing all Chapter 3 items';
+        } else {
+          count.textContent = 'Showing ' + visibleCount + ' matching items';
+        }
+      }
+
+      input.addEventListener('input', updateSearch);
+      updateSearch();
+    }());
+  </script>
+</body>
+</html>

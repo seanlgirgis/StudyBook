@@ -1,0 +1,3 @@
+﻿-- Create a dedicated schema after confirming the target database.
+-- CREATE SCHEMA data_manipulation_sql;
+-- SET search_path TO data_manipulation_sql;

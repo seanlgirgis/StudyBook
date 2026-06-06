@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SQL Window Functions Quick Lookup</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3; --muted:#9da7b3; --accent:#58a6ff; --good:#3fb950; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+    header { border-top:4px solid var(--accent); border-bottom:1px solid var(--line); background:#010409; }
+    .container { width:min(1100px,92%); margin:auto; padding:28px 0; }
+    .badge { display:inline-block; padding:4px 10px; border:1px solid var(--good); border-radius:999px; color:var(--good); font-size:.82rem; }
+    nav, section { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px; margin:18px 0; }
+    a { color:var(--accent); }
+    code, pre { font-family:Consolas,monospace; }
+    pre { overflow:auto; background:#010409; border:1px solid var(--line); border-radius:8px; padding:16px; }
+    .muted { color:var(--muted); }
+  </style>
+</head>
+<body>
+<header><div class="container"><span class="badge">DataCamp Course</span><h1>SQL Window Functions Quick Lookup</h1></div></header>
+<main class="container">
+<nav><a href="../index.html">Course Home</a> | <a href="field_guide.html">Field Guide</a> | <a href="../lab/lab_guide.html">Lab Guide</a></nav>
+<section><h2>Ranking</h2><pre><code>ROW_NUMBER() OVER (ORDER BY value DESC)
+RANK()       OVER (ORDER BY value DESC)
+DENSE_RANK() OVER (ORDER BY value DESC)</code></pre></section>
+<section><h2>Previous and next row</h2><pre><code>LAG(value)  OVER (PARTITION BY group_col ORDER BY time_col)
+LEAD(value) OVER (PARTITION BY group_col ORDER BY time_col)</code></pre></section>
+<section><h2>Running total</h2><pre><code>SUM(value) OVER (
+  PARTITION BY group_col
+  ORDER BY time_col
+  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+)</code></pre></section>
+<section><h2>Moving average</h2><pre><code>AVG(value) OVER (
+  ORDER BY time_col
+  ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+)</code></pre></section>
+</main>
+</body>
+</html>

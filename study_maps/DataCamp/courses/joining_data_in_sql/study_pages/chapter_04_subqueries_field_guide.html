@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 4 — Subqueries | Joining Data in SQL</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel-soft:#1c232d;--border:#30363d;--text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--green-soft:rgba(3,239,98,.12);--blue:#58a6ff;--blue-soft:rgba(88,166,255,.12);--amber:#d29922;--amber-soft:rgba(210,153,34,.12);--purple:#bc8cff;--purple-soft:rgba(188,140,255,.12);--danger:#ff7b72;--danger-soft:rgba(255,123,114,.10);--shadow:0 12px 30px rgba(0,0,0,.24)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);color:var(--text);line-height:1.62}a{color:inherit}code,pre{font-family:Consolas,"Courier New",monospace}.page{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:24px 0 52px}.breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}.breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d 0%,#0d2a40 58%,#14384e 100%);border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}.hero:before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}.eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}.hero p{max-width:880px;margin:14px 0 0;color:#c8d4df;font-size:1.03rem}.hero-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:9px;border:1px solid transparent;font-weight:850;text-decoration:none}.button.primary{background:var(--green);color:#03130a}.button.secondary{background:rgba(255,255,255,.04);border-color:#486274}.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px;margin-top:24px}.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}.toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);font-size:.9rem;text-decoration:none}.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}.section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow)}.section h2{margin:0 0 12px;font-size:1.45rem}.section h3{margin:22px 0 8px;font-size:1.08rem}.section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{margin:8px 0 0;padding-left:22px;color:#c9d3dc}.section li+li{margin-top:7px}pre{overflow-x:auto;margin:14px 0;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;color:#dce6ef;font-size:.92rem;line-height:1.55}.callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:var(--blue-soft);color:#cfdcec}.callout.green{border-left-color:var(--green);background:var(--green-soft)}.callout.amber{border-left-color:var(--amber);background:var(--amber-soft);color:#d8caaa}.callout.danger{border-left-color:var(--danger);background:var(--danger-soft);color:#efc3bf}.mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}.mini-card{padding:16px;background:var(--panel-soft);border:1px solid var(--border);border-radius:11px}.mini-card h3{margin:0 0 8px;font-size:1rem}.mini-card p{margin:0;color:var(--muted);font-size:.92rem}.diagram{margin:16px 0;padding:18px;border:1px solid #33404d;border-radius:11px;background:#10161d;font-family:Consolas,"Courier New",monospace;color:#d6e0e9;overflow-x:auto;white-space:pre}table{width:100%;margin:14px 0;border-collapse:collapse;font-size:.92rem}th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}th{background:#1f2933;color:#dfe8ef}td{background:#121820;color:#cbd5de}.qa{display:grid;gap:12px}.qa-item{padding:15px;border:1px solid var(--border);border-radius:10px;background:#121820}.qa-item strong{display:block;margin-bottom:6px;color:var(--green)}.memory-box{padding:16px;background:var(--purple-soft);border:1px solid rgba(188,140,255,.34);border-radius:11px}.memory-box strong{color:var(--purple)}footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}footer a{color:var(--blue);text-decoration:none}@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}@media(max-width:680px){.mini-grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+</style>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+<a href="../../../index.html">DataCamp StudyBook</a><span>›</span>
+<a href="../index.html">Joining Data in SQL</a><span>›</span>
+<span>Chapter 4: Subqueries</span>
+</nav>
+
+<header class="hero">
+<p class="eyebrow">Joining Data in SQL · Chapter 4</p>
+<h1>Subqueries</h1>
+<p>Use semi joins and anti joins to test membership, place nested queries inside <code>WHERE</code>, <code>SELECT</code>, and <code>FROM</code>, and choose the correct subquery shape for filtering, comparison, summary, and diagnostics.</p>
+<div class="hero-actions">
+<a class="button primary" href="../index.html">Course Home</a>
+<a class="button secondary" href="field_guide.html">Main Field Guide</a>
+<a class="button secondary" href="sql_join_quick_lookup.html">SQL Join Quick Lookup</a>
+<a class="button secondary" href="chapter_03_set_theory_for_sql_joins_field_guide.html">Previous Chapter</a>
+</div>
+</header>
+
+<div class="layout">
+<aside class="toc">
+<h2>Chapter Contents</h2>
+<a href="#big-picture">1. Big picture</a>
+<a href="#semi-join">2. Semi joins</a>
+<a href="#anti-join">3. Anti joins</a>
+<a href="#where">4. Subqueries in WHERE</a>
+<a href="#in-exists">5. IN and EXISTS</a>
+<a href="#select">6. Subqueries in SELECT</a>
+<a href="#from">7. Subqueries in FROM</a>
+<a href="#correlated">8. Correlated subqueries</a>
+<a href="#shapes">9. Subquery shapes</a>
+<a href="#choosing">10. Choosing the pattern</a>
+<a href="#mistakes">11. Common mistakes</a>
+<a href="#interview">12. Interview translation</a>
+<a href="#review">13. Memory review</a>
+</aside>
+
+<div class="content">
+<section class="section" id="big-picture">
+<h2>1. Big Picture</h2>
+<p>A subquery is a query nested inside another query. The inner query produces a value, a list, an existence test, or a temporary result set that the outer query uses.</p>
+<div class="diagram">Outer query
+      ↓
+Needs a value, list, existence test, or temporary table
+      ↓
+Inner query produces it
+      ↓
+Outer query filters, compares, or summarizes</div>
+<div class="mini-grid">
+<article class="mini-card"><h3>Inside WHERE</h3><p>Filter rows using a value, list, or existence test.</p></article>
+<article class="mini-card"><h3>Inside SELECT</h3><p>Return one derived value beside each outer row.</p></article>
+<article class="mini-card"><h3>Inside FROM</h3><p>Treat an intermediate query result as a table.</p></article>
+<article class="mini-card"><h3>Semi / anti join</h3><p>Keep rows based on whether a related row exists.</p></article>
+</div>
+<div class="callout green"><strong>Chapter punchline:</strong> a subquery answers a smaller question whose result becomes input to a larger question.</div>
+</section>
+
+<section class="section" id="semi-join">
+<h2>2. Semi Joins</h2>
+<p>A semi join keeps rows from the first table when at least one related row exists in another table. It returns only fields from the outer table.</p>
+<h3>Using IN</h3>
+<pre><code>SELECT name
+FROM countries
+WHERE code IN (
+  SELECT country_code
+  FROM economies
+);</code></pre>
+<h3>Using EXISTS</h3>
+<pre><code>SELECT c.name
+FROM countries AS c
+WHERE EXISTS (
+  SELECT 1
+  FROM economies AS e
+  WHERE e.country_code = c.code
+);</code></pre>
+<div class="callout green"><strong>Use a semi join when:</strong> you need to test whether a relationship exists, but you do not need fields from the related table.</div>
+</section>
+
+<section class="section" id="anti-join">
+<h2>3. Anti Joins</h2>
+<p>An anti join keeps rows from the first table when no related row exists in the second.</p>
+<h3>Using NOT EXISTS</h3>
+<pre><code>SELECT c.name
+FROM countries AS c
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM economies AS e
+  WHERE e.country_code = c.code
+);</code></pre>
+<h3>Using LEFT JOIN and IS NULL</h3>
+<pre><code>SELECT c.name
+FROM countries AS c
+LEFT JOIN economies AS e
+  ON c.code = e.country_code
+WHERE e.country_code IS NULL;</code></pre>
+<div class="callout amber"><strong>Preferred defensive pattern:</strong> <code>NOT EXISTS</code> is safer than <code>NOT IN</code> when the inner result may contain NULL.</div>
+<div class="callout danger"><strong>NULL trap:</strong> one NULL in a <code>NOT IN</code> subquery can make comparisons unknown and produce an unexpected empty result.</div>
+</section>
+
+<section class="section" id="where">
+<h2>4. Subqueries inside WHERE</h2>
+<p>A subquery in <code>WHERE</code> commonly returns one value, a list of values, or an existence result.</p>
+<h3>Compare against one value</h3>
+<pre><code>SELECT name,
+       population
+FROM cities
+WHERE population &gt; (
+  SELECT AVG(population)
+  FROM cities
+);</code></pre>
+<h3>Filter by a list</h3>
+<pre><code>SELECT name
+FROM countries
+WHERE code IN (
+  SELECT country_code
+  FROM languages
+  WHERE language = 'French'
+);</code></pre>
+<div class="callout"><strong>Shape rule:</strong> use <code>=</code>, <code>&gt;</code>, or similar operators when the inner query returns one value. Use <code>IN</code> when it returns many values.</div>
+</section>
+
+<section class="section" id="in-exists">
+<h2>5. IN, EXISTS, and Membership Tests</h2>
+<table>
+<thead><tr><th>Pattern</th><th>Best use</th><th>Main caution</th></tr></thead>
+<tbody>
+<tr><td><code>IN (subquery)</code></td><td>Compare a value to a returned list</td><td>Be careful with NOT IN and NULL</td></tr>
+<tr><td><code>EXISTS (subquery)</code></td><td>Test whether at least one related row exists</td><td>Usually needs a correct correlation condition</td></tr>
+<tr><td><code>NOT EXISTS</code></td><td>Find rows without a related match</td><td>Confirm the relationship inside the inner WHERE</td></tr>
+</tbody>
+</table>
+<pre><code>SELECT c.name
+FROM countries AS c
+WHERE EXISTS (
+  SELECT 1
+  FROM languages AS l
+  WHERE l.country_code = c.code
+    AND l.official = TRUE
+);</code></pre>
+<p>The <code>SELECT 1</code> emphasizes that only existence matters; no inner field is returned to the outer result.</p>
+<div class="callout green"><strong>Memory rule:</strong> use <code>IN</code> for list membership and <code>EXISTS</code> for existence of a related row.</div>
+</section>
+
+<section class="section" id="select">
+<h2>6. Subqueries inside SELECT</h2>
+<p>A subquery in <code>SELECT</code> must produce one value for each outer row.</p>
+<h3>Uncorrelated scalar subquery</h3>
+<pre><code>SELECT name,
+       population,
+       (
+         SELECT AVG(population)
+         FROM cities
+       ) AS average_city_population
+FROM cities;</code></pre>
+<p>The same overall average appears beside every city.</p>
+<h3>Correlated scalar subquery</h3>
+<pre><code>SELECT c.name,
+       (
+         SELECT COUNT(*)
+         FROM cities AS ci
+         WHERE ci.country_code = c.code
+       ) AS city_count
+FROM countries AS c;</code></pre>
+<div class="callout amber">Correlated subqueries in SELECT are readable, but a grouped join may be more efficient for large datasets.</div>
+</section>
+
+<section class="section" id="from">
+<h2>7. Subqueries inside FROM</h2>
+<p>A subquery in <code>FROM</code> creates an intermediate result that the outer query can treat like a table.</p>
+<pre><code>SELECT region,
+       AVG(country_population) AS average_population
+FROM (
+  SELECT region,
+         code,
+         population AS country_population
+  FROM countries
+  WHERE population IS NOT NULL
+) AS country_data
+GROUP BY region;</code></pre>
+<h3>Good reasons to use one</h3>
+<ul>
+<li>Break a complex question into stages.</li>
+<li>Aggregate once, then aggregate again.</li>
+<li>Rename or filter fields before later calculations.</li>
+<li>Create a clear intermediate dataset for the outer query.</li>
+</ul>
+<div class="callout green"><strong>PostgreSQL rule:</strong> a subquery in <code>FROM</code> needs an alias.</div>
+</section>
+
+<section class="section" id="correlated">
+<h2>8. Correlated Subqueries</h2>
+<p>A correlated subquery references a field from the outer query and therefore depends on the current outer row.</p>
+<pre><code>SELECT c.name
+FROM countries AS c
+WHERE EXISTS (
+  SELECT 1
+  FROM cities AS ci
+  WHERE ci.country_code = c.code
+    AND ci.population &gt; 1000000
+);</code></pre>
+<div class="diagram">Outer row: one country
+      ↓
+Inner query checks cities for that country
+      ↓
+EXISTS returns TRUE or FALSE
+      ↓
+Outer country is kept or discarded</div>
+<div class="callout danger"><strong>Common error:</strong> forgetting <code>ci.country_code = c.code</code> turns the inner query into a global test instead of a row-specific test.</div>
+</section>
+
+<section class="section" id="shapes">
+<h2>9. Scalar, Multi-Row, Table, and Existence Shapes</h2>
+<table>
+<thead><tr><th>Shape</th><th>Returns</th><th>Typical use</th></tr></thead>
+<tbody>
+<tr><td>Scalar</td><td>One row and one value</td><td><code>=</code>, <code>&gt;</code>, SELECT expression</td></tr>
+<tr><td>Single-column multi-row</td><td>Several values</td><td><code>IN</code></td></tr>
+<tr><td>Table subquery</td><td>Several rows and fields</td><td><code>FROM</code></td></tr>
+<tr><td>Existence subquery</td><td>TRUE/FALSE existence test</td><td><code>EXISTS</code>, <code>NOT EXISTS</code></td></tr>
+</tbody>
+</table>
+<h3>Wrong operator for a multi-row result</h3>
+<pre><code>SELECT name
+FROM countries
+WHERE code = (
+  SELECT country_code
+  FROM cities
+);</code></pre>
+<p>If several country codes are returned, <code>=</code> fails. Use <code>IN</code> or reduce the inner query to one row.</p>
+<div class="callout green"><strong>Before writing the outer query:</strong> determine the exact shape returned by the inner query.</div>
+</section>
+
+<section class="section" id="choosing">
+<h2>10. Choosing the Right Pattern</h2>
+<table>
+<thead><tr><th>Question</th><th>Pattern</th><th>Reason</th></tr></thead>
+<tbody>
+<tr><td>Which countries have economy rows?</td><td><code>IN</code> or <code>EXISTS</code></td><td>Semi-join membership test</td></tr>
+<tr><td>Which countries lack economy rows?</td><td><code>NOT EXISTS</code></td><td>Anti-join pattern</td></tr>
+<tr><td>Which cities exceed the overall average?</td><td>Scalar subquery in <code>WHERE</code></td><td>Compare each row with one summary value</td></tr>
+<tr><td>Show each country with a city count</td><td>Scalar correlated subquery in <code>SELECT</code></td><td>Return one derived value per outer row</td></tr>
+<tr><td>Aggregate an intermediate result</td><td>Subquery in <code>FROM</code></td><td>Create a staged temporary table</td></tr>
+</tbody>
+</table>
+<div class="callout green"><strong>Decision shortcut:</strong> filter by list → <code>IN</code>; test existence → <code>EXISTS</code>; compare with one value → scalar subquery; stage a table → subquery in <code>FROM</code>.</div>
+</section>
+
+<section class="section" id="mistakes">
+<h2>11. Common Mistakes</h2>
+<div class="qa">
+<article class="qa-item"><strong>Using = when the subquery returns many rows</strong>Use <code>IN</code>, <code>EXISTS</code>, or aggregate the inner query to one value.</article>
+<article class="qa-item"><strong>Using NOT IN when NULL may appear</strong>Prefer <code>NOT EXISTS</code> for NULL-safe anti-join logic.</article>
+<article class="qa-item"><strong>Forgetting the alias on a FROM subquery</strong>PostgreSQL requires a derived-table alias.</article>
+<article class="qa-item"><strong>Returning several fields in a scalar context</strong>A scalar subquery must return one field and at most one row.</article>
+<article class="qa-item"><strong>Forgetting the correlation condition</strong>The result may become global instead of row-specific.</article>
+<article class="qa-item"><strong>Using a correlated subquery when a join is clearer</strong>Repeated row-by-row logic can be harder to maintain and may perform worse.</article>
+<article class="qa-item"><strong>Assuming subqueries are always faster than joins</strong>Performance depends on indexes, data size, optimizer behavior, and query shape.</article>
+</div>
+</section>
+
+<section class="section" id="interview">
+<h2>12. Interview Translation</h2>
+<div class="qa">
+<article class="qa-item"><strong>What is a subquery?</strong>A SELECT statement nested inside another SQL statement whose result becomes input to the outer query.</article>
+<article class="qa-item"><strong>What is a semi join?</strong>It returns rows from the first table when a related row exists, without returning fields from the second table.</article>
+<article class="qa-item"><strong>What is an anti join?</strong>It returns rows from the first table when no related row exists in the second.</article>
+<article class="qa-item"><strong>What is a correlated subquery?</strong>A subquery that references the outer query and is evaluated logically in the context of each outer row.</article>
+<article class="qa-item"><strong>Why is NOT EXISTS safer than NOT IN?</strong>NOT IN can fail logically when NULL appears in the inner result, while NOT EXISTS checks for matching rows directly.</article>
+<article class="qa-item"><strong>When do you use a FROM subquery?</strong>When a problem benefits from staged filtering, renaming, or aggregation before the final query.</article>
+<article class="qa-item"><strong>How do you choose between a join and a subquery?</strong>Use a join when fields from both sides are needed; use semi/anti subqueries for existence tests and scalar/FROM subqueries for staged calculations.</article>
+</div>
+</section>
+
+<section class="section" id="review">
+<h2>13. Memory Review</h2>
+<div class="memory-box">
+<strong>Seven-sentence chapter summary</strong>
+<ol>
+<li>A subquery is nested SQL used by an outer query.</li>
+<li>Semi joins keep rows when a related row exists.</li>
+<li>Anti joins keep rows when no related row exists.</li>
+<li>WHERE subqueries filter by values, lists, or existence.</li>
+<li>SELECT subqueries must return one value per outer row.</li>
+<li>FROM subqueries act as temporary tables and need aliases.</li>
+<li>Correlated subqueries depend on fields from the outer query.</li>
+</ol>
+</div>
+<h3>Quick self-check</h3>
+<ul>
+<li>Can you write a semi join with EXISTS?</li>
+<li>Can you write an anti join with NOT EXISTS?</li>
+<li>Can you identify whether the inner result is scalar or multi-row?</li>
+<li>Can you place subqueries in WHERE, SELECT, and FROM?</li>
+<li>Can you explain the NOT IN NULL problem?</li>
+<li>Can you recognize a correlated subquery?</li>
+<li>Can you choose between a join and a subquery?</li>
+</ul>
+<div class="callout amber"><strong>Lab decision for Chapter 4:</strong> no separate chapter-only lab is required before course closeout. The strongest later practice targets are semi joins, anti joins, NULL-safe <code>NOT EXISTS</code>, and staged FROM subqueries.</div>
+<div class="callout green"><strong>Chapter completion standard:</strong> write one semi join, one anti join, one scalar subquery, and one FROM subquery, then explain when each shape is appropriate.</div>
+</section>
+</div>
+</div>
+
+<footer>
+<span>Joining Data in SQL · Chapter 4 Field Guide</span>
+<span><a href="chapter_03_set_theory_for_sql_joins_field_guide.html">Previous Chapter</a>
+&nbsp;·&nbsp;<a href="../index.html">Course Home</a>
+&nbsp;·&nbsp;<a href="field_guide.html">Main Field Guide</a></span>
+</footer>
+</main>
+</body>
+</html>

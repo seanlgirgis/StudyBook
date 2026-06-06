@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Introduction to SQL | DataCamp StudyBook</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.58;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 26px 0 50px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #071d2d 0%, #0d2a40 58%, #153b50 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero-copy {
+      max-width: 830px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .badge.green {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .badge.blue {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .badge.amber {
+      background: var(--amber-soft);
+      color: #f0b94d;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 17px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      border-color: #486274;
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+    }
+
+    .section { margin-top: 25px; }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.42rem;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 15px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 19px;
+      box-shadow: var(--shadow);
+    }
+
+    .card.featured {
+      border-color: #2f7a4c;
+      background:
+        linear-gradient(180deg, rgba(3,239,98,0.07), transparent 68%),
+        var(--panel);
+    }
+
+    .card h3 {
+      margin: 5px 0 7px;
+      font-size: 1.1rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .kicker {
+      display: inline-block;
+      color: var(--blue);
+      font-size: 0.69rem;
+      font-weight: 900;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .kicker.green { color: var(--green); }
+    .kicker.amber { color: #f0b94d; }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--green);
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .card-link:hover { text-decoration: underline; }
+
+    .chapter-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .chapter {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 15px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 16px;
+    }
+
+    .chapter-num {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #222b36;
+      border: 1px solid #3b4755;
+      color: var(--text);
+      font-weight: 900;
+    }
+
+    .chapter h3 {
+      margin: 0;
+      font-size: 1.04rem;
+    }
+
+    .chapter p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .chapter a {
+      color: var(--green);
+      font-weight: 850;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .note {
+      margin-top: 24px;
+      padding: 15px 17px;
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      background: var(--amber-soft);
+      color: #d7c9a8;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 30px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 850px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+
+      .chapter {
+        grid-template-columns: 44px minmax(0, 1fr);
+      }
+
+      .chapter a { grid-column: 2; }
+
+      .section-heading {
+        flex-direction: column;
+        align-items: start;
+      }
+
+      .hero { padding: 28px 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Courses</a>
+      <span>›</span>
+      <span>Introduction to SQL</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Canonical DataCamp Course Package</p>
+      <h1>Introduction to SQL</h1>
+      <p class="hero-copy">
+        A fast foundational course covering relational databases, tables, rows and columns,
+        identifiers, data types, schemas, basic SQL queries, aliases, views, SQL flavors,
+        and limiting result sets.
+      </p>
+
+      <div class="badges">
+        <span class="badge green">Platform complete</span>
+        <span class="badge blue">SQL Fundamentals · Course 1</span>
+        <span class="badge amber">Fast review course</span>
+      </div>
+
+      <div class="hero-actions">
+        <a class="button primary" href="study_pages/field_guide.html">Open Main Field Guide</a>
+        <a class="button secondary" href="study_pages/sql_quick_lookup.html">Open Quick Lookup</a>
+        <a class="button secondary" href="study_pages/chapter_01_relational_databases_field_guide.html">Start Chapter 1</a>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Recommended Study Path</h2>
+          <p>Use these pages for fast review.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <article class="card featured">
+          <span class="kicker green">Whole-course review</span>
+          <h3>Accumulated Field Guide</h3>
+          <p>Review the entire course in one compact, searchable page.</p>
+          <a class="card-link" href="study_pages/field_guide.html">Open Field Guide →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker">Fast syntax reference</span>
+          <h3>SQL Quick Lookup</h3>
+          <p>Find the smallest useful syntax pattern and the common trap.</p>
+          <a class="card-link" href="study_pages/sql_quick_lookup.html">Open Quick Lookup →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker amber">Coverage inventory</span>
+          <h3>Bill of Materials</h3>
+          <p>Course chapters, topics, source coverage, and final package contents.</p>
+          <a class="card-link" href="docs/BILL_OF_MATERIALS.md">Open BOM →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Chapter Field Guides</h2>
+          <p>Detailed chapter pages built from the course videos and curriculum.</p>
+        </div>
+      </div>
+
+      <div class="chapter-list">
+        <article class="chapter">
+          <div class="chapter-num">1</div>
+          <div>
+            <h3>Relational Databases</h3>
+            <p>Databases, tables, records, fields, identifiers, naming, data types, schemas, and servers.</p>
+          </div>
+          <a href="study_pages/chapter_01_relational_databases_field_guide.html">Open chapter →</a>
+        </article>
+
+        <article class="chapter">
+          <div class="chapter-num">2</div>
+          <div>
+            <h3>Querying</h3>
+            <p>SELECT, FROM, DISTINCT, aliases, views, SQL style, SQL flavors, LIMIT, and TOP.</p>
+          </div>
+          <a href="study_pages/chapter_02_querying_field_guide.html">Open chapter →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Course Package</h2>
+          <p>Supporting documentation and navigation.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <article class="card">
+          <span class="kicker">Package information</span>
+          <h3>README</h3>
+          <p>Course purpose, folder roles, status, and maintenance notes.</p>
+          <a class="card-link" href="README.md">Open README →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker">Source area</span>
+          <h3>Source Material</h3>
+          <p>Reserved for transcripts, curriculum evidence, and archived source files.</p>
+          <a class="card-link" href="source_material/">Open source folder →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker">Practice decision</span>
+          <h3>Lab Guide</h3>
+          <p>No large lab is required; DataCamp exercises provide enough practice for this basic course.</p>
+          <a class="card-link" href="lab/lab_guide.html">Open lab note →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Track Navigation</h2>
+          <p>This course belongs to the SQL Fundamentals skill track.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <article class="card featured">
+          <span class="kicker green">Current track</span>
+          <h3>SQL Fundamentals</h3>
+          <p>Return to the skill-track page where this course is Course 1.</p>
+          <a class="card-link" href="../../skill_tracks/01_sql_fundamentals/index.html">Open SQL Fundamentals →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker">Career track</span>
+          <h3>Associate Data Analyst in SQL</h3>
+          <p>Open the broader career track that also uses this foundational SQL course.</p>
+          <a class="card-link" href="../../career_tracks/01_associate_data_analyst_in_sql/index.html">Open career track →</a>
+        </article>
+      </div>
+    </section>
+
+    <aside class="note">
+      <strong>Course status:</strong>
+      completed and wrapped. No separate runnable lab package is required for this introductory course.
+    </aside>
+
+    <footer>
+      <span>Introduction to SQL</span>
+      <span>
+        <a href="../index.html">Courses</a>
+        &nbsp;·&nbsp;
+        <a href="../../skill_tracks/01_sql_fundamentals/index.html">SQL Fundamentals</a>
+        &nbsp;·&nbsp;
+        <a href="../../index.html">DataCamp Home</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joining Data in SQL — Integrated Lab Guide</title>
+<style>
+body{margin:0;background:#0d1117;color:#e6edf3;font-family:Segoe UI,Arial,sans-serif;line-height:1.6}
+main{width:min(1050px,calc(100% - 32px));margin:auto;padding:28px 0 48px}
+header,section{background:#161b22;border:1px solid #30363d;border-radius:14px;padding:22px;margin-bottom:18px}
+header{background:linear-gradient(135deg,#061d2d,#14384e)}
+h1,h2{margin-top:0}code,pre{font-family:Consolas,monospace}
+pre{background:#0f141a;border:1px solid #33404d;border-radius:9px;padding:14px;overflow:auto}
+a{color:#58a6ff}.callout{border-left:4px solid #03ef62;background:rgba(3,239,98,.10);padding:13px;border-radius:8px}
+li+li{margin-top:7px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Joining Data in SQL — Integrated Course Lab</h1>
+<p>One compact PostgreSQL lab covering joins, set operations, semi joins, anti joins, and subqueries.</p>
+</header>
+<section>
+<h2>Run order</h2>
+<ol>
+<li><code>00_create_schema.sql</code></li>
+<li><code>01_create_tables.sql</code></li>
+<li><code>02_insert_sample_data.sql</code></li>
+<li><code>03_inner_and_outer_joins.sql</code></li>
+<li><code>04_cross_and_self_joins.sql</code></li>
+<li><code>05_set_operations.sql</code></li>
+<li><code>06_subqueries.sql</code></li>
+<li><code>07_course_challenges.sql</code></li>
+</ol>
+</section>
+<section>
+<h2>What to notice</h2>
+<ul>
+<li>INNER JOIN can multiply rows.</li>
+<li>LEFT JOIN filters behave differently in ON and WHERE.</li>
+<li>FULL JOIN exposes unmatched rows from both sources.</li>
+<li>CROSS JOIN row counts multiply.</li>
+<li>A self join can be replaced by conditional aggregation in some reporting problems.</li>
+<li>UNION removes duplicates; UNION ALL preserves them.</li>
+<li>EXCEPT is directional.</li>
+<li>NOT EXISTS is safer than NOT IN when NULL is possible.</li>
+</ul>
+<div class="callout"><strong>Goal:</strong> run, inspect, modify, and explain each pattern without DataCamp hints.</div>
+</section>
+</main>
+</body>
+</html>

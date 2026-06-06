@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 1 — Introduction to Window Functions | PostgreSQL Summary Stats and Window Functions</title>
+  <style>
+    :root {
+      --bg:#0d1117; --panel:#161b22; --panel-soft:#1c232d; --border:#30363d;
+      --text:#e6edf3; --muted:#9da7b3; --green:#03ef62; --green-soft:rgba(3,239,98,.12);
+      --blue:#58a6ff; --blue-soft:rgba(88,166,255,.12); --amber:#d29922;
+      --amber-soft:rgba(210,153,34,.12); --purple:#bc8cff;
+      --purple-soft:rgba(188,140,255,.12); --danger:#ff7b72;
+      --danger-soft:rgba(255,123,114,.10); --shadow:0 12px 30px rgba(0,0,0,.24);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:
+      radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);
+      color:var(--text);line-height:1.62}
+    a{color:inherit} code,pre{font-family:Consolas,"Courier New",monospace}
+    .page{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:24px 0 52px}
+    .breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}
+    .breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}
+    .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);
+      border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}
+    .hero:before{content:"";position:absolute;inset:0 0 auto 0;height:5px;
+      background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}
+    .eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+    h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}
+    .hero p{max-width:900px;margin:14px 0 0;color:#c8d4df;font-size:1.03rem}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}
+    .button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;
+      border-radius:9px;border:1px solid #486274;background:rgba(255,255,255,.04);font-weight:850;text-decoration:none}
+    .button.primary{background:var(--green);color:#03130a;border-color:transparent}
+    .layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px;margin-top:24px}
+    .toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);
+      border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+    .toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);
+      font-size:.9rem;text-decoration:none}.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}
+    .section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);
+      border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+    .section h2{margin:0 0 12px;font-size:1.45rem}.section h3{margin:22px 0 8px;font-size:1.08rem}
+    .section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{margin:8px 0 0;padding-left:22px;color:#c9d3dc}
+    .section li+li{margin-top:7px}
+    pre{overflow-x:auto;margin:14px 0;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;
+      color:#dce6ef;font-size:.92rem;line-height:1.55}
+    .callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:var(--blue-soft);color:#cfdcec}
+    .callout.green{border-left-color:var(--green);background:var(--green-soft)}
+    .callout.amber{border-left-color:var(--amber);background:var(--amber-soft);color:#d8caaa}
+    .callout.danger{border-left-color:var(--danger);background:var(--danger-soft);color:#efc3bf}
+    .mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+    .mini-card{padding:16px;background:var(--panel-soft);border:1px solid var(--border);border-radius:11px}
+    .mini-card h3{margin:0 0 8px;font-size:1rem}.mini-card p{margin:0;color:var(--muted);font-size:.92rem}
+    .diagram{margin:16px 0;padding:18px;border:1px solid #33404d;border-radius:11px;background:#10161d;
+      font-family:Consolas,"Courier New",monospace;color:#d6e0e9;overflow-x:auto;white-space:pre}
+    table{width:100%;margin:14px 0;border-collapse:collapse;font-size:.92rem}
+    th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}
+    th{background:#1f2933;color:#dfe8ef} td{background:#121820;color:#cbd5de}
+    .qa{display:grid;gap:12px}.qa-item{padding:15px;border:1px solid var(--border);border-radius:10px;background:#121820}
+    .qa-item strong{display:block;margin-bottom:6px;color:var(--green)}
+    .memory-box{padding:16px;background:var(--purple-soft);border:1px solid rgba(188,140,255,.34);border-radius:11px}
+    .memory-box strong{color:var(--purple)}
+    footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;
+      border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}
+    footer a{color:var(--blue);text-decoration:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}
+    @media(max-width:680px){.mini-grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+  </style>
+</head>
+<body>
+<main class="page">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="../../../index.html">DataCamp</a><span>›</span>
+    <a href="../index.html">PostgreSQL Summary Stats and Window Functions</a><span>›</span>
+    <span>Chapter 1: Introduction to Window Functions</span>
+  </nav>
+
+  <header class="hero">
+    <p class="eyebrow">PostgreSQL Summary Stats and Window Functions · Chapter 1</p>
+    <h1>Introduction to Window Functions</h1>
+    <p>
+      Window functions calculate across rows related to the current row while preserving every detail row.
+      This chapter introduces the core shape of a window expression, explains why it differs from
+      <code>GROUP BY</code>, and builds the two essential subclauses: <code>ORDER BY</code> and
+      <code>PARTITION BY</code>.
+    </p>
+    <div class="hero-actions">
+      <a class="button primary" href="../index.html">Course Home</a>
+      <a class="button" href="field_guide.html">Main Field Guide</a>
+      <a class="button" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+      <a class="button" href="chapter_02_fetching_ranking_and_paging_field_guide.html">Next Chapter</a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="toc">
+      <h2>Chapter Contents</h2>
+      <a href="#big-picture">1. Big picture</a>
+      <a href="#group-by">2. Window functions vs GROUP BY</a>
+      <a href="#row-number">3. Numbering rows</a>
+      <a href="#order-by">4. ORDER BY inside OVER</a>
+      <a href="#partition-by">5. PARTITION BY</a>
+      <a href="#worked-example">6. Worked example</a>
+      <a href="#validation">7. Validation</a>
+      <a href="#mistakes">8. Common mistakes</a>
+      <a href="#interview">9. Interview translation</a>
+      <a href="#review">10. Memory review</a>
+    </aside>
+
+    <div class="content">
+      <section class="section" id="big-picture">
+        <h2>1. Big Picture</h2>
+        <p>
+          A window function looks at a set of rows connected to the current row and produces a value for
+          each input row. Unlike ordinary aggregation, it does not collapse the result into one row per group.
+        </p>
+        <div class="diagram">detail rows
+    │
+    ├── GROUP BY        → fewer output rows
+    │                     one row per group
+    │
+    └── window function → same number of output rows
+                          extra analytical column per row</div>
+
+        <div class="mini-grid">
+          <article class="mini-card"><h3>Function</h3><p>The calculation, such as <code>ROW_NUMBER()</code>.</p></article>
+          <article class="mini-card"><h3>OVER()</h3><p>Marks the function as a window function.</p></article>
+          <article class="mini-card"><h3>ORDER BY</h3><p>Controls row sequence inside the window.</p></article>
+          <article class="mini-card"><h3>PARTITION BY</h3><p>Restarts the calculation for each group.</p></article>
+        </div>
+
+        <div class="callout green">
+          <strong>Chapter punchline:</strong>
+          Window functions add analytical context to each row without losing the original row-level detail.
+        </div>
+      </section>
+
+      <section class="section" id="group-by">
+        <h2>2. Window Functions vs GROUP BY</h2>
+        <p>
+          <code>GROUP BY</code> combines many rows into one summarized row per group. A window function
+          calculates over related rows but keeps each original row visible.
+        </p>
+        <table>
+          <thead><tr><th>Feature</th><th>GROUP BY</th><th>Window function</th></tr></thead>
+          <tbody>
+            <tr><td>Output rows</td><td>Reduced</td><td>Preserved</td></tr>
+            <tr><td>Detail columns</td><td>Usually unavailable unless grouped</td><td>Remain available</td></tr>
+            <tr><td>Typical use</td><td>One summary row per group</td><td>Rank, compare, number, or aggregate per row</td></tr>
+          </tbody>
+        </table>
+
+        <pre><code>-- GROUP BY collapses rows
+SELECT country, COUNT(*) AS medals
+FROM summer_medals
+GROUP BY country;
+
+-- Window calculation preserves rows
+SELECT
+    year,
+    event,
+    country,
+    COUNT(*) OVER (PARTITION BY country) AS country_medals
+FROM summer_medals;</code></pre>
+      </section>
+
+      <section class="section" id="row-number">
+        <h2>3. Numbering Rows with ROW_NUMBER()</h2>
+        <p>
+          <code>ROW_NUMBER()</code> assigns a unique sequence number to each row. With an empty
+          <code>OVER()</code>, the numbering order is not guaranteed. Add <code>ORDER BY</code> inside
+          <code>OVER()</code> when the sequence matters.
+        </p>
+
+        <pre><code>SELECT
+    year,
+    event,
+    country,
+    ROW_NUMBER() OVER () AS row_n
+FROM summer_medals
+WHERE medal = 'Gold';</code></pre>
+
+        <div class="callout amber">
+          <strong>Common trap:</strong>
+          A row number without an explicit window order may change between executions because SQL tables
+          have no inherent row order.
+        </div>
+      </section>
+
+      <section class="section" id="order-by">
+        <h2>4. ORDER BY Inside OVER()</h2>
+        <p>
+          <code>ORDER BY</code> inside <code>OVER()</code> determines the order used by the window function.
+          It is separate from the query-level <code>ORDER BY</code>, which controls the final display order.
+        </p>
+
+        <pre><code>SELECT
+    year,
+    event,
+    country,
+    ROW_NUMBER() OVER (
+        ORDER BY year, event
+    ) AS row_n
+FROM summer_medals
+WHERE medal = 'Gold';</code></pre>
+
+        <h3>Ascending and descending</h3>
+        <pre><code>ROW_NUMBER() OVER (ORDER BY year ASC)  -- oldest first
+ROW_NUMBER() OVER (ORDER BY year DESC) -- newest first</code></pre>
+
+        <h3>Ordering by multiple columns</h3>
+        <pre><code>ROW_NUMBER() OVER (
+    ORDER BY year DESC, event ASC
+)</code></pre>
+
+        <div class="callout">
+          <strong>What to notice:</strong>
+          The first sort expression is the primary order. Later expressions break ties.
+        </div>
+
+        <h3>Inside vs outside OVER()</h3>
+        <pre><code>SELECT
+    year,
+    event,
+    country,
+    ROW_NUMBER() OVER (
+        ORDER BY year, event
+    ) AS row_n
+FROM summer_medals
+WHERE medal = 'Gold'
+ORDER BY country, row_n;</code></pre>
+
+        <p>
+          Here, the window numbers rows by <code>year, event</code>, but the final output is displayed by
+          <code>country, row_n</code>. These are two independent operations.
+        </p>
+      </section>
+
+      <section class="section" id="partition-by">
+        <h2>5. PARTITION BY</h2>
+        <p>
+          <code>PARTITION BY</code> splits the result into separate windows based on one or more column values.
+          The window function restarts inside each partition.
+        </p>
+
+        <pre><code>SELECT
+    year,
+    event,
+    country,
+    ROW_NUMBER() OVER (
+        PARTITION BY country
+        ORDER BY year
+    ) AS row_n
+FROM summer_medals
+WHERE medal = 'Gold';</code></pre>
+
+        <h3>Partitioning by multiple columns</h3>
+        <pre><code>SELECT
+    year,
+    event,
+    gender,
+    country,
+    ROW_NUMBER() OVER (
+        PARTITION BY gender, event
+        ORDER BY year
+    ) AS row_n
+FROM summer_medals
+WHERE medal = 'Gold';</code></pre>
+
+        <table>
+          <thead><tr><th>Window clause</th><th>Effect</th><th>Question answered</th></tr></thead>
+          <tbody>
+            <tr><td>No partition</td><td>One window for all rows</td><td>What is the row number overall?</td></tr>
+            <tr><td><code>PARTITION BY country</code></td><td>Numbering restarts per country</td><td>What is the row number within each country?</td></tr>
+            <tr><td><code>PARTITION BY gender, event</code></td><td>Restarts for every gender-event pair</td><td>What is the sequence within each event category?</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section" id="worked-example">
+        <h2>6. Worked Example — Reigning Champions</h2>
+        <p>
+          A reigning champion is a competitor who won the same event in the previous Games and again in the
+          current Games. Chapter 1 prepares the structure needed for that analysis by ordering results and
+          partitioning comparable competitors.
+        </p>
+
+        <pre><code>WITH champions AS (
+    SELECT
+        year,
+        gender,
+        event,
+        country
+    FROM summer_medals
+    WHERE medal = 'Gold'
+      AND sport = 'Weightlifting'
+)
+SELECT
+    year,
+    gender,
+    event,
+    country,
+    ROW_NUMBER() OVER (
+        PARTITION BY gender, event
+        ORDER BY year
+    ) AS appearance_n
+FROM champions
+ORDER BY gender, event, year;</code></pre>
+
+        <div class="callout green">
+          <strong>Result:</strong>
+          The row number restarts for each gender-event combination, creating the ordered structure needed
+          for later comparisons with <code>LAG()</code>.
+        </div>
+      </section>
+
+      <section class="section" id="validation">
+        <h2>7. Validation and Troubleshooting</h2>
+        <ul>
+          <li>Confirm the number of output rows is unchanged after adding only a window column.</li>
+          <li>Check that row numbers restart exactly where the partition changes.</li>
+          <li>Use enough <code>ORDER BY</code> columns to make tie handling predictable.</li>
+          <li>Keep window ordering separate from final result ordering in your mental model.</li>
+        </ul>
+
+        <div class="callout danger">
+          <strong>Red flag:</strong>
+          If detail rows disappear, the query probably used aggregation or filtering rather than only a window
+          calculation.
+        </div>
+      </section>
+
+      <section class="section" id="mistakes">
+        <h2>8. Common Mistakes</h2>
+        <div class="qa">
+          <article class="qa-item">
+            <strong>Assuming OVER() alone creates a meaningful order</strong>
+            It does not. Add <code>ORDER BY</code> inside <code>OVER()</code> when sequence matters.
+          </article>
+          <article class="qa-item">
+            <strong>Confusing window ORDER BY with final ORDER BY</strong>
+            The first controls the calculation. The second controls display order.
+          </article>
+          <article class="qa-item">
+            <strong>Partitioning too broadly or too narrowly</strong>
+            Choose the columns that define the independent analytical groups. Extra columns may restart the
+            calculation too often.
+          </article>
+          <article class="qa-item">
+            <strong>Expecting ROW_NUMBER() to preserve ties</strong>
+            <code>ROW_NUMBER()</code> always assigns a unique number. Tie-aware ranking comes later with
+            <code>RANK()</code> and <code>DENSE_RANK()</code>.
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="interview">
+        <h2>9. Interview Translation</h2>
+        <div class="qa">
+          <article class="qa-item">
+            <strong>What is a window function?</strong>
+            A window function calculates across rows related to the current row while preserving one output
+            row for every input row.
+          </article>
+          <article class="qa-item">
+            <strong>How is a window function different from GROUP BY?</strong>
+            <code>GROUP BY</code> collapses rows into grouped summaries. Window functions preserve detail rows
+            and add analytical values beside them.
+          </article>
+          <article class="qa-item">
+            <strong>What does ORDER BY inside OVER() do?</strong>
+            It defines the sequence used by the window calculation. It does not necessarily determine the final
+            display order.
+          </article>
+          <article class="qa-item">
+            <strong>What does PARTITION BY do?</strong>
+            It divides rows into independent groups and restarts the window calculation for each group.
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="review">
+        <h2>10. Memory Review</h2>
+        <div class="memory-box">
+          <strong>Chapter summary</strong>
+          <ol>
+            <li>Window functions preserve detail rows.</li>
+            <li><code>OVER()</code> turns a supported function into a window calculation.</li>
+            <li><code>ORDER BY</code> controls calculation sequence.</li>
+            <li><code>PARTITION BY</code> restarts the calculation per group.</li>
+          </ol>
+        </div>
+
+        <h3>Quick self-check</h3>
+        <ul>
+          <li>Can you explain why <code>GROUP BY</code> returns fewer rows?</li>
+          <li>Can you distinguish window ordering from final output ordering?</li>
+          <li>Can you predict where row numbering restarts?</li>
+          <li>Can you choose between no partition, one-column partitioning, and multi-column partitioning?</li>
+        </ul>
+
+        <div class="callout amber">
+          <strong>Lab decision:</strong>
+          No separate full lab is required yet. The DataCamp exercises already provide focused practice for
+          <code>ROW_NUMBER()</code>, <code>ORDER BY</code>, and <code>PARTITION BY</code>. Preserve reusable
+          queries for a possible course-wide lab later.
+        </div>
+
+        <div class="callout green">
+          <strong>Completion standard:</strong>
+          You can write a row-numbering query, control its order, partition it correctly, and explain why the
+          original detail rows remain visible.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    <span>PostgreSQL Summary Stats and Window Functions · Chapter 1 Field Guide</span>
+    <span>
+      <a href="../index.html">Course Home</a>
+      &nbsp;·&nbsp;
+      <a href="field_guide.html">Main Field Guide</a>
+      &nbsp;·&nbsp;
+      <a href="chapter_02_fetching_ranking_and_paging_field_guide.html">Next Chapter</a>
+    </span>
+  </footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analyzing Students' Mental Health — DataCamp Project</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1f2630;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #3fb950;
+      --green-soft: rgba(63,185,80,.14);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88,166,255,.13);
+      --amber: #d29922;
+      --code: #0b0f14;
+      --shadow: 0 16px 40px rgba(0,0,0,.28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 88% 8%, rgba(88,166,255,.08), transparent 28rem),
+        radial-gradient(circle at 8% 18%, rgba(63,185,80,.07), transparent 25rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Inter, Arial, sans-serif;
+      line-height: 1.62;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    header {
+      border-top: 4px solid transparent;
+      border-image: linear-gradient(90deg, var(--green), var(--blue)) 1;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13,17,23,.96);
+    }
+
+    .container {
+      width: min(1140px, calc(100% - 30px));
+      margin: 0 auto;
+    }
+
+    .breadcrumb {
+      padding-top: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr .75fr;
+      gap: 28px;
+      align-items: center;
+      padding: 40px 0 34px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 10px;
+      border: 1px solid rgba(63,185,80,.4);
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: #83df93;
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(2.15rem, 5vw, 3.7rem);
+      line-height: 1.05;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      max-width: 72ch;
+      font-size: 1.08rem;
+    }
+
+    .hero-panel {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(31,38,48,.97), rgba(22,27,34,.97));
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    .hero-panel ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      color: var(--muted);
+    }
+
+    main { padding: 30px 0 56px; }
+
+    .status-grid,
+    .resource-grid,
+    .path-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .status-grid { grid-template-columns: repeat(4, 1fr); margin-bottom: 28px; }
+    .resource-grid { grid-template-columns: repeat(2, 1fr); }
+    .path-grid { grid-template-columns: repeat(3, 1fr); }
+
+    .card,
+    .section {
+      background: linear-gradient(180deg, rgba(31,38,48,.97), rgba(22,27,34,.97));
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .status-card { padding: 18px; }
+    .status-card strong { display: block; font-size: 1.2rem; margin-bottom: 4px; }
+    .status-card span { color: var(--muted); font-size: .9rem; }
+
+    .section {
+      margin: 24px 0;
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 21px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-num {
+      min-width: 34px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--green-soft);
+      border: 1px solid rgba(63,185,80,.35);
+      color: #9be9a8;
+      font-weight: 800;
+    }
+
+    .section h2 { margin: 0; font-size: 1.34rem; }
+    .section-body { padding: 21px; }
+
+    .resource-card {
+      display: block;
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: rgba(255,255,255,.02);
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--blue);
+      text-decoration: none;
+    }
+
+    .resource-card strong {
+      display: block;
+      color: var(--text);
+      font-size: 1.16rem;
+      margin-bottom: 4px;
+    }
+
+    .resource-card span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .callout {
+      margin: 15px 0;
+      padding: 15px 17px;
+      border-left: 4px solid var(--blue);
+      border-radius: 8px;
+      background: var(--blue-soft);
+    }
+
+    .success {
+      margin: 15px 0;
+      padding: 15px 17px;
+      border-left: 4px solid var(--green);
+      border-radius: 8px;
+      background: var(--green-soft);
+    }
+
+    code {
+      font-family: Consolas, "Cascadia Code", monospace;
+      color: #c9d1d9;
+      background: rgba(110,118,129,.16);
+      border-radius: 5px;
+      padding: .12rem .35rem;
+    }
+
+    pre {
+      margin: 14px 0;
+      padding: 16px;
+      overflow-x: auto;
+      background: var(--code);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      line-height: 1.45;
+    }
+
+    pre code { padding: 0; background: transparent; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 11px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { background: rgba(88,166,255,.1); }
+    td { background: rgba(255,255,255,.015); }
+
+    .path-step {
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,.02);
+    }
+
+    .path-step strong { display: block; margin-bottom: 5px; }
+    .path-step span { color: var(--muted); font-size: .91rem; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      padding: 26px 0 40px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .status-grid { grid-template-columns: repeat(2, 1fr); }
+      .path-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 650px) {
+      .resource-grid, .status-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../../index.html">DataCamp</a> ›
+        <a href="../index.html">Projects</a> ›
+        Analyzing Students' Mental Health
+      </div>
+
+      <div class="hero">
+        <div>
+          <span class="badge">SQL Project · Complete</span>
+          <h1>Analyzing Students' Mental Health</h1>
+          <p class="subtitle">
+            A completed DataCamp SQL project rebuilt locally in PostgreSQL with the
+            original CSV, validated queries, a project field guide, quick lookup,
+            practice SQL, and a reusable lab guide.
+          </p>
+        </div>
+
+        <aside class="hero-panel">
+          <strong>Project question</strong>
+          <ul>
+            <li>Keep international students only.</li>
+            <li>Group them by length of stay.</li>
+            <li>Count students in each group.</li>
+            <li>Compare average mental-health scores.</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="status-grid" aria-label="Project status">
+      <div class="card status-card">
+        <strong>Platform</strong>
+        <span>COMPLETE</span>
+      </div>
+      <div class="card status-card">
+        <strong>Documentation</strong>
+        <span>STRONG</span>
+      </div>
+      <div class="card status-card">
+        <strong>Lab</strong>
+        <span>STRONG</span>
+      </div>
+      <div class="card status-card">
+        <strong>Recall</strong>
+        <span>DEVELOPING</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span class="section-num">1</span>
+        <h2>Start here</h2>
+      </div>
+      <div class="section-body">
+        <div class="path-grid">
+          <div class="path-step">
+            <strong>1. Learn the story</strong>
+            <span>Open the Project Field Guide to understand the question, columns, SQL flow, result, and interpretation.</span>
+          </div>
+          <div class="path-step">
+            <strong>2. Rebuild locally</strong>
+            <span>Use the Lab Guide to create the table, load the CSV, and rerun the analysis in PostgreSQL.</span>
+          </div>
+          <div class="path-step">
+            <strong>3. Practice retrieval</strong>
+            <span>Use the SQL Quick Lookup and practice queries until the pattern becomes automatic.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span class="section-num">2</span>
+        <h2>Study resources</h2>
+      </div>
+      <div class="section-body">
+        <div class="resource-grid">
+          <a class="resource-card" href="study_pages/project_field_guide.html">
+            <strong>Project Field Guide</strong>
+            <span>Full explanation of the project, dataset, SQL logic, results, mistakes, and interview translation.</span>
+          </a>
+
+          <a class="resource-card" href="study_pages/sql_quick_lookup.html">
+            <strong>SQL Quick Lookup</strong>
+            <span>Compact searchable reference for WHERE, null handling, GROUP BY, COUNT, AVG, ROUND, CTEs, HAVING, and validation.</span>
+          </a>
+
+          <a class="resource-card" href="lab/lab_guide.html">
+            <strong>Local PostgreSQL Lab Guide</strong>
+            <span>Step-by-step instructions for recreating and validating the project on the local machine.</span>
+          </a>
+
+          <a class="resource-card" href="lab/sql/03_practice_queries.sql">
+            <strong>Practice Queries</strong>
+            <span>Additional exploration, grouped comparisons, missing-value checks, ranking, and an unfinished practice task.</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span class="section-num">3</span>
+        <h2>Runnable project files</h2>
+      </div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="lab/sql/00_create_students_table.sql"><code>00_create_students_table.sql</code></a></td>
+              <td>Create the local <code>students</code> table with all 50 source columns.</td>
+            </tr>
+            <tr>
+              <td><a href="lab/sql/01_load_students_csv.sql"><code>01_load_students_csv.sql</code></a></td>
+              <td>Load the original CSV into PostgreSQL using <code>\copy</code>.</td>
+            </tr>
+            <tr>
+              <td><a href="lab/sql/02_project_solution.sql"><code>02_project_solution.sql</code></a></td>
+              <td>Run the final project solution and validation queries.</td>
+            </tr>
+            <tr>
+              <td><a href="lab/sql/03_practice_queries.sql"><code>03_practice_queries.sql</code></a></td>
+              <td>Extend the project with extra grouped and comparison queries.</td>
+            </tr>
+            <tr>
+              <td><a href="source_material/students.csv"><code>students.csv</code></a></td>
+              <td>Original project dataset with 286 rows.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span class="section-num">4</span>
+        <h2>Validated result</h2>
+      </div>
+      <div class="section-body">
+        <div class="success">
+          The local PostgreSQL result matched the expected DataCamp output:
+          <strong>286 source rows</strong>,
+          <strong>201 complete international rows</strong>,
+          <strong>9 stay groups</strong>,
+          and <strong>9 final rows × 5 columns</strong>.
+        </div>
+
+        <pre><code>stay
+count_int
+average_phq
+average_scs
+average_as</code></pre>
+
+        <div class="callout">
+          The result is descriptive. It shows how average scores vary across
+          length-of-stay groups, but it does not prove that length of stay caused
+          changes in mental health.
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span class="section-num">5</span>
+        <h2>Core SQL pattern</h2>
+      </div>
+      <div class="section-body">
+        <pre><code>SELECT
+    group_column,
+    COUNT(*) AS group_size,
+    ROUND(AVG(metric), 2) AS average_metric
+FROM table_name
+WHERE row_filter
+GROUP BY group_column
+ORDER BY group_column DESC;</code></pre>
+
+        <p>
+          For this project:
+          <code>group_column = stay</code>,
+          <code>row_filter = inter_dom = 'Inter'</code>,
+          and the metrics are <code>todep</code>, <code>tosc</code>, and <code>toas</code>.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span class="section-num">6</span>
+        <h2>Project files and notes</h2>
+      </div>
+      <div class="section-body">
+        <div class="resource-grid">
+          <a class="resource-card" href="README.md">
+            <strong>README</strong>
+            <span>Project purpose, structure, and usage summary.</span>
+          </a>
+
+          <a class="resource-card" href="docs/PROJECT_SETUP_AUDIT.md">
+            <strong>Project Setup Audit</strong>
+            <span>Final structure, validation evidence, and cleanup notes.</span>
+          </a>
+
+          <a class="resource-card" href="source_material/README.md">
+            <strong>Source Material Notes</strong>
+            <span>Dataset provenance and source-file handling.</span>
+          </a>
+
+          <a class="resource-card" href="lab/notes/troubleshooting.md">
+            <strong>Troubleshooting Notes</strong>
+            <span>Known issues and fixes from the local PostgreSQL setup.</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <a href="../../index.html">DataCamp Home</a> ·
+      <a href="../index.html">Projects</a> ·
+      <a href="../../skill_tracks/01_sql_fundamentals/index.html">SQL Fundamentals Track</a>
+    </div>
+  </footer>
+</body>
+</html>

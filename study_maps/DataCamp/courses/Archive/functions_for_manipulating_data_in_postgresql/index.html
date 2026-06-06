@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Functions for Manipulating Data in PostgreSQL | DataCamp StudyBook</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.58;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 26px 0 50px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #071d2d 0%, #0d2a40 58%, #153b50 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 900px;
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero-copy {
+      max-width: 830px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .badge.green {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .badge.blue {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .badge.amber {
+      background: var(--amber-soft);
+      color: #f0b94d;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 17px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      border-color: #486274;
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+    }
+
+    .section { margin-top: 25px; }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.42rem;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 15px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 19px;
+      box-shadow: var(--shadow);
+    }
+
+    .card.featured {
+      border-color: #2f7a4c;
+      background:
+        linear-gradient(180deg, rgba(3,239,98,0.07), transparent 68%),
+        var(--panel);
+    }
+
+    .card h3 {
+      margin: 5px 0 7px;
+      font-size: 1.1rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .kicker {
+      display: inline-block;
+      color: var(--blue);
+      font-size: 0.69rem;
+      font-weight: 900;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .kicker.green { color: var(--green); }
+    .kicker.purple { color: var(--purple); }
+    .kicker.amber { color: #f0b94d; }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--green);
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .card-link:hover { text-decoration: underline; }
+
+    .chapter-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .chapter {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 15px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 16px;
+    }
+
+    .chapter-num {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #222b36;
+      border: 1px solid #3b4755;
+      color: var(--text);
+      font-weight: 900;
+    }
+
+    .chapter h3 {
+      margin: 0;
+      font-size: 1.04rem;
+    }
+
+    .chapter p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .chapter a {
+      color: var(--green);
+      font-weight: 850;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .chapter a:hover { text-decoration: underline; }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .status-box {
+      padding: 13px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .status-box strong {
+      display: block;
+      color: #dce6ef;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-box span {
+      display: block;
+      margin-top: 4px;
+      color: var(--green);
+      font-weight: 850;
+    }
+
+    .note {
+      margin-top: 24px;
+      padding: 15px 17px;
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      background: var(--amber-soft);
+      color: #d7c9a8;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 30px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 850px) {
+      .grid-2, .grid-3, .status-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chapter {
+        grid-template-columns: 44px minmax(0, 1fr);
+      }
+
+      .chapter a {
+        grid-column: 2;
+      }
+
+      .section-heading {
+        flex-direction: column;
+        align-items: start;
+      }
+
+      .hero { padding: 28px 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Courses</a>
+      <span>›</span>
+      <span>Functions for Manipulating Data in PostgreSQL</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Canonical DataCamp Course Package</p>
+      <h1>Functions for Manipulating Data in PostgreSQL</h1>
+      <p class="hero-copy">
+        A practical PostgreSQL course covering data types, arrays, date and time operations,
+        text manipulation, full-text search, extensions, and fuzzy string matching.
+        This page is the front door to the complete StudyBook course package.
+      </p>
+
+      <div class="badges">
+        <span class="badge green">Platform passed</span>
+        <span class="badge blue">SQL Fundamentals · Course 6</span>
+        <span class="badge amber">Review and practice ongoing</span>
+      </div>
+
+      <div class="hero-actions">
+        <a class="button primary" href="study_pages/field_guide.html">Open Main Field Guide</a>
+        <a class="button secondary" href="study_pages/sql_function_quick_lookup.html">Open Quick Lookup</a>
+        <a class="button secondary" href="lab/lab_guide.html">Open Lab Guide</a>
+      </div>
+
+      <div class="status-grid" aria-label="Course status">
+        <div class="status-box">
+          <strong>Platform</strong>
+          <span>Passed</span>
+        </div>
+        <div class="status-box">
+          <strong>Documentation</strong>
+          <span>Strong</span>
+        </div>
+        <div class="status-box">
+          <strong>Lab coverage</strong>
+          <span>Developing</span>
+        </div>
+        <div class="status-box">
+          <strong>Recall</strong>
+          <span>Needs review</span>
+        </div>
+        <div class="status-box">
+          <strong>Interview readiness</strong>
+          <span>Needs repetition</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Recommended Study Path</h2>
+          <p>Use these three pages most often.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <article class="card featured">
+          <span class="kicker green">Whole-course map</span>
+          <h3>Accumulated Field Guide</h3>
+          <p>Review the major concepts, syntax patterns, common traps, and cross-chapter connections.</p>
+          <a class="card-link" href="study_pages/field_guide.html">Open Field Guide →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker">Fast reference</span>
+          <h3>SQL Function Quick Lookup</h3>
+          <p>Find the smallest useful syntax pattern for a PostgreSQL function, operator, or task.</p>
+          <a class="card-link" href="study_pages/sql_function_quick_lookup.html">Open Quick Lookup →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker purple">Hands-on work</span>
+          <h3>Lab Guide</h3>
+          <p>Run the course-local SQL setup, practice examples, and record mistakes and observed outputs.</p>
+          <a class="card-link" href="lab/lab_guide.html">Open Lab Guide →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Chapter Field Guides</h2>
+          <p>Detailed searchable teaching pages for each chapter.</p>
+        </div>
+      </div>
+
+      <div class="chapter-list">
+        <article class="chapter">
+          <div class="chapter-num">1</div>
+          <div>
+            <h3>PostgreSQL Data Types and Arrays</h3>
+            <p>Text, numeric, date/time, interval, arrays, indexing, ANY, containment, and metadata inspection.</p>
+          </div>
+          <a href="study_pages/chapter_01_data_types_field_guide.html">Open chapter →</a>
+        </article>
+
+        <article class="chapter">
+          <div class="chapter-num">2</div>
+          <div>
+            <h3>Date/Time Functions and Operators</h3>
+            <p>Arithmetic, intervals, current timestamps, AGE, EXTRACT, DATE_PART, and DATE_TRUNC.</p>
+          </div>
+          <a href="study_pages/chapter_02_datetime_functions_field_guide.html">Open chapter →</a>
+        </article>
+
+        <article class="chapter">
+          <div class="chapter-num">3</div>
+          <div>
+            <h3>Text Functions and String Cleanup</h3>
+            <p>Concatenation, case conversion, replacement, length, substring, trim, and padding.</p>
+          </div>
+          <a href="study_pages/chapter_03_text_functions_field_guide.html">Open chapter →</a>
+        </article>
+
+        <article class="chapter">
+          <div class="chapter-num">4</div>
+          <div>
+            <h3>Search, Extensions, and Fuzzy Matching</h3>
+            <p>LIKE, full-text search, tsvector, extensions, Levenshtein distance, and similarity.</p>
+          </div>
+          <a href="study_pages/chapter_04_search_extensions_field_guide.html">Open chapter →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Lab and Practice</h2>
+          <p>Course-local runnable SQL and operating instructions.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <article class="card">
+          <span class="kicker purple">Run first</span>
+          <h3>How to Run</h3>
+          <p>Environment, psql, folder navigation, and the recommended execution order.</p>
+          <a class="card-link" href="lab/00_how_to_run.md">Open instructions →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker purple">Practice record</span>
+          <h3>Lab Run Book</h3>
+          <p>Chapter practice plan, checkpoints, outputs, troubleshooting, and future exercises.</p>
+          <a class="card-link" href="lab/lab_run_book.md">Open run book →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker purple">SQL setup</span>
+          <h3>Runnable SQL</h3>
+          <p>Create the schema, create the course tables, and insert the sample data.</p>
+          <a class="card-link" href="lab/sql/00_create_schema.sql">00 Create schema →</a><br>
+          <a class="card-link" href="lab/sql/01_create_tables.sql">01 Create tables →</a><br>
+          <a class="card-link" href="lab/sql/02_insert_sample_data.sql">02 Insert sample data →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Course Notes and Reference</h2>
+          <p>Supporting study material and course evidence.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <article class="card">
+          <span class="kicker">Orientation</span>
+          <h3>Start Here</h3>
+          <p>Course purpose, recommended order, and the fastest route into the material.</p>
+          <a class="card-link" href="study_pages/00_start_here.md">Open Start Here →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker">Coverage inventory</span>
+          <h3>Bill of Materials</h3>
+          <p>Chapters, lessons, functions, operators, source coverage, and remaining gaps.</p>
+          <a class="card-link" href="docs/BILL_OF_MATERIALS.md">Open BOM →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker">Raw evidence</span>
+          <h3>Source Material</h3>
+          <p>Curriculum outline, raw transcripts, exercise notes, and archived source material.</p>
+          <a class="card-link" href="source_material/README.md">Open source area →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker">Study notes</span>
+          <h3>Patterns and Corrections</h3>
+          <p>Reusable SQL patterns, mistakes, easy explanations, interview translation, and flashcards.</p>
+          <a class="card-link" href="study_pages/06_sql_patterns.md">SQL patterns →</a><br>
+          <a class="card-link" href="study_pages/07_mistakes_and_corrections.md">Mistakes and corrections →</a><br>
+          <a class="card-link" href="study_pages/09_interview_translation.md">Interview translation →</a><br>
+          <a class="card-link" href="study_pages/10_flashcards.md">Flashcards →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker amber">Course state</span>
+          <h3>Session State</h3>
+          <p>Current architecture decisions, completed work, and the next recommended study action.</p>
+          <a class="card-link" href="STUDYBUBBLE_SESSION_STATE.md">Open session state →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker amber">Package information</span>
+          <h3>README and Setup Audit</h3>
+          <p>Course identity, folder purpose, track relationship, and initial package checks.</p>
+          <a class="card-link" href="README.md">Open README →</a><br>
+          <a class="card-link" href="docs/COURSE_SETUP_AUDIT.md">Open setup audit →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Track Navigation</h2>
+          <p>This canonical course package can be reused by multiple tracks.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <article class="card featured">
+          <span class="kicker green">Current track</span>
+          <h3>SQL Fundamentals</h3>
+          <p>Return to the skill-track page where this course is Course 6.</p>
+          <a class="card-link" href="../../skill_tracks/01_sql_fundamentals/index.html">Open SQL Fundamentals →</a>
+        </article>
+
+        <article class="card">
+          <span class="kicker">Career track</span>
+          <h3>Associate Data Analyst in SQL</h3>
+          <p>Open the broader career track that also reuses this PostgreSQL course.</p>
+          <a class="card-link" href="../../career_tracks/01_associate_data_analyst_in_sql/index.html">Open career track →</a>
+        </article>
+      </div>
+    </section>
+
+    <aside class="note">
+      <strong>Course-package rule:</strong>
+      this folder is the canonical active package. Track pages control sequence numbers;
+      the course folder keeps a stable reusable name.
+    </aside>
+
+    <footer>
+      <span>Functions for Manipulating Data in PostgreSQL</span>
+      <span>
+        <a href="../index.html">Courses</a>
+        &nbsp;·&nbsp;
+        <a href="../../skill_tracks/01_sql_fundamentals/index.html">SQL Fundamentals</a>
+        &nbsp;·&nbsp;
+        <a href="../../index.html">DataCamp Home</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

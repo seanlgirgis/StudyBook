@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 3 — Correlated Queries, Nested Queries, and Common Table Expressions | Data Manipulation in SQL</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--soft:#1c232d;--border:#30363d;--text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;--amber:#d29922;--purple:#bc8cff;--danger:#ff7b72;--shadow:0 12px 30px rgba(0,0,0,.24)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);color:var(--text);line-height:1.62}a{color:inherit}code,pre{font-family:Consolas,"Courier New",monospace}.page{width:min(1180px,calc(100% - 32px));margin:auto;padding:24px 0 52px}.breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}.breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}.hero:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}.eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}.hero p{max-width:920px;margin:14px 0 0;color:#c8d4df;font-size:1.03rem}.actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:9px;border:1px solid #486274;background:rgba(255,255,255,.04);font-weight:850;text-decoration:none}.button.primary{background:var(--green);color:#03130a;border-color:transparent}.layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:22px;margin-top:24px}.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}.toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);font-size:.9rem;text-decoration:none}.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}.section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow)}.section h2{margin:0 0 12px;font-size:1.45rem}.section h3{margin:22px 0 8px;font-size:1.08rem}.section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{margin:8px 0 0;padding-left:22px;color:#c9d3dc}.section li+li{margin-top:7px}pre{overflow-x:auto;margin:14px 0;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;color:#dce6ef;font-size:.92rem;line-height:1.55}.callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:rgba(88,166,255,.12);color:#cfdcec}.green{border-left-color:var(--green);background:rgba(3,239,98,.12)}.amber{border-left-color:var(--amber);background:rgba(210,153,34,.12);color:#d8caaa}.danger{border-left-color:var(--danger);background:rgba(255,123,114,.10);color:#efc3bf}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}.card{padding:16px;background:var(--soft);border:1px solid var(--border);border-radius:11px}.card h3{margin:0 0 8px;color:var(--green);font-size:1rem}.card p{margin:0;color:var(--muted);font-size:.92rem}.diagram{margin:16px 0;padding:18px;border:1px solid #33404d;border-radius:11px;background:#10161d;font-family:Consolas,"Courier New",monospace;color:#d6e0e9;overflow-x:auto;white-space:pre}table{width:100%;margin:14px 0;border-collapse:collapse;font-size:.92rem}th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}th{background:#1f2933}td{background:#121820;color:#cbd5de}.qa{display:grid;gap:12px}.qa-item{padding:15px;border:1px solid var(--border);border-radius:10px;background:#121820}.qa-item strong{display:block;margin-bottom:6px;color:var(--green)}.memory{padding:16px;background:rgba(188,140,255,.12);border:1px solid rgba(188,140,255,.34);border-radius:11px}.memory strong{color:var(--purple)}.lessons{display:grid;gap:9px;margin-top:14px}.lesson{display:flex;gap:10px;padding:11px 12px;background:#121820;border:1px solid var(--border);border-radius:9px}.num{min-width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(3,239,98,.12);color:var(--green);font-weight:800;font-size:.84rem}footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}footer a{color:var(--blue);text-decoration:none}@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}@media(max-width:680px){.grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+</style>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumbs"><a href="../../../index.html">DataCamp</a><span>›</span><a href="../index.html">Data Manipulation in SQL</a><span>›</span><span>Chapter 3: Correlated Queries, Nested Queries, and Common Table Expressions</span></nav>
+
+<header class="hero">
+<p class="eyebrow">Data Manipulation in SQL · Chapter 3</p>
+<h1>Correlated Queries, Nested Queries, and Common Table Expressions</h1>
+<p>Move beyond short subqueries by linking inner queries to outer rows, nesting multiple query levels, and organizing complex logic into readable named steps with common table expressions.</p>
+<div class="actions">
+<a class="button primary" href="../index.html">Course Home</a>
+<a class="button" href="field_guide.html">Main Field Guide</a>
+<a class="button" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+<a class="button" href="chapter_02_short_and_simple_subqueries_field_guide.html">Previous Chapter</a>
+<a class="button" href="chapter_04_window_functions_field_guide.html">Next Chapter</a>
+</div>
+</header>
+
+<div class="layout">
+<aside class="toc">
+<h2>Chapter Contents</h2>
+<a href="#scope">1. Chapter scope</a>
+<a href="#big-picture">2. Big picture</a>
+<a href="#correlated">3. Correlated subqueries</a>
+<a href="#multiple-conditions">4. Multiple conditions</a>
+<a href="#nested">5. Nested subqueries</a>
+<a href="#nested-from">6. Nesting in FROM</a>
+<a href="#cte">7. Common table expressions</a>
+<a href="#multiple-ctes">8. Organizing multiple CTEs</a>
+<a href="#ctes-nested">9. CTEs with nested logic</a>
+<a href="#choose">10. Choosing a technique</a>
+<a href="#worked-example">11. Worked example</a>
+<a href="#validation">12. Validation</a>
+<a href="#mistakes">13. Common mistakes</a>
+<a href="#interview">14. Interview translation</a>
+<a href="#review">15. Memory review</a>
+</aside>
+
+<div>
+<section class="section" id="scope">
+<h2>1. Chapter Scope</h2>
+<div class="lessons">
+<div class="lesson"><span class="num">1</span><span>Correlated subqueries</span></div>
+<div class="lesson"><span class="num">2</span><span>Getting started with correlated subqueries</span></div>
+<div class="lesson"><span class="num">3</span><span>Correlated subquery with multiple conditions</span></div>
+<div class="lesson"><span class="num">4</span><span>Nested subqueries</span></div>
+<div class="lesson"><span class="num">5</span><span>Getting started with nested subqueries</span></div>
+<div class="lesson"><span class="num">6</span><span>Nest a subquery in FROM</span></div>
+<div class="lesson"><span class="num">7</span><span>Common Table Expressions</span></div>
+<div class="lesson"><span class="num">8</span><span>Clean up with CTEs</span></div>
+<div class="lesson"><span class="num">9</span><span>Organizing with CTEs</span></div>
+<div class="lesson"><span class="num">10</span><span>CTEs with nested subqueries</span></div>
+<div class="lesson"><span class="num">11</span><span>Deciding on techniques to use</span></div>
+<div class="lesson"><span class="num">12</span><span>Get team names with a subquery</span></div>
+<div class="lesson"><span class="num">13</span><span>Get team names with correlated subqueries</span></div>
+<div class="lesson"><span class="num">14</span><span>Get team names with CTEs</span></div>
+<div class="lesson"><span class="num">15</span><span>Which technique to use?</span></div>
+</div>
+</section>
+
+<section class="section" id="big-picture">
+<h2>2. Big Picture</h2>
+<p>This chapter compares three ways to build complex SQL: correlate an inner query to the current outer row, nest one query inside another, or name intermediate steps with CTEs.</p>
+<div class="diagram">Need a value related to the current outer row?
+        ↓
+correlated subquery
+
+Need one result to feed another result?
+        ↓
+nested subquery
+
+Need readable, named stages?
+        ↓
+CTE</div>
+<div class="grid">
+<article class="card"><h3>Correlated subquery</h3><p>References a column from the outer query and may run once per outer row.</p></article>
+<article class="card"><h3>Nested subquery</h3><p>Contains multiple query levels where one inner result feeds another.</p></article>
+<article class="card"><h3>CTE</h3><p>Names an intermediate query so the final statement reads like a sequence of steps.</p></article>
+<article class="card"><h3>Decision point</h3><p>Choose clarity first, then validate performance and correctness.</p></article>
+</div>
+<div class="callout green"><strong>Chapter punchline:</strong> correlated queries solve row-by-row comparisons, nested queries compose results, and CTEs make multi-step logic easier to read and maintain.</div>
+</section>
+
+<section class="section" id="correlated">
+<h2>3. Correlated Subqueries</h2>
+<p>A correlated subquery references a column from the outer query. The inner query cannot run independently because it depends on the current outer row.</p>
+<pre><code>SELECT
+    m1.country_id,
+    m1.date,
+    m1.home_goal,
+    m1.away_goal
+FROM match AS m1
+WHERE (m1.home_goal + m1.away_goal) &gt; (
+    SELECT AVG(m2.home_goal + m2.away_goal)
+    FROM match AS m2
+    WHERE m2.country_id = m1.country_id
+);</code></pre>
+<p>For each match, the inner query calculates the average total goals for that match's country.</p>
+<div class="callout"><strong>What to notice:</strong> <code>m1.country_id</code> comes from the outer query. That outer reference creates the correlation.</div>
+</section>
+
+<section class="section" id="multiple-conditions">
+<h2>4. Correlated Subqueries with Multiple Conditions</h2>
+<p>Correlation can depend on more than one outer value, such as country and season.</p>
+<pre><code>SELECT
+    m1.country_id,
+    m1.season,
+    m1.date,
+    m1.home_goal,
+    m1.away_goal
+FROM match AS m1
+WHERE (m1.home_goal + m1.away_goal) &gt; (
+    SELECT AVG(m2.home_goal + m2.away_goal)
+    FROM match AS m2
+    WHERE m2.country_id = m1.country_id
+      AND m2.season = m1.season
+);</code></pre>
+<p>Each row is compared with the average for its own country and season.</p>
+<div class="callout amber"><strong>Performance caution:</strong> a correlated subquery may execute repeatedly. On large data, a grouped join or window function can be more efficient.</div>
+</section>
+
+<section class="section" id="nested">
+<h2>5. Nested Subqueries</h2>
+<p>A nested subquery has more than one inner level. The deepest query runs first, then its result is consumed by the next level.</p>
+<pre><code>SELECT
+    country_id,
+    date,
+    home_goal,
+    away_goal
+FROM match
+WHERE country_id IN (
+    SELECT id
+    FROM country
+    WHERE name IN (
+        SELECT name
+        FROM country
+        WHERE continent = 'Europe'
+    )
+);</code></pre>
+<div class="diagram">deepest query
+    ↓
+middle query
+    ↓
+outer query</div>
+<div class="callout green"><strong>Debugging rule:</strong> test the innermost query first, then test each containing layer.</div>
+</section>
+
+<section class="section" id="nested-from">
+<h2>6. Nesting a Subquery in FROM</h2>
+<p>A FROM subquery can itself contain another subquery.</p>
+<pre><code>SELECT
+    country,
+    avg_goals
+FROM (
+    SELECT
+        c.name AS country,
+        AVG(m.home_goal + m.away_goal) AS avg_goals
+    FROM country AS c
+    INNER JOIN match AS m
+      ON c.id = m.country_id
+    WHERE m.season IN (
+        SELECT DISTINCT season
+        FROM match
+        WHERE season &gt;= '2012/2013'
+    )
+    GROUP BY c.name
+) AS country_summary
+WHERE avg_goals &gt; 2.5;</code></pre>
+<p>The inner list subquery filters seasons, the derived table calculates country averages, and the outer query filters those averages.</p>
+</section>
+
+<section class="section" id="cte">
+<h2>7. Common Table Expressions</h2>
+<p>A CTE is a named query defined with <code>WITH</code>. It exists only for the duration of the statement.</p>
+<pre><code>WITH country_averages AS (
+    SELECT
+        country_id,
+        AVG(home_goal + away_goal) AS avg_goals
+    FROM match
+    GROUP BY country_id
+)
+SELECT
+    c.name,
+    ca.avg_goals
+FROM country AS c
+INNER JOIN country_averages AS ca
+  ON c.id = ca.country_id;</code></pre>
+<div class="callout"><strong>Why CTEs help:</strong> they separate preparation logic from the final query and give intermediate results meaningful names.</div>
+</section>
+
+<section class="section" id="multiple-ctes">
+<h2>8. Organizing with Multiple CTEs</h2>
+<p>Multiple CTEs are separated by commas and can form a readable pipeline.</p>
+<pre><code>WITH season_matches AS (
+    SELECT *
+    FROM match
+    WHERE season = '2013/2014'
+),
+league_averages AS (
+    SELECT
+        country_id,
+        AVG(home_goal + away_goal) AS avg_goals
+    FROM season_matches
+    GROUP BY country_id
+),
+overall_average AS (
+    SELECT
+        AVG(home_goal + away_goal) AS avg_goals
+    FROM season_matches
+)
+SELECT
+    c.name,
+    l.avg_goals,
+    o.avg_goals AS overall_avg,
+    l.avg_goals - o.avg_goals AS difference
+FROM league_averages AS l
+INNER JOIN country AS c
+  ON c.id = l.country_id
+CROSS JOIN overall_average AS o;</code></pre>
+<div class="callout green"><strong>Pipeline:</strong> filter once → aggregate by league → calculate overall benchmark → compare.</div>
+</section>
+
+<section class="section" id="ctes-nested">
+<h2>9. CTEs with Nested Subqueries</h2>
+<p>CTEs and subqueries can be combined. A CTE can contain a subquery, and the final query can also contain one.</p>
+<pre><code>WITH high_scoring_matches AS (
+    SELECT
+        country_id,
+        date,
+        home_goal,
+        away_goal
+    FROM match
+    WHERE (home_goal + away_goal) &gt; (
+        SELECT AVG(home_goal + away_goal)
+        FROM match
+    )
+)
+SELECT
+    c.name,
+    COUNT(h.date) AS high_scoring_matches
+FROM country AS c
+LEFT JOIN high_scoring_matches AS h
+  ON c.id = h.country_id
+GROUP BY c.name;</code></pre>
+<p>The scalar subquery calculates one threshold; the CTE names the filtered set; the final query summarizes it.</p>
+</section>
+
+<section class="section" id="choose">
+<h2>10. Choosing the Technique</h2>
+<table>
+<thead><tr><th>Need</th><th>Best starting choice</th><th>Reason</th></tr></thead>
+<tbody>
+<tr><td>Compare each row with its own group</td><td>Correlated subquery</td><td>The inner query depends on the outer row.</td></tr>
+<tr><td>Feed one result into another</td><td>Nested subquery</td><td>The query naturally has inner-to-outer layers.</td></tr>
+<tr><td>Build several readable stages</td><td>CTE</td><td>Each stage receives a meaningful name.</td></tr>
+<tr><td>Reuse the same logical result</td><td>CTE or derived table</td><td>Avoid duplicating the same nested logic.</td></tr>
+<tr><td>Need row-by-row group statistics at scale</td><td>Window function or grouped join</td><td>Often clearer and potentially more efficient.</td></tr>
+</tbody>
+</table>
+<div class="callout green"><strong>Practical rule:</strong> use the simplest form that clearly expresses the logic, then inspect the execution plan when performance matters.</div>
+</section>
+
+<section class="section" id="worked-example">
+<h2>11. Worked Example: Team Names Three Ways</h2>
+<h3>Uncorrelated subquery</h3>
+<pre><code>SELECT team_long_name
+FROM team
+WHERE team_api_id IN (
+    SELECT hometeam_id
+    FROM match
+    WHERE home_goal &gt;= 8
+);</code></pre>
+
+<h3>Correlated subquery with EXISTS</h3>
+<pre><code>SELECT
+    t.team_long_name
+FROM team AS t
+WHERE EXISTS (
+    SELECT 1
+    FROM match AS m
+    WHERE m.hometeam_id = t.team_api_id
+      AND m.home_goal &gt;= 8
+);</code></pre>
+
+<h3>CTE</h3>
+<pre><code>WITH high_scoring_home_teams AS (
+    SELECT DISTINCT hometeam_id
+    FROM match
+    WHERE home_goal &gt;= 8
+)
+SELECT
+    t.team_long_name
+FROM team AS t
+INNER JOIN high_scoring_home_teams AS h
+  ON t.team_api_id = h.hometeam_id;</code></pre>
+
+<div class="callout green"><strong>Result:</strong> all three can return the same teams. The best choice depends on readability, reuse, and the database optimizer.</div>
+</section>
+
+<section class="section" id="validation">
+<h2>12. Validation and Troubleshooting</h2>
+<ul>
+<li>Run each CTE body or inner query separately.</li>
+<li>Confirm whether a correlated subquery returns one row or many rows for each outer row.</li>
+<li>Check that outer aliases are referenced intentionally inside correlated subqueries.</li>
+<li>Compare result counts between equivalent subquery, CTE, and join solutions.</li>
+<li>Inspect for accidental duplicate rows after joining summarized results.</li>
+<li>Use <code>EXPLAIN</code> or <code>EXPLAIN ANALYZE</code> when performance matters.</li>
+</ul>
+<div class="callout danger"><strong>Red flag:</strong> if an inner query cannot run independently, it is correlated. If that was not intentional, check alias references.</div>
+</section>
+
+<section class="section" id="mistakes">
+<h2>13. Common Mistakes</h2>
+<div class="qa">
+<div class="qa-item"><strong>Forgetting the outer reference</strong>A correlated subquery becomes uncorrelated and may compare every row to the same global result.</div>
+<div class="qa-item"><strong>Using ambiguous aliases</strong>Use clear outer and inner aliases such as <code>m1</code> and <code>m2</code>.</div>
+<div class="qa-item"><strong>Returning multiple rows to a scalar comparison</strong>Ensure the correlated subquery aggregates or otherwise returns one value per outer row.</div>
+<div class="qa-item"><strong>Deep nesting without testing layers</strong>Validate the innermost query first.</div>
+<div class="qa-item"><strong>Assuming a CTE is automatically faster</strong>CTEs mainly improve structure and readability; performance depends on the engine and plan.</div>
+<div class="qa-item"><strong>Repeating the same filtering logic in several CTEs</strong>Create one base CTE and build later steps from it.</div>
+<div class="qa-item"><strong>Using a correlated subquery when a window function is clearer</strong>For per-group averages or rankings, Chapter 4 techniques may be better.</div>
+</div>
+</section>
+
+<section class="section" id="interview">
+<h2>14. Interview Translation</h2>
+<div class="qa">
+<div class="qa-item"><strong>What is a correlated subquery?</strong>A correlated subquery references values from the outer query, so its result is evaluated in the context of each outer row.</div>
+<div class="qa-item"><strong>How is it different from a normal subquery?</strong>An uncorrelated subquery can run independently. A correlated subquery depends on an outer alias or value.</div>
+<div class="qa-item"><strong>What is a nested subquery?</strong>It is a query with multiple levels of nesting where one inner result feeds another query level.</div>
+<div class="qa-item"><strong>Why use a CTE?</strong>I use a CTE to name intermediate logic, break a complex query into stages, and make testing and maintenance easier.</div>
+<div class="qa-item"><strong>Are CTEs always faster?</strong>No. Their main benefit is readability. I compare execution plans when performance is important.</div>
+<div class="qa-item"><strong>When would you avoid a correlated subquery?</strong>When it repeatedly scans a large table and the same result can be produced more clearly with a grouped join or window function.</div>
+</div>
+</section>
+
+<section class="section" id="review">
+<h2>15. Memory Review</h2>
+<div class="memory">
+<strong>Chapter summary</strong>
+<ol>
+<li>A correlated subquery references the current outer row.</li>
+<li>An uncorrelated subquery can run independently.</li>
+<li>Nested subqueries have multiple inner-to-outer levels.</li>
+<li>A CTE is a named temporary result defined with <code>WITH</code>.</li>
+<li>Multiple CTEs can form a readable processing pipeline.</li>
+<li>CTEs improve readability but are not automatically faster.</li>
+<li>Window functions may replace some correlated calculations.</li>
+</ol>
+</div>
+<h3>Quick self-check</h3>
+<ul>
+<li>Can you identify the outer reference in a correlated subquery?</li>
+<li>Can you compare each row with its country-and-season average?</li>
+<li>Can you debug a three-level nested query from the inside out?</li>
+<li>Can you rewrite a long FROM subquery as a CTE?</li>
+<li>Can you explain when a grouped join or window function may be better?</li>
+</ul>
+<div class="callout amber"><strong>Lab decision:</strong> Chapter 3 strongly deserves local practice. Correlation, nesting, and multi-step CTEs are central production SQL skills.</div>
+<div class="callout green"><strong>Completion standard:</strong> write and explain a correlated subquery, a nested query, and a multi-CTE solution—and justify which form is clearest for the problem.</div>
+</section>
+</div>
+</div>
+
+<footer>
+<span>Data Manipulation in SQL · Chapter 3 Field Guide</span>
+<span><a href="chapter_02_short_and_simple_subqueries_field_guide.html">Previous Chapter</a> · <a href="../index.html">Course Home</a> · <a href="field_guide.html">Main Field Guide</a> · <a href="chapter_04_window_functions_field_guide.html">Next Chapter</a></span>
+</footer>
+</main>
+</body>
+</html>

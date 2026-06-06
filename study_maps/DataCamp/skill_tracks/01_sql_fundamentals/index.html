@@ -3,40 +3,605 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SQL Fundamentals</title>
+  <title>SQL Fundamentals | DataCamp StudyBook</title>
   <style>
-    body { font-family: Segoe UI, Arial, sans-serif; margin: 0; background: #f6f8fb; color: #1f2937; }
-    main { max-width: 900px; margin: 0 auto; padding: 24px; }
-    section { background: #fff; border: 1px solid #dbe2ea; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    a { color: #0a5db1; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 26px 0 48px;
+    }
+
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+    }
+
+    .top-nav a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .top-nav a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061c2c 0%, #0b2940 58%, #14354c 100%);
+      border: 1px solid #24445a;
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+    }
+
+    .hero-copy {
+      max-width: 760px;
+      margin: 13px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .fact {
+      padding: 7px 11px;
+      border: 1px solid #39566a;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: #d8e2eb;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .progress-wrap {
+      margin-top: 22px;
+      max-width: 620px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 7px;
+      color: #d8e2eb;
+      font-size: 0.83rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .progress {
+      height: 9px;
+      overflow: hidden;
+      background: #354252;
+      border-radius: 999px;
+    }
+
+    .progress span {
+      display: block;
+      width: 71.4%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), #20c997);
+      border-radius: inherit;
+    }
+
+    .section {
+      margin-top: 24px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .track-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) auto;
+      gap: 15px;
+      align-items: center;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 17px;
+      box-shadow: var(--shadow);
+    }
+
+    .item.active {
+      border-color: #2f7a4c;
+      background:
+        linear-gradient(180deg, rgba(3, 239, 98, 0.07), transparent 68%),
+        var(--panel);
+    }
+
+    .number {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #222b36;
+      border: 1px solid #3a4653;
+      color: #dce6ef;
+      font-weight: 900;
+    }
+
+    .item.active .number {
+      background: var(--green);
+      border-color: var(--green);
+      color: #03130a;
+    }
+
+    .type {
+      display: inline-block;
+      margin-bottom: 3px;
+      color: var(--blue);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .type.project { color: var(--purple); }
+    .type.assessment { color: #f0b94d; }
+
+    .item h3 {
+      margin: 0;
+      font-size: 1.07rem;
+    }
+
+    .item p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .status-area {
+      min-width: 145px;
+      text-align: right;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .status.canonical {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .status.local {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .status.planned {
+      background: rgba(157, 167, 179, 0.12);
+      color: #bdc6d0;
+    }
+
+    .status.legacy {
+      background: var(--amber-soft);
+      color: #f0b94d;
+    }
+
+    .open-link {
+      display: block;
+      margin-top: 8px;
+      color: var(--green);
+      font-size: 0.86rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .open-link:hover { text-decoration: underline; }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .related-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .related-card h3 {
+      margin: 0 0 7px;
+      font-size: 1.05rem;
+    }
+
+    .related-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.91rem;
+    }
+
+    .related-card a {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--green);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .note {
+      margin-top: 24px;
+      border-left: 4px solid var(--amber);
+      background: var(--amber-soft);
+      border-radius: 10px;
+      padding: 15px 17px;
+      color: #d8caaa;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 760px) {
+      .hero { padding: 28px 21px; }
+
+      .item {
+        grid-template-columns: 44px minmax(0, 1fr);
+      }
+
+      .status-area {
+        grid-column: 2;
+        min-width: 0;
+        text-align: left;
+      }
+
+      .related-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <section>
+  <main class="page">
+    <nav class="top-nav" aria-label="Breadcrumb">
+      <a href="../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Skill Tracks</a>
+      <span>›</span>
+      <span>SQL Fundamentals</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Skill Track</p>
       <h1>SQL Fundamentals</h1>
-      <p><strong>Skill Track</strong></p>
-      <p><strong>Status:</strong> Under construction</p>
-      <p><strong>Purpose:</strong> Build the base SQL query literacy needed for analytics and data engineering.</p>
-      <p><strong>Why it matters for Sean:</strong> Matters immediately because SQL is one of Sean's highest-value foundational skills.</p>
+      <p class="hero-copy">
+        Master the SQL foundations needed for business analysis, reporting, and data engineering.
+        This StudyBook track page owns the learning order while each reusable course lives in its own stable folder. The rebuild is proceeding from the top down.
+      </p>
+
+      <div class="facts" aria-label="Track facts">
+        <span class="fact">SQL</span>
+        <span class="fact">26 hours</span>
+        <span class="fact">7 courses</span>
+        <span class="fact">2 projects</span>
+        <span class="fact">1 skill assessment</span>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>StudyBook canonical rebuild</span>
+          <span>5 of 7 courses</span>
+        </div>
+        <div class="progress" aria-label="5 of 7 courses rebuilt"><span></span></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Track Curriculum</h2>
+          <p>Course numbering belongs here, not in canonical course-folder names.</p>
+        </div>
+      </div>
+
+      <div class="track-list">
+        <article class="item">
+          <div class="number">1</div>
+          <div>
+            <span class="type">Course</span>
+            <h3>Introduction to SQL</h3>
+            <p>Relational databases, tables, rows and columns, data types, SELECT, DISTINCT, aliases, views, and SQL flavors.</p>
+          </div>
+          <div class="status-area">
+            <span class="status canonical">Complete · Canonical</span>
+            <a class="open-link" href="../../courses/introduction_to_sql/index.html">Open course →</a>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="number">2</div>
+          <div>
+            <span class="type">Course</span>
+            <h3>Intermediate SQL</h3>
+            <p>
+              Select, filter, aggregate, sort, and group data using reusable SQL patterns,
+              with a validated local PostgreSQL lab.
+            </p>
+          </div>
+          <div class="status-area">
+            <span class="status canonical">Complete · Canonical</span>
+            <a class="open-link" href="../../courses/intermediate_sql/index.html">Open course →</a>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="number">P</div>
+          <div>
+            <span class="type project">Project</span>
+            <h3>Analyzing Students' Mental Health</h3>
+            <p>
+              Apply Intermediate SQL to investigate how studying abroad and length of stay
+              relate to mental-health measures for international students.
+            </p>
+          </div>
+          <div class="status-area">
+            <span class="status canonical">Complete · Canonical</span>
+            <a class="open-link" href="../../projects/analyzing_students_mental_health/index.html">Open project →</a>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="number">3</div>
+          <div>
+            <span class="type">Course</span>
+            <h3>Joining Data in SQL</h3>
+            <p>Combine related tables using inner joins, outer joins, set operations, and subqueries.</p>
+          </div>
+          <div class="status-area">
+            <span class="status canonical">Complete · Canonical</span>
+            <a class="open-link" href="../../courses/joining_data_in_sql/index.html">Open course →</a>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="number">4</div>
+          <div>
+            <span class="type">Course</span>
+            <h3>Data Manipulation in SQL</h3>
+            <p>
+              Use CASE expressions, subqueries, correlated queries, common table expressions,
+              and window functions to transform and analyze relational data.
+            </p>
+          </div>
+          <div class="status-area">
+            <span class="status canonical">Complete · Canonical</span>
+            <a class="open-link" href="../../courses/data_manipulation_in_sql/index.html">Open course →</a>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="number">5</div>
+          <div>
+            <span class="type">Course</span>
+            <h3>PostgreSQL Summary Stats and Window Functions</h3>
+            <p>Use summary statistics, ranking, offsets, running calculations, and window frames.</p>
+          </div>
+          <div class="status-area">
+            <span class="status legacy">Legacy reference</span>
+            <a class="open-link" href="../../courses/05_postgresql_summary_stats_and_window_functions/index.html">Open old material →</a>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="number">6</div>
+          <div>
+            <span class="type">Course</span>
+            <h3>Functions for Manipulating Data in PostgreSQL</h3>
+            <p>
+              Work with PostgreSQL data types, date and time functions, text parsing,
+              arrays, full-text search, and extensions.
+            </p>
+          </div>
+          <div class="status-area">
+            <span class="status canonical">Complete · Canonical</span>
+            <a class="open-link" href="../../courses/functions_for_manipulating_data_in_postgresql/index.html">Open course →</a>
+          </div>
+        </article>
+
+        <article class="item active">
+          <div class="number">7</div>
+          <div>
+            <span class="type">Course</span>
+            <h3>Database Design</h3>
+            <p>Learn schemas, normalization, views, storage choices, and database-management concepts.</p>
+          </div>
+          <div class="status-area">
+            <span class="status planned">Next course</span>
+          </div>
+        </article>
+      </div>
     </section>
-    <section>
-      <h2>Courses to link later</h2>
-      <p>Canonical course links will be added later.</p>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Bonus Material</h2>
+          <p>Optional project and assessment items included by DataCamp.</p>
+        </div>
+      </div>
+
+      <div class="track-list">
+        <article class="item">
+          <div class="number">P</div>
+          <div>
+            <span class="type project">Bonus project</span>
+            <h3>Impact Analysis of GoodThought NGO Initiatives</h3>
+            <p>Optional capstone-style SQL analysis project.</p>
+          </div>
+          <div class="status-area">
+            <span class="status planned">Not started</span>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="number">A</div>
+          <div>
+            <span class="type assessment">Skill assessment</span>
+            <h3>Data Analysis in SQL (PostgreSQL)</h3>
+            <p>DataCamp assessment covering practical PostgreSQL analysis skills.</p>
+          </div>
+          <div class="status-area">
+            <span class="status planned">Not started</span>
+          </div>
+        </article>
+      </div>
     </section>
-    <section>
-      <h2>Projects to link later</h2>
-      <p>Canonical project links will be added later.</p>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Related Navigation</h2>
+          <p>The same canonical courses can appear in multiple tracks.</p>
+        </div>
+      </div>
+
+      <div class="related-grid">
+        <article class="related-card">
+          <h3>Associate Data Analyst in SQL</h3>
+          <p>Open the broader career track that also uses several courses from this skill track.</p>
+          <a href="../../career_tracks/01_associate_data_analyst_in_sql/index.html">Open career track →</a>
+        </article>
+
+        <article class="related-card">
+          <h3>Course Library</h3>
+          <p>Browse canonical course packages independently of their position in a track.</p>
+          <a href="../../courses/index.html">Open course library →</a>
+        </article>
+      </div>
     </section>
-    <section>
-      <h2>Related career tracks to link later</h2>
-      <p>Related career-track links will be added later.</p>
-    </section>
-    <section>
-      <p><a href="../index.html">Back to Skill Tracks</a></p>
-      <p><a href="../../index.html">Back to DataCamp StudyBook</a></p>
-    </section>
+
+    <aside class="note">
+      <strong>Current path:</strong>
+      Introduction to SQL, Intermediate SQL, Joining Data in SQL,
+      Data Manipulation in SQL, the Analyzing Students' Mental Health project,
+      and Functions for Manipulating Data in PostgreSQL are complete canonical packages.
+      The next learning item is Database Design. Older numbered folders may remain
+      temporarily as reference material.
+    </aside>
+
+    <footer>
+      <span>SQL Fundamentals · StudyBook track navigation</span>
+      <span>
+        <a href="../index.html">Skill Tracks</a>
+        &nbsp;·&nbsp;
+        <a href="../../index.html">DataCamp Home</a>
+      </span>
+    </footer>
   </main>
 </body>
 </html>

@@ -1,0 +1,1 @@
+﻿-- Chapter 2 practice: subqueries in SELECT, FROM, and WHERE.

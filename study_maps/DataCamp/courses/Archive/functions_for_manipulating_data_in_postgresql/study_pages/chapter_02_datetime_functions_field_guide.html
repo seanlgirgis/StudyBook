@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 2 Field Guide — PostgreSQL Date/Time Functions and Operators</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg2: #121a30;
+      --bg3: #18233f;
+      --panel: #0f172a;
+      --border: #2b3b63;
+      --text: #e6edf7;
+      --muted: #9fb0d1;
+      --accent: #76b7ff;
+      --accent-2: #9ad0ff;
+      --good: #8ee6a5;
+      --warn: #ffd479;
+      --danger: #ff9a9a;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(118, 183, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, #09101d 0%, #0b1020 100%);
+      color: var(--text);
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: var(--accent-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    a:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+    code, pre, .mono {
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+    }
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 96px;
+    }
+    .hero {
+      background: linear-gradient(180deg, rgba(24, 35, 63, 0.95), rgba(15, 23, 42, 0.96));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid rgba(118, 183, 255, 0.35);
+      background: rgba(118, 183, 255, 0.1);
+      border-radius: 999px;
+      color: var(--accent-2);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    h1, h2, h3, h4 {
+      margin: 0 0 12px;
+      line-height: 1.25;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 2.8rem); }
+    h2 { font-size: 1.6rem; }
+    h3 { font-size: 1.15rem; }
+    p { margin: 0 0 14px; }
+    .subtitle {
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+    .hero-links,
+    .pill-links,
+    .quick-nav,
+    .section-nav,
+    .floating-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .hero-links a,
+    .quick-nav a,
+    .section-nav a,
+    .floating-nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--accent-2);
+      border-radius: 999px;
+      font-size: 0.92rem;
+      text-decoration: none;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .hero-links a:hover,
+    .quick-nav a:hover,
+    .section-nav a:hover,
+    .floating-nav a:hover {
+      transform: translateY(-1px);
+      border-color: rgba(118, 183, 255, 0.45);
+      background: rgba(24, 35, 63, 0.95);
+      text-decoration: none;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(118, 183, 255, 0.25);
+      background: rgba(118, 183, 255, 0.08);
+      color: var(--accent-2);
+      font-size: 0.85rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    .search-wrap,
+    .toc-wrap,
+    .section {
+      margin-top: 22px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+    .search-wrap { padding: 20px; }
+    .search-input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .search-tip,
+    .search-count,
+    .muted { color: var(--muted); }
+    .search-tip,
+    .search-count { font-size: 0.94rem; }
+    .search-tip { margin-top: 10px; }
+    .search-count { margin-top: 8px; }
+    .quick-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      margin-top: 14px;
+      padding: 12px 16px;
+      background: rgba(9, 16, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    .toc-wrap,
+    .section { padding: 22px; }
+    .section { scroll-margin-top: 88px; }
+    .toc-grid,
+    .cards-2,
+    .compare-grid,
+    .cheat-grid,
+    .qa-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .toc-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-top: 18px;
+    }
+    .cards-2,
+    .compare-grid,
+    .qa-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+    .cheat-grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin-top: 16px;
+    }
+    .toc-card,
+    .card,
+    .compare-card,
+    .qa-card,
+    .cheat-cell {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(24, 35, 63, 0.72), rgba(18, 26, 48, 0.92));
+    }
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .section-num {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+    .callout,
+    .diagram {
+      border-left: 4px solid var(--accent);
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(118, 183, 255, 0.08);
+      margin: 18px 0;
+    }
+    .diagram {
+      white-space: pre-wrap;
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+    }
+    pre {
+      margin: 14px 0;
+      padding: 14px;
+      border-radius: 16px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      background: #0a1224;
+      color: #d8e5ff;
+      font-size: 0.94rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: rgba(24, 35, 63, 0.9);
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+    td { background: rgba(12, 19, 36, 0.92); }
+    .section-nav {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(43, 59, 99, 0.7);
+    }
+    .floating-nav {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(9, 16, 29, 0.95);
+      box-shadow: var(--shadow);
+      max-width: min(320px, calc(100vw - 24px));
+    }
+    .tight-list { margin: 0; padding-left: 18px; }
+    .tight-list li { margin-bottom: 6px; }
+    .search-item[hidden] { display: none !important; }
+    .good { color: var(--good); }
+    .warn { color: var(--warn); }
+    .danger { color: var(--danger); }
+
+    @media (max-width: 760px) {
+      .container { width: min(100% - 20px, 1180px); }
+      .hero,
+      .search-wrap,
+      .toc-wrap,
+      .section { border-radius: 18px; }
+      .quick-nav a,
+      .section-nav a,
+      .floating-nav a,
+      .hero-links a { flex: 1 1 auto; }
+      .cards-2,
+      .compare-grid,
+      .qa-grid { grid-template-columns: 1fr; }
+      .floating-nav {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="top">
+    <header class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="badge">Chapter 2 Detailed Guide</div>
+          <h1>Chapter 2 Field Guide — PostgreSQL Date/Time Functions and Operators</h1>
+          <p class="subtitle">Use cases, calculations, reporting patterns, examples, traps, and practical decisions for PostgreSQL date and time work.</p>
+        </div>
+        <div class="hero-links" aria-label="Guide links">
+          <a href="field_guide.html">Open Main Field Guide</a>
+          <a href="sql_function_quick_lookup.html">Open Quick Lookup</a>
+          <a href="chapter_01_data_types_field_guide.html">Open Chapter 1 Guide</a>
+          <a href="../lab/lab_guide.html">Open Lab Guide</a>
+        </div>
+      </div>
+      <div class="pill-links" aria-label="Page questions">
+        <span class="tag">How do I calculate expected dates?</span>
+        <span class="tag">How do I measure elapsed time?</span>
+        <span class="tag">How do I extract useful date parts?</span>
+        <span class="tag">How do I identify overdue records?</span>
+      </div>
+    </header>
+
+    <div class="search-wrap">
+      <label for="lookupSearch" class="mono">Search this chapter guide</label>
+      <input id="lookupSearch" class="search-input" type="search" placeholder="Search function, use case, example, trap, or keyword..." aria-label="Search function, use case, example, trap, or keyword" />
+      <div class="search-tip">Aliases included: today, now, current timestamp, no milliseconds, add days, subtract dates, elapsed time, rental duration, expected return, weekday, Sunday zero, ISO weekday, month bucket, quarter, year, open rental, null return date, overdue, past due, deadline.</div>
+      <div id="searchCount" class="search-count" aria-live="polite">Showing all Chapter 2 items</div>
+    </div>
+
+    <nav class="quick-nav" aria-label="Quick page navigation">
+      <a href="#top">Top</a>
+      <a href="#problem-lookup">Problems</a>
+      <a href="#date-arithmetic">Arithmetic</a>
+      <a href="#current-date-time">Current Time</a>
+      <a href="#age-function">AGE</a>
+      <a href="#extract-date-part">EXTRACT</a>
+      <a href="#day-of-week">Weekday</a>
+      <a href="#date-trunc">DATE_TRUNC</a>
+      <a href="#duration-calculations">Durations</a>
+      <a href="#overdue-logic">Overdue</a>
+      <a href="#mistakes">Mistakes</a>
+      <a href="#interview-qa">Q&amp;A</a>
+    </nav>
+
+    <section class="toc-wrap">
+      <h2>Table of Contents</h2>
+      <p class="muted">Use the grouped map if you want to learn in order, then jump by problem or function later.</p>
+      <div class="toc-grid">
+        <div class="toc-card">
+          <h3>Start Here</h3>
+          <ul class="tight-list">
+            <li><a href="#how-to-use">How to Use</a></li>
+            <li><a href="#chapter-map">Chapter Map</a></li>
+            <li><a href="#problem-lookup">Problem-Based Lookup</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Core Date/Time Work</h3>
+          <ul class="tight-list">
+            <li><a href="#date-arithmetic">Date Arithmetic</a></li>
+            <li><a href="#interval-arithmetic">Interval Arithmetic</a></li>
+            <li><a href="#current-date-time">Current Date and Time</a></li>
+            <li><a href="#age-function">AGE()</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Reporting and Features</h3>
+          <ul class="tight-list">
+            <li><a href="#extract-date-part">EXTRACT() and DATE_PART()</a></li>
+            <li><a href="#day-of-week">Day of Week</a></li>
+            <li><a href="#date-trunc">DATE_TRUNC()</a></li>
+            <li><a href="#duration-calculations">Duration Calculations</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Business Logic</h3>
+          <ul class="tight-list">
+            <li><a href="#null-open-records">NULL and Open Records</a></li>
+            <li><a href="#overdue-logic">Overdue Logic</a></li>
+            <li><a href="#combined-examples">Combined Examples</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Review</h3>
+          <ul class="tight-list">
+            <li><a href="#mistakes">Common Mistakes</a></li>
+            <li><a href="#interview-qa">Interview Q&amp;A</a></li>
+            <li><a href="#memory-review">Memory Review</a></li>
+            <li><a href="#related-guides">Related Guides</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how-to-use">
+      <div class="section-header">
+        <div><div class="section-num">Section 1</div><h2>How to Use This Guide</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="search by function name current_timestamp age extract date_trunc">
+          <h3>Search by function name</h3>
+          <p>Look up a function or operator directly when you already know the tool name and want the patterns quickly.</p>
+        </div>
+        <div class="card search-item" data-search="search by problem add five days find weekday overdue open rental">
+          <h3>Search by problem</h3>
+          <p>Use business-language prompts such as <span class="mono">add five days</span>, <span class="mono">find weekday</span>, or <span class="mono">open rental</span>.</p>
+        </div>
+      </div>
+      <div class="compare-grid">
+        <div class="compare-card search-item" data-search="study toc in sequence chapter guide">
+          <h3>Study in sequence</h3>
+          <p>Use the TOC to move from arithmetic, to feature extraction, to business rules, to review.</p>
+        </div>
+        <div class="compare-card search-item" data-search="quick lookup smallest syntax reminder">
+          <h3>Quick Lookup</h3>
+          <p>Smallest syntax reminder.</p>
+        </div>
+        <div class="compare-card search-item" data-search="main field guide compact whole course summary">
+          <h3>Main Field Guide</h3>
+          <p>Compact whole-course summary.</p>
+        </div>
+        <div class="compare-card search-item" data-search="chapter guide detailed use cases examples">
+          <h3>Chapter Guide</h3>
+          <p>Detailed use cases and examples.</p>
+        </div>
+        <div class="compare-card search-item" data-search="lab guide practiced evidence observed output">
+          <h3>Lab Guide</h3>
+          <p>Practiced evidence and observed output.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#top">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#chapter-map">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="chapter-map">
+      <div class="section-header">
+        <div><div class="section-num">Section 2</div><h2>Chapter Map</h2></div>
+      </div>
+      <div class="diagram search-item" data-search="identify stored date time type choose correct arithmetic derive useful features group reporting buckets apply business rules validate output type">
+Identify the stored date/time type
+→ choose the correct arithmetic
+→ derive useful date/time features
+→ group into reporting buckets
+→ apply business rules
+→ validate the output type
+      </div>
+      <table class="search-item" data-search="need main tool comparison current_date current_time current_timestamp age extract date_part date_trunc coalesce case">
+        <thead><tr><th>Need</th><th>Main tool</th></tr></thead>
+        <tbody>
+          <tr><td>add or subtract time</td><td>date/timestamp arithmetic</td></tr>
+          <tr><td>represent duration</td><td><span class="mono">INTERVAL</span></td></tr>
+          <tr><td>get current values</td><td><span class="mono">CURRENT_DATE</span> / <span class="mono">CURRENT_TIME</span> / <span class="mono">CURRENT_TIMESTAMP</span></td></tr>
+          <tr><td>measure calendar difference</td><td><span class="mono">AGE()</span></td></tr>
+          <tr><td>extract numeric parts</td><td><span class="mono">EXTRACT()</span> / <span class="mono">DATE_PART()</span></td></tr>
+          <tr><td>create buckets</td><td><span class="mono">DATE_TRUNC()</span></td></tr>
+          <tr><td>handle missing end times</td><td><span class="mono">COALESCE()</span></td></tr>
+          <tr><td>create past-due flags</td><td><span class="mono">CASE</span></td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#how-to-use">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#problem-lookup">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="problem-lookup">
+      <div class="section-header">
+        <div><div class="section-num">Section 3</div><h2>Problem-Based Lookup</h2></div>
+      </div>
+      <table>
+        <thead><tr><th>I need to...</th><th>Use</th><th>Tiny example</th><th>Why</th><th>Trap</th></tr></thead>
+        <tbody>
+          <tr class="search-item" data-search="get today date current_date today"><td>get today's date</td><td><span class="mono">CURRENT_DATE</span></td><td><span class="mono">SELECT CURRENT_DATE;</span></td><td>Returns the current calendar day.</td><td>It does not include time.</td></tr>
+          <tr class="search-item" data-search="get current time current_time"><td>get current time</td><td><span class="mono">CURRENT_TIME</span></td><td><span class="mono">SELECT CURRENT_TIME;</span></td><td>Returns the current clock time.</td><td>Not the same as full timestamp.</td></tr>
+          <tr class="search-item" data-search="get current timestamp now current_timestamp"><td>get current timestamp</td><td><span class="mono">CURRENT_TIMESTAMP</span></td><td><span class="mono">SELECT CURRENT_TIMESTAMP;</span></td><td>Returns current date plus time.</td><td>Includes fractional seconds unless precision is limited.</td></tr>
+          <tr class="search-item" data-search="current timestamp without fractional seconds no milliseconds"><td>get current timestamp without fractional seconds</td><td><span class="mono">CURRENT_TIMESTAMP(0)</span></td><td><span class="mono">CURRENT_TIMESTAMP(0)</span></td><td>Cleans up display precision.</td><td>The <span class="mono">0</span> means precision, not date arithmetic.</td></tr>
+          <tr class="search-item" data-search="cast current timestamp to timestamp"><td>cast current timestamp to timestamp</td><td><span class="mono">::timestamp</span></td><td><span class="mono">CURRENT_TIMESTAMP(0)::timestamp</span></td><td>Useful when you want PostgreSQL cast syntax.</td><td>Still a timestamp, not a date.</td></tr>
+          <tr class="search-item" data-search="add five days to now"><td>add five days to now</td><td><span class="mono">CURRENT_TIMESTAMP + INTERVAL</span></td><td><span class="mono">CURRENT_TIMESTAMP + INTERVAL '5 days'</span></td><td>Shift a moment forward safely.</td><td>Use interval, not bare integer, with timestamps.</td></tr>
+          <tr class="search-item" data-search="subtract five days from now"><td>subtract five days from now</td><td><span class="mono">CURRENT_TIMESTAMP - INTERVAL</span></td><td><span class="mono">CURRENT_TIMESTAMP - INTERVAL '5 days'</span></td><td>Shift a moment backward.</td><td>Timestamp subtraction by interval returns timestamp.</td></tr>
+          <tr class="search-item" data-search="add rental duration days to rental timestamp"><td>add rental-duration days to a rental timestamp</td><td><span class="mono">INTERVAL '1 day' * rental_duration</span></td><td><span class="mono">rental_date + INTERVAL '1 day' * rental_duration</span></td><td>Converts integer days into a real interval.</td><td>Do not compare integer days directly to interval duration.</td></tr>
+          <tr class="search-item" data-search="calculate expected return date"><td>calculate expected return date</td><td><span class="mono">rental_date + interval</span></td><td><span class="mono">rental_date + INTERVAL '5 days'</span></td><td>Clear due-date logic.</td><td>Use timestamp arithmetic when source is timestamp.</td></tr>
+          <tr class="search-item" data-search="subtract two dates"><td>subtract two dates</td><td><span class="mono">DATE - DATE</span></td><td><span class="mono">DATE '2026-06-10' - DATE '2026-06-01'</span></td><td>Gets integer day count.</td><td>It does not return interval.</td></tr>
+          <tr class="search-item" data-search="subtract two timestamps"><td>subtract two timestamps</td><td><span class="mono">TIMESTAMP - TIMESTAMP</span></td><td><span class="mono">return_date - rental_date</span></td><td>Gets elapsed interval.</td><td>It does not return a plain number.</td></tr>
+          <tr class="search-item" data-search="measure elapsed rental time"><td>measure elapsed rental time</td><td><span class="mono">return_date - rental_date</span></td><td><span class="mono">SELECT return_date - rental_date</span></td><td>Direct elapsed duration.</td><td>Open rentals need fallback handling.</td></tr>
+          <tr class="search-item" data-search="get total hours from interval epoch total hours"><td>get total hours from an interval</td><td><span class="mono">EXTRACT(EPOCH)/3600</span></td><td><span class="mono">EXTRACT(EPOCH FROM i)/3600</span></td><td>Returns total hours, not just hour component.</td><td><span class="mono">EXTRACT(hour FROM interval)</span> is only the hour part.</td></tr>
+          <tr class="search-item" data-search="get total minutes from interval epoch total minutes"><td>get total minutes from an interval</td><td><span class="mono">EXTRACT(EPOCH)/60</span></td><td><span class="mono">EXTRACT(EPOCH FROM i)/60</span></td><td>Returns total minutes.</td><td>Do not confuse component minutes with total minutes.</td></tr>
+          <tr class="search-item" data-search="get day of month"><td>get day of month</td><td><span class="mono">EXTRACT(day FROM ...)</span></td><td><span class="mono">EXTRACT(day FROM rental_date)</span></td><td>Returns calendar day number in month.</td><td>It is not weekday.</td></tr>
+          <tr class="search-item" data-search="postgresql weekday number dow sunday zero"><td>get PostgreSQL weekday number</td><td><span class="mono">EXTRACT(dow FROM ...)</span></td><td><span class="mono">EXTRACT(dow FROM rental_date)</span></td><td>Returns Sunday 0 through Saturday 6.</td><td>Easy to forget Sunday is 0.</td></tr>
+          <tr class="search-item" data-search="iso weekday number isodow monday one"><td>get ISO weekday number</td><td><span class="mono">EXTRACT(isodow FROM ...)</span></td><td><span class="mono">EXTRACT(isodow FROM rental_date)</span></td><td>Returns Monday 1 through Sunday 7.</td><td>Do not mix with <span class="mono">dow</span>.</td></tr>
+          <tr class="search-item" data-search="month number"><td>get month number</td><td><span class="mono">EXTRACT(month FROM ...)</span></td><td><span class="mono">EXTRACT(month FROM rental_date)</span></td><td>Useful for numeric month features.</td><td>Grouping by month number alone mixes years.</td></tr>
+          <tr class="search-item" data-search="quarter number"><td>get quarter number</td><td><span class="mono">EXTRACT(quarter FROM ...)</span></td><td><span class="mono">EXTRACT(quarter FROM rental_date)</span></td><td>Useful for quarter reporting features.</td><td>Still a number, not a timestamp bucket.</td></tr>
+          <tr class="search-item" data-search="year number"><td>get year number</td><td><span class="mono">EXTRACT(year FROM ...)</span></td><td><span class="mono">EXTRACT(year FROM rental_date)</span></td><td>Useful for year feature and grouping helper.</td><td>Pair with month when needed.</td></tr>
+          <tr class="search-item" data-search="hour number"><td>get hour number</td><td><span class="mono">EXTRACT(hour FROM ...)</span></td><td><span class="mono">EXTRACT(hour FROM rental_date)</span></td><td>Useful for time-of-day analysis.</td><td>Only component hour, not total duration hours.</td></tr>
+          <tr class="search-item" data-search="group timestamps by day bucket"><td>group timestamps by day</td><td><span class="mono">DATE_TRUNC('day', ...)</span></td><td><span class="mono">DATE_TRUNC('day', rental_date)</span></td><td>Creates a day bucket timestamp.</td><td><span class="mono">EXTRACT(day)</span> is just a number.</td></tr>
+          <tr class="search-item" data-search="group timestamps by week bucket"><td>group timestamps by week</td><td><span class="mono">DATE_TRUNC('week', ...)</span></td><td><span class="mono">DATE_TRUNC('week', rental_date)</span></td><td>Creates week bucket start.</td><td>Know what week-start convention you are using.</td></tr>
+          <tr class="search-item" data-search="group timestamps by month bucket"><td>group timestamps by month</td><td><span class="mono">DATE_TRUNC('month', ...)</span></td><td><span class="mono">DATE_TRUNC('month', rental_date)</span></td><td>Best for monthly reporting buckets.</td><td>Safer than month number alone across years.</td></tr>
+          <tr class="search-item" data-search="group timestamps by quarter bucket"><td>group timestamps by quarter</td><td><span class="mono">DATE_TRUNC('quarter', ...)</span></td><td><span class="mono">DATE_TRUNC('quarter', payment_date)</span></td><td>Quarter reporting bucket.</td><td>Do not confuse with numeric quarter only.</td></tr>
+          <tr class="search-item" data-search="compare actual duration to allowed duration"><td>compare actual duration to allowed duration</td><td><span class="mono">interval &gt; interval</span></td><td><span class="mono">actual_interval &gt; rental_duration * INTERVAL '1 day'</span></td><td>Both sides must be compatible.</td><td>Integer days alone are not interval.</td></tr>
+          <tr class="search-item" data-search="mark rental overdue past due"><td>mark a rental as overdue</td><td><span class="mono">CASE</span> with expected return date</td><td><span class="mono">CASE WHEN actual_end &gt; expected_end THEN TRUE END</span></td><td>Clear business flag.</td><td>Open records need fallback endpoint.</td></tr>
+          <tr class="search-item" data-search="handle null return date open rental"><td>handle a NULL return date</td><td><span class="mono">COALESCE(return_date, CURRENT_TIMESTAMP)</span></td><td><span class="mono">COALESCE(return_date, CURRENT_TIMESTAMP)</span></td><td>Provides temporary reporting endpoint.</td><td>Does not modify stored data.</td></tr>
+          <tr class="search-item" data-search="use current timestamp as fallback endpoint"><td>use current timestamp as fallback endpoint</td><td><span class="mono">COALESCE(..., CURRENT_TIMESTAMP)</span></td><td><span class="mono">COALESCE(return_date, CURRENT_TIMESTAMP)</span></td><td>Measures open duration so far.</td><td>It is reporting logic only.</td></tr>
+          <tr class="search-item" data-search="filter 90 day date range ninety day rental window"><td>filter a 90-day date range</td><td><span class="mono">BETWEEN start AND start + interval</span></td><td><span class="mono">BETWEEN DATE '2005-05-01' AND DATE '2005-05-01' + INTERVAL '90 days'</span></td><td>Readable sliding window filter.</td><td>Be precise about endpoint inclusiveness.</td></tr>
+          <tr class="search-item" data-search="weekday weekend labels"><td>create weekday/weekend labels</td><td><span class="mono">CASE</span> with <span class="mono">EXTRACT(isodow)</span></td><td><span class="mono">WHEN isodow IN (6,7) THEN 'Weekend'</span></td><td>Business-friendly labels.</td><td>Use the correct weekday numbering system.</td></tr>
+          <tr class="search-item" data-search="count rentals by weekday"><td>count rentals by weekday</td><td><span class="mono">GROUP BY EXTRACT(isodow)</span></td><td><span class="mono">COUNT(*) BY iso weekday</span></td><td>Useful operations reporting slice.</td><td>Sort by weekday number, not name only.</td></tr>
+          <tr class="search-item" data-search="count rentals by month"><td>count rentals by month</td><td><span class="mono">GROUP BY DATE_TRUNC('month')</span></td><td><span class="mono">COUNT(*) BY month bucket</span></td><td>Month bucket keeps years separated.</td><td><span class="mono">EXTRACT(month)</span> alone can mix years.</td></tr>
+          <tr class="search-item" data-search="calculate average duration"><td>calculate average duration</td><td><span class="mono">AVG(EXTRACT(EPOCH ...))</span></td><td><span class="mono">AVG(hours_value)</span></td><td>Good for operational summary metrics.</td><td>Average of interval needs clear unit choice.</td></tr>
+          <tr class="search-item" data-search="preserve time precision"><td>preserve time precision</td><td>Keep timestamp until logic is complete</td><td><span class="mono">DATE_TRUNC('day', rental_date)</span> only when needed</td><td>Avoid losing hours/minutes too early.</td><td>Premature cast to <span class="mono">DATE</span> drops time.</td></tr>
+          <tr class="search-item" data-search="cast timestamp to date only when appropriate"><td>cast timestamp to date only when appropriate</td><td><span class="mono">rental_date::date</span> late in pipeline</td><td><span class="mono">SELECT rental_date::date</span></td><td>Good for final day-level display.</td><td>Bad if later calculations still need time.</td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#chapter-map">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#date-arithmetic">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="date-arithmetic">
+      <div class="section-header"><div><div class="section-num">Section 4</div><h2>Date Arithmetic</h2></div></div>
+      <p class="search-item" data-search="date plus integer date minus integer date minus date timestamp plus interval timestamp minus interval timestamp minus timestamp return types">This section is about knowing both the arithmetic pattern and the resulting type. PostgreSQL is consistent here, and that consistency helps when you build production logic.</p>
+      <pre class="search-item" data-search="date 2026-06-01 plus 5"><code>SELECT DATE '2026-06-01' + 5 AS five_days_later;</code></pre>
+      <pre class="search-item" data-search="date minus date integer days"><code>SELECT DATE '2026-06-10' - DATE '2026-06-01' AS day_count;</code></pre>
+      <pre class="search-item" data-search="rental_date plus interval expected return"><code>SELECT
+  rental_date,
+  rental_date + INTERVAL '5 days' AS expected_return_date
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="return_date minus rental_date elapsed_time"><code>SELECT
+  return_date - rental_date AS elapsed_time
+FROM rental;</code></pre>
+      <table class="search-item" data-search="date arithmetic result table return types">
+        <thead><tr><th>Expression</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">DATE + integer</span></td><td><span class="mono">DATE</span></td></tr>
+          <tr><td><span class="mono">DATE - integer</span></td><td><span class="mono">DATE</span></td></tr>
+          <tr><td><span class="mono">DATE - DATE</span></td><td>integer days</td></tr>
+          <tr><td><span class="mono">TIMESTAMP + INTERVAL</span></td><td><span class="mono">TIMESTAMP</span></td></tr>
+          <tr><td><span class="mono">TIMESTAMP - TIMESTAMP</span></td><td><span class="mono">INTERVAL</span></td></tr>
+        </tbody>
+      </table>
+      <div class="callout search-item" data-search="date minus date returns integer days timestamp minus timestamp returns interval trap">
+        <span class="warn">Common trap:</span> <span class="mono">DATE - DATE</span> returns integer days. <span class="mono">TIMESTAMP - TIMESTAMP</span> returns <span class="mono">INTERVAL</span>.
+      </div>
+      <div class="section-nav">
+        <a href="#problem-lookup">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#interval-arithmetic">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="interval-arithmetic">
+      <div class="section-header"><div><div class="section-num">Section 5</div><h2>Interval Arithmetic</h2></div></div>
+      <p class="search-item" data-search="interval literals multiplying intervals adding intervals subtracting intervals comparing intervals">Intervals are how PostgreSQL represents durations and offsets. They are essential when an integer count of days needs to become a true duration.</p>
+      <pre class="search-item" data-search="interval 1 day times 5"><code>SELECT INTERVAL '1 day' * 5 AS five_days;</code></pre>
+      <pre class="search-item" data-search="rental duration into interval expected return film_rentals"><code>SELECT
+  rental_date
+  + INTERVAL '1 day' * rental_duration
+  AS expected_return_date
+FROM film_rentals;</code></pre>
+      <p class="muted search-item" data-search="film_rentals conceptual table example">
+        <strong>Note:</strong> <span class="mono">film_rentals</span> is a conceptual teaching table name here. Adapt it to a real joined query or local table before running it.
+      </p>
+      <pre class="search-item" data-search="two hours plus thirty minutes total duration"><code>SELECT
+  INTERVAL '2 hours' + INTERVAL '30 minutes'
+  AS total_duration;</code></pre>
+      <pre class="search-item" data-search="subtract interval from timestamp"><code>SELECT
+  CURRENT_TIMESTAMP - INTERVAL '12 hours' AS prior_moment;</code></pre>
+      <div class="callout search-item" data-search="interval 1 day times rental_duration explanation">
+        <span class="mono">INTERVAL '1 day' * rental_duration</span> turns an integer count of days into a real interval.
+      </div>
+      <div class="section-nav">
+        <a href="#date-arithmetic">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#current-date-time">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="current-date-time">
+      <div class="section-header"><div><div class="section-num">Section 6</div><h2>Current Date and Time</h2></div></div>
+      <div class="compare-grid">
+        <div class="compare-card search-item" data-search="current_date current_time current_timestamp now">
+          <h3>Core current-value tools</h3>
+          <p><span class="mono">CURRENT_DATE</span>, <span class="mono">CURRENT_TIME</span>, <span class="mono">CURRENT_TIMESTAMP</span>, and <span class="mono">NOW()</span> are the main built-ins for current values.</p>
+        </div>
+        <div class="compare-card search-item" data-search="current_timestamp 0 no fractional seconds">
+          <h3>Precision control</h3>
+          <p><span class="mono">CURRENT_TIMESTAMP(0)</span> means current timestamp with no fractional seconds.</p>
+        </div>
+      </div>
+      <pre class="search-item" data-search="current_date current_time current_timestamp right_now"><code>SELECT
+  CURRENT_DATE AS today,
+  CURRENT_TIME AS current_time,
+  CURRENT_TIMESTAMP AS right_now;</code></pre>
+      <pre class="search-item" data-search="current timestamp 0 cast timestamp five days from now"><code>SELECT
+  CURRENT_TIMESTAMP(0)::timestamp AS right_now,
+  CURRENT_TIMESTAMP(0)::timestamp + INTERVAL '5 days'
+    AS five_days_from_now;</code></pre>
+      <pre class="search-item" data-search="now function"><code>SELECT NOW() AS now_value;</code></pre>
+      <div class="callout search-item" data-search="precision not date value trap">
+        <span class="warn">Trap:</span> The number in <span class="mono">CURRENT_TIMESTAMP(0)</span> is precision, not a date value.
+      </div>
+      <div class="section-nav">
+        <a href="#interval-arithmetic">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#age-function">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="age-function">
+      <div class="section-header"><div><div class="section-num">Section 7</div><h2>AGE()</h2></div></div>
+      <p class="search-item" data-search="age end start age timestamp one argument calendar aware interval direct subtraction">Use <span class="mono">AGE()</span> when you want a calendar-style interval, especially for years/months/days style interpretation. Use direct subtraction when you want raw elapsed duration.</p>
+      <pre class="search-item" data-search="age return_date rental_date"><code>SELECT
+  AGE(return_date, rental_date) AS rental_age
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="age rental_date one argument time since rental"><code>SELECT
+  AGE(rental_date) AS time_since_rental;
+</code></pre>
+      <pre class="search-item" data-search="age current_date 1968-06-21"><code>SELECT
+  AGE(CURRENT_DATE, DATE '1968-06-21') AS age_interval;</code></pre>
+      <div class="callout search-item" data-search="age timestamp compares with current_date at midnight one argument">
+        <span class="mono">AGE(timestamp)</span> compares the timestamp with <span class="mono">CURRENT_DATE</span> at midnight.
+      </div>
+      <table class="search-item" data-search="age versus direct subtraction table">
+        <thead><tr><th>Method</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">end - start</span></td><td>direct elapsed interval</td></tr>
+          <tr><td><span class="mono">AGE(end, start)</span></td><td>calendar-style years/months/days</td></tr>
+        </tbody>
+      </table>
+      <div class="callout search-item" data-search="age returns interval not number trap">
+        <span class="warn">Trap:</span> <span class="mono">AGE()</span> returns an <span class="mono">INTERVAL</span>, not a number.
+      </div>
+      <div class="section-nav">
+        <a href="#current-date-time">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#extract-date-part">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="extract-date-part">
+      <div class="section-header"><div><div class="section-num">Section 8</div><h2>EXTRACT() and DATE_PART()</h2></div></div>
+      <p class="search-item" data-search="extract date_part year quarter month day hour minute epoch equivalent syntax">These functions turn timestamps and intervals into numeric features. They are great for slicing, labeling, and building derived metrics.</p>
+      <pre class="search-item" data-search="extract year month quarter rental_date"><code>SELECT
+  EXTRACT(year FROM rental_date) AS rental_year,
+  EXTRACT(month FROM rental_date) AS rental_month,
+  EXTRACT(quarter FROM rental_date) AS rental_quarter
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="date_part year month rental_date"><code>SELECT
+  DATE_PART('year', rental_date) AS rental_year,
+  DATE_PART('month', rental_date) AS rental_month
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="extract epoch total hours return_date rental_date"><code>SELECT
+  EXTRACT(EPOCH FROM return_date - rental_date) / 3600
+    AS total_hours
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="extract minute hour epoch examples"><code>SELECT
+  EXTRACT(hour FROM rental_date) AS rental_hour,
+  EXTRACT(minute FROM rental_date) AS rental_minute
+FROM rental;</code></pre>
+      <div class="callout search-item" data-search="extract hour from interval returns component hour epoch total hours explanation">
+        <span class="mono">EXTRACT(hour FROM interval)</span> returns only the hour component. <span class="mono">EXTRACT(EPOCH FROM interval) / 3600</span> returns total hours.
+      </div>
+      <div class="section-nav">
+        <a href="#age-function">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#day-of-week">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="day-of-week">
+      <div class="section-header"><div><div class="section-num">Section 9</div><h2>Day of Week</h2></div></div>
+      <div class="compare-grid">
+        <div class="compare-card search-item" data-search="day day of month">
+          <h3><span class="mono">day</span></h3>
+          <p>Day of month.</p>
+        </div>
+        <div class="compare-card search-item" data-search="dow sunday 0 saturday 6">
+          <h3><span class="mono">dow</span></h3>
+          <p>Sunday 0 through Saturday 6.</p>
+        </div>
+        <div class="compare-card search-item" data-search="isodow monday 1 sunday 7">
+          <h3><span class="mono">isodow</span></h3>
+          <p>Monday 1 through Sunday 7.</p>
+        </div>
+      </div>
+      <pre class="search-item" data-search="day dow isodow rental_date"><code>SELECT
+  rental_date,
+  EXTRACT(day FROM rental_date) AS day_of_month,
+  EXTRACT(dow FROM rental_date) AS postgres_day_of_week,
+  EXTRACT(isodow FROM rental_date) AS iso_day_of_week
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="2026-06-07 postgres_dow iso_dow"><code>SELECT
+  EXTRACT(dow FROM DATE '2026-06-07') AS postgres_dow,
+  EXTRACT(isodow FROM DATE '2026-06-07') AS iso_dow;</code></pre>
+      <pre class="search-item" data-search="weekday name to_char fmday"><code>SELECT
+  rental_date,
+  TO_CHAR(rental_date, 'FMDay') AS weekday_name
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="weekday weekend labels case isodow"><code>SELECT
+  CASE
+    WHEN EXTRACT(isodow FROM rental_date) IN (6, 7)
+      THEN 'Weekend'
+    ELSE 'Weekday'
+  END AS day_type,
+  COUNT(*) AS rental_count
+FROM rental
+GROUP BY day_type;</code></pre>
+      <pre class="search-item" data-search="count rentals by weekday iso weekday_name"><code>SELECT
+  EXTRACT(isodow FROM rental_date) AS iso_weekday,
+  TO_CHAR(rental_date, 'FMDay') AS weekday_name,
+  COUNT(*) AS rental_count
+FROM rental
+GROUP BY
+  EXTRACT(isodow FROM rental_date),
+  TO_CHAR(rental_date, 'FMDay')
+ORDER BY iso_weekday;</code></pre>
+      <div class="callout search-item" data-search="extract day from date is day of month not weekday trap">
+        <span class="warn">Common trap:</span> <span class="mono">EXTRACT(day FROM date)</span> is day of month, not weekday.
+      </div>
+      <div class="section-nav">
+        <a href="#extract-date-part">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#date-trunc">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="date-trunc">
+      <div class="section-header"><div><div class="section-num">Section 10</div><h2>DATE_TRUNC()</h2></div></div>
+      <p class="search-item" data-search="date_trunc day week month quarter year hour timestamp bucket">Use <span class="mono">DATE_TRUNC()</span> when you need a timestamp bucket for grouping and reporting. It gives you a normalized timestamp anchor, not just a number.</p>
+      <pre class="search-item" data-search="date_trunc day rental_date"><code>SELECT
+  DATE_TRUNC('day', rental_date) AS rental_day
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="date_trunc month rental_count"><code>SELECT
+  DATE_TRUNC('month', rental_date) AS rental_month,
+  COUNT(*) AS rental_count
+FROM rental
+GROUP BY DATE_TRUNC('month', rental_date)
+ORDER BY rental_month;</code></pre>
+      <pre class="search-item" data-search="date_trunc quarter payment_date sum amount"><code>SELECT
+  DATE_TRUNC('quarter', payment_date) AS payment_quarter,
+  SUM(amount) AS total_amount
+FROM payment
+GROUP BY DATE_TRUNC('quarter', payment_date)
+ORDER BY payment_quarter;</code></pre>
+      <pre class="search-item" data-search="date_trunc week year hour"><code>SELECT
+  DATE_TRUNC('week', rental_date) AS rental_week,
+  DATE_TRUNC('year', rental_date) AS rental_year_bucket,
+  DATE_TRUNC('hour', rental_date) AS rental_hour_bucket
+FROM rental;</code></pre>
+      <div class="callout search-item" data-search="date_trunc week monday iso style week start">
+        In PostgreSQL, <span class="mono">DATE_TRUNC('week', timestamp)</span> returns the Monday at the start of the ISO-style week.
+      </div>
+      <div class="callout search-item" data-search="extract returns number date_trunc returns timestamp bucket explanation">
+        EXTRACT returns a number. DATE_TRUNC returns a timestamp bucket. Grouping by <span class="mono">EXTRACT(month)</span> alone can mix different years.
+      </div>
+      <div class="section-nav">
+        <a href="#day-of-week">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#duration-calculations">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="duration-calculations">
+      <div class="section-header"><div><div class="section-num">Section 11</div><h2>Duration Calculations</h2></div></div>
+      <pre class="search-item" data-search="rental interval return_date minus rental_date"><code>SELECT
+  rental_id,
+  return_date - rental_date AS rental_interval
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="rounded rental hours epoch 3600"><code>SELECT
+  rental_id,
+  ROUND(
+    EXTRACT(EPOCH FROM return_date - rental_date) / 3600.0,
+    2
+  ) AS rental_hours
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="duration bands long rental normal rental"><code>SELECT
+  CASE
+    WHEN return_date - rental_date &gt; INTERVAL '7 days'
+      THEN 'Long rental'
+    ELSE 'Normal rental'
+  END AS duration_label
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="total minutes epoch 60"><code>SELECT
+  rental_id,
+  ROUND(
+    EXTRACT(EPOCH FROM return_date - rental_date) / 60.0,
+    2
+  ) AS rental_minutes
+FROM rental;</code></pre>
+      <div class="section-nav">
+        <a href="#date-trunc">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#null-open-records">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="null-open-records">
+      <div class="section-header"><div><div class="section-num">Section 12</div><h2>NULL and Open Records</h2></div></div>
+      <p class="search-item" data-search="missing return dates coalesce current timestamp fallback open records">Open rentals often have a missing <span class="mono">return_date</span>. Reporting still needs an endpoint, so queries often use <span class="mono">COALESCE()</span>.</p>
+      <pre class="search-item" data-search="coalesce return_date current_timestamp effective_return_date"><code>SELECT
+  rental_id,
+  rental_date,
+  COALESCE(return_date, CURRENT_TIMESTAMP) AS effective_return_date
+FROM rental;</code></pre>
+      <pre class="search-item" data-search="elapsed or open duration coalesce"><code>SELECT
+  rental_id,
+  COALESCE(return_date, CURRENT_TIMESTAMP) - rental_date
+    AS elapsed_or_open_duration
+FROM rental;</code></pre>
+      <div class="callout search-item" data-search="coalesce does not update stored return_date explanation">
+        <span class="mono">COALESCE</span> does not update the stored <span class="mono">return_date</span>. It only provides a fallback value in the query result.
+      </div>
+      <div class="section-nav">
+        <a href="#duration-calculations">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#overdue-logic">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="overdue-logic">
+      <div class="section-header"><div><div class="section-num">Section 13</div><h2>Overdue Logic</h2></div></div>
+      <pre class="search-item" data-search="expected return rental_report rental_duration interval 1 day"><code>SELECT
+  rental_date,
+  rental_date
+    + INTERVAL '1 day' * rental_duration
+    AS expected_return_date
+FROM rental_report;</code></pre>
+      <p class="muted search-item" data-search="rental_report conceptual table example">
+        <strong>Note:</strong> <span class="mono">rental_report</span> is a conceptual reporting table name here. Replace it with a real report CTE, join, or local table when you run the query.
+      </p>
+      <pre class="search-item" data-search="past due flag coalesce current_timestamp expected return"><code>SELECT
+  CASE
+    WHEN COALESCE(return_date, CURRENT_TIMESTAMP)
+         &gt;
+         rental_date + INTERVAL '1 day' * rental_duration
+      THEN TRUE
+    ELSE FALSE
+  END AS past_due
+FROM rental_report;</code></pre>
+      <pre class="search-item" data-search="datacamp style pattern date_trunc age past_due"><code>CASE
+  WHEN DATE_TRUNC(
+         'day',
+         AGE(return_date, rental_date)
+       ) &gt; rental_duration * INTERVAL '1 day'
+    THEN TRUE
+  ELSE FALSE
+END AS past_due</code></pre>
+      <div class="callout search-item" data-search="both sides comparison compatible actual duration interval allowed duration interval">
+        Both sides of the comparison must be compatible. The actual duration is an interval. The allowed duration must also be converted to an interval.
+      </div>
+      <div class="section-nav">
+        <a href="#null-open-records">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#combined-examples">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="combined-examples">
+      <div class="section-header"><div><div class="section-num">Section 14</div><h2>Combined Examples</h2></div></div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="expected return date example">
+          <h3>Example 1: Expected return date</h3>
+          <p><strong>Business question:</strong> When is each rental expected back?</p>
+          <pre><code>SELECT
+  rental_id,
+  rental_date,
+  rental_date + INTERVAL '1 day' * rental_duration
+    AS expected_return_date
+FROM rental_report;</code></pre>
+          <p><strong>What to notice:</strong> integer rental days are converted into interval days.</p>
+          <p><strong>Likely mistake:</strong> adding bare integer days to a timestamp.</p>
+        </div>
+        <div class="card search-item" data-search="current timestamp plus five days example">
+          <h3>Example 2: Current timestamp plus five days</h3>
+          <p><strong>Business question:</strong> What will the current moment be five days from now?</p>
+          <pre><code>SELECT
+  CURRENT_TIMESTAMP(0)::timestamp AS right_now,
+  CURRENT_TIMESTAMP(0)::timestamp + INTERVAL '5 days'
+    AS five_days_from_now;</code></pre>
+          <p><strong>What to notice:</strong> precision control cleans up the current timestamp.</p>
+          <p><strong>Likely mistake:</strong> thinking <span class="mono">(0)</span> is part of the date logic.</p>
+        </div>
+        <div class="card search-item" data-search="rental duration in total hours example">
+          <h3>Example 3: Rental duration in total hours</h3>
+          <p><strong>Business question:</strong> How many hours did each rental last?</p>
+          <pre><code>SELECT
+  rental_id,
+  ROUND(
+    EXTRACT(EPOCH FROM return_date - rental_date) / 3600.0,
+    2
+  ) AS rental_hours
+FROM rental;</code></pre>
+          <p><strong>What to notice:</strong> EPOCH converts interval into total seconds first.</p>
+          <p><strong>Likely mistake:</strong> using <span class="mono">EXTRACT(hour FROM interval)</span> for total hours.</p>
+        </div>
+        <div class="card search-item" data-search="monthly rental count example">
+          <h3>Example 4: Monthly rental count</h3>
+          <p><strong>Business question:</strong> How many rentals occurred each month?</p>
+          <pre><code>SELECT
+  DATE_TRUNC('month', rental_date) AS rental_month,
+  COUNT(*) AS rental_count
+FROM rental
+GROUP BY DATE_TRUNC('month', rental_date)
+ORDER BY rental_month;</code></pre>
+          <p><strong>What to notice:</strong> month bucket preserves year context.</p>
+          <p><strong>Likely mistake:</strong> grouping only by numeric month.</p>
+        </div>
+        <div class="card search-item" data-search="weekday weekend rental report example">
+          <h3>Example 5: Weekday/weekend rental report</h3>
+          <p><strong>Business question:</strong> Are rentals happening more on weekdays or weekends?</p>
+          <pre><code>SELECT
+  CASE
+    WHEN EXTRACT(isodow FROM rental_date) IN (6, 7)
+      THEN 'Weekend'
+    ELSE 'Weekday'
+  END AS day_type,
+  COUNT(*) AS rental_count
+FROM rental
+GROUP BY day_type;</code></pre>
+          <p><strong>What to notice:</strong> ISO weekday keeps weekend logic readable.</p>
+          <p><strong>Likely mistake:</strong> mixing <span class="mono">dow</span> and <span class="mono">isodow</span>.</p>
+        </div>
+        <div class="card search-item" data-search="open rental duration example">
+          <h3>Example 6: Open rental duration</h3>
+          <p><strong>Business question:</strong> How long has each still-open rental been out so far?</p>
+          <pre><code>SELECT
+  rental_id,
+  COALESCE(return_date, CURRENT_TIMESTAMP) - rental_date
+    AS elapsed_or_open_duration
+FROM rental;</code></pre>
+          <p><strong>What to notice:</strong> current timestamp is only a reporting fallback.</p>
+          <p><strong>Likely mistake:</strong> assuming <span class="mono">COALESCE</span> changes stored data.</p>
+        </div>
+        <div class="card search-item" data-search="past due flag example overdue">
+          <h3>Example 7: Past-due flag</h3>
+          <p><strong>Business question:</strong> Which rentals are overdue right now?</p>
+          <pre><code>SELECT
+  rental_id,
+  CASE
+    WHEN COALESCE(return_date, CURRENT_TIMESTAMP)
+         &gt; rental_date + INTERVAL '1 day' * rental_duration
+      THEN TRUE
+    ELSE FALSE
+  END AS past_due
+FROM rental_report;</code></pre>
+          <p><strong>What to notice:</strong> actual and allowed durations are compared with compatible types.</p>
+          <p><strong>Likely mistake:</strong> comparing interval logic to raw integer days.</p>
+        </div>
+        <div class="card search-item" data-search="ninety day rental window example">
+          <h3>Example 8: Ninety-day rental window</h3>
+          <p><strong>Business question:</strong> Which rentals fall inside a 90-day study window?</p>
+          <pre><code>SELECT
+  rental_id,
+  rental_date
+FROM rental
+WHERE rental_date BETWEEN DATE '2005-05-01'
+                      AND DATE '2005-05-01' + INTERVAL '90 days';</code></pre>
+          <p><strong>What to notice:</strong> the range endpoint is built from the start date plus interval.</p>
+          <p><strong>Likely mistake:</strong> forgetting how inclusive <span class="mono">BETWEEN</span> is.</p>
+          <p><strong>Production note:</strong> half-open ranges are often safer, for example <span class="mono">rental_date &gt;= TIMESTAMP '2005-05-01' AND rental_date &lt; TIMESTAMP '2005-05-01' + INTERVAL '90 days'</span>.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#overdue-logic">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#mistakes">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="mistakes">
+      <div class="section-header"><div><div class="section-num">Section 15</div><h2>Common Mistakes</h2></div></div>
+      <table>
+        <thead><tr><th>Mistake</th><th>Why it happens</th><th>Correction</th><th>Memory line</th></tr></thead>
+        <tbody>
+          <tr class="search-item" data-search="date minus date interval mistake"><td>Expecting <span class="mono">DATE - DATE</span> to return interval</td><td>People generalize from timestamp subtraction.</td><td>It returns integer day count.</td><td>Date minus date = integer days.</td></tr>
+          <tr class="search-item" data-search="timestamp minus timestamp number mistake"><td>Expecting <span class="mono">TIMESTAMP - TIMESTAMP</span> to return number</td><td>People expect raw numeric duration.</td><td>It returns <span class="mono">INTERVAL</span>.</td><td>Timestamp minus timestamp = interval.</td></tr>
+          <tr class="search-item" data-search="mixing date and timestamp without checking types"><td>Mixing <span class="mono">DATE</span> and <span class="mono">TIMESTAMP</span> without checking types</td><td>Both seem date-like.</td><td>Check source types and intended output first.</td><td>Know your input type before arithmetic.</td></tr>
+          <tr class="search-item" data-search="casting timestamp to date too early"><td>Casting timestamp to date too early</td><td>People clean up display before logic is done.</td><td>Keep timestamp precision until calculations finish.</td><td>Do not drop time before you are done.</td></tr>
+          <tr class="search-item" data-search="extract versus date_trunc confusion"><td>Confusing <span class="mono">EXTRACT</span> with <span class="mono">DATE_TRUNC</span></td><td>Both seem like date-part tools.</td><td><span class="mono">EXTRACT</span> returns a number; <span class="mono">DATE_TRUNC</span> returns a bucket timestamp.</td><td>Number versus bucket.</td></tr>
+          <tr class="search-item" data-search="grouping only by month number across years"><td>Grouping only by month number across years</td><td>Month number feels enough at first glance.</td><td>Use <span class="mono">DATE_TRUNC('month')</span> or include year too.</td><td>Month alone can mix years.</td></tr>
+          <tr class="search-item" data-search="extract hour total hours"><td>Using <span class="mono">EXTRACT(hour)</span> for total hours</td><td>The function name looks right.</td><td>Use <span class="mono">EXTRACT(EPOCH FROM interval) / 3600</span>.</td><td>Hour component is not total hours.</td></tr>
+          <tr class="search-item" data-search="forgetting epoch conversion"><td>Forgetting EPOCH conversion for total duration</td><td>Intervals do not automatically become total hours or minutes.</td><td>Convert interval to seconds with EPOCH first.</td><td>EPOCH gives you total seconds.</td></tr>
+          <tr class="search-item" data-search="confusing day with dow"><td>Confusing <span class="mono">day</span> with <span class="mono">dow</span></td><td>The names are similar.</td><td><span class="mono">day</span> is day of month; <span class="mono">dow</span> is weekday number.</td><td>Day is not weekday.</td></tr>
+          <tr class="search-item" data-search="dow sunday 0"><td>Forgetting <span class="mono">dow</span> Sunday = 0</td><td>Many people expect Monday-first numbering.</td><td>Use the PostgreSQL weekday convention consciously.</td><td>dow starts Sunday at 0.</td></tr>
+          <tr class="search-item" data-search="isodow monday 1"><td>Forgetting <span class="mono">isodow</span> Monday = 1</td><td>Switching between systems is easy.</td><td>Use ISO numbering when Monday-first logic is clearer.</td><td>isodow starts Monday at 1.</td></tr>
+          <tr class="search-item" data-search="age numeric"><td>Treating <span class="mono">AGE()</span> as numeric</td><td>It sounds like a count.</td><td>Remember it returns interval.</td><td>AGE() is calendar-style interval.</td></tr>
+          <tr class="search-item" data-search="comma syntax inside extract"><td>Using comma syntax inside <span class="mono">EXTRACT</span></td><td>People mix it with other SQL function styles.</td><td>Use <span class="mono">EXTRACT(part FROM value)</span>.</td><td>EXTRACT uses <span class="mono">FROM</span>, not comma.</td></tr>
+          <tr class="search-item" data-search="forgetting interval conversion rental_duration"><td>Forgetting interval conversion for <span class="mono">rental_duration</span></td><td>It is stored as integer days.</td><td>Multiply by <span class="mono">INTERVAL '1 day'</span>.</td><td>Convert allowed days into interval.</td></tr>
+          <tr class="search-item" data-search="coalesce changes stored data"><td>Assuming <span class="mono">COALESCE</span> changes stored data</td><td>Fallback logic can look like update logic.</td><td>It changes only the query result.</td><td>COALESCE is reporting fallback.</td></tr>
+          <tr class="search-item" data-search="open records unhandled"><td>Leaving open records unhandled</td><td>NULL end dates break elapsed calculations.</td><td>Use a reporting fallback like current timestamp.</td><td>Open records need temporary endpoint.</td></tr>
+          <tr class="search-item" data-search="comparing incompatible types"><td>Comparing incompatible types</td><td>One side is interval and the other is integer or date.</td><td>Convert both sides into comparable units or types.</td><td>Compare like with like.</td></tr>
+          <tr class="search-item" data-search="current_timestamp precision syntax"><td>Forgetting <span class="mono">CURRENT_TIMESTAMP</span> precision syntax</td><td>The parentheses look unfamiliar.</td><td><span class="mono">CURRENT_TIMESTAMP(0)</span> sets precision.</td><td>The number controls fractional seconds.</td></tr>
+          <tr class="search-item" data-search="unfinished placeholder ___"><td>Using an unfinished DataCamp placeholder such as <span class="mono">___</span></td><td>Practice scaffolds can leak into final SQL.</td><td>Replace placeholders with real expressions before running.</td><td>Scaffold is not production SQL.</td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#combined-examples">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#interview-qa">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="interview-qa">
+      <div class="section-header"><div><div class="section-num">Section 16</div><h2>Interview Q&amp;A</h2></div></div>
+      <div class="qa-grid">
+        <div class="qa-card search-item" data-search="date versus timestamp interview"><h3>DATE versus TIMESTAMP?</h3><p><span class="mono">DATE</span> stores the day only; <span class="mono">TIMESTAMP</span> stores both date and time.</p></div>
+        <div class="qa-card search-item" data-search="timestamp versus interval interview"><h3>TIMESTAMP versus INTERVAL?</h3><p>A timestamp is a moment; an interval is a duration or offset.</p></div>
+        <div class="qa-card search-item" data-search="date subtraction versus timestamp subtraction interview"><h3>DATE subtraction versus TIMESTAMP subtraction?</h3><p><span class="mono">DATE - DATE</span> returns integer days. <span class="mono">TIMESTAMP - TIMESTAMP</span> returns interval.</p></div>
+        <div class="qa-card search-item" data-search="current_timestamp 0 means interview"><h3>What does CURRENT_TIMESTAMP(0) mean?</h3><p>It means current timestamp with zero fractional-second precision.</p></div>
+        <div class="qa-card search-item" data-search="age versus direct subtraction interview"><h3>AGE() versus direct subtraction?</h3><p><span class="mono">AGE()</span> is calendar-style. Direct subtraction gives raw elapsed interval.</p></div>
+        <div class="qa-card search-item" data-search="extract versus date_part interview"><h3>EXTRACT versus DATE_PART?</h3><p>They are equivalent in purpose; <span class="mono">DATE_PART</span> uses quoted part names.</p></div>
+        <div class="qa-card search-item" data-search="extract versus date_trunc interview"><h3>EXTRACT versus DATE_TRUNC?</h3><p><span class="mono">EXTRACT</span> returns a number. <span class="mono">DATE_TRUNC</span> returns a truncated timestamp bucket.</p></div>
+        <div class="qa-card search-item" data-search="why date_trunc helps reporting interview"><h3>Why does DATE_TRUNC help reporting?</h3><p>It creates stable day/week/month/quarter buckets for grouping.</p></div>
+        <div class="qa-card search-item" data-search="how get weekday interview"><h3>How do you get weekday?</h3><p>Use <span class="mono">EXTRACT(dow FROM ...)</span> or <span class="mono">EXTRACT(isodow FROM ...)</span>, and <span class="mono">TO_CHAR</span> for readable names.</p></div>
+        <div class="qa-card search-item" data-search="dow versus isodow interview"><h3>dow versus isodow?</h3><p><span class="mono">dow</span> is Sunday 0 to Saturday 6. <span class="mono">isodow</span> is Monday 1 to Sunday 7.</p></div>
+        <div class="qa-card search-item" data-search="calculate total hours interview"><h3>How do you calculate total hours?</h3><p>Use <span class="mono">EXTRACT(EPOCH FROM interval) / 3600</span>.</p></div>
+        <div class="qa-card search-item" data-search="handle open rentals interview"><h3>How do you handle open rentals?</h3><p>Use <span class="mono">COALESCE(return_date, CURRENT_TIMESTAMP)</span> as a reporting fallback endpoint.</p></div>
+        <div class="qa-card search-item" data-search="calculate expected return date interview"><h3>How do you calculate expected return date?</h3><p>Add an interval to the rental timestamp, often <span class="mono">INTERVAL '1 day' * rental_duration</span>.</p></div>
+        <div class="qa-card search-item" data-search="build past due flag interview"><h3>How do you build a past-due flag?</h3><p>Compare actual end time or fallback end time to expected return time inside a <span class="mono">CASE</span>.</p></div>
+        <div class="qa-card search-item" data-search="both sides of interval comparison compatible interview"><h3>Why must both sides of interval comparison be compatible?</h3><p>Because comparing interval to integer or unrelated type produces wrong logic or errors.</p></div>
+      </div>
+      <div class="section-nav">
+        <a href="#mistakes">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#memory-review">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="memory-review">
+      <div class="section-header"><div><div class="section-num">Section 17</div><h2>Memory Review</h2></div></div>
+      <div class="cheat-grid">
+        <div class="cheat-cell search-item" data-search="date date integer days timestamp timestamp interval"><strong>Arithmetic</strong><p class="muted">DATE - DATE = integer days<br>TIMESTAMP - TIMESTAMP = INTERVAL<br>TIMESTAMP + INTERVAL = shifted timestamp</p></div>
+        <div class="cheat-cell search-item" data-search="current_timestamp 0 no fractional seconds"><strong>Current values</strong><p class="muted">CURRENT_TIMESTAMP(0) = no fractional seconds</p></div>
+        <div class="cheat-cell search-item" data-search="age calendar style interval"><strong>AGE()</strong><p class="muted">AGE() = calendar-style interval</p></div>
+        <div class="cheat-cell search-item" data-search="extract numeric feature date_trunc timestamp bucket"><strong>Reporting</strong><p class="muted">EXTRACT = numeric feature<br>DATE_TRUNC = timestamp bucket</p></div>
+        <div class="cheat-cell search-item" data-search="day dow isodow weekday"><strong>Weekday</strong><p class="muted">day = day of month<br>dow = Sunday 0 through Saturday 6<br>isodow = Monday 1 through Sunday 7</p></div>
+        <div class="cheat-cell search-item" data-search="epoch total hours"><strong>Total duration</strong><p class="muted">EXTRACT(EPOCH FROM interval) / 3600 = total hours</p></div>
+        <div class="cheat-cell search-item" data-search="coalesce return_date current_timestamp open records"><strong>Open records</strong><p class="muted">COALESCE(return_date, CURRENT_TIMESTAMP) = reporting fallback for open records</p></div>
+        <div class="cheat-cell search-item" data-search="rental_duration interval 1 day"><strong>Allowed duration</strong><p class="muted">rental_duration * INTERVAL '1 day' = allowed duration as interval</p></div>
+      </div>
+      <div class="card search-item" data-search="self check questions review">
+        <h3>Eight self-check questions</h3>
+        <ol class="tight-list">
+          <li>What type does <span class="mono">DATE - DATE</span> return?</li>
+          <li>When do you need interval arithmetic instead of integer arithmetic?</li>
+          <li>What does <span class="mono">CURRENT_TIMESTAMP(0)</span> control?</li>
+          <li>When is <span class="mono">AGE()</span> better than direct subtraction?</li>
+          <li>What is the difference between <span class="mono">dow</span> and <span class="mono">isodow</span>?</li>
+          <li>Why is <span class="mono">DATE_TRUNC('month')</span> safer than <span class="mono">EXTRACT(month)</span> for reporting?</li>
+          <li>How do you calculate total hours from an interval?</li>
+          <li>How do you report on open rentals without changing stored data?</li>
+        </ol>
+      </div>
+      <div class="section-nav">
+        <a href="#interview-qa">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#related-guides">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="related-guides">
+      <div class="section-header"><div><div class="section-num">Section 18</div><h2>Related Guides</h2></div></div>
+      <div class="hero-links" aria-label="Related guide links">
+        <a href="field_guide.html">Open Main Field Guide</a>
+        <a href="sql_function_quick_lookup.html">Open Quick Lookup</a>
+        <a href="chapter_01_data_types_field_guide.html">Open Chapter 1 Guide</a>
+        <a href="../lab/lab_guide.html">Open Lab Guide</a>
+      </div>
+      <div class="section-nav">
+        <a href="#memory-review">Previous section</a>
+        <a href="#top">Back to top</a>
+      </div>
+    </section>
+
+    <div class="floating-nav" aria-label="Floating page navigation">
+      <a href="#top">Top</a>
+      <a href="#problem-lookup">Problems</a>
+      <a href="#extract-date-part">EXTRACT</a>
+      <a href="#date-trunc">Buckets</a>
+      <a href="#overdue-logic">Overdue</a>
+      <a href="#mistakes">Mistakes</a>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const input = document.getElementById('lookupSearch');
+      const count = document.getElementById('searchCount');
+      const items = Array.from(document.querySelectorAll('.search-item'));
+
+      function updateSearch() {
+        const query = input.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        items.forEach((item) => {
+          const haystack = ((item.dataset.search || '') + ' ' + item.textContent).toLowerCase();
+          const matches = !query || haystack.includes(query);
+          item.hidden = !matches;
+          if (matches) visibleCount += 1;
+        });
+
+        if (!query) {
+          count.textContent = 'Showing all Chapter 2 items';
+        } else {
+          count.textContent = 'Showing ' + visibleCount + ' matching items';
+        }
+      }
+
+      input.addEventListener('input', updateSearch);
+      updateSearch();
+    }());
+  </script>
+</body>
+</html>

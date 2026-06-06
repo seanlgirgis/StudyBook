@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Data Manipulation in SQL — Lab Guide</title>
+<style>
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#0d1117;color:#e6edf3;line-height:1.6}
+main{width:min(1000px,calc(100% - 32px));margin:auto;padding:28px 0 48px}
+header,section{background:#161b22;border:1px solid #30363d;border-radius:14px;padding:22px;margin-bottom:18px}
+header{background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e)}
+h1,h2{margin-top:0}.accent{color:#03ef62}code,pre{font-family:Consolas,monospace}
+pre{background:#0f141a;border:1px solid #33404d;border-radius:9px;padding:14px;overflow:auto}
+a{color:#58a6ff}.card{background:#1c232d;border:1px solid #30363d;border-radius:10px;padding:14px;margin:10px 0}
+</style>
+</head>
+<body>
+<main>
+<header>
+<p class="accent"><strong>Data Manipulation in SQL</strong></p>
+<h1>Local Lab Guide</h1>
+<p>Practice CASE expressions, subqueries, correlated queries, CTEs, and window functions with a compact PostgreSQL soccer dataset.</p>
+</header>
+
+<section>
+<h2>Run Order</h2>
+<ol>
+<li><code>00_create_lab_schema.sql</code></li>
+<li><code>01_create_tables.sql</code></li>
+<li><code>02_insert_sample_data.sql</code></li>
+<li><code>03_chapter_01_case.sql</code></li>
+<li><code>04_chapter_02_subqueries.sql</code></li>
+<li><code>05_chapter_03_correlated_nested_ctes.sql</code></li>
+<li><code>06_chapter_04_window_functions.sql</code></li>
+<li><code>07_course_challenge.sql</code></li>
+</ol>
+</section>
+
+<section>
+<h2>Chapter Practice</h2>
+<div class="card"><strong>Chapter 1:</strong> categorize results, count wins, and calculate fractions with CASE.</div>
+<div class="card"><strong>Chapter 2:</strong> use scalar, list, FROM, and SELECT subqueries.</div>
+<div class="card"><strong>Chapter 3:</strong> compare correlated subqueries with CTE solutions.</div>
+<div class="card"><strong>Chapter 4:</strong> rank losses, calculate running totals, and use partitioned averages.</div>
+</section>
+
+<section>
+<h2>Course Challenge</h2>
+<p>Build a Manchester United season report that combines:</p>
+<ul>
+<li>home and away CTEs,</li>
+<li>CASE-based outcomes,</li>
+<li><code>UNION ALL</code>,</li>
+<li>goal difference,</li>
+<li><code>RANK()</code>, and</li>
+<li>a running season total.</li>
+</ul>
+</section>
+</main>
+</body>
+</html>

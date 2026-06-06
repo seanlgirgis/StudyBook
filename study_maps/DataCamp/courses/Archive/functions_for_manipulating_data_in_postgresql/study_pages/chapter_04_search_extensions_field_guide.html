@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 4 Field Guide — PostgreSQL Search, Full-Text Search, and Fuzzy Matching</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg2: #121a30;
+      --bg3: #18233f;
+      --panel: #0f172a;
+      --border: #2b3b63;
+      --text: #e6edf7;
+      --muted: #9fb0d1;
+      --accent: #76b7ff;
+      --accent-2: #9ad0ff;
+      --good: #8ee6a5;
+      --warn: #ffd479;
+      --danger: #ff9a9a;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(118, 183, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, #09101d 0%, #0b1020 100%);
+      color: var(--text);
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: var(--accent-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    a:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+    code, pre, .mono {
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+    }
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 96px;
+    }
+    .hero {
+      background: linear-gradient(180deg, rgba(24, 35, 63, 0.95), rgba(15, 23, 42, 0.96));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid rgba(118, 183, 255, 0.35);
+      background: rgba(118, 183, 255, 0.1);
+      border-radius: 999px;
+      color: var(--accent-2);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    h1, h2, h3, h4 {
+      margin: 0 0 12px;
+      line-height: 1.25;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 2.8rem); }
+    h2 { font-size: 1.6rem; }
+    h3 { font-size: 1.15rem; }
+    p { margin: 0 0 14px; }
+    .subtitle {
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+    .hero-links,
+    .pill-links,
+    .quick-nav,
+    .section-nav,
+    .floating-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .hero-links a,
+    .quick-nav a,
+    .section-nav a,
+    .floating-nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--accent-2);
+      border-radius: 999px;
+      font-size: 0.92rem;
+      text-decoration: none;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .hero-links a:hover,
+    .quick-nav a:hover,
+    .section-nav a:hover,
+    .floating-nav a:hover {
+      transform: translateY(-1px);
+      border-color: rgba(118, 183, 255, 0.45);
+      background: rgba(24, 35, 63, 0.95);
+      text-decoration: none;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(118, 183, 255, 0.25);
+      background: rgba(118, 183, 255, 0.08);
+      color: var(--accent-2);
+      font-size: 0.85rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    .search-wrap,
+    .toc-wrap,
+    .section {
+      margin-top: 22px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+    .search-wrap { padding: 20px; }
+    .search-input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .search-tip,
+    .search-count,
+    .muted { color: var(--muted); }
+    .search-tip,
+    .search-count { font-size: 0.94rem; }
+    .search-tip { margin-top: 10px; }
+    .search-count { margin-top: 8px; }
+    .quick-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      margin-top: 14px;
+      padding: 12px 16px;
+      background: rgba(9, 16, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    .toc-wrap,
+    .section { padding: 22px; }
+    .section { scroll-margin-top: 88px; }
+    .toc-grid,
+    .cards-2,
+    .compare-grid,
+    .qa-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .toc-grid,
+    .cards-2,
+    .compare-grid,
+    .qa-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+    .toc-card,
+    .card,
+    .compare-card,
+    .qa-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(24, 35, 63, 0.72), rgba(18, 26, 48, 0.92));
+    }
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .section-num {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+    .callout,
+    .diagram {
+      border-left: 4px solid var(--accent);
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(118, 183, 255, 0.08);
+      margin: 18px 0;
+    }
+    .diagram {
+      white-space: pre-wrap;
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+    }
+    pre {
+      margin: 14px 0;
+      padding: 14px;
+      border-radius: 16px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      background: #0a1224;
+      color: #d8e5ff;
+      font-size: 0.94rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: rgba(24, 35, 63, 0.9);
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+    td { background: rgba(12, 19, 36, 0.92); }
+    .section-nav {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(43, 59, 99, 0.7);
+    }
+    .floating-nav {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(9, 16, 29, 0.95);
+      box-shadow: var(--shadow);
+      max-width: min(320px, calc(100vw - 24px));
+    }
+    .tight-list { margin: 0; padding-left: 18px; }
+    .tight-list li { margin-bottom: 6px; }
+    .search-item[hidden] { display: none !important; }
+
+    @media (max-width: 760px) {
+      .container { width: min(100% - 20px, 1180px); }
+      .hero,
+      .search-wrap,
+      .toc-wrap,
+      .section { border-radius: 18px; }
+      .quick-nav a,
+      .section-nav a,
+      .floating-nav a,
+      .hero-links a { flex: 1 1 auto; }
+      .toc-grid,
+      .cards-2,
+      .compare-grid,
+      .qa-grid { grid-template-columns: 1fr; }
+      .floating-nav {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="top">
+    <header class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="badge">Chapter 4 Detailed Guide</div>
+          <h1>Chapter 4 Field Guide — PostgreSQL Search, Full-Text Search, and Fuzzy Matching</h1>
+          <p class="subtitle">Use cases, search strategies, examples, extensions, traps, and practical decisions for PostgreSQL text search and similarity.</p>
+        </div>
+        <div class="hero-links" aria-label="Guide links">
+          <a href="field_guide.html">Open Main Field Guide</a>
+          <a href="sql_function_quick_lookup.html">Open Quick Lookup</a>
+          <a href="chapter_01_data_types_field_guide.html">Open Chapter 1 Guide</a>
+          <a href="chapter_02_datetime_functions_field_guide.html">Open Chapter 2 Guide</a>
+          <a href="chapter_03_text_functions_field_guide.html">Open Chapter 3 Guide</a>
+          <a href="../lab/lab_guide.html">Open Lab Guide</a>
+        </div>
+      </div>
+      <div class="pill-links" aria-label="Page questions">
+        <span class="tag">When should I use LIKE or ILIKE?</span>
+        <span class="tag">When should I use full-text search?</span>
+        <span class="tag">How do I find typo-like matches?</span>
+        <span class="tag">How do I rank fuzzy candidates?</span>
+      </div>
+    </header>
+
+    <div class="search-wrap">
+      <label for="lookupSearch" class="mono">Search this chapter guide</label>
+      <input
+        id="lookupSearch"
+        class="search-input"
+        type="search"
+        placeholder="Search search method, function, operator, fuzzy match, trap, or keyword..."
+        aria-label="Search search method, function, operator, fuzzy match, trap, or keyword"
+      />
+      <div class="search-tip">Aliases included: contains text, starts with, case insensitive, like, ilike, full-text, search document, search query, tsvector, tsquery, plain words, boolean search, stemming, prefix, lexeme, extension, create function, user defined function, stored function, routine metadata, pg_proc, information_schema.routines, plpgsql, begin, return, end, dollar quoting, pg_get_function_identity_arguments, pg_get_function_result, fuzzy typo, edit distance, sounds like, soundex, difference, trigram, similarity score, threshold, percent operator, word similarity, longer sentence, closest match, distance.</div>
+      <div id="searchCount" class="search-count" aria-live="polite">Showing all Chapter 4 items</div>
+    </div>
+
+    <nav class="quick-nav" aria-label="Sticky quick navigation">
+      <a href="#top">Top</a>
+      <a href="#problem-lookup">Problems</a>
+      <a href="#like-ilike">LIKE</a>
+      <a href="#full-text-overview">Full-Text</a>
+      <a href="#tsvector">tsvector</a>
+      <a href="#tsquery">tsquery</a>
+      <a href="#boolean-search">Boolean</a>
+      <a href="#stemming-prefix">Stemming</a>
+      <a href="#extensions">Extensions</a>
+      <a href="#user-defined-functions">Functions</a>
+      <a href="#levenshtein">Levenshtein</a>
+      <a href="#soundex-difference">Soundex</a>
+      <a href="#pg-trgm">pg_trgm</a>
+      <a href="#similarity-threshold">Similarity</a>
+      <a href="#word-similarity">Word Similarity</a>
+      <a href="#trigram-distance">Distance</a>
+      <a href="#mistakes">Mistakes</a>
+      <a href="#interview-qa">Q&amp;A</a>
+    </nav>
+
+    <section class="toc-wrap">
+      <h2>Table of Contents</h2>
+      <p class="muted">This chapter is easiest when you separate character-pattern search, full-text search, phonetic matching, edit distance, and trigram similarity instead of treating them as one fuzzy toolbox.</p>
+      <div class="toc-grid">
+        <div class="toc-card">
+          <h3>Start Here</h3>
+          <ul class="tight-list">
+            <li><a href="#how-to-use">How to Use</a></li>
+            <li><a href="#chapter-map">Chapter Map</a></li>
+            <li><a href="#problem-lookup">Problem-Based Lookup</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Pattern and Full-Text Search</h3>
+          <ul class="tight-list">
+            <li><a href="#like-ilike">LIKE and ILIKE</a></li>
+            <li><a href="#full-text-overview">Full-Text Search Overview</a></li>
+            <li><a href="#tsvector">to_tsvector()</a></li>
+            <li><a href="#tsquery">to_tsquery()</a></li>
+            <li><a href="#full-text-match">@@ Matching</a></li>
+            <li><a href="#boolean-search">Boolean Search</a></li>
+            <li><a href="#plain-search">plainto_tsquery()</a></li>
+            <li><a href="#stemming-prefix">Stemming and Prefix Search</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Extensions and Fuzzy Search</h3>
+          <ul class="tight-list">
+            <li><a href="#extensions">CREATE EXTENSION</a></li>
+            <li><a href="#user-defined-functions">CREATE FUNCTION and Routine Discovery</a></li>
+            <li><a href="#fuzzystrmatch">fuzzystrmatch</a></li>
+            <li><a href="#levenshtein">levenshtein()</a></li>
+            <li><a href="#soundex-difference">soundex() and difference()</a></li>
+            <li><a href="#pg-trgm">pg_trgm</a></li>
+            <li><a href="#similarity-threshold">similarity() and Thresholds</a></li>
+            <li><a href="#word-similarity">word_similarity()</a></li>
+            <li><a href="#trigram-distance">Trigram Distance</a></li>
+          </ul>
+        </div>
+        <div class="toc-card">
+          <h3>Decision and Review</h3>
+          <ul class="tight-list">
+            <li><a href="#search-strategy">Search Strategy Guide</a></li>
+            <li><a href="#combined-examples">Combined Examples</a></li>
+            <li><a href="#mistakes">Common Mistakes</a></li>
+            <li><a href="#interview-qa">Interview Q&amp;A</a></li>
+            <li><a href="#memory-review">Memory Review</a></li>
+            <li><a href="#related-guides">Related Guides</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how-to-use">
+      <div class="section-header">
+        <div><div class="section-num">Section 1</div><h2>How to Use This Guide</h2></div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="search by function name tsvector tsquery similarity levenshtein">
+          <h3>Search by function name</h3>
+          <p>Search directly for a tool such as <span class="mono">ILIKE</span>, <span class="mono">to_tsvector</span>, <span class="mono">levenshtein</span>, or <span class="mono">word_similarity</span>.</p>
+        </div>
+        <div class="card search-item" data-search="search by problem find typo match search longer sentence sound alike">
+          <h3>Search by problem</h3>
+          <p>Search with business-language prompts such as <span class="mono">find typo match</span>, <span class="mono">search longer sentence</span>, or <span class="mono">sounds like</span>.</p>
+        </div>
+        <div class="card search-item" data-search="use toc to study in sequence">
+          <h3>Study in sequence</h3>
+          <p>Use the TOC when you want the chapter in order: pattern search first, then linguistic search, then fuzzy extensions and ranking decisions.</p>
+        </div>
+        <div class="card search-item" data-search="artifact roles quick lookup main field guide chapter guide lab guide">
+          <h3>Artifact roles</h3>
+          <p>Quick Lookup = smallest syntax reminder. Main Field Guide = compact whole-course summary. Chapter Guide = detailed use cases and examples. Lab Guide = practiced evidence and observed output.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#top">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#chapter-map">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="chapter-map">
+      <div class="section-header">
+        <div><div class="section-num">Section 2</div><h2>Chapter Map</h2></div>
+      </div>
+      <div class="diagram search-item" data-search="understand search problem choose exact pattern linguistic phonetic trigram normalize input calculate match score apply threshold rank candidates validate false positives false negatives">
+Understand the search problem
+→ choose exact, pattern, linguistic, phonetic, or trigram search
+→ normalize the input
+→ calculate a match or score
+→ apply a threshold
+→ rank the candidates
+→ validate false positives and false negatives
+      </div>
+      <table class="search-item" data-search="exact value character pattern word based linguistic typo edit count pronunciation similarity approximate character similarity match inside longer text rank nearest fuzzy candidates">
+        <thead>
+          <tr><th>Search need</th><th>Main tool</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>exact value</td><td><span class="mono">=</span></td></tr>
+          <tr><td>character pattern</td><td><span class="mono">LIKE</span> / <span class="mono">ILIKE</span></td></tr>
+          <tr><td>word-based linguistic search</td><td>full-text search</td></tr>
+          <tr><td>typo edit count</td><td><span class="mono">levenshtein()</span></td></tr>
+          <tr><td>pronunciation similarity</td><td><span class="mono">soundex()</span> / <span class="mono">difference()</span></td></tr>
+          <tr><td>approximate character similarity</td><td><span class="mono">pg_trgm similarity()</span></td></tr>
+          <tr><td>match inside longer text</td><td><span class="mono">word_similarity()</span></td></tr>
+          <tr><td>rank nearest fuzzy candidates</td><td><span class="mono">&lt;-&gt;</span></td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#how-to-use">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#problem-lookup">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="problem-lookup">
+      <div class="section-header">
+        <div><div class="section-num">Section 3</div><h2>Problem-Based Lookup</h2></div>
+      </div>
+      <table>
+        <thead><tr><th>I need to...</th><th>Use</th><th>Tiny example</th><th>Why</th><th>Trap</th></tr></thead>
+        <tbody>
+          <tr class="search-item" data-search="search values starting with a prefix like"><td>search values starting with a prefix</td><td><span class="mono">LIKE</span></td><td><span class="mono">title LIKE 'POSTGRES%'</span></td><td>Simple character prefix match</td><td>Case-sensitive unless you use <span class="mono">ILIKE</span></td></tr>
+          <tr class="search-item" data-search="search values ending with a suffix"><td>search values ending with a suffix</td><td><span class="mono">LIKE</span></td><td><span class="mono">title LIKE '%HERO'</span></td><td>Simple character suffix match</td><td>Not word-aware</td></tr>
+          <tr class="search-item" data-search="search values containing a fragment"><td>search values containing a fragment</td><td><span class="mono">LIKE</span></td><td><span class="mono">title LIKE '%GRES%'</span></td><td>Quick substring-style character match</td><td>Can overmatch partial words</td></tr>
+          <tr class="search-item" data-search="search case insensitively"><td>search case-insensitively</td><td><span class="mono">ILIKE</span></td><td><span class="mono">title ILIKE '%postgres%'</span></td><td>Ignores uppercase/lowercase differences</td><td>Still character search, not linguistic search</td></tr>
+          <tr class="search-item" data-search="search one unknown character underscore wildcard"><td>search one unknown character with <span class="mono">_</span></td><td><span class="mono">LIKE</span></td><td><span class="mono">title LIKE 'POSTGRES HER_'</span></td><td>Single-character wildcard</td><td><span class="mono">_</span> is not any-length text</td></tr>
+          <tr class="search-item" data-search="search many unknown characters percent wildcard"><td>search many unknown characters with <span class="mono">%</span></td><td><span class="mono">LIKE</span></td><td><span class="mono">title LIKE 'POST%'</span></td><td>Flexible any-length wildcard</td><td>Do not confuse with <span class="mono">pg_trgm %</span></td></tr>
+          <tr class="search-item" data-search="search whole words rather than raw characters"><td>search whole words rather than raw characters</td><td>full-text search</td><td><span class="mono">to_tsvector(...) @@ plainto_tsquery(...)</span></td><td>Word-aware matching with normalization</td><td>Needs vector and query objects</td></tr>
+          <tr class="search-item" data-search="build a searchable document"><td>build a searchable document</td><td><span class="mono">to_tsvector()</span></td><td><span class="mono">to_tsvector('english', title || ' ' || description)</span></td><td>Turns text into searchable lexemes</td><td>Original words may normalize</td></tr>
+          <tr class="search-item" data-search="turn a word into a full text query"><td>turn a word into a full-text query</td><td><span class="mono">to_tsquery()</span></td><td><span class="mono">to_tsquery('english', 'elf')</span></td><td>Structured lexeme query</td><td>Not for arbitrary raw user text</td></tr>
+          <tr class="search-item" data-search="match a document to a query"><td>match a document to a query</td><td><span class="mono">@@</span></td><td><span class="mono">document @@ query</span></td><td>Returns true/false full-text match</td><td>Keep document on left, query on right</td></tr>
+          <tr class="search-item" data-search="search multiple words with and"><td>search multiple words with AND</td><td><span class="mono">&amp;</span></td><td><span class="mono">to_tsquery('english', 'elf &amp; adventure')</span></td><td>Both lexemes must match</td><td>Operator syntax is not plain English text</td></tr>
+          <tr class="search-item" data-search="search alternatives with or"><td>search alternatives with OR</td><td><span class="mono">|</span></td><td><span class="mono">to_tsquery('english', 'elf | postgres')</span></td><td>Either lexeme can match</td><td>Do not write the word OR inside <span class="mono">to_tsquery</span></td></tr>
+          <tr class="search-item" data-search="exclude a word with not"><td>exclude a word with NOT</td><td><span class="mono">!</span></td><td><span class="mono">to_tsquery('english', 'elf &amp; !winter')</span></td><td>Removes unwanted lexeme matches</td><td>Easy to forget the symbol form</td></tr>
+          <tr class="search-item" data-search="search user entered plain words"><td>search user-entered plain words</td><td><span class="mono">plainto_tsquery()</span></td><td><span class="mono">plainto_tsquery('english', 'postgres database')</span></td><td>Safer query builder for plain user input</td><td>Stop words may disappear</td></tr>
+          <tr class="search-item" data-search="combine title and description"><td>combine title and description</td><td><span class="mono">title || ' ' || description</span></td><td><span class="mono">to_tsvector('english', title || ' ' || description)</span></td><td>Search across both fields at once</td><td>Alias calculated text when inspecting it</td></tr>
+          <tr class="search-item" data-search="see normalized lexemes"><td>see normalized lexemes</td><td><span class="mono">to_tsvector()</span></td><td><span class="mono">SELECT to_tsvector('english', description)</span></td><td>Shows what PostgreSQL actually indexes</td><td>Not all words stay exactly as typed</td></tr>
+          <tr class="search-item" data-search="understand stop word removal"><td>understand stop-word removal</td><td><span class="mono">plainto_tsquery()</span></td><td><span class="mono">plainto_tsquery('english', 'the postgres database')</span></td><td>Common filler words may disappear</td><td>Stop-word removal can surprise beginners</td></tr>
+          <tr class="search-item" data-search="search a word that stems differently"><td>search a word that stems differently</td><td><span class="mono">plainto_tsquery()</span> inspection</td><td><span class="mono">plainto_tsquery('english', 'elves')</span></td><td>Check normalized lexeme shape</td><td>Related words do not always stem together</td></tr>
+          <tr class="search-item" data-search="search a lexeme prefix"><td>search a lexeme prefix</td><td><span class="mono">:*</span></td><td><span class="mono">to_tsquery('english', 'el:*')</span></td><td>Full-text prefix match on lexemes</td><td>Not the same as <span class="mono">LIKE 'el%'</span></td></tr>
+          <tr class="search-item" data-search="inspect installed extensions"><td>inspect installed extensions</td><td><span class="mono">pg_extension</span></td><td><span class="mono">SELECT extname FROM pg_extension</span></td><td>Shows what is enabled in this database</td><td>Available is not the same as installed</td></tr>
+          <tr class="search-item" data-search="inspect available extensions"><td>inspect available extensions</td><td><span class="mono">pg_available_extensions</span></td><td><span class="mono">SELECT name FROM pg_available_extensions</span></td><td>Shows installable extension options</td><td>Does not mean they are already enabled</td></tr>
+          <tr class="search-item" data-search="install fuzzystrmatch"><td>install fuzzystrmatch</td><td><span class="mono">CREATE EXTENSION</span></td><td><span class="mono">CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;</span></td><td>Enables edit distance and phonetic functions</td><td>Extension is per database</td></tr>
+          <tr class="search-item" data-search="install pg_trgm"><td>install pg_trgm</td><td><span class="mono">CREATE EXTENSION</span></td><td><span class="mono">CREATE EXTENSION IF NOT EXISTS pg_trgm;</span></td><td>Enables trigram similarity tools</td><td>Threshold behavior is session-sensitive</td></tr>
+          <tr class="search-item" data-search="create exact plpgsql squared function create function begin return end language plpgsql"><td>create the exact PL/pgSQL squared() video function</td><td><span class="mono">CREATE FUNCTION</span></td><td><span class="mono">CREATE FUNCTION squared(i integer) RETURNS integer AS $$ BEGIN RETURN i * i; END; $$ LANGUAGE plpgsql;</span></td><td>Matches the course video example exactly</td><td>The video uses <span class="mono">LANGUAGE plpgsql</span>, not <span class="mono">LANGUAGE SQL</span>.</td></tr>
+          <tr class="search-item" data-search="understand begin end procedural block plpgsql"><td>understand <span class="mono">BEGIN</span> and <span class="mono">END</span></td><td><span class="mono">plpgsql</span> block structure</td><td><span class="mono">BEGIN ... END;</span></td><td>Marks the procedural body of the function</td><td>Do not omit the final semicolon inside the function body.</td></tr>
+          <tr class="search-item" data-search="return a calculated value function return statement"><td>return a calculated value</td><td><span class="mono">RETURN</span></td><td><span class="mono">RETURN i * i;</span></td><td>Sends the computed result back to the caller</td><td>Without <span class="mono">RETURN</span>, the function body does not yield the declared value.</td></tr>
+          <tr class="search-item" data-search="choose sql vs plpgsql function language"><td>choose SQL versus PL/pgSQL</td><td><span class="mono">LANGUAGE SQL</span> or <span class="mono">LANGUAGE plpgsql</span></td><td><span class="mono">CREATE FUNCTION ... LANGUAGE ...</span></td><td>Pick the simplest language that fits the body</td><td>Do not describe the PL/pgSQL lesson using a SQL-language example only.</td></tr>
+          <tr class="search-item" data-search="inspect defined routines information_schema routines return type"><td>inspect defined routines</td><td><span class="mono">information_schema.routines</span></td><td><span class="mono">SELECT routine_name, data_type FROM information_schema.routines</span></td><td>Portable routine discovery view with return-type detail</td><td>Use schema filtering so results stay focused.</td></tr>
+          <tr class="search-item" data-search="inspect function signature pg_proc pg_get_function_identity_arguments pg_get_function_result"><td>inspect function signature safely</td><td><span class="mono">pg_proc</span> + helpers</td><td><span class="mono">pg_get_function_identity_arguments(p.oid)</span></td><td>Shows PostgreSQL-native argument and return metadata</td><td>Catalog names and helper functions are PostgreSQL-specific.</td></tr>
+          <tr class="search-item" data-search="find return type routine data_type pg_get_function_result"><td>find a function return type</td><td><span class="mono">data_type</span> or <span class="mono">pg_get_function_result()</span></td><td><span class="mono">SELECT data_type FROM information_schema.routines</span></td><td>Confirms what a routine sends back</td><td>Do not guess from the function name alone.</td></tr>
+          <tr class="search-item" data-search="inspect sakila helper functions safely get_customer_balance inventory_held_by_customer inventory_in_stock"><td>inspect Sakila helper functions safely</td><td><span class="mono">information_schema.routines</span> and <span class="mono">pg_proc</span></td><td><span class="mono">WHERE routine_name IN (...)</span></td><td>Lets you verify purpose, signature, and return shape first</td><td>Inspect the active Sakila database before calling these functions because sample-database versions may define slightly different signatures.</td></tr>
+          <tr class="search-item" data-search="calculate edit distance"><td>calculate edit distance</td><td><span class="mono">levenshtein()</span></td><td><span class="mono">levenshtein(title, 'POSTGRES HER0')</span></td><td>Exact typo-edit count</td><td>Lower is better, not higher</td></tr>
+          <tr class="search-item" data-search="find exact typo distance"><td>find exact typo distance</td><td><span class="mono">levenshtein()</span></td><td><span class="mono">levenshtein('cat', 'cut')</span></td><td>Counts substitutions, insertions, deletions</td><td>Distance 0 means exact match</td></tr>
+          <tr class="search-item" data-search="keep only close typo matches"><td>keep only close typo matches</td><td><span class="mono">&lt;= threshold</span></td><td><span class="mono">WHERE levenshtein(title, 'POSTGRES HEROES') &lt;= 3</span></td><td>Filters typo candidates</td><td>One threshold does not fit every string length</td></tr>
+          <tr class="search-item" data-search="classify exact very close and close"><td>classify exact, very close, and close matches</td><td><span class="mono">CASE</span></td><td><span class="mono">CASE WHEN distance = 0 THEN 'Exact' ...</span></td><td>Business labels for edit distance</td><td>Threshold choice is a business decision</td></tr>
+          <tr class="search-item" data-search="compare names that sound alike"><td>compare names that sound alike</td><td><span class="mono">soundex()</span></td><td><span class="mono">soundex('Smith') = soundex('Smyth')</span></td><td>Pronunciation-style grouping</td><td>Phonetic, not spelling-based</td></tr>
+          <tr class="search-item" data-search="calculate sound similarity score"><td>calculate sound similarity score</td><td><span class="mono">difference()</span></td><td><span class="mono">difference('Smith', 'Smyth')</span></td><td>Quick phonetic similarity score</td><td>Range is 0 to 4, higher is better</td></tr>
+          <tr class="search-item" data-search="filter strongest phonetic matches"><td>filter strongest phonetic matches</td><td><span class="mono">difference() &gt;= 3</span></td><td><span class="mono">WHERE difference(first_name, 'Shaun') &gt;= 3</span></td><td>Keeps stronger sound-alike candidates</td><td>Still may include false positives</td></tr>
+          <tr class="search-item" data-search="combine sound score and edit distance"><td>combine sound score and edit distance</td><td><span class="mono">CTE + CASE</span></td><td><span class="mono">sound_score + edit_distance labels</span></td><td>Combines two fuzzy signals</td><td>Single-signal fuzzy logic can miss good candidates</td></tr>
+          <tr class="search-item" data-search="calculate trigram similarity"><td>calculate trigram similarity</td><td><span class="mono">similarity()</span></td><td><span class="mono">similarity(title, 'POSTGRES HER0')</span></td><td>Approximate character similarity score</td><td>Higher is better</td></tr>
+          <tr class="search-item" data-search="filter by a manual similarity threshold"><td>filter by a manual similarity threshold</td><td><span class="mono">&gt;= 0.3</span></td><td><span class="mono">WHERE similarity(title, 'POSTGRES HER0') &gt;= 0.3</span></td><td>Explicit score cutoff</td><td>Threshold tuning affects recall and precision</td></tr>
+          <tr class="search-item" data-search="use the percent similarity operator"><td>use the <span class="mono">%</span> similarity operator</td><td><span class="mono">title % search_text</span></td><td><span class="mono">WHERE title % 'POSTGRES HER0'</span></td><td>Pass/fail fuzzy threshold shortcut</td><td>Not the same as LIKE wildcard percent</td></tr>
+          <tr class="search-item" data-search="inspect pg_trgm similarity threshold"><td>inspect pg_trgm similarity threshold</td><td><span class="mono">SHOW</span> / <span class="mono">show_limit()</span></td><td><span class="mono">SHOW pg_trgm.similarity_threshold</span></td><td>See active pass/fail threshold</td><td>Changing threshold changes <span class="mono">%</span> behavior</td></tr>
+          <tr class="search-item" data-search="change similarity threshold"><td>change similarity threshold</td><td><span class="mono">set_limit()</span></td><td><span class="mono">SELECT set_limit(0.8)</span></td><td>Tightens or loosens trigram pass rule</td><td>Does not change the <span class="mono">similarity()</span> score itself</td></tr>
+          <tr class="search-item" data-search="restore similarity threshold"><td>restore similarity threshold</td><td><span class="mono">set_limit(0.3)</span></td><td><span class="mono">SELECT set_limit(0.3)</span></td><td>Reset temporary session change</td><td>Easy to forget after experiments</td></tr>
+          <tr class="search-item" data-search="compare clean phrase similarity"><td>compare clean phrase similarity</td><td><span class="mono">similarity()</span></td><td><span class="mono">similarity('POSTGRES HERO', 'POSTGRES HER0')</span></td><td>Whole-string fuzzy score</td><td>Long noisy text can dilute score</td></tr>
+          <tr class="search-item" data-search="find a phrase inside a longer sentence"><td>find a phrase inside a longer sentence</td><td><span class="mono">word_similarity()</span></td><td><span class="mono">word_similarity(title, 'please find POSTGRES HER0 for me')</span></td><td>Best matching extent inside longer text</td><td>Do not expect plain <span class="mono">similarity()</span> to behave the same</td></tr>
+          <tr class="search-item" data-search="calculate word similarity"><td>calculate word similarity</td><td><span class="mono">word_similarity()</span></td><td><span class="mono">word_similarity('POSTGRES HERO', sentence)</span></td><td>Phrase-in-sentence matching</td><td>Higher is better</td></tr>
+          <tr class="search-item" data-search="rank closest trigram matches"><td>rank closest trigram matches</td><td><span class="mono">&lt;-&gt;</span></td><td><span class="mono">ORDER BY title &lt;-&gt; 'POSTGRES HER0'</span></td><td>Distance ordering for fuzzy candidates</td><td>Lower is better, so sort ascending</td></tr>
+          <tr class="search-item" data-search="convert similarity to distance"><td>convert similarity to distance</td><td><span class="mono">&lt;-&gt;</span></td><td><span class="mono">distance = 1 - similarity</span></td><td>Helpful for nearest-first ranking</td><td>Do not sort distance descending</td></tr>
+          <tr class="search-item" data-search="choose like versus full text search"><td>choose LIKE versus full-text search</td><td>character vs word logic</td><td><span class="mono">LIKE '%elf%'</span> vs <span class="mono">@@ to_tsquery(...)</span></td><td>Pattern search and linguistic search are different families</td><td>LIKE does not understand lexemes or stemming</td></tr>
+          <tr class="search-item" data-search="choose levenshtein versus pg_trgm"><td>choose Levenshtein versus pg_trgm</td><td>edit count vs trigram score</td><td><span class="mono">levenshtein(...)</span> vs <span class="mono">similarity(...)</span></td><td>Edit count is exact; trigram is shared-chunk similarity</td><td>Do not treat them as the same score type</td></tr>
+          <tr class="search-item" data-search="choose soundex versus levenshtein"><td>choose Soundex versus Levenshtein</td><td>pronunciation vs typo count</td><td><span class="mono">soundex(...)</span> vs <span class="mono">levenshtein(...)</span></td><td>Use sound-based logic when spelling changes but pronunciation matters</td><td>Soundex is not typo distance</td></tr>
+          <tr class="search-item" data-search="choose similarity versus word similarity"><td>choose similarity versus word_similarity</td><td>whole string vs phrase-in-sentence</td><td><span class="mono">similarity(...)</span> vs <span class="mono">word_similarity(...)</span></td><td>Whole text score and embedded phrase score solve different problems</td><td>Longer sentences usually need <span class="mono">word_similarity()</span></td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#chapter-map">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#like-ilike">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="like-ilike">
+      <div class="section-header">
+        <div><div class="section-num">Section 4</div><h2>LIKE and ILIKE</h2></div>
+      </div>
+      <p class="search-item" data-search="like ilike compare character patterns do not understand stemming">LIKE and ILIKE compare character patterns. They do not understand word meaning, stemming, or linguistic normalization.</p>
+      <div class="compare-grid">
+        <div class="compare-card search-item" data-search="like examples starts with ends with contains one unknown character">
+          <h3>Pattern examples</h3>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE title LIKE 'POSTGRES%';</code></pre>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE title LIKE '%HERO';</code></pre>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE title LIKE '%GRES%';</code></pre>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE title LIKE 'POSTGRES HER_';</code></pre>
+        </div>
+        <div class="compare-card search-item" data-search="ilike case insensitive example">
+          <h3>Case-insensitive example</h3>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE title ILIKE '%postgres%';</code></pre>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE title LIKE 'POSTGRES_HERO';</code></pre>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE title ILIKE 'postgres%';</code></pre>
+          <table>
+            <thead><tr><th>Need</th><th>Pattern</th></tr></thead>
+            <tbody>
+              <tr><td>begins with</td><td><span class="mono">'ABC%'</span></td></tr>
+              <tr><td>ends with</td><td><span class="mono">'%ABC'</span></td></tr>
+              <tr><td>contains</td><td><span class="mono">'%ABC%'</span></td></tr>
+              <tr><td>one unknown character</td><td><span class="mono">'AB_'</span></td></tr>
+              <tr><td>case-insensitive</td><td><span class="mono">ILIKE</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#problem-lookup">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#full-text-overview">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="full-text-overview">
+      <div class="section-header">
+        <div><div class="section-num">Section 5</div><h2>Full-Text Search Overview</h2></div>
+      </div>
+      <p class="search-item" data-search="full text search overview transforms document text into searchable lexemes query words into query">Full-text search transforms document text into searchable lexemes and transforms the search request into a query.</p>
+      <div class="diagram search-item" data-search="title description to_tsvector searchable lexemes search words to_tsquery plainto_tsquery query document matches query">
+title + description
+→ to_tsvector()
+→ searchable lexemes
+
+search words
+→ to_tsquery() or plainto_tsquery()
+→ query
+
+searchable document @@ query
+→ true or false
+      </div>
+      <table class="search-item" data-search="like ilike full text fuzzy search comparison">
+        <thead><tr><th>Search type</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr><td>LIKE / ILIKE</td><td>simple character patterns</td></tr>
+          <tr><td>full-text search</td><td>word-based linguistic search</td></tr>
+          <tr><td>fuzzy search</td><td>misspellings and approximate matches</td></tr>
+        </tbody>
+      </table>
+      <pre class="search-item"><code>SELECT
+  title,
+  description
+FROM lab_films
+WHERE description ILIKE '%elf%';</code></pre>
+      <pre class="search-item"><code>SELECT
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf');</code></pre>
+      <div class="section-nav">
+        <a href="#like-ilike">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#tsvector">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="tsvector">
+      <div class="section-header">
+        <div><div class="section-num">Section 6</div><h2>to_tsvector()</h2></div>
+      </div>
+      <p class="search-item" data-search="tsvector searchable document english dictionary lexemes stemming stop words position information">Use <span class="mono">to_tsvector()</span> to build a searchable document. It uses a dictionary such as <span class="mono">'english'</span>, normalizes words into lexemes, drops some stop words, and stores position information.</p>
+      <pre class="search-item"><code>SELECT
+  title,
+  to_tsvector('english', title) AS title_document
+FROM lab_films;</code></pre>
+      <pre class="search-item"><code>SELECT
+  title,
+  description,
+  to_tsvector(
+    'english',
+    title || ' ' || description
+  ) AS searchable_document
+FROM lab_films;</code></pre>
+      <pre class="search-item"><code>SELECT
+  description,
+  to_tsvector('english', description) AS description_document
+FROM lab_films;</code></pre>
+      <pre class="search-item"><code>SELECT
+  title,
+  to_tsvector('english', title || ' ' || description) AS combined_document
+FROM lab_films;</code></pre>
+      <div class="callout search-item" data-search="to_tsvector does not keep every original word exactly as typed">
+        <strong>Normalization note</strong>
+        <p>to_tsvector() does not keep every original word exactly as typed. It normalizes words into searchable lexemes.</p>
+      </div>
+      <div class="section-nav">
+        <a href="#full-text-overview">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#tsquery">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="tsquery">
+      <div class="section-header">
+        <div><div class="section-num">Section 7</div><h2>to_tsquery()</h2></div>
+      </div>
+      <p class="search-item" data-search="structured full text query lexeme query operator syntax plain english phrases may fail">Use <span class="mono">to_tsquery()</span> when you want structured full-text query syntax with lexemes and boolean operators.</p>
+      <pre class="search-item"><code>SELECT to_tsquery('english', 'elf');</code></pre>
+      <pre class="search-item"><code>SELECT to_tsquery('english', 'elf &amp; adventure');</code></pre>
+      <pre class="search-item"><code>SELECT to_tsquery('english', 'elf | postgres');</code></pre>
+      <pre class="search-item"><code>SELECT to_tsquery('english', 'elf &amp; !winter');</code></pre>
+      <pre class="search-item"><code>SELECT to_tsquery('english', 'postgres');</code></pre>
+      <pre class="search-item"><code>SELECT to_tsquery('english', 'postgres | database');</code></pre>
+      <div class="callout search-item" data-search="to_tsquery expects full text query syntax not arbitrary raw user sentences">
+        <strong>Syntax note</strong>
+        <p>to_tsquery() expects full-text query syntax. It is not intended for arbitrary raw user sentences.</p>
+      </div>
+      <div class="section-nav">
+        <a href="#tsvector">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#full-text-match">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="full-text-match">
+      <div class="section-header">
+        <div><div class="section-num">Section 8</div><h2>@@ Matching</h2></div>
+      </div>
+      <p class="search-item" data-search="left side searchable document right side search query boolean result use in where">The left side should be the searchable document. The right side should be the full-text query. The <span class="mono">@@</span> operator returns a boolean result and is usually used in <span class="mono">WHERE</span>.</p>
+      <pre class="search-item"><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf');</code></pre>
+      <pre class="search-item"><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector(
+        'english',
+        title || ' ' || description
+      )
+      @@ plainto_tsquery(
+        'english',
+        'postgres database'
+      );</code></pre>
+      <pre class="search-item"><code>SELECT
+  film_id,
+  title
+FROM lab_films
+WHERE to_tsvector('english', title)
+      @@ to_tsquery('english', 'postgres');</code></pre>
+      <pre class="search-item"><code>SELECT
+  film_id,
+  title
+FROM lab_films
+WHERE to_tsvector('english', title || ' ' || description)
+      @@ to_tsquery('english', 'hero');</code></pre>
+      <div class="diagram search-item" data-search="memory line document matches query">document @@ query</div>
+      <div class="section-nav">
+        <a href="#tsquery">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#boolean-search">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="boolean-search">
+      <div class="section-header">
+        <div><div class="section-num">Section 9</div><h2>Boolean Search</h2></div>
+      </div>
+      <pre class="search-item"><code>SELECT *
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf &amp; adventure');</code></pre>
+      <pre class="search-item"><code>SELECT *
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf | postgres');</code></pre>
+      <pre class="search-item"><code>SELECT *
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf &amp; !winter');</code></pre>
+      <pre class="search-item"><code>SELECT *
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', '(elf | postgres) &amp; adventure');</code></pre>
+      <pre class="search-item"><code>SELECT *
+FROM lab_films
+WHERE to_tsvector('english', title || ' ' || description)
+      @@ to_tsquery('english', 'postgres &amp; !detective');</code></pre>
+      <table class="search-item" data-search="boolean operators and or not">
+        <thead><tr><th>Operator</th><th>Meaning</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">&amp;</span></td><td>AND</td><td>Both lexemes must match</td></tr>
+          <tr><td><span class="mono">|</span></td><td>OR</td><td>Either lexeme can match</td></tr>
+          <tr><td><span class="mono">!</span></td><td>NOT</td><td>Exclude unwanted lexemes</td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#full-text-match">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#plain-search">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="plain-search">
+      <div class="section-header">
+        <div><div class="section-num">Section 10</div><h2>plainto_tsquery()</h2></div>
+      </div>
+      <p class="search-item" data-search="user style input plain words automatic and behavior stop word removal safer than direct to_tsquery">Use <span class="mono">plainto_tsquery()</span> when the input is plain words from a user instead of manually structured full-text syntax.</p>
+      <pre class="search-item"><code>SELECT plainto_tsquery('english', 'postgres database');</code></pre>
+      <pre class="search-item"><code>SELECT *
+FROM lab_films
+WHERE to_tsvector(
+        'english',
+        title || ' ' || description
+      )
+      @@ plainto_tsquery(
+        'english',
+        'postgres database'
+      );</code></pre>
+      <pre class="search-item"><code>SELECT plainto_tsquery('english', 'the postgres database');</code></pre>
+      <pre class="search-item"><code>SELECT plainto_tsquery('english', 'elf adventure winter');</code></pre>
+      <div class="callout search-item" data-search="plainto_tsquery converts plain words into a valid full text query">
+        <strong>Plain-word query note</strong>
+        <p>plainto_tsquery() converts plain words into a valid full-text query.</p>
+      </div>
+      <div class="section-nav">
+        <a href="#boolean-search">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#stemming-prefix">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="stemming-prefix">
+      <div class="section-header">
+        <div><div class="section-num">Section 11</div><h2>Stemming and Prefix Search</h2></div>
+      </div>
+      <p class="search-item" data-search="stemming is language normalization related words may not always normalize to same lexeme">Stemming is language normalization. Words that look related to a person may not always normalize to the same lexeme.</p>
+      <pre class="search-item"><code>SELECT
+  plainto_tsquery('english', 'elf') AS elf_query,
+  plainto_tsquery('english', 'elves') AS elves_query;</code></pre>
+      <div class="diagram search-item" data-search="elf to elf elves to elv">elf   → 'elf'
+elves → 'elv'</div>
+      <pre class="search-item"><code>SELECT
+  film_id,
+  title,
+  description
+FROM lab_films
+WHERE to_tsvector(
+        'english',
+        title || ' ' || description
+      )
+      @@ to_tsquery(
+        'english',
+        'el:*'
+      )
+ORDER BY film_id;</code></pre>
+      <pre class="search-item"><code>SELECT
+  plainto_tsquery('english', 'hero') AS hero_query,
+  plainto_tsquery('english', 'heroes') AS heroes_query;</code></pre>
+      <pre class="search-item"><code>SELECT
+  to_tsquery('english', 'post:*') AS postgres_prefix_query;</code></pre>
+      <div class="callout search-item" data-search="colon star means lexeme prefix search full text prefix search not same as like el percent">
+        <strong>Prefix note</strong>
+        <p><span class="mono">:*</span> means lexeme-prefix search. Full-text prefix search is not the same as <span class="mono">LIKE 'el%'</span>.</p>
+      </div>
+      <div class="section-nav">
+        <a href="#plain-search">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#extensions">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="extensions">
+      <div class="section-header">
+        <div><div class="section-num">Section 12</div><h2>Extensions</h2></div>
+      </div>
+      <p class="search-item" data-search="extension installed per database schema pg_extension pg_available_extensions extnamespace search_path schema qualified function calls postgis postpic fuzzystrmatch pg_trgm available installed">An extension is installed in the current database. Its functions and objects live in a schema.</p>
+      <p class="search-item" data-search="postgresql distributions supported extensions packaged capabilities available depends on installation current database">PostgreSQL distributions commonly include supported extensions that add packaged capabilities, but availability depends on the specific installation.</p>
+      <p class="search-item" data-search="available does not mean installed current database enable per database">An extension may be known to the PostgreSQL installation without being enabled in the current database yet.</p>
+      <table class="search-item" data-search="common postgresql extensions postgis postpic fuzzystrmatch pg_trgm what they are for">
+        <thead><tr><th>Extension</th><th>Main use</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">PostGIS</span></td><td>spatial and location queries in SQL</td></tr>
+          <tr><td><span class="mono">PostPic</span></td><td>image processing inside PostgreSQL</td></tr>
+          <tr><td><span class="mono">fuzzystrmatch</span></td><td>edit-distance and phonetic string comparison</td></tr>
+          <tr><td><span class="mono">pg_trgm</span></td><td>trigram-based string similarity and fuzzy matching</td></tr>
+        </tbody>
+      </table>
+      <table class="search-item" data-search="pg_available_extensions pg_extension available versus installed comparison">
+        <thead><tr><th>Catalog</th><th>What it shows</th><th>Memory</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">pg_available_extensions</span></td><td>extensions this PostgreSQL distribution knows how to install</td><td>available to install</td></tr>
+          <tr><td><span class="mono">pg_extension</span></td><td>extensions already enabled in the current database</td><td>installed now</td></tr>
+        </tbody>
+      </table>
+      <pre class="search-item"><code>SELECT name
+FROM pg_available_extensions;</code></pre>
+      <p class="search-item" data-search="select name from pg_available_extensions exact video query available to install">This shows extensions available to install in this PostgreSQL distribution.</p>
+      <pre class="search-item"><code>SELECT extname
+FROM pg_extension;</code></pre>
+      <p class="search-item" data-search="select extname from pg_extension exact video query already enabled current database">This shows extensions already enabled in the current database.</p>
+      <div class="callout search-item" data-search="available not equal installed memory line pg_available_extensions pg_extension">
+        <strong>Memory line</strong>
+        <p><span class="mono">available ≠ installed</span></p>
+      </div>
+      <pre class="search-item"><code>CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;</code></pre>
+      <div class="card search-item" data-search="create extension if not exists fuzzystrmatch explanation rerun safely no duplicate error">
+        <h3>What this command means</h3>
+        <ul class="tight-list">
+          <li><span class="mono">CREATE EXTENSION</span> enables the extension in the current database.</li>
+          <li><span class="mono">IF NOT EXISTS</span> prevents an error if the extension is already enabled.</li>
+          <li><span class="mono">fuzzystrmatch</span> is the specific extension being enabled.</li>
+        </ul>
+      </div>
+      <pre class="search-item"><code>SELECT extname
+FROM pg_extension
+ORDER BY extname;</code></pre>
+      <p class="search-item" data-search="before enabling fuzzystrmatch pg_extension may show only plpgsql after enabling includes fuzzystrmatch">Before enabling <span class="mono">fuzzystrmatch</span>, <span class="mono">pg_extension</span> may show only <span class="mono">plpgsql</span>. After enabling it, the result should include both <span class="mono">plpgsql</span> and <span class="mono">fuzzystrmatch</span>. Exact extension lists can differ by database.</p>
+      <pre class="search-item"><code>CREATE EXTENSION IF NOT EXISTS pg_trgm;</code></pre>
+      <pre class="search-item"><code>SELECT
+  extname,
+  extnamespace::regnamespace AS extension_schema
+FROM pg_extension
+WHERE extname IN ('fuzzystrmatch', 'pg_trgm');</code></pre>
+      <pre class="search-item"><code>SHOW search_path;</code></pre>
+      <pre class="search-item"><code>SELECT
+  name,
+  default_version
+FROM pg_available_extensions
+WHERE name IN ('fuzzystrmatch', 'pg_trgm');</code></pre>
+      <pre class="search-item"><code>SELECT
+  extname,
+  extnamespace::regnamespace AS extension_schema
+FROM pg_extension
+ORDER BY extname;</code></pre>
+      <pre class="search-item"><code>SELECT
+  course06_functions_lab.levenshtein(
+    'GAMBOL',
+    'GUMBO'
+  );</code></pre>
+      <div class="card search-item" data-search="extension video recap pg_available_extensions pg_extension create extension fuzzystrmatch levenshtein similarity">
+        <h3>Video recap</h3>
+        <ul class="tight-list">
+          <li>Discover installable extensions with <span class="mono">pg_available_extensions</span>.</li>
+          <li>Inspect enabled extensions with <span class="mono">pg_extension</span>.</li>
+          <li>Enable features with <span class="mono">CREATE EXTENSION IF NOT EXISTS ...</span>.</li>
+          <li>Use <span class="mono">levenshtein()</span> for edit distance.</li>
+          <li>Use <span class="mono">similarity()</span> for trigram similarity.</li>
+        </ul>
+      </div>
+      <div class="section-nav">
+        <a href="#stemming-prefix">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#user-defined-functions">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="user-defined-functions">
+      <div class="section-header">
+        <div><div class="section-num">Section 13</div><h2>CREATE FUNCTION and Routine Discovery</h2></div>
+      </div>
+      <p class="search-item" data-search="create function reusable logic named routine parameters returns dollar quoting language plpgsql language sql">User-defined functions let you package reusable logic behind a name, parameter list, return type, body, and declared language. The DataCamp video uses a small <span class="mono">plpgsql</span> example first.</p>
+      <pre class="search-item"><code>CREATE FUNCTION squared(i integer)
+RETURNS integer AS $$
+BEGIN
+  RETURN i * i;
+END;
+$$ LANGUAGE plpgsql;</code></pre>
+      <div class="cards-2">
+        <div class="card search-item" data-search="create function pieces parameter returns dollar quoting begin return end language plpgsql explain">
+          <h3>What each piece means</h3>
+          <ul class="tight-list">
+            <li><span class="mono">CREATE FUNCTION squared</span> defines a reusable function named <span class="mono">squared</span>.</li>
+            <li><span class="mono">(i integer)</span> declares one input parameter named <span class="mono">i</span> with integer type.</li>
+            <li><span class="mono">RETURNS integer</span> declares the output type the function must send back.</li>
+            <li><span class="mono">AS $$ ... $$</span> wraps the function body using dollar quoting.</li>
+            <li><span class="mono">BEGIN</span> starts the procedural block.</li>
+            <li><span class="mono">RETURN i * i;</span> sends the calculated square back to the caller.</li>
+            <li><span class="mono">END;</span> closes the procedural block.</li>
+            <li><span class="mono">LANGUAGE plpgsql</span> says the body is written in PostgreSQL's procedural language.</li>
+          </ul>
+        </div>
+        <div class="card search-item" data-search="function versus procedure returns value callable in select squared 5 25">
+          <h3>Function vs procedure</h3>
+          <p>A function returns a value or result and can be called in a query expression. PostgreSQL also supports <span class="mono">CREATE PROCEDURE</span>, but this lesson focuses on <span class="mono">CREATE FUNCTION</span>.</p>
+          <pre><code>SELECT squared(5) AS squared_value;</code></pre>
+          <p>Expected result: <span class="mono">25</span>.</p>
+        </div>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="sql language alternative squared_sql simpler single select not video example">
+          <h3>SQL-language alternative</h3>
+          <p>This is a valid alternative for a single-expression body, but it is not the exact video example.</p>
+          <pre><code>CREATE FUNCTION squared_sql(i integer)
+RETURNS integer
+AS $$
+  SELECT i * i;
+$$
+LANGUAGE SQL;</code></pre>
+        </div>
+        <div class="card search-item" data-search="sql versus plpgsql comparison video example yes no">
+          <h3>SQL versus PL/pgSQL</h3>
+          <table>
+            <thead><tr><th>Feature</th><th>LANGUAGE SQL</th><th>LANGUAGE plpgsql</th></tr></thead>
+            <tbody>
+              <tr><td>Best for</td><td>single SQL expression or query</td><td>procedural steps and control flow</td></tr>
+              <tr><td>Uses <span class="mono">BEGIN ... END</span></td><td>no</td><td>yes</td></tr>
+              <tr><td>Uses explicit <span class="mono">RETURN</span></td><td>often implicit through query result</td><td>yes in this example</td></tr>
+              <tr><td>Video example</td><td>no</td><td>yes</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="callout search-item" data-search="dollar quoting function body plpgsql sql text easier than escaping language selection">
+        <strong>Dollar quoting note</strong>
+        <p>Dollar quoting keeps the function body readable because you do not need to escape normal single quotes the same way you would inside one large string literal. It marks the body boundary, while <span class="mono">LANGUAGE plpgsql</span> or <span class="mono">LANGUAGE SQL</span> tells PostgreSQL how to interpret the body.</p>
+      </div>
+      <table class="search-item" data-search="sakila helper functions get_customer_balance inventory_held_by_customer inventory_in_stock safe purpose template calls">
+        <thead><tr><th>Function</th><th>What it helps answer</th><th>Signature-safe template</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">get_customer_balance</span></td><td>Calculate outstanding balance as of a supplied timestamp</td><td><span class="mono">SELECT get_customer_balance(customer_id_value, effective_timestamp_value);</span></td></tr>
+          <tr><td><span class="mono">inventory_held_by_customer</span></td><td>Determine which customer currently holds an inventory item with no return_date</td><td><span class="mono">SELECT inventory_held_by_customer(inventory_id_value);</span></td></tr>
+          <tr><td><span class="mono">inventory_in_stock</span></td><td>Determine whether an inventory item is currently in stock</td><td><span class="mono">SELECT inventory_in_stock(inventory_id_value);</span></td></tr>
+        </tbody>
+      </table>
+      <p class="search-item" data-search="inspect active sakila database before calling helper functions signatures may differ">Inspect the active Sakila database before calling these functions because sample-database versions may define slightly different signatures.</p>
+      <pre class="search-item"><code>SELECT
+  routine_schema,
+  routine_name,
+  routine_type,
+  data_type
+FROM information_schema.routines
+WHERE routine_name IN (
+  'get_customer_balance',
+  'inventory_held_by_customer',
+  'inventory_in_stock'
+)
+ORDER BY
+  routine_schema,
+  routine_name;</code></pre>
+      <pre class="search-item"><code>SELECT
+  n.nspname AS function_schema,
+  p.proname AS function_name,
+  pg_get_function_identity_arguments(p.oid)
+    AS input_arguments,
+  pg_get_function_result(p.oid)
+    AS return_type
+FROM pg_proc AS p
+INNER JOIN pg_namespace AS n
+  ON n.oid = p.pronamespace
+WHERE p.proname IN (
+  'get_customer_balance',
+  'inventory_held_by_customer',
+  'inventory_in_stock'
+)
+ORDER BY
+  function_schema,
+  function_name;</code></pre>
+      <div class="section-nav">
+        <a href="#extensions">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#fuzzystrmatch">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="fuzzystrmatch">
+      <div class="section-header">
+        <div><div class="section-num">Section 14</div><h2>fuzzystrmatch</h2></div>
+      </div>
+      <p class="search-item" data-search="fuzzystrmatch provides levenshtein soundex difference">The <span class="mono">fuzzystrmatch</span> extension provides <span class="mono">levenshtein()</span>, <span class="mono">soundex()</span>, and <span class="mono">difference()</span>.</p>
+      <table class="search-item" data-search="function comparison levenshtein soundex difference">
+        <thead><tr><th>Function</th><th>Main question</th><th>Direction</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">levenshtein()</span></td><td>how many edits apart?</td><td>lower is better</td></tr>
+          <tr><td><span class="mono">soundex()</span></td><td>do they share a sound code?</td><td>same code suggests similar sound</td></tr>
+          <tr><td><span class="mono">difference()</span></td><td>how similar are the Soundex codes?</td><td>higher is better</td></tr>
+        </tbody>
+      </table>
+      <pre class="search-item"><code>SELECT levenshtein('GUMBO', 'GAMBOL');</code></pre>
+      <p class="search-item" data-search="gumbo gambol levenshtein result 2 replace u with a add l">Observed result: <span class="mono">2</span> because one edit replaces <span class="mono">U</span> with <span class="mono">A</span> and one edit adds <span class="mono">L</span> to the end.</p>
+      <pre class="search-item"><code>SELECT levenshtein('hero', 'her0');</code></pre>
+      <pre class="search-item"><code>SELECT soundex('Shaun'), soundex('Shawn');</code></pre>
+      <pre class="search-item"><code>SELECT difference('Shaun', 'Shawn');</code></pre>
+      <div class="section-nav">
+        <a href="#extensions">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#levenshtein">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="levenshtein">
+      <div class="section-header">
+        <div><div class="section-num">Section 15</div><h2>levenshtein()</h2></div>
+      </div>
+      <p class="search-item" data-search="insertion deletion substitution exact match 0 lower is better thresholds typo candidates">Levenshtein distance measures insertions, deletions, and substitutions. Exact match is <span class="mono">0</span>. Lower is better.</p>
+      <pre class="search-item"><code>SELECT
+  levenshtein('cat', 'cat') AS exact_match,
+  levenshtein('cat', 'cut') AS one_letter_changed,
+  levenshtein('cat', 'cats') AS one_letter_added,
+  levenshtein('cat', 'dog') AS very_different;</code></pre>
+      <pre class="search-item"><code>SELECT levenshtein('GUMBO', 'GAMBOL');</code></pre>
+      <p class="search-item" data-search="levenshtein distance number of edits lower is better 0 exact match gumbo gambol 2">Levenshtein distance = number of edits needed to make the strings match. Lower is better. <span class="mono">0</span> means exact match.</p>
+      <pre class="search-item"><code>SELECT
+  levenshtein(
+    'POSTGRES HERO',
+    'POSTGRES HER0'
+  ) AS edit_distance;</code></pre>
+      <pre class="search-item"><code>SELECT
+  film_id,
+  title,
+  levenshtein(
+    title,
+    'POSTGRES HEROES'
+  ) AS title_distance
+FROM lab_films
+WHERE levenshtein(
+        title,
+        'POSTGRES HEROES'
+      ) &lt;= 3
+ORDER BY title_distance, film_id;</code></pre>
+      <pre class="search-item"><code>WITH title_distances AS (
+  SELECT
+    film_id,
+    title,
+    levenshtein(
+      title,
+      'POSTGRES HEROES'
+    ) AS title_distance
+  FROM lab_films
+)
+SELECT
+  film_id,
+  title,
+  title_distance,
+  CASE
+    WHEN title_distance = 0 THEN 'Exact'
+    WHEN title_distance &lt;= 1 THEN 'Very close'
+    WHEN title_distance &lt;= 3 THEN 'Close'
+    ELSE 'Too far'
+  END AS threshold_label
+FROM title_distances
+ORDER BY title_distance, film_id;</code></pre>
+      <pre class="search-item"><code>SELECT levenshtein('POSTGRES', 'POSTGRES');</code></pre>
+      <pre class="search-item"><code>SELECT levenshtein('POSTGRES', 'POSTGERS');</code></pre>
+      <pre class="search-item"><code>SELECT levenshtein('POSTGRES HERO', 'POSTGRES HEROES');</code></pre>
+      <div class="callout search-item" data-search="thresholds are business decisions short names long titles">
+        <strong>Threshold note</strong>
+        <p>Thresholds are business decisions. A good threshold for short names may be too strict or too loose for long titles.</p>
+      </div>
+      <div class="section-nav">
+        <a href="#fuzzystrmatch">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#soundex-difference">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="soundex-difference">
+      <div class="section-header">
+        <div><div class="section-num">Section 16</div><h2>soundex() and difference()</h2></div>
+      </div>
+      <p class="search-item" data-search="phonetic code pronunciation like matching english centric false positives difference scale 0 to 4">Use phonetic matching when pronunciation matters more than exact spelling, but remember this is English-centric and can produce false positives.</p>
+      <pre class="search-item"><code>SELECT
+  soundex('Smith') AS smith_soundex,
+  soundex('Smyth') AS smyth_soundex,
+  soundex('Robert') AS robert_soundex,
+  soundex('Rupert') AS rupert_soundex;</code></pre>
+      <pre class="search-item"><code>SELECT
+  difference('Smith', 'Smyth') AS smith_smyth_difference,
+  difference('Robert', 'Rupert') AS robert_rupert_difference,
+  difference('Smith', 'Robert') AS smith_robert_difference;</code></pre>
+      <pre class="search-item"><code>SELECT
+  customer_id,
+  first_name,
+  soundex(first_name) AS first_name_soundex,
+  difference(first_name, 'Shaun') AS sound_score
+FROM lab_customers
+ORDER BY sound_score DESC, customer_id;</code></pre>
+      <div class="diagram search-item" data-search="difference 4 strongest phonetic similarity 0 weakest">difference():
+4 = strongest phonetic similarity
+0 = weakest</div>
+      <pre class="search-item"><code>WITH name_scores AS (
+  SELECT
+    customer_id,
+    first_name,
+    difference(
+      first_name,
+      'Shaun'
+    ) AS sound_score,
+    levenshtein(
+      first_name,
+      'Shaun'
+    ) AS edit_distance
+  FROM lab_customers
+)
+SELECT
+  customer_id,
+  first_name,
+  sound_score,
+  edit_distance,
+  CASE
+    WHEN sound_score = 4
+         AND edit_distance &lt;= 2
+      THEN 'Strong fuzzy match'
+    WHEN sound_score &gt;= 3
+      THEN 'Possible sound match'
+    WHEN edit_distance &lt;= 2
+      THEN 'Possible typo match'
+    ELSE 'Not a good match'
+  END AS fuzzy_match_label
+FROM name_scores
+ORDER BY sound_score DESC,
+         edit_distance,
+         customer_id;</code></pre>
+      <pre class="search-item"><code>SELECT soundex('Hero') AS hero_soundex;</code></pre>
+      <pre class="search-item"><code>SELECT difference('Hero', 'Hiro') AS hero_hiro_difference;</code></pre>
+      <pre class="search-item"><code>SELECT difference('Smith', 'Robert') AS smith_robert_difference;</code></pre>
+      <div class="section-nav">
+        <a href="#levenshtein">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#pg-trgm">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="pg-trgm">
+      <div class="section-header">
+        <div><div class="section-num">Section 17</div><h2>pg_trgm</h2></div>
+      </div>
+      <p class="search-item" data-search="pg_trgm breaks strings into overlapping character trigrams approximate text similarity typo tolerant search">pg_trgm breaks strings into overlapping character trigrams. It is useful for approximate text similarity and typo-tolerant search.</p>
+      <p class="search-item" data-search="trigram groups of three characters similarity 0 to 1 higher is better gumbo gambol">A trigram is an overlapping group of three characters. <span class="mono">similarity()</span> returns a score from <span class="mono">0</span> to <span class="mono">1</span>, where higher is better.</p>
+      <pre class="search-item"><code>CREATE EXTENSION IF NOT EXISTS pg_trgm;</code></pre>
+      <pre class="search-item"><code>SELECT similarity('GUMBO', 'GAMBOL');</code></pre>
+      <p class="search-item" data-search="similarity gumbo gambol 0.181818 observed result exact">Observed result: <span class="mono">0.181818</span>.</p>
+      <p class="search-item" data-search="similarity 0 no matching trigrams 1 perfect match higher better">A score of <span class="mono">0</span> means no matching trigrams. A score of <span class="mono">1</span> means perfect match. Higher similarity is better.</p>
+      <pre class="search-item"><code>SELECT show_limit();</code></pre>
+      <pre class="search-item"><code>SHOW pg_trgm.similarity_threshold;</code></pre>
+      <div class="diagram search-item" data-search="postgres contains overlapping 3 character pieces similarity compares shared trigrams">POSTGRES contains overlapping 3-character pieces.
+Similarity compares how many trigram pieces the strings share.</div>
+      <div class="section-nav">
+        <a href="#soundex-difference">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#similarity-threshold">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="similarity-threshold">
+      <div class="section-header">
+        <div><div class="section-num">Section 18</div><h2>similarity() and Thresholds</h2></div>
+      </div>
+      <p class="search-item" data-search="score from 0 to 1 higher is better manual filtering percent operator similarity threshold show_limit set_limit">Trigram similarity scores run from <span class="mono">0</span> to <span class="mono">1</span>. Higher is better. Exact or nearly exact strings usually score higher.</p>
+      <pre class="search-item"><code>SELECT
+  similarity(
+    'POSTGRES HERO',
+    'POSTGRES HER0'
+  ) AS hero_zero_similarity,
+  similarity(
+    'POSTGRES HERO',
+    'POSTGRES HEROES'
+  ) AS heroes_similarity,
+  similarity(
+    'POSTGRES HERO',
+    'ELF ADVENTURE'
+  ) AS elf_similarity;</code></pre>
+      <pre class="search-item"><code>SELECT
+  film_id,
+  title,
+  similarity(
+    title,
+    'POSTGRES HER0'
+  ) AS title_similarity
+FROM lab_films
+WHERE similarity(
+        title,
+        'POSTGRES HER0'
+      ) &gt;= 0.3
+ORDER BY title_similarity DESC,
+         film_id;</code></pre>
+      <pre class="search-item"><code>SELECT
+  film_id,
+  title,
+  similarity(
+    title,
+    'POSTGRES HER0'
+  ) AS title_similarity
+FROM lab_films
+WHERE title % 'POSTGRES HER0'
+ORDER BY title_similarity DESC,
+         film_id;</code></pre>
+      <pre class="search-item"><code>SHOW pg_trgm.similarity_threshold;</code></pre>
+      <pre class="search-item"><code>SELECT show_limit();</code></pre>
+      <pre class="search-item"><code>SELECT set_limit(0.8);
+SELECT set_limit(0.3);</code></pre>
+      <pre class="search-item"><code>SELECT
+  similarity('POSTGRES HERO', 'POSTGRES HER0') AS close_score;</code></pre>
+      <pre class="search-item"><code>SELECT
+  similarity('POSTGRES HERO', 'ELF ADVENTURE') AS far_score;</code></pre>
+      <div class="callout search-item" data-search="title percent search_text means similarity passes current threshold changing threshold changes rows pass not score">
+        <strong>Threshold warning</strong>
+        <p><span class="mono">title % search_text</span> means <span class="mono">similarity(title, search_text)</span> passes the current pg_trgm threshold. Changing the threshold changes which rows pass the <span class="mono">%</span> operator. It does not change the <span class="mono">similarity()</span> score itself.</p>
+      </div>
+      <div class="section-nav">
+        <a href="#pg-trgm">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#word-similarity">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="word-similarity">
+      <div class="section-header">
+        <div><div class="section-num">Section 19</div><h2>word_similarity()</h2></div>
+      </div>
+      <p class="search-item" data-search="phrase inside longer sentence compares best continuous extent higher is better extra surrounding words">Use <span class="mono">word_similarity()</span> when a matching phrase may appear inside longer text. It compares against the best matching continuous extent in the other text.</p>
+      <pre class="search-item"><code>SELECT
+  similarity(
+    'POSTGRES HERO',
+    'please find POSTGRES HER0 for me'
+  ) AS regular_similarity,
+  word_similarity(
+    'POSTGRES HERO',
+    'please find POSTGRES HER0 for me'
+  ) AS word_similarity_score;</code></pre>
+      <pre class="search-item"><code>SELECT
+  film_id,
+  title,
+  word_similarity(
+    title,
+    'please find POSTGRES HER0 for me'
+  ) AS word_score
+FROM lab_films
+WHERE word_similarity(
+        title,
+        'please find POSTGRES HER0 for me'
+      ) &gt;= 0.3
+ORDER BY word_score DESC,
+         film_id;</code></pre>
+      <pre class="search-item"><code>SELECT
+  word_similarity('POSTGRES HERO', 'POSTGRES HER0') AS short_phrase_score;</code></pre>
+      <pre class="search-item"><code>SELECT
+  word_similarity('POSTGRES HERO', 'please find POSTGRES HER0 for me') AS sentence_score;</code></pre>
+      <div class="callout search-item" data-search="similarity whole strings word_similarity better when matching phrase appears inside longer text">
+        <strong>Whole string vs longer sentence</strong>
+        <p><span class="mono">similarity()</span> compares whole strings. <span class="mono">word_similarity()</span> is better when the matching phrase appears inside longer text.</p>
+      </div>
+      <div class="section-nav">
+        <a href="#similarity-threshold">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#trigram-distance">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="trigram-distance">
+      <div class="section-header">
+        <div><div class="section-num">Section 20</div><h2>Trigram Distance</h2></div>
+      </div>
+      <p class="search-item" data-search="distance operator less than dash greater than lower is better exact match 0 ordering ascending candidate ranking">The <span class="mono">&lt;-&gt;</span> operator is trigram distance. Lower is better. Exact match distance is <span class="mono">0</span>.</p>
+      <pre class="search-item"><code>SELECT
+  title,
+  similarity(
+    title,
+    'POSTGRES HER0'
+  ) AS similarity_score,
+  title &lt;-&gt; 'POSTGRES HER0'
+    AS trigram_distance
+FROM lab_films
+ORDER BY trigram_distance ASC,
+         title;</code></pre>
+      <pre class="search-item"><code>SELECT
+  title,
+  title &lt;-&gt; 'POSTGRES HER0'
+    AS trigram_distance
+FROM lab_films
+WHERE title % 'POSTGRES HER0'
+ORDER BY trigram_distance ASC;</code></pre>
+      <pre class="search-item"><code>SELECT
+  'POSTGRES HERO' &lt;-&gt; 'POSTGRES HER0' AS close_distance;</code></pre>
+      <pre class="search-item"><code>SELECT
+  'POSTGRES HERO' &lt;-&gt; 'ELF ADVENTURE' AS far_distance;</code></pre>
+      <div class="diagram search-item" data-search="similarity higher is better distance lower is better">similarity(): higher is better
+distance &lt;-&gt;: lower is better</div>
+      <div class="section-nav">
+        <a href="#word-similarity">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#search-strategy">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="search-strategy">
+      <div class="section-header">
+        <div><div class="section-num">Section 21</div><h2>Search Strategy Guide</h2></div>
+      </div>
+      <table class="search-item" data-search="decision oriented search strategy exact code starts with known prefix case insensitive fragment word based document search typo count needed similar pronunciation approximate phrase similarity phrase inside longer sentence rank fuzzy candidates">
+        <thead><tr><th>Situation</th><th>Best starting tool</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>exact code</td><td><span class="mono">=</span></td><td>precise equality</td></tr>
+          <tr><td>starts with known prefix</td><td><span class="mono">LIKE 'ABC%'</span></td><td>simple character pattern</td></tr>
+          <tr><td>case-insensitive fragment</td><td><span class="mono">ILIKE '%abc%'</span></td><td>case-insensitive character search</td></tr>
+          <tr><td>word-based document search</td><td>full-text search</td><td>stemming and word logic</td></tr>
+          <tr><td>typo count needed</td><td><span class="mono">levenshtein()</span></td><td>exact edit count</td></tr>
+          <tr><td>similar pronunciation</td><td><span class="mono">soundex()</span> / <span class="mono">difference()</span></td><td>phonetic matching</td></tr>
+          <tr><td>approximate phrase similarity</td><td><span class="mono">similarity()</span></td><td>trigram score</td></tr>
+          <tr><td>phrase inside longer sentence</td><td><span class="mono">word_similarity()</span></td><td>best matching extent</td></tr>
+          <tr><td>rank fuzzy candidates</td><td><span class="mono">&lt;-&gt;</span></td><td>distance ordering</td></tr>
+          <tr><td>discover installable extensions</td><td><span class="mono">pg_available_extensions</span></td><td>what can be enabled here</td></tr>
+          <tr><td>inspect enabled extensions</td><td><span class="mono">pg_extension</span></td><td>what is installed now</td></tr>
+          <tr><td>safely enable fuzzystrmatch</td><td><span class="mono">CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;</span></td><td>rerunnable setup</td></tr>
+          <tr><td>verify that fuzzystrmatch was installed</td><td><span class="mono">SELECT extname FROM pg_extension;</span></td><td>confirm enabled extensions</td></tr>
+          <tr><td>calculate GUMBO/GAMBOL edit distance</td><td><span class="mono">levenshtein('GUMBO', 'GAMBOL')</span></td><td>returns <span class="mono">2</span></td></tr>
+          <tr><td>calculate GUMBO/GAMBOL trigram similarity</td><td><span class="mono">similarity('GUMBO', 'GAMBOL')</span></td><td>returns <span class="mono">0.181818</span></td></tr>
+          <tr><td>distinguish available from installed extensions</td><td><span class="mono">pg_available_extensions</span> vs <span class="mono">pg_extension</span></td><td>can install vs already installed</td></tr>
+          <tr><td>identify what PostGIS is for</td><td><span class="mono">PostGIS</span></td><td>spatial and location queries</td></tr>
+          <tr><td>identify what PostPic is for</td><td><span class="mono">PostPic</span></td><td>image processing inside PostgreSQL</td></tr>
+        </tbody>
+      </table>
+      <div class="card search-item" data-search="do i need exact characters or linguistic words typo tolerance pronunciation similarity score true false search short phrase inside longer text ranking">
+        <h3>Decision questions</h3>
+        <ul class="tight-list">
+          <li>Do I need exact characters or linguistic words?</li>
+          <li>Do I need typo tolerance?</li>
+          <li>Do I need pronunciation similarity?</li>
+          <li>Do I need a score or only true/false?</li>
+          <li>Do I need to search a short phrase inside longer text?</li>
+          <li>Do I need ranking?</li>
+        </ul>
+      </div>
+      <div class="section-nav">
+        <a href="#trigram-distance">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#combined-examples">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="combined-examples">
+      <div class="section-header">
+        <div><div class="section-num">Section 22</div><h2>Combined Examples</h2></div>
+      </div>
+      <div class="card search-item" data-search="micro example bank extra sql examples like ilike tsvector tsquery similarity word similarity distance">
+        <h3>Micro Example Bank</h3>
+        <p><strong>Purpose:</strong> Keep one place with tiny reusable Chapter 4 syntax reminders.</p>
+        <pre><code>SELECT * FROM lab_films WHERE title LIKE 'POSTGRES%';</code></pre>
+        <pre><code>SELECT * FROM lab_films WHERE title LIKE '%HERO';</code></pre>
+        <pre><code>SELECT * FROM lab_films WHERE title LIKE '%GRES%';</code></pre>
+        <pre><code>SELECT * FROM lab_films WHERE title ILIKE '%postgres%';</code></pre>
+        <pre><code>SELECT * FROM lab_films WHERE title LIKE 'POSTGRES HER_';</code></pre>
+        <pre><code>SELECT to_tsvector('english', title) FROM lab_films;</code></pre>
+        <pre><code>SELECT to_tsvector('english', description) FROM lab_films;</code></pre>
+        <pre><code>SELECT to_tsquery('english', 'elf');</code></pre>
+        <pre><code>SELECT to_tsquery('english', 'elf &amp; adventure');</code></pre>
+        <pre><code>SELECT to_tsquery('english', 'elf | postgres');</code></pre>
+        <pre><code>SELECT to_tsquery('english', 'elf &amp; !winter');</code></pre>
+        <pre><code>SELECT plainto_tsquery('english', 'postgres database');</code></pre>
+        <pre><code>SELECT plainto_tsquery('english', 'the postgres database');</code></pre>
+        <pre><code>SELECT plainto_tsquery('english', 'elves');</code></pre>
+        <pre><code>SELECT to_tsquery('english', 'el:*');</code></pre>
+        <pre><code>CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;</code></pre>
+        <pre><code>CREATE EXTENSION IF NOT EXISTS pg_trgm;</code></pre>
+        <pre><code>SELECT levenshtein('cat', 'cut');</code></pre>
+        <pre><code>SELECT levenshtein('POSTGRES HERO', 'POSTGRES HER0');</code></pre>
+        <pre><code>SELECT soundex('Smith');</code></pre>
+        <pre><code>SELECT soundex('Smyth');</code></pre>
+        <pre><code>SELECT difference('Smith', 'Smyth');</code></pre>
+        <pre><code>SELECT difference('Hero', 'Hiro');</code></pre>
+        <pre><code>SELECT similarity('POSTGRES HERO', 'POSTGRES HER0');</code></pre>
+        <pre><code>SELECT similarity('POSTGRES HERO', 'ELF ADVENTURE');</code></pre>
+        <pre><code>SELECT show_limit();</code></pre>
+        <pre><code>SHOW pg_trgm.similarity_threshold;</code></pre>
+        <pre><code>SELECT set_limit(0.8);</code></pre>
+        <pre><code>SELECT set_limit(0.3);</code></pre>
+        <pre><code>SELECT word_similarity('POSTGRES HERO', 'please find POSTGRES HER0 for me');</code></pre>
+        <pre><code>SELECT 'POSTGRES HERO' &lt;-&gt; 'POSTGRES HER0';</code></pre>
+        <pre><code>SELECT 'POSTGRES HERO' &lt;-&gt; 'ELF ADVENTURE';</code></pre>
+      </div>
+      <div class="cards-2">
+        <div class="card search-item" data-search="example 1 case insensitive title fragment search">
+          <h3>Example 1: Case-insensitive title fragment search</h3>
+          <p><strong>Business question:</strong> How do I find titles containing postgres regardless of case?</p>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE title ILIKE '%postgres%';</code></pre>
+          <p><strong>What to notice:</strong> Best for character fragments, not linguistic word search.</p>
+          <p><strong>Likely mistake:</strong> Expecting stemming or typo tolerance.</p>
+        </div>
+        <div class="card search-item" data-search="example 2 full text description search">
+          <h3>Example 2: Full-text description search</h3>
+          <p><strong>Business question:</strong> How do I search descriptions for the word elf as a word token?</p>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf');</code></pre>
+          <p><strong>What to notice:</strong> Word-based matching is different from substring matching.</p>
+          <p><strong>Likely mistake:</strong> Reaching for LIKE when word logic matters.</p>
+        </div>
+        <div class="card search-item" data-search="example 3 combined title and description search">
+          <h3>Example 3: Combined title and description search</h3>
+          <p><strong>Business question:</strong> How do I search both title and description at once?</p>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE to_tsvector(
+        'english',
+        title || ' ' || description
+      )
+      @@ to_tsquery('english', 'postgres');</code></pre>
+          <p><strong>What to notice:</strong> Build one searchable document from multiple fields.</p>
+          <p><strong>Likely mistake:</strong> Searching only one column and missing matches.</p>
+        </div>
+        <div class="card search-item" data-search="example 4 plain user word search">
+          <h3>Example 4: Plain user-word search</h3>
+          <p><strong>Business question:</strong> How do I search a normal user phrase safely?</p>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE to_tsvector(
+        'english',
+        title || ' ' || description
+      )
+      @@ plainto_tsquery(
+        'english',
+        'postgres database'
+      );</code></pre>
+          <p><strong>What to notice:</strong> plainto_tsquery handles plain words.</p>
+          <p><strong>Likely mistake:</strong> Feeding raw sentences straight into to_tsquery.</p>
+        </div>
+        <div class="card search-item" data-search="example 5 boolean and search">
+          <h3>Example 5: Boolean AND search</h3>
+          <p><strong>Business question:</strong> How do I require two words?</p>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf &amp; adventure');</code></pre>
+          <p><strong>What to notice:</strong> Both lexemes must match.</p>
+          <p><strong>Likely mistake:</strong> Writing plain English AND instead of <span class="mono">&amp;</span>.</p>
+        </div>
+        <div class="card search-item" data-search="example 6 stemming surprise">
+          <h3>Example 6: Stemming surprise</h3>
+          <p><strong>Business question:</strong> Why do elf and elves not always behave the same?</p>
+          <pre><code>SELECT
+  plainto_tsquery('english', 'elf') AS elf_query,
+  plainto_tsquery('english', 'elves') AS elves_query;</code></pre>
+          <p><strong>What to notice:</strong> Related words may normalize differently.</p>
+          <p><strong>Likely mistake:</strong> Assuming human-related words always share one lexeme.</p>
+        </div>
+        <div class="card search-item" data-search="example 7 prefix full text search">
+          <h3>Example 7: Prefix full-text search</h3>
+          <p><strong>Business question:</strong> How do I search a lexeme prefix?</p>
+          <pre><code>SELECT *
+FROM lab_films
+WHERE to_tsvector(
+        'english',
+        title || ' ' || description
+      )
+      @@ to_tsquery(
+        'english',
+        'el:*'
+      );</code></pre>
+          <p><strong>What to notice:</strong> Prefix search uses lexeme logic, not raw characters.</p>
+          <p><strong>Likely mistake:</strong> Treating it like LIKE prefix matching.</p>
+        </div>
+        <div class="card search-item" data-search="example 8 levenshtein typo filter">
+          <h3>Example 8: Levenshtein typo filter</h3>
+          <p><strong>Business question:</strong> Which titles are within three edits of POSTGRES HEROES?</p>
+          <pre><code>SELECT
+  film_id,
+  title,
+  levenshtein(title, 'POSTGRES HEROES') AS title_distance
+FROM lab_films
+WHERE levenshtein(title, 'POSTGRES HEROES') &lt;= 3
+ORDER BY title_distance, film_id;</code></pre>
+          <p><strong>What to notice:</strong> Lower edit count means closer match.</p>
+          <p><strong>Likely mistake:</strong> Using one cutoff blindly for every text length.</p>
+        </div>
+        <div class="card search-item" data-search="example 9 soundex name candidates">
+          <h3>Example 9: Soundex name candidates</h3>
+          <p><strong>Business question:</strong> Which customer names sound like Shaun?</p>
+          <pre><code>SELECT
+  customer_id,
+  first_name,
+  soundex(first_name) AS first_name_soundex,
+  difference(first_name, 'Shaun') AS sound_score
+FROM lab_customers
+ORDER BY sound_score DESC, customer_id;</code></pre>
+          <p><strong>What to notice:</strong> difference score is higher when sound is closer.</p>
+          <p><strong>Likely mistake:</strong> Reading difference like edit distance.</p>
+        </div>
+        <div class="card search-item" data-search="example 10 combined sound and edit score">
+          <h3>Example 10: Combined sound and edit score</h3>
+          <p><strong>Business question:</strong> How do I combine phonetic and typo scoring?</p>
+          <pre><code>WITH name_scores AS (
+  SELECT
+    customer_id,
+    first_name,
+    difference(first_name, 'Shaun') AS sound_score,
+    levenshtein(first_name, 'Shaun') AS edit_distance
+  FROM lab_customers
+)
+SELECT
+  customer_id,
+  first_name,
+  sound_score,
+  edit_distance
+FROM name_scores
+ORDER BY sound_score DESC, edit_distance, customer_id;</code></pre>
+          <p><strong>What to notice:</strong> Two weak fuzzy signals together can be stronger than one alone.</p>
+          <p><strong>Likely mistake:</strong> Trusting only one similarity family.</p>
+        </div>
+        <div class="card search-item" data-search="example 11 pg_trgm similarity threshold">
+          <h3>Example 11: pg_trgm similarity threshold</h3>
+          <p><strong>Business question:</strong> Which titles have a trigram similarity score of at least 0.3?</p>
+          <pre><code>SELECT
+  film_id,
+  title,
+  similarity(title, 'POSTGRES HER0') AS title_similarity
+FROM lab_films
+WHERE similarity(title, 'POSTGRES HER0') &gt;= 0.3
+ORDER BY title_similarity DESC, film_id;</code></pre>
+          <p><strong>What to notice:</strong> This is manual thresholding with explicit score output.</p>
+          <p><strong>Likely mistake:</strong> Confusing score filtering with the <span class="mono">%</span> operator.</p>
+        </div>
+        <div class="card search-item" data-search="example 12 percent operator search">
+          <h3>Example 12: % operator search</h3>
+          <p><strong>Business question:</strong> Which titles pass the current pg_trgm similarity threshold?</p>
+          <pre><code>SELECT
+  film_id,
+  title,
+  similarity(title, 'POSTGRES HER0') AS title_similarity
+FROM lab_films
+WHERE title % 'POSTGRES HER0'
+ORDER BY title_similarity DESC, film_id;</code></pre>
+          <p><strong>What to notice:</strong> Percent means pass/fail fuzzy threshold here.</p>
+          <p><strong>Likely mistake:</strong> Mixing it up with LIKE wildcard percent.</p>
+        </div>
+        <div class="card search-item" data-search="example 13 word similarity inside sentence">
+          <h3>Example 13: word_similarity inside sentence</h3>
+          <p><strong>Business question:</strong> How do I find a title inside a longer messy sentence?</p>
+          <pre><code>SELECT
+  film_id,
+  title,
+  word_similarity(
+    title,
+    'please find POSTGRES HER0 for me'
+  ) AS word_score
+FROM lab_films
+ORDER BY word_score DESC, film_id;</code></pre>
+          <p><strong>What to notice:</strong> Better for embedded phrase matching than whole-string similarity.</p>
+          <p><strong>Likely mistake:</strong> Expecting whole-string similarity to stay strong with extra surrounding words.</p>
+        </div>
+        <div class="card search-item" data-search="example 14 trigram distance ranking">
+          <h3>Example 14: Trigram distance ranking</h3>
+          <p><strong>Business question:</strong> How do I rank nearest fuzzy matches first?</p>
+          <pre><code>SELECT
+  title,
+  title &lt;-&gt; 'POSTGRES HER0' AS trigram_distance
+FROM lab_films
+WHERE title % 'POSTGRES HER0'
+ORDER BY trigram_distance ASC;</code></pre>
+          <p><strong>What to notice:</strong> Distance is the inverse direction from similarity.</p>
+          <p><strong>Likely mistake:</strong> Sorting descending and pushing worse matches to the top.</p>
+        </div>
+      </div>
+      <div class="section-nav">
+        <a href="#search-strategy">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#mistakes">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="mistakes">
+      <div class="section-header">
+        <div><div class="section-num">Section 23</div><h2>Common Mistakes</h2></div>
+      </div>
+      <table>
+        <thead><tr><th>Mistake</th><th>Why it happens</th><th>Correction</th><th>Memory line</th></tr></thead>
+        <tbody>
+          <tr class="search-item" data-search="expecting like to understand words"><td>Expecting LIKE to understand words</td><td>LIKE feels like generic search.</td><td>Use full-text search for word-aware linguistic matching.</td><td>LIKE is characters, not words.</td></tr>
+          <tr class="search-item" data-search="expecting like to ignore case"><td>Expecting LIKE to ignore case</td><td>Many people expect friendly search by default.</td><td>Use <span class="mono">ILIKE</span> for case-insensitive character matching.</td><td>LIKE cares about case.</td></tr>
+          <tr class="search-item" data-search="confusing like percent wildcard with pg_trgm percent operator"><td>Confusing LIKE <span class="mono">%</span> wildcard with pg_trgm <span class="mono">%</span> operator</td><td>Same symbol, different search family.</td><td>In LIKE, <span class="mono">%</span> means wildcard. In pg_trgm, <span class="mono">%</span> means passes threshold.</td><td>Same symbol, different meaning.</td></tr>
+          <tr class="search-item" data-search="expecting full text search to behave like substring search"><td>Expecting full-text search to behave like substring search</td><td>People assume search always works on raw visible characters.</td><td>Remember full-text search works on normalized lexemes.</td><td>Full-text is token logic.</td></tr>
+          <tr class="search-item" data-search="forgetting to build a tsvector"><td>Forgetting to build a <span class="mono">tsvector</span></td><td>People jump straight to words and WHERE clauses.</td><td>Build the searchable document with <span class="mono">to_tsvector()</span>.</td><td>No document, no match.</td></tr>
+          <tr class="search-item" data-search="forgetting to build a tsquery"><td>Forgetting to build a <span class="mono">tsquery</span></td><td>Words alone look search-like.</td><td>Use <span class="mono">to_tsquery()</span> or <span class="mono">plainto_tsquery()</span>.</td><td>No query, no full-text operator.</td></tr>
+          <tr class="search-item" data-search="reversing sides of @@"><td>Reversing the sides of <span class="mono">@@</span></td><td>Both sides look text-search related.</td><td>Keep document on left and query on right.</td><td>document @@ query</td></tr>
+          <tr class="search-item" data-search="using raw plain words directly in to_tsquery"><td>Using raw plain words directly in <span class="mono">to_tsquery()</span></td><td>It looks like a generic input function.</td><td>Use <span class="mono">plainto_tsquery()</span> for plain user text.</td><td>Structured vs plain input.</td></tr>
+          <tr class="search-item" data-search="confusing plainto_tsquery with to_tsquery"><td>Confusing <span class="mono">plainto_tsquery()</span> with <span class="mono">to_tsquery()</span></td><td>The names are similar.</td><td>Use <span class="mono">plainto_tsquery()</span> for plain words and <span class="mono">to_tsquery()</span> for manual operator syntax.</td><td>plain words vs manual query syntax</td></tr>
+          <tr class="search-item" data-search="forgetting full text boolean symbols"><td>Forgetting full-text boolean symbols</td><td>People write AND, OR, NOT like English.</td><td>Use <span class="mono">&amp;</span>, <span class="mono">|</span>, and <span class="mono">!</span>.</td><td>Full-text has its own symbols.</td></tr>
+          <tr class="search-item" data-search="assuming stemming always matches related words"><td>Assuming stemming always matches related words</td><td>Human intuition expects related words to collapse together.</td><td>Inspect actual query/vector output when it matters.</td><td>Trust, then inspect lexemes.</td></tr>
+          <tr class="search-item" data-search="confusing prefix lexeme search with like prefix search"><td>Confusing prefix lexeme search with LIKE prefix search</td><td>Both feel like starts-with logic.</td><td><span class="mono">el:*</span> is lexeme prefix search, not raw character prefix search.</td><td>Lexeme prefix is not string prefix.</td></tr>
+          <tr class="search-item" data-search="forgetting create extension"><td>Forgetting <span class="mono">CREATE EXTENSION</span></td><td>Function names look built-in.</td><td>Enable the extension first.</td><td>No extension, no extension functions.</td></tr>
+          <tr class="search-item" data-search="describing video example with language sql only"><td>Describing the video example with <span class="mono">LANGUAGE SQL</span> only</td><td>A simple SQL body looks shorter and easier to remember.</td><td>The video's <span class="mono">squared()</span> example is written with <span class="mono">LANGUAGE plpgsql</span>.</td><td>Video function = PL/pgSQL first.</td></tr>
+          <tr class="search-item" data-search="forgetting begin return end semicolon in plpgsql function"><td>Forgetting <span class="mono">BEGIN</span>, <span class="mono">RETURN</span>, <span class="mono">END;</span>, or the final internal semicolon</td><td>Single-query functions make procedural structure easy to skip mentally.</td><td>The PL/pgSQL version needs the full block structure inside the dollar-quoted body.</td><td>BEGIN, RETURN, END, semicolon.</td></tr>
+          <tr class="search-item" data-search="confusing dollar quoting with language selection"><td>Confusing dollar quoting with language selection</td><td>Both appear in the function definition and can blur together.</td><td><span class="mono">$$ ... $$</span> marks the body boundaries; <span class="mono">LANGUAGE ...</span> tells PostgreSQL how to interpret it.</td><td>Delimiter first, language second.</td></tr>
+          <tr class="search-item" data-search="inventing sakila helper function argument counts"><td>Inventing Sakila helper-function argument counts</td><td>Helper names sound descriptive enough to guess from.</td><td>Inspect the live database with <span class="mono">information_schema.routines</span> and <span class="mono">pg_get_function_identity_arguments()</span> first.</td><td>Inspect signatures before calling.</td></tr>
+          <tr class="search-item" data-search="thinking function and procedure are identical"><td>Thinking function and procedure are identical</td><td>Both sound like reusable database logic.</td><td>Remember this course block focuses on functions that return values and can be called in queries.</td><td>Function returns a value.</td></tr>
+          <tr class="search-item" data-search="thinking information_schema routines and pg_proc are duplicates"><td>Assuming <span class="mono">information_schema.routines</span> and <span class="mono">pg_proc</span> are interchangeable duplicates</td><td>Both expose routine metadata.</td><td>Use <span class="mono">information_schema.routines</span> for portable discovery and <span class="mono">pg_proc</span> for PostgreSQL-native detail.</td><td>Portable view vs native catalog.</td></tr>
+          <tr class="search-item" data-search="ignoring routine schema when searching functions"><td>Ignoring routine schema when searching for functions</td><td>Function names look unique enough by themselves.</td><td>Inspect schema too, especially when searching Sakila helper functions.</td><td>Schema names disambiguate routines.</td></tr>
+          <tr class="search-item" data-search="assuming extension is server wide only"><td>Assuming extension is server-wide only</td><td>People hear installed and think global only.</td><td>Remember the extension is enabled in the current database.</td><td>Installed in database, not magic everywhere.</td></tr>
+          <tr class="search-item" data-search="confusing database level installation with schema placement"><td>Confusing database-level installation with schema placement</td><td>Enablement and object location sound like one thing.</td><td>The database gets the extension, and the objects live in a schema.</td><td>Database enablement, schema location.</td></tr>
+          <tr class="search-item" data-search="treating available extensions as already installed"><td>Treating available extensions as already installed</td><td>The word available sounds like ready to use.</td><td><span class="mono">pg_available_extensions</span> means the extension can be enabled, not that it already is.</td><td>Available is not installed.</td></tr>
+          <tr class="search-item" data-search="confusing pg_available_extensions with pg_extension"><td>Confusing <span class="mono">pg_available_extensions</span> with <span class="mono">pg_extension</span></td><td>Both tables list extension names.</td><td>Use <span class="mono">pg_available_extensions</span> for installable options and <span class="mono">pg_extension</span> for enabled extensions.</td><td>Can install vs installed now.</td></tr>
+          <tr class="search-item" data-search="omitting if not exists during repeat extension setup"><td>Omitting <span class="mono">IF NOT EXISTS</span> during repeat setup</td><td>One-time setup commands look safe to rerun by default.</td><td>Use <span class="mono">CREATE EXTENSION IF NOT EXISTS ...</span> for rerunnable setup.</td><td>Safe setup should rerun cleanly.</td></tr>
+          <tr class="search-item" data-search="ignoring search_path"><td>Ignoring <span class="mono">search_path</span></td><td>Functions often work until schema placement changes.</td><td>Check search_path or use schema-qualified calls when needed.</td><td>Path controls visibility.</td></tr>
+          <tr class="search-item" data-search="treating levenshtein higher as better"><td>Treating Levenshtein higher as better</td><td>Many scoring systems reward bigger values.</td><td>Lower distance is better; exact match is <span class="mono">0</span>.</td><td>Distance down is good.</td></tr>
+          <tr class="search-item" data-search="reading similarity lower as better"><td>Reading similarity lower as better</td><td>Distance and similarity families can blur together.</td><td>Higher trigram similarity is better. Lower trigram distance is better.</td><td>Similarity up, distance down.</td></tr>
+          <tr class="search-item" data-search="assuming every postgresql installation includes same extensions"><td>Assuming every PostgreSQL installation includes the same extensions</td><td>Tutorial examples can make extension availability look universal.</td><td>Check <span class="mono">pg_available_extensions</span> in the current installation.</td><td>Extension availability depends on the installation.</td></tr>
+          <tr class="search-item" data-search="assuming postgis and pg_trgm solve same problem"><td>Assuming PostGIS and pg_trgm solve the same problem</td><td>Both are add-on extensions.</td><td>PostGIS is for spatial work. pg_trgm is for trigram text similarity.</td><td>One is spatial; one is text similarity.</td></tr>
+          <tr class="search-item" data-search="using one threshold for every string length"><td>Using one threshold for every string length</td><td>People want one reusable cutoff.</td><td>Tune thresholds by text length and false-positive risk.</td><td>Thresholds are business choices.</td></tr>
+          <tr class="search-item" data-search="treating soundex as exact spelling similarity"><td>Treating Soundex as exact spelling similarity</td><td>Both compare strings, so they feel interchangeable.</td><td>Soundex is phonetic, not letter-by-letter.</td><td>Sound code, not spelling code.</td></tr>
+          <tr class="search-item" data-search="assuming soundex works equally well for every language"><td>Assuming Soundex works equally well for every language</td><td>Phonetic systems feel universal.</td><td>Treat it as English-centric and validate real data.</td><td>Phonetics are language-shaped.</td></tr>
+          <tr class="search-item" data-search="forgetting difference range is 0 to 4"><td>Forgetting <span class="mono">difference()</span> range is 0 to 4</td><td>People expect bigger arbitrary numbers.</td><td>Read the score on its own scale: 4 strongest, 0 weakest.</td><td>difference lives on 0..4</td></tr>
+          <tr class="search-item" data-search="treating similarity lower as better"><td>Treating similarity lower as better</td><td>Distance and similarity are easy to mix up.</td><td>Higher trigram similarity is better.</td><td>Similarity up is good.</td></tr>
+          <tr class="search-item" data-search="thinking percent is percent math"><td>Thinking <span class="mono">%</span> is percent math</td><td>The symbol looks familiar from arithmetic and LIKE.</td><td>In pg_trgm, it means passes similarity threshold.</td><td>Percent here is fuzzy pass/fail.</td></tr>
+          <tr class="search-item" data-search="changing set_limit and forgetting to restore it"><td>Changing <span class="mono">set_limit()</span> and forgetting to restore it</td><td>Threshold experiments are easy to leave behind.</td><td>Reset the session threshold after tests.</td><td>Always clean up session tuning.</td></tr>
+          <tr class="search-item" data-search="assuming percent changes similarity score"><td>Assuming <span class="mono">%</span> changes the similarity score</td><td>Threshold filtering and scoring happen in the same area.</td><td>Threshold changes pass/fail behavior, not <span class="mono">similarity()</span> output.</td><td>Filter changes, score stays.</td></tr>
+          <tr class="search-item" data-search="confusing similarity with word_similarity"><td>Confusing <span class="mono">similarity()</span> with <span class="mono">word_similarity()</span></td><td>They look like near-duplicates.</td><td>Use similarity for whole strings and word_similarity for phrase-in-sentence matching.</td><td>Whole string vs embedded phrase.</td></tr>
+          <tr class="search-item" data-search="sorting distance descending"><td>Sorting <span class="mono">&lt;-&gt;</span> descending</td><td>People copy the descending pattern from score sorting.</td><td>Sort ascending because lower distance is better.</td><td>Distance goes up in the wrong direction.</td></tr>
+          <tr class="search-item" data-search="pasting psql result output back into the sql prompt"><td>Pasting psql result output back into the SQL prompt</td><td>Results and commands can blur together during live work.</td><td>Paste only SQL, or comment explanatory text first.</td><td>Only SQL belongs at the prompt.</td></tr>
+          <tr class="search-item" data-search="using conceptual table names without adapting them"><td>Using conceptual table names without adapting them</td><td>Examples often teach patterns with simplified names.</td><td>Replace conceptual names with the actual course tables before execution.</td><td>Concept first, table second.</td></tr>
+        </tbody>
+      </table>
+      <div class="section-nav">
+        <a href="#combined-examples">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#interview-qa">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="interview-qa">
+      <div class="section-header">
+        <div><div class="section-num">Section 24</div><h2>Interview Q&amp;A</h2></div>
+      </div>
+      <div class="qa-grid">
+        <div class="qa-card search-item" data-search="like versus ilike interview"><h3>LIKE versus ILIKE?</h3><p>LIKE is case-sensitive character-pattern matching. ILIKE is case-insensitive character-pattern matching.</p></div>
+        <div class="qa-card search-item" data-search="like versus full text search interview"><h3>LIKE versus full-text search?</h3><p>LIKE works on raw character patterns. Full-text search works on normalized word tokens and lexemes.</p></div>
+        <div class="qa-card search-item" data-search="what to_tsvector does interview"><h3>What does to_tsvector do?</h3><p>It turns text into a searchable document of normalized lexemes with position information.</p></div>
+        <div class="qa-card search-item" data-search="what to_tsquery does interview"><h3>What does to_tsquery do?</h3><p>It builds a structured full-text query using lexemes and operators such as AND, OR, and NOT.</p></div>
+        <div class="qa-card search-item" data-search="what plainto_tsquery does interview"><h3>What does plainto_tsquery do?</h3><p>It converts plain user-style words into a valid full-text query.</p></div>
+        <div class="qa-card search-item" data-search="what @@ means interview"><h3>What does @@ mean?</h3><p>It means a searchable document matches a full-text query.</p></div>
+        <div class="qa-card search-item" data-search="full text and or not interview"><h3>How do full-text AND, OR, and NOT work?</h3><p>Use <span class="mono">&amp;</span> for AND, <span class="mono">|</span> for OR, and <span class="mono">!</span> for NOT.</p></div>
+        <div class="qa-card search-item" data-search="what a lexeme is interview"><h3>What is a lexeme?</h3><p>It is PostgreSQL's normalized searchable word form used by full-text search.</p></div>
+        <div class="qa-card search-item" data-search="what stemming means interview"><h3>What does stemming mean?</h3><p>It means normalizing related word forms toward a base searchable form.</p></div>
+        <div class="qa-card search-item" data-search="why elf and elves may normalize differently interview"><h3>Why might elf and elves normalize differently?</h3><p>Because stemming is dictionary-driven and does not guarantee every human-related word form maps the way you expect.</p></div>
+        <div class="qa-card search-item" data-search="what colon star means interview"><h3>What does <span class="mono">:*</span> mean?</h3><p>It means lexeme-prefix search in a full-text query.</p></div>
+        <div class="qa-card search-item" data-search="what is a postgresql extension interview"><h3>What is a PostgreSQL extension?</h3><p>It is a packaged set of database capabilities that can be enabled in a PostgreSQL database.</p></div>
+        <div class="qa-card search-item" data-search="what pg_available_extensions shows interview"><h3>What does <span class="mono">pg_available_extensions</span> show?</h3><p>It shows extensions this PostgreSQL installation knows how to install.</p></div>
+        <div class="qa-card search-item" data-search="what pg_extension shows interview"><h3>What does <span class="mono">pg_extension</span> show?</h3><p>It shows extensions already enabled in the current database.</p></div>
+        <div class="qa-card search-item" data-search="available versus installed extensions interview"><h3>Available versus installed extensions?</h3><p>Available means the extension can be enabled. Installed means it is already enabled in the current database.</p></div>
+        <div class="qa-card search-item" data-search="why use if not exists create extension interview"><h3>Why use <span class="mono">IF NOT EXISTS</span>?</h3><p>It lets setup be rerun without throwing an error when the extension is already enabled.</p></div>
+        <div class="qa-card search-item" data-search="what does postgis add interview"><h3>What does PostGIS add?</h3><p>It adds spatial and location-query support inside PostgreSQL.</p></div>
+        <div class="qa-card search-item" data-search="what does postpic add interview"><h3>What does PostPic add?</h3><p>It adds image-processing capabilities inside PostgreSQL.</p></div>
+        <div class="qa-card search-item" data-search="what does fuzzystrmatch add interview"><h3>What does fuzzystrmatch add?</h3><p>It adds edit-distance and phonetic string-comparison helpers such as <span class="mono">levenshtein()</span>, <span class="mono">soundex()</span>, and <span class="mono">difference()</span>.</p></div>
+        <div class="qa-card search-item" data-search="what does pg_trgm add interview"><h3>What does pg_trgm add?</h3><p>It adds trigram-based fuzzy string similarity, threshold matching, and distance ranking.</p></div>
+        <div class="qa-card search-item" data-search="where extensions are installed interview"><h3>Where are extensions installed?</h3><p>They are enabled in the current database.</p></div>
+        <div class="qa-card search-item" data-search="where extension objects live interview"><h3>Where do extension objects live?</h3><p>They live in a schema, which may matter for search_path or schema-qualified calls.</p></div>
+        <div class="qa-card search-item" data-search="what language does video use squared plpgsql interview"><h3>What language does the video use for <span class="mono">squared()</span>?</h3><p>The video uses <span class="mono">LANGUAGE plpgsql</span> with a <span class="mono">BEGIN ... END</span> block and an explicit <span class="mono">RETURN</span>.</p></div>
+        <div class="qa-card search-item" data-search="what create function does interview"><h3>What does <span class="mono">CREATE FUNCTION</span> do?</h3><p>It creates a named reusable routine with parameters, a return type, a body, and a declared language.</p></div>
+        <div class="qa-card search-item" data-search="what begin does plpgsql interview"><h3>What does <span class="mono">BEGIN</span> do in the video example?</h3><p>It starts the procedural body of the <span class="mono">plpgsql</span> function.</p></div>
+        <div class="qa-card search-item" data-search="what return does in function interview"><h3>What does <span class="mono">RETURN</span> do?</h3><p>It sends the computed result back to the caller using the declared return type.</p></div>
+        <div class="qa-card search-item" data-search="what end does in plpgsql interview"><h3>What does <span class="mono">END</span> do?</h3><p>It closes the procedural block that started with <span class="mono">BEGIN</span>.</p></div>
+        <div class="qa-card search-item" data-search="what language plpgsql means interview"><h3>What does <span class="mono">LANGUAGE plpgsql</span> mean?</h3><p>It tells PostgreSQL to interpret the body using its procedural language rather than plain SQL only.</p></div>
+        <div class="qa-card search-item" data-search="why dollar quoting in function body interview"><h3>Why use dollar quoting in a function body?</h3><p>It keeps the function body readable by avoiding awkward quote escaping; it is a delimiter choice, not the language choice.</p></div>
+        <div class="qa-card search-item" data-search="when language sql enough interview"><h3>When is <span class="mono">LANGUAGE SQL</span> enough?</h3><p>It is enough for a simple function body that can be expressed as a single SQL query or expression, like the <span class="mono">squared_sql()</span> alternative.</p></div>
+        <div class="qa-card search-item" data-search="what returns means in function definition interview"><h3>What does <span class="mono">RETURNS</span> mean in a function definition?</h3><p>It declares the data type the function sends back to the caller.</p></div>
+        <div class="qa-card search-item" data-search="how discover functions interview"><h3>How do you discover existing functions?</h3><p>Use <span class="mono">information_schema.routines</span> for a portable view, or <span class="mono">pg_proc</span> joined to <span class="mono">pg_namespace</span> plus PostgreSQL helper functions for signature detail.</p></div>
+        <div class="qa-card search-item" data-search="how inspect function arguments interview"><h3>How do you inspect function arguments?</h3><p>Use <span class="mono">pg_get_function_identity_arguments(p.oid)</span> from <span class="mono">pg_proc</span> to retrieve the input-argument signature safely.</p></div>
+        <div class="qa-card search-item" data-search="how inspect function return type interview"><h3>How do you inspect a function return type?</h3><p>Check <span class="mono">data_type</span> in <span class="mono">information_schema.routines</span> or <span class="mono">pg_get_function_result(p.oid)</span> in <span class="mono">pg_proc</span>.</p></div>
+        <div class="qa-card search-item" data-search="why verify sakila signatures first interview"><h3>Why verify Sakila helper-function signatures first?</h3><p>Sample-database versions can differ slightly, so metadata inspection is safer than inventing argument counts or types.</p></div>
+        <div class="qa-card search-item" data-search="what pg_proc stores interview"><h3>What does <span class="mono">pg_proc</span> store?</h3><p>It stores PostgreSQL function metadata, including names, schema linkage, and information that can be expanded into argument and return-type detail.</p></div>
+        <div class="qa-card search-item" data-search="what levenshtein measures interview"><h3>What does levenshtein measure?</h3><p>It measures edit distance: the number of insertions, deletions, or substitutions needed to change one string into another.</p></div>
+        <div class="qa-card search-item" data-search="why lower levenshtein is better interview"><h3>Why is lower Levenshtein better?</h3><p>Because smaller edit distance means fewer changes are needed, and exact match is 0.</p></div>
+        <div class="qa-card search-item" data-search="why levenshtein gumbo gambol equals 2 interview"><h3>Why is <span class="mono">levenshtein('GUMBO', 'GAMBOL')</span> equal to 2?</h3><p>Because one edit replaces <span class="mono">U</span> with <span class="mono">A</span>, and one edit adds <span class="mono">L</span> at the end.</p></div>
+        <div class="qa-card search-item" data-search="what soundex measures interview"><h3>What does Soundex measure?</h3><p>It creates a rough phonetic code so similar-sounding strings can group together.</p></div>
+        <div class="qa-card search-item" data-search="what difference returns interview"><h3>What does difference return?</h3><p>It returns a phonetic similarity score from 0 to 4 based on Soundex codes.</p></div>
+        <div class="qa-card search-item" data-search="what pg_trgm does interview"><h3>What does pg_trgm do?</h3><p>It compares strings by overlapping character trigrams for approximate similarity search.</p></div>
+        <div class="qa-card search-item" data-search="what similarity score means interview"><h3>What does a similarity score mean?</h3><p>It is a trigram similarity score from 0 to 1, where higher is better.</p></div>
+        <div class="qa-card search-item" data-search="what does similarity score 0 mean interview"><h3>What does a similarity score of 0 mean?</h3><p>It means there are no matching trigrams between the compared strings.</p></div>
+        <div class="qa-card search-item" data-search="what does similarity score 1 mean interview"><h3>What does a similarity score of 1 mean?</h3><p>It means the strings are a perfect trigram match.</p></div>
+        <div class="qa-card search-item" data-search="what percent means in pg_trgm interview"><h3>What does <span class="mono">%</span> mean in pg_trgm?</h3><p>It means the similarity passes the current trigram threshold.</p></div>
+        <div class="qa-card search-item" data-search="what threshold controls interview"><h3>What does the threshold control?</h3><p>It controls which rows pass the <span class="mono">%</span> operator, not the raw similarity score.</p></div>
+        <div class="qa-card search-item" data-search="similarity versus word_similarity interview"><h3>similarity versus word_similarity?</h3><p>similarity compares whole strings. word_similarity is better when a matching phrase appears inside longer text.</p></div>
+        <div class="qa-card search-item" data-search="what trigram distance means interview"><h3>What does <span class="mono">&lt;-&gt;</span> mean?</h3><p>It is trigram distance, which is roughly 1 minus similarity, so lower is better.</p></div>
+        <div class="qa-card search-item" data-search="how to rank fuzzy matches interview"><h3>How do you rank fuzzy matches?</h3><p>Use descending similarity scores or ascending trigram distance, depending on the metric you expose.</p></div>
+        <div class="qa-card search-item" data-search="when to combine phonetic and edit distance scoring interview"><h3>When do you combine phonetic and edit-distance scoring?</h3><p>When sound-alike matching alone or typo distance alone is too weak and you want a stronger fuzzy candidate report.</p></div>
+      </div>
+      <div class="section-nav">
+        <a href="#mistakes">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#memory-review">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="memory-review">
+      <div class="section-header">
+        <div><div class="section-num">Section 25</div><h2>Memory Review</h2></div>
+      </div>
+      <div class="diagram search-item" data-search="memory review like ilike tsvector tsquery plainto_tsquery document matches query and or not prefix search extension installed in database objects live in schema levenshtein soundex difference similarity percent word_similarity distance">
+LIKE = character pattern
+ILIKE = case-insensitive character pattern
+
+to_tsvector() = searchable document
+to_tsquery() = structured search query
+plainto_tsquery() = plain words converted to query
+@@ = document matches query
+
+&amp; = AND
+| = OR
+! = NOT
+
+:* = lexeme prefix search
+
+Extension = installed in database
+Extension objects = live in a schema
+pg_available_extensions = what can be installed
+pg_extension = what is installed now
+CREATE EXTENSION = enable extension in current database
+IF NOT EXISTS = rerun safely without duplicate-install error
+PostGIS = spatial/location support
+PostPic = image processing support
+fuzzystrmatch = edit distance and phonetic matching
+pg_trgm = trigram similarity
+
+CREATE FUNCTION = reusable named routine
+BEGIN ... END = procedural block
+RETURN = sends result back
+$$ ... $$ = function-body delimiter
+LANGUAGE plpgsql = procedural PostgreSQL language
+LANGUAGE SQL = SQL-query function body
+RETURNS = declared output type
+information_schema.routines = portable routine discovery
+pg_proc + pg_namespace = PostgreSQL-native function catalog view
+
+levenshtein() = edit count
+levenshtein('GUMBO', 'GAMBOL') = 2 edits
+lower is better
+0 = exact
+
+soundex() = phonetic code
+difference() = phonetic score
+higher is better
+4 = strongest
+
+similarity() = trigram score
+similarity('GUMBO', 'GAMBOL') = 0.181818
+higher is better
+1 = strongest
+
+% = passes current pg_trgm threshold
+
+word_similarity() = phrase match inside longer text
+higher is better
+
+&lt;-&gt; = trigram distance
+lower is better
+0 = closest
+      </div>
+      <div class="card search-item" data-search="self check questions chapter 4 review">
+        <h3>Twelve self-check questions</h3>
+        <ol class="tight-list">
+          <li>When is LIKE enough, and when do you need full-text search?</li>
+          <li>When should you use ILIKE instead of LIKE?</li>
+          <li>What does to_tsvector actually store?</li>
+          <li>Why is plainto_tsquery safer for plain user text?</li>
+          <li>What does <span class="mono">document @@ query</span> mean?</li>
+          <li>Why might elf and elves not search the same way?</li>
+          <li>What problem does <span class="mono">:*</span> solve?</li>
+          <li>Why is lower Levenshtein distance better?</li>
+          <li>Why is higher difference() better?</li>
+          <li>What is the difference between similarity() and word_similarity()?</li>
+          <li>What does the pg_trgm <span class="mono">%</span> operator really mean?</li>
+          <li>Why should trigram distance be sorted ascending?</li>
+        </ol>
+      </div>
+      <div class="section-nav">
+        <a href="#interview-qa">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#related-guides">Next section</a>
+      </div>
+    </section>
+
+    <section class="section" id="related-guides">
+      <div class="section-header">
+        <div><div class="section-num">Section 26</div><h2>Related Guides</h2></div>
+      </div>
+      <div class="hero-links" aria-label="Related guide links">
+        <a href="field_guide.html">Open Main Field Guide</a>
+        <a href="sql_function_quick_lookup.html">Open Quick Lookup</a>
+        <a href="chapter_01_data_types_field_guide.html">Open Chapter 1 Guide</a>
+        <a href="chapter_02_datetime_functions_field_guide.html">Open Chapter 2 Guide</a>
+        <a href="chapter_03_text_functions_field_guide.html">Open Chapter 3 Guide</a>
+        <a href="../lab/lab_guide.html">Open Lab Guide</a>
+      </div>
+      <div class="section-nav">
+        <a href="#memory-review">Previous section</a>
+        <a href="#top">Back to top</a>
+        <a href="#top">Return to top</a>
+      </div>
+    </section>
+
+    <div class="floating-nav" aria-label="Floating page navigation">
+      <a href="#top">Top</a>
+      <a href="#problem-lookup">Problems</a>
+      <a href="#full-text-overview">Full-Text</a>
+      <a href="#fuzzystrmatch">Fuzzy</a>
+      <a href="#pg-trgm">pg_trgm</a>
+      <a href="#mistakes">Mistakes</a>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const input = document.getElementById('lookupSearch');
+      const count = document.getElementById('searchCount');
+      const items = Array.from(document.querySelectorAll('.search-item'));
+
+      function updateSearch() {
+        const query = input.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        items.forEach((item) => {
+          const haystack = ((item.dataset.search || '') + ' ' + item.textContent).toLowerCase();
+          const matches = !query || haystack.includes(query);
+          item.hidden = !matches;
+          if (matches) visibleCount += 1;
+        });
+
+        if (!query) {
+          count.textContent = 'Showing all Chapter 4 items';
+        } else {
+          count.textContent = 'Showing ' + visibleCount + ' matching items';
+        }
+      }
+
+      input.addEventListener('input', updateSearch);
+      updateSearch();
+    }());
+  </script>
+</body>
+</html>

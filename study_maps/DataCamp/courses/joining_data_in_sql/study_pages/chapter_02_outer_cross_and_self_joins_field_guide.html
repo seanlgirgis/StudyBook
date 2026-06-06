@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 2 — Outer Joins, Cross Joins and Self Joins | Joining Data in SQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Joining Data in SQL</a>
+      <span>›</span>
+      <span>Chapter 2: Outer Joins, Cross Joins and Self Joins</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Joining Data in SQL · Chapter 2</p>
+      <h1>Outer Joins, Cross Joins and Self Joins</h1>
+      <p>
+        Preserve unmatched rows with outer joins, generate every possible pairing
+        with <code>CROSS JOIN</code>, compare rows from the same table with self joins,
+        and choose the correct join from the business question rather than from memory alone.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_join_quick_lookup.html">SQL Join Quick Lookup</a>
+        <a class="button secondary" href="chapter_01_introducing_inner_joins_field_guide.html">Previous Chapter</a>
+        <a class="button secondary" href="chapter_03_set_theory_for_sql_joins_field_guide.html">Next Chapter</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Chapter Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#left-right">2. LEFT and RIGHT JOIN</a>
+        <a href="#remember-left">3. Remembering LEFT</a>
+        <a href="#filter-placement">4. ON versus WHERE</a>
+        <a href="#full-join">5. FULL JOIN</a>
+        <a href="#compare-joins">6. Comparing joins</a>
+        <a href="#chain-full">7. Chaining FULL JOINs</a>
+        <a href="#cross-join">8. CROSS JOIN</a>
+        <a href="#self-join">9. Self joins</a>
+        <a href="#choose-join">10. Choosing the join</a>
+        <a href="#mistakes">11. Common mistakes</a>
+        <a href="#interview">12. Interview translation</a>
+        <a href="#review">13. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>
+            Chapter 1 focused on matched rows. Chapter 2 asks a broader question:
+            which rows must remain when a match does not exist?
+          </p>
+
+          <div class="diagram">Start with the business population
+      ↓
+Decide which unmatched rows must remain
+      ↓
+Choose INNER, LEFT, RIGHT, or FULL JOIN
+      ↓
+Check whether rows may multiply
+      ↓
+Validate NULLs and row counts</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Outer joins</h3>
+              <p>Preserve unmatched rows from one side or from both sides.</p>
+            </article>
+            <article class="mini-card">
+              <h3>CROSS JOIN</h3>
+              <p>Create every possible combination without a join condition.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Self join</h3>
+              <p>Use one physical table twice under different aliases and roles.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Core decision</h3>
+              <p>Choose joins by required row preservation, not by table size.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Chapter punchline:</strong> join selection is fundamentally a row-preservation decision.
+          </div>
+        </section>
+
+        <section class="section" id="left-right">
+          <h2>2. LEFT JOIN and RIGHT JOIN</h2>
+          <p>
+            A <code>LEFT JOIN</code> keeps every row from the table written before the join.
+            A <code>RIGHT JOIN</code> keeps every row from the table written after the join.
+          </p>
+
+          <h3>LEFT JOIN</h3>
+          <pre><code>SELECT c.code,
+       c.name,
+       e.year,
+       e.gdp_percapita
+FROM countries AS c
+LEFT JOIN economies AS e
+  ON c.code = e.code;</code></pre>
+
+          <p>
+            Every country survives. If a country has no matching economy row,
+            the economy columns contain <code>NULL</code>.
+          </p>
+
+          <h3>RIGHT JOIN</h3>
+          <pre><code>SELECT c.code,
+       c.name,
+       e.year,
+       e.gdp_percapita
+FROM countries AS c
+RIGHT JOIN economies AS e
+  ON c.code = e.code;</code></pre>
+
+          <p>
+            Every economy row survives. Country columns become <code>NULL</code>
+            when no matching country exists.
+          </p>
+
+          <div class="callout amber">
+            <strong>Practical preference:</strong> many teams rewrite RIGHT JOIN as LEFT JOIN
+            by swapping table order because the preserved population is easier to read from the
+            <code>FROM</code> clause.
+          </div>
+        </section>
+
+        <section class="section" id="remember-left">
+          <h2>3. Remembering What Is LEFT</h2>
+
+          <div class="diagram">FROM countries AS c          ← left table
+LEFT JOIN economies AS e    ← right table
+  ON c.code = e.code</div>
+
+          <p>
+            “Left” refers only to the table's position in the query. It does not mean:
+          </p>
+
+          <ul>
+            <li>the larger table,</li>
+            <li>the parent table,</li>
+            <li>the table with the primary key, or</li>
+            <li>the first table created in the database.</li>
+          </ul>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Answer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Which rows must survive?</td>
+                <td>Every row from <code>countries</code>.</td>
+              </tr>
+              <tr>
+                <td>Where do missing values appear?</td>
+                <td>In columns selected from <code>economies</code>.</td>
+              </tr>
+              <tr>
+                <td>Can one country appear more than once?</td>
+                <td>Yes, when it matches several economy rows.</td>
+              </tr>
+              <tr>
+                <td>Does LEFT JOIN preserve the exact left row count?</td>
+                <td>No. It preserves every left row, but one-to-many matches can increase the result count.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout danger">
+            <strong>Common misconception:</strong> LEFT JOIN does not guarantee exactly one output row per left row.
+          </div>
+        </section>
+
+        <section class="section" id="filter-placement">
+          <h2>4. Filter Placement: ON versus WHERE</h2>
+          <p>
+            A right-table filter placed in <code>WHERE</code> can remove the unmatched rows
+            that a LEFT JOIN was supposed to preserve.
+          </p>
+
+          <h3>WHERE removes unmatched rows</h3>
+          <pre><code>SELECT c.name,
+       e.year,
+       e.gdp_percapita
+FROM countries AS c
+LEFT JOIN economies AS e
+  ON c.code = e.code
+WHERE e.year = 2015;</code></pre>
+
+          <p>
+            Unmatched rows have <code>e.year = NULL</code>. The <code>WHERE</code> condition
+            rejects them.
+          </p>
+
+          <h3>ON limits eligible matches but preserves countries</h3>
+          <pre><code>SELECT c.name,
+       e.year,
+       e.gdp_percapita
+FROM countries AS c
+LEFT JOIN economies AS e
+  ON c.code = e.code
+ AND e.year = 2015;</code></pre>
+
+          <div class="callout green">
+            <strong>Decision rule:</strong> put a right-side condition in <code>ON</code>
+            when it defines which rows may match. Put it in <code>WHERE</code> when you
+            intentionally want to filter the final result.
+          </div>
+        </section>
+
+        <section class="section" id="full-join">
+          <h2>5. FULL JOIN</h2>
+          <p>
+            A <code>FULL JOIN</code> returns matched rows, unmatched left rows,
+            and unmatched right rows.
+          </p>
+
+          <pre><code>SELECT c.code AS country_code,
+       c.name,
+       e.code AS economy_code,
+       e.year,
+       e.gdp_percapita
+FROM countries AS c
+FULL JOIN economies AS e
+  ON c.code = e.code;</code></pre>
+
+          <div class="diagram">countries.code    economies.code    Result
+--------------    --------------    ------------------------
+USA               USA               matched row
+CAN               NULL              left-only row
+NULL              BRA               right-only row</div>
+
+          <h3>Good uses for FULL JOIN</h3>
+          <ul>
+            <li>reconciling records from two systems,</li>
+            <li>finding keys missing from either side,</li>
+            <li>migration validation,</li>
+            <li>data-quality comparison, and</li>
+            <li>building a complete combined key universe.</li>
+          </ul>
+
+          <div class="callout green">
+            <strong>Memory rule:</strong> FULL JOIN means, “show everything from both sides and align matches where possible.”
+          </div>
+        </section>
+
+        <section class="section" id="compare-joins">
+          <h2>6. Comparing the Main Join Types</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Join</th>
+                <th>Matched rows</th>
+                <th>Unmatched left</th>
+                <th>Unmatched right</th>
+                <th>Typical question</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>INNER JOIN</code></td>
+                <td>Yes</td>
+                <td>No</td>
+                <td>No</td>
+                <td>Which records exist in both tables?</td>
+              </tr>
+              <tr>
+                <td><code>LEFT JOIN</code></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>No</td>
+                <td>Show all customers, including those without orders.</td>
+              </tr>
+              <tr>
+                <td><code>RIGHT JOIN</code></td>
+                <td>Yes</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>Show every right-side record, even without a left match.</td>
+              </tr>
+              <tr>
+                <td><code>FULL JOIN</code></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Reconcile two complete systems.</td>
+              </tr>
+              <tr>
+                <td><code>CROSS JOIN</code></td>
+                <td>Not key-based</td>
+                <td>Not applicable</td>
+                <td>Not applicable</td>
+                <td>Generate every possible combination.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="chain-full">
+          <h2>7. Chaining FULL JOINs</h2>
+          <p>
+            After the first FULL JOIN, the usable key may exist on either side.
+            <code>COALESCE</code> can choose the first non-NULL key for the next join.
+          </p>
+
+          <pre><code>SELECT COALESCE(c.code, e.code, p.country_code) AS country_code,
+       c.name,
+       e.year AS economy_year,
+       p.year AS population_year
+FROM countries AS c
+FULL JOIN economies AS e
+  ON c.code = e.code
+FULL JOIN populations AS p
+  ON COALESCE(c.code, e.code) = p.country_code;</code></pre>
+
+          <div class="callout">
+            <strong>Why COALESCE helps:</strong> a row preserved only from
+            <code>economies</code> has <code>c.code = NULL</code> but may still have a valid
+            <code>e.code</code>.
+          </div>
+
+          <div class="callout danger">
+            Chained FULL JOINs can be difficult to reason about when keys are duplicated.
+            Validate each two-table stage before adding the next join.
+          </div>
+        </section>
+
+        <section class="section" id="cross-join">
+          <h2>8. CROSS JOIN</h2>
+          <p>
+            <code>CROSS JOIN</code> has no join condition. Every row from the first source
+            is paired with every row from the second.
+          </p>
+
+          <pre><code>SELECT c.name,
+       l.name AS language
+FROM countries AS c
+CROSS JOIN languages AS l;</code></pre>
+
+          <div class="diagram">3 country rows
+× 4 language rows
+= 12 result rows</div>
+
+          <h3>Useful CROSS JOIN cases</h3>
+          <ul>
+            <li>products × reporting months,</li>
+            <li>regions × planning scenarios,</li>
+            <li>students × required assessments,</li>
+            <li>test parameters × test values,</li>
+            <li>creating a complete reporting grid before attaching actual facts.</li>
+          </ul>
+
+          <h3>Controlled reporting grid</h3>
+          <pre><code>SELECT c.code,
+       c.name,
+       y.year
+FROM countries AS c
+CROSS JOIN (
+  VALUES (2023),
+         (2024),
+         (2025)
+) AS y(year);</code></pre>
+
+          <div class="callout danger">
+            <strong>Explosion risk:</strong> output rows equal left rows multiplied by right rows.
+            One million rows crossed with one thousand rows creates one billion rows.
+          </div>
+        </section>
+
+        <section class="section" id="self-join">
+          <h2>9. Self Joins</h2>
+          <p>
+            A self join uses the same physical table more than once under different aliases.
+            Each alias represents a different role, level, or time period.
+          </p>
+
+          <h3>Compare two years for the same country</h3>
+          <pre><code>SELECT p1.country_code,
+       p1.year AS start_year,
+       p1.population AS start_population,
+       p2.year AS end_year,
+       p2.population AS end_population,
+       p2.population - p1.population AS population_change
+FROM populations AS p1
+INNER JOIN populations AS p2
+  ON p1.country_code = p2.country_code
+ AND p1.year = 2010
+ AND p2.year = 2015;</code></pre>
+
+          <h3>Employee-to-manager hierarchy</h3>
+          <pre><code>SELECT employee.name AS employee_name,
+       manager.name AS manager_name
+FROM employees AS employee
+LEFT JOIN employees AS manager
+  ON employee.manager_id = manager.employee_id;</code></pre>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Alias 1</h3>
+              <p>Represents the employee, earlier period, child row, or first comparison role.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Alias 2</h3>
+              <p>Represents the manager, later period, parent row, or second comparison role.</p>
+            </article>
+          </div>
+
+          <div class="callout amber">
+            A broad self join may produce A–A, A–B, and B–A. Use a condition such as
+            <code>a.id &lt; b.id</code> when each unordered pair should appear only once.
+          </div>
+        </section>
+
+        <section class="section" id="choose-join">
+          <h2>10. Choosing the Join</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Business requirement</th>
+                <th>Likely join</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Only customers who placed an order</td>
+                <td><code>INNER JOIN</code></td>
+                <td>Only matches are required.</td>
+              </tr>
+              <tr>
+                <td>All customers, including those with no orders</td>
+                <td><code>LEFT JOIN</code></td>
+                <td>The customer population must be preserved.</td>
+              </tr>
+              <tr>
+                <td>All records from two systems, including unmatched keys</td>
+                <td><code>FULL JOIN</code></td>
+                <td>Both complete populations must survive.</td>
+              </tr>
+              <tr>
+                <td>Every product for every reporting month</td>
+                <td><code>CROSS JOIN</code></td>
+                <td>A complete combination grid is intentional.</td>
+              </tr>
+              <tr>
+                <td>Employee and manager from one employee table</td>
+                <td>Self <code>LEFT JOIN</code></td>
+                <td>The same table plays two roles, and top-level managers may have no parent.</td>
+              </tr>
+              <tr>
+                <td>Compare one country's values across two years</td>
+                <td>Self <code>INNER JOIN</code></td>
+                <td>Two rows from one table are paired by country.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            <strong>Best sequence:</strong> identify the main population → decide which unmatched rows must remain →
+            confirm key cardinality → estimate row multiplication → choose the join.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>11. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Assuming LEFT means the parent or larger table</strong>
+              LEFT is determined only by the table's position after <code>FROM</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Filtering the right table in WHERE unintentionally</strong>
+              The filter removes NULL-extended rows and can create inner-join behavior.
+            </article>
+
+            <article class="qa-item">
+              <strong>Expecting one output row per left row</strong>
+              One-to-many matches can duplicate left-side values.
+            </article>
+
+            <article class="qa-item">
+              <strong>Running CROSS JOIN without estimating size</strong>
+              Row counts multiply rather than add.
+            </article>
+
+            <article class="qa-item">
+              <strong>Self joining without aliases</strong>
+              Column references become ambiguous and the two roles are unclear.
+            </article>
+
+            <article class="qa-item">
+              <strong>Self joining only on the entity key</strong>
+              This may create every time-period combination for each entity.
+            </article>
+
+            <article class="qa-item">
+              <strong>Chaining FULL JOINs on one nullable key</strong>
+              Rows preserved from the other side may fail to match the third table.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>12. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>How do you choose between INNER JOIN and LEFT JOIN?</strong>
+              I begin with the required output population. If unmatched rows should be excluded,
+              I use an inner join. If every row from the primary population must remain,
+              I use a left join and expect NULL values for missing right-side data.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is a common LEFT JOIN bug?</strong>
+              Filtering a right-side field in the WHERE clause can remove NULL-extended rows.
+              When the condition defines which right-side rows may match, I place it in ON.
+            </article>
+
+            <article class="qa-item">
+              <strong>When would you use FULL JOIN?</strong>
+              I use it mainly for reconciliation and completeness analysis, where I need
+              matched records plus keys missing from either system.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is the risk of CROSS JOIN?</strong>
+              Its row count grows multiplicatively. I estimate the expected size first and use
+              it only when every combination is intentional.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is a self join?</strong>
+              It is a normal join where the same physical table appears under separate aliases
+              so each instance can represent a different role, hierarchy level, or time period.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you validate an outer join?</strong>
+              I compare source and result counts, inspect NULL-extended rows, verify key cardinality,
+              and separately count unmatched keys from both sides when appropriate.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>13. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Six-sentence chapter summary</strong>
+            <ol>
+              <li><code>LEFT JOIN</code> preserves every row from the left table.</li>
+              <li><code>RIGHT JOIN</code> preserves every row from the right table.</li>
+              <li><code>FULL JOIN</code> preserves unmatched rows from both sides.</li>
+              <li><code>CROSS JOIN</code> creates every possible row combination.</li>
+              <li>A self join gives one table two or more logical roles through aliases.</li>
+              <li>Join choice starts with deciding which unmatched rows must survive.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you identify the preserved table in a LEFT JOIN?</li>
+            <li>Can you explain why a WHERE filter may break outer-join preservation?</li>
+            <li>Can you describe a real reconciliation use case for FULL JOIN?</li>
+            <li>Can you calculate the expected row count of a CROSS JOIN?</li>
+            <li>Can you explain why a self join requires aliases?</li>
+            <li>Can you prevent mirrored duplicate pairs in a self join?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision for Chapter 2:</strong> no separate lab is required yet.
+            Keep the course moving. Add local practice later if outer-join filter placement,
+            CROSS JOIN row growth, or self-join pairing needs reinforcement.
+          </div>
+
+          <div class="callout green">
+            <strong>Final chapter sentence:</strong> outer joins control preservation,
+            CROSS JOIN creates combinations, and self joins let one table play multiple roles.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Joining Data in SQL · Chapter 2 Field Guide</span>
+      <span>
+        <a href="chapter_01_introducing_inner_joins_field_guide.html">Previous Chapter</a>
+        &nbsp;·&nbsp;
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_03_set_theory_for_sql_joins_field_guide.html">Next Chapter</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

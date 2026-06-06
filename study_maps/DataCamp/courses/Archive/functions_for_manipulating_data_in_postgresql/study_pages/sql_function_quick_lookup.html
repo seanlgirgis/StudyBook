@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PostgreSQL Functions Quick Lookup Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #79c0ff;
+    --green: #56d364;
+    --green-bg: #0d2818;
+    --yellow: #e3b341;
+    --yellow-bg: #2d1d00;
+    --red: #ff7b72;
+    --red-bg: #2d0d0d;
+    --purple: #bc8cff;
+    --teal: #39d0d8;
+    --teal-bg: #03242a;
+    --orange: #ffa657;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.7; }
+  header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 2.5rem 0 2rem; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--purple), var(--teal)); }
+  .header-badge { display: inline-block; font-family: var(--mono); font-size: 11px; color: var(--green); background: var(--green-bg); border: 1px solid var(--green); border-radius: 4px; padding: 3px 10px; letter-spacing: 0.08em; margin-bottom: 1rem; }
+  header h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+  header h1 span { color: var(--accent); }
+  header p { color: var(--muted); font-size: 1rem; font-family: var(--mono); }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .section { margin: 2.5rem 0 4rem; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+  .section-num { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--bg); background: var(--accent); border-radius: 4px; padding: 3px 8px; letter-spacing: 0.05em; flex-shrink: 0; }
+  .section-num.grn { background: var(--green); }
+  .section-num.ylw { background: var(--yellow); color: #000; }
+  .section-num.red { background: var(--red); }
+  .section-num.tel { background: var(--teal); color: #000; }
+  h2 { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.01em; }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 0.7rem; }
+  p, li { color: #c9d1d9; font-size: 15px; line-height: 1.8; }
+  ul { padding-left: 1.5rem; margin: 0.75rem 0; }
+  .callout { border-radius: 6px; padding: 1rem 1.25rem; margin: 1.25rem 0; font-size: 14px; line-height: 1.7; }
+  .callout.info { background: #051d2c; border: 1px solid #1d5a8a; color: var(--accent2); }
+  .callout.warn { background: var(--yellow-bg); border: 1px solid var(--yellow); color: var(--yellow); }
+  .callout strong { display: block; font-weight: 600; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.1em; opacity: 0.7; }
+  .search-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; margin: 2rem 0; }
+  .search-input { width: 100%; background: #010409; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; font-size: 15px; font-family: var(--sans); }
+  .search-tip { margin-top: 0.75rem; color: var(--muted); font-family: var(--mono); font-size: 12px; }
+  .search-count { margin-top: 0.75rem; color: var(--accent2); font-family: var(--mono); font-size: 12px; }
+  .quick-nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 2rem;
+    padding: 0.85rem 1rem;
+    background: rgba(22, 27, 34, 0.96);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+  }
+  .quick-nav a,
+  .section-nav a,
+  .floating-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--bg3);
+    text-decoration: none;
+  }
+  .quick-nav a:hover,
+  .section-nav a:hover,
+  .floating-nav a:hover {
+    border-color: var(--accent);
+    color: var(--accent2);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; margin: 1.25rem 0; }
+  th { background: var(--bg3); color: var(--muted); font-size: 11px; letter-spacing: 0.08em; padding: 8px 12px; text-align: left; border: 1px solid var(--border); }
+  td { padding: 7px 12px; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  code { font-family: var(--mono); font-size: 13px; color: #e6edf3; }
+  td code, p code, li code { background: var(--bg3); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; color: var(--orange); }
+  pre { background: #010409; border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem 1.5rem; overflow-x: auto; margin: 1rem 0; white-space: pre-wrap; word-break: break-word; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; }
+  .card h3 { margin-top: 0; color: var(--accent); font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em; }
+  a { color: var(--accent); text-decoration: none; }
+  .section-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.5rem;
+  }
+  .floating-nav {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 0.75rem;
+    background: rgba(22, 27, 34, 0.96);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+  }
+  .back-top { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; padding: 5px 10px; border: 1px solid var(--border); border-radius: 4px; margin-top: 1.5rem; }
+  footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  @media (max-width: 800px) {
+    .cards { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.6rem; }
+    .quick-nav { top: 0; }
+    .floating-nav {
+      right: 0.75rem;
+      bottom: 0.75rem;
+      flex-direction: row;
+      flex-wrap: wrap;
+      max-width: calc(100vw - 1.5rem);
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <div class="header-badge">POSTGRESQL · QUICK LOOKUP · CHEAT SHEET</div>
+    <h1>PostgreSQL <span>Functions Quick Lookup Cheat Sheet</span></h1>
+    <p>Fast syntax lookup for DataCamp Functions for Manipulating Data in PostgreSQL.</p>
+  </div>
+</header>
+
+<div class="container">
+  <a id="top"></a>
+
+  <div class="search-wrap">
+    <input id="lookupSearch" class="search-input" type="text" placeholder="Search function, problem, trap, or keyword..." />
+    <div class="search-tip">Tip: Try searching <code>current timestamp</code>, <code>month bucket</code>, <code>null fallback</code>, <code>collapse spaces</code>, <code>truncate text</code>, <code>short preview</code>, <code>complete words</code>, <code>word boundary</code>, <code>create type</code>, <code>udt_name</code>, <code>create function</code>, <code>plpgsql</code>, <code>pg_proc</code>, <code>pg_get_function_identity_arguments</code>, <code>pg_available_extensions</code>, <code>pg_extension</code>, <code>postgis</code>, <code>postpic</code>, <code>gumbo gambol</code>, <code>fuzzy</code>, <code>array contains</code>, or <code>full-text</code>.</div>
+    <div id="searchCount" class="search-count" aria-live="polite">
+      Showing all quick lookup items
+    </div>
+  </div>
+
+  <nav class="quick-nav" aria-label="Quick page navigation">
+    <a href="#top">Top</a>
+    <a href="#how-to-use">How to Use</a>
+    <a href="#az-index">A-Z</a>
+    <a href="#problem-index">Problems</a>
+    <a href="#tiny-examples">Examples</a>
+    <a href="#direction-rules">Directions</a>
+    <a href="#mistake-table">Mistakes</a>
+    <a href="#main-guides">Guides</a>
+  </nav>
+
+  <div class="section" id="how-to-use">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2>How to Use This Cheat Sheet</h2>
+    </div>
+    <ul class="search-item">
+      <li>Use browser find with <code>Ctrl+F</code>.</li>
+      <li>Search by function name, problem phrase, or mistake.</li>
+      <li>This page gives the smallest useful example.</li>
+      <li>For deeper explanation, use the Field Guide.</li>
+      <li>For worked lab evidence, use the Lab Guide.</li>
+    </ul>
+    <div class="section-nav">
+      <a href="#top">← Previous</a>
+      <a href="#top">↑ Top</a>
+      <a href="#az-index">Next →</a>
+    </div>
+  </div>
+
+  <div class="section" id="az-index">
+    <div class="section-header">
+      <div class="section-num grn">02</div>
+      <h2>A-Z Function and Operator Index</h2>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Search keywords</th><th>Function / Operator</th><th>Tiny syntax</th><th>Use when</th><th>Trap</th></tr>
+      </thead>
+      <tbody>
+        <tr class="search-item"><td>elapsed timestamp gap</td><td><code>AGE()</code></td><td><code>SELECT AGE(end_ts, start_ts);</code></td><td>want readable timestamp difference</td><td>returns interval, not number</td></tr>
+        <tr class="search-item"><td>array has one value</td><td><code>ANY()</code></td><td><code>SELECT 'sql' = ANY(tags);</code></td><td>search array for one value</td><td>not for multi-value required match</td></tr>
+        <tr class="search-item"><td>array contains requested values</td><td><code>@&gt;</code></td><td><code>SELECT tags @&gt; ARRAY['sql'];</code></td><td>check array contains one or more values</td><td>right side must be an array</td></tr>
+        <tr class="search-item"><td>count array items</td><td><code>CARDINALITY()</code></td><td><code>SELECT CARDINALITY(tags);</code></td><td>count values inside array</td><td>arrays start at 1, not 0</td></tr>
+        <tr class="search-item"><td>standard cast</td><td><code>CAST()</code></td><td><code>SELECT CAST(ts AS date);</code></td><td>convert data type with standard SQL</td><td>more verbose than <code>::</code></td></tr>
+        <tr class="search-item"><td>postgres cast shorthand</td><td><code>::</code></td><td><code>SELECT ts::date;</code></td><td>quick PostgreSQL cast</td><td>PostgreSQL-specific syntax</td></tr>
+        <tr class="search-item"><td>label with conditions</td><td><code>CASE</code></td><td><code>SELECT CASE WHEN x &gt; 0 THEN 'Y' END;</code></td><td>build business labels</td><td>order matters, first match wins</td></tr>
+        <tr class="search-item"><td>create enum, controlled list, user-defined type</td><td><code>CREATE TYPE ... AS ENUM</code></td><td><code>CREATE TYPE dayofweek AS ENUM ('Monday', 'Tuesday');</code></td><td>define a small stable controlled type</td><td>lookup table is better when values need metadata</td></tr>
+        <tr class="search-item"><td>inspect custom type metadata, actual type name</td><td><code>pg_type</code></td><td><code>SELECT typname, typcategory FROM pg_type;</code></td><td>inspect PostgreSQL type catalog</td><td>contains built-in and custom types</td></tr>
+        <tr class="search-item"><td>underlying udt name, user-defined column</td><td><code>udt_name</code></td><td><code>SELECT data_type, udt_name FROM information_schema.columns;</code></td><td>find the actual PostgreSQL type name</td><td><code>USER-DEFINED</code> is only the broad label</td></tr>
+        <tr class="search-item"><td>create the exact PL/pgSQL squared() video function</td><td><code>CREATE FUNCTION</code></td><td><code>CREATE FUNCTION squared(i integer) RETURNS integer AS $$ BEGIN RETURN i * i; END; $$ LANGUAGE plpgsql;</code></td><td>match the course video function definition</td><td>the video uses <code>LANGUAGE plpgsql</code>, not just <code>LANGUAGE SQL</code></td></tr>
+        <tr class="search-item"><td>inspect function arguments and return type</td><td><code>pg_proc</code> + helpers</td><td><code>SELECT pg_get_function_identity_arguments(p.oid), pg_get_function_result(p.oid) FROM pg_proc AS p;</code></td><td>inspect PostgreSQL-native routine signatures safely</td><td>better than guessing Sakila helper parameters</td></tr>
+        <tr class="search-item"><td>discover installable extensions</td><td><code>pg_available_extensions</code></td><td><code>SELECT name FROM pg_available_extensions;</code></td><td>see what can be enabled here</td><td>available is not the same as installed</td></tr>
+        <tr class="search-item"><td>inspect enabled extensions</td><td><code>pg_extension</code></td><td><code>SELECT extname FROM pg_extension;</code></td><td>see what is enabled now</td><td>current database only</td></tr>
+        <tr class="search-item"><td>enable extension safely</td><td><code>CREATE EXTENSION</code></td><td><code>CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;</code></td><td>rerunnable extension setup</td><td>omit <code>IF NOT EXISTS</code> and repeat runs can fail</td></tr>
+        <tr class="search-item"><td>spatial extension</td><td><code>PostGIS</code></td><td><code>-- spatial/location extension</code></td><td>identify mapping and geometry support</td><td>not for text similarity</td></tr>
+        <tr class="search-item"><td>image processing extension</td><td><code>PostPic</code></td><td><code>-- image-processing extension</code></td><td>identify image work inside PostgreSQL</td><td>not for fuzzy string matching</td></tr>
+        <tr class="search-item"><td>null fallback</td><td><code>COALESCE()</code></td><td><code>SELECT COALESCE(return_date, NOW());</code></td><td>replace NULL with fallback</td><td>argument types must be compatible</td></tr>
+        <tr class="search-item"><td>join strings function-style</td><td><code>CONCAT()</code></td><td><code>SELECT CONCAT(first, ' ', last);</code></td><td>build full name or label</td><td>null handling differs from <code>||</code></td></tr>
+        <tr class="search-item"><td>today date</td><td><code>CURRENT_DATE</code></td><td><code>SELECT CURRENT_DATE;</code></td><td>get today's date</td><td>no time part</td></tr>
+        <tr class="search-item"><td>current clock time</td><td><code>CURRENT_TIME</code></td><td><code>SELECT CURRENT_TIME;</code></td><td>get current time only</td><td>no date part</td></tr>
+        <tr class="search-item"><td>current timestamp</td><td><code>CURRENT_TIMESTAMP</code></td><td><code>SELECT CURRENT_TIMESTAMP;</code></td><td>get current timestamp</td><td>includes fractional seconds</td></tr>
+        <tr class="search-item"><td>timestamp no milliseconds</td><td><code>CURRENT_TIMESTAMP(0)</code></td><td><code>SELECT CURRENT_TIMESTAMP(0);</code></td><td>get whole-second timestamp</td><td><code>(0)</code> is precision, not zero time</td></tr>
+        <tr class="search-item"><td>date part alternative</td><td><code>DATE_PART()</code></td><td><code>SELECT DATE_PART('month', ts);</code></td><td>get numeric month or quarter</td><td>returns number, not bucket</td></tr>
+        <tr class="search-item"><td>month bucket</td><td><code>DATE_TRUNC()</code></td><td><code>SELECT DATE_TRUNC('month', ts);</code></td><td>group by month or week</td><td>better than month number across years</td></tr>
+        <tr class="search-item"><td>numeric date part</td><td><code>EXTRACT()</code></td><td><code>SELECT EXTRACT(month FROM ts);</code></td><td>get month, quarter, year number</td><td>returns number, not timestamp</td></tr>
+        <tr class="search-item"><td>weekday, day of week, Sunday zero, ISO weekday, dow</td><td><code>EXTRACT(dow)</code></td><td><code>SELECT EXTRACT(dow FROM rental_date);</code></td><td>get PostgreSQL weekday number</td><td>Sunday = 0</td></tr>
+        <tr class="search-item"><td>ISO weekday, Monday one, Sunday seven, isodow</td><td><code>EXTRACT(isodow)</code></td><td><code>SELECT EXTRACT(isodow FROM rental_date);</code></td><td>get ISO weekday number</td><td>Monday = 1, Sunday = 7</td></tr>
+        <tr class="search-item"><td>total interval hours</td><td><code>EXTRACT(EPOCH FROM interval)</code></td><td><code>SELECT EXTRACT(EPOCH FROM gap) / 3600;</code></td><td>get total hours from interval</td><td><code>EXTRACT(hour ...)</code> is only hour component</td></tr>
+        <tr class="search-item"><td>case-insensitive match</td><td><code>ILIKE</code></td><td><code>SELECT * FROM t WHERE txt ILIKE '%case%';</code></td><td>search ignoring case</td><td>not the same as full-text search</td></tr>
+        <tr class="search-item"><td>title case</td><td><code>INITCAP()</code></td><td><code>SELECT INITCAP(TRIM(txt));</code></td><td>standardize names or labels</td><td>clean first, then format</td></tr>
+        <tr class="search-item"><td>relative time offset</td><td><code>INTERVAL</code></td><td><code>SELECT NOW() + INTERVAL '5 days';</code></td><td>add hours or days</td><td>avoid mixing with date-only assumptions</td></tr>
+        <tr class="search-item"><td>left prefix</td><td><code>LEFT()</code></td><td><code>SELECT LEFT(txt, 3);</code></td><td>extract first characters</td><td>fixed-width only</td></tr>
+        <tr class="search-item"><td>truncate text, short preview, complete words, word boundary, do not cut word</td><td><code>LEFT() + REVERSE() + POSITION()</code></td><td><code>LEFT(
+  description,
+  50 - POSITION(
+    ' ' IN REVERSE(LEFT(description, 50))
+  )
+)</code></td><td>create a maximum-length preview ending at a complete word</td><td>no space in the preview means <code>POSITION()</code> returns 0</td></tr>
+        <tr class="search-item"><td>count characters</td><td><code>LENGTH()</code></td><td><code>SELECT LENGTH(txt);</code></td><td>measure text length</td><td>useful for hidden spaces</td></tr>
+        <tr class="search-item"><td>fuzzy typo distance, gumbo gambol edit count</td><td><code>levenshtein()</code></td><td><code>SELECT levenshtein('GUMBO', 'GAMBOL');</code></td><td>measure edit distance</td><td>lower is better; this example returns <code>2</code></td></tr>
+        <tr class="search-item"><td>starts with or contains</td><td><code>LIKE</code></td><td><code>SELECT * FROM t WHERE txt LIKE 'G%';</code></td><td>character-pattern search</td><td>case-sensitive in PostgreSQL</td></tr>
+        <tr class="search-item"><td>lowercase</td><td><code>LOWER()</code></td><td><code>SELECT LOWER(TRIM(txt));</code></td><td>normalize case</td><td>clean first if padding exists</td></tr>
+        <tr class="search-item"><td>left pad zeros</td><td><code>LPAD()</code></td><td><code>SELECT LPAD(code, 4, '0');</code></td><td>make fixed-width code</td><td>can truncate if target is shorter</td></tr>
+        <tr class="search-item"><td>trim left spaces</td><td><code>LTRIM()</code></td><td><code>SELECT LTRIM(txt);</code></td><td>remove left padding</td><td>only left side</td></tr>
+        <tr class="search-item"><td>current timestamp shorthand</td><td><code>NOW()</code></td><td><code>SELECT NOW();</code></td><td>get current timestamp</td><td>may include timezone detail</td></tr>
+        <tr class="search-item"><td>substring position</td><td><code>POSITION()</code></td><td><code>SELECT POSITION('ELF' IN txt);</code></td><td>find substring index</td><td>returns 0 if not found</td></tr>
+        <tr class="search-item"><td>collapse repeated spaces</td><td><code>REGEXP_REPLACE()</code></td><td><code>SELECT REGEXP_REPLACE(txt, '\s+', ' ', 'g');</code></td><td>clean internal whitespace</td><td>without <code>'g'</code>, only first match</td></tr>
+        <tr class="search-item"><td>exact text swap</td><td><code>REPLACE()</code></td><td><code>SELECT REPLACE(txt, 'ELF', 'ORC');</code></td><td>replace exact matching text</td><td>not fuzzy replacement</td></tr>
+        <tr class="search-item"><td>reverse characters</td><td><code>REVERSE()</code></td><td><code>SELECT REVERSE(txt);</code></td><td>reverse text</td><td>niche, not general cleanup</td></tr>
+        <tr class="search-item"><td>right suffix</td><td><code>RIGHT()</code></td><td><code>SELECT RIGHT(txt, 3);</code></td><td>extract last characters</td><td>fixed-width only</td></tr>
+        <tr class="search-item"><td>round result</td><td><code>ROUND()</code></td><td><code>SELECT ROUND(x, 2);</code></td><td>round numeric output</td><td>use numeric expression first</td></tr>
+        <tr class="search-item"><td>right pad text</td><td><code>RPAD()</code></td><td><code>SELECT RPAD(code, 8, '.');</code></td><td>pad label or code to width</td><td>can truncate if target is shorter</td></tr>
+        <tr class="search-item"><td>trim right spaces</td><td><code>RTRIM()</code></td><td><code>SELECT RTRIM(txt);</code></td><td>remove right padding</td><td>only right side</td></tr>
+        <tr class="search-item"><td>trigram score, gumbo gambol similarity</td><td><code>similarity()</code></td><td><code>SELECT similarity('GUMBO', 'GAMBOL');</code></td><td>fuzzy trigram score</td><td>higher is better; this example returns <code>0.181818</code></td></tr>
+        <tr class="search-item"><td>phonetic code</td><td><code>soundex()</code></td><td><code>SELECT soundex('Smith');</code></td><td>sound-alike matching</td><td>phonetic, not edit distance</td></tr>
+        <tr class="search-item"><td>sound similarity score</td><td><code>difference()</code></td><td><code>SELECT difference('Smith', 'Smyth');</code></td><td>compare phonetic closeness</td><td>higher is better</td></tr>
+        <tr class="search-item"><td>split by delimiter</td><td><code>SPLIT_PART()</code></td><td><code>SELECT SPLIT_PART(txt, ' ', 1);</code></td><td>pull nth piece of text</td><td>part numbers start at 1</td></tr>
+        <tr class="search-item"><td>substring position alt</td><td><code>STRPOS()</code></td><td><code>SELECT STRPOS(txt, 'ELF');</code></td><td>find substring index</td><td>returns 0 if not found</td></tr>
+        <tr class="search-item"><td>substring standard form</td><td><code>SUBSTRING()</code></td><td><code>SELECT SUBSTRING(txt FROM 2 FOR 3);</code></td><td>extract middle text</td><td>positions are 1-based</td></tr>
+        <tr class="search-item"><td>substring short form</td><td><code>SUBSTR()</code></td><td><code>SELECT SUBSTR(txt, 2, 3);</code></td><td>extract middle text</td><td>positions are 1-based</td></tr>
+        <tr class="search-item"><td>build searchable document</td><td><code>to_tsvector()</code></td><td><code>SELECT to_tsvector('english', txt);</code></td><td>prepare text for full-text search</td><td>tokens get normalized</td></tr>
+        <tr class="search-item"><td>build tsquery manually</td><td><code>to_tsquery()</code></td><td><code>SELECT to_tsquery('english', 'elf &amp; search');</code></td><td>use full-text operators</td><td>not ideal for raw user text</td></tr>
+        <tr class="search-item"><td>build tsquery from plain words</td><td><code>plainto_tsquery()</code></td><td><code>SELECT plainto_tsquery('english', 'postgres database');</code></td><td>convert plain words safely</td><td>stop words may disappear</td></tr>
+        <tr class="search-item"><td>full-text match</td><td><code>@@</code></td><td><code>SELECT doc @@ query;</code></td><td>test tsvector against tsquery</td><td>both sides should be full-text objects</td></tr>
+        <tr class="search-item"><td>discover routines, find helper functions</td><td><code>information_schema.routines</code></td><td><code>SELECT routine_name FROM information_schema.routines;</code></td><td>browse available functions</td><td>filter by schema or routine name</td></tr>
+        <tr class="search-item"><td>trim both sides</td><td><code>TRIM()</code></td><td><code>SELECT TRIM(txt);</code></td><td>clean outside spaces</td><td>does not fix internal repeated spaces</td></tr>
+        <tr class="search-item"><td>uppercase</td><td><code>UPPER()</code></td><td><code>SELECT UPPER(TRIM(txt));</code></td><td>normalize case</td><td>clean first if needed</td></tr>
+        <tr class="search-item"><td>embedded fuzzy match</td><td><code>word_similarity()</code></td><td><code>SELECT word_similarity(a, phrase);</code></td><td>match inside longer sentence</td><td>higher is better</td></tr>
+        <tr class="search-item"><td>trigram pass fail</td><td><code>pg_trgm %</code></td><td><code>SELECT title % 'POSTGRES HER0';</code></td><td>filter similar-enough match</td><td>not percent math</td></tr>
+        <tr class="search-item"><td>trigram distance</td><td><code>pg_trgm &lt;-&gt;</code></td><td><code>SELECT title &lt;-&gt; 'POSTGRES HER0';</code></td><td>rank closest trigram matches</td><td>lower is better</td></tr>
+        <tr class="search-item"><td>current trigram threshold</td><td><code>show_limit()</code></td><td><code>SELECT show_limit();</code></td><td>inspect active pg_trgm threshold</td><td>threshold affects <code>%</code>, not score</td></tr>
+        <tr class="search-item"><td>set trigram threshold</td><td><code>set_limit()</code></td><td><code>SELECT set_limit(0.3);</code></td><td>change pg_trgm threshold</td><td>reset temporary changes</td></tr>
+      </tbody>
+    </table>
+    <div class="section-nav">
+      <a href="#how-to-use">← Previous</a>
+      <a href="#top">↑ Top</a>
+      <a href="#problem-index">Next →</a>
+    </div>
+  </div>
+
+  <div class="section" id="problem-index">
+    <div class="section-header">
+      <div class="section-num ylw">03</div>
+      <h2>Problem-Based Lookup Index</h2>
+    </div>
+    <table>
+      <thead>
+        <tr><th>I want to...</th><th>Use this</th><th>Tiny SQL</th><th>Watch out</th></tr>
+      </thead>
+      <tbody>
+        <tr class="search-item"><td>get today’s date</td><td><code>CURRENT_DATE</code></td><td><code>SELECT CURRENT_DATE;</code></td><td>date only, no time</td></tr>
+        <tr class="search-item"><td>get current time</td><td><code>CURRENT_TIME</code></td><td><code>SELECT CURRENT_TIME;</code></td><td>time only, no date</td></tr>
+        <tr class="search-item"><td>get current timestamp</td><td><code>CURRENT_TIMESTAMP</code></td><td><code>SELECT CURRENT_TIMESTAMP;</code></td><td>includes fractional seconds</td></tr>
+        <tr class="search-item"><td>get current timestamp with no milliseconds</td><td><code>CURRENT_TIMESTAMP(0)</code></td><td><code>SELECT CURRENT_TIMESTAMP(0);</code></td><td>precision argument, not zero time</td></tr>
+        <tr class="search-item"><td>add 5 days to now</td><td><code>INTERVAL</code></td><td><code>SELECT CURRENT_TIMESTAMP(0)::timestamp + INTERVAL '5 days';</code></td><td>timestamp math returns timestamp</td></tr>
+        <tr class="search-item"><td>add rental duration days to rental date</td><td><code>INTERVAL</code></td><td><code>SELECT rental_date + INTERVAL '1 day' * rental_duration;</code></td><td>duration must be numeric days</td></tr>
+        <tr class="search-item"><td>subtract two timestamps</td><td>timestamp subtraction</td><td><code>SELECT return_date - rental_date;</code></td><td>returns interval</td></tr>
+        <tr class="search-item"><td>subtract two dates</td><td>date subtraction</td><td><code>SELECT return_date::date - rental_date::date;</code></td><td>returns integer days</td></tr>
+        <tr class="search-item"><td>get total hours from an interval</td><td><code>EXTRACT(EPOCH)</code></td><td><code>SELECT EXTRACT(EPOCH FROM gap) / 3600;</code></td><td><code>EXTRACT(hour ...)</code> is not total hours</td></tr>
+        <tr class="search-item"><td>round numeric result</td><td><code>ROUND()</code></td><td><code>SELECT ROUND(total_hours, 2);</code></td><td>round after computing</td></tr>
+        <tr class="search-item"><td>group by month</td><td><code>DATE_TRUNC()</code></td><td><code>SELECT DATE_TRUNC('month', rental_date);</code></td><td>safer than month number alone</td></tr>
+        <tr class="search-item"><td>get month number</td><td><code>EXTRACT()</code></td><td><code>SELECT EXTRACT(month FROM rental_date);</code></td><td>numeric part only</td></tr>
+        <tr class="search-item"><td>get quarter number</td><td><code>EXTRACT()</code> or <code>DATE_PART()</code></td><td><code>SELECT EXTRACT(quarter FROM rental_date);</code></td><td>numeric part only</td></tr>
+        <tr class="search-item"><td>get day of week with Sunday as 0</td><td><code>EXTRACT(dow)</code></td><td><code>SELECT EXTRACT(dow FROM rental_date);</code></td><td><code>0 = Sunday, 6 = Saturday</code></td></tr>
+        <tr class="search-item"><td>get ISO day of week</td><td><code>EXTRACT(isodow)</code></td><td><code>SELECT EXTRACT(isodow FROM rental_date);</code></td><td><code>1 = Monday, 7 = Sunday</code></td></tr>
+        <tr class="search-item"><td>get the day number within the month</td><td><code>EXTRACT(day)</code></td><td><code>SELECT EXTRACT(day FROM rental_date);</code></td><td>This is day of month, not weekday</td></tr>
+        <tr class="search-item"><td>cast timestamp to date</td><td><code>::</code> or <code>CAST()</code></td><td><code>SELECT rental_date::date;</code></td><td>drops time detail</td></tr>
+        <tr class="search-item"><td>replace NULL with fallback</td><td><code>COALESCE()</code></td><td><code>SELECT COALESCE(return_date, NOW());</code></td><td>types must match</td></tr>
+        <tr class="search-item"><td>label rows with business logic</td><td><code>CASE</code></td><td><code>SELECT CASE WHEN x &gt; 72 THEN 'Long' END;</code></td><td>order from most specific to least</td></tr>
+        <tr class="search-item"><td>build a full name</td><td><code>CONCAT()</code> or <code>||</code></td><td><code>SELECT CONCAT(first_name, ' ', last_name);</code></td><td><code>||</code> can null out whole result</td></tr>
+        <tr class="search-item"><td>clean outside spaces</td><td><code>TRIM()</code></td><td><code>SELECT TRIM(raw_text);</code></td><td>not internal spaces</td></tr>
+        <tr class="search-item"><td>clean left spaces only</td><td><code>LTRIM()</code></td><td><code>SELECT LTRIM(raw_text);</code></td><td>left side only</td></tr>
+        <tr class="search-item"><td>clean right spaces only</td><td><code>RTRIM()</code></td><td><code>SELECT RTRIM(raw_text);</code></td><td>right side only</td></tr>
+        <tr class="search-item"><td>title-case text</td><td><code>INITCAP()</code></td><td><code>SELECT INITCAP(TRIM(raw_text));</code></td><td>trim first</td></tr>
+        <tr class="search-item"><td>uppercase text</td><td><code>UPPER()</code></td><td><code>SELECT UPPER(TRIM(raw_text));</code></td><td>trim first</td></tr>
+        <tr class="search-item"><td>lowercase text</td><td><code>LOWER()</code></td><td><code>SELECT LOWER(TRIM(raw_text));</code></td><td>trim first</td></tr>
+        <tr class="search-item"><td>pad code with zeros</td><td><code>LPAD()</code></td><td><code>SELECT LPAD(raw_code, 4, '0');</code></td><td>target shorter can truncate</td></tr>
+        <tr class="search-item"><td>collapse repeated internal spaces</td><td><code>REGEXP_REPLACE()</code></td><td><code>SELECT REGEXP_REPLACE(raw_text, '\s+', ' ', 'g');</code></td><td>need <code>'g'</code></td></tr>
+        <tr class="search-item"><td>find substring position</td><td><code>POSITION()</code> or <code>STRPOS()</code></td><td><code>SELECT STRPOS(comparison_text, 'ELF');</code></td><td>returns 0 if not found</td></tr>
+        <tr class="search-item"><td>extract left characters</td><td><code>LEFT()</code></td><td><code>SELECT LEFT(comparison_text, 3);</code></td><td>fixed-width slice</td></tr>
+        <tr class="search-item"><td>extract right characters</td><td><code>RIGHT()</code></td><td><code>SELECT RIGHT(comparison_text, 3);</code></td><td>fixed-width slice</td></tr>
+        <tr class="search-item"><td>extract middle text</td><td><code>SUBSTRING()</code> or <code>SUBSTR()</code></td><td><code>SELECT SUBSTR(comparison_text, 2, 3);</code></td><td>positions start at 1</td></tr>
+        <tr class="search-item"><td>shorten text without cutting the final word</td><td><code>LEFT + REVERSE + POSITION</code></td><td><code>LEFT(txt, 50 - POSITION(' ' IN REVERSE(LEFT(txt, 50))))</code></td><td>assumes spaces exist inside the preview</td></tr>
+        <tr class="search-item"><td>split text by delimiter</td><td><code>SPLIT_PART()</code></td><td><code>SELECT SPLIT_PART(clean_text, ' ', 1);</code></td><td>part numbers start at 1</td></tr>
+        <tr class="search-item"><td>search text starts with</td><td><code>LIKE</code></td><td><code>SELECT * FROM t WHERE txt LIKE 'G%';</code></td><td>case-sensitive</td></tr>
+        <tr class="search-item"><td>search text contains</td><td><code>LIKE</code></td><td><code>SELECT * FROM t WHERE txt LIKE '%BO%';</code></td><td>character search only</td></tr>
+        <tr class="search-item"><td>search case-insensitive</td><td><code>ILIKE</code></td><td><code>SELECT * FROM t WHERE txt ILIKE '%case%';</code></td><td>not full-text search</td></tr>
+        <tr class="search-item"><td>search array for one value</td><td><code>ANY()</code></td><td><code>SELECT * FROM t WHERE 'sql' = ANY(tags);</code></td><td>one searched value</td></tr>
+        <tr class="search-item"><td>check array contains multiple values</td><td><code>@&gt;</code></td><td><code>SELECT * FROM t WHERE tags @&gt; ARRAY['sql','postgres'];</code></td><td>right side must be array</td></tr>
+        <tr class="search-item"><td>count array items</td><td><code>CARDINALITY()</code></td><td><code>SELECT CARDINALITY(tags);</code></td><td>arrays are 1-based</td></tr>
+        <tr class="search-item"><td>create a controlled list of values</td><td><code>CREATE TYPE ... AS ENUM</code></td><td><code>CREATE TYPE dayofweek AS ENUM ('Monday', ...);</code></td><td>better for small stable label lists</td></tr>
+        <tr class="search-item"><td>inspect a user-defined column</td><td><code>information_schema.columns</code></td><td><code>SELECT data_type, udt_name FROM information_schema.columns;</code></td><td>check <code>udt_name</code> when <code>data_type</code> says <code>USER-DEFINED</code></td></tr>
+        <tr class="search-item"><td>inspect a custom type in PostgreSQL</td><td><code>pg_type</code></td><td><code>SELECT typname, typcategory FROM pg_type WHERE typcategory = 'E';</code></td><td><code>'E'</code> means enum category</td></tr>
+        <tr class="search-item"><td>create the exact video function with PL/pgSQL</td><td><code>CREATE FUNCTION</code></td><td><code>CREATE FUNCTION squared(i integer) RETURNS integer AS $$ BEGIN RETURN i * i; END; $$ LANGUAGE plpgsql;</code></td><td>remember <code>BEGIN</code>, <code>RETURN</code>, <code>END</code>, and <code>LANGUAGE plpgsql</code></td></tr>
+        <tr class="search-item"><td>choose SQL versus PL/pgSQL for a function</td><td><code>LANGUAGE SQL</code> or <code>LANGUAGE plpgsql</code></td><td><code>CREATE FUNCTION ... LANGUAGE ...</code></td><td>simple query body can use SQL; the video lesson uses PL/pgSQL</td></tr>
+        <tr class="search-item"><td>find existing routines or helper functions</td><td><code>information_schema.routines</code> or <code>pg_proc</code></td><td><code>SELECT routine_name FROM information_schema.routines;</code></td><td>schema filtering keeps results useful</td></tr>
+        <tr class="search-item"><td>inspect a function signature before calling it</td><td><code>pg_get_function_identity_arguments()</code></td><td><code>SELECT pg_get_function_identity_arguments(p.oid) FROM pg_proc AS p;</code></td><td>safer than inventing Sakila argument counts</td></tr>
+        <tr class="search-item"><td>discover installable extensions</td><td><code>pg_available_extensions</code></td><td><code>SELECT name FROM pg_available_extensions;</code></td><td>available does not mean enabled yet</td></tr>
+        <tr class="search-item"><td>inspect enabled extensions</td><td><code>pg_extension</code></td><td><code>SELECT extname FROM pg_extension;</code></td><td>shows the current database state</td></tr>
+        <tr class="search-item"><td>safely enable fuzzystrmatch</td><td><code>CREATE EXTENSION IF NOT EXISTS</code></td><td><code>CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;</code></td><td>use rerunnable setup</td></tr>
+        <tr class="search-item"><td>compare GUMBO and GAMBOL by edit distance</td><td><code>levenshtein()</code></td><td><code>SELECT levenshtein('GUMBO', 'GAMBOL');</code></td><td>returns <code>2</code>; lower is better</td></tr>
+        <tr class="search-item"><td>compare GUMBO and GAMBOL by trigram similarity</td><td><code>similarity()</code></td><td><code>SELECT similarity('GUMBO', 'GAMBOL');</code></td><td>returns <code>0.181818</code>; higher is better</td></tr>
+        <tr class="search-item"><td>full-text searchable document</td><td><code>to_tsvector()</code></td><td><code>SELECT to_tsvector('english', description);</code></td><td>tokens normalize</td></tr>
+        <tr class="search-item"><td>full-text query from plain words</td><td><code>plainto_tsquery()</code></td><td><code>SELECT plainto_tsquery('english', 'postgres database');</code></td><td>stop words may be removed</td></tr>
+        <tr class="search-item"><td>full-text match</td><td><code>@@</code></td><td><code>SELECT doc @@ query;</code></td><td>use tsvector plus tsquery</td></tr>
+        <tr class="search-item"><td>fuzzy typo distance</td><td><code>levenshtein()</code></td><td><code>SELECT levenshtein('POSTGRES HERO', 'POSTGRES HER0');</code></td><td>lower is better</td></tr>
+        <tr class="search-item"><td>fuzzy sound match</td><td><code>soundex()</code> / <code>difference()</code></td><td><code>SELECT difference('Smith', 'Smyth');</code></td><td><code>difference()</code> higher is better</td></tr>
+        <tr class="search-item"><td>fuzzy trigram score</td><td><code>similarity()</code></td><td><code>SELECT similarity('POSTGRES HERO', 'POSTGRES HER0');</code></td><td>higher is better</td></tr>
+        <tr class="search-item"><td>fuzzy trigram pass/fail</td><td><code>pg_trgm %</code></td><td><code>SELECT title % 'POSTGRES HER0';</code></td><td>threshold-based true/false</td></tr>
+        <tr class="search-item"><td>fuzzy match inside longer sentence</td><td><code>word_similarity()</code></td><td><code>SELECT word_similarity('POSTGRES HERO', 'please find POSTGRES HER0 for me');</code></td><td>higher is better</td></tr>
+        <tr class="search-item"><td>rank closest trigram matches</td><td><code>pg_trgm &lt;-&gt;</code></td><td><code>SELECT title &lt;-&gt; 'POSTGRES HER0' FROM lab_films ORDER BY 1 ASC;</code></td><td>sort ascending</td></tr>
+      </tbody>
+    </table>
+    <div class="section-nav">
+      <a href="#az-index">← Previous</a>
+      <a href="#top">↑ Top</a>
+      <a href="#tiny-examples">Next →</a>
+    </div>
+  </div>
+
+  <div class="section" id="tiny-examples">
+    <div class="section-header">
+      <div class="section-num tel">04</div>
+      <h2>Tiny Examples by Category</h2>
+    </div>
+    <div class="cards">
+      <div class="card search-item">
+        <h3>Date/time quick examples</h3>
+        <pre><code>SELECT CURRENT_DATE;
+SELECT CURRENT_TIME;
+SELECT CURRENT_TIMESTAMP;
+SELECT CURRENT_TIMESTAMP(0);
+SELECT CURRENT_TIMESTAMP(0)::timestamp;
+SELECT CURRENT_TIMESTAMP(0)::timestamp + INTERVAL '5 days';
+SELECT rental_date + INTERVAL '1 day' * rental_duration AS expected_return_date;
+SELECT return_date - rental_date AS rental_duration;
+SELECT return_date::date - rental_date::date AS rental_days;
+SELECT DATE_TRUNC('month', rental_date) AS rental_month;
+SELECT EXTRACT(day FROM rental_date) AS day_of_month;
+SELECT EXTRACT(dow FROM rental_date) AS postgres_day_of_week;
+SELECT EXTRACT(isodow FROM rental_date) AS iso_day_of_week;
+SELECT DATE_PART('dow', rental_date) AS postgres_day_of_week;
+SELECT DATE_PART('isodow', rental_date) AS iso_day_of_week;
+SELECT EXTRACT(month FROM rental_date) AS rental_month_number;
+SELECT EXTRACT(EPOCH FROM return_date - rental_date) / 3600 AS total_hours;</code></pre>
+      </div>
+      <div class="card search-item">
+        <h3>Text cleanup quick examples</h3>
+        <pre><code>SELECT TRIM(raw_text);
+SELECT LTRIM(raw_text);
+SELECT RTRIM(raw_text);
+SELECT INITCAP(TRIM(raw_text));
+SELECT UPPER(TRIM(raw_text));
+SELECT LOWER(TRIM(raw_text));
+SELECT LPAD(raw_code, 4, '0');
+SELECT REGEXP_REPLACE(raw_text, '\s+', ' ', 'g');</code></pre>
+      </div>
+      <div class="card search-item">
+        <h3>Text parsing quick examples</h3>
+        <pre><code>SELECT POSITION('ELF' IN comparison_text);
+SELECT STRPOS(comparison_text, 'ELF');
+SELECT LEFT(comparison_text, 3);
+SELECT RIGHT(comparison_text, 3);
+SELECT SUBSTRING(comparison_text FROM 2 FOR 3);
+SELECT SUBSTR(comparison_text, 2, 3);
+SELECT
+  LEFT(
+    description,
+    50 - POSITION(
+      ' ' IN REVERSE(LEFT(description, 50))
+    )
+  ) AS short_description
+FROM film;
+SELECT SPLIT_PART(clean_text, ' ', 1);</code></pre>
+      </div>
+      <div class="card search-item">
+        <h3>Pattern search quick examples</h3>
+        <pre><code>SELECT * FROM lab_dirty_text WHERE comparison_text LIKE 'G%';
+SELECT * FROM lab_dirty_text WHERE comparison_text LIKE '%BO%';
+SELECT * FROM lab_dirty_text WHERE comparison_text LIKE 'G_MBO';
+SELECT * FROM lab_dirty_text WHERE comparison_text ILIKE '%case%';</code></pre>
+      </div>
+      <div class="card search-item">
+        <h3>ARRAY quick examples</h3>
+        <pre><code>SELECT favorite_tags[1] AS first_tag FROM lab_customers;
+SELECT * FROM lab_customers WHERE 'sql' = ANY(favorite_tags);
+SELECT * FROM lab_customers WHERE favorite_tags @> ARRAY['sql'];
+SELECT * FROM lab_customers WHERE favorite_tags @> ARRAY['sql', 'postgres'];
+SELECT CARDINALITY(favorite_tags) AS tag_count FROM lab_customers;</code></pre>
+      </div>
+      <div class="card search-item">
+        <h3>Custom types and functions quick examples</h3>
+        <pre><code>CREATE TYPE dayofweek AS ENUM (
+  'Monday',
+  'Tuesday',
+  'Wednesday'
+);
+
+SELECT typname, typcategory
+FROM pg_type
+WHERE typcategory = 'E';
+
+SELECT data_type, udt_name
+FROM information_schema.columns
+WHERE data_type = 'USER-DEFINED';
+
+CREATE FUNCTION squared(i integer)
+RETURNS integer AS $$
+BEGIN
+  RETURN i * i;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT squared(5);
+
+CREATE FUNCTION squared_sql(i integer)
+RETURNS integer
+AS $$
+  SELECT i * i;
+$$
+LANGUAGE SQL;
+
+SELECT
+  n.nspname,
+  p.proname,
+  pg_get_function_identity_arguments(p.oid),
+  pg_get_function_result(p.oid)
+FROM pg_proc AS p
+INNER JOIN pg_namespace AS n
+  ON n.oid = p.pronamespace;</code></pre>
+      </div>
+      <div class="card search-item">
+        <h3>Full-text search quick examples</h3>
+        <pre><code>SELECT to_tsvector('english', description) FROM lab_films;
+
+SELECT *
+FROM lab_films
+WHERE to_tsvector('english', description)
+      @@ to_tsquery('english', 'elf');
+
+SELECT *
+FROM lab_films
+WHERE to_tsvector('english', title || ' ' || description)
+      @@ plainto_tsquery('english', 'postgres database');</code></pre>
+      </div>
+      <div class="card search-item">
+        <h3>Fuzzy search quick examples</h3>
+        <pre><code>CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+SELECT levenshtein('POSTGRES HERO', 'POSTGRES HER0');
+SELECT soundex('Smith'), soundex('Smyth');
+SELECT difference('Smith', 'Smyth');
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+SELECT similarity('POSTGRES HERO', 'POSTGRES HER0');
+SELECT word_similarity('POSTGRES HERO', 'please find POSTGRES HER0 for me');
+SELECT show_limit();
+SELECT set_limit(0.3);
+
+SELECT *
+FROM lab_films
+WHERE title % 'POSTGRES HER0';
+
+SELECT
+  title,
+  title <-> 'POSTGRES HER0' AS trigram_distance
+FROM lab_films
+ORDER BY trigram_distance ASC;</code></pre>
+      </div>
+      <div class="card search-item">
+        <h3>PostgreSQL extension video examples</h3>
+        <pre><code>SELECT name FROM pg_available_extensions;
+SELECT extname FROM pg_extension;
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+SELECT extname FROM pg_extension;
+SELECT levenshtein('GUMBO', 'GAMBOL');
+SELECT similarity('GUMBO', 'GAMBOL');
+
+-- levenshtein result = 2
+-- similarity result = 0.181818</code></pre>
+      </div>
+    </div>
+    <div class="section-nav">
+      <a href="#problem-index">← Previous</a>
+      <a href="#top">↑ Top</a>
+      <a href="#direction-rules">Next →</a>
+    </div>
+  </div>
+
+  <div class="section" id="direction-rules">
+    <div class="section-header">
+      <div class="section-num red">05</div>
+      <h2>Direction Rules: Higher vs Lower vs True/False</h2>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Function / Operator</th><th>Direction</th><th>Best value</th><th>Memory</th></tr>
+      </thead>
+      <tbody>
+        <tr class="search-item"><td><code>levenshtein()</code></td><td>lower is better</td><td><code>0</code> exact</td><td>edit distance</td></tr>
+        <tr class="search-item"><td><code>similarity()</code></td><td>higher is better</td><td><code>1</code> exact/high</td><td>trigram score</td></tr>
+        <tr class="search-item"><td><code>word_similarity()</code></td><td>higher is better</td><td><code>1</code> exact/high</td><td>match inside longer text</td></tr>
+        <tr class="search-item"><td><code>difference()</code></td><td>higher is better</td><td><code>4</code> strongest</td><td>sound similarity</td></tr>
+        <tr class="search-item"><td><code>title % search</code></td><td>true/false</td><td><code>true</code></td><td>passes pg_trgm threshold</td></tr>
+        <tr class="search-item"><td><code>title &lt;-&gt; search</code></td><td>lower is better</td><td><code>0</code> exact/close</td><td>trigram distance</td></tr>
+        <tr class="search-item"><td><code>LIKE</code> / <code>ILIKE</code></td><td>true/false</td><td><code>true</code></td><td>character pattern match</td></tr>
+        <tr class="search-item"><td><code>@@</code></td><td>true/false</td><td><code>true</code></td><td>full-text match</td></tr>
+        <tr class="search-item"><td><code>@&gt;</code></td><td>true/false</td><td><code>true</code></td><td>array contains requested array</td></tr>
+        <tr class="search-item"><td><code>ANY()</code></td><td>true/false</td><td><code>true</code></td><td>searched value appears in array</td></tr>
+      </tbody>
+    </table>
+    <div class="section-nav">
+      <a href="#tiny-examples">← Previous</a>
+      <a href="#top">↑ Top</a>
+      <a href="#mistake-table">Next →</a>
+    </div>
+  </div>
+
+  <div class="section" id="mistake-table">
+    <div class="section-header">
+      <div class="section-num ylw">06</div>
+      <h2>Common Mistake Flash Table</h2>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Mistake</th><th>Correct memory</th></tr>
+      </thead>
+      <tbody>
+        <tr class="search-item"><td><code>CURRENT_TIMESTAMP(___)</code> syntax error</td><td>replace blank with precision like <code>CURRENT_TIMESTAMP(0)</code></td></tr>
+        <tr class="search-item"><td>expecting <code>DATE - DATE</code> to return interval</td><td>it returns integer days</td></tr>
+        <tr class="search-item"><td>expecting <code>TIMESTAMP - TIMESTAMP</code> to return number</td><td>it returns <code>INTERVAL</code></td></tr>
+        <tr class="search-item"><td>using <code>EXTRACT(hour FROM interval)</code> for total hours</td><td>use <code>EXTRACT(EPOCH FROM interval) / 3600</code></td></tr>
+        <tr class="search-item"><td>grouping by <code>EXTRACT(month)</code> across years</td><td>use <code>DATE_TRUNC('month', timestamp)</code></td></tr>
+        <tr class="search-item"><td>Using <code>EXTRACT(day FROM date)</code> for weekday</td><td><code>day</code> means day of month; use <code>dow</code> or <code>isodow</code> for weekday</td></tr>
+        <tr class="search-item"><td>Forgetting PostgreSQL <code>dow</code> numbering</td><td><code>dow</code>: Sunday = 0 through Saturday = 6</td></tr>
+        <tr class="search-item"><td>Forgetting ISO weekday numbering</td><td><code>isodow</code>: Monday = 1 through Sunday = 7</td></tr>
+        <tr class="search-item"><td>expecting arrays to start at 0</td><td>PostgreSQL arrays start at 1</td></tr>
+        <tr class="search-item"><td>thinking <code>USER-DEFINED</code> is the actual type name</td><td>check <code>udt_name</code> for the real PostgreSQL type</td></tr>
+        <tr class="search-item"><td>thinking every controlled list should be an enum</td><td>use a lookup table when values need attributes or frequent changes</td></tr>
+        <tr class="search-item"><td>describing the video function with <code>LANGUAGE SQL</code> only</td><td>the course video uses <code>LANGUAGE plpgsql</code> for <code>squared()</code></td></tr>
+        <tr class="search-item"><td>forgetting <code>BEGIN</code>, <code>RETURN</code>, or <code>END;</code> in the PL/pgSQL body</td><td>the procedural example needs the full block plus the internal semicolon</td></tr>
+        <tr class="search-item"><td>confusing <code>$$ ... $$</code> with language selection</td><td>dollar quoting marks the body; <code>LANGUAGE ...</code> picks how PostgreSQL interprets it</td></tr>
+        <tr class="search-item"><td>inventing Sakila helper-function arguments</td><td>inspect signatures first with <code>pg_get_function_identity_arguments()</code></td></tr>
+        <tr class="search-item"><td>treating <code>information_schema.routines</code> and <code>pg_proc</code> as the same thing</td><td>portable view versus PostgreSQL-native catalog</td></tr>
+        <tr class="search-item"><td>thinking available means installed</td><td>available means it can be enabled; check <code>pg_extension</code> for what is installed now</td></tr>
+        <tr class="search-item"><td>thinking <code>pg_extension</code> lists installable options</td><td><code>pg_extension</code> lists enabled extensions; <code>pg_available_extensions</code> lists installable options</td></tr>
+        <tr class="search-item"><td>expecting <code>TRIM()</code> to fix internal spaces</td><td>use <code>REGEXP_REPLACE(text, '\s+', ' ', 'g')</code></td></tr>
+        <tr class="search-item"><td>forgetting <code>'g'</code> in <code>REGEXP_REPLACE()</code></td><td>without <code>g</code>, only first match is replaced</td></tr>
+        <tr class="search-item"><td>using <code>LEFT(text, 50)</code> when complete words matter</td><td>find the last space inside the preview before applying the final <code>LEFT()</code></td></tr>
+        <tr class="search-item"><td>expecting <code>LIKE</code> to ignore case</td><td>use <code>ILIKE</code></td></tr>
+        <tr class="search-item"><td>treating <code>levenshtein()</code> bigger as better</td><td>lower is better</td></tr>
+        <tr class="search-item"><td>reading Levenshtein high as good</td><td>Levenshtein is edit distance, so lower is better</td></tr>
+        <tr class="search-item"><td>treating <code>similarity()</code> lower as better</td><td>higher is better</td></tr>
+        <tr class="search-item"><td>reading similarity low as good</td><td>similarity is a trigram score, so higher is better</td></tr>
+        <tr class="search-item"><td>reading <code>pg_trgm %</code> as percent math</td><td>it means similar enough</td></tr>
+        <tr class="search-item"><td>sorting <code>&lt;-&gt;</code> descending</td><td>use ascending because lower distance is better</td></tr>
+        <tr class="search-item"><td>pasting result table text into psql</td><td>paste only SQL or comment text with <code>--</code></td></tr>
+      </tbody>
+    </table>
+    <div class="section-nav">
+      <a href="#direction-rules">← Previous</a>
+      <a href="#top">↑ Top</a>
+      <a href="#main-guides">Next →</a>
+    </div>
+  </div>
+
+  <div class="section" id="main-guides">
+    <div class="section-header">
+      <div class="section-num tel">07</div>
+      <h2>Links Back to Main Guides</h2>
+    </div>
+    <ul class="search-item">
+      <li><a href="field_guide.html">field_guide.html</a></li>
+      <li><a href="../lab/lab_guide.html">lab_guide.html</a></li>
+    </ul>
+    <div class="callout info search-item">
+      <strong>WHEN TO USE WHICH</strong>
+      Field Guide = concept explanation. Lab Guide = worked practice and evidence. Quick Lookup = fastest syntax reminder.
+    </div>
+    <div class="section-nav">
+      <a href="#mistake-table">← Previous</a>
+      <a href="#top">↑ Top</a>
+    </div>
+  </div>
+
+  <div class="floating-nav" aria-label="Floating page navigation">
+    <a href="#top">Top</a>
+    <a href="#az-index">A-Z</a>
+    <a href="#problem-index">Problems</a>
+    <a href="#mistake-table">Mistakes</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>PostgreSQL Functions Quick Lookup Cheat Sheet · Built for fast syntax lookup.</p>
+    <p style="margin-top:6px"><a href="#top">↑ back to top</a></p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    const input = document.getElementById('lookupSearch');
+    const items = Array.from(document.querySelectorAll('.search-item'));
+    const searchCount = document.getElementById('searchCount');
+    function applyFilter() {
+      const q = input.value.toLowerCase().trim();
+      let visibleCount = 0;
+      items.forEach(function (item) {
+        const text = item.textContent.toLowerCase();
+        const show = q === '' || text.includes(q);
+        item.style.display = show ? '' : 'none';
+        if (show) {
+          visibleCount += 1;
+        }
+      });
+      if (q === '') {
+        searchCount.textContent = 'Showing all quick lookup items';
+      } else {
+        searchCount.textContent = 'Showing ' + visibleCount + ' matching items';
+      }
+    }
+    input.addEventListener('input', applyFilter);
+    applyFilter();
+  }());
+</script>
+</body>
+</html>

@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 1 — Introducing Inner Joins | Joining Data in SQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Joining Data in SQL</a>
+      <span>›</span>
+      <span>Chapter 1: Introducing Inner Joins</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Joining Data in SQL · Chapter 1</p>
+      <h1>Introducing Inner Joins</h1>
+      <p>
+        Match rows across tables, use aliases safely, choose between <code>ON</code>
+        and <code>USING</code>, understand primary and foreign keys, and chain multiple
+        joins without creating accidental row multiplication.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_join_quick_lookup.html">SQL Join Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_outer_cross_and_self_joins_field_guide.html">Next Chapter</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Chapter Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#inner-join">2. INNER JOIN</a>
+        <a href="#first-join">3. Your first join</a>
+        <a href="#aliases">4. Table aliases</a>
+        <a href="#on-using">5. ON versus USING</a>
+        <a href="#relationships">6. Table relationships</a>
+        <a href="#inspect">7. Inspecting relationships</a>
+        <a href="#multiple-joins">8. Multiple joins</a>
+        <a href="#validation">9. Checking joins</a>
+        <a href="#mistakes">10. Common mistakes</a>
+        <a href="#interview">11. Interview translation</a>
+        <a href="#review">12. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>
+            A join combines related rows at query time. It does not permanently merge tables.
+            The database evaluates a relationship between columns and returns the requested
+            fields from the matching rows.
+          </p>
+
+          <div class="diagram">Choose the starting table
+      ↓
+Identify the related table
+      ↓
+Choose the matching key or keys
+      ↓
+Join the rows
+      ↓
+Select and validate the result</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>INNER JOIN</h3>
+              <p>Keeps rows only when the join condition finds a match in both inputs.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Primary key</h3>
+              <p>Uniquely identifies a row in its own table.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Foreign key</h3>
+              <p>Refers to a key in another table and creates a relationship.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Cardinality</h3>
+              <p>Determines whether one key produces one row or many output rows.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Chapter punchline:</strong> a correct join starts with the real-world relationship, not merely with columns that have the same data type.
+          </div>
+        </section>
+
+        <section class="section" id="inner-join">
+          <h2>2. The Ins and Outs of INNER JOIN</h2>
+          <p>
+            For each row in one table, SQL searches the other table for rows that satisfy
+            the join condition. Only successful matches remain.
+          </p>
+
+          <div class="diagram">countries                         populations
+---------                         -----------
+code  name                        country_code  year  population
+USA   United States               USA           2020  331000000
+CAN   Canada                      CAN           2020   38000000
+MEX   Mexico                      BRA           2020  213000000
+
+INNER JOIN on countries.code = populations.country_code
+
+USA and CAN remain.
+MEX has no population match and is removed.
+BRA has no country match and is removed.</div>
+
+          <div class="callout amber">
+            <strong>Important:</strong> an INNER JOIN may return more rows than either source
+            table when one key matches several rows. That is normal in one-to-many relationships.
+          </div>
+        </section>
+
+        <section class="section" id="first-join">
+          <h2>3. Your First Join</h2>
+
+          <pre><code>SELECT c.name,
+       p.year,
+       p.population
+FROM countries AS c
+INNER JOIN populations AS p
+  ON c.code = p.country_code;</code></pre>
+
+          <h3>Read the query in plain English</h3>
+          <ol>
+            <li>Start with the <code>countries</code> table.</li>
+            <li>Match rows from <code>populations</code>.</li>
+            <li>Use country code as the relationship.</li>
+            <li>Keep only matching rows.</li>
+            <li>Return country name, year, and population.</li>
+          </ol>
+
+          <div class="callout">
+            <strong>Join condition rule:</strong> compare fields that represent the same
+            real-world identifier. Similar names or matching data types are not enough.
+          </div>
+        </section>
+
+        <section class="section" id="aliases">
+          <h2>4. Joining with Aliased Tables</h2>
+          <p>
+            Aliases shorten references and make column ownership explicit.
+          </p>
+
+          <pre><code>SELECT c.name,
+       p.year,
+       p.population
+FROM countries AS c
+INNER JOIN populations AS p
+  ON c.code = p.country_code;</code></pre>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Practice</th>
+                <th>Why it matters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>countries AS c</code></td>
+                <td>Creates a short, readable table reference.</td>
+              </tr>
+              <tr>
+                <td><code>c.name</code></td>
+                <td>Shows exactly which table supplies the field.</td>
+              </tr>
+              <tr>
+                <td>Use aliases consistently</td>
+                <td>Prevents ambiguity in SELECT, ON, WHERE, and ORDER BY.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout danger">
+            <strong>Common mistake:</strong> after assigning an alias, do not keep using
+            the original table name in the same query block. Use the alias consistently.
+          </div>
+        </section>
+
+        <section class="section" id="on-using">
+          <h2>5. ON versus USING</h2>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Use ON</h3>
+              <pre><code>FROM countries AS c
+INNER JOIN populations AS p
+  ON c.code = p.country_code</code></pre>
+              <p>Use it when field names differ or the relationship needs several conditions.</p>
+            </article>
+
+            <article class="mini-card">
+              <h3>Use USING</h3>
+              <pre><code>FROM countries AS c
+INNER JOIN economies AS e
+  USING (code)</code></pre>
+              <p>Use it when both tables have the same join-column name.</p>
+            </article>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>ON</th>
+                <th>USING</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Different field names</td>
+                <td>Supported</td>
+                <td>Not supported</td>
+              </tr>
+              <tr>
+                <td>Compound conditions</td>
+                <td>Supported</td>
+                <td>Only shared named fields</td>
+              </tr>
+              <tr>
+                <td>Readability</td>
+                <td>More explicit</td>
+                <td>More compact</td>
+              </tr>
+              <tr>
+                <td>Join key in output</td>
+                <td>Both field versions may remain addressable</td>
+                <td>Usually exposed as one merged key field</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            <strong>Memory rule:</strong> same field name on both sides means
+            <code>USING</code> is possible. Different names require <code>ON</code>.
+          </div>
+        </section>
+
+        <section class="section" id="relationships">
+          <h2>6. Defining Table Relationships</h2>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Primary key</h3>
+              <p>A field or field set that uniquely identifies one row.</p>
+              <p>Example: <code>countries.code</code>.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Foreign key</h3>
+              <p>A field whose values refer to a key in another table.</p>
+              <p>Example: <code>populations.country_code</code>.</p>
+            </article>
+          </div>
+
+          <h3>Common relationship shapes</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Relationship</th>
+                <th>Meaning</th>
+                <th>Typical result effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>One-to-one</td>
+                <td>One row on each side for a key</td>
+                <td>Usually one result row per match</td>
+              </tr>
+              <tr>
+                <td>One-to-many</td>
+                <td>One parent row matches several child rows</td>
+                <td>Parent values repeat across result rows</td>
+              </tr>
+              <tr>
+                <td>Many-to-many</td>
+                <td>Several rows on both sides share a key</td>
+                <td>Rows may multiply rapidly</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout">
+            <strong>Key lesson:</strong> join keys do not have to be unique, but their
+            uniqueness determines how many output rows are produced.
+          </div>
+        </section>
+
+        <section class="section" id="inspect">
+          <h2>7. Inspecting a Relationship</h2>
+          <p>
+            Before trusting a join, inspect the fields and sample values that connect the tables.
+          </p>
+
+          <h3>Inspect key values</h3>
+          <pre><code>SELECT code,
+       name
+FROM countries
+ORDER BY code;
+
+SELECT country_code,
+       year,
+       population
+FROM populations
+ORDER BY country_code,
+         year;</code></pre>
+
+          <h3>Check key frequency</h3>
+          <pre><code>SELECT country_code,
+       COUNT(*) AS rows_per_country
+FROM populations
+GROUP BY country_code
+ORDER BY rows_per_country DESC;</code></pre>
+
+          <p>
+            This reveals whether each country appears once or many times in the child table.
+          </p>
+
+          <div class="callout amber">
+            <strong>Before joining:</strong> confirm meaning, data type, sample values,
+            nullability, uniqueness, and whether an additional field such as year is part
+            of the relationship.
+          </div>
+        </section>
+
+        <section class="section" id="multiple-joins">
+          <h2>8. Joining Multiple Tables</h2>
+          <p>
+            Add tables one at a time. Each new join should connect to tables already available
+            in the query through a valid relationship.
+          </p>
+
+          <pre><code>SELECT c.name,
+       p.year,
+       p.fertility_rate,
+       e.unemployment_rate
+FROM countries AS c
+INNER JOIN populations AS p
+  ON c.code = p.country_code
+INNER JOIN economies AS e
+  ON c.code = e.code
+ AND p.year = e.year;</code></pre>
+
+          <div class="callout green">
+            <strong>Why match both country and year?</strong> Country identifies the entity,
+            while year identifies the reporting period. Omitting year may combine unrelated periods.
+          </div>
+
+          <h3>Build the join incrementally</h3>
+          <pre><code>-- Step 1: validate countries and populations
+SELECT c.code,
+       c.name,
+       p.year
+FROM countries AS c
+INNER JOIN populations AS p
+  ON c.code = p.country_code;
+
+-- Step 2: add economies with the complete relationship
+SELECT c.code,
+       c.name,
+       p.year,
+       e.unemployment_rate
+FROM countries AS c
+INNER JOIN populations AS p
+  ON c.code = p.country_code
+INNER JOIN economies AS e
+  ON c.code = e.code
+ AND p.year = e.year;</code></pre>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>9. Checking Multi-Table Joins</h2>
+          <p>
+            A query may execute successfully while still being logically wrong.
+            Validate each stage of the join.
+          </p>
+
+          <ul>
+            <li>Compare row counts before and after each join.</li>
+            <li>Select the join keys temporarily so you can inspect them.</li>
+            <li>Check whether duplicate growth is expected.</li>
+            <li>Include time or another dimension when the relationship requires it.</li>
+            <li>Build one join at a time instead of writing the entire chain at once.</li>
+          </ul>
+
+          <pre><code>SELECT c.code,
+       p.year,
+       COUNT(*) AS joined_rows
+FROM countries AS c
+INNER JOIN populations AS p
+  ON c.code = p.country_code
+INNER JOIN economies AS e
+  ON c.code = e.code
+ AND p.year = e.year
+GROUP BY c.code,
+         p.year
+HAVING COUNT(*) &gt; 1;</code></pre>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> when a result becomes much larger than expected,
+            inspect whether part of a composite relationship—such as year—was omitted.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>10. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Joining fields only because their names look related</strong>
+              Similar names do not prove that the fields represent the same business key.
+            </article>
+
+            <article class="qa-item">
+              <strong>Ignoring year in a country-and-year relationship</strong>
+              This may create cross-year combinations for each country.
+            </article>
+
+            <article class="qa-item">
+              <strong>Selecting an ambiguous field name</strong>
+              Use the table alias, such as <code>c.name</code>, when several tables contain
+              fields with the same name.
+            </article>
+
+            <article class="qa-item">
+              <strong>Expecting unmatched rows from INNER JOIN</strong>
+              INNER JOIN removes rows that do not satisfy the join condition.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming one match per key</strong>
+              One-to-many relationships legitimately repeat the parent row.
+            </article>
+
+            <article class="qa-item">
+              <strong>Writing every join before testing</strong>
+              Build the query in stages so row growth and faulty conditions are easier to find.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>11. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What does INNER JOIN do?</strong>
+              It returns rows where the join condition finds a match in both inputs.
+              Unmatched rows from either side are excluded.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why can an INNER JOIN increase row count?</strong>
+              Because one key may match several rows. In one-to-many or many-to-many relationships,
+              each valid combination becomes an output row.
+            </article>
+
+            <article class="qa-item">
+              <strong>When would you use USING instead of ON?</strong>
+              I use <code>USING</code> when both tables share the same join-field name and the
+              relationship is simple. I use <code>ON</code> for different names, compound keys,
+              or more explicit conditions.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you troubleshoot a multi-table join?</strong>
+              I add one join at a time, inspect the key fields, compare row counts, test key
+              uniqueness, and verify that every part of a composite key is included.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is the difference between a primary key and a foreign key?</strong>
+              A primary key uniquely identifies a row in its own table. A foreign key stores
+              values that refer to a key in another table.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>12. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Six-sentence chapter summary</strong>
+            <ol>
+              <li><code>INNER JOIN</code> keeps matched rows only.</li>
+              <li>Aliases make field ownership clear.</li>
+              <li><code>USING</code> requires matching field names.</li>
+              <li>Primary and foreign keys describe how tables relate.</li>
+              <li>Relationship cardinality determines row multiplication.</li>
+              <li>Multi-table joins may require compound conditions such as entity plus year.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you write a two-table INNER JOIN?</li>
+            <li>Can you explain why one country may appear several times?</li>
+            <li>Can you choose between <code>ON</code> and <code>USING</code>?</li>
+            <li>Can you identify the primary and foreign key in a relationship?</li>
+            <li>Can you explain why year sometimes belongs in the join condition?</li>
+            <li>Can you validate a join with row counts and duplicate checks?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision for Chapter 1:</strong> no separate chapter-only lab is required.
+            The DataCamp exercises already provide direct practice, and the guide preserves the reusable patterns.
+          </div>
+
+          <div class="callout green">
+            <strong>Chapter completion standard:</strong> write a two-table INNER JOIN,
+            explain one-to-many row growth, choose between <code>ON</code> and <code>USING</code>,
+            and chain a third table without mixing unrelated periods.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Joining Data in SQL · Chapter 1 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_outer_cross_and_self_joins_field_guide.html">Next Chapter</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

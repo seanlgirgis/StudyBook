@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Joining Data in SQL | Quick Lookup</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0,0,0,0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3,239,98,0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .search-wrap {
+      margin-top: 18px;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      min-height: 46px;
+      padding: 0 14px;
+      border: 1px solid #486274;
+      border-radius: 10px;
+      background: #0f141a;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(3,239,98,0.12);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0,1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 20px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .lookup-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .lookup-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .lookup-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      color: var(--green);
+    }
+
+    .lookup-card p {
+      margin: 6px 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .lookup-card .trap {
+      margin-top: 9px;
+      padding: 9px 10px;
+      border-left: 3px solid var(--amber);
+      border-radius: 7px;
+      background: var(--amber-soft);
+      color: #ddcfad;
+      font-size: 0.88rem;
+    }
+
+    pre {
+      overflow-x: auto;
+      margin: 12px 0;
+      padding: 14px;
+      border: 1px solid #33404d;
+      border-radius: 9px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .hidden { display: none !important; }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .lookup-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Joining Data in SQL</a>
+      <span>›</span>
+      <span>SQL Quick Lookup</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp · Joining Data in SQL</p>
+      <h1>SQL Quick Lookup</h1>
+      <p>
+        The smallest useful syntax patterns, direction rules, and common traps
+        for joins, set operators, semi joins, anti joins, and subqueries.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="../lab/lab_guide.html">Integrated Lab</a>
+        <a class="button secondary" href="chapter_01_introducing_inner_joins_field_guide.html">Chapter 1</a>
+      </div>
+
+      <div class="search-wrap">
+        <input id="lookupSearch" type="search" placeholder="Search: left join, except, anti join, null, correlated..." aria-label="Search quick lookup">
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Quick Lookup</h2>
+        <a href="#decision">1. Decision table</a>
+        <a href="#joins">2. Join patterns</a>
+        <a href="#outer">3. Outer join traps</a>
+        <a href="#cross-self">4. Cross and self joins</a>
+        <a href="#sets">5. Set operators</a>
+        <a href="#subqueries">6. Subqueries</a>
+        <a href="#semi-anti">7. Semi and anti joins</a>
+        <a href="#validation">8. Validation patterns</a>
+        <a href="#memory">9. One-line rules</a>
+      </aside>
+
+      <div class="content">
+        <section class="section searchable" id="decision">
+          <h2>1. Decision Table</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Need</th>
+                <th>Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Only matching rows</td><td><code>INNER JOIN</code></td></tr>
+              <tr><td>All rows from the main table</td><td><code>LEFT JOIN</code></td></tr>
+              <tr><td>All rows from both tables</td><td><code>FULL JOIN</code></td></tr>
+              <tr><td>Every possible combination</td><td><code>CROSS JOIN</code></td></tr>
+              <tr><td>Compare rows in one table</td><td>Self join</td></tr>
+              <tr><td>Append and remove duplicates</td><td><code>UNION</code></td></tr>
+              <tr><td>Append and preserve duplicates</td><td><code>UNION ALL</code></td></tr>
+              <tr><td>Rows present in both results</td><td><code>INTERSECT</code></td></tr>
+              <tr><td>Rows in first result only</td><td><code>EXCEPT</code></td></tr>
+              <tr><td>Related row exists</td><td><code>EXISTS</code> or <code>IN</code></td></tr>
+              <tr><td>No related row exists</td><td><code>NOT EXISTS</code></td></tr>
+              <tr><td>Compare to one summary value</td><td>Scalar subquery</td></tr>
+              <tr><td>Build an intermediate table</td><td>Subquery in <code>FROM</code></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section searchable" id="joins">
+          <h2>2. Join Patterns</h2>
+          <div class="lookup-grid">
+            <article class="lookup-card searchable">
+              <h3>INNER JOIN</h3>
+              <pre><code>SELECT ...
+FROM table_a AS a
+INNER JOIN table_b AS b
+  ON a.key = b.key;</code></pre>
+              <p>Use when unmatched rows should disappear.</p>
+              <div class="trap">Trap: one-to-many matches may increase row count.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>LEFT JOIN</h3>
+              <pre><code>SELECT ...
+FROM main_table AS m
+LEFT JOIN detail_table AS d
+  ON m.key = d.key;</code></pre>
+              <p>Preserves every row from the left table.</p>
+              <div class="trap">Trap: right-side WHERE filters can remove unmatched rows.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>RIGHT JOIN</h3>
+              <pre><code>SELECT ...
+FROM table_a AS a
+RIGHT JOIN table_b AS b
+  ON a.key = b.key;</code></pre>
+              <p>Preserves every row from the right table.</p>
+              <div class="trap">Often clearer as a LEFT JOIN with reversed table order.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>FULL JOIN</h3>
+              <pre><code>SELECT ...
+FROM table_a AS a
+FULL JOIN table_b AS b
+  ON a.key = b.key;</code></pre>
+              <p>Preserves matched and unmatched rows from both sides.</p>
+              <div class="trap">Best for reconciliation; inspect NULLs on both sides.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>USING</h3>
+              <pre><code>SELECT ...
+FROM table_a AS a
+INNER JOIN table_b AS b
+  USING (shared_key);</code></pre>
+              <p>Use when both tables share the same join-column name.</p>
+              <div class="trap">Cannot directly express different key names.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>Composite Join</h3>
+              <pre><code>SELECT ...
+FROM table_a AS a
+JOIN table_b AS b
+  ON a.entity_id = b.entity_id
+ AND a.period_id = b.period_id;</code></pre>
+              <p>Use when the real relationship requires several fields.</p>
+              <div class="trap">Omitting period or version may create false combinations.</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section searchable" id="outer">
+          <h2>3. Outer Join Filter Placement</h2>
+
+          <h3>Filter in WHERE — unmatched rows removed</h3>
+          <pre><code>SELECT c.name,
+       e.year
+FROM countries AS c
+LEFT JOIN economies AS e
+  ON c.code = e.country_code
+WHERE e.year = 2015;</code></pre>
+
+          <h3>Filter in ON — unmatched left rows preserved</h3>
+          <pre><code>SELECT c.name,
+       e.year
+FROM countries AS c
+LEFT JOIN economies AS e
+  ON c.code = e.country_code
+ AND e.year = 2015;</code></pre>
+
+          <div class="callout green">
+            <strong>Rule:</strong> put a right-side condition in <code>ON</code> when it defines
+            which rows may match. Put it in <code>WHERE</code> when you intentionally want
+            to filter the final result.
+          </div>
+        </section>
+
+        <section class="section searchable" id="cross-self">
+          <h2>4. CROSS JOIN and Self Join</h2>
+
+          <div class="lookup-grid">
+            <article class="lookup-card searchable">
+              <h3>CROSS JOIN</h3>
+              <pre><code>SELECT c.code,
+       y.year
+FROM countries AS c
+CROSS JOIN target_years AS y;</code></pre>
+              <p>Returns every possible combination.</p>
+              <div class="trap">Row count = left rows × right rows.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>Self Join</h3>
+              <pre><code>SELECT p1.country_code,
+       p1.size AS size2010,
+       p2.size AS size2015
+FROM populations AS p1
+JOIN populations AS p2
+  ON p1.country_code = p2.country_code
+ AND p1.year = 2010
+ AND p2.year = 2015;</code></pre>
+              <p>One table plays two roles through aliases.</p>
+              <div class="trap">Without role restrictions, every row may pair with every related row.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>Conditional Aggregation Alternative</h3>
+              <pre><code>SELECT country_code,
+       MAX(size) FILTER (WHERE year = 2010) AS size2010,
+       MAX(size) FILTER (WHERE year = 2015) AS size2015
+FROM populations
+GROUP BY country_code;</code></pre>
+              <p>Often cleaner for fixed side-by-side reporting periods.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section searchable" id="sets">
+          <h2>5. Set Operators</h2>
+
+          <div class="lookup-grid">
+            <article class="lookup-card searchable">
+              <h3>UNION</h3>
+              <pre><code>SELECT key FROM source_a
+UNION
+SELECT key FROM source_b;</code></pre>
+              <p>Appends rows and removes duplicates.</p>
+              <div class="trap">Duplicate removal compares the complete selected row.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>UNION ALL</h3>
+              <pre><code>SELECT key FROM source_a
+UNION ALL
+SELECT key FROM source_b;</code></pre>
+              <p>Appends all rows and preserves duplicates.</p>
+              <div class="trap">Use this when row counts and lineage matter.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>INTERSECT</h3>
+              <pre><code>SELECT key FROM source_a
+INTERSECT
+SELECT key FROM source_b;</code></pre>
+              <p>Returns rows found in both results.</p>
+              <div class="trap">An INNER JOIN may need DISTINCT to match the same result.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>EXCEPT</h3>
+              <pre><code>SELECT key FROM source_a
+EXCEPT
+SELECT key FROM source_b;</code></pre>
+              <p>Returns first-result rows absent from the second.</p>
+              <div class="trap">Direction matters: A EXCEPT B is not B EXCEPT A.</div>
+            </article>
+          </div>
+
+          <div class="callout">
+            <strong>Compatibility rule:</strong> each SELECT must return the same number of fields
+            in the same order with compatible data types.
+          </div>
+        </section>
+
+        <section class="section searchable" id="subqueries">
+          <h2>6. Subqueries</h2>
+
+          <div class="lookup-grid">
+            <article class="lookup-card searchable">
+              <h3>Scalar Subquery in WHERE</h3>
+              <pre><code>SELECT name
+FROM cities
+WHERE population &gt; (
+  SELECT AVG(population)
+  FROM cities
+);</code></pre>
+              <p>Inner query must return one value.</p>
+              <div class="trap">Use IN or EXISTS if several rows may return.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>Subquery in SELECT</h3>
+              <pre><code>SELECT c.name,
+       (
+         SELECT COUNT(*)
+         FROM cities AS ci
+         WHERE ci.country_code = c.code
+       ) AS city_count
+FROM countries AS c;</code></pre>
+              <p>Returns one derived scalar value per outer row.</p>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>Subquery in FROM</h3>
+              <pre><code>SELECT region,
+       AVG(country_population)
+FROM (
+  SELECT region,
+         population AS country_population
+  FROM countries
+) AS country_data
+GROUP BY region;</code></pre>
+              <p>Creates an intermediate result table.</p>
+              <div class="trap">PostgreSQL requires an alias.</div>
+            </article>
+
+            <article class="lookup-card searchable">
+              <h3>Correlated Subquery</h3>
+              <pre><code>SELECT c.name
+FROM countries AS c
+WHERE EXISTS (
+  SELECT 1
+  FROM cities AS ci
+  WHERE ci.country_code = c.code
+);</code></pre>
+              <p>References the current row from the outer query.</p>
+              <div class="trap">Forgetting the correlation condition changes the logic completely.</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section searchable" id="semi-anti">
+          <h2>7. Semi Joins and Anti Joins</h2>
+
+          <h3>Semi Join with EXISTS</h3>
+          <pre><code>SELECT c.name
+FROM countries AS c
+WHERE EXISTS (
+  SELECT 1
+  FROM economies AS e
+  WHERE e.country_code = c.code
+);</code></pre>
+
+          <h3>Anti Join with NOT EXISTS</h3>
+          <pre><code>SELECT c.name
+FROM countries AS c
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM economies AS e
+  WHERE e.country_code = c.code
+);</code></pre>
+
+          <h3>Anti Join with LEFT JOIN</h3>
+          <pre><code>SELECT c.name
+FROM countries AS c
+LEFT JOIN economies AS e
+  ON c.code = e.country_code
+WHERE e.country_code IS NULL;</code></pre>
+
+          <div class="callout danger">
+            <strong>NULL warning:</strong> avoid <code>NOT IN</code> when the inner result may
+            contain NULL. Prefer <code>NOT EXISTS</code>.
+          </div>
+        </section>
+
+        <section class="section searchable" id="validation">
+          <h2>8. Validation Patterns</h2>
+
+          <h3>Count duplicate join results</h3>
+          <pre><code>SELECT entity_id,
+       period_id,
+       COUNT(*) AS joined_rows
+FROM joined_result
+GROUP BY entity_id,
+         period_id
+HAVING COUNT(*) &gt; 1;</code></pre>
+
+          <h3>Find unmatched left rows</h3>
+          <pre><code>SELECT a.key
+FROM table_a AS a
+LEFT JOIN table_b AS b
+  ON a.key = b.key
+WHERE b.key IS NULL;</code></pre>
+
+          <h3>Find unmatched rows on either side</h3>
+          <pre><code>SELECT a.key AS a_key,
+       b.key AS b_key
+FROM table_a AS a
+FULL JOIN table_b AS b
+  ON a.key = b.key
+WHERE a.key IS NULL
+   OR b.key IS NULL;</code></pre>
+
+          <div class="callout green">
+            <strong>Always check:</strong> source row counts, key uniqueness, output row count,
+            unmatched rows, duplicate growth, and whether time/version belongs in the join key.
+          </div>
+        </section>
+
+        <section class="section searchable" id="memory">
+          <h2>9. One-Line Memory Rules</h2>
+
+          <table>
+            <tbody>
+              <tr><td><code>INNER JOIN</code></td><td>Keep matches only.</td></tr>
+              <tr><td><code>LEFT JOIN</code></td><td>Preserve the left population.</td></tr>
+              <tr><td><code>FULL JOIN</code></td><td>Preserve both populations.</td></tr>
+              <tr><td><code>CROSS JOIN</code></td><td>Multiply combinations.</td></tr>
+              <tr><td>Self join</td><td>One table, multiple aliases, multiple roles.</td></tr>
+              <tr><td><code>UNION</code></td><td>Append and deduplicate.</td></tr>
+              <tr><td><code>UNION ALL</code></td><td>Append everything.</td></tr>
+              <tr><td><code>INTERSECT</code></td><td>Common rows.</td></tr>
+              <tr><td><code>EXCEPT</code></td><td>First result minus second result.</td></tr>
+              <tr><td><code>EXISTS</code></td><td>At least one related row exists.</td></tr>
+              <tr><td><code>NOT EXISTS</code></td><td>No related row exists.</td></tr>
+              <tr><td>Scalar subquery</td><td>One value only.</td></tr>
+              <tr><td>FROM subquery</td><td>Temporary table; alias required.</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Joining Data in SQL · SQL Quick Lookup</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="../lab/lab_guide.html">Integrated Lab</a>
+      </span>
+    </footer>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById('lookupSearch');
+    const searchableItems = Array.from(document.querySelectorAll('.searchable'));
+
+    searchInput.addEventListener('input', function () {
+      const query = this.value.trim().toLowerCase();
+
+      searchableItems.forEach(function (item) {
+        const text = item.textContent.toLowerCase();
+        item.classList.toggle('hidden', query.length > 0 && !text.includes(query));
+      });
+    });
+  </script>
+</body>
+</html>

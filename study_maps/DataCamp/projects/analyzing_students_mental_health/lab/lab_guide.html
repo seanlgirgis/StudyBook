@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab Guide — Analyzing Students' Mental Health</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1f2630;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #3fb950;
+      --green-soft: rgba(63,185,80,.14);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88,166,255,.13);
+      --amber: #d29922;
+      --red: #f85149;
+      --code: #0b0f14;
+      --shadow: 0 16px 40px rgba(0,0,0,.28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 90% 8%, rgba(88,166,255,.08), transparent 28rem),
+        radial-gradient(circle at 5% 20%, rgba(63,185,80,.07), transparent 24rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Inter, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    header {
+      border-top: 4px solid transparent;
+      border-image: linear-gradient(90deg, var(--green), var(--blue)) 1;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13,17,23,.96);
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .breadcrumb {
+      padding-top: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .hero {
+      padding: 32px 0 30px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border: 1px solid rgba(63,185,80,.4);
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: #83df93;
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    h1 {
+      margin: 12px 0 8px;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      max-width: 78ch;
+    }
+
+    main { padding: 28px 0 54px; }
+
+    .nav-grid,
+    .status-grid,
+    .step-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .nav-grid { grid-template-columns: repeat(4, 1fr); margin-bottom: 26px; }
+    .status-grid { grid-template-columns: repeat(4, 1fr); margin-bottom: 26px; }
+    .step-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .card,
+    .section,
+    .toc {
+      background: linear-gradient(180deg, rgba(31,38,48,.97), rgba(22,27,34,.97));
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .card { padding: 17px; }
+    .card strong { display: block; font-size: 1.15rem; margin-bottom: 3px; }
+    .card span { color: var(--muted); font-size: .9rem; }
+
+    .toc {
+      padding: 19px;
+      margin-bottom: 26px;
+    }
+
+    .toc-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px 16px;
+    }
+
+    .toc-links a {
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.04);
+      border-radius: 8px;
+      background: rgba(255,255,255,.025);
+    }
+
+    .section {
+      margin: 22px 0;
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 17px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-num {
+      min-width: 34px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--green-soft);
+      border: 1px solid rgba(63,185,80,.35);
+      color: #9be9a8;
+      font-weight: 800;
+    }
+
+    .section h2 { margin: 0; font-size: 1.3rem; }
+    .section-body { padding: 20px; }
+
+    .callout {
+      margin: 14px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 8px;
+      background: var(--blue-soft);
+    }
+
+    .warning {
+      margin: 14px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--amber);
+      border-radius: 8px;
+      background: rgba(210,153,34,.09);
+    }
+
+    .success {
+      margin: 14px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--green);
+      border-radius: 8px;
+      background: var(--green-soft);
+    }
+
+    code {
+      font-family: Consolas, "Cascadia Code", monospace;
+      color: #c9d1d9;
+      background: rgba(110,118,129,.16);
+      border-radius: 5px;
+      padding: .12rem .35rem;
+    }
+
+    pre {
+      margin: 14px 0;
+      padding: 16px;
+      overflow-x: auto;
+      background: var(--code);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      line-height: 1.45;
+    }
+
+    pre code { padding: 0; background: transparent; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 11px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { background: rgba(88,166,255,.1); }
+    td { background: rgba(255,255,255,.015); }
+
+    ul, ol { padding-left: 1.25rem; }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checklist li {
+      margin: 8px 0;
+      padding-left: 1.8rem;
+      position: relative;
+    }
+
+    .checklist li::before {
+      content: "☐";
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .back-top {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: .9rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      padding: 24px 0 36px;
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .nav-grid, .status-grid { grid-template-columns: repeat(2, 1fr); }
+      .toc-links, .step-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      .nav-grid, .status-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Project Home</a> › Lab Guide
+      </div>
+      <div class="hero">
+        <span class="badge">Local PostgreSQL Lab</span>
+        <h1>Analyzing Students' Mental Health</h1>
+        <p class="subtitle">
+          Rebuild the DataCamp project locally, load the original CSV into PostgreSQL,
+          run the final analysis, validate the result, and practice related SQL patterns.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="nav-grid" aria-label="Project navigation">
+      <a class="card" href="../index.html">
+        <strong>Project Home</strong>
+        <span>Main landing page</span>
+      </a>
+      <a class="card" href="../study_pages/project_field_guide.html">
+        <strong>Field Guide</strong>
+        <span>Project explanation</span>
+      </a>
+      <a class="card" href="../study_pages/sql_quick_lookup.html">
+        <strong>SQL Quick Lookup</strong>
+        <span>Compact syntax reference</span>
+      </a>
+      <a class="card" href="sql/02_project_solution.sql">
+        <strong>Final SQL</strong>
+        <span>Validated solution file</span>
+      </a>
+    </nav>
+
+    <section class="toc">
+      <strong>Lab contents</strong>
+      <div class="toc-links">
+        <a href="#status">1. Current status</a>
+        <a href="#files">2. Lab files</a>
+        <a href="#setup">3. Setup</a>
+        <a href="#load">4. Load CSV</a>
+        <a href="#run">5. Run solution</a>
+        <a href="#validate">6. Validate</a>
+        <a href="#practice">7. Practice</a>
+        <a href="#troubleshooting">8. Troubleshooting</a>
+        <a href="#checklist">9. Completion checklist</a>
+      </div>
+    </section>
+
+    <div class="status-grid" id="status">
+      <div class="card"><strong>Database</strong><span>observability</span></div>
+      <div class="card"><strong>Schema</strong><span>public</span></div>
+      <div class="card"><strong>Table</strong><span>students</span></div>
+      <div class="card"><strong>Rows</strong><span>286 loaded</span></div>
+    </div>
+
+    <section class="section" id="files">
+      <div class="section-header">
+        <span class="section-num">1</span>
+        <h2>Lab file map</h2>
+      </div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Purpose</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>sql/00_create_students_table.sql</code></td>
+              <td>Create the local PostgreSQL table with all 50 source columns.</td>
+              <td>Validated</td>
+            </tr>
+            <tr>
+              <td><code>sql/01_load_students_csv.sql</code></td>
+              <td>Load the source CSV using <code>\copy</code>.</td>
+              <td>Validated</td>
+            </tr>
+            <tr>
+              <td><code>sql/02_project_solution.sql</code></td>
+              <td>Run the final DataCamp analysis and validation queries.</td>
+              <td>Validated</td>
+            </tr>
+            <tr>
+              <td><code>sql/03_practice_queries.sql</code></td>
+              <td>Explore, compare, aggregate, rank, and extend the project.</td>
+              <td>Ready</td>
+            </tr>
+            <tr>
+              <td><code>../source_material/students.csv</code></td>
+              <td>Original project dataset.</td>
+              <td>286 rows</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="setup">
+      <div class="section-header">
+        <span class="section-num">2</span>
+        <h2>Create the table</h2>
+      </div>
+      <div class="section-body">
+        <p>Open <code>psql</code> and connect to the local database:</p>
+
+        <pre><code>psql -U postgres -d observability</code></pre>
+
+        <p>Move to the SQL folder from inside <code>psql</code>:</p>
+
+        <pre><code>\cd D:/Workarea/StudyBook/study_maps/DataCamp/projects/analyzing_students_mental_health/lab/sql</code></pre>
+
+        <p>Create the table:</p>
+
+        <pre><code>\i 00_create_students_table.sql</code></pre>
+
+        <div class="success">
+          Expected messages include <code>DROP TABLE</code>, <code>CREATE TABLE</code>,
+          and several <code>COMMENT</code> confirmations.
+        </div>
+
+        <p>Inspect the table definition:</p>
+
+        <pre><code>\d students</code></pre>
+      </div>
+    </section>
+
+    <section class="section" id="load">
+      <div class="section-header">
+        <span class="section-num">3</span>
+        <h2>Load the CSV</h2>
+      </div>
+      <div class="section-body">
+        <p>Run the loader:</p>
+
+        <pre><code>\i 01_load_students_csv.sql</code></pre>
+
+        <div class="callout">
+          The file uses <code>\copy</code>, so the CSV is read by the local
+          <code>psql</code> client. This is usually easier than server-side
+          <code>COPY</code> on Windows.
+        </div>
+
+        <p>Expected validation:</p>
+
+        <pre><code>loaded_rows
+-----------
+286</code></pre>
+
+        <div class="warning">
+          The loader truncates the table first. Re-running it replaces the current rows
+          instead of creating duplicates.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="run">
+      <div class="section-header">
+        <span class="section-num">4</span>
+        <h2>Run the project solution</h2>
+      </div>
+      <div class="section-body">
+        <pre><code>\i 02_project_solution.sql</code></pre>
+
+        <p>The query performs these steps:</p>
+
+        <div class="step-grid">
+          <div class="card">
+            <strong>Clean</strong>
+            <span>Remove incomplete rows for the fields used by the analysis.</span>
+          </div>
+          <div class="card">
+            <strong>Filter</strong>
+            <span>Keep only <code>inter_dom = 'Inter'</code>.</span>
+          </div>
+          <div class="card">
+            <strong>Group</strong>
+            <span>Create one group for each <code>stay</code> value.</span>
+          </div>
+          <div class="card">
+            <strong>Summarize</strong>
+            <span>Count students and average the three score columns.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="validate">
+      <div class="section-header">
+        <span class="section-num">5</span>
+        <h2>Expected validated output</h2>
+      </div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th>stay</th>
+              <th>count_int</th>
+              <th>average_phq</th>
+              <th>average_scs</th>
+              <th>average_as</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>10</td><td>1</td><td>13.00</td><td>32.00</td><td>50.00</td></tr>
+            <tr><td>8</td><td>1</td><td>10.00</td><td>44.00</td><td>65.00</td></tr>
+            <tr><td>7</td><td>1</td><td>4.00</td><td>48.00</td><td>45.00</td></tr>
+            <tr><td>6</td><td>3</td><td>6.00</td><td>38.00</td><td>58.67</td></tr>
+            <tr><td>5</td><td>1</td><td>0.00</td><td>34.00</td><td>91.00</td></tr>
+            <tr><td>4</td><td>14</td><td>8.57</td><td>33.93</td><td>87.71</td></tr>
+            <tr><td>3</td><td>46</td><td>9.09</td><td>37.13</td><td>78.00</td></tr>
+            <tr><td>2</td><td>39</td><td>8.28</td><td>37.08</td><td>77.67</td></tr>
+            <tr><td>1</td><td>95</td><td>7.48</td><td>38.11</td><td>72.80</td></tr>
+          </tbody>
+        </table>
+
+        <div class="success">
+          Confirmed locally:
+          <strong>286 source rows</strong>,
+          <strong>201 complete international rows</strong>,
+          <strong>9 stay groups</strong>,
+          and <strong>9 final rows × 5 columns</strong>.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="practice">
+      <div class="section-header">
+        <span class="section-num">6</span>
+        <h2>Practice beyond the project</h2>
+      </div>
+      <div class="section-body">
+        <p>Run the practice file:</p>
+
+        <pre><code>\i 03_practice_queries.sql</code></pre>
+
+        <p>It includes:</p>
+        <ul>
+          <li>table inspection and row counts</li>
+          <li>international versus domestic comparisons</li>
+          <li>missing-value checks with <code>FILTER</code></li>
+          <li>grouped averages by stay, gender, and age</li>
+          <li>a CTE plus <code>CROSS JOIN</code> comparison</li>
+          <li>ranking with <code>DENSE_RANK()</code></li>
+          <li>an unfinished exercise using <code>HAVING</code></li>
+        </ul>
+
+        <div class="callout">
+          Best next exercise: return only stay groups with at least five international
+          students, then sort by average depression score from highest to lowest.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="troubleshooting">
+      <div class="section-header">
+        <span class="section-num">7</span>
+        <h2>Troubleshooting</h2>
+      </div>
+      <div class="section-body">
+        <h3><code>\i</code> says “No such file or directory”</h3>
+        <p>
+          Either change the <code>psql</code> working directory with <code>\cd</code>,
+          or provide the full path:
+        </p>
+
+        <pre><code>\i D:/Workarea/StudyBook/study_maps/DataCamp/projects/analyzing_students_mental_health/lab/sql/02_project_solution.sql</code></pre>
+
+        <h3>The CSV cannot be found</h3>
+        <p>Confirm this file exists:</p>
+
+        <pre><code>D:\Workarea\StudyBook\study_maps\DataCamp\projects\analyzing_students_mental_health\source_material\students.csv</code></pre>
+
+        <h3>The load creates duplicates</h3>
+        <p>
+          Use the provided loader, which runs <code>TRUNCATE TABLE students;</code>
+          before loading.
+        </p>
+
+        <h3>The row count is not 286</h3>
+        <p>
+          Check that the correct CSV was used and that the table was not partially loaded.
+          Re-run the create and load scripts in order.
+        </p>
+
+        <p>
+          See <a href="notes/troubleshooting.md">the troubleshooting notes</a> for the
+          project-specific issue log.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="checklist">
+      <div class="section-header">
+        <span class="section-num">8</span>
+        <h2>Lab completion checklist</h2>
+      </div>
+      <div class="section-body">
+        <ul class="checklist">
+          <li>Connected to the <code>observability</code> database.</li>
+          <li>Created <code>public.students</code>.</li>
+          <li>Loaded exactly 286 rows.</li>
+          <li>Ran the final project query.</li>
+          <li>Received 9 rows and 5 columns.</li>
+          <li>Validated 201 complete international rows.</li>
+          <li>Explained the purpose of <code>WHERE</code>, <code>GROUP BY</code>, and <code>AVG()</code>.</li>
+          <li>Recognized that one-student groups should not support strong conclusions.</li>
+          <li>Completed at least one query from <code>03_practice_queries.sql</code>.</li>
+        </ul>
+
+        <a class="back-top" href="#top">Back to top ↑</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <a href="../index.html">Project Home</a> ·
+      <a href="../study_pages/project_field_guide.html">Project Field Guide</a> ·
+      <a href="../study_pages/sql_quick_lookup.html">SQL Quick Lookup</a>
+    </div>
+  </footer>
+</body>
+</html>

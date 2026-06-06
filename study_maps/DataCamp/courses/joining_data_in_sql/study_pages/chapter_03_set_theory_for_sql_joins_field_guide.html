@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 3 — Set Theory for SQL Joins | Joining Data in SQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 880px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Joining Data in SQL</a>
+      <span>›</span>
+      <span>Chapter 3: Set Theory for SQL Joins</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Joining Data in SQL · Chapter 3</p>
+      <h1>Set Theory for SQL Joins</h1>
+      <p>
+        Combine compatible query results with <code>UNION</code> and
+        <code>UNION ALL</code>, find shared rows with <code>INTERSECT</code>,
+        subtract one result from another with <code>EXCEPT</code>, and understand
+        how set operations differ from joins.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_join_quick_lookup.html">SQL Join Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_outer_cross_and_self_joins_field_guide.html">Previous Chapter</a>
+        <a class="button secondary" href="chapter_04_subqueries_field_guide.html">Next Chapter</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Chapter Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#joins-vs-sets">2. Joins versus sets</a>
+        <a href="#compatibility">3. Compatibility rules</a>
+        <a href="#union">4. UNION</a>
+        <a href="#union-all">5. UNION ALL</a>
+        <a href="#compare-union">6. Comparing UNION forms</a>
+        <a href="#intersect">7. INTERSECT</a>
+        <a href="#except">8. EXCEPT</a>
+        <a href="#ordering">9. ORDER BY</a>
+        <a href="#choosing">10. Choosing an operator</a>
+        <a href="#mistakes">11. Common mistakes</a>
+        <a href="#interview">12. Interview translation</a>
+        <a href="#review">13. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>
+            Set operations combine the rows returned by separate SELECT statements.
+            Unlike joins, they do not add related columns side by side. They stack,
+            compare, or subtract compatible result sets.
+          </p>
+
+          <div class="diagram">First SELECT result
+      ↓
+Set operator
+      ↓
+Second SELECT result
+      ↓
+One combined result set</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>UNION</h3>
+              <p>Append rows and remove duplicates.</p>
+            </article>
+            <article class="mini-card">
+              <h3>UNION ALL</h3>
+              <p>Append every row and preserve duplicates.</p>
+            </article>
+            <article class="mini-card">
+              <h3>INTERSECT</h3>
+              <p>Keep rows found in both results.</p>
+            </article>
+            <article class="mini-card">
+              <h3>EXCEPT</h3>
+              <p>Keep first-result rows not found in the second.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Chapter punchline:</strong> joins combine columns horizontally;
+            set operations combine compatible rows vertically.
+          </div>
+        </section>
+
+        <section class="section" id="joins-vs-sets">
+          <h2>2. Joins versus Set Operations</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Join</th>
+                <th>Set operation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Main direction</td>
+                <td>Horizontal</td>
+                <td>Vertical</td>
+              </tr>
+              <tr>
+                <td>Combines</td>
+                <td>Columns from related rows</td>
+                <td>Rows from separate query results</td>
+              </tr>
+              <tr>
+                <td>Main requirement</td>
+                <td>A relationship condition such as <code>ON</code></td>
+                <td>Compatible selected columns</td>
+              </tr>
+              <tr>
+                <td>Typical question</td>
+                <td>Bring related attributes together</td>
+                <td>Combine, compare, or subtract result sets</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="diagram">JOIN
+countries + economies
+→ country fields beside economy fields
+
+SET OPERATION
+country codes from economies
+UNION
+country codes from populations
+→ one longer list of country codes</div>
+
+          <div class="callout amber">
+            Set operations do not need a foreign-key relationship. They need compatible output shapes.
+          </div>
+        </section>
+
+        <section class="section" id="compatibility">
+          <h2>3. Set Compatibility Rules</h2>
+          <p>
+            Each SELECT participating in a set operation must return the same number
+            of columns in the same order, with compatible data types.
+          </p>
+
+          <h3>Compatible result shapes</h3>
+          <pre><code>SELECT country_code,
+       year
+FROM economies
+
+UNION
+
+SELECT country_code,
+       year
+FROM populations;</code></pre>
+
+          <h3>Incompatible column counts</h3>
+          <pre><code>SELECT country_code,
+       year,
+       gdp_percapita
+FROM economies
+
+UNION
+
+SELECT country_code,
+       year
+FROM populations;</code></pre>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Rule</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Same number of columns</td>
+                <td>Every SELECT must return the same number of expressions.</td>
+              </tr>
+              <tr>
+                <td>Same positional meaning</td>
+                <td>The first field aligns with the first, the second with the second, and so on.</td>
+              </tr>
+              <tr>
+                <td>Compatible data types</td>
+                <td>Fields in the same position must be comparable or convertible.</td>
+              </tr>
+              <tr>
+                <td>Output names</td>
+                <td>The final result normally takes its field names from the first SELECT.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            <strong>Memory rule:</strong> set operations align fields by position, not by name.
+          </div>
+        </section>
+
+        <section class="section" id="union">
+          <h2>4. UNION</h2>
+          <p>
+            <code>UNION</code> stacks the rows returned by two queries and removes
+            duplicate rows from the combined result.
+          </p>
+
+          <pre><code>SELECT country_code
+FROM economies
+
+UNION
+
+SELECT country_code
+FROM populations;</code></pre>
+
+          <div class="diagram">First query:  USA, CAN, MEX
+Second query: USA, BRA
+
+UNION:
+USA, CAN, MEX, BRA</div>
+
+          <h3>Combine two years</h3>
+          <pre><code>SELECT country_code,
+       year
+FROM economies
+WHERE year = 2010
+
+UNION
+
+SELECT country_code,
+       year
+FROM economies
+WHERE year = 2015;</code></pre>
+
+          <div class="callout">
+            <strong>Duplicate rule:</strong> UNION compares the entire selected row.
+            Two rows are duplicates only when all selected values match.
+          </div>
+        </section>
+
+        <section class="section" id="union-all">
+          <h2>5. UNION ALL</h2>
+          <p>
+            <code>UNION ALL</code> stacks all rows and does not remove duplicates.
+          </p>
+
+          <pre><code>SELECT country_code
+FROM economies
+
+UNION ALL
+
+SELECT country_code
+FROM populations;</code></pre>
+
+          <div class="diagram">First query:  USA, CAN, MEX
+Second query: USA, BRA
+
+UNION ALL:
+USA, CAN, MEX, USA, BRA</div>
+
+          <h3>Why UNION ALL is often preferred</h3>
+          <ul>
+            <li>It preserves every source row.</li>
+            <li>It avoids accidental deduplication.</li>
+            <li>It usually performs less work.</li>
+            <li>It is appropriate for event, audit, transaction, and append-style datasets.</li>
+          </ul>
+
+          <div class="callout green">
+            <strong>Engineering habit:</strong> ask whether duplicate removal is truly required.
+            If not, use <code>UNION ALL</code>.
+          </div>
+        </section>
+
+        <section class="section" id="compare-union">
+          <h2>6. UNION versus UNION ALL</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>UNION</th>
+                <th>UNION ALL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Duplicates</td>
+                <td>Removed</td>
+                <td>Preserved</td>
+              </tr>
+              <tr>
+                <td>Typical performance</td>
+                <td>More work because duplicates must be detected</td>
+                <td>Usually faster</td>
+              </tr>
+              <tr>
+                <td>Typical use</td>
+                <td>Create a distinct combined list</td>
+                <td>Append complete datasets</td>
+              </tr>
+              <tr>
+                <td>Row count</td>
+                <td>Less than or equal to the combined inputs</td>
+                <td>Exactly the sum of both result counts</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout amber">
+            Duplicate removal applies to the complete row, not to one chosen field.
+          </div>
+        </section>
+
+        <section class="section" id="intersect">
+          <h2>7. INTERSECT</h2>
+          <p>
+            <code>INTERSECT</code> returns rows present in both query results.
+          </p>
+
+          <pre><code>SELECT country_code
+FROM economies
+
+INTERSECT
+
+SELECT country_code
+FROM populations;</code></pre>
+
+          <div class="diagram">First query:  USA, CAN, MEX
+Second query: USA, BRA, CAN
+
+INTERSECT:
+USA, CAN</div>
+
+          <h3>Compare country-year availability</h3>
+          <pre><code>SELECT country_code,
+       year
+FROM economies
+
+INTERSECT
+
+SELECT country_code,
+       year
+FROM populations;</code></pre>
+
+          <p>
+            This returns only country-year combinations that exist in both sources.
+          </p>
+
+          <div class="callout green">
+            <strong>Use case:</strong> identify the shared key universe before joining or comparing measures.
+          </div>
+        </section>
+
+        <section class="section" id="except">
+          <h2>8. EXCEPT</h2>
+          <p>
+            <code>EXCEPT</code> returns rows from the first query that do not appear
+            in the second query. The direction matters.
+          </p>
+
+          <pre><code>SELECT country_code
+FROM economies
+
+EXCEPT
+
+SELECT country_code
+FROM populations;</code></pre>
+
+          <div class="diagram">First query:  USA, CAN, MEX
+Second query: USA, BRA
+
+First EXCEPT second:
+CAN, MEX
+
+Second EXCEPT first:
+BRA</div>
+
+          <h3>Find economy records missing from populations</h3>
+          <pre><code>SELECT country_code,
+       year
+FROM economies
+
+EXCEPT
+
+SELECT country_code,
+       year
+FROM populations;</code></pre>
+
+          <div class="callout danger">
+            <strong>Direction rule:</strong> <code>A EXCEPT B</code> is not the same as
+            <code>B EXCEPT A</code>.
+          </div>
+        </section>
+
+        <section class="section" id="ordering">
+          <h2>9. Ordering a Set Result</h2>
+          <p>
+            A final <code>ORDER BY</code> applies to the complete combined result and
+            normally appears after the final SELECT.
+          </p>
+
+          <pre><code>SELECT country_code,
+       year
+FROM economies
+
+UNION
+
+SELECT country_code,
+       year
+FROM populations
+
+ORDER BY country_code,
+         year;</code></pre>
+
+          <h3>Use the output name from the first SELECT</h3>
+          <pre><code>SELECT country_code AS code
+FROM economies
+
+UNION
+
+SELECT country_code
+FROM populations
+
+ORDER BY code;</code></pre>
+
+          <div class="callout amber">
+            Never assume the output order of a set operation unless you add a final
+            <code>ORDER BY</code>.
+          </div>
+        </section>
+
+        <section class="section" id="choosing">
+          <h2>10. Choosing the Correct Set Operator</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Business requirement</th>
+                <th>Operator</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Combine two lists without repeated rows</td>
+                <td><code>UNION</code></td>
+                <td>Duplicates are removed.</td>
+              </tr>
+              <tr>
+                <td>Append every row from two extracts</td>
+                <td><code>UNION ALL</code></td>
+                <td>All source rows are preserved.</td>
+              </tr>
+              <tr>
+                <td>Find rows present in both datasets</td>
+                <td><code>INTERSECT</code></td>
+                <td>Only shared rows remain.</td>
+              </tr>
+              <tr>
+                <td>Find first-source rows absent from the second</td>
+                <td><code>EXCEPT</code></td>
+                <td>The second result is subtracted from the first.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            <strong>Decision shortcut:</strong> all rows → <code>UNION ALL</code>;
+            unique combined rows → <code>UNION</code>; common rows →
+            <code>INTERSECT</code>; first-only rows → <code>EXCEPT</code>.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>11. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Using different field counts</strong>
+              Every SELECT must return the same number of fields.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming fields align by name</strong>
+              Set operations align fields by position.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using UNION when duplicates are meaningful</strong>
+              UNION may remove valid repeated rows. Use UNION ALL when preservation matters.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming UNION ALL removes duplicates</strong>
+              UNION ALL preserves every row returned by both queries.
+            </article>
+
+            <article class="qa-item">
+              <strong>Reversing EXCEPT</strong>
+              The first query defines the population from which rows are removed.
+            </article>
+
+            <article class="qa-item">
+              <strong>Expecting a guaranteed order</strong>
+              Add a final ORDER BY to sort the complete set result.
+            </article>
+
+            <article class="qa-item">
+              <strong>Combining unrelated fields merely because their types match</strong>
+              Compatible data types do not guarantee compatible business meaning.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>12. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is the difference between UNION and UNION ALL?</strong>
+              UNION combines compatible query results and removes duplicate rows.
+              UNION ALL preserves every row and is generally faster because it avoids
+              duplicate elimination.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do set operations differ from joins?</strong>
+              Joins combine related columns horizontally. Set operations append or compare
+              compatible rows vertically.
+            </article>
+
+            <article class="qa-item">
+              <strong>What does INTERSECT do?</strong>
+              It returns rows that appear in both query results.
+            </article>
+
+            <article class="qa-item">
+              <strong>What does EXCEPT do?</strong>
+              It returns rows from the first query that do not appear in the second,
+              so query order matters.
+            </article>
+
+            <article class="qa-item">
+              <strong>What must be compatible in a set operation?</strong>
+              The SELECT statements must return the same number of fields in the same
+              positional order with compatible data types.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why is UNION ALL common in data engineering?</strong>
+              It preserves row counts and lineage, avoids accidental deduplication,
+              and normally requires less processing.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>13. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Six-sentence chapter summary</strong>
+            <ol>
+              <li>Set operations combine compatible query results vertically.</li>
+              <li><code>UNION</code> removes duplicate rows.</li>
+              <li><code>UNION ALL</code> preserves every row.</li>
+              <li><code>INTERSECT</code> keeps rows found in both results.</li>
+              <li><code>EXCEPT</code> keeps first-query rows absent from the second.</li>
+              <li>Field count, order, meaning, and compatible types must align.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you explain the horizontal-versus-vertical difference?</li>
+            <li>Can you predict the difference between UNION and UNION ALL?</li>
+            <li>Can you explain why field position matters?</li>
+            <li>Can you find shared rows with INTERSECT?</li>
+            <li>Can you explain the direction of EXCEPT?</li>
+            <li>Can you place ORDER BY correctly?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision for Chapter 3:</strong> no separate lab is needed yet.
+            The DataCamp exercises provide enough first-pass practice. Preserve any
+            confusion about duplicate removal or EXCEPT direction for later review.
+          </div>
+
+          <div class="callout green">
+            <strong>Chapter completion standard:</strong> choose the correct set operator,
+            align query outputs correctly, explain duplicate behavior, and predict the
+            direction of EXCEPT.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Joining Data in SQL · Chapter 3 Field Guide</span>
+      <span>
+        <a href="chapter_02_outer_cross_and_self_joins_field_guide.html">Previous Chapter</a>
+        &nbsp;·&nbsp;
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_04_subqueries_field_guide.html">Next Chapter</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

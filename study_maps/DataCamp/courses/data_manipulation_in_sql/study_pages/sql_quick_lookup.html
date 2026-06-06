@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Data Manipulation in SQL — Quick Lookup</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--soft:#1c232d;--border:#30363d;--text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;--amber:#d29922;--purple:#bc8cff;--danger:#ff7b72;--shadow:0 12px 30px rgba(0,0,0,.24)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);color:var(--text);line-height:1.62}a{color:inherit}code,pre{font-family:Consolas,"Courier New",monospace}.page{width:min(1180px,calc(100% - 32px));margin:auto;padding:24px 0 52px}.breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}.breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}.hero:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}.eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}.hero p{max-width:920px;margin:14px 0 0;color:#c8d4df;font-size:1.03rem}.actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:9px;border:1px solid #486274;background:rgba(255,255,255,.04);font-weight:850;text-decoration:none}.button.primary{background:var(--green);color:#03130a;border-color:transparent}.status-grid,.chapter-grid,.cheat-grid,.compare-grid{display:grid;gap:14px}.status-grid{grid-template-columns:repeat(5,minmax(0,1fr));margin-top:20px}.chapter-grid,.compare-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cheat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.status-card,.chapter-card,.cheat-card,.compare-card{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:16px}.status-card strong,.chapter-card h3,.cheat-card h3,.compare-card h3{display:block;margin:0 0 7px;color:var(--green)}.status-card span,.chapter-card p,.cheat-card p,.compare-card p{margin:0;color:var(--muted);font-size:.92rem}.layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:22px;margin-top:24px}.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}.toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);font-size:.9rem;text-decoration:none}.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}.section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow)}.section h2{margin:0 0 12px;font-size:1.45rem}.section h3{margin:22px 0 8px;font-size:1.08rem}.section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{margin:8px 0 0;padding-left:22px;color:#c9d3dc}.section li+li{margin-top:7px}pre{overflow-x:auto;margin:14px 0;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;color:#dce6ef;font-size:.9rem;line-height:1.5}.callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:rgba(88,166,255,.12);color:#cfdcec}.green{border-left-color:var(--green);background:rgba(3,239,98,.12)}.amber{border-left-color:var(--amber);background:rgba(210,153,34,.12);color:#d8caaa}.danger{border-left-color:var(--danger);background:rgba(255,123,114,.10);color:#efc3bf}.diagram{margin:16px 0;padding:18px;border:1px solid #33404d;border-radius:11px;background:#10161d;font-family:Consolas,"Courier New",monospace;color:#d6e0e9;overflow-x:auto;white-space:pre}table{width:100%;margin:14px 0;border-collapse:collapse;font-size:.92rem}th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}th{background:#1f2933}td{background:#121820;color:#cbd5de}.qa{display:grid;gap:12px}.qa-item{padding:15px;border:1px solid var(--border);border-radius:10px;background:#121820}.qa-item strong{display:block;margin-bottom:6px;color:var(--green)}footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}footer a{color:var(--blue);text-decoration:none}@media(max-width:1000px){.status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cheat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}@media(max-width:680px){.status-grid,.chapter-grid,.cheat-grid,.compare-grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+
+.search-wrap{margin-top:18px}.search-wrap input{width:100%;padding:13px 14px;border:1px solid #3b4a58;border-radius:10px;background:#0f141a;color:var(--text);font-size:1rem}.lookup-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.lookup-card{background:var(--soft);border:1px solid var(--border);border-radius:11px;padding:15px}.lookup-card h3{margin:0 0 7px;color:var(--green);font-size:1rem}.lookup-card p{margin:0 0 9px;color:var(--muted);font-size:.9rem}.lookup-card pre{margin:10px 0;padding:11px;font-size:.82rem}.trap{margin-top:10px;padding:9px 10px;border-left:3px solid var(--amber);border-radius:7px;background:rgba(210,153,34,.12);color:#d8caaa;font-size:.84rem}.hidden{display:none!important}@media(max-width:980px){.lookup-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.lookup-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumbs"><a href="../../../index.html">DataCamp</a><span>›</span><a href="../index.html">Data Manipulation in SQL</a><span>›</span><span>SQL Quick Lookup</span></nav>
+<header class="hero">
+<p class="eyebrow">Data Manipulation in SQL · Quick Reference</p>
+<h1>SQL Quick Lookup</h1>
+<p>Searchable syntax reference for CASE expressions, subqueries, correlated queries, CTEs, and window functions.</p>
+<div class="actions">
+<a class="button primary" href="../index.html">Course Home</a>
+<a class="button" href="field_guide.html">Main Field Guide</a>
+<a class="button" href="../lab/lab_guide.html">Lab Guide</a>
+</div>
+<div class="search-wrap"><input id="lookupSearch" type="search" placeholder="Search CASE, subquery, CTE, OVER, PARTITION BY, rank..." aria-label="Search quick lookup"></div>
+</header>
+
+<section class="section"><h2>CASE and Conditional Aggregation</h2><div class="lookup-grid"><article class="lookup-card"><h3>Basic CASE</h3><p>Create a derived category or label.</p><pre><code>CASE
+  WHEN condition THEN result
+  ELSE fallback
+END</code></pre><div class="trap">Conditions are checked top to bottom; the first true branch wins.</div></article><article class="lookup-card"><h3>Conditional count</h3><p>Count rows that satisfy a condition.</p><pre><code>SUM(CASE
+      WHEN condition THEN 1
+      ELSE 0
+    END)</code></pre><div class="trap">COUNT(CASE ... ELSE 0 END) counts zero because zero is not NULL.</div></article><article class="lookup-card"><h3>Conditional fraction</h3><p>Calculate a proportion with 1 and 0.</p><pre><code>AVG(CASE
+      WHEN condition THEN 1.0
+      ELSE 0.0
+    END)</code></pre><div class="trap">Use decimal values when division or percentages are involved.</div></article></div></section><section class="section"><h2>Subqueries</h2><div class="lookup-grid"><article class="lookup-card"><h3>Scalar subquery</h3><p>Compare with one calculated value.</p><pre><code>WHERE value &gt; (
+  SELECT AVG(value)
+  FROM source
+)</code></pre><div class="trap">The inner query must return one value.</div></article><article class="lookup-card"><h3>List subquery</h3><p>Filter against multiple returned values.</p><pre><code>WHERE id IN (
+  SELECT id
+  FROM source
+  WHERE condition
+)</code></pre><div class="trap">Use IN rather than = when multiple rows can be returned.</div></article><article class="lookup-card"><h3>Safe anti-filter</h3><p>Exclude matching rows safely.</p><pre><code>WHERE NOT EXISTS (
+  SELECT 1
+  FROM child c
+  WHERE c.key = p.key
+)</code></pre><div class="trap">NOT IN can fail unexpectedly when the subquery returns NULL.</div></article><article class="lookup-card"><h3>FROM subquery</h3><p>Query an intermediate result as a table.</p><pre><code>FROM (
+  SELECT key, AVG(value) AS avg_value
+  FROM source
+  GROUP BY key
+) AS summary</code></pre><div class="trap">A derived table needs an alias.</div></article><article class="lookup-card"><h3>SELECT subquery</h3><p>Add one scalar benchmark column.</p><pre><code>SELECT
+  group_col,
+  (SELECT AVG(value) FROM source) AS overall_avg
+FROM source</code></pre><div class="trap">A SELECT subquery must return a single value for each outer row.</div></article><article class="lookup-card"><h3>Correlated subquery</h3><p>Compare an outer row with its own group.</p><pre><code>WHERE main.value &gt; (
+  SELECT AVG(sub.value)
+  FROM source sub
+  WHERE sub.group_id = main.group_id
+)</code></pre><div class="trap">The outer reference makes the inner query dependent on the current row.</div></article></div></section><section class="section"><h2>CTEs and Query Organization</h2><div class="lookup-grid"><article class="lookup-card"><h3>CTE</h3><p>Name an intermediate query step.</p><pre><code>WITH prepared AS (
+  SELECT ...
+)
+SELECT *
+FROM prepared;</code></pre><div class="trap">A CTE mainly improves structure; it is not automatically faster.</div></article><article class="lookup-card"><h3>Multiple CTEs</h3><p>Build a readable processing pipeline.</p><pre><code>WITH base AS (...),
+summary AS (...),
+benchmark AS (...)
+SELECT ...
+FROM summary;</code></pre><div class="trap">Separate CTEs with commas; use WITH only once.</div></article><article class="lookup-card"><h3>CTE plus UNION ALL</h3><p>Stack compatible prepared datasets.</p><pre><code>WITH home AS (...),
+away AS (...),
+all_rows AS (
+  SELECT * FROM home
+  UNION ALL
+  SELECT * FROM away
+)
+SELECT * FROM all_rows;</code></pre><div class="trap">Use UNION ALL when duplicate removal is not required.</div></article></div></section><section class="section"><h2>Window Functions</h2><div class="lookup-grid"><article class="lookup-card"><h3>Window aggregate</h3><p>Add a group metric without collapsing rows.</p><pre><code>AVG(value) OVER (
+  PARTITION BY group_id
+)</code></pre><div class="trap">PARTITION BY groups calculations; it does not reduce row count.</div></article><article class="lookup-card"><h3>Running total</h3><p>Accumulate values in sequence.</p><pre><code>SUM(value) OVER (
+  PARTITION BY group_id
+  ORDER BY date, id
+  ROWS BETWEEN UNBOUNDED PRECEDING
+           AND CURRENT ROW
+)</code></pre><div class="trap">Use deterministic ordering when dates can tie.</div></article><article class="lookup-card"><h3>Moving average</h3><p>Calculate over nearby rows.</p><pre><code>AVG(value) OVER (
+  PARTITION BY group_id
+  ORDER BY date, id
+  ROWS BETWEEN 2 PRECEDING
+           AND CURRENT ROW
+)</code></pre><div class="trap">Early rows have partial frames with fewer than three rows.</div></article><article class="lookup-card"><h3>Rank</h3><p>Rank rows by a measure.</p><pre><code>RANK() OVER (
+  PARTITION BY season
+  ORDER BY metric DESC
+)</code></pre><div class="trap">RANK leaves gaps after ties; DENSE_RANK does not.</div></article></div></section>
+
+<section class="section">
+<h2>Technique Decision Map</h2>
+<div class="diagram">Need a conditional label or metric?  → CASE
+Need one calculated filter value?     → Scalar subquery
+Need a generated list?                → IN / EXISTS
+Need an intermediate table?           → FROM subquery
+Need row-dependent group comparison?  → Correlated subquery or window
+Need named processing stages?         → CTE
+Need group context without row loss?  → Window function</div>
+<div class="callout">Begin with the required output grain and the expected shape of the intermediate result. Then choose the syntax.</div>
+</section>
+
+<footer>
+<span>Data Manipulation in SQL · SQL Quick Lookup</span>
+<span><a href="../index.html">Course Home</a> · <a href="field_guide.html">Main Field Guide</a> · <a href="../lab/lab_guide.html">Lab Guide</a></span>
+</footer>
+</main>
+<script>
+const searchInput=document.getElementById("lookupSearch");
+const cards=Array.from(document.querySelectorAll(".lookup-card"));
+searchInput.addEventListener("input",function(){
+  const term=this.value.trim().toLowerCase();
+  cards.forEach(card=>{
+    const text=card.textContent.toLowerCase();
+    card.classList.toggle("hidden",term && !text.includes(term));
+  });
+});
+</script>
+</body>
+</html>

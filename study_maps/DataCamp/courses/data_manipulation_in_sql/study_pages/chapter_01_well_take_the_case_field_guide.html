@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 1 — We'll Take the CASE | Data Manipulation in SQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 920px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      color: var(--green);
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    .lesson-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .lesson {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 11px 12px;
+      background: #121820;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+    }
+
+    .lesson .num {
+      min-width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--green-soft);
+      color: var(--green);
+      font-weight: 800;
+      font-size: 0.84rem;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Data Manipulation in SQL</a>
+      <span>›</span>
+      <span>Chapter 1: We'll Take the CASE</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Data Manipulation in SQL · Chapter 1</p>
+      <h1>We'll Take the CASE</h1>
+      <p>
+        Learn how to turn row-level conditions into useful categories, flags, counts,
+        sums, and percentages. This chapter moves from basic <code>CASE WHEN</code>
+        expressions to conditional aggregation and fraction calculations.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_short_and_simple_subqueries_field_guide.html">Next Chapter</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Chapter Contents</h2>
+        <a href="#scope">1. Chapter scope</a>
+        <a href="#big-picture">2. Big picture</a>
+        <a href="#basic-case">3. Basic CASE</a>
+        <a href="#column-comparisons">4. Comparing values</a>
+        <a href="#complex-case">5. Complex conditions</a>
+        <a href="#filtering">6. Filtering with CASE</a>
+        <a href="#aggregation">7. CASE with aggregates</a>
+        <a href="#worked-example">8. Worked example</a>
+        <a href="#validation">9. Validation</a>
+        <a href="#mistakes">10. Common mistakes</a>
+        <a href="#interview">11. Interview translation</a>
+        <a href="#review">12. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="scope">
+          <h2>1. Chapter Scope</h2>
+          <p>
+            The chapter contains the following lesson and exercise sequence.
+          </p>
+
+          <div class="lesson-list">
+            <div class="lesson"><span class="num">1</span><span>We'll take the CASE</span></div>
+            <div class="lesson"><span class="num">2</span><span>Basic CASE statements</span></div>
+            <div class="lesson"><span class="num">3</span><span>CASE statements comparing column values</span></div>
+            <div class="lesson"><span class="num">4</span><span>CASE statements comparing two column values, part 2</span></div>
+            <div class="lesson"><span class="num">5</span><span>In CASE things get more complex</span></div>
+            <div class="lesson"><span class="num">6</span><span>In CASE of rivalry</span></div>
+            <div class="lesson"><span class="num">7</span><span>Filtering your CASE statement</span></div>
+            <div class="lesson"><span class="num">8</span><span>CASE WHEN with aggregate functions</span></div>
+            <div class="lesson"><span class="num">9</span><span>COUNT using CASE WHEN</span></div>
+            <div class="lesson"><span class="num">10</span><span>Conditional selection and summation with CASE WHEN</span></div>
+            <div class="lesson"><span class="num">11</span><span>Using CASE and AVG to derive fractions</span></div>
+          </div>
+        </section>
+
+        <section class="section" id="big-picture">
+          <h2>2. Big Picture</h2>
+          <p>
+            A <code>CASE</code> expression is SQL's way of applying conditional logic
+            inside a query. It evaluates conditions from top to bottom and returns the
+            result associated with the first true condition.
+          </p>
+
+          <div class="diagram">row
+  ↓
+evaluate WHEN conditions from top to bottom
+  ↓
+first true condition → return its THEN result
+  ↓
+no match → return ELSE result
+  ↓
+new derived value in the result set</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Create categories</h3>
+              <p>Convert numeric or text values into labels such as win, loss, draw, high, medium, or low.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Create flags</h3>
+              <p>Return 1 or 0 to make later counting, summing, and averaging easy.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Conditional aggregation</h3>
+              <p>Count or sum only rows that meet a condition without removing other rows from the group.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Fractions and percentages</h3>
+              <p>Use <code>AVG</code> over a 1/0 flag or divide conditional counts by total counts.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Chapter punchline:</strong>
+            Use <code>CASE</code> to classify rows first; then combine it with aggregates to summarize those classifications.
+          </div>
+        </section>
+
+        <section class="section" id="basic-case">
+          <h2>3. Basic CASE Statements</h2>
+          <p>
+            The searched form of <code>CASE</code> is the most flexible form because each
+            <code>WHEN</code> can contain a full Boolean condition.
+          </p>
+
+          <pre><code>SELECT
+    match_id,
+    CASE
+        WHEN home_goal &gt; away_goal THEN 'Home win'
+        WHEN home_goal &lt; away_goal THEN 'Away win'
+        ELSE 'Draw'
+    END AS result
+FROM matches;</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong>
+            <code>CASE</code> does not create a table or permanently change data. It creates
+            a derived value in the query result.
+          </div>
+
+          <h3>Simple CASE versus searched CASE</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Form</th>
+                <th>Best for</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Simple CASE</td>
+                <td>Comparing one expression to fixed values</td>
+                <td><code>CASE status WHEN 'A' THEN ...</code></td>
+              </tr>
+              <tr>
+                <td>Searched CASE</td>
+                <td>Ranges, multiple columns, and compound conditions</td>
+                <td><code>CASE WHEN score &gt; 10 THEN ...</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="column-comparisons">
+          <h2>4. Comparing Column Values</h2>
+          <p>
+            A powerful use of <code>CASE</code> is comparing two columns from the same row.
+            In soccer data, comparing home and away goals lets you label a match outcome.
+          </p>
+
+          <pre><code>SELECT
+    date,
+    hometeam_id,
+    awayteam_id,
+    CASE
+        WHEN home_goal &gt; away_goal THEN hometeam_id
+        WHEN home_goal &lt; away_goal THEN awayteam_id
+        ELSE NULL
+    END AS winner_team_id
+FROM match;</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong>
+            The output data types of all <code>THEN</code> branches and the
+            <code>ELSE</code> branch must be compatible. Avoid mixing integers and text
+            unless you cast deliberately.
+          </div>
+
+          <h3>Condition order matters</h3>
+
+          <pre><code>CASE
+    WHEN score &gt;= 90 THEN 'A'
+    WHEN score &gt;= 80 THEN 'B'
+    WHEN score &gt;= 70 THEN 'C'
+    ELSE 'Below C'
+END</code></pre>
+
+          <p>
+            The most specific or highest-threshold condition must appear first. Once a
+            condition is true, later branches are ignored.
+          </p>
+        </section>
+
+        <section class="section" id="complex-case">
+          <h2>5. More Complex CASE Logic</h2>
+          <p>
+            Conditions can combine multiple columns with <code>AND</code>,
+            <code>OR</code>, and parentheses.
+          </p>
+
+          <pre><code>SELECT
+    match_id,
+    CASE
+        WHEN home_team = 'Team A'
+             AND home_goal &gt; away_goal THEN 'Team A home win'
+        WHEN away_team = 'Team A'
+             AND away_goal &gt; home_goal THEN 'Team A away win'
+        WHEN home_team = 'Team A'
+             OR away_team = 'Team A' THEN 'Team A did not win'
+        ELSE 'Team A not involved'
+    END AS team_a_result
+FROM matches;</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong>
+            Parentheses make mixed <code>AND</code>/<code>OR</code> logic easier to read and
+            protect against precedence mistakes.
+          </div>
+
+          <h3>Rivalry pattern</h3>
+
+          <pre><code>CASE
+    WHEN hometeam_id = 101 AND awayteam_id = 202 THEN 'Rivalry'
+    WHEN hometeam_id = 202 AND awayteam_id = 101 THEN 'Rivalry'
+    ELSE 'Other match'
+END</code></pre>
+
+          <p>
+            The same logical relationship may appear in either column order. When the
+            order should not matter, cover both arrangements.
+          </p>
+        </section>
+
+        <section class="section" id="filtering">
+          <h2>6. Filtering Your CASE Statement</h2>
+          <p>
+            <code>CASE</code> changes values; <code>WHERE</code> removes rows. They solve
+            different problems and are often used together.
+          </p>
+
+          <pre><code>SELECT
+    date,
+    CASE
+        WHEN home_goal &gt; away_goal THEN 'Home win'
+        WHEN home_goal &lt; away_goal THEN 'Away win'
+        ELSE 'Draw'
+    END AS result
+FROM matches
+WHERE season = '2013/2014';</code></pre>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Use WHERE when...</h3>
+              <p>You do not want nonmatching rows included in the result at all.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Use CASE when...</h3>
+              <p>You want to retain rows but label or measure them differently.</p>
+            </article>
+          </div>
+
+          <div class="callout amber">
+            <strong>Important distinction:</strong>
+            A condition inside <code>CASE</code> is not automatically a filter. Rows remain
+            unless the <code>WHERE</code> clause excludes them.
+          </div>
+        </section>
+
+        <section class="section" id="aggregation">
+          <h2>7. CASE WHEN with Aggregate Functions</h2>
+          <p>
+            Conditional aggregation lets one grouped query calculate several metrics at
+            once. The most common patterns use <code>COUNT</code>, <code>SUM</code>, and
+            <code>AVG</code>.
+          </p>
+
+          <h3>COUNT using CASE WHEN</h3>
+
+          <pre><code>SELECT
+    season,
+    COUNT(CASE
+              WHEN home_goal &gt; away_goal THEN 1
+          END) AS home_wins
+FROM matches
+GROUP BY season;</code></pre>
+
+          <p>
+            <code>COUNT(expression)</code> ignores <code>NULL</code>. The expression returns
+            <code>1</code> for matching rows and <code>NULL</code> otherwise.
+          </p>
+
+          <h3>SUM using CASE WHEN</h3>
+
+          <pre><code>SELECT
+    season,
+    SUM(CASE
+            WHEN home_goal &gt; away_goal THEN 1
+            ELSE 0
+        END) AS home_wins
+FROM matches
+GROUP BY season;</code></pre>
+
+          <p>
+            This pattern explicitly contributes 1 for a match and 0 for a nonmatch.
+          </p>
+
+          <h3>Conditional sums of values</h3>
+
+          <pre><code>SELECT
+    season,
+    SUM(CASE
+            WHEN home_goal &gt; away_goal THEN home_goal
+            ELSE 0
+        END) AS goals_in_home_wins
+FROM matches
+GROUP BY season;</code></pre>
+
+          <h3>AVG to derive a fraction</h3>
+
+          <pre><code>SELECT
+    season,
+    AVG(CASE
+            WHEN home_goal &gt; away_goal THEN 1.0
+            ELSE 0.0
+        END) AS home_win_fraction
+FROM matches
+GROUP BY season;</code></pre>
+
+          <p>
+            Because the average of 1s and 0s is the proportion of 1s, this returns the
+            fraction of matches won by the home team.
+          </p>
+
+          <div class="callout green">
+            <strong>Memory shortcut:</strong>
+            <code>SUM(flag)</code> gives the count; <code>AVG(flag)</code> gives the fraction.
+          </div>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>8. Worked Example</h2>
+          <p>
+            Produce one row per season with total matches, counts by outcome, and the
+            percentage of home wins.
+          </p>
+
+          <pre><code>SELECT
+    season,
+    COUNT(*) AS total_matches,
+
+    SUM(CASE
+            WHEN home_goal &gt; away_goal THEN 1
+            ELSE 0
+        END) AS home_wins,
+
+    SUM(CASE
+            WHEN home_goal &lt; away_goal THEN 1
+            ELSE 0
+        END) AS away_wins,
+
+    SUM(CASE
+            WHEN home_goal = away_goal THEN 1
+            ELSE 0
+        END) AS draws,
+
+    ROUND(
+        100.0 * AVG(
+            CASE
+                WHEN home_goal &gt; away_goal THEN 1.0
+                ELSE 0.0
+            END
+        ),
+        2
+    ) AS home_win_pct
+FROM matches
+GROUP BY season
+ORDER BY season;</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong>
+            The query keeps every match, groups by season, derives several conditional
+            metrics, and calculates a percentage without a separate subquery.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>9. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Check that outcome counts add up to <code>COUNT(*)</code>.</li>
+            <li>Verify that the percentage stays between 0 and 100.</li>
+            <li>Use decimal values such as <code>1.0</code> or multiply by <code>100.0</code> to avoid integer-division surprises.</li>
+            <li>Confirm that nullable goal columns are handled as intended.</li>
+            <li>Temporarily select the raw columns beside the <code>CASE</code> output to inspect row-level classification.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong>
+            If category totals do not reconcile with the total row count, a condition may
+            overlap, omit a case, or mishandle <code>NULL</code>.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>10. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Forgetting END</strong>
+              Every <code>CASE</code> expression must close with <code>END</code>, normally
+              followed by an alias.
+            </article>
+
+            <article class="qa-item">
+              <strong>Putting broad conditions first</strong>
+              A broad branch can capture rows before a more precise branch gets a chance.
+              Order conditions from most specific to least specific.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming CASE filters rows</strong>
+              <code>CASE</code> derives values. Use <code>WHERE</code> when rows must be removed.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using COUNT with ELSE 0</strong>
+              <code>COUNT</code> counts both 1 and 0 because both are non-NULL. For
+              <code>COUNT(CASE ...)</code>, omit <code>ELSE</code> or return <code>NULL</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Integer division</strong>
+              Dividing integers may truncate the result in some SQL systems. Force a
+              decimal with <code>1.0</code>, <code>100.0</code>, or an explicit cast.
+            </article>
+
+            <article class="qa-item">
+              <strong>Mixing incompatible result types</strong>
+              All branches should return compatible types. Use explicit casting when a
+              consistent output type is needed.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>11. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is a CASE expression?</strong>
+              A <code>CASE</code> expression applies conditional logic inside SQL and
+              returns one value based on the first true condition. I use it for
+              categorization, flags, and conditional metrics.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you perform conditional aggregation?</strong>
+              I place a <code>CASE</code> expression inside an aggregate. For example,
+              <code>SUM(CASE WHEN condition THEN 1 ELSE 0 END)</code> counts matching rows
+              while preserving the grouping context.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is the difference between WHERE and CASE?</strong>
+              <code>WHERE</code> filters rows before aggregation, while <code>CASE</code>
+              keeps rows and assigns conditional values that can later be selected or aggregated.
+            </article>
+
+            <article class="qa-item">
+              <strong>How can AVG calculate a percentage?</strong>
+              I return 1.0 for rows that meet the condition and 0.0 otherwise. The average
+              of that flag is the fraction of matching rows, which I can multiply by 100
+              for a percentage.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>12. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Chapter summary</strong>
+            <ol>
+              <li><code>CASE</code> checks conditions from top to bottom.</li>
+              <li>The first true branch wins.</li>
+              <li><code>ELSE</code> is optional; without it, unmatched rows return <code>NULL</code>.</li>
+              <li><code>SUM(CASE ... THEN 1 ELSE 0 END)</code> counts matches.</li>
+              <li><code>AVG(CASE ... THEN 1.0 ELSE 0.0 END)</code> returns a fraction.</li>
+              <li><code>WHERE</code> filters rows; <code>CASE</code> derives values.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you classify a match as home win, away win, or draw?</li>
+            <li>Can you explain why condition order matters?</li>
+            <li>Can you count conditional rows with both <code>COUNT</code> and <code>SUM</code>?</li>
+            <li>Can you calculate a percentage with <code>AVG</code> over a 1/0 flag?</li>
+            <li>Can you distinguish row filtering from conditional labeling?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong>
+            Chapter 1 deserves a focused local lab covering classification, overlapping
+            conditions, conditional counts, conditional sums, and percentages.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong>
+            You can write a multi-branch <code>CASE</code>, combine it with
+            <code>COUNT</code>/<code>SUM</code>/<code>AVG</code>, and explain why the query
+            produces the expected result.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Data Manipulation in SQL · Chapter 1 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_short_and_simple_subqueries_field_guide.html">Next Chapter</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

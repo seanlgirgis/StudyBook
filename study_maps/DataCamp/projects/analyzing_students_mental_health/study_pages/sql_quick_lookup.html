@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Quick Lookup — Analyzing Students' Mental Health</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1f2630;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #3fb950;
+      --green-soft: rgba(63,185,80,.14);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88,166,255,.13);
+      --amber: #d29922;
+      --red: #f85149;
+      --code: #0b0f14;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 90% 5%, rgba(88,166,255,.08), transparent 28rem),
+        radial-gradient(circle at 5% 20%, rgba(63,185,80,.07), transparent 24rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Inter, Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    header {
+      border-top: 4px solid transparent;
+      border-image: linear-gradient(90deg, var(--green), var(--blue)) 1;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13,17,23,.96);
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .breadcrumb {
+      padding-top: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .hero {
+      padding: 30px 0 28px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(63,185,80,.4);
+      background: var(--green-soft);
+      color: #82df91;
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    h1 {
+      margin: 12px 0 8px;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      max-width: 75ch;
+    }
+
+    main { padding: 26px 0 50px; }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 12px 0;
+      background: rgba(13,17,23,.94);
+      backdrop-filter: blur(10px);
+    }
+
+    .search {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(88,166,255,.12);
+    }
+
+    .quick-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 24px;
+    }
+
+    .quick-nav a {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255,255,255,.025);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(31,38,48,.97), rgba(22,27,34,.97));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.08rem;
+    }
+
+    .tag {
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: .73rem;
+      font-weight: 700;
+      color: #9be9a8;
+      background: var(--green-soft);
+      border: 1px solid rgba(63,185,80,.3);
+    }
+
+    .card-body { padding: 15px 16px 17px; }
+
+    .rule {
+      margin: 0 0 10px;
+      color: var(--muted);
+    }
+
+    code {
+      font-family: Consolas, "Cascadia Code", monospace;
+      color: #c9d1d9;
+      background: rgba(110,118,129,.16);
+      border-radius: 5px;
+      padding: .1rem .35rem;
+    }
+
+    pre {
+      margin: 10px 0 0;
+      padding: 14px;
+      overflow-x: auto;
+      background: var(--code);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      line-height: 1.45;
+    }
+
+    pre code { background: transparent; padding: 0; }
+
+    .trap {
+      margin-top: 11px;
+      padding: 10px 12px;
+      border-left: 4px solid var(--amber);
+      border-radius: 7px;
+      background: rgba(210,153,34,.09);
+      color: #d6c9a7;
+      font-size: .92rem;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 9px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { background: rgba(88,166,255,.1); }
+    td { background: rgba(255,255,255,.015); }
+
+    footer {
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      padding: 24px 0 36px;
+      text-align: center;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 780px) {
+      .grid { grid-template-columns: 1fr; }
+      .full { grid-column: auto; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Project Home</a> ›
+        <a href="project_field_guide.html">Project Field Guide</a> ›
+        SQL Quick Lookup
+      </div>
+      <div class="hero">
+        <span class="badge">Compact Reference</span>
+        <h1>SQL Quick Lookup</h1>
+        <p class="subtitle">
+          The smallest useful syntax for filtering, cleaning, grouping, averaging,
+          rounding, sorting, validating, and explaining this project.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="toolbar">
+      <input
+        id="searchBox"
+        class="search"
+        type="search"
+        placeholder="Search: WHERE, GROUP BY, AVG, CTE, null, validation..."
+        aria-label="Search SQL quick lookup">
+    </div>
+
+    <nav class="quick-nav" aria-label="Quick sections">
+      <a href="#filter">Filter</a>
+      <a href="#nulls">Nulls</a>
+      <a href="#group">Group</a>
+      <a href="#count">Count</a>
+      <a href="#average">Average</a>
+      <a href="#round">Round</a>
+      <a href="#sort">Sort</a>
+      <a href="#cte">CTE</a>
+      <a href="#having">Having</a>
+      <a href="#validation">Validation</a>
+      <a href="#final-query">Final Query</a>
+    </nav>
+
+    <div class="grid" id="lookupGrid">
+      <section class="card lookup-card" id="filter" data-search="where filter international inter_dom rows">
+        <div class="card-header">
+          <h2>Filter rows with WHERE</h2>
+          <span class="tag">WHERE</span>
+        </div>
+        <div class="card-body">
+          <p class="rule">Use <code>WHERE</code> to keep only international students.</p>
+          <pre><code>WHERE inter_dom = 'Inter'</code></pre>
+          <div class="trap">
+            Trap: forgetting this filter mixes domestic and international students.
+          </div>
+        </div>
+      </section>
+
+      <section class="card lookup-card" id="nulls" data-search="null is not null missing clean data">
+        <div class="card-header">
+          <h2>Remove incomplete rows</h2>
+          <span class="tag">IS NOT NULL</span>
+        </div>
+        <div class="card-body">
+          <p class="rule">Keep only rows with values in every field used by the analysis.</p>
+          <pre><code>WHERE inter_dom IS NOT NULL
+  AND stay IS NOT NULL
+  AND todep IS NOT NULL
+  AND tosc IS NOT NULL
+  AND toas IS NOT NULL</code></pre>
+          <div class="trap">
+            Trap: use <code>IS NULL</code> or <code>IS NOT NULL</code>, not <code>= NULL</code>.
+          </div>
+        </div>
+      </section>
+
+      <section class="card lookup-card" id="group" data-search="group by stay bucket one row per group">
+        <div class="card-header">
+          <h2>Create stay groups</h2>
+          <span class="tag">GROUP BY</span>
+        </div>
+        <div class="card-body">
+          <p class="rule">Create one result row for each length-of-stay value.</p>
+          <pre><code>GROUP BY stay</code></pre>
+          <div class="trap">
+            Trap: every selected column that is not aggregated must normally appear in
+            <code>GROUP BY</code>.
+          </div>
+        </div>
+      </section>
+
+      <section class="card lookup-card" id="count" data-search="count rows count star group size sample size">
+        <div class="card-header">
+          <h2>Count students per group</h2>
+          <span class="tag">COUNT</span>
+        </div>
+        <div class="card-body">
+          <p class="rule">Count all rows inside each stay group.</p>
+          <pre><code>COUNT(*) AS count_int</code></pre>
+          <div class="trap">
+            Trap: <code>COUNT(column)</code> ignores null values in that column.
+          </div>
+        </div>
+      </section>
+
+      <section class="card lookup-card" id="average" data-search="avg average mean depression social connectedness stress">
+        <div class="card-header">
+          <h2>Calculate group averages</h2>
+          <span class="tag">AVG</span>
+        </div>
+        <div class="card-body">
+          <pre><code>AVG(todep)  -- depression
+AVG(tosc)   -- social connectedness
+AVG(toas)   -- acculturative stress</code></pre>
+          <div class="trap">
+            Trap: averages can look precise even when the group contains only one student.
+            Always read the count with the average.
+          </div>
+        </div>
+      </section>
+
+      <section class="card lookup-card" id="round" data-search="round decimal two places precision">
+        <div class="card-header">
+          <h2>Round to two decimals</h2>
+          <span class="tag">ROUND</span>
+        </div>
+        <div class="card-body">
+          <p class="rule">Wrap the aggregate inside <code>ROUND()</code>.</p>
+          <pre><code>ROUND(AVG(todep), 2) AS average_phq</code></pre>
+          <div class="trap">
+            PostgreSQL supports rounding a numeric value to the requested number of decimal places.
+          </div>
+        </div>
+      </section>
+
+      <section class="card lookup-card" id="sort" data-search="order by descending desc longest stay first">
+        <div class="card-header">
+          <h2>Sort longest stay first</h2>
+          <span class="tag">ORDER BY</span>
+        </div>
+        <div class="card-body">
+          <pre><code>ORDER BY stay DESC</code></pre>
+          <div class="trap">
+            <code>DESC</code> means high to low. <code>ASC</code> means low to high.
+          </div>
+        </div>
+      </section>
+
+      <section class="card lookup-card" id="cte" data-search="with cte common table expression clean_students stages">
+        <div class="card-header">
+          <h2>Separate cleaning with a CTE</h2>
+          <span class="tag">WITH</span>
+        </div>
+        <div class="card-body">
+          <pre><code>WITH clean_students AS (
+    SELECT
+        inter_dom,
+        stay,
+        todep,
+        tosc,
+        toas
+    FROM students
+    WHERE stay IS NOT NULL
+)
+SELECT *
+FROM clean_students;</code></pre>
+          <div class="trap">
+            A CTE improves readability here, but it is not required for such a small query.
+          </div>
+        </div>
+      </section>
+
+      <section class="card lookup-card" id="having" data-search="having filter groups at least five count aggregate">
+        <div class="card-header">
+          <h2>Filter groups with HAVING</h2>
+          <span class="tag">HAVING</span>
+        </div>
+        <div class="card-body">
+          <p class="rule">Use <code>HAVING</code> after grouping to keep only larger groups.</p>
+          <pre><code>GROUP BY stay
+HAVING COUNT(*) &gt;= 5</code></pre>
+          <div class="trap">
+            <code>WHERE</code> filters rows before grouping. <code>HAVING</code> filters groups after grouping.
+          </div>
+        </div>
+      </section>
+
+      <section class="card lookup-card" data-search="alias as rename output columns">
+        <div class="card-header">
+          <h2>Name result columns</h2>
+          <span class="tag">AS</span>
+        </div>
+        <div class="card-body">
+          <pre><code>COUNT(*) AS count_int
+ROUND(AVG(todep), 2) AS average_phq</code></pre>
+          <div class="trap">
+            Match the exact aliases required by the project instructions.
+          </div>
+        </div>
+      </section>
+
+      <section class="card lookup-card full" id="validation" data-search="validation row count distinct groups 286 201 9">
+        <div class="card-header">
+          <h2>Validation checks</h2>
+          <span class="tag">VERIFY</span>
+        </div>
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>SQL</th>
+                <th>Expected</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>How many source rows loaded?</td>
+                <td><code>SELECT COUNT(*) FROM students;</code></td>
+                <td>286</td>
+              </tr>
+              <tr>
+                <td>How many complete international rows are analyzed?</td>
+                <td><code>SELECT COUNT(*) ... WHERE inter_dom = 'Inter' ...</code></td>
+                <td>201</td>
+              </tr>
+              <tr>
+                <td>How many stay groups?</td>
+                <td><code>SELECT COUNT(DISTINCT stay) ...</code></td>
+                <td>9</td>
+              </tr>
+              <tr>
+                <td>How large is the final result?</td>
+                <td>Run the final grouped query.</td>
+                <td>9 rows × 5 columns</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card lookup-card full" id="final-query" data-search="final solution full query clean_students project">
+        <div class="card-header">
+          <h2>Final project query</h2>
+          <span class="tag">SOLUTION</span>
+        </div>
+        <div class="card-body">
+          <pre><code>WITH clean_students AS (
+    SELECT
+        inter_dom,
+        stay,
+        todep,
+        tosc,
+        toas
+    FROM students
+    WHERE inter_dom IS NOT NULL
+      AND stay IS NOT NULL
+      AND todep IS NOT NULL
+      AND tosc IS NOT NULL
+      AND toas IS NOT NULL
+)
+SELECT
+    stay,
+    COUNT(*) AS count_int,
+    ROUND(AVG(todep), 2) AS average_phq,
+    ROUND(AVG(tosc), 2) AS average_scs,
+    ROUND(AVG(toas), 2) AS average_as
+FROM clean_students
+WHERE inter_dom = 'Inter'
+GROUP BY stay
+ORDER BY stay DESC;</code></pre>
+        </div>
+      </section>
+
+      <section class="card lookup-card full" data-search="mental model order execution from where group having select order">
+        <div class="card-header">
+          <h2>Useful mental model</h2>
+          <span class="tag">ORDER</span>
+        </div>
+        <div class="card-body">
+          <p class="rule">Think through the query in this practical order:</p>
+          <pre><code>FROM
+→ WHERE
+→ GROUP BY
+→ HAVING
+→ SELECT
+→ ORDER BY</code></pre>
+          <div class="trap">
+            This is a reasoning model, not the written clause order of every SQL statement.
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <a href="../index.html">Project Home</a> ·
+      <a href="project_field_guide.html">Project Field Guide</a> ·
+      <a href="../lab/lab_guide.html">Lab Guide</a>
+    </div>
+  </footer>
+
+  <script>
+    const searchBox = document.getElementById("searchBox");
+    const cards = [...document.querySelectorAll(".lookup-card")];
+
+    searchBox.addEventListener("input", () => {
+      const term = searchBox.value.trim().toLowerCase();
+
+      cards.forEach(card => {
+        const searchable = (
+          card.dataset.search + " " + card.textContent
+        ).toLowerCase();
+
+        card.classList.toggle("hidden", term && !searchable.includes(term));
+      });
+    });
+  </script>
+</body>
+</html>
