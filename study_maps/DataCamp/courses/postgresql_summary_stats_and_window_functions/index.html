@@ -3,42 +3,498 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PostgreSQL Summary Stats and Window Functions</title>
+  <title>PostgreSQL Summary Stats and Window Functions | DataCamp StudyBook</title>
   <style>
-    :root { color-scheme: dark; --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3; --muted:#9da7b3; --accent:#58a6ff; --good:#3fb950; }
+    :root {
+      --bg:#0d1117;
+      --panel:#161b22;
+      --panel-soft:#1c232d;
+      --border:#30363d;
+      --text:#e6edf3;
+      --muted:#9da7b3;
+      --green:#03ef62;
+      --green-soft:rgba(3,239,98,.12);
+      --blue:#58a6ff;
+      --blue-soft:rgba(88,166,255,.12);
+      --amber:#d29922;
+      --amber-soft:rgba(210,153,34,.12);
+      --purple:#bc8cff;
+      --shadow:0 12px 30px rgba(0,0,0,.24);
+    }
+
     * { box-sizing:border-box; }
-    body { margin:0; font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-    header { border-top:4px solid var(--accent); border-bottom:1px solid var(--line); background:#010409; }
-    .container { width:min(1100px,92%); margin:auto; padding:28px 0; }
-    .badge { display:inline-block; padding:4px 10px; border:1px solid var(--good); border-radius:999px; color:var(--good); font-size:.82rem; }
-    nav, section { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px; margin:18px 0; }
-    a { color:var(--accent); }
-    code, pre { font-family:Consolas,monospace; }
-    pre { overflow:auto; background:#010409; border:1px solid var(--line); border-radius:8px; padding:16px; }
-    .muted { color:var(--muted); }
+    html { scroll-behavior:smooth; }
+
+    body {
+      margin:0;
+      font-family:"Segoe UI",Arial,sans-serif;
+      background:
+        radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    a { color:inherit; }
+    code { font-family:Consolas,"Courier New",monospace; }
+
+    .page {
+      width:min(1180px,calc(100% - 32px));
+      margin:0 auto;
+      padding:24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin-bottom:16px;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    .breadcrumbs a {
+      color:var(--muted);
+      text-decoration:none;
+    }
+
+    .breadcrumbs a:hover { color:var(--green); }
+
+    .hero {
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(135deg,#061d2d 0%,#0d2a40 58%,#14384e 100%);
+      border:1px solid #28506a;
+      border-radius:18px;
+      padding:34px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero::before {
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:5px;
+      background:linear-gradient(90deg,var(--green),var(--blue),var(--purple));
+    }
+
+    .eyebrow {
+      margin:0 0 7px;
+      color:var(--green);
+      font-size:.76rem;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    h1 {
+      margin:0;
+      font-size:clamp(2.1rem,4vw,3.3rem);
+      line-height:1.08;
+    }
+
+    .hero p {
+      max-width:900px;
+      margin:14px 0 0;
+      color:#c8d4df;
+      font-size:1.03rem;
+    }
+
+    .hero-actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:11px;
+      margin-top:22px;
+    }
+
+    .button {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:42px;
+      padding:0 16px;
+      border-radius:9px;
+      border:1px solid #486274;
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      text-decoration:none;
+      font-weight:850;
+    }
+
+    .button.primary {
+      background:var(--green);
+      color:#03130a;
+      border-color:transparent;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .resource-grid {
+      display:grid;
+      gap:14px;
+    }
+
+    .status-grid {
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      margin-top:20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .resource-grid {
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .resource-card {
+      background:var(--panel-soft);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .resource-card h3 {
+      display:block;
+      margin:0 0 7px;
+      color:var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .resource-card p {
+      margin:0;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    .chapter-card a,
+    .resource-card a {
+      text-decoration:none;
+    }
+
+    .chapter-card a:hover h3,
+    .resource-card a:hover h3 {
+      color:var(--blue);
+    }
+
+    .section {
+      margin-top:22px;
+      background:linear-gradient(180deg,var(--panel),#141920);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .section h2 {
+      margin:0 0 14px;
+      font-size:1.45rem;
+    }
+
+    .section p {
+      margin:0 0 12px;
+      color:#c9d3dc;
+    }
+
+    .section ol,
+    .section ul {
+      margin:8px 0 0;
+      padding-left:22px;
+      color:#c9d3dc;
+    }
+
+    .section li + li { margin-top:7px; }
+
+    .callout {
+      margin-top:15px;
+      padding:14px 16px;
+      border-left:4px solid var(--blue);
+      border-radius:9px;
+      background:var(--blue-soft);
+      color:#cfdcec;
+    }
+
+    .callout.green {
+      border-left-color:var(--green);
+      background:var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color:var(--amber);
+      background:var(--amber-soft);
+      color:#d8caaa;
+    }
+
+    .path {
+      margin-top:14px;
+      padding:14px;
+      border:1px solid #33404d;
+      border-radius:10px;
+      background:#0f141a;
+      color:#dce6ef;
+      overflow-x:auto;
+      font-family:Consolas,"Courier New",monospace;
+    }
+
+    footer {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:28px;
+      padding-top:18px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:.88rem;
+    }
+
+    footer a {
+      color:var(--blue);
+      text-decoration:none;
+    }
+
+    @media (max-width:1000px) {
+      .status-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .resource-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+
+    @media (max-width:700px) {
+      .status-grid,
+      .chapter-grid,
+      .resource-grid {
+        grid-template-columns:1fr;
+      }
+
+      .hero { padding:28px 21px; }
+      .section { padding:18px; }
+    }
   </style>
 </head>
 <body>
-<header><div class="container"><span class="badge">DataCamp Course</span><h1>PostgreSQL Summary Stats and Window Functions</h1></div></header>
-<main class="container">
-<nav>
-  <h2>Start here</h2>
-  <ul>
-    <li><a href="study_pages/field_guide.html">Accumulated Field Guide</a></li>
-    <li><a href="study_pages/sql_quick_lookup.html">SQL Quick Lookup</a></li>
-    <li><a href="lab/lab_guide.html">Hands-on Lab Guide</a></li>
-  </ul>
-</nav>
-<section>
-  <h2>Chapter guides</h2>
-  <ol>
-    <li><a href="study_pages/chapter_01_introduction_to_window_functions_field_guide.html">Introduction to window functions</a></li>
-    <li><a href="study_pages/chapter_02_fetching_ranking_and_paging_field_guide.html">Fetching, ranking, and paging</a></li>
-    <li><a href="study_pages/chapter_03_aggregate_window_functions_and_frames_field_guide.html">Aggregate window functions and frames</a></li>
-    <li><a href="study_pages/chapter_04_beyond_window_functions_field_guide.html">Beyond window functions</a></li>
-  </ol>
-</section>
-<section><h2>Status</h2><p>Platform complete. StudyBook documentation and lab practice are developing.</p></section>
-</main>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../index.html">DataCamp Course Library</a>
+      <span>›</span>
+      <span>PostgreSQL Summary Stats and Window Functions</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp · Intermediate SQL · Course Complete</p>
+      <h1>PostgreSQL Summary Stats and Window Functions</h1>
+      <p>
+        A complete StudyBook package for window-function foundations, row-to-row fetching,
+        ranking and paging, aggregate windows and frames, plus PostgreSQL pivoting,
+        subtotals, and summary techniques.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="study_pages/field_guide.html">Open Main Field Guide</a>
+        <a class="button" href="study_pages/sql_quick_lookup.html">Open SQL Quick Lookup</a>
+        <a class="button" href="lab/lab_guide.html">Open Lab Guide</a>
+        <a class="button" href="README.md">Open README</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card">
+          <strong>COMPLETE</strong>
+          <span>Platform status</span>
+        </div>
+        <div class="status-card">
+          <strong>STRONG</strong>
+          <span>Documentation coverage</span>
+        </div>
+        <div class="status-card">
+          <strong>READY</strong>
+          <span>Lab package</span>
+        </div>
+        <div class="status-card">
+          <strong>DEVELOPING</strong>
+          <span>Recall confidence</span>
+        </div>
+        <div class="status-card">
+          <strong>NEEDS REPETITION</strong>
+          <span>Interview readiness</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Recommended Study Order</h2>
+      <ol>
+        <li><a href="study_pages/field_guide.html">Read the accumulated Field Guide</a></li>
+        <li><a href="study_pages/chapter_01_introduction_to_window_functions_field_guide.html">Review Chapter 1 — Introduction to Window Functions</a></li>
+        <li><a href="study_pages/chapter_02_fetching_ranking_and_paging_field_guide.html">Review Chapter 2 — Fetching, Ranking, and Paging</a></li>
+        <li><a href="study_pages/chapter_03_aggregate_window_functions_and_frames_field_guide.html">Review Chapter 3 — Aggregate Window Functions and Frames</a></li>
+        <li><a href="study_pages/chapter_04_beyond_window_functions_field_guide.html">Review Chapter 4 — Beyond Window Functions</a></li>
+        <li><a href="study_pages/sql_quick_lookup.html">Use the SQL Quick Lookup for syntax recall</a></li>
+        <li><a href="lab/lab_guide.html">Run the complete PostgreSQL lab</a></li>
+        <li>Record mistakes and observed outputs in <a href="lab/lab_run_book.md">the Lab Run Book</a></li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>Chapter Guides</h2>
+
+      <div class="chapter-grid">
+        <article class="chapter-card">
+          <a href="study_pages/chapter_01_introduction_to_window_functions_field_guide.html">
+            <h3>Chapter 1 — Introduction to Window Functions</h3>
+            <p>Window functions versus GROUP BY, ROW_NUMBER, ORDER BY inside OVER, and PARTITION BY.</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="study_pages/chapter_02_fetching_ranking_and_paging_field_guide.html">
+            <h3>Chapter 2 — Fetching, Ranking, and Paging</h3>
+            <p>LAG, LEAD, FIRST_VALUE, LAST_VALUE, RANK, DENSE_RANK, and NTILE.</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="study_pages/chapter_03_aggregate_window_functions_and_frames_field_guide.html">
+            <h3>Chapter 3 — Aggregate Window Functions and Frames</h3>
+            <p>Running totals, moving calculations, frame boundaries, ROWS, and RANGE.</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="study_pages/chapter_04_beyond_window_functions_field_guide.html">
+            <h3>Chapter 4 — Beyond Window Functions</h3>
+            <p>CROSSTAB, ROLLUP, CUBE, COALESCE, STRING_AGG, and analytical result shaping.</p>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Course Resources</h2>
+
+      <div class="resource-grid">
+        <article class="resource-card">
+          <a href="study_pages/field_guide.html">
+            <h3>Main Field Guide</h3>
+            <p>Whole-course memory map and cross-chapter review.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="study_pages/field_guide.md">
+            <h3>Field Guide Markdown</h3>
+            <p>Portable text version of the accumulated course guide.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="study_pages/sql_quick_lookup.html">
+            <h3>SQL Quick Lookup</h3>
+            <p>Searchable syntax, rules, and common traps.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="lab/00_how_to_run.md">
+            <h3>How to Run the Lab</h3>
+            <p>PowerShell and psql execution instructions.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="lab/lab_run_book.md">
+            <h3>Lab Run Book</h3>
+            <p>Practice checklist, evidence log, and mistake tracker.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="docs/BILL_OF_MATERIALS.md">
+            <h3>Bill of Materials</h3>
+            <p>Course scope, chapter inventory, and source coverage.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="docs/COURSE_SETUP_AUDIT.md">
+            <h3>Course Setup Audit</h3>
+            <p>Course-package setup and completion checks.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="README.md">
+            <h3>Course README</h3>
+            <p>Course identity, structure, execution notes, and status.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="STUDYBUBBLE_SESSION_STATE.md">
+            <h3>Session State</h3>
+            <p>Current course state and next review actions.</p>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Complete Local Lab</h2>
+
+      <p>
+        The lab uses the Summer Olympics dataset and provides setup scripts, exercises,
+        full solutions, expected outputs, validation checks, and troubleshooting notes.
+      </p>
+
+      <ul>
+        <li><a href="lab/run_lab.ps1">PowerShell Lab Runner</a></li>
+        <li><a href="lab/sql/00_create_schema.sql">Create Lab Schema</a></li>
+        <li><a href="lab/sql/01_create_table.sql">Create Summer Medals Table</a></li>
+        <li><a href="lab/sql/02_load_data.sql">Load Summer Olympics Data</a></li>
+        <li><a href="lab/sql/03_validate_data.sql">Validate the Loaded Dataset</a></li>
+        <li><a href="lab/sql/exercises/01_window_foundations_exercises.sql">Chapter 1 Exercises</a></li>
+        <li><a href="lab/sql/exercises/02_fetching_ranking_paging_exercises.sql">Chapter 2 Exercises</a></li>
+        <li><a href="lab/sql/exercises/03_aggregate_frames_exercises.sql">Chapter 3 Exercises</a></li>
+        <li><a href="lab/sql/exercises/04_beyond_window_functions_exercises.sql">Chapter 4 Exercises</a></li>
+      </ul>
+
+      <div class="callout green">
+        Run <code>lab\run_lab.ps1</code> to recreate the schema, load 31,165 medal records,
+        and validate the dataset before beginning the exercises.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Course Closeout</h2>
+
+      <p>
+        The DataCamp course is complete, the four chapter guides are built, the accumulated
+        Field Guide and SQL Quick Lookup are updated, and a complete course-local PostgreSQL
+        lab package is available. The course now moves into repetition and maintenance mode.
+      </p>
+
+      <div class="callout amber">
+        Next review priority: practice frame boundaries, tie-aware ranking, LAST_VALUE frame behavior,
+        and the aggregate-first → rank-second → pivot-third pattern.
+      </div>
+
+      <div class="path">D:\Workarea\StudyBook\study_maps\DataCamp\courses\postgresql_summary_stats_and_window_functions</div>
+    </section>
+
+    <footer>
+      <span>DataCamp StudyBook · PostgreSQL Summary Stats and Window Functions</span>
+      <span>
+        <a href="../../index.html">Course Library</a>
+        &nbsp;·&nbsp;
+        <a href="study_pages/field_guide.html">Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="study_pages/sql_quick_lookup.html">Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="lab/lab_guide.html">Lab Guide</a>
+      </span>
+    </footer>
+  </main>
 </body>
 </html>

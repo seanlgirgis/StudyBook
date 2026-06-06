@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 2 — Working with DATE/TIME Functions and Operators | Functions for Manipulating Data in PostgreSQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+
+    .toc-search {
+      width: 100%;
+      margin: 2px 0 12px;
+      padding: 10px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f141a;
+      color: var(--text);
+      font: inherit;
+    }
+    .toc-search:focus {
+      outline: 2px solid rgba(88, 166, 255, 0.45);
+      border-color: var(--blue);
+    }
+    .search-hidden { display: none !important; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp Courses</a>
+      <span>›</span>
+      <a href="../index.html">Functions for Manipulating Data in PostgreSQL</a>
+      <span>›</span>
+      <span>Chapter 2: Working with DATE/TIME Functions and Operators</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Functions for Manipulating Data in PostgreSQL · Chapter 2</p>
+      <h1>Working with DATE/TIME Functions and Operators</h1>
+      <p>
+        Learn how PostgreSQL performs date and timestamp arithmetic, represents elapsed time with <code>INTERVAL</code>, retrieves the current date and time, extracts individual date parts, and creates reporting buckets with <code>DATE_TRUNC()</code>.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_function_quick_lookup.html">SQL Function Quick Lookup</a>
+        <a class="button secondary" href="chapter_01_overview_of_common_data_types_field_guide.html">Previous: Overview of Common Data Types</a>
+        <a class="button secondary" href="chapter_03_parsing_and_manipulating_text_field_guide.html">Next: Parsing and Manipulating Text</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Section Contents</h2>
+        <input class="toc-search" id="chapter-search" type="search" placeholder="Search this chapter…" aria-label="Search this chapter">
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Date, Timestamp, and Interval Arithmetic</a>
+        <a href="#concept-2">3. Current Date and Time Functions</a>
+        <a href="#concept-3">4. EXTRACT, DATE_PART, and DATE_TRUNC</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section searchable-section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>PostgreSQL treats dates, timestamps, and intervals as values that can be added, subtracted, compared, filtered, and grouped. The key is knowing the result type produced by each operation and choosing the function that matches the business question.</p>
+
+          <div class="diagram">DATE - DATE                 → integer number of days
+TIMESTAMP - TIMESTAMP       → INTERVAL
+TIMESTAMP + INTERVAL        → TIMESTAMP
+EXTRACT(field FROM value)   → numeric component
+DATE_TRUNC('unit', value)   → timestamp bucket</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Date, Timestamp, and Interval Arithmetic</h3>
+              <p>Add and subtract dates, timestamps, and intervals while watching the returned data type.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Current Date and Time Functions</h3>
+              <p>Use CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP, NOW(), LOCALTIME, and LOCALTIMESTAMP.</p>
+            </article>
+            <article class="mini-card">
+              <h3>EXTRACT, DATE_PART, and DATE_TRUNC</h3>
+              <p>Extract one component for analysis or truncate a timestamp to a reporting boundary.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Combined Rental-Date Patterns</h3>
+              <p>Combine rental duration, interval arithmetic, filtering, and time bucketing in realistic queries.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> Use intervals to move through time, EXTRACT to retrieve one component, and DATE_TRUNC to build stable reporting groups.
+          </div>
+        </section>
+
+        <section class="section searchable-section" id="concept-1">
+          <h2>2. Date, Timestamp, and Interval Arithmetic</h2>
+          <p>Subtracting two DATE values returns a whole-number day count. Subtracting two TIMESTAMP values returns an INTERVAL. To move a timestamp forward by a numeric duration, convert the number into an interval by multiplying it by a unit such as INTERVAL '1 day'.</p>
+
+          <pre><code>SELECT DATE '2026-06-10' - DATE '2026-06-01' AS days_between;
+
+SELECT TIMESTAMP '2026-06-10 18:00'
+     - TIMESTAMP '2026-06-09 08:30' AS elapsed_time;
+
+SELECT rental_date
+     + rental_duration * INTERVAL '1 day' AS expected_return_date
+FROM rental_schedule;</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> The operator may look the same, but PostgreSQL chooses the result type from the input types.
+          </div>
+        </section>
+
+        <section class="section searchable-section" id="concept-2">
+          <h2>3. Current Date and Time Functions</h2>
+          <p>PostgreSQL supplies several expressions for the current date and time. CURRENT_DATE returns only the calendar date. CURRENT_TIMESTAMP and NOW() return the current timestamp with time zone. LOCALTIME and LOCALTIMESTAMP omit time-zone information. NOW() and CURRENT_TIMESTAMP remain stable within the same transaction.</p>
+
+          <pre><code>SELECT CURRENT_DATE,
+       CURRENT_TIME,
+       CURRENT_TIMESTAMP,
+       NOW(),
+       LOCALTIME,
+       LOCALTIMESTAMP;
+
+SELECT *
+FROM rental
+WHERE rental_date >= CURRENT_TIMESTAMP - INTERVAL '7 days';</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> Do not assume every current-time expression has the same type or time-zone behavior. Choose deliberately, especially when comparing stored timestamps.
+          </div>
+        </section>
+
+        <section class="section searchable-section" id="concept-3">
+          <h2>4. EXTRACT, DATE_PART, and DATE_TRUNC</h2>
+          <p>EXTRACT and DATE_PART return an individual numeric component such as year, month, day, hour, or day of week. DATE_TRUNC rounds a timestamp down to the beginning of a chosen unit and is usually better for grouping records into reporting buckets.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Expression</th>
+                <th>Returns</th>
+                <th>Best use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>EXTRACT(MONTH FROM rental_date)</code></td>
+                <td>Numeric month component</td>
+                <td>Filtering, labeling, or calculations using one component</td>
+              </tr>
+              <tr>
+                <td><code>DATE_TRUNC('month', rental_date)</code></td>
+                <td>Timestamp at the start of the month</td>
+                <td>Grouping and ordering monthly reports</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section searchable-section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>This query calculates each rental's expected return date, keeps only overdue unreturned rentals, and exposes the month in which the rental began.</p>
+
+          <pre><code>SELECT
+    r.rental_id,
+    r.rental_date,
+    DATE_TRUNC('month', r.rental_date) AS rental_month,
+    r.rental_date + f.rental_duration * INTERVAL '1 day' AS expected_return_date
+FROM rental AS r
+JOIN inventory AS i ON r.inventory_id = i.inventory_id
+JOIN film AS f ON i.film_id = f.film_id
+WHERE r.return_date IS NULL
+  AND CURRENT_TIMESTAMP >
+      r.rental_date + f.rental_duration * INTERVAL '1 day'
+ORDER BY expected_return_date;</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> Each returned row represents an open rental whose calculated due timestamp is earlier than the current timestamp.
+          </div>
+        </section>
+
+        <section class="section searchable-section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Check the data type of every operand before predicting the result of date/time arithmetic.</li>
+            <li>Verify whether stored timestamps include time-zone information before comparing them with NOW().</li>
+            <li>Handle NULL return dates explicitly because arithmetic and comparisons involving NULL produce NULL.</li>
+            <li>When grouping across several years, group by a complete bucket such as DATE_TRUNC('month', value), not only EXTRACT(MONTH FROM value).</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> A report that groups only by month number can combine January from different years into one row.
+          </div>
+        </section>
+
+        <section class="section searchable-section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Treating one month as exactly thirty days</strong>
+              <code>INTERVAL '1 month'</code> follows calendar boundaries and is not always equal to <code>INTERVAL '30 days'</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Adding a bare number to a timestamp</strong>
+              Express the unit explicitly: multiply the count by <code>INTERVAL '1 day'</code>, <code>INTERVAL '1 hour'</code>, or another appropriate interval.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using EXTRACT when a time bucket is needed</strong>
+              Use <code>DATE_TRUNC()</code> for chronological grouping because it preserves a complete timestamp boundary.
+            </article>
+          </div>
+        </section>
+
+        <section class="section searchable-section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What does PostgreSQL return when two timestamps are subtracted?</strong>
+              It returns an <code>INTERVAL</code> representing the elapsed time. By contrast, subtracting two DATE values returns the number of days.
+            </article>
+
+            <article class="qa-item">
+              <strong>When would you use EXTRACT instead of DATE_TRUNC?</strong>
+              Use <code>EXTRACT</code> when one numeric component is needed, such as hour or day of week. Use <code>DATE_TRUNC</code> when a complete time bucket is needed for grouping and ordering.
+            </article>
+
+            <article class="qa-item">
+              <strong>How would you calculate an expected return timestamp from a duration stored as an integer?</strong>
+              Multiply the integer by an interval unit, such as <code>rental_duration * INTERVAL '1 day'</code>, and add the resulting interval to the rental timestamp.
+            </article>
+          </div>
+        </section>
+
+        <section class="section searchable-section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li><code>DATE - DATE</code> returns a day count.</li>
+              <li><code>TIMESTAMP - TIMESTAMP</code> returns an <code>INTERVAL</code>.</li>
+              <li><code>EXTRACT</code> returns one component; <code>DATE_TRUNC</code> returns a bucket boundary.</li>
+              <li>Use an explicit interval unit when converting numeric durations into elapsed time.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>What result type do you get from subtracting two timestamps?</li>
+            <li>How would you find rows from the last seven days?</li>
+            <li>Why is grouping only by EXTRACT(MONTH) risky across several years?</li>
+            <li>How would you add a film's rental duration to its rental timestamp?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> Practice is warranted. Build queries for elapsed rental time, expected return timestamps, current-date filters, extracted components, and monthly buckets.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> You can explain the result types of date/time subtraction, use intervals safely, choose among current-time expressions, and select EXTRACT or DATE_TRUNC for the correct reporting need.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Functions for Manipulating Data in PostgreSQL · Chapter 2 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_01_overview_of_common_data_types_field_guide.html">Previous: Overview of Common Data Types</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_03_parsing_and_manipulating_text_field_guide.html">Next: Parsing and Manipulating Text</a>
+      </span>
+    </footer>
+  </main>
+
+  <script>
+    const chapterSearch = document.getElementById("chapter-search");
+    const searchableSections = document.querySelectorAll(".searchable-section");
+    chapterSearch.addEventListener("input", function () {
+      const term = this.value.trim().toLowerCase();
+      searchableSections.forEach(function (section) {
+        section.classList.toggle("search-hidden", term && !section.innerText.toLowerCase().includes(term));
+      });
+    });
+  </script>
+
+</body>
+</html>

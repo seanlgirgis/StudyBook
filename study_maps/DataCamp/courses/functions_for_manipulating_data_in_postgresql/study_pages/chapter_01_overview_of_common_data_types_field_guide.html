@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 1 — Overview of Common Data Types | Functions for Manipulating Data in PostgreSQL</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp Courses</a>
+      <span>›</span>
+      <a href="../index.html">Functions for Manipulating Data in PostgreSQL</a>
+      <span>›</span>
+      <span>Chapter 1: Overview of Common Data Types</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Functions for Manipulating Data in PostgreSQL · Chapter 1</p>
+      <h1>Overview of Common Data Types</h1>
+      <p>
+        Learn how PostgreSQL data types control storage and behavior, how to inspect column metadata, and how to work with text, numeric, date/time, interval, and array values.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_function_quick_lookup.html">SQL Function Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_working_with_date_time_functions_and_operators_field_guide.html">Next: DATE/TIME Functions and Operators</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Section Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Text, Numeric, and Metadata Types</a>
+        <a href="#concept-2">3. Date, Time, Timestamp, and Interval</a>
+        <a href="#concept-3">4. Arrays, Indexing, ANY, and Containment</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>A PostgreSQL data type determines what a column can store, which operators are valid, how comparisons behave, and which functions can be applied. Before manipulating unfamiliar data, inspect the actual type instead of guessing from how the value looks.</p>
+
+          <div class="diagram">column value
+   ↓
+identify actual data type
+   ↓
+choose valid function or operator
+   ↓
+validate returned type and result</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Text, Numeric, and Metadata Types</h3>
+              <p>Understand CHAR, VARCHAR, TEXT, integer families, NUMERIC, and information_schema.columns.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Date, Time, Timestamp, and Interval</h3>
+              <p>Distinguish calendar dates, clock times, timestamps, timezone-aware timestamps, and durations.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Arrays, Indexing, ANY, and Containment</h3>
+              <p>Use 1-based indexes, ANY for scalar-to-element matching, and @> for array containment.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Type-First Query Design</h3>
+              <p>Inspect the type first, then choose the correct function, cast, comparison, or operator.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> First identify the data type; then choose the function or operator that matches that type.
+          </div>
+        </section>
+
+        <section class="section" id="concept-1">
+          <h2>2. Text, Numeric, and Metadata Types</h2>
+          <p>Text values may use CHAR, VARCHAR, or TEXT. Whole numbers commonly use SMALLINT, INTEGER, or BIGINT, while exact decimal values use NUMERIC or DECIMAL. When the type is unknown, query information_schema.columns rather than inferring it from displayed values.</p>
+
+          <pre><code>SELECT
+    column_name,
+    data_type,
+    character_maximum_length,
+    numeric_precision,
+    numeric_scale
+FROM information_schema.columns
+WHERE table_schema = 'public'
+  AND table_name = 'payment'
+ORDER BY ordinal_position;</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> A value that looks numeric may still be stored as text. Metadata reveals the real type.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Date, Time, Timestamp, and Interval</h2>
+          <p>DATE stores a calendar date, TIME stores a time of day, TIMESTAMP stores both date and time, and TIMESTAMPTZ represents an absolute moment displayed in the session time zone. INTERVAL stores an amount of elapsed time rather than a point on the calendar.</p>
+
+          <pre><code>SELECT create_date
+FROM customer
+LIMIT 5;
+
+SELECT rental_date,
+       return_date,
+       return_date - rental_date AS rental_duration
+FROM rental
+WHERE return_date IS NOT NULL
+LIMIT 5;</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> Do not treat TIMESTAMP and INTERVAL as interchangeable. One is a point in time; the other is a duration.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. Arrays, Indexing, ANY, and Containment</h2>
+          <p>PostgreSQL arrays hold ordered collections of values of the same base type. Array subscripts normally start at 1. ANY compares one scalar value with each array element, while @> checks whether one array contains another array.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Pattern</th>
+                <th>Question answered</th>
+                <th>Important rule</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>'Trailers' = ANY(special_features)</code></td>
+                <td>Does this scalar equal at least one array element?</td>
+                <td>ANY compares one value against each element.</td>
+              </tr>
+              <tr>
+                <td><code>special_features @&gt; ARRAY['Trailers']</code></td>
+                <td>Does the left array contain the right array?</td>
+                <td>Both sides are arrays; cast when PostgreSQL cannot infer the type.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>This example first inspects the type of the film.special_features column, then searches for films containing the Trailers feature using both supported patterns.</p>
+
+          <pre><code>SELECT column_name, data_type
+FROM information_schema.columns
+WHERE table_schema = 'public'
+  AND table_name = 'film'
+  AND column_name = 'special_features';
+
+SELECT title
+FROM film
+WHERE 'Trailers' = ANY (special_features);
+
+SELECT title
+FROM film
+WHERE special_features @> ARRAY['Trailers']::text[];</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> The metadata query confirms the column type, and the two search expressions return films whose special_features array includes Trailers.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Filter information_schema.columns by both table_schema and table_name when duplicate table names may exist.</li>
+            <li>Confirm that an array column has the expected base type before constructing a typed array literal.</li>
+            <li>Remember that PostgreSQL array indexing normally begins at 1, not 0.</li>
+            <li>Use NUMERIC or DECIMAL for exact monetary values instead of approximate floating-point types.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> Choosing a function only because a displayed value looks like text, a number, or a date can produce invalid logic.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Guessing a column type from its displayed value</strong>
+              Inspect <code>information_schema.columns</code> or another catalog view before selecting functions and operators.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using zero-based array indexes</strong>
+              PostgreSQL arrays normally begin at index <code>1</code>; <code>array_col[1]</code> retrieves the first element.
+            </article>
+
+            <article class="qa-item">
+              <strong>Confusing ANY with array containment</strong>
+              Use <code>= ANY(array_col)</code> for scalar-to-element comparison and <code>@&gt;</code> for array-to-array containment.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>How do you determine a column's data type in PostgreSQL?</strong>
+              I query <code>information_schema.columns</code>, usually filtering by schema, table, and column, so I can choose functions and operators based on the real type.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is the difference between TIMESTAMP and INTERVAL?</strong>
+              A timestamp represents a point in time, while an interval represents an amount of elapsed time.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do ANY and @> differ for arrays?</strong>
+              <code>ANY</code> compares one scalar value against the elements of an array. <code>@&gt;</code> tests whether the left array contains the right array.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li>Inspect the type before applying a function.</li>
+              <li><code>NUMERIC</code> is preferred for exact money calculations.</li>
+              <li><code>TIMESTAMP</code> is a point in time; <code>INTERVAL</code> is a duration.</li>
+              <li>PostgreSQL arrays normally use 1-based indexing.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Which catalog view can reveal a column's data type?</li>
+            <li>Why is NUMERIC generally preferred for currency?</li>
+            <li>What index retrieves the first PostgreSQL array element?</li>
+            <li>When would you choose ANY instead of @>?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> Light practice is useful. Inspect metadata, query date/time columns, access array elements, and compare ANY with @> using the Sakila film data.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> You can identify the actual column type, explain the major text, numeric, temporal, and array types, and choose correct array indexing and search syntax.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Functions for Manipulating Data in PostgreSQL · Chapter 1 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_working_with_date_time_functions_and_operators_field_guide.html">Next: DATE/TIME Functions and Operators</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

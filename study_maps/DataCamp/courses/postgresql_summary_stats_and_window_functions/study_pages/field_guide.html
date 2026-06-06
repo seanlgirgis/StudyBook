@@ -1,35 +1,129 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PostgreSQL Window Functions Field Guide</title>
-  <style>
-    :root { color-scheme: dark; --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3; --muted:#9da7b3; --accent:#58a6ff; --good:#3fb950; }
-    * { box-sizing:border-box; }
-    body { margin:0; font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-    header { border-top:4px solid var(--accent); border-bottom:1px solid var(--line); background:#010409; }
-    .container { width:min(1100px,92%); margin:auto; padding:28px 0; }
-    .badge { display:inline-block; padding:4px 10px; border:1px solid var(--good); border-radius:999px; color:var(--good); font-size:.82rem; }
-    nav, section { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px; margin:18px 0; }
-    a { color:var(--accent); }
-    code, pre { font-family:Consolas,monospace; }
-    pre { overflow:auto; background:#010409; border:1px solid var(--line); border-radius:8px; padding:16px; }
-    .muted { color:var(--muted); }
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PostgreSQL Summary Stats and Window Functions — Field Guide</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--soft:#1c232d;--border:#30363d;--text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;--amber:#d29922;--purple:#bc8cff;--shadow:0 12px 30px rgba(0,0,0,.24)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--blue)}code,pre{font-family:Consolas,"Courier New",monospace}.page{width:min(1200px,calc(100% - 32px));margin:auto;padding:24px 0 52px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}
+.hero:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}
+.eyebrow{color:var(--green);font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:.76rem}.hero h1{margin:.2rem 0;font-size:clamp(2rem,4vw,3.1rem)}.hero p{color:#c8d4df;max-width:900px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.button{padding:10px 15px;border:1px solid #486274;border-radius:9px;text-decoration:none;font-weight:800}.button.primary{background:var(--green);color:#03130a;border-color:transparent}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;margin-top:24px}.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px}.toc a{display:block;color:var(--muted);text-decoration:none;padding:6px}.toc a:hover{color:var(--green)}
+.section{background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:var(--soft);border:1px solid var(--border);border-radius:11px;padding:16px}.card h3{margin-top:0;color:var(--green)}pre{overflow:auto;background:#0f141a;border:1px solid #33404d;border-radius:10px;padding:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0}th,td{border:1px solid var(--border);padding:10px;text-align:left}th{background:#1f2933}td{background:#121820}.callout{border-left:4px solid var(--blue);background:rgba(88,166,255,.12);padding:14px;border-radius:9px}.trap{border-left-color:var(--amber);background:rgba(210,153,34,.12)}
+.search{width:100%;margin-top:18px;padding:13px;border:1px solid #3b4a58;border-radius:10px;background:#0f141a;color:var(--text);font-size:1rem}.hidden{display:none!important}
+footer{margin-top:26px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}@media(max-width:700px){.grid{grid-template-columns:1fr}.hero{padding:26px 20px}}
+</style>
 </head>
-<body>
-<header><div class="container"><span class="badge">DataCamp Course</span><h1>PostgreSQL Window Functions Field Guide</h1></div></header>
-<main class="container">
-<nav><a href="../index.html">Course Home</a> | <a href="sql_quick_lookup.html">Quick Lookup</a> | <a href="../lab/lab_guide.html">Lab Guide</a></nav>
-<section><h2>Core mental model</h2><p>A window function calculates over related rows while retaining every detail row.</p></section>
-<section><h2>Essential syntax</h2><pre><code>function_expression OVER (
+<body><main class="page">
+<header class="hero">
+<p class="eyebrow">DataCamp · Completed Course</p>
+<h1>PostgreSQL Summary Stats and Window Functions</h1>
+<p>A whole-course memory map for window-function foundations, fetching, ranking, frames, moving calculations, pivoting, subtotals, and analytical PostgreSQL patterns.</p>
+<div class="actions">
+<a class="button primary" href="../index.html">Course Home</a>
+<a class="button" href="field_guide.md">Markdown Guide</a>
+<a class="button" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+<a class="button" href="../lab/lab_run_book.md">Lab Run Book</a>
+</div>
+</header>
+<div class="layout">
+<aside class="toc"><strong>Guide Contents</strong>
+<a href="#chapters">1. Chapter guides</a><a href="#mental">2. Mental model</a>
+<a href="#foundations">3. Foundations</a><a href="#fetching">4. Fetching and ranking</a>
+<a href="#frames">5. Aggregates and frames</a><a href="#beyond">6. Beyond windows</a>
+<a href="#mistakes">7. Common mistakes</a><a href="#interview">8. Interview review</a>
+</aside>
+<div>
+<section class="section" id="chapters"><h2>1. Chapter Guides</h2><div class="grid">
+<article class="card"><h3><a href="chapter_01_introduction_to_window_functions_field_guide.html">Chapter 1 — Introduction</a></h3><p>Window functions versus GROUP BY, ROW_NUMBER, ORDER BY, and PARTITION BY.</p></article>
+<article class="card"><h3><a href="chapter_02_fetching_ranking_and_paging_field_guide.html">Chapter 2 — Fetching, Ranking, and Paging</a></h3><p>LAG, LEAD, FIRST_VALUE, LAST_VALUE, ranking functions, and NTILE.</p></article>
+<article class="card"><h3><a href="chapter_03_aggregate_window_functions_and_frames_field_guide.html">Chapter 3 — Aggregates and Frames</a></h3><p>Running totals, moving averages, frames, ROWS, and RANGE.</p></article>
+<article class="card"><h3><a href="chapter_04_beyond_window_functions_field_guide.html">Chapter 4 — Beyond Window Functions</a></h3><p>CROSSTAB, ROLLUP, CUBE, COALESCE, and STRING_AGG.</p></article>
+</div></section>
+
+<section class="section" id="mental"><h2>2. Core Mental Model</h2>
+<div class="callout"><strong>Window functions calculate across related rows while preserving each detail row.</strong></div>
+<pre><code>GROUP BY        → fewer rows
+Window function → same rows + analytical column</code></pre>
+<pre><code>function_expression OVER (
   PARTITION BY grouping_column
   ORDER BY ordering_column
   ROWS BETWEEN frame_start AND frame_end
 )</code></pre></section>
-<section><h2>Course chapters</h2><ol><li>Window foundations</li><li>Fetching, ranking, and paging</li><li>Aggregate windows and frames</li><li>Beyond window functions</li></ol></section>
-<section><h2>Interview translation</h2><p>I use window functions for ranking, row-to-row comparisons, running totals, and moving statistics without collapsing detailed rows.</p></section>
-</main>
-</body>
-</html>
+
+<section class="section" id="foundations"><h2>3. Window Foundations</h2><div class="grid">
+<article class="card"><h3>OVER()</h3><p>Marks the function as a window calculation.</p></article>
+<article class="card"><h3>ORDER BY</h3><p>Controls the sequence used by the calculation.</p></article>
+<article class="card"><h3>PARTITION BY</h3><p>Restarts the calculation for each group.</p></article>
+<article class="card"><h3>ROW_NUMBER()</h3><p>Assigns a unique sequence number to every row.</p></article>
+</div>
+<pre><code>ROW_NUMBER() OVER (
+  PARTITION BY gender, event
+  ORDER BY year
+)</code></pre></section>
+
+<section class="section" id="fetching"><h2>4. Fetching, Ranking, and Paging</h2>
+<table><thead><tr><th>Function</th><th>Rule</th></tr></thead><tbody>
+<tr><td>LAG</td><td>Previous row</td></tr><tr><td>LEAD</td><td>Following row</td></tr>
+<tr><td>FIRST_VALUE</td><td>First value in frame</td></tr><tr><td>LAST_VALUE</td><td>Last value in frame; often needs UNBOUNDED FOLLOWING</td></tr>
+</tbody></table>
+<pre><code>ROW_NUMBER → unique
+RANK       → ties with gaps
+DENSE_RANK → ties without gaps</code></pre>
+<pre><code>NTILE(3) OVER (ORDER BY medals DESC)</code></pre>
+<div class="callout trap"><strong>NTILE balances row counts, not value ranges.</strong></div></section>
+
+<section class="section" id="frames"><h2>5. Aggregate Windows and Frames</h2>
+<pre><code>SUM(medals) OVER (
+  PARTITION BY country
+  ORDER BY year
+  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+)</code></pre>
+<pre><code>AVG(medals) OVER (
+  PARTITION BY country
+  ORDER BY year
+  ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+)</code></pre>
+<table><thead><tr><th>Frame</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>ROWS</td><td>Physical records</td></tr><tr><td>RANGE</td><td>Logical peers based on ORDER BY values</td></tr>
+</tbody></table></section>
+
+<section class="section" id="beyond"><h2>6. Beyond Window Functions</h2><div class="grid">
+<article class="card"><h3>CROSSTAB</h3><p>Pivot row categories into columns. Requires tablefunc and an explicit output schema.</p></article>
+<article class="card"><h3>ROLLUP</h3><p>Hierarchical subtotals.</p></article>
+<article class="card"><h3>CUBE</h3><p>All subtotal combinations.</p></article>
+<article class="card"><h3>COALESCE</h3><p>Replace structural nulls with readable labels.</p></article>
+<article class="card"><h3>STRING_AGG</h3><p>Concatenate ordered values into one text summary.</p></article>
+</div>
+<pre><code>Aggregate first
+→ rank second
+→ pivot or summarize third</code></pre></section>
+
+<section class="section" id="mistakes"><h2>7. Common Mistakes</h2>
+<ul>
+<li>Confusing window ORDER BY with final query ORDER BY.</li>
+<li>Forgetting PARTITION BY and allowing calculations to cross groups.</li>
+<li>Using LAST_VALUE without extending the frame.</li>
+<li>Choosing the wrong ranking function for ties.</li>
+<li>Miscounting frame rows.</li>
+<li>Using RANGE when exact physical rows are required.</li>
+<li>Confusing ROLLUP with CUBE.</li>
+</ul></section>
+
+<section class="section" id="interview"><h2>8. Interview Review</h2>
+<p><strong>What is a window function?</strong><br>A calculation across rows related to the current row that preserves every detail row.</p>
+<p><strong>RANK versus DENSE_RANK?</strong><br>Both preserve ties; RANK leaves gaps and DENSE_RANK does not.</p>
+<p><strong>What is a frame?</strong><br>The subset of ordered rows used for the current row’s calculation.</p>
+<p><strong>ROWS versus RANGE?</strong><br>ROWS counts records; RANGE groups rows sharing the same ordering value.</p>
+<p><strong>ROLLUP versus CUBE?</strong><br>ROLLUP follows a hierarchy; CUBE returns every subtotal combination.</p>
+<div class="callout"><strong>Interview sentence:</strong> I use window functions for ranking, row-to-row comparisons, running totals, moving statistics, and grouped analytical calculations without collapsing detailed rows.</div>
+</section>
+</div></div>
+<footer><span>PostgreSQL Summary Stats and Window Functions · Main Field Guide</span><span><a href="../index.html">Course Home</a> · <a href="sql_quick_lookup.html">Quick Lookup</a></span></footer>
+</main></body></html>

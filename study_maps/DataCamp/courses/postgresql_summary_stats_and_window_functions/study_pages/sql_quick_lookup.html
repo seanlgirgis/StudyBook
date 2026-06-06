@@ -1,41 +1,32 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SQL Window Functions Quick Lookup</title>
-  <style>
-    :root { color-scheme: dark; --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3; --muted:#9da7b3; --accent:#58a6ff; --good:#3fb950; }
-    * { box-sizing:border-box; }
-    body { margin:0; font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-    header { border-top:4px solid var(--accent); border-bottom:1px solid var(--line); background:#010409; }
-    .container { width:min(1100px,92%); margin:auto; padding:28px 0; }
-    .badge { display:inline-block; padding:4px 10px; border:1px solid var(--good); border-radius:999px; color:var(--good); font-size:.82rem; }
-    nav, section { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px; margin:18px 0; }
-    a { color:var(--accent); }
-    code, pre { font-family:Consolas,monospace; }
-    pre { overflow:auto; background:#010409; border:1px solid var(--line); border-radius:8px; padding:16px; }
-    .muted { color:var(--muted); }
-  </style>
-</head>
-<body>
-<header><div class="container"><span class="badge">DataCamp Course</span><h1>SQL Window Functions Quick Lookup</h1></div></header>
-<main class="container">
-<nav><a href="../index.html">Course Home</a> | <a href="field_guide.html">Field Guide</a> | <a href="../lab/lab_guide.html">Lab Guide</a></nav>
-<section><h2>Ranking</h2><pre><code>ROW_NUMBER() OVER (ORDER BY value DESC)
-RANK()       OVER (ORDER BY value DESC)
-DENSE_RANK() OVER (ORDER BY value DESC)</code></pre></section>
-<section><h2>Previous and next row</h2><pre><code>LAG(value)  OVER (PARTITION BY group_col ORDER BY time_col)
-LEAD(value) OVER (PARTITION BY group_col ORDER BY time_col)</code></pre></section>
-<section><h2>Running total</h2><pre><code>SUM(value) OVER (
-  PARTITION BY group_col
-  ORDER BY time_col
-  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-)</code></pre></section>
-<section><h2>Moving average</h2><pre><code>AVG(value) OVER (
-  ORDER BY time_col
-  ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
-)</code></pre></section>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SQL Window Functions Quick Lookup</title><style>
+:root{--bg:#0d1117;--panel:#161b22;--soft:#1c232d;--border:#30363d;--text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;--amber:#d29922;--purple:#bc8cff;--shadow:0 12px 30px rgba(0,0,0,.24)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--blue)}code,pre{font-family:Consolas,"Courier New",monospace}.page{width:min(1200px,calc(100% - 32px));margin:auto;padding:24px 0 52px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}
+.hero:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}
+.eyebrow{color:var(--green);font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:.76rem}.hero h1{margin:.2rem 0;font-size:clamp(2rem,4vw,3.1rem)}.hero p{color:#c8d4df;max-width:900px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.button{padding:10px 15px;border:1px solid #486274;border-radius:9px;text-decoration:none;font-weight:800}.button.primary{background:var(--green);color:#03130a;border-color:transparent}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;margin-top:24px}.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px}.toc a{display:block;color:var(--muted);text-decoration:none;padding:6px}.toc a:hover{color:var(--green)}
+.section{background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:var(--soft);border:1px solid var(--border);border-radius:11px;padding:16px}.card h3{margin-top:0;color:var(--green)}pre{overflow:auto;background:#0f141a;border:1px solid #33404d;border-radius:10px;padding:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0}th,td{border:1px solid var(--border);padding:10px;text-align:left}th{background:#1f2933}td{background:#121820}.callout{border-left:4px solid var(--blue);background:rgba(88,166,255,.12);padding:14px;border-radius:9px}.trap{border-left-color:var(--amber);background:rgba(210,153,34,.12)}
+.search{width:100%;margin-top:18px;padding:13px;border:1px solid #3b4a58;border-radius:10px;background:#0f141a;color:var(--text);font-size:1rem}.hidden{display:none!important}
+footer{margin-top:26px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}@media(max-width:700px){.grid{grid-template-columns:1fr}.hero{padding:26px 20px}}
+</style></head>
+<body><main class="page">
+<header class="hero"><p class="eyebrow">PostgreSQL Summary Stats and Window Functions</p><h1>SQL Quick Lookup</h1>
+<p>Searchable syntax and decision rules for window functions, frames, ranking, pivoting, and subtotals.</p>
+<div class="actions"><a class="button primary" href="../index.html">Course Home</a><a class="button" href="field_guide.html">Main Field Guide</a><a class="button" href="../lab/lab_run_book.md">Lab Run Book</a></div>
+<input id="lookupSearch" class="search" type="search" placeholder="Search LAG, ranking, frame, pivot, ROLLUP...">
+</header>
+<section class="section"><h2>Foundations</h2><div class="grid"><article class="card lookup-card"><h3>OVER()</h3><p>Turn a supported function into a window calculation.</p><pre><code>function_expression OVER ()</code></pre><div class="callout trap">OVER does not itself define ordering or partitioning.</div></article><article class="card lookup-card"><h3>ORDER BY inside OVER</h3><p>Define the sequence used by the calculation.</p><pre><code>ROW_NUMBER() OVER (ORDER BY year)</code></pre><div class="callout trap">This is separate from the final query ORDER BY.</div></article><article class="card lookup-card"><h3>PARTITION BY</h3><p>Restart the calculation per group.</p><pre><code>ROW_NUMBER() OVER (PARTITION BY event ORDER BY year)</code></pre><div class="callout trap">Omitting it may mix unrelated groups.</div></article></div></section><section class="section"><h2>Fetching and Ranking</h2><div class="grid"><article class="card lookup-card"><h3>LAG</h3><p>Fetch a prior row value.</p><pre><code>LAG(value, 1) OVER (PARTITION BY group_col ORDER BY time_col)</code></pre><div class="callout trap">The offset counts rows, not time units.</div></article><article class="card lookup-card"><h3>LEAD</h3><p>Fetch a following row value.</p><pre><code>LEAD(value, 1) OVER (PARTITION BY group_col ORDER BY time_col)</code></pre><div class="callout trap">The last rows may return NULL.</div></article><article class="card lookup-card"><h3>FIRST_VALUE</h3><p>Return the first value in the frame.</p><pre><code>FIRST_VALUE(value) OVER (ORDER BY sort_col)</code></pre><div class="callout trap">Frame boundaries still matter.</div></article><article class="card lookup-card"><h3>LAST_VALUE</h3><p>Return the final value in the frame.</p><pre><code>LAST_VALUE(value) OVER (ORDER BY sort_col RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)</code></pre><div class="callout trap">Without UNBOUNDED FOLLOWING, it may return the current value.</div></article><article class="card lookup-card"><h3>ROW_NUMBER</h3><p>Assign a unique sequence.</p><pre><code>ROW_NUMBER() OVER (ORDER BY value DESC)</code></pre><div class="callout trap">Ties still receive different numbers.</div></article><article class="card lookup-card"><h3>RANK</h3><p>Competition ranking with gaps.</p><pre><code>RANK() OVER (ORDER BY value DESC)</code></pre><div class="callout trap">Ties cause gaps.</div></article><article class="card lookup-card"><h3>DENSE_RANK</h3><p>Tie-aware ranking without gaps.</p><pre><code>DENSE_RANK() OVER (ORDER BY value DESC)</code></pre><div class="callout trap">Do not use when gaps are meaningful.</div></article><article class="card lookup-card"><h3>NTILE</h3><p>Split ordered rows into buckets.</p><pre><code>NTILE(3) OVER (ORDER BY value DESC)</code></pre><div class="callout trap">Balances row counts, not value ranges.</div></article></div></section><section class="section"><h2>Aggregates and Frames</h2><div class="grid"><article class="card lookup-card"><h3>Running total</h3><p>Cumulative total through the current row.</p><pre><code>SUM(value) OVER (PARTITION BY group_col ORDER BY time_col ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)</code></pre><div class="callout trap">Include PARTITION BY when totals must restart.</div></article><article class="card lookup-card"><h3>Moving average</h3><p>Average a bounded recent window.</p><pre><code>AVG(value) OVER (ORDER BY time_col ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)</code></pre><div class="callout trap">2 preceding plus current equals up to 3 rows.</div></article><article class="card lookup-card"><h3>Moving total</h3><p>Sum a bounded recent window.</p><pre><code>SUM(value) OVER (ORDER BY time_col ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)</code></pre><div class="callout trap">Early rows use fewer observations.</div></article><article class="card lookup-card"><h3>Centered frame</h3><p>Use rows before and after the current row.</p><pre><code>MAX(value) OVER (ORDER BY time_col ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)</code></pre><div class="callout trap">Boundary rows have smaller frames.</div></article><article class="card lookup-card"><h3>ROWS</h3><p>Count physical rows.</p><pre><code>ROWS BETWEEN 3 PRECEDING AND CURRENT ROW</code></pre><div class="callout trap">This can include up to 4 rows.</div></article><article class="card lookup-card"><h3>RANGE</h3><p>Include peers sharing ORDER BY values.</p><pre><code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code></pre><div class="callout trap">Duplicates can expand the frame.</div></article></div></section><section class="section"><h2>Beyond Window Functions</h2><div class="grid"><article class="card lookup-card"><h3>CROSSTAB</h3><p>Pivot row values into columns.</p><pre><code>SELECT * FROM CROSSTAB($$ source_query $$) AS ct (row_key text, "2008" integer, "2012" integer);</code></pre><div class="callout trap">Requires tablefunc and an explicit output schema.</div></article><article class="card lookup-card"><h3>ROLLUP</h3><p>Create hierarchical subtotals.</p><pre><code>GROUP BY ROLLUP(year, quarter)</code></pre><div class="callout trap">Column order defines the hierarchy.</div></article><article class="card lookup-card"><h3>CUBE</h3><p>Create all subtotal combinations.</p><pre><code>GROUP BY CUBE(country, medal)</code></pre><div class="callout trap">Produces more grouping sets than ROLLUP.</div></article><article class="card lookup-card"><h3>COALESCE</h3><p>Replace NULL with the first non-null value.</p><pre><code>COALESCE(country, 'All countries')</code></pre><div class="callout trap">Subtotal NULLs may be structural, not missing data.</div></article><article class="card lookup-card"><h3>STRING_AGG</h3><p>Combine rows into an ordered string.</p><pre><code>STRING_AGG(country, ', ' ORDER BY rank_n)</code></pre><div class="callout trap">Put ORDER BY inside STRING_AGG when sequence matters.</div></article></div></section>
+<footer><span>PostgreSQL Summary Stats and Window Functions · SQL Quick Lookup</span><span><a href="field_guide.html">Main Field Guide</a></span></footer>
 </main>
-</body>
-</html>
+<script>
+const input=document.getElementById('lookupSearch');
+const cards=[...document.querySelectorAll('.lookup-card')];
+input.addEventListener('input',()=>{const t=input.value.trim().toLowerCase();cards.forEach(c=>c.classList.toggle('hidden',t&&!c.textContent.toLowerCase().includes(t)));});
+</script></body></html>
