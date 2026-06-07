@@ -1,0 +1,656 @@
+<!doctype html>
+<!--
+TEMPLATE USAGE
+Replace every template field with section-specific content.
+Keep the CSS and layout stable unless the course requires a deliberate design change.
+Recommended filename pattern:
+chapter_XX_section_slug_field_guide.html
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 2 — Database Schemas and Normalization | Database Design</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Database Design</a>
+      <span>›</span>
+      <span>Chapter 2: Database Schemas and Normalization</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Database Design · Chapter 2</p>
+      <h1>Database Schemas and Normalization</h1>
+      <p>
+        Move from dimensional-model ideas into concrete schema design. This chapter explains star and snowflake schemas, why normalization reduces redundancy and protects data integrity, when denormalization can improve analytical access, and how first, second, and third normal form prevent update, insertion, and deletion anomalies.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">Database Design Quick Lookup</a>
+        <a class="button secondary" href="chapter_01_processing_storing_and_organizing_data_field_guide.html">Chapter 1: Processing, Storing, and Organizing Data</a>
+        <a class="button secondary" href="chapter_03_database_views_field_guide.html">Chapter 3: Database Views</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Section Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Star and Snowflake Schemas</a>
+        <a href="#concept-2">3. Normalization and Denormalization</a>
+        <a href="#concept-3">4. First, Second, and Third Normal Form</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>A schema is a set of decisions about grain, dependencies, reuse, and query cost. A star schema keeps dimensions wide and directly connected to the fact table for simpler queries. A snowflake schema normalizes dimension hierarchies into additional tables, reducing repeated values but increasing join depth. Normal forms provide a disciplined way to decide which attributes belong together.</p>
+
+          <div class="diagram">Business event at a declared grain
+        │
+        ▼
+Fact table (measures + foreign keys)
+   ├──────────────┬──────────────┐
+   ▼              ▼              ▼
+Book dimension  Store dimension  Time dimension
+                    │
+                    ├── City
+                    ├── State
+                    └── Country
+
+Normalization test:
+atomic values → full-key dependency → no transitive dependency</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Star and Snowflake Schemas</h3>
+              <p>A star schema favors direct fact-to-dimension joins; a snowflake schema further normalizes dimension hierarchies.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Normalization and Denormalization</h3>
+              <p>Normalization removes repeated groups and enforces consistency; denormalization intentionally repeats data to simplify or accelerate reads.</p>
+            </article>
+            <article class="mini-card">
+              <h3>First, Second, and Third Normal Form</h3>
+              <p>1NF, 2NF, and 3NF progressively eliminate repeating values, partial dependencies, and transitive dependencies.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Data Integrity and Anomalies</h3>
+              <p>Poor dependency design produces update, insertion, and deletion anomalies.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> Design from grain and dependencies first. Choose star versus snowflake and normalized versus denormalized structures as explicit workload trade-offs.
+          </div>
+        </section>
+
+        <section class="section" id="concept-1">
+          <h2>2. Star and Snowflake Schemas</h2>
+          <p>In a star schema, a central fact table records business events or measurements and connects directly to descriptive dimensions through foreign keys. Facts change frequently and contain measures such as sales amount or quantity. Dimensions change less often and describe the who, what, where, and when. A snowflake schema starts from the same fact table but splits repeating dimension attributes into related subdimensions. A store can reference a city, the city a state, and the state a country. This stores hierarchy members once and improves consistency, but every split adds joins and query complexity.</p>
+
+          <pre><code>-- Star: store attributes remain together
+SELECT f.sales_id, s.store_address, s.city, s.state,
+       s.country, f.sales_amount
+FROM fact_booksales AS f
+JOIN dim_store_star AS s ON f.store_id = s.store_id;
+
+-- Snowflake: geography is normalized
+SELECT f.sales_id, s.store_address, c.city, st.state,
+       co.country, f.sales_amount
+FROM fact_booksales AS f
+JOIN dim_store_sf AS s    ON f.store_id = s.store_id
+JOIN dim_city_sf AS c     ON s.city_id = c.city_id
+JOIN dim_state_sf AS st   ON c.state_id = st.state_id
+JOIN dim_country_sf AS co ON st.country_id = co.country_id;</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> Both designs answer the same question. The star query needs fewer joins; the snowflake stores each geographic label once and makes hierarchy maintenance safer.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Normalization and Denormalization</h2>
+          <p>Normalization divides data into smaller related tables so each fact is stored in one logical place. It saves space, improves consistency, makes updates safer, and makes a schema easier to extend. Its cost is read complexity: normalized queries often require more joins. Denormalization reverses some separation deliberately. It is common in reporting models where simpler scans matter more than repeated descriptive values. OLTP systems generally lean toward normalization because of frequent writes; OLAP models often accept selective denormalization because they are read-heavy.</p>
+
+          <pre><code>CREATE TABLE dim_country_sf (
+    country_id integer PRIMARY KEY,
+    country    text NOT NULL UNIQUE
+);
+
+CREATE TABLE dim_state_sf (
+    state_id   integer PRIMARY KEY,
+    state      text NOT NULL,
+    country_id integer NOT NULL
+        REFERENCES dim_country_sf(country_id),
+    UNIQUE (state, country_id)
+);</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> Normalization is not automatically better, and denormalization is not automatically bad. A fully normalized analytical model may burden every report with joins; a heavily denormalized operational model may create inconsistent updates.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. First, Second, and Third Normal Form</h2>
+          <p>Normal forms test functional dependency. First normal form requires atomic values and no repeating groups. Second normal form requires 1NF and, when a composite key exists, every non-key attribute must depend on the whole key rather than only part of it. Third normal form requires 2NF and removes transitive dependencies: a non-key attribute must not depend on another non-key attribute. If course_id determines instructor_id and instructor_id determines instructor_name, the instructor name belongs with the instructor, not repeated in every course row.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Normal form</th>
+                <th>Dependency rule</th>
+                <th>Typical repair</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1NF</td>
+                <td>One atomic value per cell; no repeating groups.</td>
+                <td>Move repeating values into separate rows or a child table.</td>
+              </tr>
+              <tr>
+                <td>2NF and 3NF</td>
+                <td>2NF: depend on the whole composite key. 3NF: non-key attributes depend only on the key.</td>
+                <td>Split partial and transitive dependencies into entity tables connected by foreign keys.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>Suppose enrollment data repeats student, course, and instructor facts in one table keyed by (student_id, course_id). Student email depends only on student_id; course title and instructor_id depend only on course_id; instructor name depends on instructor_id. The normalized design assigns each fact to its determinant.</p>
+
+          <pre><code>CREATE TABLE student (
+    student_id integer PRIMARY KEY,
+    student_email text NOT NULL UNIQUE
+);
+CREATE TABLE instructor (
+    instructor_id integer PRIMARY KEY,
+    instructor_name text NOT NULL
+);
+CREATE TABLE course (
+    course_id integer PRIMARY KEY,
+    course_title text NOT NULL,
+    instructor_id integer NOT NULL REFERENCES instructor
+);
+CREATE TABLE enrollment (
+    student_id integer REFERENCES student,
+    course_id integer REFERENCES course,
+    progress numeric(5,2) CHECK (progress BETWEEN 0 AND 1),
+    PRIMARY KEY (student_id, course_id)
+);</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> Each fact has one authoritative home. Updating an instructor changes one row; deleting one enrollment does not erase the course; a new course can exist before anyone enrolls.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Declare each table grain in one sentence; for enrollment, one row per student per course.</li>
+            <li>List candidate keys and functional dependencies before splitting tables.</li>
+            <li>Test update, insertion, and deletion scenarios for accidental inconsistency or information loss.</li>
+            <li>Compare representative star and snowflake queries with realistic data and EXPLAIN.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> A descriptive value appears in many rows with inconsistent spellings and no key, UNIQUE constraint, foreign key, or reference table to enforce one truth.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Normalizing without identifying the determinant</strong>
+              Splitting a table because it looks wide is not normalization. State the dependency first, then place the fact in the table keyed by its determinant.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming snowflake means faster</strong>
+              Snowflaking reduces repeated dimension data but usually adds joins. Measure the workload before claiming a performance benefit.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming a surrogate key proves normalization</strong>
+              Adding an id column does not remove partial or transitive dependencies. A keyed table can still repeat facts incorrectly.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is the difference between a star and a snowflake schema?</strong>
+              A star connects a fact table directly to wide dimensions for simpler analytical queries. A snowflake normalizes dimension hierarchies into additional tables, reducing redundancy and improving consistency at the cost of more joins.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why normalize a database?</strong>
+              To store each fact once, reduce redundancy, enforce integrity, and prevent update, insertion, and deletion anomalies. The trade-off is greater join complexity.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do 2NF and 3NF differ?</strong>
+              2NF removes dependency on only part of a composite key. 3NF removes transitive dependency, where a non-key attribute depends on another non-key attribute.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li>Star means one direct dimension layer; snowflake means normalized dimension hierarchies.</li>
+              <li>1NF: atomic. 2NF: whole composite key. 3NF: no non-key-to-non-key dependency.</li>
+              <li>Normalization favors integrity and safe writes; denormalization favors simpler reads.</li>
+              <li>Update, insertion, and deletion anomalies signal that unrelated facts are stored together.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you declare a fact-table grain before listing columns?</li>
+            <li>Can you explain why city, state, and country may become separate dimensions?</li>
+            <li>Can you find columns that depend on only part of a composite key?</li>
+            <li>Can you justify one deliberate denormalization choice?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> Build star and snowflake versions of a small bookstore model, compare join paths, then create and repair 1NF, 2NF, and 3NF violations.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> You can draw both schemas, state grain and keys, normalize through 3NF, explain all three anomalies, and justify a design for a stated OLTP or OLAP workload.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Database Design · Chapter 2 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">Database Design Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_01_processing_storing_and_organizing_data_field_guide.html">Chapter 1: Processing, Storing, and Organizing Data</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_03_database_views_field_guide.html">Chapter 3: Database Views</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

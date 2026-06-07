@@ -1,45 +1,723 @@
-﻿<!doctype html>
+<!doctype html>
+<!--
+FIELD GUIDE TEMPLATE
+
+Purpose:
+- Whole-course accumulated Field Guide
+- Cross-chapter memory map
+- Navigation hub
+- Decision guide
+- Interview review
+- Lab evidence summary
+
+Instructions:
+1. Replace every template token.
+2. Add or remove chapter cards to match the course.
+3. Keep this filename when used as the active course guide:
+   field_guide.html
+4. Preserve the shared layout and visual system unless a deliberate design change is required.
+-->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Functions for Manipulating Data in PostgreSQL | Field Guide</title>
+  <title>Functions for Manipulating Data in PostgreSQL — Field Guide</title>
   <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
       font-family: "Segoe UI", Arial, sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
-      line-height: 1.6;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
     }
-    main {
-      width: min(900px, calc(100% - 32px));
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 32px 0 48px;
+      padding: 24px 0 52px;
     }
-    section {
-      background: #161b22;
-      border: 1px solid #30363d;
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .cheat-grid,
+    .compare-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cheat-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .compare-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .cheat-card,
+    .compare-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .cheat-card h3,
+    .compare-card h3 {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .cheat-card p,
+    .compare-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 22px;
+      box-shadow: var(--shadow);
     }
-    h1 { margin-top: 0; }
-    p { color: #9da7b3; }
-    a {
-      color: #03ef62;
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul,
+    .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
       text-decoration: none;
-      font-weight: 700;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cheat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .status-grid,
+      .chapter-grid,
+      .cheat-grid,
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <section>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Functions for Manipulating Data in PostgreSQL</a>
+      <span>›</span>
+      <span>Main Field Guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp · Functions for Manipulating Data in PostgreSQL</p>
       <h1>Functions for Manipulating Data in PostgreSQL Field Guide</h1>
-      <p><strong>Status:</strong> Under construction</p>
-      <p>This accumulated Field Guide will become the whole-course memory map and cross-chapter review page.</p>
-      <p><a href="../index.html">Back to Course Home</a></p>
-    </section>
+      <p>
+        A whole-course memory map for choosing PostgreSQL data types and functions, performing date/time arithmetic, parsing and formatting text, working with arrays, and using full-text search and extensions.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.md">Markdown Guide</a>
+        <a class="button secondary" href="sql_function_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="../lab/lab_run_book.md">Lab Run Book</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card"><strong>COMPLETE</strong><span>Platform status</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Documentation</span></div>
+        <div class="status-card"><strong>DEVELOPING</strong><span>Lab coverage</span></div>
+        <div class="status-card"><strong>DEVELOPING</strong><span>Recall confidence</span></div>
+        <div class="status-card"><strong>NEEDS REPETITION</strong><span>Interview readiness</span></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Guide Contents</h2>
+        <a href="#chapters">1. Chapter guides</a>
+        <a href="#big-picture">2. Course big picture</a>
+        <a href="#core-concepts">3. Core concepts</a>
+        <a href="#patterns">4. Core syntax and patterns</a>
+        <a href="#comparisons">5. Comparisons and decisions</a>
+        <a href="#mistakes">6. Common mistakes</a>
+        <a href="#interview">7. Interview translation</a>
+        <a href="#lab">8. Local lab evidence</a>
+        <a href="#memory">9. Memory nuggets</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="chapters">
+          <h2>1. Chapter Guides</h2>
+
+          <div class="chapter-grid">
+            <article class="chapter-card">
+              <h3><a href="chapter_01_overview_of_common_data_types_field_guide.html">Chapter 1 — Overview of Common Data Types</a></h3>
+              <p>Choose appropriate PostgreSQL data types; inspect metadata; work with dates, timestamps, intervals, arrays, ANY, and containment.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_02_working_with_date_time_functions_and_operators_field_guide.html">Chapter 2 — Working with DATE/TIME Functions and Operators</a></h3>
+              <p>Perform date and timestamp arithmetic; use current-time functions; extract fields and truncate timestamps into reporting periods.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_03_parsing_and_manipulating_text_field_guide.html">Chapter 3 — Parsing and Manipulating Text</a></h3>
+              <p>Normalize, combine, measure, locate, extract, trim, pad, replace, and format character data.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_04_full_text_search_and_postgresql_extensions_field_guide.html">Chapter 4 — Full-text Search and PostgreSQL Extensions</a></h3>
+              <p>Move beyond LIKE with text-search vectors and queries; inspect user-defined types; install and apply useful extensions.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="big-picture">
+          <h2>2. Course Big Picture</h2>
+          <p>PostgreSQL functions become easier when you first identify the input type, then choose the operation, and finally validate the output type and edge cases. The course moves from type awareness to temporal calculations, text transformation, and advanced search capabilities.</p>
+
+          <div class="diagram">Question → inspect data type → choose function/operator → compose expressions → validate output
+
+Types      : text | numeric | date/time | interval | array | user-defined
+Operations : inspect | calculate | extract | transform | search | extend</div>
+
+          <div class="callout green">
+            <strong>Course punchline:</strong> Start with the data type. Function choice, return type, and common traps all follow from that decision.
+          </div>
+        </section>
+
+        <section class="section" id="core-concepts">
+          <h2>3. Core Concepts</h2>
+
+          <div class="cheat-grid">
+            <article class="cheat-card">
+              <h3>Type-first design</h3>
+              <p>Inspect column types and metadata before selecting operators or functions.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Temporal arithmetic</h3>
+              <p>Dates can produce day counts; timestamps produce intervals; intervals can be added to temporal values.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Temporal bucketing</h3>
+              <p>Use EXTRACT or DATE_PART for components and DATE_TRUNC for reusable reporting boundaries.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Text transformation</h3>
+              <p>Normalize case, join values, replace fragments, trim whitespace, and create display-ready labels.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Text parsing</h3>
+              <p>Locate delimiters before extracting pieces with SUBSTRING, LEFT, RIGHT, or SUBSTR.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Search and extensions</h3>
+              <p>Use full-text search for linguistic matching and extensions for fuzzy or specialized behavior.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="patterns">
+          <h2>4. Core Syntax and Patterns</h2>
+
+          <h3>Inspect a table column</h3>
+          <pre><code>SELECT column_name, data_type, udt_name
+FROM information_schema.columns
+WHERE table_schema = 'public'
+  AND table_name = 'film'
+ORDER BY ordinal_position;</code></pre>
+          <p>Metadata inspection prevents guessing about arrays, user-defined types, precision, and other storage details.</p>
+
+          <h3>Build a monthly time bucket</h3>
+          <pre><code>SELECT DATE_TRUNC('month', rental_date) AS rental_month,
+       COUNT(*) AS rentals
+FROM rental
+GROUP BY rental_month
+ORDER BY rental_month;</code></pre>
+          <p>DATE_TRUNC returns a timestamp aligned to the requested boundary, making it suitable for grouping.</p>
+
+          <h3>Parse and normalize an email address</h3>
+          <pre><code>SELECT LOWER(email) AS normalized_email,
+       SUBSTRING(LOWER(email) FROM 1
+         FOR POSITION('@' IN LOWER(email)) - 1) AS username,
+       SUBSTRING(LOWER(email) FROM POSITION('@' IN LOWER(email)) + 1) AS domain
+FROM customer;</code></pre>
+          <p>Find the delimiter first, then derive extraction boundaries. Validate missing or repeated delimiters before production use.</p>
+        </section>
+
+        <section class="section" id="comparisons">
+          <h2>5. Comparisons and Decision Rules</h2>
+
+          <div class="compare-grid">
+            <article class="compare-card">
+              <h3>Pattern matching</h3>
+              <p>LIKE and ILIKE match character patterns and are appropriate for simple prefix, suffix, substring, or case-insensitive checks.</p>
+            </article>
+
+            <article class="compare-card">
+              <h3>Full-text search</h3>
+              <p>to_tsvector and to_tsquery normalize words and support linguistic search across larger text fields.</p>
+            </article>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Need</th>
+                <th>Preferred tool</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Get one date/time component</td>
+                <td>EXTRACT or DATE_PART</td>
+                <td>Returns a selected field such as year, month, or dow.</td>
+              </tr>
+              <tr>
+                <td>Group into calendar periods</td>
+                <td>DATE_TRUNC</td>
+                <td>Returns a timestamp aligned to a boundary.</td>
+              </tr>
+              <tr>
+                <td>Search words by meaning/stemming</td>
+                <td>Full-text search</td>
+                <td>Uses searchable vectors and queries rather than raw substrings.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>6. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Guessing a column type</strong>
+              Inspect information_schema.columns or PostgreSQL catalogs before writing type-specific expressions.
+            </article>
+
+            <article class="qa-item">
+              <strong>Confusing an interval with a number</strong>
+              Timestamp subtraction returns an interval, while date subtraction commonly returns an integer day count.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using DATE_TRUNC when a scalar is needed</strong>
+              DATE_TRUNC returns a timestamp. Use EXTRACT or DATE_PART when you need a numeric component.
+            </article>
+
+            <article class="qa-item">
+              <strong>Treating LIKE as full-text search</strong>
+              LIKE scans raw patterns. Full-text search tokenizes and normalizes language-aware text.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>7. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>How do you decide which PostgreSQL function to use?</strong>
+              I begin with the input data type and desired output, inspect metadata when necessary, choose the smallest appropriate function, and validate nulls, boundaries, and return types.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is the difference between EXTRACT and DATE_TRUNC?</strong>
+              EXTRACT returns a selected component such as month or year. DATE_TRUNC returns a timestamp aligned to a period boundary and is often used for grouping.
+            </article>
+
+            <article class="qa-item">
+              <strong>How would you parse a delimited text value safely?</strong>
+              First locate and validate the delimiter, then calculate extraction boundaries. I also define behavior for nulls, missing delimiters, and malformed values.
+            </article>
+
+            <article class="qa-item">
+              <strong>When would you use PostgreSQL full-text search?</strong>
+              When users search natural-language text and need tokenization, normalization, stemming, and indexable search rather than literal substring matching.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="lab">
+          <h2>8. Local Lab Evidence</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Validated result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Data types and metadata</td>
+                <td>Lab scripts create typed sample tables and include catalog queries for inspection.</td>
+              </tr>
+              <tr>
+                <td>Date/time operations</td>
+                <td>Exercises calculate elapsed time, expected return dates, overdue rows, and monthly buckets.</td>
+              </tr>
+              <tr>
+                <td>Text and arrays</td>
+                <td>Exercises normalize names and email addresses, create padded labels, and filter array contents.</td>
+              </tr>
+              <tr>
+                <td>Search and extensions</td>
+                <td>Exercises compare LIKE with full-text search and optionally enable pg_trgm and fuzzystrmatch.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            The supplied lab package is runnable in PostgreSQL. Extension exercises are optional because installation privileges vary by environment.
+          </div>
+        </section>
+
+        <section class="section" id="memory">
+          <h2>9. Quick Memory Nuggets</h2>
+
+          <pre><code>Type first → operation second → function third → validation last</code></pre>
+
+          <pre><code>EXTRACT = component
+DATE_TRUNC = period boundary
+AGE / subtraction = elapsed difference</code></pre>
+
+          <pre><code>POSITION/STRPOS = locate
+SUBSTRING/LEFT/RIGHT = extract
+TRIM/LOWER/INITCAP = normalize
+to_tsvector @@ to_tsquery = full-text search</code></pre>
+
+          <div class="callout amber">
+            <strong>Final review:</strong> Practice explaining why each function matches the input type and required output. Memorizing names without return-type awareness is not enough.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Functions for Manipulating Data in PostgreSQL · Main Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.md">Markdown Guide</a>
+        &nbsp;·&nbsp;
+        <a href="sql_function_quick_lookup.html">Quick Lookup</a>
+      </span>
+    </footer>
   </main>
 </body>
 </html>

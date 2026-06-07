@@ -1,0 +1,664 @@
+<!doctype html>
+<!--
+TEMPLATE USAGE
+Replace every template token with section-specific content.
+Keep the CSS and layout stable unless the course requires a deliberate design change.
+Recommended filename pattern:
+chapter_XX_section_slug_field_guide.html
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 4 — Database Management | Database Design</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Database Design</a>
+      <span>›</span>
+      <span>Chapter 4: Database Management</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Database Design · Chapter 4</p>
+      <h1>Database Management</h1>
+      <p>
+        Manage a database after its schema exists: control access with PostgreSQL roles and privileges, partition large tables for operational and analytical workloads, integrate heterogeneous data safely, and choose a DBMS whose data model and operational strengths match the business problem.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">Database Design Quick Lookup</a>
+        <a class="button secondary" href="chapter_03_database_views_field_guide.html">Previous Chapter: Database Views</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Section Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Roles, Privileges, and Access Control</a>
+        <a href="#concept-2">3. Table Partitioning</a>
+        <a href="#concept-3">4. Data Integration and DBMS Selection</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>Database design does not stop when tables are created. A production database must answer four continuing questions: who may perform which actions, how growing data remains manageable, how data from different systems becomes trustworthy and comparable, and which database technology best fits the workload. These decisions connect security, performance, governance, and architecture.</p>
+
+          <div class="diagram">USERS / APPLICATIONS\n        |\n        v\nROLES + PRIVILEGES  ---- controls ---->  DATABASE OBJECTS\n        |                                      |\n        |                                      v\n        |                               PARTITIONED TABLES\n        |                                      |\n        v                                      v\nAUDITABLE ACCESS                        SCALABLE STORAGE\n        \\______________________________________/\n                         |\n                         v\n          INTEGRATED / UNIFIED DATA MODEL\n                         |\n                         v\n       DBMS chosen for workload, structure, and scale</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Roles, Privileges, and Access Control</h3>
+              <p>PostgreSQL treats users and groups as roles. Privileges such as SELECT, INSERT, UPDATE, DELETE, and object ownership should be granted to the smallest appropriate role rather than broadly to PUBLIC.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Table Partitioning</h3>
+              <p>Vertical partitioning separates columns; horizontal partitioning separates rows. Partitioning is a physical organization strategy for scale and maintenance, not a substitute for normalization.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Data Integration and DBMS Selection</h3>
+              <p>Data integration combines different sources, formats, and technologies into a translated, unified view. It requires explicit mappings, transformations, quality checks, security controls, and ownership.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Operational Design Trade-offs</h3>
+              <p>Relational, document, key-value, and column-oriented systems optimize different access patterns. Pick from requirements, not fashion: consistency, schema stability, query style, growth, latency, and operational expertise all matter.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> Good database management makes access intentional, growth manageable, integrated data trustworthy, and technology choices explainable.
+          </div>
+        </section>
+
+        <section class="section" id="concept-1">
+          <h2>2. Roles, Privileges, and Access Control</h2>
+          <p>A PostgreSQL role is an identity that can act as a login user, a group, or both. This lets administrators separate authentication from authorization. A login role identifies a person or service; a group role represents a job function such as <code>data_analyst</code>. Object privileges are then granted to the group role, and users inherit those privileges through membership. This is easier to audit and maintain than repeating grants for every individual. Role attributes such as <code>LOGIN</code>, <code>CREATEDB</code>, <code>CREATEROLE</code>, and <code>SUPERUSER</code> are distinct from object privileges. Apply least privilege: grant only what the role needs, revoke obsolete access, and avoid using powerful administrator accounts for ordinary work.</p>
+
+          <pre><code>-- Functional group role: no login required
+CREATE ROLE data_analyst;
+
+-- Login role for a person
+CREATE ROLE sean LOGIN PASSWORD &#x27;use-a-secret-manager&#x27;;
+
+-- Grant object access to the group
+GRANT USAGE ON SCHEMA analytics TO data_analyst;
+GRANT SELECT ON ALL TABLES IN SCHEMA analytics TO data_analyst;
+
+-- Add the user to the group role
+GRANT data_analyst TO sean;
+
+-- Remove an unsafe privilege
+REVOKE INSERT ON analytics.sales FROM data_analyst;
+
+-- Change a role setting deliberately
+ALTER ROLE sean SET statement_timeout = &#x27;2min&#x27;;</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> <code>GRANT data_analyst TO sean</code> grants role membership, while <code>GRANT SELECT ON ... TO data_analyst</code> grants an object privilege. They solve different parts of access control.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Table Partitioning</h2>
+          <p>As tables grow into hundreds of gigabytes or terabytes, indexes may no longer fit comfortably in memory and maintenance operations become expensive. Partitioning divides one logical dataset into smaller physical pieces. <strong>Vertical partitioning</strong> moves groups of columns into separate tables linked by the same key; it is useful when wide or rarely accessed attributes should not burden common queries. <strong>Horizontal partitioning</strong> splits rows by a partition key such as date, region, tenant, or identifier range. PostgreSQL commonly uses range, list, or hash partitioning. Benefits include partition pruning, smaller indexes, easier archival, and tiered storage. Costs include more design complexity, partition maintenance, restrictions around keys, and poor performance when queries cannot filter on the partition key.</p>
+
+          <pre><code>-- One logical table, physically divided by date range
+CREATE TABLE orders (
+    order_id      bigint,
+    customer_id   bigint NOT NULL,
+    ordered_at    date NOT NULL,
+    amount        numeric(12,2) NOT NULL,
+    PRIMARY KEY (order_id, ordered_at)
+) PARTITION BY RANGE (ordered_at);
+
+CREATE TABLE orders_2025_q1 PARTITION OF orders
+FOR VALUES FROM (&#x27;2025-01-01&#x27;) TO (&#x27;2025-04-01&#x27;);
+
+CREATE TABLE orders_2025_q2 PARTITION OF orders
+FOR VALUES FROM (&#x27;2025-04-01&#x27;) TO (&#x27;2025-07-01&#x27;);
+
+SELECT SUM(amount)
+FROM orders
+WHERE ordered_at &gt;= DATE &#x27;2025-04-01&#x27;
+  AND ordered_at &lt;  DATE &#x27;2025-07-01&#x27;;</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> Partitioning and normalization address different problems. Normalization reduces redundancy and dependency anomalies; partitioning changes physical placement for scale and maintenance. A normalized model may still need partitioning, and a partitioned table may still be badly normalized.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. Data Integration and DBMS Selection</h2>
+          <p>Data integration creates a unified view from sources that may differ in database engine, schema, format, naming, units, identifiers, and update frequency. A robust plan defines the target model, source-to-target mappings, transformations, refresh cadence, data ownership, quality rules, lineage, failure handling, and security. Transformation tooling—often ETL or ELT—can standardize types, deduplicate records, reconcile customer identifiers, and convert currencies or time zones. The destination DBMS should then be selected from workload needs. Relational SQL systems work well when relationships, constraints, transactions, and flexible joins matter. Document stores fit evolving nested records; key-value stores fit simple high-speed lookup; column-oriented systems fit large analytical scans. “NoSQL” does not mean “no schema”—it often moves schema enforcement from the database into applications and pipelines.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Decision area</th>
+                <th>Relational / SQL preference</th>
+                <th>NoSQL or specialized preference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Data and consistency</td>
+                <td>Stable entities, strong relationships, constraints, multi-row transactions, joins, and ACID guarantees.</td>
+                <td>Rapidly evolving or nested records, simple key access, very high scale, or a specialized graph/time-series/search workload.</td>
+              </tr>
+              <tr>
+                <td>Query and operations</td>
+                <td>Ad hoc SQL, reporting, predictable governance, mature relational tooling, and referential integrity.</td>
+                <td>Known access patterns, horizontal distribution, flexible document shape, or columnar analytical throughput.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>Suppose a company integrates PostgreSQL sales data, MongoDB product-behavior documents, and CSV marketing contacts into an analytical platform. The following design separates access control, staging, transformation, and consumption.</p>
+
+          <pre><code>-- 1. Create functional roles
+CREATE ROLE etl_writer;
+CREATE ROLE reporting_reader;
+
+-- 2. Separate ingestion from curated analytics
+CREATE SCHEMA staging;
+CREATE SCHEMA analytics;
+
+GRANT USAGE, CREATE ON SCHEMA staging TO etl_writer;
+GRANT USAGE ON SCHEMA analytics TO reporting_reader;
+
+-- 3. Store raw batches by load date
+CREATE TABLE staging.raw_events (
+    source_system text NOT NULL,
+    loaded_at     date NOT NULL,
+    payload       jsonb NOT NULL
+) PARTITION BY RANGE (loaded_at);
+
+CREATE TABLE staging.raw_events_2026_01
+PARTITION OF staging.raw_events
+FOR VALUES FROM (&#x27;2026-01-01&#x27;) TO (&#x27;2026-02-01&#x27;);
+
+-- 4. Publish a governed relational model
+CREATE TABLE analytics.customer_activity (
+    customer_key  bigint,
+    activity_date date,
+    channel       text,
+    revenue       numeric(12,2),
+    PRIMARY KEY (customer_key, activity_date, channel)
+);
+
+GRANT SELECT ON analytics.customer_activity TO reporting_reader;</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> Writers can load staging data without changing curated analytics; analysts receive read-only access; raw data can be retained or removed by partition; and the unified table exposes consistent identifiers, dates, channels, and measures.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Test permissions with representative login roles: confirm allowed statements succeed and prohibited statements fail. Inspect role membership and object grants rather than assuming inheritance.</li>
+            <li>Use <code>EXPLAIN</code> to verify partition pruning. A date-filtered query should not scan every partition; missing or mis-typed predicates can defeat pruning.</li>
+            <li>Reconcile integrated row counts, keys, null rates, duplicate rates, units, time zones, and source totals. Record lineage from every target field back to its source and transformation.</li>
+            <li>Evaluate DBMS candidates against real workload tests: transaction rate, query latency, data volume, availability, recovery, security, skills, licensing, and operational burden—not only feature lists.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> A solution is unsafe when broad roles can write production data, partitions have gaps or overlaps, integration silently drops or duplicates records, or the DBMS was selected before access patterns and consistency requirements were understood.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Granting privileges directly to every person</strong>
+              Create functional group roles, grant privileges to those roles, and manage users through role membership. This reduces privilege drift and makes onboarding, offboarding, and audits much clearer.
+            </article>
+
+            <article class="qa-item">
+              <strong>Partitioning every large-looking table</strong>
+              Partition only when the workload and lifecycle benefit. Choose a key used by common filters and maintenance operations. Too many tiny partitions or a poor partition key adds planning and operational overhead without useful pruning.
+            </article>
+
+            <article class="qa-item">
+              <strong>Treating integration or NoSQL as schema-free</strong>
+              Integrated data needs an explicit semantic model, and NoSQL data still has structure. Document mappings, contracts, validation rules, compatibility expectations, and ownership even when enforcement occurs outside the database.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>How would you implement least-privilege database access?</strong>
+              I separate login roles from functional group roles, grant object privileges to the functional roles, and grant users membership in those roles. I avoid routine superuser use, revoke unused access, test permissions with representative accounts, and periodically review role membership and ownership.
+            </article>
+
+            <article class="qa-item">
+              <strong>When would you partition a table, and how would you choose the key?</strong>
+              I partition when data volume, retention, index size, or maintenance makes one physical table difficult to manage. I choose a key aligned with frequent predicates and lifecycle operations—often time for event data—then verify pruning with actual queries. I also account for skew, uniqueness constraints, late-arriving data, and partition creation and retention.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you choose SQL versus NoSQL?</strong>
+              I start from the workload: data shape, relationships, transaction and consistency requirements, query patterns, growth, latency, availability, and team capability. Relational systems are strong for integrity, transactions, and flexible joins; document, key-value, columnar, graph, or time-series systems can be better for specific shapes and access patterns. Polyglot persistence is acceptable when the operational cost is justified.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li>Role attributes control what an identity may be; object privileges control what it may do to database objects.</li>
+              <li>Vertical partitioning splits columns; horizontal partitioning splits rows by a partition key.</li>
+              <li>Integration requires a unified semantic model plus mappings, quality checks, lineage, security, and failure handling.</li>
+              <li>Choose a DBMS from workload and operational requirements—not from popularity or the label SQL/NoSQL.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you explain the difference between a login role, a group role, role membership, and an object privilege?</li>
+            <li>Can you distinguish partitioning from normalization and give one useful partition key?</li>
+            <li>Can you list the minimum controls in a trustworthy data-integration plan?</li>
+            <li>Can you defend a relational, document, key-value, or columnar choice using concrete access patterns?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> A focused PostgreSQL lab is worthwhile: create login and group roles, prove GRANT/REVOKE behavior, build a range-partitioned event table, inspect pruning with EXPLAIN, and document a source-to-target mapping for a small integration.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> Complete this chapter when you can design role-based access, explain and implement vertical versus horizontal partitioning, review an integration plan for quality and security gaps, and justify a DBMS choice with workload-specific trade-offs.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Database Design · Chapter 4 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">Database Design Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_03_database_views_field_guide.html">Previous Chapter: Database Views</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

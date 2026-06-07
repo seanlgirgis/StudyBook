@@ -1,45 +1,637 @@
-﻿<!doctype html>
+<!doctype html>
+<!--
+TEMPLATE USAGE
+Replace every PLACEHOLDER with section-specific content.
+Keep the CSS and layout stable unless the course requires a deliberate design change.
+Recommended filename pattern:
+chapter_XX_section_slug_field_guide.html
+-->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Functions for Manipulating Data in PostgreSQL | Chapter 3 - Parsing and Manipulating Text</title>
+  <title>Chapter 3 — Parsing and Manipulating Text | Functions for Manipulating Data in PostgreSQL</title>
   <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
       font-family: "Segoe UI", Arial, sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
-      line-height: 1.6;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
     }
-    main {
-      width: min(900px, calc(100% - 32px));
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 32px 0 48px;
+      padding: 24px 0 52px;
     }
-    section {
-      background: #161b22;
-      border: 1px solid #30363d;
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 22px;
+      box-shadow: var(--shadow);
     }
-    h1 { margin-top: 0; }
-    p { color: #9da7b3; }
-    a {
-      color: #03ef62;
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
       text-decoration: none;
-      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <section>
-      <h1>Chapter 3 - Parsing and Manipulating Text</h1>
-      <p><strong>Status:</strong> Under construction</p>
-      <p>This chapter Field Guide will be populated from the course curriculum, videos, transcripts, exercises, and learner notes.</p>
-      <p><a href="../index.html">Back to Course Home</a></p>
-    </section>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Functions for Manipulating Data in PostgreSQL</a>
+      <span>›</span>
+      <span>Chapter 3: Parsing and Manipulating Text</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Functions for Manipulating Data in PostgreSQL · Chapter 3</p>
+      <h1>Parsing and Manipulating Text</h1>
+      <p>
+        Transform, inspect, parse, truncate, pad, and clean PostgreSQL text values with reusable string functions. This chapter connects formatting functions with position-aware substring extraction so messy character data can become analysis-ready.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_working_with_date_time_functions_and_operators_field_guide.html">Previous: Date/Time Functions and Operators</a>
+        <a class="button secondary" href="chapter_04_full_text_search_and_postgresql_extensions_field_guide.html">Next: Full-text Search and PostgreSQL Extensions</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Section Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Reformatting String Data</a>
+        <a href="#concept-2">3. Measuring and Parsing Text</a>
+        <a href="#concept-3">4. Truncating, Trimming, and Padding</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>Text manipulation usually follows a small pipeline: standardize the value, locate a delimiter or boundary, extract the part you need, and finally clean or format the result. PostgreSQL provides both operators and functions for every stage, and the functions can be nested when one transformation depends on another.</p>
+
+          <div class="diagram">raw text
+   ↓ concatenate / case / replace / reverse
+standardized text
+   ↓ length + position
+known boundaries
+   ↓ left / right / substring / substr
+extracted text
+   ↓ trim / lpad / rpad
+analysis-ready output</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Reformatting String Data</h3>
+              <p>Use || or CONCAT() to combine values; UPPER(), LOWER(), INITCAP(), REPLACE(), and REVERSE() reshape their contents.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Measuring and Parsing Text</h3>
+              <p>Use LENGTH()/CHAR_LENGTH() and STRPOS()/POSITION() to discover where useful text begins and ends.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Truncating, Trimming, and Padding</h3>
+              <p>Use LEFT(), RIGHT(), SUBSTRING()/SUBSTR(), TRIM(), LPAD(), and RPAD() to return exactly the portion and width you need.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Combining String Functions</h3>
+              <p>Nest functions so the output of one function becomes the input or argument of another.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> Find the boundary first, then extract or format the text around that boundary.
+          </div>
+        </section>
+
+        <section class="section" id="concept-1">
+          <h2>2. Reformatting String Data</h2>
+          <p>PostgreSQL can concatenate strings with the <code>||</code> operator or the <code>CONCAT()</code> function. Case functions standardize capitalization, while replacement and reversal functions reshape existing content. These operations are especially useful for names, email addresses, labels, and dirty descriptive fields.</p>
+
+          <pre><code>SELECT
+    first_name || ' ' || last_name AS full_name,
+    CONCAT(first_name, ' ', last_name) AS full_name_function,
+    UPPER(email) AS email_upper,
+    LOWER(email) AS email_lower,
+    INITCAP(first_name || ' ' || last_name) AS display_name,
+    REPLACE(description, 'A Astounding', 'An Astounding') AS corrected_text,
+    REVERSE(title) AS reversed_title
+FROM customer;</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> The <code>||</code> operator is concise, while <code>CONCAT()</code> is often easier when combining several values. Case conversion changes presentation, not the stored source value, unless it is used in an UPDATE.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Measuring and Parsing Text</h2>
+          <p>Before extracting text, determine its total length or locate a delimiter. <code>LENGTH()</code> and <code>CHAR_LENGTH()</code> return the number of characters. <code>STRPOS(string, substring)</code> and <code>POSITION(substring IN string)</code> return the first matching character position. Once a boundary is known, <code>LEFT()</code>, <code>RIGHT()</code>, <code>SUBSTRING()</code>, or the alias <code>SUBSTR()</code> can return the desired fragment.</p>
+
+          <pre><code>SELECT
+    email,
+    CHAR_LENGTH(email) AS email_length,
+    STRPOS(email, '@') AS at_position,
+    SUBSTRING(email FROM 1 FOR POSITION('@' IN email) - 1) AS username,
+    SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain
+FROM customer;
+
+SELECT
+    LEFT(description, 50) AS first_50_chars,
+    RIGHT(description, 20) AS last_20_chars,
+    SUBSTR(description, 10, 50) AS chars_10_to_59
+FROM film;</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> Position functions return 0 when the substring is not found. A computed length such as <code>POSITION(...) - 1</code> can therefore become invalid or misleading unless missing delimiters are handled.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. Truncating, Trimming, and Padding</h2>
+          <p>Truncation limits text to a useful portion, trimming removes unwanted edge characters, and padding produces a fixed-width display. <code>TRIM()</code> can remove whitespace or a specified character from both ends, or only from the leading or trailing edge. <code>LPAD()</code> and <code>RPAD()</code> extend a value to a requested total length and truncate it when the requested length is shorter.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>Smallest useful pattern</th>
+                <th>Primary use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>TRIM / LTRIM / RTRIM</td>
+                <td><code>TRIM(BOTH ' ' FROM value)</code></td>
+                <td>Remove whitespace or selected edge characters.</td>
+              </tr>
+              <tr>
+                <td>LPAD / RPAD</td>
+                <td><code>LPAD(value, 10, '0')</code></td>
+                <td>Create fixed-width labels, codes, or display values.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>This example parses an email address, standardizes its case, and formats a compact customer label. Each inner function produces a value consumed by the next function.</p>
+
+          <pre><code>SELECT
+    customer_id,
+    LOWER(email) AS normalized_email,
+    INITCAP(first_name || ' ' || last_name) AS customer_name,
+    SUBSTRING(LOWER(email) FROM 1 FOR POSITION('@' IN LOWER(email)) - 1) AS username,
+    SUBSTRING(LOWER(email) FROM POSITION('@' IN LOWER(email)) + 1) AS domain,
+    LPAD(customer_id::text, 6, '0') || ' - ' ||
+        INITCAP(TRIM(first_name || ' ' || last_name)) AS customer_label
+FROM customer;</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> The query returns a normalized email, a display-ready name, separate username and domain components, and a six-character zero-padded customer identifier.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Check <code>POSITION()</code> or <code>STRPOS()</code> before using a delimiter-derived length.</li>
+            <li>Compare the original value beside the transformed value while developing a query.</li>
+            <li>Confirm whether the requested substring start and length are one-based and inclusive for the function form being used.</li>
+            <li>Test padding with values both shorter and longer than the requested output width.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> Unexpected empty strings, missing final characters, or negative substring lengths usually indicate an off-by-one boundary or a delimiter that was not present.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Forgetting separators during concatenation</strong>
+              <code>first_name || last_name</code> produces one fused value. Add an explicit literal such as <code>' '</code>, <code>', '</code>, or <code>' - '</code>.
+            </article>
+
+            <article class="qa-item">
+              <strong>Including the delimiter in the extracted text</strong>
+              Subtract 1 when extracting the text before a delimiter, and add 1 when starting after it.
+            </article>
+
+            <article class="qa-item">
+              <strong>Treating LPAD or RPAD as append-only functions</strong>
+              The length argument is the total output length. PostgreSQL may truncate an input that is already longer than that width.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>How would you split an email address into username and domain?</strong>
+              Locate <code>@</code> with <code>POSITION()</code> or <code>STRPOS()</code>, extract the characters before it for the username, and start one character after it for the domain.
+            </article>
+
+            <article class="qa-item">
+              <strong>When would you use CONCAT() instead of ||?</strong>
+              Both combine text. <code>||</code> is compact and readable for a few expressions; <code>CONCAT()</code> can be clearer for a longer argument list and has different NULL handling that should be chosen deliberately.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you clean and standardize a user-entered label?</strong>
+              Trim unwanted edge whitespace, normalize case with <code>LOWER()</code>, <code>UPPER()</code>, or <code>INITCAP()</code>, replace known bad text where appropriate, and validate the transformed result beside the source.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li>Concatenate with <code>||</code> or <code>CONCAT()</code>; include separators explicitly.</li>
+              <li>Use length and position functions to calculate text boundaries.</li>
+              <li>Use LEFT/RIGHT for edge extraction and SUBSTRING/SUBSTR for position-based extraction.</li>
+              <li>TRIM cleans edges; LPAD and RPAD create a requested total width.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you extract everything before and after <code>@</code> without including the delimiter?</li>
+            <li>Can you explain the difference between a start position and a substring length?</li>
+            <li>Can you predict what LPAD does when the source value is already too long?</li>
+            <li>Can you combine trimming, case conversion, and concatenation in one readable expression?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> A focused SQL lab is useful because string functions are learned through boundary and dirty-data practice. Reuse the course-local customer, film, and dirty-text tables rather than creating a separate large environment.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> You can normalize text, calculate delimiter positions, extract substrings without off-by-one errors, and clean or pad output using the appropriate PostgreSQL function.
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>Functions for Manipulating Data in PostgreSQL · Chapter 3 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">SQL Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_working_with_date_time_functions_and_operators_field_guide.html">Previous Chapter</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_04_full_text_search_and_postgresql_extensions_field_guide.html">Next Chapter</a>
+      </span>
+    </footer>
   </main>
 </body>
 </html>

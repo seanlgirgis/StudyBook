@@ -1,0 +1,748 @@
+<!doctype html>
+<!--
+FIELD GUIDE TEMPLATE
+
+Purpose:
+- Whole-course accumulated Field Guide
+- Cross-chapter memory map
+- Navigation hub
+- Decision guide
+- Interview review
+- Lab evidence summary
+
+Instructions:
+1. Replace every template field.
+2. Add or remove chapter cards to match the course.
+3. Keep this filename when used as the active course guide:
+   field_guide.html
+4. Preserve the shared layout and visual system unless a deliberate design change is required.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Database Design — Field Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .cheat-grid,
+    .compare-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cheat-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .compare-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .cheat-card,
+    .compare-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .cheat-card h3,
+    .compare-card h3 {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .cheat-card p,
+    .compare-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul,
+    .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cheat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .status-grid,
+      .chapter-grid,
+      .cheat-grid,
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Database Design</a>
+      <span>›</span>
+      <span>Main Field Guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp · Database Design</p>
+      <h1>Database Design Field Guide</h1>
+      <p>
+        A cross-chapter guide to workload-driven database architecture: operational and analytical systems, storage and dimensional design, normalization, views, security, partitioning, integration, and DBMS selection.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.md">Markdown Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="../lab/lab_run_book.md">Lab Run Book</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card"><strong>COMPLETE</strong><span>Platform status</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Documentation</span></div>
+        <div class="status-card"><strong>DEVELOPING</strong><span>Lab coverage</span></div>
+        <div class="status-card"><strong>DEVELOPING</strong><span>Recall confidence</span></div>
+        <div class="status-card"><strong>NEEDS REPETITION</strong><span>Interview readiness</span></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Guide Contents</h2>
+        <a href="#chapters">1. Chapter guides</a>
+        <a href="#big-picture">2. Course big picture</a>
+        <a href="#core-concepts">3. Core concepts</a>
+        <a href="#patterns">4. Core syntax and patterns</a>
+        <a href="#comparisons">5. Comparisons and decisions</a>
+        <a href="#mistakes">6. Common mistakes</a>
+        <a href="#interview">7. Interview translation</a>
+        <a href="#lab">8. Local lab evidence</a>
+        <a href="#memory">9. Memory nuggets</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="chapters">
+          <h2>1. Chapter Guides</h2>
+
+          <div class="chapter-grid">
+            <article class="chapter-card">
+              <h3><a href="chapter_01_processing_storing_and_organizing_data_field_guide.html">Chapter 1: Processing, Storing, and Organizing Data</a></h3>
+              <p>Separate operational OLTP work from analytical OLAP work; choose storage, pipelines, and dimensional models from business needs.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_02_database_schemas_and_normalization_field_guide.html">Chapter 2: Database Schemas and Normalization</a></h3>
+              <p>Use star and snowflake schemas intentionally, normalize transactional data, and recognize dependency-driven anomalies.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_03_database_views_field_guide.html">Chapter 3: Database Views</a></h3>
+              <p>Use regular and materialized views as managed interfaces, security boundaries, and performance tools.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_04_database_management_field_guide.html">Chapter 4: Database Management</a></h3>
+              <p>Control access with roles, scale tables through partitioning, integrate data safely, and select a DBMS by workload.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="big-picture">
+          <h2>2. Course Big Picture</h2>
+          <p>Database design starts with workload and business rules, not with table syntax. Operational databases protect current transactions; analytical systems reorganize history for large scans and aggregation. Schemas, views, permissions, partitioning, and integration are design decisions that trade write simplicity, read speed, consistency, freshness, and maintainability.</p>
+
+          <div class="diagram">Business questions and service needs
+        |
+        v
+Choose workload: OLTP / OLAP / mixed
+        |
+        v
+Model data: normalized entities or dimensional facts + dimensions
+        |
+        v
+Expose safely: views, materialized views, roles, privileges
+        |
+        v
+Operate at scale: partitions, integration pipelines, DBMS choice</div>
+
+          <div class="callout green">
+            <strong>Course punchline:</strong> Design from workload, grain, dependencies, and access patterns; then prove integrity, performance, freshness, and security.
+          </div>
+        </section>
+
+        <section class="section" id="core-concepts">
+          <h2>3. Core Concepts</h2>
+
+          <div class="cheat-grid">
+            <article class="cheat-card">
+              <h3>Operational database</h3>
+              <p>Runs day-to-day activity with current detailed data, frequent small transactions, concurrency, and strong integrity.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Analytical database</h3>
+              <p>Supports history, aggregation, reporting, and scans across large volumes; commonly modeled for OLAP.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Normalization</h3>
+              <p>Stores each fact in the appropriate place to reduce redundancy and prevent update, insertion, and deletion anomalies.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Dimensional modeling</h3>
+              <p>Defines a fact-table grain and descriptive dimensions to make analytical questions easy and predictable.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Views</h3>
+              <p>Provide reusable query interfaces; materialized views trade storage and refresh work for faster reads.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Operational governance</h3>
+              <p>Roles, privileges, partitions, integration controls, and DBMS selection keep the design secure and sustainable.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="patterns">
+          <h2>4. Core Syntax and Patterns</h2>
+
+          <h3>Normalized operational core</h3>
+          <pre><code>CREATE TABLE customer (
+  customer_id bigint PRIMARY KEY,
+  customer_name text NOT NULL
+);
+
+CREATE TABLE orders (
+  order_id bigint PRIMARY KEY,
+  customer_id bigint NOT NULL REFERENCES customer(customer_id),
+  ordered_at timestamptz NOT NULL
+);</code></pre>
+          <p>Separate entities, identify keys, and enforce relationships. This reduces duplication while preserving transaction integrity.</p>
+
+          <h3>Analytical star schema</h3>
+          <pre><code>fact_sales(
+  date_key,
+  customer_key,
+  product_key,
+  quantity,
+  revenue
+)
+
+dim_date(...)
+dim_customer(...)
+dim_product(...)</code></pre>
+          <p>State the fact grain first—for example one row per sold product per order—then attach dimensions at compatible grain.</p>
+
+          <h3>Managed read interface</h3>
+          <pre><code>CREATE VIEW reporting.order_summary AS
+SELECT customer_id, count(*) AS order_count
+FROM orders
+GROUP BY customer_id;
+
+GRANT SELECT ON reporting.order_summary TO analyst_role;</code></pre>
+          <p>A view centralizes logic and narrows access, but it does not automatically materialize data or eliminate dependency management.</p>
+        </section>
+
+        <section class="section" id="comparisons">
+          <h2>5. Comparisons and Decision Rules</h2>
+
+          <div class="compare-grid">
+            <article class="compare-card">
+              <h3>Normalize for write correctness</h3>
+              <p>Best when many transactions update shared business entities and consistency matters more than one-query simplicity.</p>
+            </article>
+
+            <article class="compare-card">
+              <h3>Denormalize for read efficiency</h3>
+              <p>Useful when repeated joins dominate analytical workloads and duplication can be controlled through reliable pipelines.</p>
+            </article>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Decision</th>
+                <th>Prefer</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Frequent inserts and updates</td>
+                <td>Normalized OLTP schema</td>
+                <td>Reduces duplicate facts and anomalies.</td>
+              </tr>
+              <tr>
+                <td>Repeated aggregate reporting</td>
+                <td>Star schema or materialized view</td>
+                <td>Makes scans and joins simpler or precomputes expensive work.</td>
+              </tr>
+              <tr>
+                <td>Very large time-based table</td>
+                <td>Range partitioning</td>
+                <td>Can prune irrelevant partitions and simplify retention operations.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>6. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Starting with tables before requirements</strong>
+              Define users, transactions, questions, volume, latency, freshness, and integrity rules first.
+            </article>
+
+            <article class="qa-item">
+              <strong>Confusing OLTP with operational reporting</strong>
+              An operational database serves current transactions; reporting against it is a workload imposed on that system, not a reason to call it OLAP.
+            </article>
+
+            <article class="qa-item">
+              <strong>Normalizing without checking dependencies</strong>
+              Normal forms are driven by keys and functional dependencies, not by merely creating more tables.
+            </article>
+
+            <article class="qa-item">
+              <strong>Treating materialized views as automatically fresh</strong>
+              They store results and require a refresh strategy, dependency order, monitoring, and acceptable staleness.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>7. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is an operational database?</strong>
+              It supports current day-to-day transactions such as orders, payments, and inventory updates. It is usually OLTP-oriented: many short concurrent operations, strong integrity, and low-latency reads and writes.
+            </article>
+
+            <article class="qa-item">
+              <strong>When would you normalize a schema?</strong>
+              When duplicate facts create integrity risk and the workload has frequent inserts or updates. I identify candidate keys and functional dependencies, then decompose while preserving relationships.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do star and snowflake schemas differ?</strong>
+              A star keeps dimensions relatively denormalized for simpler analytical joins; a snowflake normalizes dimension hierarchies, reducing some duplication but increasing joins and complexity.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you choose a DBMS?</strong>
+              I start with workload, consistency, query shape, data model, scale, latency, operations, ecosystem, and team capability—then test the riskiest assumptions with representative data.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="lab">
+          <h2>8. Local Lab Evidence</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Validated result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Operational schema</td>
+                <td>Runnable PostgreSQL DDL models customers, products, orders, and order items with primary and foreign keys.</td>
+              </tr>
+              <tr>
+                <td>Analytical schema</td>
+                <td>Runnable star-schema DDL defines dimensions and a sales fact table with an explicit line-item grain.</td>
+              </tr>
+              <tr>
+                <td>Views and access</td>
+                <td>Practice SQL creates a reporting view, a materialized view, an analyst role, and scoped privileges.</td>
+              </tr>
+              <tr>
+                <td>Partitioning</td>
+                <td>Practice SQL creates a range-partitioned events table and demonstrates partition-aware filtering.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            The package includes a compact PostgreSQL lab intended for local execution. Status remains DEVELOPING until the scripts are run and observed outputs are recorded.
+          </div>
+        </section>
+
+        <section class="section" id="memory">
+          <h2>9. Quick Memory Nuggets</h2>
+
+          <pre><code>Operational = operate now
+Analytical  = understand history
+OLTP        = many short transactions
+OLAP        = scans, joins, aggregates</code></pre>
+
+          <pre><code>Normalization question:
+What does each non-key attribute depend on?
+Star-schema question:
+What exactly does one fact row represent?</code></pre>
+
+          <pre><code>View = stored query
+Materialized view = stored result
+Partition = physical table subdivision
+Role = privilege container / login identity</code></pre>
+
+          <div class="callout amber">
+            <strong>Final review:</strong> Be able to explain each design as a trade-off. Avoid absolute claims such as “normalized is always better” or “NoSQL is faster.”
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Database Design · Main Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.md">Markdown Guide</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">Quick Lookup</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

@@ -92,7 +92,7 @@
     }
 
     .hero-copy {
-      max-width: 760px;
+      max-width: 850px;
       margin: 13px 0 0;
       color: #c8d4df;
       font-size: 1.03rem;
@@ -141,15 +141,13 @@
 
     .progress span {
       display: block;
-      width: 71.4%;
+      width: 100%;
       height: 100%;
       background: linear-gradient(90deg, var(--green), #20c997);
       border-radius: inherit;
     }
 
-    .section {
-      margin-top: 24px;
-    }
+    .section { margin-top: 24px; }
 
     .section-heading {
       display: flex;
@@ -256,19 +254,9 @@
       color: var(--green);
     }
 
-    .status.local {
-      background: var(--blue-soft);
-      color: var(--blue);
-    }
-
     .status.planned {
       background: rgba(157, 167, 179, 0.12);
       color: #bdc6d0;
-    }
-
-    .status.legacy {
-      background: var(--amber-soft);
-      color: #f0b94d;
     }
 
     .open-link {
@@ -382,7 +370,8 @@
       <p class="hero-copy">
         Master the SQL foundations needed for business analysis, reporting, and data engineering.
         This StudyBook track page owns the learning order while each reusable course lives in its own stable folder.
-        PostgreSQL Summary Stats and Window Functions is now rebuilt with the current templates, and the next item is a fresh rebuild of Functions for Manipulating Data in PostgreSQL.
+        All seven SQL Fundamentals courses are now rebuilt as canonical StudyBook packages. Database Design is complete
+        with chapter guides, an accumulated field guide, a searchable quick lookup, and a course-local PostgreSQL design lab.
       </p>
 
       <div class="facts" aria-label="Track facts">
@@ -396,9 +385,9 @@
       <div class="progress-wrap">
         <div class="progress-label">
           <span>StudyBook canonical rebuild</span>
-          <span>5 of 7 courses</span>
+          <span>7 of 7 courses</span>
         </div>
-        <div class="progress" aria-label="5 of 7 courses rebuilt"><span></span></div>
+        <div class="progress" aria-label="7 of 7 courses rebuilt"><span></span></div>
       </div>
     </header>
 
@@ -429,10 +418,7 @@
           <div>
             <span class="type">Course</span>
             <h3>Intermediate SQL</h3>
-            <p>
-              Select, filter, aggregate, sort, and group data using reusable SQL patterns,
-              with a validated local PostgreSQL lab.
-            </p>
+            <p>Select, filter, aggregate, sort, and group data using reusable SQL patterns, with a validated local PostgreSQL lab.</p>
           </div>
           <div class="status-area">
             <span class="status canonical">Complete · Canonical</span>
@@ -445,10 +431,7 @@
           <div>
             <span class="type project">Project</span>
             <h3>Analyzing Students' Mental Health</h3>
-            <p>
-              Apply Intermediate SQL to investigate how studying abroad and length of stay
-              relate to mental-health measures for international students.
-            </p>
+            <p>Apply Intermediate SQL to investigate how studying abroad and length of stay relate to mental-health measures for international students.</p>
           </div>
           <div class="status-area">
             <span class="status canonical">Complete · Canonical</span>
@@ -474,10 +457,7 @@
           <div>
             <span class="type">Course</span>
             <h3>Data Manipulation in SQL</h3>
-            <p>
-              Use CASE expressions, subqueries, correlated queries, common table expressions,
-              and window functions to transform and analyze relational data.
-            </p>
+            <p>Use CASE expressions, subqueries, correlated queries, common table expressions, and window functions to transform and analyze relational data.</p>
           </div>
           <div class="status-area">
             <span class="status canonical">Complete · Canonical</span>
@@ -498,19 +478,16 @@
           </div>
         </article>
 
-        <article class="item active">
+        <article class="item">
           <div class="number">6</div>
           <div>
             <span class="type">Course</span>
             <h3>Functions for Manipulating Data in PostgreSQL</h3>
-            <p>
-              Work with PostgreSQL data types, date and time functions, text parsing,
-              arrays, full-text search, and extensions.
-            </p>
+            <p>Work with PostgreSQL data types, date and time functions, text parsing, arrays, full-text search, and extensions.</p>
           </div>
           <div class="status-area">
-            <span class="status planned">Next course · Rebuild</span>
-            <a class="open-link" href="../../courses/functions_for_manipulating_data_in_postgresql/index.html">Open previous package →</a>
+            <span class="status canonical">Complete · Canonical</span>
+            <a class="open-link" href="../../courses/functions_for_manipulating_data_in_postgresql/index.html">Open course →</a>
           </div>
         </article>
 
@@ -519,10 +496,11 @@
           <div>
             <span class="type">Course</span>
             <h3>Database Design</h3>
-            <p>Learn schemas, normalization, views, storage choices, and database-management concepts.</p>
+            <p>Design operational and analytical databases using schemas, normalization, dimensional models, views, roles, partitioning, and appropriate DBMS choices.</p>
           </div>
           <div class="status-area">
-            <span class="status planned">Planned</span>
+            <span class="status canonical">Complete · Canonical</span>
+            <a class="open-link" href="../../courses/database_design/index.html">Open course →</a>
           </div>
         </article>
       </div>
@@ -537,15 +515,15 @@
       </div>
 
       <div class="track-list">
-        <article class="item">
+        <article class="item active">
           <div class="number">P</div>
           <div>
             <span class="type project">Bonus project</span>
             <h3>Impact Analysis of GoodThought NGO Initiatives</h3>
-            <p>Optional capstone-style SQL analysis project.</p>
+            <p>Optional capstone-style SQL analysis project and the next remaining track item.</p>
           </div>
           <div class="status-area">
-            <span class="status planned">Not started</span>
+            <span class="status planned">Next · Not started</span>
           </div>
         </article>
 
@@ -588,12 +566,11 @@
 
     <aside class="note">
       <strong>Current path:</strong>
-      Introduction to SQL, Intermediate SQL, Joining Data in SQL,
-      Data Manipulation in SQL, the Analyzing Students' Mental Health project,
-      and PostgreSQL Summary Stats and Window Functions are complete canonical packages.
-      The next learning item is a fresh rebuild of Functions for Manipulating Data in PostgreSQL
-      using the current templates and chapter-by-chapter method. Its previous package remains
-      available as source material until the rebuild is complete.
+      All seven SQL Fundamentals courses are complete canonical packages:
+      Introduction to SQL, Intermediate SQL, Joining Data in SQL, Data Manipulation in SQL,
+      PostgreSQL Summary Stats and Window Functions, Functions for Manipulating Data in PostgreSQL,
+      and Database Design. The Analyzing Students' Mental Health project is also complete.
+      The remaining track items are the GoodThought NGO bonus project and the PostgreSQL skill assessment.
     </aside>
 
     <footer>

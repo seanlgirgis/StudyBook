@@ -1,0 +1,677 @@
+<!doctype html>
+<!--
+TEMPLATE USAGE
+All template placeholders have been replaced with chapter-specific content.
+Keep the CSS and layout stable unless the course requires a deliberate design change.
+Recommended filename pattern:
+chapter_XX_section_slug_field_guide.html
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 3 — Database Views | Database Design</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Database Design</a>
+      <span>›</span>
+      <span>Chapter 3: Database Views</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Database Design · Chapter 1</p>
+      <h1>Database Views</h1>
+      <p>
+        Learn how views turn stored queries into reusable database interfaces, how to manage permissions and dependencies safely, and when materialized views trade freshness for faster analytical reads.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">Database Design Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_database_schemas_and_normalization_field_guide.html">Chapter 2: Schemas and Normalization</a>
+        <a class="button secondary" href="chapter_04_database_management_field_guide.html">Chapter 4: Database Management</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Section Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Regular Views: Stored Queries as Interfaces</a>
+        <a href="#concept-2">3. Managing, Securing, and Redefining Views</a>
+        <a href="#concept-3">4. Materialized Views and Refresh Strategy</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>A view gives a name to a query so users can query its result as though it were a table. A regular view stores the query definition, not a separate copy of the result. This makes views useful for simplifying complex joins, presenting a stable interface over changing tables, and limiting which rows or columns users can see. A materialized view is different: it stores the query result physically and must be refreshed when the underlying data changes.</p>
+
+          <div class="diagram">Base tables
+    |
+    |  CREATE VIEW ... AS SELECT ...
+    v
+Regular view
+(query definition stored; result computed when queried)
+    |
+    +--&gt; simpler interface
+    +--&gt; reusable business logic
+    +--&gt; access boundary
+
+Base tables
+    |
+    |  CREATE MATERIALIZED VIEW ... AS SELECT ...
+    v
+Materialized view
+(result stored physically; refreshed deliberately)
+    |
+    +--&gt; faster reads
+    +--&gt; storage cost
+    +--&gt; possible staleness</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Regular Views: Stored Queries as Interfaces</h3>
+              <p>A regular view is a virtual table backed by a stored SELECT statement. It is queried like a table, but its rows are normally derived at query time.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Managing, Securing, and Redefining Views</h3>
+              <p>Views can be granted or revoked from roles, may sometimes support INSERT or UPDATE, and can be replaced or dropped with dependency-aware commands.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Materialized Views and Refresh Strategy</h3>
+              <p>A materialized view stores result rows, making repeated expensive reads faster at the cost of storage and data freshness.</p>
+            </article>
+            <article class="mini-card">
+              <h3>View Dependencies</h3>
+              <p>Views may depend on tables or other views. Those dependencies affect replacement, dropping, refresh order, and pipeline scheduling.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> Use a regular view to package and protect query logic; use a materialized view when repeated query cost matters more than immediate freshness.
+          </div>
+        </section>
+
+        <section class="section" id="concept-1">
+          <h2>2. Regular Views: Stored Queries as Interfaces</h2>
+          <p>A regular view behaves like a table from the consumer's perspective, but PostgreSQL stores the defining query rather than a separate data copy. Each query against the view expands into the underlying query plan. This lets a team hide normalized joins, expose only approved columns, and keep reporting SQL stable even when the physical schema is more complex.</p>
+
+          <pre><code>CREATE VIEW sci_fi_books AS
+SELECT
+    b.title,
+    a.author
+FROM dim_book_sf AS b
+JOIN dim_author_sf AS a
+  ON b.author_id = a.author_id
+JOIN dim_genre_sf AS g
+  ON b.genre_id = g.genre_id
+WHERE g.genre = &#x27;science fiction&#x27;;
+
+SELECT *
+FROM sci_fi_books;
+
+-- Inspect views available through the information schema
+SELECT table_schema, table_name
+FROM information_schema.views
+WHERE table_schema NOT IN (&#x27;pg_catalog&#x27;, &#x27;information_schema&#x27;);</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> The view exposes only the columns and rows selected by its defining query. The underlying tables remain the source of truth, and the view normally consumes no separate row-storage space.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Managing, Securing, and Redefining Views</h2>
+          <p>A view is also a database object with privileges and dependencies. PostgreSQL can grant SELECT, INSERT, UPDATE, or DELETE privileges on a view, although a privilege does not guarantee that the view is structurally updatable. Simple single-table views are more likely to be automatically updatable; joins, aggregation, DISTINCT, set operations, and grouping commonly make a view read-only unless additional mechanisms are provided.</p>
+
+          <pre><code>-- Give analysts read access without exposing the base table directly
+GRANT SELECT ON sci_fi_books TO analyst_role;
+
+-- Remove a privilege
+REVOKE UPDATE ON sci_fi_books FROM analyst_role;
+
+-- Replace the defining query
+CREATE OR REPLACE VIEW sci_fi_books AS
+SELECT
+    b.book_id,
+    b.title,
+    a.author
+FROM dim_book_sf AS b
+JOIN dim_author_sf AS a
+  ON b.author_id = a.author_id
+JOIN dim_genre_sf AS g
+  ON b.genre_id = g.genre_id
+WHERE g.genre = &#x27;science fiction&#x27;;
+
+-- Drop only when nothing depends on the view
+DROP VIEW sci_fi_books RESTRICT;</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> GRANT UPDATE does not make a complex view updatable. Privilege checks and structural updatability are separate questions. Also, CREATE OR REPLACE VIEW must preserve compatible existing columns; renaming or removing columns may require a controlled drop-and-recreate.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. Materialized Views and Refresh Strategy</h2>
+          <p>Materialized views physically store the output of a query. Queries read those stored rows instead of rerunning the full underlying query. They are well suited to expensive aggregations, warehouse workloads, and data that changes less frequently than it is read. Their central design decision is refresh policy: how stale may the data be, how long does refresh take, and what depends on the result?</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Regular view</th>
+                <th>Materialized view</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>What is stored</td>
+                <td>The query definition</td>
+                <td>The query result rows</td>
+              </tr>
+              <tr>
+                <td>Freshness and cost</td>
+                <td>Current base data, but query work happens at read time</td>
+                <td>Fast reads, but results can become stale until refreshed</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>Suppose an analytics team repeatedly calculates monthly sales by region from a large fact table. A regular view centralizes the business logic, while a materialized view can cache the expensive aggregate for dashboards.</p>
+
+          <pre><code>CREATE MATERIALIZED VIEW monthly_region_sales AS
+SELECT
+    date_trunc(&#x27;month&#x27;, sold_at) AS sales_month,
+    region_id,
+    SUM(amount) AS total_sales,
+    COUNT(*) AS order_count
+FROM sales
+GROUP BY
+    date_trunc(&#x27;month&#x27;, sold_at),
+    region_id;
+
+CREATE INDEX monthly_region_sales_idx
+    ON monthly_region_sales (sales_month, region_id);
+
+-- Recompute stored results after source data changes
+REFRESH MATERIALIZED VIEW monthly_region_sales;
+
+SELECT *
+FROM monthly_region_sales
+WHERE sales_month = DATE &#x27;2026-05-01&#x27;;</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> Dashboard queries scan the compact, pre-aggregated result instead of recomputing the full sales aggregation each time. The trade-off is that the dashboard reflects the last successful refresh, not necessarily the latest transaction.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Query the view and compare representative rows with the equivalent base-table query.</li>
+            <li>Check the exposed columns and privileges to confirm that sensitive fields are not reachable through the view.</li>
+            <li>Before replacing or dropping a view, identify dependent views, reports, functions, and scheduled jobs.</li>
+            <li>For materialized views, record the last refresh time and test whether refresh duration fits the allowed maintenance window.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> A report silently relies on stale materialized data, or a DROP ... CASCADE removes dependent objects that were not reviewed.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Treating a view as an independent data copy</strong>
+              A regular view usually stores only its query definition. Changes in base data are visible when the view is queried, subject to transaction visibility.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming every view is writable</strong>
+              Updatability depends on the defining query. Joins and aggregations commonly prevent automatic INSERT, UPDATE, or DELETE operations.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using materialized views without a freshness contract</strong>
+              Define who refreshes the view, how often, how failures are detected, and how much staleness consumers can tolerate.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is the difference between a table and a view?</strong>
+              A table stores rows physically. A regular view stores a query definition and presents its result as a virtual table. It is useful for abstraction, reuse, and access control, but its query cost is generally paid when the view is read.
+            </article>
+
+            <article class="qa-item">
+              <strong>When would you choose a materialized view?</strong>
+              I would choose one for expensive, repeatedly read queries where some staleness is acceptable, such as warehouse aggregates or dashboard summaries. I would also define an explicit refresh and dependency strategy.
+            </article>
+
+            <article class="qa-item">
+              <strong>How can views improve security?</strong>
+              A view can expose an approved subset of columns or rows while permissions on the base tables remain restricted. It is an interface layer, not a replacement for correct role, ownership, and privilege design.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li>Regular view: store the query, compute the result when read.</li>
+              <li>Materialized view: store the result, refresh it when needed.</li>
+              <li>Privileges do not guarantee structural updatability.</li>
+              <li>Dependencies must be understood before replace, drop, or refresh operations.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can you explain why a regular view normally shows current base-table data?</li>
+            <li>Can you name two query features that often make a view non-updatable?</li>
+            <li>Can you describe the speed-versus-freshness trade-off of a materialized view?</li>
+            <li>Can you explain the difference between DROP VIEW RESTRICT and CASCADE?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> A focused PostgreSQL lab is valuable: create a normal view, grant restricted access, test an updatable and non-updatable view, then create and refresh a materialized aggregate.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> You can create, query, inspect, secure, replace, and drop views safely; distinguish regular from materialized views; and explain refresh and dependency trade-offs without overclaiming that every view is writable.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Database Design · Chapter 3 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">Database Design Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_database_schemas_and_normalization_field_guide.html">Chapter 2: Schemas and Normalization</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_04_database_management_field_guide.html">Chapter 4: Database Management</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>
