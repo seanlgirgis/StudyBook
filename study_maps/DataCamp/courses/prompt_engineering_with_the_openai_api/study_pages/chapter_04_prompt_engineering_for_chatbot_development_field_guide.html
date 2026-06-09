@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
 TEMPLATE USAGE
-Replace every {{PLACEHOLDER}} with section-specific content.
+Replace every template fields with section-specific content.
 Keep the CSS and layout stable unless the course requires a deliberate design change.
 Recommended filename pattern:
 chapter_XX_section_slug_field_guide.html
@@ -10,7 +10,7 @@ chapter_XX_section_slug_field_guide.html
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{SECTION_NUMBER}} — {{SECTION_TITLE}} | {{COURSE_TITLE}}</title>
+  <title>Chapter 4 — Prompt Engineering for Chatbot Development | Prompt Engineering with the OpenAI API</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -366,25 +366,26 @@ chapter_XX_section_slug_field_guide.html
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Prompt Engineering with the OpenAI API</a>
       <span>›</span>
-      <span>{{SECTION_NUMBER}}: {{SECTION_TITLE}}</span>
+      <span>Chapter 4: Prompt Engineering for Chatbot Development</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} · Chapter 1</p>
-      <h1>{{SECTION_TITLE}}</h1>
+      <p class="eyebrow">Prompt Engineering with the OpenAI API · Chapter 4</p>
+      <h1>Prompt Engineering for Chatbot Development</h1>
       <p>
-        {{SECTION_SUMMARY_HTML}}
+        Design chatbot behavior with system prompts, role-playing instructions, response guidelines, domain boundaries, and external context. This chapter shows how to turn a general language model into a focused assistant that behaves consistently within a defined purpose.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Join Quick Lookup</a>
-        <a class="button secondary" href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="chapter_03_prompt_engineering_for_business_applications_field_guide.html">Previous: Business Applications</a>
+        <a class="button secondary" href="sql_quick_lookup.html">Prompt Engineering Quick Lookup</a>
+        <a class="button secondary" href="field_guide.html">Return to Main Field Guide</a>
       </div>
     </header>
 
@@ -392,9 +393,9 @@ chapter_XX_section_slug_field_guide.html
       <aside class="toc">
         <h2>Section Contents</h2>
         <a href="#big-picture">1. Big picture</a>
-        <a href="#concept-1">2. {{CONCEPT_1_TITLE}}</a>
-        <a href="#concept-2">3. {{CONCEPT_2_TITLE}}</a>
-        <a href="#concept-3">4. {{CONCEPT_3_TITLE}}</a>
+        <a href="#concept-1">2. System Prompts and Behavioral Control</a>
+        <a href="#concept-2">3. Role-Playing Prompts</a>
+        <a href="#concept-3">4. External Context and Grounded Answers</a>
         <a href="#worked-example">5. Worked example</a>
         <a href="#validation">6. Validation</a>
         <a href="#mistakes">7. Common mistakes</a>
@@ -405,78 +406,117 @@ chapter_XX_section_slug_field_guide.html
       <div class="content">
         <section class="section" id="big-picture">
           <h2>1. Big Picture</h2>
-          <p>{{BIG_PICTURE_EXPLANATION}}</p>
+          <p>A chatbot prompt is an operating contract. The system message defines the chatbot's purpose, role, tone, response rules, and domain boundaries. The user message supplies the current request. External context fills knowledge gaps that the base model cannot reliably answer from training alone.</p>
 
-          <div class="diagram">{{BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">System prompt
+  ├─ purpose and role
+  ├─ audience, tone, length, and structure
+  ├─ allowed and disallowed behavior
+  └─ trusted external context
+        ↓
+User message
+        ↓
+Chatbot response
+        ↓
+Validate relevance, accuracy, safety, and source fidelity</div>
 
           <div class="mini-grid">
             <article class="mini-card">
-              <h3>{{CONCEPT_1_TITLE}}</h3>
-              <p>{{CONCEPT_1_SUMMARY}}</p>
+              <h3>System Prompts and Behavioral Control</h3>
+              <p>Use the system message to define purpose, response guidelines, and what the chatbot should do when a request is outside its domain.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_2_TITLE}}</h3>
-              <p>{{CONCEPT_2_SUMMARY}}</p>
+              <h3>Role-Playing Prompts</h3>
+              <p>Assign a professional role, expertise, personality, and communication style so the chatbot answers from a useful perspective.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_3_TITLE}}</h3>
-              <p>{{CONCEPT_3_SUMMARY}}</p>
+              <h3>External Context and Grounded Answers</h3>
+              <p>Supply missing private, recent, or organization-specific information through example conversations or the system prompt.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_4_TITLE}}</h3>
-              <p>{{CONCEPT_4_SUMMARY}}</p>
+              <h3>Context Limits and Validation</h3>
+              <p>Keep context relevant and compact, distinguish supplied facts from model knowledge, and verify that responses do not add unsupported claims.</p>
             </article>
           </div>
 
           <div class="callout green">
-            <strong>Section punchline:</strong> {{SECTION_PUNCHLINE}}
+            <strong>Section punchline:</strong> A reliable chatbot is not defined by one clever user prompt; it is shaped by a persistent system contract, clear boundaries, and trusted context.
           </div>
         </section>
 
         <section class="section" id="concept-1">
-          <h2>2. {{CONCEPT_1_TITLE}}</h2>
-          <p>{{CONCEPT_1_EXPLANATION}}</p>
+          <h2>2. System Prompts and Behavioral Control</h2>
+          <p>The system message gives persistent instructions for the conversation. A strong chatbot system prompt states who the assistant is, what domain it serves, how it should communicate, and how it should handle unsupported or out-of-scope questions. Purpose narrows the expected question space; response guidelines control audience, tone, length, and structure; behavioral rules define allowed actions and fallback replies.</p>
 
-          <pre><code>{{CONCEPT_1_CODE_EXAMPLE}}</code></pre>
+          <pre><code>from openai_support import Message, OpenAIService
+
+ai = OpenAIService()
+
+messages = [
+    Message(
+        role=&quot;system&quot;,
+        content=(
+            &quot;You are a financial education chatbot. &quot;
+            &quot;Answer finance questions precisely, formally, and objectively. &quot;
+            &quot;When a question is outside finance, reply exactly: &quot;
+            &quot;&#x27;Sorry, I only know about finance.&#x27;&quot;
+        ),
+    ),
+    Message(
+        role=&quot;user&quot;,
+        content=&quot;What will the weather be tomorrow?&quot;,
+    ),
+]
+
+print(ai.get_response(messages=messages))</code></pre>
 
           <div class="callout">
-            <strong>What to notice:</strong> {{CONCEPT_1_NOTICE}}
+            <strong>What to notice:</strong> The system message does more than set tone. It defines the chatbot's domain and a deterministic fallback for out-of-scope requests.
           </div>
         </section>
 
         <section class="section" id="concept-2">
-          <h2>3. {{CONCEPT_2_TITLE}}</h2>
-          <p>{{CONCEPT_2_EXPLANATION}}</p>
+          <h2>3. Role-Playing Prompts</h2>
+          <p>Role-playing prompts ask the chatbot to behave as a specific professional, such as a customer support agent, product manager, sales engineer, financial analyst, or technology journalist. The role changes vocabulary, focus, depth, and priorities. A role alone is not enough: useful prompts also define expertise, audience, tone, scope, and fallback behavior.</p>
 
-          <pre><code>{{CONCEPT_2_CODE_EXAMPLE}}</code></pre>
+          <pre><code>system_prompt = &quot;&quot;&quot;
+You are a seasoned technology journalist who specializes in careful,
+evidence-based analysis of the technology industry.
+
+Write for informed business readers.
+Use a balanced and analytical tone.
+Discuss both opportunities and risks.
+Answer only technology-related questions.
+For other topics, state that your specialization is technology.
+&quot;&quot;&quot;</code></pre>
 
           <div class="callout amber">
-            <strong>Common trap:</strong> {{CONCEPT_2_TRAP}}
+            <strong>Common trap:</strong> Do not assume that naming a role automatically defines the behavior. Two people with the same job title may differ in expertise, audience, tone, depth, and boundaries.
           </div>
         </section>
 
         <section class="section" id="concept-3">
-          <h2>4. {{CONCEPT_3_TITLE}}</h2>
-          <p>{{CONCEPT_3_EXPLANATION}}</p>
+          <h2>4. External Context and Grounded Answers</h2>
+          <p>A pretrained model may not know recent events, private company details, or personal information that was never in its training data. Small amounts of trusted context can be inserted as prior user/assistant examples or directly inside the system prompt. Sample conversations demonstrate both facts and response patterns, while system-prompt context is often more compact for a small stable knowledge base. Large contexts require retrieval or other techniques beyond the scope of this chapter.</p>
 
           <table>
             <thead>
               <tr>
-                <th>{{TABLE_HEADER_1}}</th>
-                <th>{{TABLE_HEADER_2}}</th>
-                <th>{{TABLE_HEADER_3}}</th>
+                <th>Context method</th>
+                <th>Best use</th>
+                <th>Main limitation</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{TABLE_ROW_1_COL_1}}</td>
-                <td>{{TABLE_ROW_1_COL_2}}</td>
-                <td>{{TABLE_ROW_1_COL_3}}</td>
+                <td>Sample conversations</td>
+                <td>Teach example questions, answers, style, and conversational behavior.</td>
+                <td>May require many examples and consume context space.</td>
               </tr>
               <tr>
-                <td>{{TABLE_ROW_2_COL_1}}</td>
-                <td>{{TABLE_ROW_2_COL_2}}</td>
-                <td>{{TABLE_ROW_2_COL_3}}</td>
+                <td>System-prompt context</td>
+                <td>Provide a small stable set of company facts, policies, services, or instructions.</td>
+                <td>Does not scale well to large or frequently changing knowledge bases.</td>
               </tr>
             </tbody>
           </table>
@@ -484,26 +524,58 @@ chapter_XX_section_slug_field_guide.html
 
         <section class="section" id="worked-example">
           <h2>5. Worked Example</h2>
-          <p>{{WORKED_EXAMPLE_INTRO}}</p>
+          <p>This example combines purpose, role, response guidelines, domain boundaries, and small external context in one system prompt.</p>
 
-          <pre><code>{{WORKED_EXAMPLE_CODE}}</code></pre>
+          <pre><code>from openai_support import Message, OpenAIService
+
+ai = OpenAIService()
+
+company_services = &quot;&quot;&quot;
+ABC Tech Solutions provides:
+1. Web application development
+2. Mobile application development
+3. Custom software solutions
+&quot;&quot;&quot;
+
+messages = [
+    Message(
+        role=&quot;system&quot;,
+        content=f&quot;&quot;&quot;
+You are the customer-service chatbot for ABC Tech Solutions.
+
+Use only the company context below when answering questions about services.
+Be concise, professional, and friendly.
+If the answer is not contained in the context, say:
+&quot;I do not have that information. Please contact a company representative.&quot;
+
+Company context:
+```{company_services}```
+&quot;&quot;&quot;,
+    ),
+    Message(
+        role=&quot;user&quot;,
+        content=&quot;How many services does the company offer, and what are they?&quot;,
+    ),
+]
+
+print(ai.get_response(messages=messages))</code></pre>
 
           <div class="callout green">
-            <strong>Result:</strong> {{WORKED_EXAMPLE_RESULT}}
+            <strong>Result:</strong> The chatbot should identify exactly three services and list only the services supplied in the system context. If asked for an unsupported detail, it should use the defined fallback instead of inventing an answer.
           </div>
         </section>
 
         <section class="section" id="validation">
           <h2>6. Validation and Troubleshooting</h2>
           <ul>
-            <li>{{VALIDATION_ITEM_1}}</li>
-            <li>{{VALIDATION_ITEM_2}}</li>
-            <li>{{VALIDATION_ITEM_3}}</li>
-            <li>{{VALIDATION_ITEM_4}}</li>
+            <li>Test in-domain, out-of-domain, ambiguous, and adversarial user questions.</li>
+            <li>Verify that the chatbot follows the required tone, length, structure, and fallback wording.</li>
+            <li>Compare every context-grounded answer with the supplied source to detect omissions or unsupported additions.</li>
+            <li>Keep sensitive or private information out of prompts unless its use is authorized and appropriately protected.</li>
           </ul>
 
           <div class="callout danger">
-            <strong>Red flag:</strong> {{VALIDATION_RED_FLAG}}
+            <strong>Red flag:</strong> A confident answer is not proof that the chatbot used the supplied context correctly. The model may blend context with unsupported prior knowledge unless the prompt and validation rules prevent it.
           </div>
         </section>
 
@@ -512,18 +584,18 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Defining a role without defining boundaries</strong>
+              Add the supported domain, target audience, response rules, and an explicit fallback for questions the chatbot should not answer.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>Treating system-prompt context as a scalable knowledge base</strong>
+              Use inline context only for small stable information. Larger or changing knowledge should be retrieved selectively rather than copied wholesale into every prompt.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>Assuming prompt engineering guarantees compliance</strong>
+              Test behavior across many inputs, validate source fidelity, and add application-level controls. Prompt instructions improve behavior but do not guarantee it.
             </article>
           </div>
         </section>
@@ -533,18 +605,18 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>What belongs in a chatbot system prompt?</strong>
+              The chatbot's purpose and role, supported domain, target audience, tone, response length and structure, behavioral rules, fallback behavior, and any small trusted context required for accurate answers.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>How are role-playing prompts different from simple tone instructions?</strong>
+              A role defines the professional perspective, priorities, and expertise that shape the answer. Tone is only one communication property. A complete role prompt usually combines role, expertise, audience, tone, scope, and behavior.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>How would you give a chatbot organization-specific knowledge?</strong>
+              For a small stable context, I can include the facts in the system prompt or demonstrate them through sample conversations. For larger or frequently changing knowledge, I would retrieve only the relevant content and validate the response against the source.
             </article>
           </div>
         </section>
@@ -555,40 +627,42 @@ chapter_XX_section_slug_field_guide.html
           <div class="memory-box">
             <strong>Section summary</strong>
             <ol>
-              <li>{{MEMORY_RULE_1}}</li>
-              <li>{{MEMORY_RULE_2}}</li>
-              <li>{{MEMORY_RULE_3}}</li>
-              <li>{{MEMORY_RULE_4}}</li>
+              <li>The system message is the chatbot's operating contract.</li>
+              <li>Purpose defines what the chatbot is for; boundaries define what it should refuse.</li>
+              <li>Role-playing changes perspective, vocabulary, depth, and priorities—not only tone.</li>
+              <li>External context grounds answers, but output still requires validation.</li>
             </ol>
           </div>
 
           <h3>Quick self-check</h3>
           <ul>
-            <li>{{SELF_CHECK_1}}</li>
-            <li>{{SELF_CHECK_2}}</li>
-            <li>{{SELF_CHECK_3}}</li>
-            <li>{{SELF_CHECK_4}}</li>
+            <li>Can I write a system prompt that defines purpose, audience, tone, structure, and fallback behavior?</li>
+            <li>Can I explain how the same user question changes under support, product, and sales-engineering roles?</li>
+            <li>Can I choose between sample conversations and system-prompt context?</li>
+            <li>Can I explain why a large or changing knowledge base needs retrieval rather than one giant prompt?</li>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> {{LAB_DECISION}}
+            <strong>Lab decision:</strong> Create a Chapter 4 chatbot lab with one small file per pattern: dual-prompt helper, purpose and guidelines, domain fallback, role comparison, role plus constraints, sample-conversation context, and system-prompt context.
           </div>
 
           <div class="callout green">
-            <strong>Completion standard:</strong> {{COMPLETION_STANDARD}}
+            <strong>Completion standard:</strong> You can design a chatbot system prompt, constrain behavior, compare role-based responses, add small trusted context, and explain how you would test the chatbot for accuracy, scope control, and unsupported claims.
           </div>
         </section>
       </div>      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} · {{SECTION_NUMBER}} Field Guide</span>
+      <span>Prompt Engineering with the OpenAI API · Chapter 4 Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="field_guide.html">Main Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a href="chapter_03_prompt_engineering_for_business_applications_field_guide.html">Previous: Business Applications</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">Quick Lookup</a>
       </span>
     </footer>
   </main>
