@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-SQL QUICK LOOKUP TEMPLATE
+PROMPT ENGINEERING QUICK LOOKUP TEMPLATE
 
 Purpose:
 - Searchable whole-course syntax reference
@@ -9,7 +9,7 @@ Purpose:
 - Common traps beside each pattern
 
 Instructions:
-1. Replace every {{PLACEHOLDER}}.
+1. Replace every template value.
 2. Duplicate or remove lookup cards as needed.
 3. Keep the active course filename:
    sql_quick_lookup.html
@@ -20,7 +20,7 @@ Instructions:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{COURSE_TITLE}} — Quick Lookup</title>
+  <title>Prompt Engineering with the OpenAI API — Quick Lookup</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -275,155 +275,186 @@ Instructions:
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Prompt Engineering with the OpenAI API</a>
       <span>›</span>
-      <span>SQL Quick Lookup</span>
+      <span>Prompt Engineering Quick Lookup</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} · Quick Reference</p>
-      <h1>SQL Quick Lookup</h1>
+      <p class="eyebrow">Prompt Engineering with the OpenAI API · Quick Reference</p>
+      <h1>Prompt Engineering Quick Lookup</h1>
       <p>
-        {{QUICK_LOOKUP_SUMMARY_HTML}}
+        A searchable dictionary of the smallest useful prompt patterns, output contracts, chatbot controls, and validation rules used throughout the course.
       </p>
 
       <div class="actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button" href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button" href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a class="button" href="field_guide.html">Main Field Guide</a>
+        <a class="button" href="../lab/lab_run_book.md">Lab Run Book</a>
       </div>
 
       <div class="search-wrap">
         <input id="lookupSearch" type="search"
-               placeholder="{{SEARCH_PLACEHOLDER}}"
+               placeholder="Search roles, few-shot, JSON, validation, chatbot state..."
                aria-label="Search quick lookup">
       </div>
     </header>
 
     <section class="section">
-      <h2>{{SECTION_1_TITLE}}</h2>
+      <h2>Prompt Foundations</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_1_TITLE}}</h3>
-          <p>{{ITEM_1_PURPOSE}}</p>
-          <pre><code>{{ITEM_1_CODE}}</code></pre>
-          <div class="trap">{{ITEM_1_TRAP}}</div>
+          <h3>System + user roles</h3>
+          <p>Separate lasting behavior from the current request.</p>
+          <pre><code>messages = [
+  {"role": "system", "content": system_prompt},
+  {"role": "user", "content": user_prompt}
+]</code></pre>
+          <div class="trap">Do not place one-turn user data into the persistent system contract unless intended.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_2_TITLE}}</h3>
-          <p>{{ITEM_2_PURPOSE}}</p>
-          <pre><code>{{ITEM_2_CODE}}</code></pre>
-          <div class="trap">{{ITEM_2_TRAP}}</div>
+          <h3>Delimited source text</h3>
+          <p>Separate instructions from the text to transform.</p>
+          <pre><code>prompt = f"""Summarize this text:
+```{text}```"""</code></pre>
+          <div class="trap">Delimiters improve clarity; they do not guarantee resistance to prompt injection.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_3_TITLE}}</h3>
-          <p>{{ITEM_3_PURPOSE}}</p>
-          <pre><code>{{ITEM_3_CODE}}</code></pre>
-          <div class="trap">{{ITEM_3_TRAP}}</div>
+          <h3>Explicit constraints</h3>
+          <p>Make the response measurable and testable.</p>
+          <pre><code>Use exactly 3 bullets.
+Return only the labels.
+Keep under 80 words.</code></pre>
+          <div class="trap">Conflicting or excessive constraints can reduce quality.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{SECTION_2_TITLE}}</h2>
+      <h2>Examples and Task Control</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_4_TITLE}}</h3>
-          <p>{{ITEM_4_PURPOSE}}</p>
-          <pre><code>{{ITEM_4_CODE}}</code></pre>
-          <div class="trap">{{ITEM_4_TRAP}}</div>
+          <h3>Zero-shot</h3>
+          <p>Give instructions without examples.</p>
+          <pre><code>Classify as Positive, Negative, or Neutral.
+Return only the label.</code></pre>
+          <div class="trap">The model may choose an unexpected format unless the contract is explicit.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_5_TITLE}}</h3>
-          <p>{{ITEM_5_PURPOSE}}</p>
-          <pre><code>{{ITEM_5_CODE}}</code></pre>
-          <div class="trap">{{ITEM_5_TRAP}}</div>
+          <h3>One-shot</h3>
+          <p>Demonstrate one desired input/output pattern.</p>
+          <pre><code>Input: {1, 3, 4}
+Output: [1, 3]
+Input: {5, 8, 9}
+Output:</code></pre>
+          <div class="trap">One example may not cover edge cases or all categories.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_6_TITLE}}</h3>
-          <p>{{ITEM_6_PURPOSE}}</p>
-          <pre><code>{{ITEM_6_CODE}}</code></pre>
-          <div class="trap">{{ITEM_6_TRAP}}</div>
+          <h3>Few-shot</h3>
+          <p>Provide several representative examples.</p>
+          <pre><code>User: Excellent service.
+Assistant: Positive
+User: Delivery was late.
+Assistant: Negative</code></pre>
+          <div class="trap">Use consistent labels and include representative classes.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{SECTION_3_TITLE}}</h2>
+      <h2>Structured Output and Validation</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_7_TITLE}}</h3>
-          <p>{{ITEM_7_PURPOSE}}</p>
-          <pre><code>{{ITEM_7_CODE}}</code></pre>
-          <div class="trap">{{ITEM_7_TRAP}}</div>
+          <h3>Multi-step task</h3>
+          <p>Define dependent stages in order.</p>
+          <pre><code>Step 1: identify the issue.
+Step 2: infer the likely trigger.
+Step 3: recommend the first action.</code></pre>
+          <div class="trap">Several independent fields are not necessarily a multi-step task.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_8_TITLE}}</h3>
-          <p>{{ITEM_8_PURPOSE}}</p>
-          <pre><code>{{ITEM_8_CODE}}</code></pre>
-          <div class="trap">{{ITEM_8_TRAP}}</div>
+          <h3>Structured JSON output</h3>
+          <p>Produce machine-readable fields.</p>
+          <pre><code>Return valid JSON only.
+Use null when missing.
+Do not add extra keys.</code></pre>
+          <div class="trap">Valid JSON can still contain wrong values.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_9_TITLE}}</h3>
-          <p>{{ITEM_9_PURPOSE}}</p>
-          <pre><code>{{ITEM_9_CODE}}</code></pre>
-          <div class="trap">{{ITEM_9_TRAP}}</div>
+          <h3>Python validation</h3>
+          <p>Accept or reject model output deterministically.</p>
+          <pre><code>data = json.loads(response)
+if set(data) != expected_keys:
+    raise ValueError("Unexpected keys")</code></pre>
+          <div class="trap">Validate keys, types, allowed values, ranges, and source fidelity.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{SECTION_4_TITLE}}</h2>
+      <h2>Chatbot Context and State</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_10_TITLE}}</h3>
-          <p>{{ITEM_10_PURPOSE}}</p>
-          <pre><code>{{ITEM_10_CODE}}</code></pre>
-          <div class="trap">{{ITEM_10_TRAP}}</div>
+          <h3>Domain fallback</h3>
+          <p>Control out-of-scope chatbot requests.</p>
+          <pre><code>If outside personal finance, reply exactly:
+"Sorry, I only answer personal-finance questions."</code></pre>
+          <div class="trap">Prompt rules improve compliance but do not guarantee it.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_11_TITLE}}</h3>
-          <p>{{ITEM_11_PURPOSE}}</p>
-          <pre><code>{{ITEM_11_CODE}}</code></pre>
-          <div class="trap">{{ITEM_11_TRAP}}</div>
+          <h3>Trusted context</h3>
+          <p>Ground an answer in supplied information.</p>
+          <pre><code>Use only the context below.
+If absent, say: "I do not have that information."</code></pre>
+          <div class="trap">The model may still strengthen wording or add unsupported implications.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_12_TITLE}}</h3>
-          <p>{{ITEM_12_PURPOSE}}</p>
-          <pre><code>{{ITEM_12_CODE}}</code></pre>
-          <div class="trap">{{ITEM_12_TRAP}}</div>
+          <h3>Structured chat state</h3>
+          <p>Carry compact state across turns.</p>
+          <pre><code>{
+ "confirmed_facts": [],
+ "recommended_actions": [],
+ "completed_actions": [],
+ "open_questions": []
+}</code></pre>
+          <div class="trap">Do not let advice become a confirmed fact; validate updates before storage.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{REFERENCE_SECTION_TITLE}}</h2>
+      <h2>Prompt Selection Map</h2>
 
-      <div class="diagram">{{REFERENCE_DIAGRAM}}</div>
+      <div class="diagram">No example needed → zero-shot
+One format demonstration → one-shot
+Several classes or edge cases → few-shot
+Dependent stages → multi-step
+Machine-facing result → JSON + validation
+Stateful chat → recent turns + structured state</div>
 
       <div class="callout">
-        {{REFERENCE_CALLOUT}}
+        The prompt controls what the model should return. Deterministic application code controls whether the result is accepted.
       </div>
     </section>
 
     <footer>
-      <span>{{COURSE_TITLE}} · SQL Quick Lookup</span>
+      <span>Prompt Engineering with the OpenAI API · Prompt Engineering Quick Lookup</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="field_guide.html">Main Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a href="../lab/lab_run_book.md">Lab Run Book</a>
       </span>
     </footer>
   </main>

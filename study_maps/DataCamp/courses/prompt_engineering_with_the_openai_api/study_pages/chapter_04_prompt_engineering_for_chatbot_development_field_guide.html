@@ -401,6 +401,7 @@ chapter_XX_section_slug_field_guide.html
         <a href="#mistakes">7. Common mistakes</a>
         <a href="#interview">8. Interview translation</a>
         <a href="#review">9. Memory review</a>
+        <a href="#practice-trail">10. Practice trail</a>
       </aside>
 
       <div class="content">
@@ -643,13 +644,60 @@ print(ai.get_response(messages=messages))</code></pre>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> Create a Chapter 4 chatbot lab with one small file per pattern: dual-prompt helper, purpose and guidelines, domain fallback, role comparison, role plus constraints, sample-conversation context, and system-prompt context.
+            <strong>Lab decision:</strong> Chapter 4 now has a replayable ten-file chatbot lab under <code>lab/chapter_04/</code>, covering dual-prompt design, compact and structured conversation state, state validation, domain boundaries, role-playing, and two external-context methods.
           </div>
 
           <div class="callout green">
             <strong>Completion standard:</strong> You can design a chatbot system prompt, constrain behavior, compare role-based responses, add small trusted context, and explain how you would test the chatbot for accuracy, scope control, and unsupported claims.
           </div>
         </section>
+
+        <section class="section" id="practice-trail">
+          <h2>10. Practice Trail and Chatbot Architecture</h2>
+          <p>The Chapter 4 lab preserves the course patterns and the additional stateful-chatbot design explored during practice. Each file isolates one behavior so it can be replayed and compared later.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Exercise</th>
+                <th>Validated lesson</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>01_dual_prompt_chatbot.py</code></td><td>Separates persistent system behavior from the current user request.</td></tr>
+              <tr><td><code>02_stateful_chatbot_context.py</code></td><td>Adds compact prior context so the response becomes more relevant than a generic answer.</td></tr>
+              <tr><td><code>03_answer_and_updated_state.py</code></td><td>Returns both a user-facing answer and a compact revised conversation state.</td></tr>
+              <tr><td><code>04_structured_chat_state.py</code></td><td>Separates confirmed facts, recommendations, completed actions, and open questions in JSON.</td></tr>
+              <tr><td><code>05_validate_chat_state.py</code></td><td>Validates exact keys and list/string types before the application stores model-proposed state.</td></tr>
+              <tr><td><code>06_domain_boundaries.py</code></td><td>Uses a precise out-of-domain fallback response.</td></tr>
+              <tr><td><code>07_role_playing_comparison.py</code></td><td>Shows that professional roles change focus, vocabulary, and priorities—not only tone.</td></tr>
+              <tr><td><code>08_system_prompt_context.py</code></td><td>Grounds an organization-specific answer with a compact factual context in the system prompt.</td></tr>
+              <tr><td><code>09_sample_conversation_context.py</code></td><td>Uses prior user/assistant examples to teach facts and response style together.</td></tr>
+              <tr><td><code>10_context_method_comparison.py</code></td><td>Compares system-prompt context with sample-conversation context and exposes wording drift.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="diagram">System contract
+  + recent raw messages
+  + compact structured state
+  + current user request
+        ↓
+Chatbot answer
+  + proposed state update
+        ↓
+Python schema validation
+        ↓
+Store, reject, retry, or route for review</div>
+
+          <div class="callout green">
+            <strong>Stateful-chatbot pattern:</strong> keep a small number of recent messages for conversational flow, preserve older useful facts in structured state, and let application code validate every proposed memory update.
+          </div>
+
+          <div class="callout danger">
+            <strong>Memory-drift warning:</strong> a model-generated state summary can slowly turn assumptions into facts. Keep facts, recommendations, completed actions, and open questions separate, and never store sensitive information without a clear need and policy.
+          </div>
+        </section>
+
       </div>      </div>
     </div>
 

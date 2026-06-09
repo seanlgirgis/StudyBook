@@ -11,7 +11,7 @@ Purpose:
 - Course closeout summary
 
 Instructions:
-1. Replace every {{PLACEHOLDER}}.
+1. Replace every template field.
 2. Add or remove chapter cards to match the actual course.
 3. Add or remove resource cards based on available artifacts.
 4. Keep the active course filename:
@@ -23,7 +23,7 @@ Instructions:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{COURSE_TITLE}} | {{PROJECT_TITLE}}</title>
+  <title>Prompt Engineering with the OpenAI API | DataCamp StudyBook</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -300,48 +300,49 @@ Instructions:
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../index.html">{{PROJECT_TITLE}}</a>
+      <a href="../../index.html">DataCamp StudyBook</a>
       <span>›</span>
-      <span>{{COURSE_TITLE}}</span>
+      <span>Prompt Engineering with the OpenAI API</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{PLATFORM_LABEL}} Course</p>
-      <h1>{{COURSE_TITLE}}</h1>
+      <p class="eyebrow">DataCamp Course</p>
+      <h1>Prompt Engineering with the OpenAI API</h1>
       <p>
-        {{COURSE_SUMMARY_HTML}}
+        A completed four-chapter course package covering prompt structure, advanced prompting strategies, business applications, and chatbot development. The local lab preserves runnable Python examples for message roles, few-shot prompting, structured extraction, validation, chatbot boundaries, external context, and structured conversational state.
       </p>
 
       <div class="hero-actions">
-        <a class="button primary" href="{{FIELD_GUIDE_FILE}}">Open Main Field Guide</a>
-        <a class="button" href="{{QUICK_LOOKUP_FILE}}">Open SQL Quick Lookup</a>
-        <a class="button" href="{{LAB_RUN_BOOK_FILE}}">Open Lab Run Book</a>
-        <a class="button" href="{{BILL_OF_MATERIALS_FILE}}">Open Bill of Materials</a>
+        <a class="button primary" href="study_pages/field_guide.html">Open Main Field Guide</a>
+        <a class="button" href="study_pages/sql_quick_lookup.html">Open Prompt Engineering Quick Lookup</a>
+        <a class="button" href="study_pages/prompt_engineering_pattern_dictionary.html">Open Pattern Dictionary</a>
+        <a class="button" href="lab/lab_run_book.md">Open Lab Run Book</a>
+        <a class="button" href="docs/BILL_OF_MATERIALS.md">Open Bill of Materials</a>
       </div>
 
       <div class="status-grid">
         <div class="status-card">
-          <strong>{{PLATFORM_STATUS}}</strong>
+          <strong>PASSED</strong>
           <span>Platform status</span>
         </div>
 
         <div class="status-card">
-          <strong>{{DOCUMENTATION_STATUS}}</strong>
+          <strong>COMPLETE</strong>
           <span>Documentation coverage</span>
         </div>
 
         <div class="status-card">
-          <strong>{{LAB_STATUS}}</strong>
+          <strong>STRONG</strong>
           <span>Lab coverage</span>
         </div>
 
         <div class="status-card">
-          <strong>{{RECALL_STATUS}}</strong>
+          <strong>DEVELOPING</strong>
           <span>Recall confidence</span>
         </div>
 
         <div class="status-card">
-          <strong>{{INTERVIEW_STATUS}}</strong>
+          <strong>NEEDS REPETITION</strong>
           <span>Interview readiness</span>
         </div>
       </div>
@@ -351,14 +352,15 @@ Instructions:
       <h2>Recommended Study Order</h2>
 
       <ol>
-        <li><a href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a></li>
-        <li><a href="{{CHAPTER_01_FILE}}">{{CHAPTER_01_TITLE}}</a></li>
-        <li><a href="{{CHAPTER_02_FILE}}">{{CHAPTER_02_TITLE}}</a></li>
-        <li><a href="{{CHAPTER_03_FILE}}">{{CHAPTER_03_TITLE}}</a></li>
-        <li><a href="{{CHAPTER_04_FILE}}">{{CHAPTER_04_TITLE}}</a></li>
-        <li><a href="{{QUICK_LOOKUP_FILE}}">Quick Lookup</a></li>
-        <li><a href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a></li>
-        <li>{{FINAL_STUDY_STEP}}</li>
+        <li><a href="study_pages/field_guide.html">Main Field Guide</a></li>
+        <li><a href="study_pages/chapter_01_introduction_to_prompt_engineering_best_practices_field_guide.html">Chapter 1 — Introduction and Best Practices</a></li>
+        <li><a href="study_pages/chapter_02_advanced_prompt_engineering_strategies_field_guide.html">Chapter 2 — Advanced Prompting Strategies</a></li>
+        <li><a href="study_pages/chapter_03_prompt_engineering_for_business_applications_field_guide.html">Chapter 3 — Business Applications</a></li>
+        <li><a href="study_pages/chapter_04_prompt_engineering_for_chatbot_development_field_guide.html">Chapter 4 — Chatbot Development</a></li>
+        <li><a href="study_pages/sql_quick_lookup.html">Quick Lookup</a></li>
+        <li><a href="lab/lab_run_book.md">Lab Run Book</a></li>
+        <li><a href="study_pages/prompt_engineering_pattern_dictionary.html">Prompt Engineering Pattern Dictionary</a></li>
+        <li>Complete the final self-test / certification-prep page when it is added.</li>
       </ol>
     </section>
 
@@ -367,30 +369,30 @@ Instructions:
 
       <div class="chapter-grid">
         <article class="chapter-card">
-          <a href="{{CHAPTER_01_FILE}}">
-            <h3>{{CHAPTER_01_TITLE}}</h3>
-            <p>{{CHAPTER_01_SUMMARY}}</p>
+          <a href="study_pages/chapter_01_introduction_to_prompt_engineering_best_practices_field_guide.html">
+            <h3>Chapter 1 — Introduction and Best Practices</h3>
+            <p>Message roles, clear instructions, delimiters, output structure, conditions, and foundational prompt design.</p>
           </a>
         </article>
 
         <article class="chapter-card">
-          <a href="{{CHAPTER_02_FILE}}">
-            <h3>{{CHAPTER_02_TITLE}}</h3>
-            <p>{{CHAPTER_02_SUMMARY}}</p>
+          <a href="study_pages/chapter_02_advanced_prompt_engineering_strategies_field_guide.html">
+            <h3>Chapter 2 — Advanced Prompting Strategies</h3>
+            <p>Zero-shot, one-shot, few-shot, multi-step prompting, reasoning patterns, self-consistency, and temperature.</p>
           </a>
         </article>
 
         <article class="chapter-card">
-          <a href="{{CHAPTER_03_FILE}}">
-            <h3>{{CHAPTER_03_TITLE}}</h3>
-            <p>{{CHAPTER_03_SUMMARY}}</p>
+          <a href="study_pages/chapter_03_prompt_engineering_for_business_applications_field_guide.html">
+            <h3>Chapter 3 — Business Applications</h3>
+            <p>Summarization, expansion, translation, tone, proofreading, classification, extraction, JSON, and deterministic validation.</p>
           </a>
         </article>
 
         <article class="chapter-card">
-          <a href="{{CHAPTER_04_FILE}}">
-            <h3>{{CHAPTER_04_TITLE}}</h3>
-            <p>{{CHAPTER_04_SUMMARY}}</p>
+          <a href="study_pages/chapter_04_prompt_engineering_for_chatbot_development_field_guide.html">
+            <h3>Chapter 4 — Chatbot Development</h3>
+            <p>System contracts, role-playing, boundaries, external context, stateful chat, structured memory, and validation.</p>
           </a>
         </article>
       </div>
@@ -401,65 +403,72 @@ Instructions:
 
       <div class="resource-grid">
         <article class="resource-card">
-          <a href="{{FIELD_GUIDE_FILE}}">
+          <a href="study_pages/field_guide.html">
             <h3>Main Field Guide</h3>
-            <p>{{FIELD_GUIDE_DESCRIPTION}}</p>
+            <p>Whole-course memory map with chapter navigation, decision rules, reusable patterns, mistakes, and lab evidence.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{FIELD_GUIDE_MARKDOWN_FILE}}">
+          <a href="study_pages/field_guide.md">
             <h3>Field Guide Markdown</h3>
-            <p>{{FIELD_GUIDE_MARKDOWN_DESCRIPTION}}</p>
+            <p>Portable Markdown version of the accumulated whole-course guide.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{QUICK_LOOKUP_FILE}}">
+          <a href="study_pages/sql_quick_lookup.html">
             <h3>Quick Lookup</h3>
-            <p>{{QUICK_LOOKUP_DESCRIPTION}}</p>
+            <p>Searchable prompt-pattern reference with small examples, use cases, and common traps.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{LAB_HOW_TO_RUN_FILE}}">
+          <a href="study_pages/prompt_engineering_pattern_dictionary.html">
+            <h3>Prompt Engineering Pattern Dictionary</h3>
+            <p>Searchable accumulated dictionary of techniques, prompt styles, decision rules, smallest useful patterns, and common traps.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="lab/00_how_to_run.md">
             <h3>How to Run the Lab</h3>
-            <p>{{LAB_HOW_TO_RUN_DESCRIPTION}}</p>
+            <p>Environment setup, API-key use, and commands for running the local Python exercises.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{LAB_RUN_BOOK_FILE}}">
+          <a href="lab/lab_run_book.md">
             <h3>Lab Run Book</h3>
-            <p>{{LAB_RUN_BOOK_DESCRIPTION}}</p>
+            <p>Hands-on course trail, checkpoints, practiced outputs, and troubleshooting notes.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{BILL_OF_MATERIALS_FILE}}">
+          <a href="docs/BILL_OF_MATERIALS.md">
             <h3>Bill of Materials</h3>
-            <p>{{BILL_OF_MATERIALS_DESCRIPTION}}</p>
+            <p>Inventory of chapters, source material, study artifacts, lab coverage, and remaining closeout work.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{COURSE_SETUP_AUDIT_FILE}}">
+          <a href="docs/COURSE_SETUP_AUDIT.md">
             <h3>Course Setup Audit</h3>
-            <p>{{COURSE_SETUP_AUDIT_DESCRIPTION}}</p>
+            <p>Course architecture, expected artifacts, naming, navigation, and setup validation.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{README_FILE}}">
+          <a href="README.md">
             <h3>Course README</h3>
-            <p>{{README_DESCRIPTION}}</p>
+            <p>Canonical course identity, status, study order, artifacts, lab organization, and maintenance notes.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{SESSION_STATE_FILE}}">
+          <a href="STUDYBUBBLE_SESSION_STATE.md">
             <h3>Session State</h3>
-            <p>{{SESSION_STATE_DESCRIPTION}}</p>
+            <p>Current course progress and handoff state for future sessions.</p>
           </a>
         </article>
       </div>
@@ -468,40 +477,42 @@ Instructions:
     <section class="section">
       <h2>Local Lab</h2>
 
-      <p>{{LAB_SUMMARY_HTML}}</p>
+      <p>The lab is organized by chapter. Each exercise is preserved as a separate Python file so the learning trail can be replayed later without overwriting earlier work.</p>
 
       <ul>
-        <li><a href="{{LAB_SQL_01_FILE}}">{{LAB_SQL_01_LABEL}}</a></li>
-        <li><a href="{{LAB_SQL_02_FILE}}">{{LAB_SQL_02_LABEL}}</a></li>
-        <li><a href="{{LAB_SQL_03_FILE}}">{{LAB_SQL_03_LABEL}}</a></li>
-        <li><a href="{{LAB_SQL_04_FILE}}">{{LAB_SQL_04_LABEL}}</a></li>
+        <li><a href="lab/chapter_01/README.md">Chapter 1 Lab — Foundations and Prompt Structure</a></li>
+        <li><a href="lab/chapter_02/README.md">Chapter 2 Lab — Advanced Prompting Strategies</a></li>
+        <li><a href="lab/chapter_03/README.md">Chapter 3 Lab — Business Applications and AI-Assisted ETL</a></li>
+        <li><a href="lab/chapter_04/README.md">Chapter 4 Lab — Chatbots and Structured State</a></li>
       </ul>
 
       <div class="callout green">
-        {{LAB_COMPLETION_NOTE}}
+        Lab coverage is strong: the course includes message-role helpers, one/few-shot prompting, business extraction, JSON validation, chatbot boundaries, context grounding, and structured rolling-state experiments.
       </div>
     </section>
 
     <section class="section">
       <h2>Course Closeout</h2>
 
-      <p>{{COURSE_CLOSEOUT_SUMMARY}}</p>
+      <p>The DataCamp platform course is complete and the four chapter guides and local labs have been reconciled. The course now moves into review mode rather than being treated as permanently mastered.</p>
 
       <div class="callout amber">
-        {{COURSE_NEXT_ACTION}}
+        The Prompt Engineering Pattern Dictionary is complete and linked. The remaining enhancement is the final self-test / certification-prep page.
       </div>
 
-      <div class="path">{{CANONICAL_COURSE_PATH}}</div>
+      <div class="path">D:\Workarea\StudyBook\study_maps\DataCamp\courses\prompt_engineering_with_the_openai_api</div>
     </section>
 
     <footer>
-      <span>{{PROJECT_TITLE}} · {{COURSE_TITLE}}</span>
+      <span>DataCamp StudyBook · Prompt Engineering with the OpenAI API</span>
       <span>
-        <a href="{{FIELD_GUIDE_FILE}}">Field Guide</a>
+        <a href="study_pages/field_guide.html">Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{QUICK_LOOKUP_FILE}}">Quick Lookup</a>
+        <a href="study_pages/sql_quick_lookup.html">Quick Lookup</a>
         &nbsp;·&nbsp;
-        <a href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a href="study_pages/prompt_engineering_pattern_dictionary.html">Pattern Dictionary</a>
+        &nbsp;·&nbsp;
+        <a href="lab/lab_run_book.md">Lab Run Book</a>
       </span>
     </footer>
   </main>

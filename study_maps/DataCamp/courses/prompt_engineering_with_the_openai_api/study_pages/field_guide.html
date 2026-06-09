@@ -11,7 +11,7 @@ Purpose:
 - Lab evidence summary
 
 Instructions:
-1. Replace every {{PLACEHOLDER}}.
+1. Replace every template value.
 2. Add or remove chapter cards to match the course.
 3. Keep this filename when used as the active course guide:
    field_guide.html
@@ -21,7 +21,7 @@ Instructions:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{COURSE_TITLE}} — Field Guide</title>
+  <title>Prompt Engineering with the OpenAI API — Field Guide</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -408,33 +408,33 @@ Instructions:
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Prompt Engineering with the OpenAI API</a>
       <span>›</span>
       <span>Main Field Guide</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{PLATFORM_LABEL}} · {{COURSE_TITLE}}</p>
-      <h1>{{COURSE_TITLE}} Field Guide</h1>
+      <p class="eyebrow">DataCamp · Prompt Engineering with the OpenAI API</p>
+      <h1>Prompt Engineering with the OpenAI API Field Guide</h1>
       <p>
-        {{COURSE_SUMMARY_HTML}}
+        A whole-course memory map for designing reliable prompts and chatbot behavior with the OpenAI API. It connects prompt structure, examples, multi-step reasoning, business transformations, structured extraction, validation, role-based chatbots, context grounding, and compact conversation state.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{FIELD_GUIDE_MARKDOWN_FILE}}">Markdown Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Quick Lookup</a>
-        <a class="button secondary" href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a class="button secondary" href="field_guide.md">Markdown Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">Prompt Engineering Quick Lookup</a>
+        <a class="button secondary" href="../lab/lab_run_book.md">Lab Run Book</a>
       </div>
 
       <div class="status-grid">
-        <div class="status-card"><strong>{{PLATFORM_STATUS}}</strong><span>Platform status</span></div>
-        <div class="status-card"><strong>{{DOCUMENTATION_STATUS}}</strong><span>Documentation</span></div>
-        <div class="status-card"><strong>{{LAB_STATUS}}</strong><span>Lab coverage</span></div>
-        <div class="status-card"><strong>{{RECALL_STATUS}}</strong><span>Recall confidence</span></div>
-        <div class="status-card"><strong>{{INTERVIEW_STATUS}}</strong><span>Interview readiness</span></div>
+        <div class="status-card"><strong>COMPLETE</strong><span>Platform status</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Documentation</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Lab coverage</span></div>
+        <div class="status-card"><strong>DEVELOPING</strong><span>Recall confidence</span></div>
+        <div class="status-card"><strong>NEEDS REPETITION</strong><span>Interview readiness</span></div>
       </div>
     </header>
 
@@ -458,35 +458,45 @@ Instructions:
 
           <div class="chapter-grid">
             <article class="chapter-card">
-              <h3><a href="{{CHAPTER_01_FILE}}">{{CHAPTER_01_TITLE}}</a></h3>
-              <p>{{CHAPTER_01_SUMMARY}}</p>
+              <h3><a href="chapter_01_introduction_to_prompt_engineering_best_practices_field_guide.html">Chapter 1 — Introduction to Prompt Engineering Best Practices</a></h3>
+              <p>Prompt roles, clear instructions, delimiters, constraints, output formats, conditional rules, and the first reusable OpenAI helper patterns.</p>
             </article>
 
             <article class="chapter-card">
-              <h3><a href="{{CHAPTER_02_FILE}}">{{CHAPTER_02_TITLE}}</a></h3>
-              <p>{{CHAPTER_02_SUMMARY}}</p>
+              <h3><a href="chapter_02_advanced_prompt_engineering_strategies_field_guide.html">Chapter 2 — Advanced Prompt Engineering Strategies</a></h3>
+              <p>Zero-shot, one-shot, few-shot, dependent multi-step prompts, reasoning formats, self-consistency, and temperature tradeoffs.</p>
             </article>
 
             <article class="chapter-card">
-              <h3><a href="{{CHAPTER_03_FILE}}">{{CHAPTER_03_TITLE}}</a></h3>
-              <p>{{CHAPTER_03_SUMMARY}}</p>
+              <h3><a href="chapter_03_prompt_engineering_for_business_applications_field_guide.html">Chapter 3 — Prompt Engineering for Business Applications</a></h3>
+              <p>Summarization, expansion, translation, tone adjustment, proofreading, classification, entity extraction, JSON output, and deterministic validation.</p>
             </article>
 
             <article class="chapter-card">
-              <h3><a href="{{CHAPTER_04_FILE}}">{{CHAPTER_04_TITLE}}</a></h3>
-              <p>{{CHAPTER_04_SUMMARY}}</p>
+              <h3><a href="chapter_04_prompt_engineering_for_chatbot_development_field_guide.html">Chapter 4 — Prompt Engineering for Chatbot Development</a></h3>
+              <p>System contracts, domain boundaries, roles, external context, sample conversations, structured conversational state, and state validation.</p>
             </article>
           </div>
         </section>
 
         <section class="section" id="big-picture">
           <h2>2. Course Big Picture</h2>
-          <p>{{COURSE_BIG_PICTURE}}</p>
+          <p>Prompt engineering is the design of an input contract between an application and a language model. The contract defines behavior, supplies context, constrains output, and makes the result testable. Reliable systems do not trust fluent output alone: they validate structure, allowed values, source fidelity, safety, and business rules in deterministic code.</p>
 
-          <div class="diagram">{{COURSE_BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">Business or user goal
+  ↓
+System behavior + trusted context
+  ↓
+User request + examples + constraints
+  ↓
+Model response
+  ↓
+Parse and validate
+  ↓
+Accept, retry, reject, or human review</div>
 
           <div class="callout green">
-            <strong>Course punchline:</strong> {{COURSE_PUNCHLINE}}
+            <strong>Course punchline:</strong> A strong prompt narrows the model’s freedom, while application code verifies whether the answer is safe and usable.
           </div>
         </section>
 
@@ -495,33 +505,33 @@ Instructions:
 
           <div class="cheat-grid">
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_1_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_1_SUMMARY}}</p>
+              <h3>Message Roles</h3>
+              <p>System messages define persistent behavior; user messages provide the current request; assistant messages can demonstrate desired behavior.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_2_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_2_SUMMARY}}</p>
+              <h3>Examples and Shots</h3>
+              <p>Zero-shot uses instructions only, one-shot demonstrates one pattern, and few-shot provides several representative examples.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_3_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_3_SUMMARY}}</p>
+              <h3>Constraints and Structure</h3>
+              <p>Define allowed labels, exact fields, word or sentence limits, output order, missing-value behavior, and fallback responses.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_4_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_4_SUMMARY}}</p>
+              <h3>Task Decomposition</h3>
+              <p>Use multi-step prompts when later work depends on earlier results; use concise reasoning formats when intermediate calculations aid review.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_5_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_5_SUMMARY}}</p>
+              <h3>Grounded Business Output</h3>
+              <p>Preserve source meaning during summaries, rewrites, translations, extraction, and code generation; do not let polished prose create new facts.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_6_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_6_SUMMARY}}</p>
+              <h3>Chatbot State and Context</h3>
+              <p>Combine a persistent system contract, recent messages, trusted context, and a validated structured state for stateful chat.</p>
             </article>
           </div>
         </section>
@@ -529,17 +539,33 @@ Instructions:
         <section class="section" id="patterns">
           <h2>4. Core Syntax and Patterns</h2>
 
-          <h3>{{PATTERN_1_TITLE}}</h3>
-          <pre><code>{{PATTERN_1_CODE}}</code></pre>
-          <p>{{PATTERN_1_EXPLANATION}}</p>
+          <h3>Bounded message request</h3>
+          <pre><code>messages = [
+    Message(role="system", content=system_prompt),
+    Message(role="user", content=user_prompt),
+]
+response = ai.get_response(messages=messages)</code></pre>
+          <p>Separate lasting behavior from the current request. This makes the same chatbot contract reusable across many turns.</p>
 
-          <h3>{{PATTERN_2_TITLE}}</h3>
-          <pre><code>{{PATTERN_2_CODE}}</code></pre>
-          <p>{{PATTERN_2_EXPLANATION}}</p>
+          <h3>Fixed-schema extraction</h3>
+          <pre><code>prompt = f"""
+Extract the ticket into valid JSON only.
+Allowed categories: Billing, Technical, Account, General.
+Use null for missing values.
+Do not add extra keys.
+```{ticket}```
+"""</code></pre>
+          <p>A fixed schema turns unstructured text into data that Python can parse and validate.</p>
 
-          <h3>{{PATTERN_3_TITLE}}</h3>
-          <pre><code>{{PATTERN_3_CODE}}</code></pre>
-          <p>{{PATTERN_3_EXPLANATION}}</p>
+          <h3>Structured rolling chat state</h3>
+          <pre><code>state = {
+  "confirmed_facts": [],
+  "recommended_actions": [],
+  "completed_actions": [],
+  "open_questions": []
+}
+# Model proposes updated_state; Python validates before storage.</code></pre>
+          <p>Keep facts, advice, completed work, and unresolved questions separate to reduce memory drift.</p>
         </section>
 
         <section class="section" id="comparisons">
@@ -547,39 +573,39 @@ Instructions:
 
           <div class="compare-grid">
             <article class="compare-card">
-              <h3>{{COMPARE_LEFT_TITLE}}</h3>
-              <p>{{COMPARE_LEFT_SUMMARY}}</p>
+              <h3>Prompt controls</h3>
+              <p>Instructions, examples, delimiters, roles, context, output schemas, temperature, and fallback wording shape the model response.</p>
             </article>
 
             <article class="compare-card">
-              <h3>{{COMPARE_RIGHT_TITLE}}</h3>
-              <p>{{COMPARE_RIGHT_SUMMARY}}</p>
+              <h3>Application controls</h3>
+              <p>JSON parsing, exact-key checks, type checks, allowed-value validation, retries, logging, and human review determine whether the response is accepted.</p>
             </article>
           </div>
 
           <table>
             <thead>
               <tr>
-                <th>{{DECISION_HEADER_1}}</th>
-                <th>{{DECISION_HEADER_2}}</th>
-                <th>{{DECISION_HEADER_3}}</th>
+                <th>Need</th>
+                <th>Prompt pattern</th>
+                <th>Main trap</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{DECISION_ROW_1_COL_1}}</td>
-                <td>{{DECISION_ROW_1_COL_2}}</td>
-                <td>{{DECISION_ROW_1_COL_3}}</td>
+                <td>Teach one format or label mapping</td>
+                <td>One-shot or few-shot example</td>
+                <td>Inconsistent examples teach inconsistent behavior.</td>
               </tr>
               <tr>
-                <td>{{DECISION_ROW_2_COL_1}}</td>
-                <td>{{DECISION_ROW_2_COL_2}}</td>
-                <td>{{DECISION_ROW_2_COL_3}}</td>
+                <td>Process unstructured business text</td>
+                <td>Classification or extraction with fixed JSON schema</td>
+                <td>Valid JSON can still contain incorrect facts.</td>
               </tr>
               <tr>
-                <td>{{DECISION_ROW_3_COL_1}}</td>
-                <td>{{DECISION_ROW_3_COL_2}}</td>
-                <td>{{DECISION_ROW_3_COL_3}}</td>
+                <td>Maintain chatbot continuity</td>
+                <td>Recent messages plus compact structured state</td>
+                <td>Repeated model-written summaries can drift without validation.</td>
               </tr>
             </tbody>
           </table>
@@ -590,23 +616,23 @@ Instructions:
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Using vague instructions</strong>
+              Define the task, audience, source boundary, output format, limits, and acceptance rules.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>Confusing examples with task steps</strong>
+              Shots are demonstrations; steps are dependent stages inside the work.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>Treating model output as validated data</strong>
+              Parse and validate exact keys, types, allowed labels, null behavior, ranges, and source fidelity.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_4_TITLE}}</strong>
-              {{MISTAKE_4_CORRECTION}}
+              <strong>Letting conversation memory rewrite itself freely</strong>
+              Separate confirmed facts from recommendations and completed actions, then validate proposed state updates before storage.
             </article>
           </div>
         </section>
@@ -616,23 +642,23 @@ Instructions:
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>How do you make an LLM output reliable for a data pipeline?</strong>
+              I constrain the task with a fixed schema and allowed values, request machine-readable output, parse it, validate keys and types in deterministic code, and route failures to retry or review.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>When would you use few-shot prompting?</strong>
+              When instructions alone do not reliably convey the desired label mapping, style, structure, or edge-case behavior. I choose representative and consistent examples.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>How would you design a stateful chatbot?</strong>
+              I combine a system contract, a small window of recent messages, and compact structured state. The model proposes a state update, but application code validates it before storage.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_4}}</strong>
-              {{INTERVIEW_ANSWER_4}}
+              <strong>What is the role of the system prompt?</strong>
+              It defines persistent purpose, domain, tone, response rules, boundaries, fallback behavior, and small trusted context for the conversation.
             </article>
           </div>
         </section>
@@ -649,53 +675,56 @@ Instructions:
             </thead>
             <tbody>
               <tr>
-                <td>{{LAB_AREA_1}}</td>
-                <td>{{LAB_RESULT_1}}</td>
+                <td>Foundational prompts</td>
+                <td>Roles, constraints, delimiters, output formatting, and weak-versus-precise prompts were run locally.</td>
               </tr>
               <tr>
-                <td>{{LAB_AREA_2}}</td>
-                <td>{{LAB_RESULT_2}}</td>
+                <td>Advanced strategies</td>
+                <td>Zero/one/few-shot, multi-step, reasoning, self-consistency, and temperature comparisons were preserved as separate files.</td>
               </tr>
               <tr>
-                <td>{{LAB_AREA_3}}</td>
-                <td>{{LAB_RESULT_3}}</td>
+                <td>Business extraction</td>
+                <td>Ticket classification and entity extraction produced JSON that Python parsed and validated.</td>
               </tr>
               <tr>
-                <td>{{LAB_AREA_4}}</td>
-                <td>{{LAB_RESULT_4}}</td>
+                <td>Chatbot state</td>
+                <td>Structured rolling state separated facts, recommendations, completed actions, and open questions, with key/type validation.</td>
               </tr>
             </tbody>
           </table>
 
           <div class="callout green">
-            {{LAB_SUMMARY}}
+            The local lab is strong: it preserves a progressive set of runnable examples across all four chapters instead of overwriting one exercise file.
           </div>
         </section>
 
         <section class="section" id="memory">
           <h2>9. Quick Memory Nuggets</h2>
 
-          <pre><code>{{MEMORY_BLOCK_1}}</code></pre>
+          <pre><code>Prompt quality = clear task + relevant context + explicit constraints + testable output</code></pre>
 
-          <pre><code>{{MEMORY_BLOCK_2}}</code></pre>
+          <pre><code>LLM proposes
+Python validates
+Application accepts, retries, rejects, or reviews</code></pre>
 
-          <pre><code>{{MEMORY_BLOCK_3}}</code></pre>
+          <pre><code>System contract + recent turns + structured state + current request
+→ stateful chatbot response</code></pre>
 
           <div class="callout amber">
-            <strong>Final review:</strong> {{FINAL_REVIEW_NOTE}}
+            <strong>Final review:</strong> Review by pattern, not by chapter only: roles, examples, constraints, transformations, structured extraction, validation, context grounding, and state management.
           </div>
         </section>
       </div>      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} · Main Field Guide</span>
+      <span>Prompt Engineering with the OpenAI API · Main Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{FIELD_GUIDE_MARKDOWN_FILE}}">Markdown Guide</a>
+        <a href="field_guide.md">Markdown Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{QUICK_LOOKUP_FILE}}">Quick Lookup</a>
+        <a href="sql_quick_lookup.html">Quick Lookup</a>
       </span>
     </footer>
   </main>
