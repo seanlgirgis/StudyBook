@@ -1,0 +1,55 @@
+1. Prompt engineering for chatbot development
+00:00 - 00:04
+Let's explore prompt engineering for chatbot development.
+
+2. The need for prompt engineering for chatbots
+00:04 - 00:29
+Effective prompts help optimize the use of LLMs. But why is prompt engineering vital for chatbot development? Predicting user questions is challenging, even with valuable data on site searches and queries. This is where prompt engineering can guide the chatbot's behavior in answering questions, ensuring reliable and effective responses.
+
+3. Chatbot prompt engineering with OpenAI API
+00:29 - 00:38
+How do we achieve this using the OpenAI API? Recall that every message we send has a designated role.
+
+4. Chatbot prompt engineering with OpenAI API
+00:38 - 00:45
+Until now, we've only examined user messages due to the emphasis on user prompts.
+
+5. Chatbot prompt engineering with OpenAI API
+00:45 - 00:53
+We will focus on system messages to build a chatbot since these guide the model behavior when answering users.
+
+6. Chat completions endpoint for chatbot development
+00:53 - 01:26
+The chat completion endpoint is ideal for chatbot development. Via this endpoint, we send messages as lists, each with a specific role. In this example, we send a system message that directs the chatbot to act as an expert data scientist, simplifying complex ideas, followed by a user message seeking an explanation of prompt engineering. In output, we observe how the response uses an analogy of instructing a robot to prepare a sandwich.
+
+7. Changing get_response() for chatbot
+01:26 - 01:45
+Previously, we wrapped code into the `get_response` function for a single prompt. Now, we will modify it to receive two prompts: a system and a user prompt. We will have to pass two messages to the function whenever we call it.
+
+8. System message: define purpose
+01:45 - 02:18
+The first thing to specify in a system's message is the chatbot's purpose. For instance, if we build a financial chatbot, we can give the model this information through the system prompt, and when a user asks a question like 'Who are you?', the model will know how to answer. Specifying the purpose will let the chatbot know what questions to expect. Clear purpose improves domain-accurate assistance, while vague or undefined purposes may lead to irrelevant answers.
+
+9. System message: response guidelines
+02:18 - 02:50
+We should also incorporate clear response guidelines to direct the model's behavior, including the target audience, expected tone, output length, and output structure. We won't need to define everything but should be specific about what suits our use case. In the example of a financial chatbot, we might direct the model to respond precisely, formally, and objectively. Suppose a user asks for the chatbot's opinion about cryptocurrencies through a user prompt.
+
+10. System message: response guidelines
+02:50 - 03:04
+We see how the chatbot answers precisely, starting with a definition of cryptocurrencies, and then detailing their advantages and disadvantages to remain objective. And finally, it provides a summary.
+
+11. System message: behavior guidance
+03:04 - 03:17
+We'll also want to consider using conditional for behavior guidance, guiding the model on how to respond. For example, we might not want the financial chatbot to answer queries not related to finance.
+
+12. System message: behavior guidance
+03:17 - 03:25
+To do so, we tell the model in the system prompt to answer financial questions to the best of its knowledge,
+
+13. System message: behavior guidance
+03:25 - 03:40
+and for the other questions, the answer should be 'Sorry, I only know about finance'. Consequently, if a user asks about the weather, the chatbot will clarify that its only domain is finance.
+
+14. Let's practice!
+03:40 - 03:43
+Time to practice.

@@ -1,0 +1,59 @@
+1. Text analysis
+00:00 - 00:04
+It's time to analyze text using effective prompts.
+
+2. Text analysis
+00:04 - 00:27
+Text analysis is the process of examining text to extract relevant information. This video explores text classification and entity extraction techniques using sample customer data. Note that these examples are fictional, and companies should seek legal advice for using customer data in compliance with privacy regulations.
+
+3. Text classification
+00:27 - 00:42
+In text classification, the goal is to assign one of several potential categories to a given text. A common example is sentiment analysis, which categorizes text as positive, negative, or neutral.
+
+4. Specified categories
+00:42 - 01:08
+To classify texts effectively, we should specify the classification categories and output requirements in the prompt. For instance, when asking the model to classify the sentiment of a smartwatch review, we explicitly mention the options as positive, negative, or neutral, and request a one-word response. The model responds according to our specifications.
+
+5. Unspecified categories
+01:08 - 01:29
+When classification categories are not specified, the model relies on its internal knowledge. Using the previous prompt without defining categories will still work for standard sentiment analysis. However, for more complex cases, it's best to specify classes to ensure expected outcomes.
+
+6. Multiple classes
+01:29 - 01:56
+Texts can fit multiple classes, such as a review expressing several emotions. Without a predetermined list, the best practice is to ask the model to specify a maximum number of classes when specifying emotions. For the smartwatch review, we instruct the model to list up to three emotions. The model identifies the customer as impressed, positive, and comfortable.
+
+7. Entity extraction
+01:56 - 02:10
+Another form of analyzing text is through entity extraction, where the goal is to extract specific entities from a given text, including names, places, organizations, and dates.
+
+8. Entity extraction: specify entities
+02:10 - 02:25
+To extract entities effectively, we should specify the entities to extract and the desired output format. Here, we have a product description for a mobile phone, and we instruct the model to identify the product name,
+
+9. Entity extraction: specify entities
+02:25 - 02:26
+display size,
+
+10. Entity extraction: specify entities
+02:26 - 02:28
+and camera resolution,
+
+11. Entity extraction: specify entities
+02:28 - 02:32
+while formatting the answer as an unordered list.
+
+12. Entity extraction: specify entities
+02:32 - 02:41
+We see how the model extracts the product name, display size, and camera resolution, formatting them as requested.
+
+13. Entity extraction with few-shot prompts
+02:41 - 03:16
+When entities and their structure are too complex to explain, we can use a few-shot prompt. Suppose we have two support ticket examples from two customers using a travel booking application and their extracted entities. The structure is complex, with parent entities like 'customer' and 'reservation details', and sub-entities that vary depending on the information found in the corresponding ticket. For instance, entities_1 has phone, but entities_2 does not.
+
+14. Entity extraction with few-shot prompts
+03:16 - 03:49
+Suppose we have this new ticket, ticket_3, from a customer named David and want to extract its entities in the same way as the previous two tickets. We formulate a few-shot prompt containing the example tickets, their extracted entities, and the new ticket. The model extracts the entities from ticket_3, following a similar structure to the provided examples and capturing new sub-entities such as the customer ID.
+
+15. Let's practice!
+03:49 - 03:52
+Let's practice!

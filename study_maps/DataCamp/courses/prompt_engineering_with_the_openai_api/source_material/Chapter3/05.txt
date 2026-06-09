@@ -1,0 +1,47 @@
+1. Text transformation
+00:00 - 00:08
+Now, we will explore text transformation applications and how effective prompt engineering facilitates them.
+
+2. Text transformation
+00:08 - 00:27
+As the name suggests, text transformation changes a given text to create new text while maintaining the same information. Applications include language translation, tone adjustment, and writing improvement, all achievable with LLMs using effective prompts.
+
+3. Language translation
+00:27 - 00:48
+Let's explore language translation first. When asking the LLM to translate a text, we should specify input and output languages in the prompt. For example, here we have an English product description for an electric scooter, and we ask the model to translate it to French.
+
+4. If text language is unknown ...
+00:48 - 01:00
+But what if the language of the input text is unknown? We can ask the model, with a delimited prompt, to name the language. Here, the text is written in German.
+
+5. Multilingual translation
+01:00 - 01:25
+We can translate text from one language to multiple languages simultaneously. Here, we ask the model to translate an English product review into French, Spanish, and German, and the model generates the requested translations. Companies may use LLMs for initial translations but should verify accuracy, especially for customer-facing content.
+
+6. Tone adjustment
+01:25 - 01:46
+With tone adjustment, text is re-written to suit various business needs. For instance, a marketing company might have an informal promotional message about its summer sales. We can ask the model to rephrase it more formally and with a persuasive tone by specifying this in the prompt.
+
+7. Tone adjustment
+01:46 - 02:00
+The text is now transformed into a professional invitation for customers to explore remarkable summer sales, highlighting unique benefits. The tone and structure are more formal and polished.
+
+8. Tone adjustment: specify audience
+02:00 - 02:25
+To adapt a text's tone, we can specify the target audience, a key strategy in effective communication. For instance, a product description with technical jargon about microprocessors and algorithms can be rephrased for a non-technical audience. We can ask the model to re-write it this way, making it more accessible to the target audience.
+
+9. Grammar and writing improvements
+02:25 - 02:49
+Text transformation also includes grammar and writing improvements. To correct spelling, grammar, and punctuation without changing the structure, we can ask the model for proofreading. For instance, in this text inviting for collaboration, the model can correct typos and grammar mistakes without altering the style or structure.
+
+10. Grammar and writing improvements
+02:49 - 03:15
+However, if we want the model to enhance the clarity of our text by modifying its structure while retaining the same meaning, we should ask it to proofread and restructure the text for enhanced readability, flow, and coherence. In this case, using the same text with the spelling errors, we observe how the structure becomes more readable and well-written.
+
+11. Multiple transformations
+03:15 - 03:40
+Finally, we can perform multiple transformations at once using multi-step prompts. Suppose we have the following text for a product review written informally with many errors. We ask the model to proofread it first, then rewrite it in a professional tone. The model corrects the text in step 1, and rewrites it in step 2.
+
+12. Let's practice!
+03:40 - 03:42
+Let's practice!

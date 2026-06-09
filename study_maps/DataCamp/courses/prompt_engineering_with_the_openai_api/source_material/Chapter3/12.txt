@@ -1,0 +1,59 @@
+1. Code generation and explanation
+00:00 - 00:12
+The final business applications we will cover are code generation and explanation. Let's explore creating and explaining code snippets with effective prompts.
+
+2. Code generation
+00:12 - 00:28
+Code generation creates code to solve a problem and is essential in any domain that uses software. Using LLMs for this purpose requires a solid understanding of the generated code for practical use.
+
+3. Code generation prompts
+00:28 - 00:59
+To generate code, the prompt should include the problem description, target programming language, and desired format, such as script, function, or class. For example, asking for a Python function to calculate average sales per quarter, the model generates a function named `calculate_average_sales` that takes a `quarterly_sales` list, sums the elements, divides by the list length, and returns the average.
+
+4. Input-output examples
+00:59 - 01:25
+Sometimes, we use input-output examples instead of explicit problem descriptions to generate a program. For example, here we have input lists of quarterly sales, of four numbers each, and corresponding outputs, but we need to understand how outputs are generated based on the lists. We can ask the model to write a Python program for this.
+
+5. Input-output examples
+01:25 - 01:38
+The model first identifies that an average function maps each input to its output. Then, it provides the corresponding function and shows how it applies to the examples.
+
+6. Code modification
+01:38 - 01:59
+Instead of generating code from scratch, we can ask the model to modify existing code. For example, given a Python script that calculates and prints `total_sales` from a `quarterly_sales` list, we can ask the model to transform it into a function that we can call to compute the total sales.
+
+7. Code modification
+01:59 - 02:09
+The model generates the requested function that computes the total sales, and the modified script that calls it on a quarterly_sales list.
+
+8. Multiple code modifications
+02:09 - 02:21
+We can include multiple modifications in a single prompt. Using the same script we had, we can ask the model to allow users to input parameters interactively
+
+9. Multiple code modifications
+02:21 - 02:26
+and test if they are positive, returning an error message if they are not.
+
+10. Multiple code modifications
+02:26 - 02:39
+The model makes the necessary changes: the code now takes four inputs interactively, displays an error message for negative values, and computes the `total_sales`.
+
+11. Code explanation
+02:39 - 02:50
+Sometimes, pieces of code can become very difficult to interpret, especially if they are lengthy. LLMs can help explain such code.
+
+12. Code explanation requirements
+02:50 - 03:09
+When asking the model to explain a specific code, we should specify the desired explanation length. For example, asking for a one-sentence explanation results in a high-level summary, like stating that the code calculates the average sales per quarter.
+
+13. Detailed code explanation
+03:09 - 03:22
+We can also ask the model to explain the code in detail. In this case, we use a chain-of-thought prompt, asking the model to think step by step. We apply this prompt for the same code we had earlier.
+
+14. Detailed code explanation
+03:22 - 03:44
+The model will take one code chunk at a time and explain its functionality. It explains step by step what happens in each part, starting with the function definition, moving into the computation, and then returning the result. Finally, it summarizes the purpose of the code.
+
+15. Let's practice!
+03:44 - 03:46
+Time to practice!

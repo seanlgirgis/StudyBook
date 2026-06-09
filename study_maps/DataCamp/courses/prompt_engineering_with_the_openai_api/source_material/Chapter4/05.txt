@@ -1,0 +1,59 @@
+1. Role-playing prompts for chatbots
+00:00 - 00:09
+An important aspect to discuss when talking about chatbot development is role-playing prompts. Let's see what these are.
+
+2. Role-playing prompts
+00:09 - 00:45
+Role-playing prompts instruct the chatbot to adopt a specific role, like an actor in a play being given a character to portray. This means adjusting tone, vocabulary, and behavior to fit the role's requirements, providing tailored responses instead of generic ones. This approach ensures effective interactions, especially for domain-specific chatbots. The chatbot learns these roles from its training data. We'll start with an example to understand role-playing prompts, then move to implementation.
+
+3. Role-playing example
+00:45 - 01:02
+Imagine we're developing a chatbot for a company offering high-tech products. A customer asks about the technical specifications of a certain product. We've defined three roles for the chatbot: customer support agent,
+
+4. Role-playing example
+01:02 - 01:03
+product manager,
+
+5. Role-playing example
+01:03 - 01:09
+and sales engineer. How would each of these roles answer the user query?
+
+6. Customer support agent
+01:09 - 01:19
+The customer support agent provides general guidance, directs customers to the website for more details, and offers assistance.
+
+7. Product manager
+01:19 - 01:27
+The product manager highlights strategic benefits, focusing on how the product aligns with goals and professional needs.
+
+8. Sales engineer
+01:27 - 01:40
+The sales engineer focuses on technical specifics, discussing processor details, features, and security. From this example, we can see how each role can affect the response.
+
+9. Role-playing prompts
+01:40 - 02:02
+And now let's move to implementation. We have to tell the model to act as a specific role, no matter what that role is. For instance, we can ask the model to act as an expert financial analyst and then ask it to offer insights about retirement planning for individuals approaching retirement age.
+
+10. Expert financial analyst
+02:02 - 02:14
+We see how the response gets shaped as if a real expert in financial analysis is providing it, highlighting several considerations to remember when planning their retirement.
+
+11. More effective role-playing
+02:14 - 02:44
+Role-playing prompts involve assigning specific requirements beyond assigning a role. For instance, although two journalists share the same profession, they might differ in traits such as personality and expertise. For example, we can ask the chatbot to embody a seasoned technology journalist specializing in thorough tech industry analysis. Then, ask about the impact of AI on job markets.
+
+12. Technology journalist
+02:44 - 02:54
+Here, we can see how the model responds as a journalist with the qualities we described, providing a detailed analysis of the topic in the article.
+
+13. Role-playing with requirements
+02:54 - 03:13
+As a final note, we should keep in mind that role-playing does not eliminate the need to specify other requirements like behavior or response guidelines. For instance, in the journalist chatbot scenario, if we want it to exclusively handle tech-related questions,
+
+14. Role-playing with requirements
+03:13 - 03:27
+we modify the prompt to test this condition and let it display an appropriate message if not satisfied. If a user asks about a topic like American literature, the chatbot will clarify its specialization in technology.
+
+15. Let's practice!
+03:27 - 03:31
+Time to put this into practice!

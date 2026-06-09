@@ -1,0 +1,27 @@
+1. Congratulations
+00:00 - 00:11
+Congratulations on completing the course! Throughout this learning journey, you've mastered the intricacies of prompt engineering for optimal results with language models.
+
+2. Chapter 1
+00:11 - 00:24
+In Chapter 1, you laid the foundation by understanding prompt engineering principles and best practices, including delimited and conditional prompts and structured outputs.
+
+3. Chapter 2
+00:24 - 00:37
+In Chapter 2, you leveled up your skills with advanced techniques like few-shot, multi-step, chain-of-thought, self-consistency, and iterative prompting to tackle complex tasks.
+
+4. Chapter 3
+00:37 - 00:49
+Then, you applied all these techniques in Chapter 3, where you ventured into real-world business applications, relying on techniques like text summarization, expansion, and more.
+
+5. Chapter 4
+00:49 - 01:00
+In Chapter 4, you became a chatbot virtuoso and mastered system prompt design through techniques like role-playing and adding external context.
+
+6. Final note
+01:00 - 01:31
+It's worth remembering that while prompt engineering enhances performance and yields better outcomes from a language model, such models have limitations, just like any other system. And even with precise prompt engineering, desired results are not always guaranteed. For this reason, you should always review the answers meticulously for accuracy and potential bias and avoid using them mindlessly to ensure the most optimal performance.
+
+7. Keep it up!
+01:31 - 01:42
+Thank you for being a part of this incredible journey. Stay curious, stay creative, and continue to push the boundaries of prompt engineering!

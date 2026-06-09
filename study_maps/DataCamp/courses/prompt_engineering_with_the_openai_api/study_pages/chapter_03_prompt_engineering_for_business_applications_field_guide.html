@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
 TEMPLATE USAGE
-Replace every {{PLACEHOLDER}} with section-specific content.
+Replace every PLACEHOLDER with section-specific content.
 Keep the CSS and layout stable unless the course requires a deliberate design change.
 Recommended filename pattern:
 chapter_XX_section_slug_field_guide.html
@@ -10,7 +10,7 @@ chapter_XX_section_slug_field_guide.html
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{SECTION_NUMBER}} — {{SECTION_TITLE}} | {{COURSE_TITLE}}</title>
+  <title>Chapter 3 — Prompt Engineering for Business Applications | Prompt Engineering with the OpenAI API</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -366,25 +366,26 @@ chapter_XX_section_slug_field_guide.html
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Prompt Engineering with the OpenAI API</a>
       <span>›</span>
-      <span>{{SECTION_NUMBER}}: {{SECTION_TITLE}}</span>
+      <span>Chapter 3: Prompt Engineering for Business Applications</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} · Chapter 1</p>
-      <h1>{{SECTION_TITLE}}</h1>
+      <p class="eyebrow">Prompt Engineering with the OpenAI API · Chapter 3</p>
+      <h1>Prompt Engineering for Business Applications</h1>
       <p>
-        {{SECTION_SUMMARY_HTML}}
+        Apply prompt-engineering techniques to practical business work: summarize and expand text, translate and rewrite content, classify and extract information, and generate, modify, or explain code.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Join Quick Lookup</a>
-        <a class="button secondary" href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="chapter_02_advanced_prompt_engineering_strategies_field_guide.html">Previous: Advanced Strategies</a>
+        <a class="button secondary" href="sql_quick_lookup.html">Prompt Engineering Quick Lookup</a>
+        <a class="button secondary" href="chapter_04_prompt_engineering_for_chatbot_development_field_guide.html">Next: Chatbot Development</a>
       </div>
     </header>
 
@@ -392,91 +393,128 @@ chapter_XX_section_slug_field_guide.html
       <aside class="toc">
         <h2>Section Contents</h2>
         <a href="#big-picture">1. Big picture</a>
-        <a href="#concept-1">2. {{CONCEPT_1_TITLE}}</a>
-        <a href="#concept-2">3. {{CONCEPT_2_TITLE}}</a>
-        <a href="#concept-3">4. {{CONCEPT_3_TITLE}}</a>
+        <a href="#concept-1">2. Summarization and Expansion</a>
+        <a href="#concept-2">3. Transformation and Analysis</a>
+        <a href="#concept-3">4. Code Generation, Modification, and Explanation</a>
         <a href="#worked-example">5. Worked example</a>
         <a href="#validation">6. Validation</a>
         <a href="#mistakes">7. Common mistakes</a>
         <a href="#interview">8. Interview translation</a>
         <a href="#review">9. Memory review</a>
+        <a href="#practice-trail">10. Practice trail</a>
       </aside>
 
       <div class="content">
         <section class="section" id="big-picture">
           <h2>1. Big Picture</h2>
-          <p>{{BIG_PICTURE_EXPLANATION}}</p>
+          <p>Business prompting is less about asking the model to write something and more about defining a repeatable transformation. A useful business prompt states the source text or code, the operation to perform, the audience or business goal, the required structure, and the limits that make the result reviewable.</p>
 
-          <div class="diagram">{{BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">Business input
+  ↓
+Choose the operation
+  ├─ summarize or expand
+  ├─ translate, adjust tone, or improve writing
+  ├─ classify or extract entities
+  └─ generate, modify, or explain code
+  ↓
+Specify audience, focus, format, and limits
+  ↓
+Generate output
+  ↓
+Validate meaning, facts, privacy, and correctness</div>
 
           <div class="mini-grid">
             <article class="mini-card">
-              <h3>{{CONCEPT_1_TITLE}}</h3>
-              <p>{{CONCEPT_1_SUMMARY}}</p>
+              <h3>Summarization and Expansion</h3>
+              <p>Compress long material while preserving meaning, or expand short notes into coherent business communication.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_2_TITLE}}</h3>
-              <p>{{CONCEPT_2_SUMMARY}}</p>
+              <h3>Transformation and Analysis</h3>
+              <p>Translate, adapt tone, proofread, classify, and extract entities with explicit categories and output rules.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_3_TITLE}}</h3>
-              <p>{{CONCEPT_3_SUMMARY}}</p>
+              <h3>Code Generation, Modification, and Explanation</h3>
+              <p>Describe the programming problem, target language, desired code form, and explanation depth.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_4_TITLE}}</h3>
-              <p>{{CONCEPT_4_SUMMARY}}</p>
+              <h3>Business Validation</h3>
+              <p>Treat model output as a draft: verify translations, customer-facing claims, extracted entities, and generated code.</p>
             </article>
           </div>
 
           <div class="callout green">
-            <strong>Section punchline:</strong> {{SECTION_PUNCHLINE}}
+            <strong>Section punchline:</strong> For business applications, a prompt should define the operation, preserve the intended meaning, and make the result easy to inspect and validate.
           </div>
         </section>
 
         <section class="section" id="concept-1">
-          <h2>2. {{CONCEPT_1_TITLE}}</h2>
-          <p>{{CONCEPT_1_EXPLANATION}}</p>
+          <h2>2. Summarization and Expansion</h2>
+          <p>Summarization condenses source material while preserving its essential meaning. Strong summarization prompts specify a length limit, output structure, and focus area. Expansion performs the reverse operation: it turns notes or bullet points into coherent text while controlling tone, audience, length, and structure.</p>
 
-          <pre><code>{{CONCEPT_1_CODE_EXAMPLE}}</code></pre>
+          <pre><code>review = &quot;&quot;&quot;The smartwatch is light, comfortable, and easy to use.
+The battery lasts several days, but the screen is difficult to read outdoors.&quot;&quot;&quot;
+
+prompt = f&quot;&quot;&quot;
+Summarize the review delimited by triple backticks.
+Use exactly three bullet points.
+Focus on product strengths, drawbacks, and user experience.
+
+```{review}```
+&quot;&quot;&quot;</code></pre>
 
           <div class="callout">
-            <strong>What to notice:</strong> {{CONCEPT_1_NOTICE}}
+            <strong>What to notice:</strong> “Summarize this” is valid but underspecified. Sentence count, bullet count, focus, and audience turn it into a repeatable business instruction. Expansion also needs a guardrail: expand the wording without inventing causes, promises, applications, or business facts.
           </div>
         </section>
 
         <section class="section" id="concept-2">
-          <h2>3. {{CONCEPT_2_TITLE}}</h2>
-          <p>{{CONCEPT_2_EXPLANATION}}</p>
+          <h2>3. Transformation and Analysis</h2>
+          <p>Text transformation preserves the underlying information while changing language, tone, readability, or structure. Text analysis extracts meaning from text through classification or entity extraction. For classification, define the allowed categories and output shape. For entity extraction, name the entities and the exact structure to return. Few-shot examples help when the entity structure is too complex to describe cleanly.</p>
 
-          <pre><code>{{CONCEPT_2_CODE_EXAMPLE}}</code></pre>
+          <pre><code>ticket = &quot;&quot;&quot;Customer David, ID C-1042, needs to change reservation R-778
+from Dallas to Chicago on July 18.&quot;&quot;&quot;
+
+prompt = f&quot;&quot;&quot;
+Extract the following entities from the ticket:
+- customer name
+- customer ID
+- reservation ID
+- origin
+- destination
+- travel date
+
+Return a JSON object. Use null for missing values.
+
+```{ticket}```
+&quot;&quot;&quot;</code></pre>
 
           <div class="callout amber">
-            <strong>Common trap:</strong> {{CONCEPT_2_TRAP}}
+            <strong>Common trap:</strong> Do not let the model invent categories, entities, relationships, or missing values. Define the allowed classes, exact output schema, and an explicit fallback such as <code>null</code> or <code>N/A</code>. Parse and validate machine-facing output in Python before accepting it.
           </div>
         </section>
 
         <section class="section" id="concept-3">
-          <h2>4. {{CONCEPT_3_TITLE}}</h2>
-          <p>{{CONCEPT_3_EXPLANATION}}</p>
+          <h2>4. Code Generation, Modification, and Explanation</h2>
+          <p>Code-generation prompts should include the problem, target programming language, and desired artifact type such as a function, class, or complete script. Existing code can be supplied for modification, with each requested change stated explicitly. Code-explanation prompts should define the intended audience and explanation depth.</p>
 
           <table>
             <thead>
               <tr>
-                <th>{{TABLE_HEADER_1}}</th>
-                <th>{{TABLE_HEADER_2}}</th>
-                <th>{{TABLE_HEADER_3}}</th>
+                <th>Business task</th>
+                <th>Prompt must specify</th>
+                <th>Validation focus</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{TABLE_ROW_1_COL_1}}</td>
-                <td>{{TABLE_ROW_1_COL_2}}</td>
-                <td>{{TABLE_ROW_1_COL_3}}</td>
+                <td>Text work</td>
+                <td>Operation, source text, audience, tone, focus, length, and structure.</td>
+                <td>Meaning preserved, claims accurate, translation and tone appropriate.</td>
               </tr>
               <tr>
-                <td>{{TABLE_ROW_2_COL_1}}</td>
-                <td>{{TABLE_ROW_2_COL_2}}</td>
-                <td>{{TABLE_ROW_2_COL_3}}</td>
+                <td>Code work</td>
+                <td>Problem, language, function/class/script format, inputs, outputs, and constraints.</td>
+                <td>Syntax, edge cases, security, tests, and whether the code actually solves the problem.</td>
               </tr>
             </tbody>
           </table>
@@ -484,26 +522,42 @@ chapter_XX_section_slug_field_guide.html
 
         <section class="section" id="worked-example">
           <h2>5. Worked Example</h2>
-          <p>{{WORKED_EXAMPLE_INTRO}}</p>
+          <p>This support-ticket example combines transformation, classification, entity extraction, and structured output in one bounded business task.</p>
 
-          <pre><code>{{WORKED_EXAMPLE_CODE}}</code></pre>
+          <pre><code>ticket = &quot;&quot;&quot;I am David, customer C-1042. My reservation R-778 is for Dallas
+to Chicago on July 18, but I need to move it to July 20. Please help urgently.&quot;&quot;&quot;
+
+prompt = f&quot;&quot;&quot;
+Analyze the support ticket delimited by triple backticks.
+
+1. Rewrite it as a concise professional support summary.
+2. Classify urgency as High, Medium, or Low.
+3. Extract customer name, customer ID, reservation ID, route, old date, and new date.
+
+Return exactly these sections:
+SUMMARY:
+URGENCY:
+ENTITIES:
+
+```{ticket}```
+&quot;&quot;&quot;</code></pre>
 
           <div class="callout green">
-            <strong>Result:</strong> {{WORKED_EXAMPLE_RESULT}}
+            <strong>Result:</strong> The output is useful because it preserves the request, constrains the urgency labels, and exposes the extracted details in a reviewable structure.
           </div>
         </section>
 
         <section class="section" id="validation">
           <h2>6. Validation and Troubleshooting</h2>
           <ul>
-            <li>{{VALIDATION_ITEM_1}}</li>
-            <li>{{VALIDATION_ITEM_2}}</li>
-            <li>{{VALIDATION_ITEM_3}}</li>
-            <li>{{VALIDATION_ITEM_4}}</li>
+            <li>Compare summaries and rewrites with the source to ensure no essential fact was lost or changed.</li>
+            <li>Have fluent speakers or approved translation tools verify customer-facing translations.</li>
+            <li>Check classification labels and extracted entities against known examples, including missing-value cases.</li>
+            <li>Run, test, and review generated code; never assume syntactically plausible code is production-ready.</li>
           </ul>
 
           <div class="callout danger">
-            <strong>Red flag:</strong> {{VALIDATION_RED_FLAG}}
+            <strong>Red flag:</strong> A polished response can still contain fabricated facts, privacy-sensitive content, incorrect entities, or unsafe code.
           </div>
         </section>
 
@@ -512,18 +566,18 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Asking for a generic summary</strong>
+              State the length, structure, audience, and focus. “Three bullets focused on risks and recommendations” is testable; “summarize this” is not.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>Changing meaning during transformation</strong>
+              Tell the model what must remain unchanged. Distinguish proofreading from restructuring, and review the result against the source.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>Trusting generated code without execution</strong>
+              Specify inputs, outputs, edge cases, and constraints, then run tests and inspect the implementation before reuse.
             </article>
           </div>
         </section>
@@ -533,18 +587,18 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>How would you improve a text-summarization prompt?</strong>
+              I would define the intended audience, length limit, output structure, and the aspects the summary must emphasize, then compare the result with the source for meaning preservation.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>What is the difference between proofreading and rewriting?</strong>
+              Proofreading corrects grammar, spelling, and punctuation while preserving style and structure. Rewriting may change structure, tone, and flow while retaining the underlying meaning.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>What information belongs in a code-generation prompt?</strong>
+              The problem, target language, artifact type, inputs, outputs, constraints, edge cases, and expected format. Generated code must still be tested and reviewed.
             </article>
           </div>
         </section>
@@ -555,40 +609,84 @@ chapter_XX_section_slug_field_guide.html
           <div class="memory-box">
             <strong>Section summary</strong>
             <ol>
-              <li>{{MEMORY_RULE_1}}</li>
-              <li>{{MEMORY_RULE_2}}</li>
-              <li>{{MEMORY_RULE_3}}</li>
-              <li>{{MEMORY_RULE_4}}</li>
+              <li>Summarization compresses; expansion elaborates.</li>
+              <li>Transformation changes presentation while preserving meaning.</li>
+              <li>Classification needs allowed labels; extraction needs named entities and a schema.</li>
+              <li>Generated code is a draft until it is executed, tested, and reviewed.</li>
             </ol>
           </div>
 
           <h3>Quick self-check</h3>
           <ul>
-            <li>{{SELF_CHECK_1}}</li>
-            <li>{{SELF_CHECK_2}}</li>
-            <li>{{SELF_CHECK_3}}</li>
-            <li>{{SELF_CHECK_4}}</li>
+            <li>Can I write a summary prompt with a measurable length, structure, and focus?</li>
+            <li>Can I distinguish proofreading, restructuring, tone adjustment, and translation?</li>
+            <li>Can I define classes or an extraction schema with explicit missing-value behavior?</li>
+            <li>Can I describe and validate a code-generation or code-modification request?</li>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> {{LAB_DECISION}}
+            <strong>Lab decision:</strong> Chapter 3 now has a replayable nine-file lab under <code>lab/chapter_03/</code>, progressing from business writing tasks to structured extraction, JSON parsing, deterministic validation, and safe acceptance or rejection.
           </div>
 
           <div class="callout green">
-            <strong>Completion standard:</strong> {{COMPLETION_STANDARD}}
+            <strong>Completion standard:</strong> You can turn a business objective into a bounded prompt, produce a structured result, and explain how you would validate the output before use.
           </div>
         </section>
+
+        <section class="section" id="practice-trail">
+          <h2>10. Practice Trail and Business Pipeline</h2>
+          <p>The Chapter 3 lab preserves one runnable file per business pattern. The sequence moves from human-facing content transformation into machine-facing extraction and validation.</p>
+          <table>
+            <thead><tr><th>Exercise</th><th>Validated lesson</th></tr></thead>
+            <tbody>
+              <tr><td><code>01_business_summary.py</code></td><td>Three-bullet summary covering result, concern, and action.</td></tr>
+              <tr><td><code>02_business_expansion.py</code></td><td>Expansion with explicit protection against unsupported interpretation.</td></tr>
+              <tr><td><code>03_tone_adjustment.py</code></td><td>Professional and empathetic tone without false promises.</td></tr>
+              <tr><td><code>04_business_translation.py</code></td><td>Meaning, timing, and tone preserved across languages.</td></tr>
+              <tr><td><code>05_proofreading.py</code></td><td>Grammar correction without broad creative rewriting.</td></tr>
+              <tr><td><code>06_ticket_classification_and_extraction.py</code></td><td>Fixed-label classification plus named-entity extraction.</td></tr>
+              <tr><td><code>07_json_entity_extraction.py</code></td><td>Fixed-key, machine-readable JSON with no Markdown wrapper.</td></tr>
+              <tr><td><code>08_parse_and_validate_json.py</code></td><td>JSON parsing plus allowed-value and type validation.</td></tr>
+              <tr><td><code>09_safe_json_validation.py</code></td><td>Safe accept/reject handling without crashing the pipeline.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="diagram">Unstructured business text
+  ↓
+Constrained prompt
+  ↓
+Structured JSON
+  ↓
+json.loads(...)
+  ↓
+Key, type, and allowed-value validation
+  ↓
+Accept, reject, retry, or human review</div>
+
+          <div class="callout green">
+            <strong>Data-engineering pattern:</strong> the model proposes structure, deterministic code validates it, and the pipeline decides whether to accept, reject, retry, or route the record for review.
+          </div>
+
+          <div class="callout danger">
+            <strong>Production caution:</strong> valid JSON is not the same as correct data. Validate exact keys, required fields, types, allowed labels, ranges, source fidelity, and privacy requirements before loading downstream.
+          </div>
+        </section>
+
       </div>      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} · {{SECTION_NUMBER}} Field Guide</span>
+      <span>Prompt Engineering with the OpenAI API · Chapter 3 Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="field_guide.html">Main Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a href="chapter_02_advanced_prompt_engineering_strategies_field_guide.html">Previous: Advanced Strategies</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_04_prompt_engineering_for_chatbot_development_field_guide.html">Next: Chatbot Development</a>
       </span>
     </footer>
   </main>

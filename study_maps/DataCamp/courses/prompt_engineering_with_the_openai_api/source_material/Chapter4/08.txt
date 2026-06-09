@@ -1,0 +1,35 @@
+1. Incorporating external context
+00:00 - 00:10
+One key consideration when creating a chatbot is incorporating some external context. Let's explore why that's important and how we can achieve it!
+
+2. The need for external context
+00:10 - 00:35
+We use a pre-trained language model when building a chatbot using the OpenAI API. Such models only recognize specific information they have been trained on. However, we might want our chatbot to know more than that! We should provide it with some context about the missing information to ensure it responds accurately and effectively to user queries.
+
+3. Lack of information in LLMs
+00:35 - 01:12
+But why does certain information seem to be missing? There are two main reasons. First, language models are trained on vast web data. If we ask about events after the model's training or knowledge cut-off, they may struggle or invent answers, unless they have access to real-time browsing. For example, a model trained in 2021, when asked about 2023 financial trends might say, "I apologize, but as of my last update in 2021, I don't have information about financial trends in 2023."
+
+4. Lack of information in LLMs
+01:12 - 01:34
+Second, the information might not be publicly available, so the model wouldn't know the answer as the information would have been outside the scope of their training. For example, if we ask the chatbot to act as a study buddy and then ask the name of a favorite instructor, it won't know it since this is personal information.
+
+5. How to give extra information?
+01:34 - 01:48
+We need to provide additional context for the chatbot to answer users' questions. This context can be given as samples of previous conversations or through the system's initial prompt.
+
+6. Sample conversations
+01:48 - 02:18
+We can guide the model with sample conversations. For example, we can tell the model via a system message that it's a customer service chatbot. We then provide a user prompt asking about services, and an assistant response listing them. The model will use this context to answer questions such as "how many services are offered." A disadvantage of this method is that it may require many sample questions and answers.
+
+7. System prompt
+02:18 - 03:01
+A more effective way of doing this is to provide the context inside the system_prompt. Suppose a company named ABC Tech Solutions wants the model to know about their services. The company should define them initially inside a string variable. Then, the system prompt will include these services and the classic parts of the system prompt we've learned about, including the chatbot's purpose and behavior guidelines. When a user asks about the company's services, the model will respond with the three services from the system_prompt: web application development, mobile app development, and custom software solutions.
+
+8. Final note
+03:01 - 03:22
+One thing to note is that these methods will work well for relatively small contexts because any LLM will have some limitations in the amount of context it can handle. When a large amount of context is needed, more sophisticated techniques should be applied, which are outside the scope of this course.
+
+9. Let's practice!
+03:22 - 03:25
+Time to practice!

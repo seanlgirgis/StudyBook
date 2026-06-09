@@ -384,7 +384,7 @@ chapter_XX_section_slug_field_guide.html
         <a class="button primary" href="../index.html">Course Home</a>
         <a class="button secondary" href="field_guide.html">Main Field Guide</a>
         <a class="button secondary" href="chapter_01_introduction_to_prompt_engineering_best_practices_field_guide.html">Previous: Best Practices</a>
-        <a class="button secondary" href="sql_quick_lookup.html">SQL Join Quick Lookup</a>
+        <a class="button secondary" href="sql_quick_lookup.html">Prompt Engineering Quick Lookup</a>
         <a class="button secondary" href="chapter_03_prompt_engineering_for_business_applications_field_guide.html">Next: Business Applications</a>
       </div>
     </header>
@@ -401,6 +401,7 @@ chapter_XX_section_slug_field_guide.html
         <a href="#mistakes">7. Common mistakes</a>
         <a href="#interview">8. Interview translation</a>
         <a href="#review">9. Memory review</a>
+        <a href="#practice-trail">10. Practice trail</a>
       </aside>
 
       <div class="content">
@@ -437,7 +438,7 @@ Need more robust reasoning? → Self-consistency</div>
           </div>
 
           <div class="callout green">
-            <strong>Section punchline:</strong> {{SECTION_PUNCHLINE}}
+            <strong>Section punchline:</strong> Use the lightest prompting strategy that reliably controls the task: examples teach patterns, steps organize dependent work, and repeated candidates help test uncertain reasoning.
           </div>
         </section>
 
@@ -484,7 +485,7 @@ Step 3: Give a final verdict and one recommended fix.
 
         <section class="section" id="concept-3">
           <h2>4. Chain-of-Thought and Self-Consistency</h2>
-          <p>Chain-of-thought prompting requests intermediate reasoning before a final answer, which can help on complex reasoning tasks and make the result easier to inspect. It can also be demonstrated through few-shot examples that include worked reasoning. Self-consistency extends this idea by generating several independent candidate solutions and selecting the most common final answer. This reduces dependence on a single flawed reasoning path.</p>
+          <p>Reasoning prompts ask the model to expose a brief calculation or intermediate path before the final answer. Few-shot reasoning demonstrates the desired reasoning format with an example. Self-consistency extends the idea by comparing several candidate solutions and selecting the majority result. The local lab also showed that one call producing three similar answers is weaker than genuinely independent runs, and that agreement still does not prove correctness.</p>
 
           <table>
             <thead>
@@ -501,9 +502,14 @@ Step 3: Give a final verdict and one recommended fix.
                 <td>Examples must be representative and should cover every class in classification tasks.</td>
               </tr>
               <tr>
-                <td>Multi-step / reasoning prompts</td>
-                <td>Sequential generation, evaluation, and tasks that benefit from decomposed reasoning.</td>
-                <td>Too many vague steps can add noise; a flawed reasoning path can still produce a wrong answer.</td>
+                <td>Multi-step prompting</td>
+                <td>Dependent stages where later work builds on earlier results.</td>
+                <td>Several output fields are not automatically multi-step; the stages should have a real dependency.</td>
+              </tr>
+              <tr>
+                <td>Reasoning / self-consistency</td>
+                <td>Brief calculations, alternative hypotheses, and comparison of candidate answers.</td>
+                <td>Fluent reasoning, repeated agreement, or a majority vote can still share the same unsupported assumption.</td>
               </tr>
             </tbody>
           </table>
@@ -615,13 +621,47 @@ print(response.choices[0].message.content)</code></pre>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> Create a Chapter 2 practice trail with separate files for zero/one/few-shot prompting, multi-step prompting, reasoning prompts, and a small self-consistency experiment.
+            <strong>Lab decision:</strong> Chapter 2 now has a replayable nine-file practice trail under <code>lab/chapter_02/</code>, covering zero/one/few-shot prompting, dependent multi-step work, brief reasoning, self-consistency, incident hypothesis comparison, and temperature variation.
           </div>
 
           <div class="callout green">
             <strong>Completion standard:</strong> You can select and implement the prompting strategy that matches the task, explain the trade-offs, and validate the model’s output rather than trusting it automatically.
           </div>
         </section>
+
+        <section class="section" id="practice-trail">
+          <h2>10. Practice Trail and Evidence</h2>
+          <p>The Chapter 2 lab preserves each advanced prompting pattern in its own runnable file. This prevents overwriting and makes the chapter replayable later.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Exercise</th>
+                <th>What it demonstrates</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>01_zero_shot_prompting.py</code></td><td>Direct classification with no examples.</td></tr>
+              <tr><td><code>02_one_shot_prompting.py</code></td><td>One demonstration pair plus an explicit label contract.</td></tr>
+              <tr><td><code>03_few_shot_prompting.py</code></td><td>Representative examples covering Positive, Negative, and Neutral.</td></tr>
+              <tr><td><code>04_multi_step_prompting.py</code></td><td>A tiered response pattern where later steps depend on earlier results.</td></tr>
+              <tr><td><code>05_chain_of_thought_prompting.py</code></td><td>A visible calculation followed by a final answer.</td></tr>
+              <tr><td><code>06_few_shot_reasoning.py</code></td><td>An example that teaches a brief reasoning-and-answer format.</td></tr>
+              <tr><td><code>07_self_consistency_prompting.py</code></td><td>Several candidate calculations and a majority result.</td></tr>
+              <tr><td><code>08_incident_root_cause_consistency.py</code></td><td>Competing incident hypotheses, evidence, and a best-supported conclusion.</td></tr>
+              <tr><td><code>09_temperature_comparison.py</code></td><td>Low versus moderate temperature and the difference between wording variation and genuinely different reasoning.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            <strong>Most important practical rule:</strong> instructions define the valid answer space, examples demonstrate the pattern, temperature permits variation, and external evidence determines whether the result is trustworthy.
+          </div>
+
+          <div class="callout danger">
+            <strong>Root-cause caution:</strong> “The deployment introduced inefficient code” was a plausible hypothesis, but the evidence only established that a deployment change caused the issue. Logs, diffs, metrics, and tests are required to confirm the exact cause.
+          </div>
+        </section>
+
       </div>      </div>
     </div>
 

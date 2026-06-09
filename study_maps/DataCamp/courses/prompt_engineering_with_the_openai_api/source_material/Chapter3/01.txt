@@ -1,0 +1,51 @@
+1. Text summarization and expansion
+00:00 - 00:16
+Great work so far! Now that we're comfortable with prompt engineering principles and strategies, let's apply this knowledge to business applications. This video will focus on developing effective prompts for text summarization and expansion.
+
+2. Text summarization
+00:16 - 00:48
+Text summarization condenses text into a shorter, coherent version while preserving its essential meaning. This technique is used across industries to streamline business processes. In finance, it speeds up decision-making by summarizing lengthy reports. In marketing, it turns customer feedback into actionable insights for better campaign strategies. If prompted effectively, language models can be leveraged for summarization.
+
+3. Ineffective prompt
+00:48 - 01:13
+Summarizing text can seem straightforward: providing the model with text and asking to summarize it. For example, here we have a smartwatch review covering design, quality, and comfort. If we ask the model to summarize it using a simple prompt without details, the model will do so, but the prompt could be more effective with specific guidance.
+
+4. Prompt improvement
+01:13 - 01:20
+We can specify the output limits, output structure, and summarization focus to make the prompt more effective.
+
+5. Effective prompt: output limits
+01:20 - 01:35
+We can specify the output limits by the number of sentences, words, or characters. Here, for the same smartwatch review, we modify the prompt to ask for one sentence, which we see reflected in the output.
+
+6. Effective prompt: output structure
+01:35 - 01:52
+We can also specify the output structure by explicitly mentioning the format in the prompt. Let's try this by asking for three bullet points at most. Now, the output is a three-bullet summary reflecting the qualities of the watch.
+
+7. Effective prompt: summarization focus
+01:52 - 02:14
+Finally, we can ask the model to focus on specific aspects of the product review while summarizing. Here, we can instruct the model to summarize the review in three sentences, focusing on the key features and user experience. This helps us identify the product's strengths and drawbacks.
+
+8. Effective prompt: summarization focus
+02:14 - 02:25
+As we can see, the response has precisely three sentences, highlighting the user's positive feedback and the key features they enjoyed about the product.
+
+9. Text expansion
+02:25 - 02:52
+Text expansion, the opposite of summarization, generates text from a few ideas or bullet points. It boosts business efficiency and productivity by streamlining communication and reducing time spent on tasks like composing emails or generating report text. With LLMs, we can effectively expand text when using well-crafted prompts.
+
+10. Text expansion prompts
+02:52 - 03:06
+A typical text expansion prompt should ask to expand a delimited text, highlighting key focus areas and specifying output requirements like tone, length, structure, and audience.
+
+11. Expanding service description
+03:06 - 03:32
+Let's illustrate text expansion with an example. We have bullet points describing a company's social media services, such as content creation and community building. To create a coherent description of their services, we use a delimited prompt to ask the model to expand the bullet points into a professional, two-sentence overview of its features and benefits.
+
+12. Expanding service description
+03:32 - 03:38
+The model expands the service description to two sentences using a professional tone.
+
+13. Let's practice!
+03:38 - 03:41
+Time to practice!
