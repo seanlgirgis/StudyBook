@@ -1,0 +1,514 @@
+<!doctype html>
+<!-- Completed course landing page for Working with the OpenAI API. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Working with the OpenAI API | DataCamp</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3,239,98,.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88,166,255,.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210,153,34,.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188,140,255,.12);
+      --danger: #ff7b72;
+      --shadow: 0 12px 30px rgba(0,0,0,.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3,239,98,.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+    code { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4vw, 3.3rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid #486274;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 850;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+      border-color: transparent;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .resource-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .resource-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .resource-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .resource-card h3 {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .resource-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .chapter-card a,
+    .resource-card a {
+      text-decoration: none;
+    }
+
+    .chapter-card a:hover h3,
+    .resource-card a:hover h3 {
+      color: var(--blue);
+    }
+
+    .section {
+      margin-top: 22px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.45rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ol,
+    .section ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    .callout {
+      margin-top: 15px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .path {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      overflow-x: auto;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .resource-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 700px) {
+      .status-grid,
+      .chapter-grid,
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../index.html">DataCamp</a>
+      <span>›</span>
+      <span>Working with the OpenAI API</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp Course</p>
+      <h1>Working with the OpenAI API</h1>
+      <p>
+        Course 1 in the Developing AI Applications skill track. Covers OpenAI API clients, chat requests, prompt design, temperature and token controls, few-shot prompting, system guardrails, assistant examples, and multi-turn conversation history.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="study_pages/field_guide.html">Open Main Field Guide</a>
+        <a class="button" href="study_pages/sql_quick_lookup.html">Open API Quick Lookup</a>
+        <a class="button" href="lab/lab_run_book.md">Open Lab Run Book</a>
+        <a class="button" href="study_pages/certification_review_digest.html">Certification Digest</a>
+        <a class="button" href="study_pages/openai_api_code_patterns.html">Code Patterns</a>
+        <a class="button" href="study_pages/certification_self_test.html">Self-Test</a>
+        <a class="button" href="docs/BILL_OF_MATERIALS.md">Open Bill of Materials</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card">
+          <strong>Completed</strong>
+          <span>Platform status</span>
+        </div>
+
+        <div class="status-card">
+          <strong>Complete</strong>
+          <span>Documentation coverage</span>
+        </div>
+
+        <div class="status-card">
+          <strong>Validated</strong>
+          <span>Lab coverage</span>
+        </div>
+
+        <div class="status-card">
+          <strong>Strong foundation</strong>
+          <span>Recall confidence</span>
+        </div>
+
+        <div class="status-card">
+          <strong>Review-ready</strong>
+          <span>Interview readiness</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Recommended Study Order</h2>
+
+      <ol>
+        <li><a href="study_pages/field_guide.html">Main Field Guide</a></li>
+        <li><a href="study_pages/chapter_01_introduction_to_the_openai_api_field_guide.html">Chapter 1 — Introduction to the OpenAI API</a></li>
+        <li><a href="study_pages/chapter_02_prompting_openai_models_field_guide.html">Chapter 2 — Prompting OpenAI Models</a></li>
+        <li><a href="study_pages/chapter_03_building_conversations_with_the_openai_api_field_guide.html">Chapter 3 — Building Conversations with the OpenAI API</a></li>
+        <li><a href="study_pages/sql_quick_lookup.html">Quick Lookup</a></li>
+        <li><a href="lab/lab_run_book.md">Lab Run Book</a></li>
+        <li><a href="study_pages/certification_review_digest.html">Certification Review Digest</a></li>
+        <li><a href="study_pages/openai_api_code_patterns.html">OpenAI API Code Patterns</a></li>
+        <li><a href="study_pages/certification_self_test.html">Certification Self-Test</a></li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>Chapter Guides</h2>
+
+      <div class="chapter-grid">
+        <article class="chapter-card">
+          <a href="study_pages/chapter_01_introduction_to_the_openai_api_field_guide.html">
+            <h3>Chapter 1 — Introduction to the OpenAI API</h3>
+            <p>OpenAI clients, endpoints, models, messages, API-key safety, and response extraction.</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="study_pages/chapter_02_prompting_openai_models_field_guide.html">
+            <h3>Chapter 2 — Prompting OpenAI Models</h3>
+            <p>Prompt structure, f-strings, temperature, token usage, completion limits, and few-shot prompting.</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="study_pages/chapter_03_building_conversations_with_the_openai_api_field_guide.html">
+            <h3>Chapter 3 — Building Conversations with the OpenAI API</h3>
+            <p>System, user, and assistant roles; guardrails; examples; and application-managed conversation history.</p>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Course Resources</h2>
+
+      <div class="resource-grid">
+        <article class="resource-card">
+          <a href="study_pages/field_guide.html">
+            <h3>Main Field Guide</h3>
+            <p>Accumulated visual guide covering all three chapters, decision rules, mistakes, interview translation, and lab evidence.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="study_pages/field_guide.md">
+            <h3>Field Guide Markdown</h3>
+            <p>Portable Markdown version of the whole-course guide.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="study_pages/sql_quick_lookup.html">
+            <h3>Quick Lookup</h3>
+            <p>Searchable OpenAI API and Python code-pattern reference.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="study_pages/certification_review_digest.html">
+            <h3>Certification Review Digest</h3>
+            <p>Fast exam-oriented review of chapter punchlines, decision rules, likely traps, and must-know distinctions.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="study_pages/openai_api_code_patterns.html">
+            <h3>OpenAI API Code Patterns</h3>
+            <p>Compact reusable Python patterns for requests, prompts, roles, tokens, guardrails, and conversation memory.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="study_pages/certification_self_test.html">
+            <h3>Certification Self-Test</h3>
+            <p>Twenty-five expandable concept, code-reading, debugging, and small-build questions.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="lab/00_how_to_run.md">
+            <h3>How to Run the Lab</h3>
+            <p>Environment setup, API-key handling, and lab execution instructions.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="lab/lab_run_book.md">
+            <h3>Lab Run Book</h3>
+            <p>Ordered lab index and validation notes for the local API exercises.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="docs/BILL_OF_MATERIALS.md">
+            <h3>Bill of Materials</h3>
+            <p>Inventory of course source material, study pages, lab files, and supporting documentation.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="docs/COURSE_SETUP_AUDIT.md">
+            <h3>Course Setup Audit</h3>
+            <p>Course-package completeness and navigation audit.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="README.md">
+            <h3>Course README</h3>
+            <p>Course identity, structure, completion status, and study workflow.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="STUDYBUBBLE_SESSION_STATE.md">
+            <h3>Session State</h3>
+            <p>Working-session notes retained for course continuity.</p>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Local Lab</h2>
+
+      <p>The local Python labs exercised real API calls, f-string prompts, temperature comparisons, token inspection, completion limits, few-shot classification, role-based behavior, guardrails, multi-turn conversations, and conversation-history snapshots.</p>
+
+      <ul>
+        <li><a href="lab/python/01_first_chat_request.py">01_first_chat_request.py — basic request and response extraction</a></li>
+        <li><a href="lab/python/02_summarize_customer_chat.py">02_summarize_customer_chat.py — f-string summarization</a></li>
+        <li><a href="lab/python/03_temperature_comparison.py">03_temperature_comparison.py — temperature, tokens, and output limits</a></li>
+        <li><a href="lab/python/06_multi_turn_with_snapshots.py">06_multi_turn_with_snapshots.py — protected multi-turn history with snapshots</a></li>
+      </ul>
+
+      <div class="callout green">
+        Lab work is complete for the first course pass. The strongest evidence is the multi-turn lab, which showed growing input tokens and preserved system, user, and assistant messages after each call.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Course Closeout</h2>
+
+      <p>The DataCamp course is complete, all three chapter guides are linked, and the accumulated Field Guide and searchable Quick Lookup are furnished. The certification-prep digest, code-pattern workbook, and self-test are now linked alongside the standard course documentation.</p>
+
+      <div class="callout amber">
+        Use the Certification Review Digest, then the Code Patterns workbook, then the Self-Test for future end-of-track review.
+      </div>
+
+      <div class="path">D:\Workarea\StudyBook\study_maps\DataCamp\courses\working_with_the_openai_api</div>
+    </section>
+
+    <footer>
+      <span>DataCamp · Working with the OpenAI API</span>
+      <span>
+        <a href="study_pages/field_guide.html">Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="study_pages/sql_quick_lookup.html">Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="lab/lab_run_book.md">Lab Run Book</a>
+        &nbsp;·&nbsp;
+        <a href="study_pages/certification_review_digest.html">Certification Digest</a>
+        &nbsp;·&nbsp;
+        <a href="study_pages/openai_api_code_patterns.html">Code Patterns</a>
+        &nbsp;·&nbsp;
+        <a href="study_pages/certification_self_test.html">Self-Test</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

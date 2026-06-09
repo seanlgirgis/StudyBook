@@ -1,0 +1,27 @@
+1. Utilizing the assistant role
+00:00 - 00:06
+So we've seen the power of the system role, let's now talk about the assistant role.
+
+2. Chat completions for single-turn tasks
+00:06 - 00:31
+Recall that chat messages are a list of dictionaries, where each dictionary provides content to a specific role from either system, user, or assistant. For single turn tasks, no content is sent to the assistant role - the model uses only its existing knowledge, the system message, and the user prompt to generate a response.
+
+3. Providing examples
+00:31 - 01:13
+Assistant messages are primarily used for providing examples to the model. Recall that providing examples to the model in the form of shot-prompting helps steer the model towards more desirable outputs. Providing examples with the assistant chat role is, in effect, a more structured away of shot-prompting. For the Python programming tutor application we've discussed, we could provide a few examples of user questions and answers that would be sent to the API along with the new user's question. This will give the application a better understanding of the desired style and tone of responses. Let's give this a go!
+
+4. Providing examples
+01:13 - 01:30
+Between the system message and the new user's message, we'll add a new user message with an example Python question, followed by an assistant message to serve as an ideal response from the model. Let's test this out!
+
+5. The response
+01:30 - 01:52
+The generated content can be accessed with the same series of attributes. With an example to work with, the model generates a concise and informative response in-line with the assistant example provided. Like with the shot-prompting we've seen previously, we can experiment to determine how many examples are necessary to achieve our goals.
+
+6. System vs. assistant vs. user
+01:52 - 02:59
+Up to this point, we've provided examples in the user prompt and in the form of user-assistant pairs. We can even provide examples in the system message! With all these options, where's the best place to provide examples? If the system must output specific information or in a certain format, add this to the system message. Consider this a guardrail, which recall, places restrictions on the model output. Example conversations should be provided as user-assistant pairs, as these will guide the model on how to continue the conversation in the same fashion. Finally, examples can be provided in the user message if the context is important to understand a new question or instruction. This is common in single-turn tasks. For example, if we want to create a new job advert for our company, we may need to provide an existing job advert to give the model enough context to complete this specific task.
+
+7. Let's practice!
+02:59 - 03:12
+In the next video, we'll bring together everything we've learned about chat roles to build a functional chatbot that can handle back-and-forth conversations. For now, time to practice!

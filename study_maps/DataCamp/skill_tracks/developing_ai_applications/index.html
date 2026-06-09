@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Developing AI Applications | DataCamp StudyBook</title>
+  <style>
+    :root {
+      --bg:#0d1117;
+      --panel:#161b22;
+      --panel-soft:#1c232d;
+      --border:#30363d;
+      --text:#e6edf3;
+      --muted:#9da7b3;
+      --green:#03ef62;
+      --blue:#58a6ff;
+      --amber:#d29922;
+      --shadow:0 12px 30px rgba(0,0,0,.24);
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:"Segoe UI",Arial,sans-serif;
+      background:
+        radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a { color:inherit; }
+    .page {
+      width:min(1180px,calc(100% - 32px));
+      margin:0 auto;
+      padding:24px 0 50px;
+    }
+    .breadcrumbs {
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin-bottom:16px;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+    .breadcrumbs a {
+      color:var(--muted);
+      text-decoration:none;
+    }
+    .breadcrumbs a:hover { color:var(--green); }
+    .hero {
+      position:relative;
+      overflow:hidden;
+      padding:34px;
+      border:1px solid #28506a;
+      border-radius:18px;
+      background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);
+      box-shadow:var(--shadow);
+    }
+    .hero::before {
+      content:"";
+      position:absolute;
+      inset:0 0 auto;
+      height:5px;
+      background:linear-gradient(90deg,var(--green),var(--blue),#bc8cff);
+    }
+    .eyebrow {
+      margin:0 0 7px;
+      color:var(--green);
+      font-size:.76rem;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    h1 {
+      margin:0;
+      font-size:clamp(2.1rem,4vw,3.3rem);
+      line-height:1.08;
+    }
+    .hero p {
+      max-width:900px;
+      margin:14px 0 0;
+      color:#c8d4df;
+    }
+    .actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:11px;
+      margin-top:22px;
+    }
+    .button {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:42px;
+      padding:0 16px;
+      border:1px solid #486274;
+      border-radius:9px;
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      text-decoration:none;
+      font-weight:850;
+    }
+    .button.primary {
+      border-color:transparent;
+      background:var(--green);
+      color:#03130a;
+    }
+    .status-grid {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+      margin-top:20px;
+    }
+    .status {
+      padding:15px;
+      border:1px solid var(--border);
+      border-radius:11px;
+      background:var(--panel-soft);
+    }
+    .status strong {
+      display:block;
+      color:var(--green);
+    }
+    .status span {
+      color:var(--muted);
+      font-size:.88rem;
+    }
+    .section {
+      margin-top:22px;
+      padding:22px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:linear-gradient(180deg,var(--panel),#141920);
+      box-shadow:var(--shadow);
+    }
+    .section h2 {
+      margin:0 0 8px;
+      font-size:1.45rem;
+    }
+    .section > p {
+      margin:0;
+      color:var(--muted);
+    }
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-top:16px;
+    }
+    .card {
+      padding:18px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--panel-soft);
+    }
+    .badge.complete {
+      background:rgba(3,239,98,.12);
+      color:var(--green);
+    }
+    .badge.next {
+      background:rgba(88,166,255,.12);
+      color:var(--blue);
+    }
+    .badge {
+      display:inline-block;
+      padding:4px 9px;
+      border-radius:999px;
+      background:rgba(3,239,98,.12);
+      color:var(--green);
+      font-size:.73rem;
+      font-weight:900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .card h2 {
+      margin:9px 0 8px;
+      font-size:1.08rem;
+    }
+    .card h2 a {
+      text-decoration:none;
+    }
+    .card h2 a:hover {
+      color:var(--blue);
+    }
+    .card p {
+      margin:0;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+    .card-link {
+      display:inline-block;
+      margin-top:13px;
+      color:var(--green);
+      font-weight:800;
+      text-decoration:none;
+    }
+    .callout {
+      margin-top:16px;
+      padding:14px 16px;
+      border-left:4px solid var(--amber);
+      border-radius:9px;
+      background:rgba(210,153,34,.1);
+      color:#d8caaa;
+    }
+    footer {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:28px;
+      padding-top:18px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:.88rem;
+    }
+    footer a {
+      color:var(--blue);
+      text-decoration:none;
+    }
+    @media(max-width:900px) {
+      .status-grid,.grid { grid-template-columns:1fr; }
+      .hero { padding:28px 21px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../index.html">DataCamp StudyBook</a>
+      <span>›</span>
+      <a href="../index.html">Skill Tracks</a>
+      <span>›</span>
+      <span>Developing AI Applications</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp Skill Track</p>
+      <h1>Developing AI Applications</h1>
+      <p>
+        Applied AI development through the OpenAI API, prompt engineering,
+        Hugging Face, privacy, production systems, embeddings, vector databases,
+        LangChain, and retrieval-augmented generation.
+      </p>
+
+      <div class="actions">
+        <a class="button primary" href="../../projects/planning_a_trip_to_paris_with_the_openai_api/index.html">Continue with Project 2</a>
+        <a class="button" href="../../courses/index.html">Course Library</a>
+        <a class="button" href="../../projects/index.html">Project Library</a>
+        <a class="button" href="../index.html">All Skill Tracks</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status"><strong>10 items</strong><span>8 courses and 2 projects</span></div>
+        <div class="status"><strong>2 COURSES COMPLETE</strong><span>Courses 1 and 2 documented</span></div>
+        <div class="status"><strong>IN PROGRESS</strong><span>Track learning status</span></div>
+        <div class="status"><strong>AI + RAG</strong><span>Primary specialization</span></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Recommended Track Order</h2>
+      <p>
+        Follow the sequence below. The track owns ordering; every linked course
+        and project remains a reusable canonical package.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <span class="badge complete">Course 1 · Complete</span>
+          <h2><a href="../../courses/working_with_the_openai_api/index.html">Working with the OpenAI API</a></h2>
+          <p>Learn the API foundations, prompting models, and building multi-turn conversations. Platform and StudyBook package complete.</p>
+          <a class="card-link" href="../../courses/working_with_the_openai_api/index.html">Open package →</a>
+        </article>
+        <article class="card">
+          <span class="badge next">Project 1 · Next</span>
+          <h2><a href="../../projects/planning_a_trip_to_paris_with_the_openai_api/index.html">Planning a Trip to Paris with the OpenAI API</a></h2>
+          <p>Apply the OpenAI API to a practical travel-planning workflow.</p>
+          <a class="card-link" href="../../projects/planning_a_trip_to_paris_with_the_openai_api/index.html">Open package →</a>
+        </article>
+        <article class="card">
+          <span class="badge complete">Course 2 · Complete</span>
+          <h2><a href="../../courses/ai_ethics/index.html">AI Ethics</a></h2>
+          <p>Study fairness, transparency, accountability, explainability, hidden bias, ethical frameworks, and Ethical AI by Design. Platform and StudyBook package complete.</p>
+          <a class="card-link" href="../../courses/ai_ethics/index.html">Open package →</a>
+        </article>
+        <article class="card">
+          <span class="badge">Course 3</span>
+          <h2><a href="../../courses/prompt_engineering_with_the_openai_api/index.html">Prompt Engineering with the OpenAI API</a></h2>
+          <p>Build reliable prompts for business applications and chatbot workflows.</p>
+          <a class="card-link" href="../../courses/prompt_engineering_with_the_openai_api/index.html">Open package →</a>
+        </article>
+        <article class="card">
+          <span class="badge">Course 4</span>
+          <h2><a href="../../courses/working_with_hugging_face/index.html">Working with Hugging Face</a></h2>
+          <p>Use the Hugging Face ecosystem and create model-powered pipelines.</p>
+          <a class="card-link" href="../../courses/working_with_hugging_face/index.html">Open package →</a>
+        </article>
+        <article class="card">
+          <span class="badge">Course 5</span>
+          <h2><a href="../../courses/introduction_to_data_privacy/index.html">Introduction to Data Privacy</a></h2>
+          <p>Learn privacy foundations, privacy by design, and responsible data handling.</p>
+          <a class="card-link" href="../../courses/introduction_to_data_privacy/index.html">Open package →</a>
+        </article>
+        <article class="card">
+          <span class="badge">Course 6</span>
+          <h2><a href="../../courses/developing_ai_systems_with_the_openai_api/index.html">Developing AI Systems with the OpenAI API</a></h2>
+          <p>Structure end-to-end applications, use function calling, and prepare systems for production.</p>
+          <a class="card-link" href="../../courses/developing_ai_systems_with_the_openai_api/index.html">Open package →</a>
+        </article>
+        <article class="card">
+          <span class="badge">Course 7</span>
+          <h2><a href="../../courses/introduction_to_embeddings_with_the_openai_api/index.html">Introduction to Embeddings with the OpenAI API</a></h2>
+          <p>Learn embeddings, semantic similarity, AI search, and vector database foundations.</p>
+          <a class="card-link" href="../../courses/introduction_to_embeddings_with_the_openai_api/index.html">Open package →</a>
+        </article>
+        <article class="card">
+          <span class="badge">Project 2</span>
+          <h2><a href="../../projects/topic_analysis_of_clothing_reviews_with_embeddings/index.html">Topic Analysis of Clothing Reviews with Embeddings</a></h2>
+          <p>Use embeddings to explore similarity and themes in unstructured customer reviews.</p>
+          <a class="card-link" href="../../projects/topic_analysis_of_clothing_reviews_with_embeddings/index.html">Open package →</a>
+        </article>
+        <article class="card">
+          <span class="badge">Course 8</span>
+          <h2><a href="../../courses/developing_llm_applications_with_langchain/index.html">Developing LLM Applications with LangChain</a></h2>
+          <p>Build chains, agents, retrieval workflows, and retrieval-augmented generation applications.</p>
+          <a class="card-link" href="../../courses/developing_llm_applications_with_langchain/index.html">Open package →</a>
+        </article>
+      </div>
+
+      <div class="callout">
+        <strong>Current progress:</strong> Working with the OpenAI API and AI Ethics are complete.
+        The next uncompleted item in the published track order is Project 1,
+        Planning a Trip to Paris with the OpenAI API. All links remain relative.
+      </div>
+    </section>
+
+    <footer>
+      <span>DataCamp StudyBook · Developing AI Applications</span>
+      <span>
+        <a href="../../index.html">DataCamp Home</a>
+        &nbsp;·&nbsp;
+        <a href="../index.html">Skill Tracks</a>
+        &nbsp;·&nbsp;
+        <a href="../../courses/index.html">Courses</a>
+        &nbsp;·&nbsp;
+        <a href="../../projects/index.html">Projects</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

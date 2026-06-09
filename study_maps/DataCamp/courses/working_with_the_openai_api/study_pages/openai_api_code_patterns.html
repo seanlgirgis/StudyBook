@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenAI API Code Patterns | Working with the OpenAI API</title>
+
+<style>
+:root{
+  --bg:#0d1117;--panel:#161b22;--panel-soft:#1c232d;--border:#30363d;
+  --text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;
+  --amber:#d29922;--purple:#bc8cff;--danger:#ff7b72;--shadow:0 12px 30px rgba(0,0,0,.24)
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:
+radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);
+color:var(--text);line-height:1.62}
+a{color:inherit} code,pre{font-family:Consolas,"Courier New",monospace}
+.page{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:24px 0 52px}
+.breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}
+.breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);
+border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}
+.hero::before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}
+.eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}.hero p{max-width:900px;margin:14px 0 0;color:#c8d4df}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.button{display:inline-flex;min-height:40px;padding:0 15px;align-items:center;justify-content:center;border-radius:9px;
+border:1px solid #486274;background:rgba(255,255,255,.04);text-decoration:none;font-weight:800}
+.button.primary{background:var(--green);color:#03130a;border-color:transparent}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;margin-top:24px}
+.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);font-size:.9rem;text-decoration:none}
+.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}
+.section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+.section h2{margin:0 0 12px;font-size:1.42rem}.section h3{margin:22px 0 8px;font-size:1.06rem}
+.section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{color:#c9d3dc}
+pre{overflow-x:auto;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;color:#dce6ef;font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{padding:16px;background:var(--panel-soft);border:1px solid var(--border);border-radius:11px}
+.card h3{margin:0 0 7px;color:var(--green)}.card p{margin:0;color:var(--muted);font-size:.92rem}
+.callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:rgba(88,166,255,.12);color:#cfdcec}
+.callout.green{border-left-color:var(--green);background:rgba(3,239,98,.12)}
+.callout.amber{border-left-color:var(--amber);background:rgba(210,153,34,.12);color:#d8caaa}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.92rem}th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:#1f2933}td{background:#121820;color:#cbd5de}
+details{margin:10px 0;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#121820}
+summary{cursor:pointer;font-weight:800;color:var(--green)}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}
+footer a{color:var(--blue);text-decoration:none}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+</style>
+
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumbs">
+<a href="../../../index.html">DataCamp</a><span>›</span>
+<a href="../index.html">Working with the OpenAI API</a><span>›</span>
+<span>OpenAI API Code Patterns</span>
+</nav>
+<header class="hero">
+<p class="eyebrow">Code Workbook</p>
+<h1>OpenAI API Code Patterns</h1>
+<p>Compact reusable Python patterns from the course, each paired with its purpose and most important failure mode.</p>
+<div class="actions">
+<a class="button primary" href="../index.html">Course Home</a>
+<a class="button" href="field_guide.html">Main Field Guide</a>
+<a class="button" href="sql_quick_lookup.html">Quick Lookup</a>
+</div>
+</header>
+<div class="layout">
+<aside class="toc"><h2>Contents</h2><a href="#p1">1. Create the client</a>
+<a href="#p2">2. Basic request</a>
+<a href="#p3">3. System and user roles</a>
+<a href="#p4">4. F-string prompt</a>
+<a href="#p5">5. Temperature and length</a>
+<a href="#p6">6. Token usage</a>
+<a href="#p7">7. Few-shot prompting</a>
+<a href="#p8">8. Assistant example</a>
+<a href="#p9">9. Guardrail</a>
+<a href="#p10">10. Multi-turn history</a>
+<a href="#p11">11. Truncation protection</a>
+<a href="#p12">12. Snapshot history</a></aside>
+<div><section class="section" id="p1">
+<h2>1. Create the client</h2>
+<p>Use the environment variable rather than embedding the key.</p>
+<pre><code>from openai import OpenAI
+
+client = OpenAI()</code></pre>
+<div class="callout amber"><strong>Trap:</strong> Do not commit a real key.</div>
+</section><section class="section" id="p2">
+<h2>2. Basic request</h2>
+<p>Send one user message and extract the first reply.</p>
+<pre><code>response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    messages=[
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain APIs simply.&quot;}
+    ]
+)
+
+reply = response.choices[0].message.content</code></pre>
+<div class="callout amber"><strong>Trap:</strong> messages must be a list.</div>
+</section><section class="section" id="p3">
+<h2>3. System and user roles</h2>
+<p>Separate behavior from the actual task.</p>
+<pre><code>messages = [
+    {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;Answer like a patient tutor.&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain Python lists.&quot;}
+]</code></pre>
+<div class="callout amber"><strong>Trap:</strong> Do not swap the roles.</div>
+</section><section class="section" id="p4">
+<h2>4. F-string prompt</h2>
+<p>Insert source text into the prompt.</p>
+<pre><code>prompt = f&quot;&quot;&quot;
+Summarize this in one sentence:
+
+{customer_chat}
+&quot;&quot;&quot;</code></pre>
+<div class="callout amber"><strong>Trap:</strong> The f prefix is required.</div>
+</section><section class="section" id="p5">
+<h2>5. Temperature and length</h2>
+<p>Control variation and output ceiling.</p>
+<pre><code>response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    temperature=0.2,
+    max_completion_tokens=150,
+    messages=messages
+)</code></pre>
+<div class="callout amber"><strong>Trap:</strong> The output can still be cut off.</div>
+</section><section class="section" id="p6">
+<h2>6. Token usage</h2>
+<p>Inspect actual request and response size.</p>
+<pre><code>print(response.usage.prompt_tokens)
+print(response.usage.completion_tokens)
+print(response.usage.total_tokens)</code></pre>
+<div class="callout amber"><strong>Trap:</strong> Tokens are not equivalent to words.</div>
+</section><section class="section" id="p7">
+<h2>7. Few-shot prompting</h2>
+<p>Teach labels or format with examples.</p>
+<pre><code>prompt = &quot;&quot;&quot;
+Love these! = 5
+Comfortable, but not very pretty = 2
+
+Shoes fell apart on second use. =
+&quot;&quot;&quot;</code></pre>
+<div class="callout amber"><strong>Trap:</strong> Examples must be accurate.</div>
+</section><section class="section" id="p8">
+<h2>8. Assistant example</h2>
+<p>Represent example answers as assistant messages.</p>
+<pre><code>messages = [
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize Portugal.&quot;},
+    {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Portugal borders Spain. Its capital is Lisbon.&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize Greece.&quot;}
+]</code></pre>
+<div class="callout amber"><strong>Trap:</strong> Example answers do not use role=user.</div>
+</section><section class="section" id="p9">
+<h2>9. Guardrail</h2>
+<p>Define scope and refusal behavior.</p>
+<pre><code>{
+    &quot;role&quot;: &quot;system&quot;,
+    &quot;content&quot;: (
+        &quot;You are a Python tutor. &quot;
+        &quot;Answer only Python questions. &quot;
+        &quot;Politely refuse unrelated topics.&quot;
+    )
+}</code></pre>
+<div class="callout amber"><strong>Trap:</strong> A role alone is not a full guardrail.</div>
+</section><section class="section" id="p10">
+<h2>10. Multi-turn history</h2>
+<p>Append user, call API, append assistant.</p>
+<pre><code>messages.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_text})
+
+response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    messages=messages
+)
+
+reply = response.choices[0].message.content or &quot;&quot;
+messages.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: reply})</code></pre>
+<div class="callout amber"><strong>Trap:</strong> The API does not remember automatically.</div>
+</section><section class="section" id="p11">
+<h2>11. Truncation protection</h2>
+<p>Reject incomplete replies.</p>
+<pre><code>choice = response.choices[0]
+
+if choice.finish_reason == &quot;length&quot;:
+    raise RuntimeError(&quot;Reply was truncated.&quot;)</code></pre>
+<div class="callout amber"><strong>Trap:</strong> Do not append truncated output.</div>
+</section><section class="section" id="p12">
+<h2>12. Snapshot history</h2>
+<p>Persist the full conversation after each call.</p>
+<pre><code>json_path.write_text(
+    json.dumps(payload, indent=2, ensure_ascii=False),
+    encoding=&quot;utf-8&quot;
+)</code></pre>
+<div class="callout amber"><strong>Trap:</strong> Snapshots may contain sensitive user data.</div>
+</section></div>
+</div>
+<footer><span>Working with the OpenAI API</span><span><a href="../index.html">Course Home</a> · <a href="field_guide.html">Field Guide</a></span></footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,33 @@
+1. Unpacking the blackbox: Transparency
+00:00 - 00:16
+Welcome back! AI systems are often regarded as mysterious and unknown. Data goes in and magic comes out! To truly use AI ethically, we must understand how that magic works.
+
+2. Black-box nature
+00:16 - 00:47
+Most AI implementations are considered black boxes. In the AI realm, a black box is a system where we know the inputs and we know the outputs or results but how we get from input to output remains a mystery. While not AI, our brains are probably the most intuitive example of a black box system. We may know what we perceive and what we express, but the cognitive process in between is ambiguous.
+
+3. Ambiguousness is non-ideal
+00:47 - 01:44
+From an ethical perspective, ambiguity is bad. Really bad. How can we validate and trust the AI's decisions when we can't comprehend its decision-making process? How can we ensure that we aren’t violating any regulations or crossing moral boundaries? This brings us to the concept of 'Transparency'. Transparency involves making an AI's decision-making process intelligible or understandable. Imagine we have an AI trained to boost sales, a transparent AI model would allow us to see the factors it uses to make its predictions. Does it consider a consumer's past purchases, geographical location, or browsing history? Comprehending this fosters trust and enables us to verify the AI's decisions.
+
+4. Throughout the AI life cycle
+01:44 - 02:16
+Transparency in AI touches on allies at all levels of the AI life cycle, which involves data collection, preparation, model training, evaluation, and deployment. We must know what data was used to train a model, how that data was manipulated, a general overview of how the model works, and how the model can be implemented. The goal of transparency is to determine if we are comfortable with the underpinnings of the AI system.
+
+5. A deciding factor
+02:16 - 02:45
+Unfortunately, transparency isn't very common when interacting with AI. Many people hesitate when interacting with AI systems because they don't understand what data goes into them or how they work. As AI flourishes, transparency will be a deciding factor for many individuals in deciding between competing AI offerings, so organizations must consider transparency as a key tent post in their AI initiatives.
+
+1 Icon made by Eucalyp from www.flaticon.com
+6. Openness is key
+02:45 - 03:20
+Transparency even transcends AI itself. Transparency of practice helps make AI ethical. What this means is being open about challenges and learnings from utilizing AI. Transparency fosters innovation. When the principles of an AI system are open, other people can learn from, improve upon, and contribute to it. In turn, this accelerates the development of more sophisticated, reliable, and effective AI systems.
+
+1 Icon made by Freepik from www.flaticon.com
+7. Embracing transparency in AI
+03:20 - 04:32
+This idea of transparency may sound intimidating for many businesses looking to advance with AI. AI requires investment, and having large parts of that on display is a way for competitors and regulators to get involved. However, transparency is actually helpful for managing both parties. Transparency is more likely to lead to predictable regulation and public perception. If people and governments know what is happening, they react less strongly than when surprised. Predictable regulation offers greater value to businesses than the risk of competitors duplicating their work. It provides a stable environment for strategy formulation, reducing risks and uncertainties. While competitors might try to copy products or services, they can't replicate a company's strategic agility, culture, or relationships with customers and stakeholders. Transparency allows for companies to compete on their company's strengths instead of how long they can hide their actions from the public.
+
+8. Let's practice!
+04:32 - 04:37
+Now, let’s get on with a few exercises!

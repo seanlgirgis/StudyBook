@@ -1,0 +1,29 @@
+1. The future of AI ethics
+00:00 - 00:12
+As we wrap up, let's set sail on the dynamic waters of emerging ethical challenges and understand how to steer our AI development ethically right from the design stage.
+
+2. Understanding the present
+00:12 - 00:53
+One thing you may have noticed, is that AI ethics revolves around the same core ideas and practices. Throughout this whole experience we have explored these principles from a few different avenues but at their core the messages remain the same. Use AI to enhance the human experience and ensure that we place the needs of society over an impressive technological advancement. Many current implementation of AI Ethics are a bit murky with some companies cutting corners and others making less than ethical decisions. Having discussions about ethical AI and championing it throughout your spaces will ensure everyone benefits from AI's potential.
+
+3. Anticipating future ethical dilemmas
+00:53 - 01:21
+AI is continually evolving, and with each advancement, new ethical challenges emerge. As AI integrates more into every industry, we'll face questions about data privacy, potential bias, and decision-making autonomy. Anticipating these challenges helps us prepare for the ethical dilemmas of tomorrow. Most likely, we can’t predict the future of AI ethics, but as the saying goes, history doesn’t repeat itself, but it often rhymes.
+
+1 Icon made by Freepik from www.flaticon.com
+4. The dynamic nature of AI ethics
+01:21 - 01:54
+Just like AI, AI ethics isn't static. It's a dynamic field that evolves with technological advancements. Today's ethical principles must adapt tomorrow to accommodate new AI applications or societal values. Tapping into the advancements made in the field of data security, data privacy, and data ethics, are great resources to learn from and draw inspiration from. Continuous learning and development in areas around data and AI will allow you to see emerging trends and be on the lookout for new technologies and pitfalls.
+
+1 Icons made by Freepik from www.flaticon.com
+5. Ethical AI by Design
+01:54 - 03:02
+Having an awareness of technology and techniques is great but how can we proactively address these ethical challenges before they occur. One effective approach is 'Ethical AI by Design.' This means integrating ethical considerations right from the initial design stage of AI systems. Baking ethics into your AI systems is a recipe for success. How do we go about doing that? Well, many exercises and examples in this course have had you employee the practice of Ethical AI by Design. Remember helping LlamaFlix's implementation of AI? That was a part of Ethical AI by Design. More broadly, there's really any number of ways to do Ethical AI by Design. Before we even get to AI decisions we need to ensure that there are robust safeguards on data and storage. Data Ethics and AI ethics go hand in hand. Ethical AI by Design places the ethical principles we discussed at the front of the decision making process.
+
+6. Ethical AI in practice
+03:02 - 03:45
+For instance, when creating a healthcare AI system we ensure that all algorithms are transparent and explainable, promoting trust and understanding in the trust AI-driven diagnoses. When planning their new AI systems, retailers need to avoid bias and ensure accountability to deliver personalized recommendations and enhanced customer experiences. Incorporating ethics from the design stage isn't just about addressing immediate challenges; it's also about future-proofing AI systems as well. By building ethically sound AI, we ensure our systems are ready to adapt to future ethical challenges, regulations, and societal values.
+
+7. Let's practice!
+03:45 - 03:52
+Great job! We are near the end, and have covered quite a bit of material. Let's wrap it up with some exercises.

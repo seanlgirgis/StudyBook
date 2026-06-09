@@ -1,0 +1,39 @@
+1. Honing ethics by design
+00:00 - 00:06
+Welcome back, let's unpack AI ethics by design just a little bit more.
+
+2. Deceptively simple
+00:06 - 00:26
+AI Ethics by design is deceptively simple, make sure you consider the ethical ramifications of AI before unleashing it into the world. But for many of us that simplicity prevents us from seeing exactly where and when we would be place a greater emphasis on ethics. Lets unpack so you know what to be on the lookout for.
+
+3. The big ones
+00:26 - 01:15
+There are seven main checkpoints when designing an AI system with ethics in mind. Defining the objectives, getting stakeholder engagement, collecting and managing data, designing a system transparently, evaluating bias, implementing a way for people to raise concerns and finally iteration and evaluation. In a moment we will explore what each one means, before that I want to emphasize that these aren't comprehensive. When you begin to think ethically around AI you might find that some of these don't make sense to your application or there are things missing. This is fantastic! That means you are truly thinking ethically and are applying the principles we've explored to your real world. Great job!
+
+4. Defining objectives
+01:15 - 01:44
+The first step of any journey is defining an objective. Where do we want to go and how should we get there. The outcome part is usually pretty simple, for LlamaFlix they wanted to create a new medical tool to diagnose rare illnesses. Figuring out how to do that ethically can be challenging, luckily LlamaFlix has an ethical framework to show them the way. Making their decision-making easier!
+
+5. The gangs all here
+01:44 - 02:05
+Involving the right stakeholders comes next. This process is all about finding the people who matter and making sure their voices are heard. You can focus on experts in the industry or potential clients or customers. Getting broad feedback and input helps find ethical pitfalls that may have been otherwise overlooked.
+
+6. The right data in the right place
+02:05 - 02:32
+With the right people and the right plan, we need to make sure we have the right data and store and manage it well. Improper collection of data can have disastrous results on even the best-laid plans. What if LlamaFlix only collected data from wealthy clients to create their model? They may unintentionally create a bias where their model works better on certain people versus others.
+
+7. Transparency in design
+02:32 - 02:57
+Being transparent while designing systems, including creating clear documentation and exposing the decision making process as much as possible accomplishes a lot when making an AI system. Sadly many popular techniques don't foster a lot of transparency but if you leverage Explainable AI then you might be surprised with how much you can unlock the black box.
+
+8. The end is only the beginning
+02:57 - 03:30
+The last three milestones all go hand in hand. We want to evaluate any biases after the fact, give people the opportunity to raise concerns about the impact of the AI system on them. Due to AI's potential to cause disproportionate impact, we must remain vigilant to bias creeping in and provide people an avenue to raise their concerns. And as always, keep reviewing and iterating. New things come around everyday and embracing continual improvement can be a lot of fun.
+
+9. It's a wonderful world out there
+03:30 - 03:54
+And speaking of continual improvement being fun, I hope you have enjoyed this course. It was a lot of fun to make and I encourage you to come back and try some of our other courses here at DataCamp. I've selected a few of my favorites for you to jump into. These courses can help you evolve your approach to ethics, data and the world around you to see the awesome in everything.
+
+10. Thank you!
+03:54 - 03:58
+Thank you for sticking with me, its been great. See you next time.

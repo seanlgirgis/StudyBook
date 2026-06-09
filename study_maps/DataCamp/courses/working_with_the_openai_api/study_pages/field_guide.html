@@ -1,0 +1,764 @@
+<!doctype html>
+<!-- Completed whole-course field guide for Working with the OpenAI API. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Working with the OpenAI API — Field Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .cheat-grid,
+    .compare-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cheat-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .compare-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .cheat-card,
+    .compare-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .cheat-card h3,
+    .compare-card h3 {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .cheat-card p,
+    .compare-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul,
+    .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cheat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .status-grid,
+      .chapter-grid,
+      .cheat-grid,
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Working with the OpenAI API</a>
+      <span>›</span>
+      <span>Main Field Guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp · Working with the OpenAI API</p>
+      <h1>Working with the OpenAI API Field Guide</h1>
+      <p>
+        A whole-course memory map for building OpenAI API requests, designing prompts, controlling output behavior, and preserving multi-turn conversation history in Python.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.md">Markdown Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">OpenAI API Quick Lookup</a>
+        <a class="button secondary" href="../lab/lab_run_book.md">Lab Run Book</a>
+        <a class="button secondary" href="certification_review_digest.html">Certification Digest</a>
+        <a class="button secondary" href="openai_api_code_patterns.html">Code Patterns</a>
+        <a class="button secondary" href="certification_self_test.html">Certification Self-Test</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card"><strong>Completed</strong><span>Platform status</span></div>
+        <div class="status-card"><strong>Complete</strong><span>Documentation</span></div>
+        <div class="status-card"><strong>Validated</strong><span>Lab coverage</span></div>
+        <div class="status-card"><strong>Strong foundation</strong><span>Recall confidence</span></div>
+        <div class="status-card"><strong>Review-ready</strong><span>Interview readiness</span></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Guide Contents</h2>
+        <a href="#chapters">1. Chapter guides</a>
+        <a href="#big-picture">2. Course big picture</a>
+        <a href="#core-concepts">3. Core concepts</a>
+        <a href="#patterns">4. Core syntax and patterns</a>
+        <a href="#comparisons">5. Comparisons and decisions</a>
+        <a href="#mistakes">6. Common mistakes</a>
+        <a href="#interview">7. Interview translation</a>
+        <a href="#lab">8. Local lab evidence</a>
+        <a href="#memory">9. Memory nuggets</a>
+        <a href="#certification-prep">10. Certification prep</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="chapters">
+          <h2>1. Chapter Guides</h2>
+
+          <div class="chapter-grid">
+            <article class="chapter-card">
+              <h3><a href="chapter_01_introduction_to_the_openai_api_field_guide.html">Chapter 1 — Introduction to the OpenAI API</a></h3>
+              <p>Clients, endpoints, models, messages, API-key safety, and extracting generated text.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_02_prompting_openai_models_field_guide.html">Chapter 2 — Prompting OpenAI Models</a></h3>
+              <p>Prompt structure, f-strings, temperature, token controls, and zero-shot versus few-shot prompting.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_03_building_conversations_with_the_openai_api_field_guide.html">Chapter 3 — Building Conversations</a></h3>
+              <p>Roles, guardrails, assistant examples, and application-managed conversation memory.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="big-picture">
+          <h2>2. Course Big Picture</h2>
+          <p>OpenAI API applications follow a repeatable cycle: create a client, build an ordered messages list, call a model, inspect the response, extract the assistant text, and preserve selected messages when a later request needs context.</p>
+
+          <div class="diagram">Python application
+  ↓
+OpenAI client
+  ↓
+model + messages + controls
+  ↓
+Chat Completions endpoint
+  ↓
+response.choices[0].message.content
+  ↓
+print/use reply or append it to history</div>
+
+          <div class="callout green">
+            <strong>Course punchline:</strong> The API generates one response at a time; your application owns prompt structure, safety rules, token controls, and conversation memory.
+          </div>
+        </section>
+
+        <section class="section" id="core-concepts">
+          <h2>3. Core Concepts</h2>
+
+          <div class="cheat-grid">
+            <article class="cheat-card">
+              <h3>Client and endpoint</h3>
+              <p>The client sends authenticated requests to an API operation.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Messages and roles</h3>
+              <p>System defines behavior, user supplies requests, and assistant represents replies or examples.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Prompt quality</h3>
+              <p>Useful prompts specify task, context, tone, format, and constraints.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Temperature</h3>
+              <p>Lower values favor consistency; higher values favor variety but may increase drift.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Tokens and limits</h3>
+              <p>Input and output tokens are counted separately; completion limits can truncate replies.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Conversation memory</h3>
+              <p>Store and resend ordered user and assistant messages because independent calls are stateless.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="patterns">
+          <h2>4. Core Syntax and Patterns</h2>
+
+          <h3>Basic request</h3>
+          <pre><code>from openai import OpenAI
+
+client = OpenAI()
+
+response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Give me one tip.&quot;}]
+)
+
+print(response.choices[0].message.content)</code></pre>
+          <p>Create the client, send one user message, and extract the first generated reply.</p>
+
+          <h3>Controlled prompt</h3>
+          <pre><code>response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    temperature=0.2,
+    max_completion_tokens=150,
+    messages=messages
+)</code></pre>
+          <p>Use a low temperature for steadier output and a completion limit large enough to finish the required response.</p>
+
+          <h3>Multi-turn history</h3>
+          <pre><code>messages.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_text})
+response = client.chat.completions.create(model=&quot;gpt-4o-mini&quot;, messages=messages)
+reply = response.choices[0].message.content or &quot;&quot;
+messages.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: reply})</code></pre>
+          <p>Append the user turn, send the full history, extract the reply, and store the assistant turn.</p>
+        </section>
+
+        <section class="section" id="comparisons">
+          <h2>5. Comparisons and Decision Rules</h2>
+
+          <div class="compare-grid">
+            <article class="compare-card">
+              <h3>Zero-shot</h3>
+              <p>Use an instruction without examples when the task and output format are obvious.</p>
+            </article>
+
+            <article class="compare-card">
+              <h3>Few-shot</h3>
+              <p>Provide polished examples when labels, scoring rules, tone, or exact formatting need stronger guidance.</p>
+            </article>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Need</th>
+                <th>Preferred choice</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Stable classification</td>
+                <td>Low temperature + examples</td>
+                <td>Reduces variation and defines the scoring pattern</td>
+              </tr>
+              <tr>
+                <td>Creative brainstorming</td>
+                <td>Higher temperature</td>
+                <td>Allows more varied wording and ideas</td>
+              </tr>
+              <tr>
+                <td>Multi-turn follow-up</td>
+                <td>Resend message history</td>
+                <td>The API does not retain prior calls automatically</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>6. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Hard-coding a real API key</strong>
+              Use an environment variable and never commit or paste a real secret into source files.
+            </article>
+
+            <article class="qa-item">
+              <strong>Swapping system and user roles</strong>
+              Behavior instructions belong to system; the human task belongs to user.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming automatic memory</strong>
+              Store both user and assistant turns and resend the ordered history.
+            </article>
+
+            <article class="qa-item">
+              <strong>Appending a truncated reply</strong>
+              Check finish_reason and avoid storing replies that ended because of the token ceiling.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>7. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>How do you make a basic OpenAI API request?</strong>
+              Create a client, send a model and messages list, then extract response.choices[0].message.content.
+            </article>
+
+            <article class="qa-item">
+              <strong>How does multi-turn memory work?</strong>
+              The application stores prior user and assistant messages and resends the complete ordered history.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is temperature?</strong>
+              A control that influences randomness: lower values generally favor consistency, while higher values allow more variation.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you detect truncation?</strong>
+              Inspect response.choices[0].finish_reason. A value of length indicates the output ceiling was reached.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="lab">
+          <h2>8. Local Lab Evidence</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Validated result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Basic API request</td>
+                <td>Created a client, sent a prompt, and printed the first assistant response.</td>
+              </tr>
+              <tr>
+                <td>Prompt controls</td>
+                <td>Compared temperature values, token usage, and completion limits.</td>
+              </tr>
+              <tr>
+                <td>Prompting patterns</td>
+                <td>Validated f-string summarization and zero-shot/few-shot classification.</td>
+              </tr>
+              <tr>
+                <td>Conversation history</td>
+                <td>Built multi-turn calls with finish-reason protection and JSON/text snapshots.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            The labs confirmed the full course flow with real API calls, token measurements, role-based prompts, guardrails, and application-managed history.
+          </div>
+        </section>
+
+        <section class="section" id="memory">
+          <h2>9. Quick Memory Nuggets</h2>
+
+          <pre><code>client = OpenAI()
+response = client.chat.completions.create(...)
+reply = response.choices[0].message.content</code></pre>
+
+          <pre><code>system = behavior
+user = request
+assistant = reply or example</code></pre>
+
+          <pre><code>append user
+→ send full history
+→ extract reply
+→ append assistant</code></pre>
+
+          <div class="callout amber">
+            <strong>Final review:</strong> Be able to explain roles, token usage, temperature, finish_reason, few-shot prompting, and why the application owns conversation memory.
+          </div>
+        </section>
+
+        <section class="section" id="certification-prep">
+          <h2>10. Certification-Prep Resources</h2>
+          <p>
+            Use these focused resources after the full Field Guide when preparing for
+            end-of-track testing or a fast course review.
+          </p>
+
+          <div class="chapter-grid">
+            <article class="chapter-card">
+              <h3><a href="certification_review_digest.html">Certification Review Digest</a></h3>
+              <p>
+                A fast review of chapter punchlines, must-know distinctions,
+                decision rules, common traps, and readiness questions.
+              </p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="openai_api_code_patterns.html">OpenAI API Code Patterns</a></h3>
+              <p>
+                Compact reusable Python patterns for clients, prompts, roles,
+                tokens, guardrails, truncation protection, and conversation memory.
+              </p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="certification_self_test.html">Certification Self-Test</a></h3>
+              <p>
+                Twenty-five expandable concept, code-reading, debugging,
+                and small-build questions for honest recall testing.
+              </p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Recommended order:</strong>
+            Review Digest → Code Patterns → Self-Test.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Working with the OpenAI API · Main Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.md">Markdown Guide</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="certification_review_digest.html">Certification Digest</a>
+        &nbsp;·&nbsp;
+        <a href="openai_api_code_patterns.html">Code Patterns</a>
+        &nbsp;·&nbsp;
+        <a href="certification_self_test.html">Self-Test</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

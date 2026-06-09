@@ -1,0 +1,509 @@
+<!doctype html>
+<!--
+COURSE INDEX TEMPLATE
+
+Purpose:
+- Main landing page for a canonical course folder
+- Course status dashboard
+- Chapter navigation
+- Resource navigation
+- Lab entry point
+- Course closeout summary
+
+Instructions:
+1. Replace every {{PLACEHOLDER}}.
+2. Add or remove chapter cards to match the actual course.
+3. Add or remove resource cards based on available artifacts.
+4. Keep the active course filename:
+   index.html
+5. Preserve relative paths from the course root.
+6. Keep canonical course folders number-free; track pages own ordering.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{COURSE_TITLE}} | {{PROJECT_TITLE}}</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3,239,98,.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88,166,255,.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210,153,34,.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188,140,255,.12);
+      --danger: #ff7b72;
+      --shadow: 0 12px 30px rgba(0,0,0,.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3,239,98,.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+    code { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4vw, 3.3rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid #486274;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 850;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+      border-color: transparent;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .resource-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .resource-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .resource-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .resource-card h3 {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .resource-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .chapter-card a,
+    .resource-card a {
+      text-decoration: none;
+    }
+
+    .chapter-card a:hover h3,
+    .resource-card a:hover h3 {
+      color: var(--blue);
+    }
+
+    .section {
+      margin-top: 22px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.45rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ol,
+    .section ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    .callout {
+      margin-top: 15px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .path {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      overflow-x: auto;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .resource-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 700px) {
+      .status-grid,
+      .chapter-grid,
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../index.html">{{PROJECT_TITLE}}</a>
+      <span>›</span>
+      <span>{{COURSE_TITLE}}</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">{{PLATFORM_LABEL}} Course</p>
+      <h1>{{COURSE_TITLE}}</h1>
+      <p>
+        {{COURSE_SUMMARY_HTML}}
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="{{FIELD_GUIDE_FILE}}">Open Main Field Guide</a>
+        <a class="button" href="{{QUICK_LOOKUP_FILE}}">Open SQL Quick Lookup</a>
+        <a class="button" href="{{LAB_RUN_BOOK_FILE}}">Open Lab Run Book</a>
+        <a class="button" href="{{BILL_OF_MATERIALS_FILE}}">Open Bill of Materials</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card">
+          <strong>{{PLATFORM_STATUS}}</strong>
+          <span>Platform status</span>
+        </div>
+
+        <div class="status-card">
+          <strong>{{DOCUMENTATION_STATUS}}</strong>
+          <span>Documentation coverage</span>
+        </div>
+
+        <div class="status-card">
+          <strong>{{LAB_STATUS}}</strong>
+          <span>Lab coverage</span>
+        </div>
+
+        <div class="status-card">
+          <strong>{{RECALL_STATUS}}</strong>
+          <span>Recall confidence</span>
+        </div>
+
+        <div class="status-card">
+          <strong>{{INTERVIEW_STATUS}}</strong>
+          <span>Interview readiness</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Recommended Study Order</h2>
+
+      <ol>
+        <li><a href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a></li>
+        <li><a href="{{CHAPTER_01_FILE}}">{{CHAPTER_01_TITLE}}</a></li>
+        <li><a href="{{CHAPTER_02_FILE}}">{{CHAPTER_02_TITLE}}</a></li>
+        <li><a href="{{CHAPTER_03_FILE}}">{{CHAPTER_03_TITLE}}</a></li>
+        <li><a href="{{CHAPTER_04_FILE}}">{{CHAPTER_04_TITLE}}</a></li>
+        <li><a href="{{QUICK_LOOKUP_FILE}}">Quick Lookup</a></li>
+        <li><a href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a></li>
+        <li>{{FINAL_STUDY_STEP}}</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>Chapter Guides</h2>
+
+      <div class="chapter-grid">
+        <article class="chapter-card">
+          <a href="{{CHAPTER_01_FILE}}">
+            <h3>{{CHAPTER_01_TITLE}}</h3>
+            <p>{{CHAPTER_01_SUMMARY}}</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="{{CHAPTER_02_FILE}}">
+            <h3>{{CHAPTER_02_TITLE}}</h3>
+            <p>{{CHAPTER_02_SUMMARY}}</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="{{CHAPTER_03_FILE}}">
+            <h3>{{CHAPTER_03_TITLE}}</h3>
+            <p>{{CHAPTER_03_SUMMARY}}</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="{{CHAPTER_04_FILE}}">
+            <h3>{{CHAPTER_04_TITLE}}</h3>
+            <p>{{CHAPTER_04_SUMMARY}}</p>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Course Resources</h2>
+
+      <div class="resource-grid">
+        <article class="resource-card">
+          <a href="{{FIELD_GUIDE_FILE}}">
+            <h3>Main Field Guide</h3>
+            <p>{{FIELD_GUIDE_DESCRIPTION}}</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="{{FIELD_GUIDE_MARKDOWN_FILE}}">
+            <h3>Field Guide Markdown</h3>
+            <p>{{FIELD_GUIDE_MARKDOWN_DESCRIPTION}}</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="{{QUICK_LOOKUP_FILE}}">
+            <h3>Quick Lookup</h3>
+            <p>{{QUICK_LOOKUP_DESCRIPTION}}</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="{{LAB_HOW_TO_RUN_FILE}}">
+            <h3>How to Run the Lab</h3>
+            <p>{{LAB_HOW_TO_RUN_DESCRIPTION}}</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="{{LAB_RUN_BOOK_FILE}}">
+            <h3>Lab Run Book</h3>
+            <p>{{LAB_RUN_BOOK_DESCRIPTION}}</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="{{BILL_OF_MATERIALS_FILE}}">
+            <h3>Bill of Materials</h3>
+            <p>{{BILL_OF_MATERIALS_DESCRIPTION}}</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="{{COURSE_SETUP_AUDIT_FILE}}">
+            <h3>Course Setup Audit</h3>
+            <p>{{COURSE_SETUP_AUDIT_DESCRIPTION}}</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="{{README_FILE}}">
+            <h3>Course README</h3>
+            <p>{{README_DESCRIPTION}}</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="{{SESSION_STATE_FILE}}">
+            <h3>Session State</h3>
+            <p>{{SESSION_STATE_DESCRIPTION}}</p>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Local Lab</h2>
+
+      <p>{{LAB_SUMMARY_HTML}}</p>
+
+      <ul>
+        <li><a href="{{LAB_SQL_01_FILE}}">{{LAB_SQL_01_LABEL}}</a></li>
+        <li><a href="{{LAB_SQL_02_FILE}}">{{LAB_SQL_02_LABEL}}</a></li>
+        <li><a href="{{LAB_SQL_03_FILE}}">{{LAB_SQL_03_LABEL}}</a></li>
+        <li><a href="{{LAB_SQL_04_FILE}}">{{LAB_SQL_04_LABEL}}</a></li>
+      </ul>
+
+      <div class="callout green">
+        {{LAB_COMPLETION_NOTE}}
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Course Closeout</h2>
+
+      <p>{{COURSE_CLOSEOUT_SUMMARY}}</p>
+
+      <div class="callout amber">
+        {{COURSE_NEXT_ACTION}}
+      </div>
+
+      <div class="path">{{CANONICAL_COURSE_PATH}}</div>
+    </section>
+
+    <footer>
+      <span>{{PROJECT_TITLE}} · {{COURSE_TITLE}}</span>
+      <span>
+        <a href="{{FIELD_GUIDE_FILE}}">Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="{{QUICK_LOOKUP_FILE}}">Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

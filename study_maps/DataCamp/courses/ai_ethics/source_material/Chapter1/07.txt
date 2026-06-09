@@ -1,0 +1,28 @@
+1. AI ethics: where's the line?
+00:00 - 00:19
+Greetings, learners. Let’s stay nerdy for a while longer! The world of AI ethics is intriguing, filled with fascinating questions and thought-provoking dilemmas. Let's continue our exploration, this time into some challenges faced by AI ethics.
+
+2. The privacy-personalization paradox
+00:19 - 01:15
+Imagine an AI system that personalizes user experiences. Sounds wonderful, right? We all love personalized experiences over generic ones, and AI has the power to make it happen. However, there's a catch. Personalization can sometimes compromise user privacy. How much are we willing to let technology know about us? This is known as the privacy-personalization paradox, where the line between personalization and privacy is not always clear. To address this, we need to ensure AI literacy, enabling individuals to understand how their data is tracked and utilized. Companies like Spotify lead the way by publicizing clear privacy policies that provide insights into the categories, purposes, and legal basis of collected personal data.
+
+3. The bias-fairness conundrum
+01:15 - 02:02
+Another challenge is the bias-fairness conundrum. AI systems learn from data, but what if that data carries societal biases? Remember, humans create the data, and their biases can inadvertently enter the dataset. As a result, AI systems may unintentionally amplify these biases. Even the previous releases of the powerful AI model, ChatGPT, faced criticism for making problematic statements about certain religious beliefs. Ensuring fairness in practice is an ongoing challenge, but efforts are underway to address it by training models with fairer data.
+
+4. The transparency-complexity trade-off
+02:02 - 03:02
+Now, consider the transparency-complexity trade-off. Complex AI models can provide highly accurate predictions, but they often lack transparency and are difficult to comprehend. Think about yourself or others you know— do they possess the background knowledge required to truly understand these algorithms? It can be challenging. On the other hand, simpler models are more transparent but sacrifice accuracy. Choosing between transparency and complexity depends on the context, making it an interesting trade-off. Once again, AI literacy plays a vital role. It empowers us to comprehend and assess the ethical implication of these tools. You can check out Google's AlphaGo program as an example of achieving explainability while maintaining high-performance capabilities.
+
+1 Icon made by Freepik from www.flaticon.com
+5. The autonomy-control dilemma
+03:02 - 04:01
+And finally, let's ponder over the autonomy-control dilemma. AI systems can act autonomously, boosting efficiency, but they might sometimes operate outside human control. Would that scare you? Are we marching our way towards terminator? It can be fun to talk about, but not something I think we need to fear. Should we prioritize autonomy or control? or, is it a combination of them both? Again, there's no one-size-fits-all answer. Tesla, for example, faced criticism and scrutiny regarding the level of control and user responsibility in the context of Autopilot. The company has taken steps to address these concerns by emphasizing the importance of driver vigilance, implementing safety features like driver monitoring systems, and providing clear instructions for users to stay engaged and ready to take control at any moment.
+
+6. Navigating the challenges
+04:01 - 04:27
+Navigating these ethical dilemmas requires making thoughtful trade-offs. The human element becomes critical in decision-making processes. While perfect solutions may be elusive, striving to make better decisions given the complexities of each situation is paramount. Involving diverse stakeholders and maintaining continuous monitoring of AI systems are vital practices.
+
+7. Let's practice!
+04:27 - 04:51
+Remember, AI ethics is an ongoing journey, not a destination. Embrace the challenges and open-ended questions it presents. Participating in the AI journey offers exciting possibilities. We may not have all the answers, but through exploration and reflection, we continue to learn and grow. Ok, time for some exercises!

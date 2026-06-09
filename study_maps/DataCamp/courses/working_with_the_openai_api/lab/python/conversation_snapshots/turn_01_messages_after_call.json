@@ -1,0 +1,24 @@
+{
+  "captured_at": "2026-06-07T17:41:19",
+  "turn_number": 1,
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 42,
+    "completion_tokens": 93,
+    "total_tokens": 135
+  },
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a patient Python tutor. Teach a complete beginner. Keep every answer under 80 words and finish every thought completely."
+    },
+    {
+      "role": "user",
+      "content": "What is a Python list?"
+    },
+    {
+      "role": "assistant",
+      "content": "A Python list is a collection that can hold multiple items in a single variable. Lists are ordered, changeable, and allow duplicate values. You create a list by placing items inside square brackets, separated by commas. For example: \n\n```python\nmy_list = [1, 2, 3, \"apple\", \"banana\"]\n```\n\nYou can access items using their index, starting from 0. Lists are versatile and widely used in Python programming."
+    }
+  ]
+}

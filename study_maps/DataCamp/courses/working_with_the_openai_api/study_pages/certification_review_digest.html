@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certification Review Digest | Working with the OpenAI API</title>
+
+<style>
+:root{
+  --bg:#0d1117;--panel:#161b22;--panel-soft:#1c232d;--border:#30363d;
+  --text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;
+  --amber:#d29922;--purple:#bc8cff;--danger:#ff7b72;--shadow:0 12px 30px rgba(0,0,0,.24)
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:
+radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);
+color:var(--text);line-height:1.62}
+a{color:inherit} code,pre{font-family:Consolas,"Courier New",monospace}
+.page{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:24px 0 52px}
+.breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}
+.breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);
+border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}
+.hero::before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}
+.eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}.hero p{max-width:900px;margin:14px 0 0;color:#c8d4df}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.button{display:inline-flex;min-height:40px;padding:0 15px;align-items:center;justify-content:center;border-radius:9px;
+border:1px solid #486274;background:rgba(255,255,255,.04);text-decoration:none;font-weight:800}
+.button.primary{background:var(--green);color:#03130a;border-color:transparent}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;margin-top:24px}
+.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);font-size:.9rem;text-decoration:none}
+.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}
+.section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+.section h2{margin:0 0 12px;font-size:1.42rem}.section h3{margin:22px 0 8px;font-size:1.06rem}
+.section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{color:#c9d3dc}
+pre{overflow-x:auto;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;color:#dce6ef;font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{padding:16px;background:var(--panel-soft);border:1px solid var(--border);border-radius:11px}
+.card h3{margin:0 0 7px;color:var(--green)}.card p{margin:0;color:var(--muted);font-size:.92rem}
+.callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:rgba(88,166,255,.12);color:#cfdcec}
+.callout.green{border-left-color:var(--green);background:rgba(3,239,98,.12)}
+.callout.amber{border-left-color:var(--amber);background:rgba(210,153,34,.12);color:#d8caaa}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.92rem}th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:#1f2933}td{background:#121820;color:#cbd5de}
+details{margin:10px 0;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#121820}
+summary{cursor:pointer;font-weight:800;color:var(--green)}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}
+footer a{color:var(--blue);text-decoration:none}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+</style>
+
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumbs">
+<a href="../../../index.html">DataCamp</a><span>›</span>
+<a href="../index.html">Working with the OpenAI API</a><span>›</span>
+<span>Certification Review Digest</span>
+</nav>
+<header class="hero">
+<p class="eyebrow">Certification Prep</p>
+<h1>Certification Review Digest</h1>
+<p>A fast, exam-oriented review of the complete course: concepts, decision rules, traps, and high-value recall points.</p>
+<div class="actions">
+<a class="button primary" href="../index.html">Course Home</a>
+<a class="button" href="field_guide.html">Main Field Guide</a>
+<a class="button" href="sql_quick_lookup.html">Quick Lookup</a>
+</div>
+</header>
+<div class="layout">
+<aside class="toc"><h2>Contents</h2><a href="#one-page">1. One-page map</a>
+<a href="#know">2. Know this cold</a>
+<a href="#decisions">3. Decision rules</a>
+<a href="#traps">4. Traps</a>
+<a href="#review">5. Fast review</a></aside>
+<div>
+<section class="section" id="one-page">
+<h2>1. One-Page Course Map</h2>
+<pre><code>client = OpenAI()
+messages = [...]
+response = client.chat.completions.create(...)
+reply = response.choices[0].message.content</code></pre>
+<div class="grid">
+<article class="card"><h3>Chapter 1</h3><p>Client, endpoint, model, messages, response extraction, and API-key safety.</p></article>
+<article class="card"><h3>Chapter 2</h3><p>Prompt quality, f-strings, temperature, token usage, completion limits, and few-shot prompting.</p></article>
+<article class="card"><h3>Chapter 3</h3><p>Roles, guardrails, assistant examples, and application-managed conversation history.</p></article>
+<article class="card"><h3>Course Punchline</h3><p>The application owns the prompt, safety rules, token controls, and memory.</p></article>
+</div>
+</section>
+
+<section class="section" id="know">
+<h2>2. Know This Cold</h2>
+<table>
+<tr><th>Concept</th><th>Meaning</th></tr>
+<tr><td><code>system</code></td><td>Behavior, scope, and guardrails</td></tr>
+<tr><td><code>user</code></td><td>The human request</td></tr>
+<tr><td><code>assistant</code></td><td>A model reply or example answer</td></tr>
+<tr><td><code>temperature</code></td><td>Controls variation; lower is steadier, higher is more creative</td></tr>
+<tr><td><code>max_completion_tokens</code></td><td>Output ceiling; may truncate the answer</td></tr>
+<tr><td><code>finish_reason</code></td><td>Why generation stopped</td></tr>
+<tr><td><code>prompt_tokens</code></td><td>Input tokens</td></tr>
+<tr><td><code>completion_tokens</code></td><td>Output tokens</td></tr>
+</table>
+</section>
+
+<section class="section" id="decisions">
+<h2>3. Decision Rules</h2>
+<ul>
+<li>Use low temperature for classification, extraction, factual summaries, and repeatable support answers.</li>
+<li>Use higher temperature for brainstorming, naming, slogans, and creative variation.</li>
+<li>Use few-shot examples when labels, scoring, tone, or exact format matter.</li>
+<li>Use a system guardrail to define both allowed scope and refusal behavior.</li>
+<li>Do not append a reply when <code>finish_reason == "length"</code>.</li>
+<li>Resend prior messages when a follow-up depends on earlier context.</li>
+</ul>
+</section>
+
+<section class="section" id="traps">
+<h2>4. High-Value Traps</h2>
+<div class="grid">
+<article class="card"><h3>Swapped roles</h3><p>Behavior instructions belong to system; the human request belongs to user.</p></article>
+<article class="card"><h3>Fake memory</h3><p>The API does not remember. Your program must preserve and resend the history.</p></article>
+<article class="card"><h3>Truncated history</h3><p>A cut-off reply can damage later context if appended blindly.</p></article>
+<article class="card"><h3>Bad examples</h3><p>Few-shot examples teach wording, format, judgment, and mistakes.</p></article>
+<article class="card"><h3>Tokens are not words</h3><p>Input and output are counted separately, and token count is only loosely related to word count.</p></article>
+<article class="card"><h3>Creativity risk</h3><p>High temperature can invent unsupported product claims.</p></article>
+</div>
+</section>
+
+<section class="section" id="review">
+<h2>5. Fast Review Questions</h2>
+<ol>
+<li>Where is generated text found in the response object?</li>
+<li>Which role defines behavior and guardrails?</li>
+<li>Why does input-token usage grow during a multi-turn chat?</li>
+<li>What is the difference between zero-shot and few-shot prompting?</li>
+<li>What does <code>finish_reason == "length"</code> mean?</li>
+<li>Why should a classification task usually use low temperature?</li>
+<li>Why should a real API key stay outside source code?</li>
+</ol>
+<div class="callout green"><strong>Readiness rule:</strong> You should be able to answer all seven without opening the Field Guide.</div>
+</section>
+</div>
+</div>
+<footer><span>Working with the OpenAI API</span><span><a href="../index.html">Course Home</a> · <a href="field_guide.html">Field Guide</a></span></footer>
+</main>
+</body>
+</html>

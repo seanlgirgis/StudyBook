@@ -1,0 +1,32 @@
+1. Digging deeper: AI ethics principles
+00:00 - 00:20
+Welcome back! In this video, we will delve into the principles that guide the development, deployment, and use of artificial intelligence: fairness, accountability, and transparency. By understanding these principles, we can ensure that AI systems are ethical and trustworthy.
+
+2. Meet MedTech Innovations
+00:20 - 00:54
+Let's consider MedTech Innovations, a fictional healthcare company. They've been using AI to improve patient care, but they've also realized the importance of ethics in AI. Let's explore why. As we do so, please think of other possible scenarios and areas that are out there where these principles matter. Think of your own life, your career, businesses you know, and ask yourself questions: how can these things apply here? How can I learn more?
+
+3. The principle of fairness
+00:54 - 01:53
+MedTech uses AI to prioritize patient care, for example, by providing personalized treatment plans. But here's a challenge: what if their AI system starts favoring one group of patients over another, based on patients’ gender, ethnicity, occupation, and other demographic information? The principle of fairness comes into play here. It emphasizes that AI systems should treat all individuals equally and avoid any form of discrimination. It is important to reflect on whether such biases exist or can arise, how should they be addressed, and what actions can be taken to ensure fairness. Addressing these questions requires active engagement with AI systems. We cannot simply assume that machines will inherently provide the right answers. We must partner with AI and take responsibility for understanding and addressing ethical concerns.
+
+4. The principle of accountability
+01:53 - 02:28
+Now onto the topic of accountability. Imagine a situation where MedTech's AI system makes a mistake. Who is responsible? Is it the software developer, the doctor using the system, the hospital implementing it, or the company that created the AI system? The principle of accountability states that someone should always be accountable for the outcomes of an AI system. Clarifying roles and responsibilities is crucial to ensure accountability and address any issues that may arise.
+
+5. The principle of transparency
+02:28 - 03:05
+Transparency is the third principle we'll explore. Suppose MedTech's AI system recommends a specific treatment for a patient. Without transparency, it may be difficult to understand why that recommendation was made. The principle of transparency asserts that decisions made by AI systems should be explainable and comprehensible. This requires sharing knowledge and information across different stakeholders. For instance, data scientists can explain the selection of algorithms and the validation process to important stakeholders.
+
+6. Applying AI ethics
+03:05 - 03:42
+How does MedTech apply these principles? To ensure fairness, they continuously test their AI systems to detect and rectify any bias. Accountability is established by defining clear responsibilities for each AI system's outcomes. In terms of transparency, MedTech is actively working on making their AI systems explainable and understandable. These efforts demonstrate their commitment to ethics and building trust with patients while mitigating risks associated with unethical AI use.
+
+7. Why do they matter?
+03:42 - 04:17
+Understanding and applying these principles helps MedTech ensure their AI systems are ethical. This not only builds trust with their patients but also mitigates risks that could arise from unethical AI use. In order for AI to be seen as a viable tool in society, which it is, trust will go a long way. People fear what they don’t know. If we can ensure transparency and knowledge around AI systems, hopefully, trust can be built and this powerful tool will be utilized.
+
+1 Icons made by Freepik & Smashicons from www.flaticon.com
+8. Let's practice!
+04:17 - 04:32
+As you work with AI, remember to keep these principles in mind. They serve as your compass in navigating the exciting yet complex world of AI. Now, let's move on to a few exercises!

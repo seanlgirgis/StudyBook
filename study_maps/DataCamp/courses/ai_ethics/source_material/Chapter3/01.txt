@@ -1,0 +1,34 @@
+1. Ethical frameworks
+00:00 - 00:17
+We’re embarking on an insightful journey, exploring ethical frameworks for decision-making in AI. Imagine an AI model making a significant decision. What guides this decision? How do we ensure it's ethical? Let's unravel these intriguing questions together.
+
+2. The background story
+00:17 - 00:45
+There are numerous ethical frameworks and philosophies to guide AI decision-making. For this course, we aren’t going to dive into the nuances between deontological versus consequentialist approaches. These schools of ethical thought have battled for many years, and adding AI to the mix will only make the battle more spirited. There isn’t going to be a universal framework for applying AI ethics, which actually is a good thing. Let's understand why.
+
+3. Ethical framework defined
+00:45 - 01:15
+What do we mean by 'ethical frameworks'? Ethical frameworks provide a scaffolding to model and define ethical decisions before they present themselves. For instance, an AI model used to predict patient risk in healthcare should do so in a manner that respects patient privacy and ensures fairness among different patient groups. Without such guidelines, an AI model might make decisions that are scientifically reasonable but ethically dubious.
+
+4. Organizational benefits
+01:15 - 01:44
+An ethical framework allows organizations to think about the scope and impact of their decisions with AI ahead of time. The framework itself gives a clear starting point. Previously feared for potentially stifling innovation, AI ethics now undergo a transformation. They are seen as capable of promoting innovation by alleviating ambiguity and challenges associated with AI usage.
+
+1 Icon made by Prosymbols Premium from www.flaticon.com
+5. Meet AgroTech!
+01:44 - 02:51
+It's crucial to note that ethical frameworks aren't one-size-fits-all solutions. Different industries may require different considerations. To demonstrate what an ethical framework looks like and how it can help organizations adopt AI, let's look at a fictional company: AgroTech. AgroTech is a new company aspiring to specialize in innovating how crops are harvested around the world. AgroTech decides that they want to create an ethical framework to guide their company's growth. They align on three key pillars: environmental sustainability, economic viability, and social equity, which are vital values to an agriculture company. Defining these pillars allow AgroTech to rank potential ideas and maintain its vision for the future. AgroTech is in the early stages of creating its new smart harvester series of drones to intelligently and automatically harvest crops. Before they get started, they consult their ethical framework to make sure that they keep ethics at the forefront of innovation.
+
+6. Meet AgroTech!(2)
+02:51 - 03:45
+Balancing environmental sustainability with economic viability and social equity is challenging. AgroTech must ensure that their smart harvesters don’t focus solely on expensive and resource-intensive crops while neglecting others. This could create an imbalance where farmers are incentivized only to plant a certain type of crop and jeopardize AgroTech’s sustainable mission. Conversely, whatever solution the smart harvesters utilize must be economically viable, or else there won’t be any reason for someone to utilize their product. At this point, AgroTech hasn’t made any large decisions about its path forward. Still, by taking a moment and consulting their ethical framework, it gives them a clear step to figure out what is important to them and check in as they build out their smart harvester series of drones.
+
+1 Icon made by Freepik from www.flaticon.com
+7. Challenges are unavoidable
+03:45 - 04:25
+Ethical frameworks come with challenges. Balancing various ethical considerations can be a tightrope walk. There might also be cultural and regional variations in what's considered ethical, making these frameworks even more complicated to construct. However, these hurdles are not insurmountable and encourage us to think critically about AI ethics. Ethical frameworks leave a profound impact on AI development and use. They help ensure that AI doesn't just do what it can from a technical perspective but also from a human perspective. This guidance aids in building trust with AI systems.
+
+1 Icons made by Flat Icons & Freepik from www.flaticon.com
+8. Let's practice!
+04:25 - 04:31
+There's more to learn and explore! Check out the following exercises to reinforce your understanding.

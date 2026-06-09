@@ -1,0 +1,635 @@
+<!doctype html>
+<!--
+TEMPLATE USAGE
+Replace every template token with section-specific content.
+Keep the CSS and layout stable unless the course requires a deliberate design change.
+Recommended filename pattern:
+chapter_XX_section_slug_field_guide.html
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 2 — Below the Surface: AI Ethics | AI Ethics</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">AI Ethics</a>
+      <span>›</span>
+      <span>Chapter 2: Below the Surface: AI Ethics</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">AI Ethics · Chapter 1</p>
+      <h1>Below the Surface: AI Ethics</h1>
+      <p>
+        Go beneath the surface of ethical AI by examining transparency, fairness, accountability, and Explainable AI. This chapter shows how organizations can make AI decisions more understandable, identify hidden bias, assign responsibility, and use interpretable models or explanation techniques.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">AI Ethics Quick Lookup</a>
+        <a class="button secondary" href="chapter_01_approaching_ai_ethics_field_guide.html">Previous: Approaching AI Ethics</a>
+        <a class="button secondary" href="chapter_03_the_way_forward_ai_ethics_field_guide.html">Next: The Way Forward</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Section Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Transparency and the Black Box</a>
+        <a href="#concept-2">3. Fairness and Hidden Bias</a>
+        <a href="#concept-3">4. Accountability and Human Responsibility</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>Many AI systems behave like black boxes: we can observe the inputs and outputs, but the internal reasoning is difficult to understand. That ambiguity makes it harder to trust decisions, detect unfairness, satisfy regulations, or assign responsibility. This chapter connects three ethical principles—transparency, fairness, and accountability—with Explainable AI, a set of approaches that helps humans understand how and why an AI system reaches a conclusion.</p>
+
+          <div class="diagram">Data collection → Preparation → Model training → Evaluation → Deployment
+       ↓              ↓              ↓             ↓             ↓
+  What data?     What changes?   How does it work?  Is it fair?  Who owns outcomes?
+
+Transparency reveals the process
+Fairness checks the impact
+Accountability assigns responsibility
+Explainable AI helps connect inputs to decisions</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Transparency and the Black Box</h3>
+              <p>Transparency makes the AI lifecycle understandable, including the data used, how it was prepared, how the model works in general, and how it is deployed.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Fairness and Hidden Bias</h3>
+              <p>Fairness means checking whether an AI system favors or disadvantages groups and recognizing that bias can remain even when sensitive variables are removed.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Accountability and Human Responsibility</h3>
+              <p>Accountability requires producers, deployers, and users to accept responsibility rather than treating model output as unquestionable truth.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Explainable AI</h3>
+              <p>Explainable AI uses interpretable models or explanation methods such as LIME and SHAP to make decisions clearer to humans.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> Ethical AI requires more than good predictions. We must understand the system, test its effects, assign responsibility, and explain important decisions.
+          </div>
+        </section>
+
+        <section class="section" id="concept-1">
+          <h2>2. Transparency and the Black Box</h2>
+          <p>A black-box AI system is one where the inputs and outputs are visible but the path between them is unclear. From an ethical perspective, that ambiguity is dangerous because people cannot easily validate the decision, identify problematic factors, or decide whether the system respects rules and values. Transparency addresses this by making the AI lifecycle intelligible—from data collection and preparation through training, evaluation, deployment, and lessons learned after use.</p>
+
+          <pre><code>TRANSPARENCY CHECK
+• What data trained the model?
+• How was the data cleaned or transformed?
+• What general logic does the model use?
+• How was performance evaluated?
+• How is the system deployed and monitored?
+• What limitations, failures, and lessons are shared?</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> Transparency is broader than revealing model internals. It includes openness about data, preparation, implementation, limitations, challenges, and lessons learned.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Fairness and Hidden Bias</h2>
+          <p>Fairness in AI means avoiding unjustified preference or disadvantage across groups such as race, gender, age, or socioeconomic status. One technique, fairness through unawareness, removes sensitive variables from the data. However, this is not a complete solution because models may infer those characteristics through proxy variables. The healthcare example in the chapter shows that a model could predict a patient's self-reported race from a chest X-ray even after obvious related factors were controlled. Therefore fairness requires ongoing audits and monitoring, not only removing a few columns.</p>
+
+          <pre><code>FAIRNESS REVIEW
+1. Remove or justify sensitive variables.
+2. Search for proxy variables that may reveal the same information.
+3. Compare error rates and outcomes across relevant groups.
+4. Investigate unexplained disparities.
+5. Repeat the audit as data and behavior change.</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> Removing race, gender, or age does not guarantee fairness. Other features may act as proxies, and the model may still discover hidden patterns correlated with those characteristics.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. Accountability and Human Responsibility</h2>
+          <p>Accountability assigns responsibility for the outcomes and impacts of AI systems. Developers, organizations, deployers, and users cannot escape responsibility by saying that the algorithm made the decision. Overtrust is especially dangerous: people may follow a machine even when their own judgment signals a problem. The chapter's robot-evacuation and automated-driving examples illustrate why both producers and consumers must remain vigilant. A useful rule is trust but verify.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Principle</th>
+                <th>Core question</th>
+                <th>Practical action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Transparency</td>
+                <td>Can relevant people understand how the system was built and used?</td>
+                <td>Document data, preparation, model logic, deployment, limitations, and lessons.</td>
+              </tr>
+              <tr>
+                <td>Accountability</td>
+                <td>Who is responsible for the decision and its consequences?</td>
+                <td>Assign owners, preserve human judgment, verify outputs, and provide correction paths.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>Consider a construction company using AI to select job candidates. The company wants speed, but it also needs to understand whether the model is making fair and explainable decisions.</p>
+
+          <pre><code>Scenario: AI ranks construction applicants.
+
+Transparency:
+  Document training data, feature preparation, ranking logic,
+  performance limits, and deployment rules.
+
+Fairness:
+  Check whether the model favors the CEO's alumni,
+  nearby applicants, people from larger companies,
+  or any demographic group without job-related justification.
+
+Accountability:
+  Name the hiring owner and the technical owner.
+  Require human review before rejection.
+
+Explainability:
+  Show which job-related factors most influenced each ranking.</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> The company can identify hidden preference patterns, explain rankings, preserve human review, and correct unfair outcomes instead of blindly trusting the model.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Verify that the organization documents data sources, preparation, model behavior, and deployment.</li>
+            <li>Compare outcomes and error rates across relevant groups, not only overall accuracy.</li>
+            <li>Confirm that named producers, deployers, and users understand their responsibilities.</li>
+            <li>Check whether explanations are understandable and useful for the affected decision.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> A high-impact model produces a decision that no one can explain, no one audits for group disparities, and no one accepts responsibility when harm occurs.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Believing openness means revealing every trade secret</strong>
+              Transparency should provide meaningful information about data, process, risks, and limitations. It does not require publishing every proprietary detail.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming sensitive-column removal solves fairness</strong>
+              Models can infer sensitive information from proxies. Fairness must be evaluated through outcome testing and audits.
+            </article>
+
+            <article class="qa-item">
+              <strong>Treating model output as objective truth</strong>
+              AI is a human-built tool. Producers and users should trust but verify, preserve judgment, and remain accountable.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is the black-box problem in AI?</strong>
+              The black-box problem occurs when we can observe an AI system's inputs and outputs but cannot easily understand the internal reasoning that connects them. This makes validation, trust, fairness checks, compliance, and accountability more difficult.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why is fairness through unawareness not enough?</strong>
+              Removing sensitive fields can help, but other features may serve as proxies and allow the model to infer the same information. Fairness therefore requires group-level outcome analysis, error comparison, monitoring, and repeated audits.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is Explainable AI, and how can it be implemented?</strong>
+              Explainable AI makes model decisions understandable to humans. It can be built into the model by choosing interpretable approaches such as decision trees or linear and logistic regression, or added after training through techniques such as LIME and SHAP.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li>Transparency covers the full AI lifecycle, not only the final prediction.</li>
+              <li>Fairness through unawareness can reduce risk but cannot eliminate hidden proxies.</li>
+              <li>Accountability remains with humans and organizations; trust model output, but verify it.</li>
+              <li>LIME explains one prediction locally; SHAP estimates how much each feature contributed.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can I explain the black-box problem in one sentence?</li>
+            <li>Can I explain why removing protected attributes does not guarantee fairness?</li>
+            <li>Can I distinguish accountability of AI producers from accountability of AI users?</li>
+            <li>Can I compare interpretable models, LIME, and SHAP?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> Use a light case-analysis lab rather than a programming lab. For one high-impact AI scenario, document the data lifecycle, identify potential proxies, assign accountable owners, and write a plain-English explanation of one decision.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> You can describe the black-box problem, identify hidden fairness risks, explain who remains accountable, and choose between an interpretable model, LIME, or SHAP for a practical explanation need.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>AI Ethics · Chapter 2 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">AI Ethics Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_01_approaching_ai_ethics_field_guide.html">Previous: Approaching AI Ethics</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_03_the_way_forward_ai_ethics_field_guide.html">Next: The Way Forward</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

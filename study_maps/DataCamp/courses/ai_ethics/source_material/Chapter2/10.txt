@@ -1,0 +1,38 @@
+1. Explainable AI
+00:00 - 00:14
+We’ve built up the principles of ethical AI. Now let’s look at the promising field of Explainable AI, or XAI, and see how XAI is able to tackle many of the challenges we observed along the way.
+
+2. What's explainable AI?
+00:14 - 00:46
+Explainable AI refers to artificial intelligence systems whose internal workings are understood by humans. It's not just about creating AI systems that make accurate predictions or automate tasks. It's about making AI's decision-making process clear, understandable, and explainable. It helps us understand why and how AI makes certain decisions, and is a major step towards achieving ethical AI as a whole.
+
+1 Icon made by vectorsmarket15 from www.flaticon.com
+3. The central pillars
+00:46 - 01:31
+XAI places transparency, fairness, and accountability as its central pillars for developing and evaluating a model. The 'how' and 'why' of AI conclusions should be accessible and logical to humans. XAI commonly comes in two forms, the first being a model, built with explainability at its core. This is realized by utilizing interpretable models, such as decision trees or logistic and linear regression. These models often don’t perform as well as other more complex models but their power is in being able to see how inputs are processed and arrive at the outputs directly.
+
+1 Icons made by juicy_fish & Becris from www.flaticon.com
+4. How does it work?
+01:31 - 01:51
+For models that weren’t explainable from the beginning, XAI can be added on like a wrapper around the existing model to make it more explainable. Let's think about adding XAI to an existing model as giving the model a voice, enabling it to narrate its own decision-making process.
+
+5. How does it work?
+01:51 - 02:12
+Imagine you're using a sophisticated AI model to predict whether a movie will be a hit or a miss based on features like budget, genre, cast, and director. The model has been working well in terms of its predictions, but you can't understand why it predicts a certain movie to be a hit or a miss. Here's where XAI comes in.
+
+6. Local Interpretable Model-agnostic Explanations (LIME)
+02:12 - 02:49
+One common method to add XAI to the model is using a technique called Local Interpretable Model-agnostic Explanations, or LIME. Picture LIME as a translator that helps the model communicate its thoughts. It creates a simpler version of the model's decision-making process around a specific prediction and explains why the model made that decision. For instance, the model might predict that a movie will be a hit, and the LIME might explain that this is because the movie has a popular director and a high budget.
+
+1 Icon made by Freepik from www.flaticon.com
+7. SHapley Additive exPlanations (SHAP)
+02:49 - 03:18
+Another technique is SHapley Additive exPlanations, or SHAP. Think of SHAP as a detective that reveals the importance of each clue or feature in solving a case and making a prediction. For example, SHAP might tell you for a specific movie, the director was 50% responsible for the prediction, the cast was 30% responsible, the genre was 15% responsible, and the budget was 5% responsible.
+
+8. Future of XAI
+03:18 - 03:41
+There are many more techniques and approaches to XAI and I encourage you to look into the field more because the gap between XAI and traditional techniques is shrinking. With ongoing research and advances in AI interpretability techniques, we're making progress toward more transparent, fair, and accountable AI systems.
+
+9. Let's practice!
+03:41 - 03:53
+Hopefully, the field of XAI excites you as much as it excites me. Take a deep dive into the following exercises and keep striving for ethical AI. It's worth it!

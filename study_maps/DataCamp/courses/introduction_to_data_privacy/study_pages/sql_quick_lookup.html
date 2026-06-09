@@ -1,0 +1,445 @@
+<!doctype html>
+<!--
+SQL QUICK LOOKUP TEMPLATE
+
+Purpose:
+- Searchable whole-course syntax reference
+- Smallest useful code patterns
+- Short purpose statements
+- Common traps beside each pattern
+
+Instructions:
+1. Replace every {{PLACEHOLDER}}.
+2. Duplicate or remove lookup cards as needed.
+3. Keep the active course filename:
+   sql_quick_lookup.html
+4. Preserve the search script and the .lookup-card class.
+5. Keep examples short enough to scan quickly.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{COURSE_TITLE}} — Quick Lookup</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3,239,98,.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88,166,255,.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210,153,34,.12);
+      --danger: #ff7b72;
+      --shadow: 0 12px 30px rgba(0,0,0,.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3,239,98,.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 50px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d, #0d2a40 58%, #14384e);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), #bc8cff);
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.05rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 40px;
+      padding: 0 15px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      border: 1px solid #486274;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+      border-color: transparent;
+    }
+
+    .search-wrap {
+      margin-top: 18px;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #3b4a58;
+      border-radius: 10px;
+      background: #0f141a;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .search-wrap input:focus {
+      outline: 2px solid rgba(88,166,255,.35);
+      border-color: var(--blue);
+    }
+
+    .section {
+      margin-top: 22px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.35rem;
+    }
+
+    .lookup-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .lookup-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 15px;
+    }
+
+    .lookup-card h3 {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 1rem;
+    }
+
+    .lookup-card p {
+      margin: 0 0 9px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .lookup-card pre {
+      margin: 10px 0;
+      padding: 11px;
+      border: 1px solid #33404d;
+      border-radius: 8px;
+      background: #0f141a;
+      color: #dce6ef;
+      overflow-x: auto;
+      font-size: .84rem;
+      line-height: 1.45;
+    }
+
+    .trap {
+      margin-top: 10px;
+      padding: 9px 10px;
+      border-left: 3px solid var(--amber);
+      border-radius: 7px;
+      background: var(--amber-soft);
+      color: #d8caaa;
+      font-size: .84rem;
+    }
+
+    .callout {
+      margin-top: 14px;
+      padding: 13px 15px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .diagram {
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #10161d;
+      white-space: pre;
+      overflow-x: auto;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 980px) {
+      .lookup-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 650px) {
+      .lookup-grid { grid-template-columns: 1fr; }
+      .hero { padding: 26px 20px; }
+      .section { padding: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <span>›</span>
+      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <span>›</span>
+      <span>SQL Quick Lookup</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">{{COURSE_TITLE}} · Quick Reference</p>
+      <h1>SQL Quick Lookup</h1>
+      <p>
+        {{QUICK_LOOKUP_SUMMARY_HTML}}
+      </p>
+
+      <div class="actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button" href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a class="button" href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+      </div>
+
+      <div class="search-wrap">
+        <input id="lookupSearch" type="search"
+               placeholder="{{SEARCH_PLACEHOLDER}}"
+               aria-label="Search quick lookup">
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>{{SECTION_1_TITLE}}</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>{{ITEM_1_TITLE}}</h3>
+          <p>{{ITEM_1_PURPOSE}}</p>
+          <pre><code>{{ITEM_1_CODE}}</code></pre>
+          <div class="trap">{{ITEM_1_TRAP}}</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>{{ITEM_2_TITLE}}</h3>
+          <p>{{ITEM_2_PURPOSE}}</p>
+          <pre><code>{{ITEM_2_CODE}}</code></pre>
+          <div class="trap">{{ITEM_2_TRAP}}</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>{{ITEM_3_TITLE}}</h3>
+          <p>{{ITEM_3_PURPOSE}}</p>
+          <pre><code>{{ITEM_3_CODE}}</code></pre>
+          <div class="trap">{{ITEM_3_TRAP}}</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>{{SECTION_2_TITLE}}</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>{{ITEM_4_TITLE}}</h3>
+          <p>{{ITEM_4_PURPOSE}}</p>
+          <pre><code>{{ITEM_4_CODE}}</code></pre>
+          <div class="trap">{{ITEM_4_TRAP}}</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>{{ITEM_5_TITLE}}</h3>
+          <p>{{ITEM_5_PURPOSE}}</p>
+          <pre><code>{{ITEM_5_CODE}}</code></pre>
+          <div class="trap">{{ITEM_5_TRAP}}</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>{{ITEM_6_TITLE}}</h3>
+          <p>{{ITEM_6_PURPOSE}}</p>
+          <pre><code>{{ITEM_6_CODE}}</code></pre>
+          <div class="trap">{{ITEM_6_TRAP}}</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>{{SECTION_3_TITLE}}</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>{{ITEM_7_TITLE}}</h3>
+          <p>{{ITEM_7_PURPOSE}}</p>
+          <pre><code>{{ITEM_7_CODE}}</code></pre>
+          <div class="trap">{{ITEM_7_TRAP}}</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>{{ITEM_8_TITLE}}</h3>
+          <p>{{ITEM_8_PURPOSE}}</p>
+          <pre><code>{{ITEM_8_CODE}}</code></pre>
+          <div class="trap">{{ITEM_8_TRAP}}</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>{{ITEM_9_TITLE}}</h3>
+          <p>{{ITEM_9_PURPOSE}}</p>
+          <pre><code>{{ITEM_9_CODE}}</code></pre>
+          <div class="trap">{{ITEM_9_TRAP}}</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>{{SECTION_4_TITLE}}</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>{{ITEM_10_TITLE}}</h3>
+          <p>{{ITEM_10_PURPOSE}}</p>
+          <pre><code>{{ITEM_10_CODE}}</code></pre>
+          <div class="trap">{{ITEM_10_TRAP}}</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>{{ITEM_11_TITLE}}</h3>
+          <p>{{ITEM_11_PURPOSE}}</p>
+          <pre><code>{{ITEM_11_CODE}}</code></pre>
+          <div class="trap">{{ITEM_11_TRAP}}</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>{{ITEM_12_TITLE}}</h3>
+          <p>{{ITEM_12_PURPOSE}}</p>
+          <pre><code>{{ITEM_12_CODE}}</code></pre>
+          <div class="trap">{{ITEM_12_TRAP}}</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>{{REFERENCE_SECTION_TITLE}}</h2>
+
+      <div class="diagram">{{REFERENCE_DIAGRAM}}</div>
+
+      <div class="callout">
+        {{REFERENCE_CALLOUT}}
+      </div>
+    </section>
+
+    <footer>
+      <span>{{COURSE_TITLE}} · SQL Quick Lookup</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+      </span>
+    </footer>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById("lookupSearch");
+    const cards = Array.from(document.querySelectorAll(".lookup-card"));
+
+    searchInput.addEventListener("input", function () {
+      const term = this.value.trim().toLowerCase();
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.classList.toggle("hidden", term && !text.includes(term));
+      });
+    });
+  </script>
+</body>
+</html>

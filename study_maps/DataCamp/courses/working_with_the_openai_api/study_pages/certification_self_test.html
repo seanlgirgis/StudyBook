@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certification Self-Test | Working with the OpenAI API</title>
+
+<style>
+:root{
+  --bg:#0d1117;--panel:#161b22;--panel-soft:#1c232d;--border:#30363d;
+  --text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;
+  --amber:#d29922;--purple:#bc8cff;--danger:#ff7b72;--shadow:0 12px 30px rgba(0,0,0,.24)
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:
+radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);
+color:var(--text);line-height:1.62}
+a{color:inherit} code,pre{font-family:Consolas,"Courier New",monospace}
+.page{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:24px 0 52px}
+.breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;color:var(--muted);font-size:.9rem}
+.breadcrumbs a{color:var(--muted);text-decoration:none}.breadcrumbs a:hover{color:var(--green)}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);
+border:1px solid #28506a;border-radius:18px;padding:34px;box-shadow:var(--shadow)}
+.hero::before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}
+.eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}.hero p{max-width:900px;margin:14px 0 0;color:#c8d4df}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.button{display:inline-flex;min-height:40px;padding:0 15px;align-items:center;justify-content:center;border-radius:9px;
+border:1px solid #486274;background:rgba(255,255,255,.04);text-decoration:none;font-weight:800}
+.button.primary{background:var(--green);color:#03130a;border-color:transparent}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;margin-top:24px}
+.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.toc h2{margin:0 0 10px;font-size:1rem}.toc a{display:block;padding:7px 8px;border-radius:7px;color:var(--muted);font-size:.9rem;text-decoration:none}
+.toc a:hover{background:rgba(255,255,255,.05);color:var(--green)}
+.section{margin-bottom:18px;background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+.section h2{margin:0 0 12px;font-size:1.42rem}.section h3{margin:22px 0 8px;font-size:1.06rem}
+.section p{margin:0 0 12px;color:#c9d3dc}.section ul,.section ol{color:#c9d3dc}
+pre{overflow-x:auto;padding:16px;border:1px solid #33404d;border-radius:10px;background:#0f141a;color:#dce6ef;font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{padding:16px;background:var(--panel-soft);border:1px solid var(--border);border-radius:11px}
+.card h3{margin:0 0 7px;color:var(--green)}.card p{margin:0;color:var(--muted);font-size:.92rem}
+.callout{margin:16px 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:9px;background:rgba(88,166,255,.12);color:#cfdcec}
+.callout.green{border-left-color:var(--green);background:rgba(3,239,98,.12)}
+.callout.amber{border-left-color:var(--amber);background:rgba(210,153,34,.12);color:#d8caaa}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.92rem}th,td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:#1f2933}td{background:#121820;color:#cbd5de}
+details{margin:10px 0;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#121820}
+summary{cursor:pointer;font-weight:800;color:var(--green)}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}
+footer a{color:var(--blue);text-decoration:none}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:static}}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.hero{padding:28px 21px}.section{padding:18px}}
+</style>
+
+</head>
+<body>
+<main class="page">
+<nav class="breadcrumbs">
+<a href="../../../index.html">DataCamp</a><span>›</span>
+<a href="../index.html">Working with the OpenAI API</a><span>›</span>
+<span>Certification Self-Test</span>
+</nav>
+<header class="hero">
+<p class="eyebrow">Recall Check</p>
+<h1>Certification Self-Test</h1>
+<p>Twenty-five focused questions covering concepts, code reading, debugging, and small build decisions from the course.</p>
+<div class="actions">
+<a class="button primary" href="../index.html">Course Home</a>
+<a class="button" href="field_guide.html">Main Field Guide</a>
+<a class="button" href="sql_quick_lookup.html">Quick Lookup</a>
+</div>
+</header>
+<div class="layout">
+<aside class="toc"><h2>Contents</h2><a href="#instructions">1. Instructions</a>
+<a href="#questions">2. Questions</a>
+<a href="#score">3. Scoring</a></aside>
+<div>
+<section class="section" id="instructions">
+<h2>1. How to Use This Test</h2>
+<p>Answer each question before opening the answer. Mark anything uncertain and revisit the matching section in the Field Guide or Code Patterns workbook.</p>
+<div class="callout green"><strong>Target:</strong> 20 or more correct without reference material before moving on.</div>
+</section>
+<section class="section" id="questions">
+<h2>2. Self-Test</h2>
+<details id="q1">
+<summary>1. [Concept] What does the system role control?</summary>
+<p><strong>Answer:</strong> Behavior, tone, scope, and guardrails.</p>
+</details><details id="q2">
+<summary>2. [Concept] Where is the actual human request stored?</summary>
+<p><strong>Answer:</strong> In a message with role=user.</p>
+</details><details id="q3">
+<summary>3. [Concept] What is the assistant role?</summary>
+<p><strong>Answer:</strong> A label for model replies or example answers.</p>
+</details><details id="q4">
+<summary>4. [Concept] Why does input-token usage grow in a multi-turn chat?</summary>
+<p><strong>Answer:</strong> Because the full stored conversation history is resent.</p>
+</details><details id="q5">
+<summary>5. [Concept] What does temperature control?</summary>
+<p><strong>Answer:</strong> The degree of variation/randomness in generation.</p>
+</details><details id="q6">
+<summary>6. [Concept] What does max_completion_tokens control?</summary>
+<p><strong>Answer:</strong> The maximum generated output size.</p>
+</details><details id="q7">
+<summary>7. [Concept] What does finish_reason='length' indicate?</summary>
+<p><strong>Answer:</strong> The reply hit the output ceiling and may be truncated.</p>
+</details><details id="q8">
+<summary>8. [Concept] What is few-shot prompting?</summary>
+<p><strong>Answer:</strong> Providing one or more examples to guide output.</p>
+</details><details id="q9">
+<summary>9. [Concept] Why are poor examples dangerous?</summary>
+<p><strong>Answer:</strong> The model can imitate their errors, style, and bad assumptions.</p>
+</details><details id="q10">
+<summary>10. [Concept] Who owns conversation memory?</summary>
+<p><strong>Answer:</strong> The application, not the API.</p>
+</details><details id="q11">
+<summary>11. [Code] Complete the extraction path: response.____[0].message.____</summary>
+<p><strong>Answer:</strong> choices and content.</p>
+</details><details id="q12">
+<summary>12. [Code] What must surround a message dictionary?</summary>
+<p><strong>Answer:</strong> A list, because messages expects a list of dictionaries.</p>
+</details><details id="q13">
+<summary>13. [Code] Which line stores a model reply into history?</summary>
+<p><strong>Answer:</strong> messages.append({&#x27;role&#x27;:&#x27;assistant&#x27;,&#x27;content&#x27;:reply})</p>
+</details><details id="q14">
+<summary>14. [Code] How do you load a key safely in the basic client?</summary>
+<p><strong>Answer:</strong> Set OPENAI_API_KEY in the environment, then call OpenAI().</p>
+</details><details id="q15">
+<summary>15. [Code] What must be added before {customer_chat} is interpolated?</summary>
+<p><strong>Answer:</strong> The f prefix on the string.</p>
+</details><details id="q16">
+<summary>16. [Code] Which usage field reports input tokens?</summary>
+<p><strong>Answer:</strong> response.usage.prompt_tokens</p>
+</details><details id="q17">
+<summary>17. [Code] Which usage field reports output tokens?</summary>
+<p><strong>Answer:</strong> response.usage.completion_tokens</p>
+</details><details id="q18">
+<summary>18. [Code] Which role should hold a worked example answer?</summary>
+<p><strong>Answer:</strong> assistant</p>
+</details><details id="q19">
+<summary>19. [Debug] A behavior instruction was placed under role=user. What is wrong?</summary>
+<p><strong>Answer:</strong> It should normally be a system instruction.</p>
+</details><details id="q20">
+<summary>20. [Debug] A follow-up ignores the earlier answer. What is the likely problem?</summary>
+<p><strong>Answer:</strong> The prior user/assistant history was not resent.</p>
+</details><details id="q21">
+<summary>21. [Debug] A product description invents features. What can help?</summary>
+<p><strong>Answer:</strong> Lower temperature and an explicit &#x27;use only confirmed features&#x27; instruction.</p>
+</details><details id="q22">
+<summary>22. [Debug] A reply ends mid-sentence. What should you inspect?</summary>
+<p><strong>Answer:</strong> finish_reason and max_completion_tokens.</p>
+</details><details id="q23">
+<summary>23. [Debug] The next turn used a truncated reply as context. What should change?</summary>
+<p><strong>Answer:</strong> Do not append replies whose finish_reason is length.</p>
+</details><details id="q24">
+<summary>24. [Build] Build a request that asks for a two-sentence beginner explanation of APIs.</summary>
+<p><strong>Answer:</strong> Use system for teaching style, user for the task, and a small completion limit.</p>
+</details><details id="q25">
+<summary>25. [Build] Build a two-turn chat where the second question refers to the first answer.</summary>
+<p><strong>Answer:</strong> Append user, call API, append assistant, then append the follow-up and resend the whole messages list.</p>
+</details>
+</section>
+<section class="section" id="score">
+<h2>3. Scoring Guide</h2>
+<table>
+<tr><th>Score</th><th>Meaning</th></tr>
+<tr><td>22–25</td><td>Strong course recall</td></tr>
+<tr><td>18–21</td><td>Ready with light review</td></tr>
+<tr><td>14–17</td><td>Review weak areas before testing</td></tr>
+<tr><td>Below 14</td><td>Repeat the digest and code patterns</td></tr>
+</table>
+</section>
+</div>
+</div>
+<footer><span>Working with the OpenAI API</span><span><a href="../index.html">Course Home</a> · <a href="field_guide.html">Field Guide</a></span></footer>
+</main>
+</body>
+</html>

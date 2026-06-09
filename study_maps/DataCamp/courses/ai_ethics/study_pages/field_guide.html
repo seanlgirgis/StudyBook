@@ -1,0 +1,721 @@
+<!doctype html>
+<!--
+FIELD GUIDE TEMPLATE
+
+Purpose:
+- Whole-course accumulated Field Guide
+- Cross-chapter memory map
+- Navigation hub
+- Decision guide
+- Interview review
+- Lab evidence summary
+
+Instructions:
+1. Replace every template token.
+2. Add or remove chapter cards to match the course.
+3. Keep this filename when used as the active course guide:
+   field_guide.html
+4. Preserve the shared layout and visual system unless a deliberate design change is required.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Ethics — Field Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .cheat-grid,
+    .compare-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cheat-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .compare-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .cheat-card,
+    .compare-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .cheat-card h3,
+    .compare-card h3 {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .cheat-card p,
+    .compare-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul,
+    .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cheat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .status-grid,
+      .chapter-grid,
+      .cheat-grid,
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">AI Ethics</a>
+      <span>›</span>
+      <span>Main Field Guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">DataCamp · AI Ethics</p>
+      <h1>AI Ethics Field Guide</h1>
+      <p>
+        A whole-course memory map for evaluating AI systems through fairness, accountability, transparency, explainability, stakeholder participation, ethical frameworks, and Ethical AI by Design.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.md">Markdown Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">AI Ethics Quick Lookup</a>
+        <a class="button secondary" href="../lab/lab_run_book.md">Lab Run Book</a>
+        <a class="button secondary" href="certification_prep.html">Certification Prep</a>
+        <a class="button secondary" href="final_self_test.html">Final Self-Test</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card"><strong>COMPLETE</strong><span>Platform status</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Documentation</span></div>
+        <div class="status-card"><strong>LIGHT</strong><span>Lab coverage</span></div>
+        <div class="status-card"><strong>DEVELOPING</strong><span>Recall confidence</span></div>
+        <div class="status-card"><strong>NEEDS REPETITION</strong><span>Interview readiness</span></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Guide Contents</h2>
+        <a href="#chapters">1. Chapter guides</a>
+        <a href="#big-picture">2. Course big picture</a>
+        <a href="#core-concepts">3. Core concepts</a>
+        <a href="#patterns">4. Core syntax and patterns</a>
+        <a href="#comparisons">5. Comparisons and decisions</a>
+        <a href="#mistakes">6. Common mistakes</a>
+        <a href="#interview">7. Interview translation</a>
+        <a href="#lab">8. Local lab evidence</a>
+        <a href="#memory">9. Memory nuggets</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="chapters">
+          <h2>1. Chapter Guides</h2>
+
+          <div class="chapter-grid">
+            <article class="chapter-card">
+              <h3><a href="chapter_01_approaching_ai_ethics_field_guide.html">Chapter 1 — Approaching AI Ethics</a></h3>
+              <p>Introduces AI ethics, fairness, accountability, transparency, privacy, human control, and continuous monitoring.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_02_below_the_surface_ai_ethics_field_guide.html">Chapter 2 — Below the Surface: AI Ethics</a></h3>
+              <p>Explores black-box systems, hidden proxies, automation bias, interpretable models, LIME, SHAP, and shared accountability.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_03_the_way_forward_ai_ethics_field_guide.html">Chapter 3 — The Way Forward: AI Ethics</a></h3>
+              <p>Turns principles into practice through ethical frameworks, stakeholders, business value, and Ethical AI by Design.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="big-picture">
+          <h2>2. Course Big Picture</h2>
+          <p>AI ethics asks whether an AI system should be built and used—not merely whether it can make accurate predictions. Responsible AI combines technical quality with human values, clear ownership, understandable decisions, fair outcomes, and ongoing governance.</p>
+
+          <div class="diagram">Values and objectives
+        ↓
+Stakeholders → Data → Model → Decision → Real-world impact
+        ↑         ↑       ↑         ↑
+   participation fairness explanation accountability
+        \________ monitoring and iteration ________/</div>
+
+          <div class="callout green">
+            <strong>Course punchline:</strong> Responsible AI is a lifecycle practice: define ethical goals, use representative data, test outcomes, explain decisions, preserve human responsibility, listen to affected people, and keep monitoring.
+          </div>
+        </section>
+
+        <section class="section" id="core-concepts">
+          <h2>3. Core Concepts</h2>
+
+          <div class="cheat-grid">
+            <article class="cheat-card">
+              <h3>Fairness</h3>
+              <p>Check whether outcomes or errors unjustifiably disadvantage people or groups. Equal treatment alone does not guarantee fair impact.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Accountability</h3>
+              <p>People and organizations remain responsible for design, approval, deployment, monitoring, correction, and appeal.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Transparency</h3>
+              <p>Explain data, preparation, model behavior, limitations, deployment, and important decisions to relevant stakeholders.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Explainability</h3>
+              <p>Use interpretable models or methods such as LIME and SHAP to clarify why a model produced a result.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Stakeholder Participation</h3>
+              <p>Include technical, legal, operational, domain, user, and affected-community perspectives throughout the lifecycle.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Ethical AI by Design</h3>
+              <p>Build ethics into objectives, data, design, testing, complaint handling, monitoring, and iteration from the start.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="patterns">
+          <h2>4. Core Syntax and Patterns</h2>
+
+          <h3>High-impact AI review</h3>
+          <pre><code>1. Who is affected?
+2. What harm is possible?
+3. Is the data representative?
+4. Can the decision be explained?
+5. Who owns the outcome?
+6. Can a human review or override?
+7. How will it be monitored?</code></pre>
+          <p>Use this sequence before approving AI in healthcare, hiring, lending, insurance, legal, or other consequential settings.</p>
+
+          <h3>Fairness validation</h3>
+          <pre><code>Plan representation → inspect data → test group outcomes → investigate proxies → monitor drift</code></pre>
+          <p>Removing a protected attribute is not enough; proxies and unequal error rates may remain.</p>
+
+          <h3>Explainability choice</h3>
+          <pre><code>Interpretable model = understandable by design
+LIME = local approximation for one prediction
+SHAP = feature contribution values</code></pre>
+          <p>Choose the explanation approach according to decision impact, audience, model type, and need for local or comparative explanations.</p>
+        </section>
+
+        <section class="section" id="comparisons">
+          <h2>5. Comparisons and Decision Rules</h2>
+
+          <div class="compare-grid">
+            <article class="compare-card">
+              <h3>Fairness through unawareness</h3>
+              <p>Remove sensitive attributes. Helpful as one control, but weak when proxies remain or outcomes are not audited.</p>
+            </article>
+
+            <article class="compare-card">
+              <h3>Outcome-based fairness review</h3>
+              <p>Compare decisions and errors across groups, investigate disparities, and repeat checks over time.</p>
+            </article>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Situation</th>
+                <th>Prefer</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>High-impact decision</td>
+                <td>Stronger explanation and human review</td>
+                <td>The consequences of error are serious.</td>
+              </tr>
+              <tr>
+                <td>Need one local explanation</td>
+                <td>LIME</td>
+                <td>It approximates behavior around one prediction.</td>
+              </tr>
+              <tr>
+                <td>Need comparable feature contributions</td>
+                <td>SHAP</td>
+                <td>It assigns contribution values to features.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>6. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Assuming AI is neutral</strong>
+              Data, objectives, labels, thresholds, and deployment choices all carry human values and possible bias.
+            </article>
+
+            <article class="qa-item">
+              <strong>Equating identical treatment with fairness</strong>
+              Fairness examines unjust disadvantage and real outcomes, not only whether the same process was applied.
+            </article>
+
+            <article class="qa-item">
+              <strong>Removing sensitive columns and stopping</strong>
+              Search for proxies and compare group-level outcomes and error rates.
+            </article>
+
+            <article class="qa-item">
+              <strong>Treating ethics as a launch gate</strong>
+              Ethics continues through complaints, monitoring, audits, correction, and iteration.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>7. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is AI ethics?</strong>
+              AI ethics is the practice of aligning AI development and use with human values such as fairness, privacy, transparency, accountability, safety, and respect for affected people.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why is removing protected attributes insufficient?</strong>
+              Other variables may act as proxies, and unfairness can still appear in group-level outcomes. Fairness must be tested, not assumed.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do LIME and SHAP differ?</strong>
+              LIME creates a simple local approximation around one prediction. SHAP assigns contribution values showing how features pushed a prediction.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is Ethical AI by Design?</strong>
+              It means embedding ethical objectives, stakeholder participation, responsible data practices, transparency, bias testing, complaint channels, monitoring, and iteration throughout the lifecycle.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="lab">
+          <h2>8. Local Lab Evidence</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Validated result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Scenario analysis</td>
+                <td>Use stakeholder, harm, fairness, transparency, accountability, and oversight questions on a fictional case.</td>
+              </tr>
+              <tr>
+                <td>Fairness review</td>
+                <td>Plan representation early, inspect data, test group outcomes, investigate proxies, and monitor change.</td>
+              </tr>
+              <tr>
+                <td>Explanation review</td>
+                <td>Choose interpretable models, LIME, or SHAP according to the explanation need.</td>
+              </tr>
+              <tr>
+                <td>Governance design</td>
+                <td>Define an ethical framework, accountable owners, complaint channels, and lifecycle checkpoints.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            This conceptual course benefits from lightweight scenario and governance exercises rather than a programming lab.
+          </div>
+        </section>
+
+        <section class="section" id="memory">
+          <h2>9. Quick Memory Nuggets</h2>
+
+          <pre><code>Fairness = outcome
+Accountability = owner
+Transparency = explanation</code></pre>
+
+          <pre><code>Plan diversity → inspect data → test outcomes → monitor after launch</code></pre>
+
+          <pre><code>LIME = local approximation
+SHAP = feature contributions
+Ethical AI by Design = ethics across the lifecycle</code></pre>
+
+          <div class="callout amber">
+            <strong>Final review:</strong> Use Certification Prep for concentrated review, then take the Final Self-Test without notes.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>AI Ethics · Main Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.md">Markdown Guide</a>
+        &nbsp;·&nbsp;
+        <a href="sql_quick_lookup.html">Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="certification_prep.html">Certification Prep</a>
+        &nbsp;·&nbsp;
+        <a href="final_self_test.html">Final Self-Test</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

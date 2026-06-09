@@ -1,0 +1,39 @@
+1. Multi-turn conversations with GPT
+00:00 - 00:10
+Great work so far! In this video, we'll begin to unleash the full potential of chat models by creating multi-turn conversations.
+
+2. Assistant messages
+00:10 - 00:42
+We've seen how we can construct a series of messages outlining a conversation between the user and assistant, which is uses to respond to a final user message. The model, in this case, will output a response to this final user prompt. If we could store this response and add it to the messages, we could continue this back-and-forth conversation with the model. This is exactly what goes on underneath AI chatbots like ChatGPT!
+
+3. Building a conversation
+00:42 - 00:50
+To create this conversation, we'll need to code a mechanism so that when a user message is sent, and an assistant response is generated,
+
+4. Building a conversation
+00:50 - 00:53
+it is fed back into the messages
+
+5. Building a conversation
+00:53 - 00:56
+and stored to be sent with the next user message.
+
+6. Building a conversation
+00:56 - 01:00
+Then, when a new user message is provided,
+
+7. Building a conversation
+01:00 - 01:21
+the model has the context from the conversation history to draw from. This means that if we introduce ourselves in the first user message, then ask the model what our name is in the second, it should return the correct answer, as it has access to the full conversation history. Let's start to code this in Python.
+
+8. Coding a conversation
+01:21 - 02:35
+We start by defining a system message to set the assistant's behavior - we could also have added initial user-assistant example messages here, but we've left them out for brevity. Then we define a list of questions. Here we ask why Python is popular and then ask it to summarize the response provided in one sentence, which requires context on the previous response. Because we want a response for each question, we start by looping over the user_qs list. Next, to convert the user questions into messages for the API, we create a message dictionary containing the question as content from the user role, and add it to the list of messages using the list .append() method. We can now send the messages to the model and store the response. We extract the resulting assistant's message by subsetting from the API response, creating a dictionary so it's in the messages format, then add it to the messages list for the next iteration. Finally, we'll add two print statements so we can see the conversation between the user and assistant written as a script.
+
+9. Conversation with an AI
+02:35 - 02:44
+We can see that we were successfully able to provide a follow-up correction to the model's response without having to repeat our question.
+
+10. Let's practice!
+02:44 - 02:53
+You've learned about the key functionality underpinning many AI-powered chatbots and assistants - time to begin creating your own!

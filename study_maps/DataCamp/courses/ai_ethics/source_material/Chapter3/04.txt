@@ -1,0 +1,26 @@
+Transcript
+1. The value of ethical AI
+00:00 - 00:22
+Ethics and, in particular, AI ethics, will be vital for organizations to embrace and champion as the explosion of AI takes hold. Consumers are still grappling with how AI consumes their data and influences their decisions. Championing ethical AI will be an early competitive advantage for any organization to adopt.
+
+2. Balancing the scale
+00:22 - 00:49
+AI is ushering in a new era of extremely fast decision-making with widespread impact. Approaching AI responsibly ensures that any organization won’t be caught off guard by a rogue AI system. The potential brand risk for a system behaving badly is monumental, but it's also foolish to say the risks outweigh the potential benefits. AI ethics can balance the scales and make AI attainable for any organization.
+
+3. AI ethics isn't optional
+00:49 - 01:47
+Simply put, AI ethics isn't just an optional accessory but a necessity in our rapidly evolving digital landscape. It's the balancing beam that allows businesses to navigate the tightrope walk between utilizing AI for its immense benefits and preventing any potential pitfalls or missteps. Take, for instance, the financial services industry which heavily leans on AI capabilities to support key operations like risk management, fraud identification, treasury operations, and securities trading. The indispensability of AI systems in this industry is profound - a lack of AI integration in these sectors could lead to disastrous consequences. One important question is, how do organizations ensure that the benefits of AI get maximized, given that AI opportunities often come with AI risks? The answer lies in the effective implementation of AI ethics.
+
+4. Bring in tangible impacts
+01:47 - 02:21
+Leading the charge in AI ethics isn't just a defensive strategy. It's an offensive move that propels organizations ahead of the curve, giving them a unique competitive advantage. With increasing consumer awareness around data privacy and ethical considerations, championing ethical AI can transform businesses into trusted entities in the eyes of their customers. This, in turn, can lead to enhanced customer loyalty, brand reputation, and, ultimately, a tangible impact on the bottom line.
+
+1 Icon made by Vectoricons from www.flaticon.com
+5. New field, new challenges
+02:21 - 02:54
+The field of AI ethics is very new. Until recently, many companies weren’t utilizing AI in a large-scale way. This makes finding examples of AI gone bad very challenging. It may simply be too early in the AI explosion to see many examples of AI behaving badly, or current iterations of AI are behaving well, ethically speaking. The only thing we know for sure is that burying your head in the sand like an ostrich and ignoring the utility of AI ethics is a recipe for disaster.
+
+1 Icon made by ultimatearm from www.flaticon.com
+6. Let's practice!
+02:54 - 03:00
+Time for a few exercises to refresh your newly acquired knowledge!

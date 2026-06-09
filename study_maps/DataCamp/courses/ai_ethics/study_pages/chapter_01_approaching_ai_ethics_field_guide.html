@@ -1,0 +1,631 @@
+<!doctype html>
+<!--
+TEMPLATE USAGE
+Replace every template token with section-specific content.
+Keep the CSS and layout stable unless the course requires a deliberate design change.
+Recommended filename pattern:
+chapter_XX_section_slug_field_guide.html
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 1 — Approaching AI Ethics | AI Ethics</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">AI Ethics</a>
+      <span>›</span>
+      <span>Chapter 1: Approaching AI Ethics</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">AI Ethics · Chapter 1</p>
+      <h1>Approaching AI Ethics</h1>
+      <p>
+        Build the foundation for ethical AI: understand why ethics matters, apply the principles of fairness, accountability, and transparency, and reason through the trade-offs between privacy, personalization, model complexity, and human control.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">AI Ethics Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_below_the_surface_ai_ethics_field_guide.html">Next: Below the Surface</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Section Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Why AI Ethics Matters</a>
+        <a href="#concept-2">3. Fairness, Accountability, and Transparency</a>
+        <a href="#concept-3">4. Ethical Trade-offs</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>AI systems influence healthcare, insurance, finance, media, and many other parts of society. They can improve speed and accuracy, but they can also reproduce human bias, hide the reasons behind important decisions, misuse personal data, or operate without clear responsibility. AI ethics provides principles and practices for aligning AI systems with societal values and reducing harm throughout their design, deployment, and use.</p>
+
+          <div class="diagram">Human goals and values
+        ↓
+Data → AI system → Decision or recommendation → Real-world impact
+  ↑         ↑                  ↑                    ↑
+privacy   fairness        transparency         accountability
+        \________________ human oversight ________________/</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Why AI Ethics Matters</h3>
+              <p>Ethics asks what is right, what could cause harm, and how AI should serve people rather than merely optimize a technical objective.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Fairness, Accountability, and Transparency</h3>
+              <p>Fairness reduces discrimination, accountability assigns responsibility, and transparency makes AI decisions understandable to relevant stakeholders.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Ethical Trade-offs</h3>
+              <p>Ethical AI often requires balancing valid goals, such as personalization versus privacy or accuracy versus explainability.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Human Oversight and AI Literacy</h3>
+              <p>People must understand, monitor, question, and when necessary override AI systems. Machines do not remove human responsibility.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> Ethical AI is not achieved by trusting the model. It is achieved by deliberately testing the system, assigning responsibility, explaining decisions, and managing trade-offs over time.
+          </div>
+        </section>
+
+        <section class="section" id="concept-1">
+          <h2>2. Why AI Ethics Matters</h2>
+          <p>Ethics is the study of right and wrong and the moral principles that guide behavior. AI ethics applies that thinking to how AI is built and used. An insurance model, for example, may appear efficient while disproportionately denying claims from a particular neighborhood. Because data and design choices come from people and institutions, human interests and historical biases can enter the system. Ethical guidance helps teams identify those risks before they become widespread harm.</p>
+
+          <pre><code>AI ETHICS REVIEW
+1. What decision is the system influencing?
+2. Who benefits from the decision?
+3. Who could be harmed or excluded?
+4. What data and assumptions shape the result?
+5. What safeguards, appeals, and monitoring are required?</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> A technically accurate system can still be ethically unacceptable. Evaluate both model performance and the consequences of using the model in a real social setting.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Fairness, Accountability, and Transparency</h2>
+          <p>The course introduces three core principles. Fairness means that AI should not discriminate or systematically disadvantage people because of demographic or other protected characteristics. Accountability means that named people or organizations remain responsible for the system and its outcomes. Transparency means that relevant stakeholders can understand how the system was developed, what information it uses, and why it produced an important recommendation or decision.</p>
+
+          <pre><code>FAIRNESS
+• Compare outcomes across relevant groups.
+• Investigate and correct unjustified disparities.
+
+ACCOUNTABILITY
+• Assign owners for design, approval, monitoring, and response.
+• Provide escalation and appeal paths.
+
+TRANSPARENCY
+• Explain data, assumptions, limitations, and decision logic.
+• Tailor explanations to users, reviewers, and affected people.</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> Do not assume that an AI system is neutral simply because it is automated. Automation can preserve or amplify bias already present in data, labels, policies, or institutional practices.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. Ethical Trade-offs</h2>
+          <p>Ethical questions rarely have a universal answer. Teams must reason through competing values and choose safeguards appropriate to the context. Personalization may improve a service while requiring more personal data. A complex model may improve predictive accuracy while becoming harder to explain. Autonomy may increase efficiency while reducing direct human control. The goal is not a perfect answer but a justified, documented, and continuously monitored decision.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Trade-off</th>
+                <th>Value on one side</th>
+                <th>Ethical response</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Privacy vs. personalization</td>
+                <td>Useful tailored experiences may require personal data.</td>
+                <td>Collect only needed data, explain its use, obtain valid consent, and give users control.</td>
+              </tr>
+              <tr>
+                <td>Transparency vs. complexity</td>
+                <td>Complex models may be powerful but difficult to understand.</td>
+                <td>Match explainability requirements to the risk and impact of the decision.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>Consider MedTech Innovations, a fictional healthcare company that uses AI to prioritize patient care and recommend personalized treatment plans. The team should translate each ethical principle into a specific operating practice.</p>
+
+          <pre><code>Scenario: AI recommends which patients receive priority care.
+
+Fairness check:
+  Compare recommendations across gender, ethnicity, occupation,
+  age, and other relevant groups.
+
+Accountability check:
+  Name the clinical owner, technical owner, approval authority,
+  and incident-response owner.
+
+Transparency check:
+  Explain the major factors behind the recommendation,
+  validation process, uncertainty, and known limitations.
+
+Human-control check:
+  Allow clinicians to review, challenge, and override the result.</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> The AI becomes decision support rather than an unaccountable decision-maker. Trust is strengthened because the organization tests for bias, assigns ownership, communicates limitations, and preserves human judgment.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Test outcomes across relevant groups instead of relying only on one overall accuracy score.</li>
+            <li>Confirm that a named person or team owns each stage: design, approval, deployment, monitoring, and incident response.</li>
+            <li>Check whether affected users can understand the decision, question it, and seek review or appeal.</li>
+            <li>Monitor the system after deployment because data, behavior, and social conditions can change.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> No one can explain why the AI made a high-impact decision, and no one is clearly responsible for correcting it.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Treating AI as inherently objective</strong>
+              AI reflects choices about data, labels, objectives, thresholds, and deployment. Review those human choices explicitly.
+            </article>
+
+            <article class="qa-item">
+              <strong>Reducing fairness to identical treatment</strong>
+              Identical treatment can still produce unfair outcomes when groups begin from different conditions. Examine context, impact, and unjustified disparities.
+            </article>
+
+            <article class="qa-item">
+              <strong>Seeking a one-time ethics approval</strong>
+              Ethics is an ongoing practice. Reassess the system when data, users, models, laws, or deployment conditions change.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is the purpose of AI ethics?</strong>
+              AI ethics guides the responsible development and use of AI so that systems align with human and societal values, reduce harm, and preserve trust. It addresses not only technical performance but also fairness, privacy, transparency, accountability, and real-world impact.
+            </article>
+
+            <article class="qa-item">
+              <strong>How would you explain fairness, accountability, and transparency?</strong>
+              Fairness asks whether outcomes unjustifiably disadvantage people or groups. Accountability assigns clear human or organizational responsibility for decisions and failures. Transparency makes the system's data, logic, limitations, and outcomes understandable to the people who need that information.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you handle competing ethical goals?</strong>
+              I identify the affected stakeholders, assess the severity and likelihood of harm, document the competing values, choose safeguards proportionate to the risk, preserve human review, and monitor the result. The decision should be explainable rather than treated as a purely technical optimization.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li>AI is not automatically neutral; human choices enter through data, objectives, and deployment.</li>
+              <li>Fairness asks who may be disadvantaged and whether the difference is justified.</li>
+              <li>Accountability requires named owners; transparency requires understandable reasons and limitations.</li>
+              <li>Ethical trade-offs require context, stakeholder input, human oversight, and continuous monitoring.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can I explain why high model accuracy does not guarantee ethical use?</li>
+            <li>Can I distinguish fairness, accountability, and transparency without mixing them together?</li>
+            <li>Can I describe the privacy-personalization and transparency-complexity trade-offs?</li>
+            <li>Can I name the human controls needed around a high-impact AI decision?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> No programming lab is required for this chapter. Use a scenario-analysis worksheet: identify stakeholders, possible harms, relevant principles, trade-offs, owners, safeguards, and monitoring measures.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> You can evaluate a new AI use case in plain English, identify its main ethical risks and trade-offs, and propose specific fairness, accountability, transparency, and human-oversight controls.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>AI Ethics · Chapter 1 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_below_the_surface_ai_ethics_field_guide.html">Next: Below the Surface</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

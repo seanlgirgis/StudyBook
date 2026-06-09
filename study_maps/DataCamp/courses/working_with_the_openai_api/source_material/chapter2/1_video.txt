@@ -1,0 +1,49 @@
+1. Summarizing and editing text
+00:00 - 00:08
+In this chapter, we'll explore the range of tasks that can be performed by OpenAI's chat completion models.
+
+2. Recap...
+00:08 - 00:20
+So far, we've used chat models to answer questions or follow simple instructions. Now, let's use these models to transform text, with text editing and summarization.
+
+3. Text editing
+00:20 - 00:43
+First, let's explore text editing. Let's use a chat model to update the name, pronouns, and job title in a biography. Notice that the prompt starts with the instruction, then the text to edit. We've also used triple quotes to define a multi-line prompt for ease of readability and processing.
+
+4. Text editing
+00:43 - 01:07
+Then, as before, we send this prompt to the Chat Completions endpoint under the "content" key of a user message. Voilà! We have our updated text. Even with a find and replace tool, this task would normally require us to specify each word and its replacement; this approach is much more flexible.
+
+5. Text summarization
+01:07 - 01:28
+Next, let's explore text summarization. Imagine you work for a large company with millions of customers. The customer support team asks for short summaries of customer chats to track performance and improve customer satisfaction. They provide a chat transcript stored as a string.
+
+6. Text summarization
+01:28 - 02:07
+To summarize it, we'll craft a prompt that clearly asks for a concise summary, and use an f-string to insert the text variable. F-strings are denoted with an "f" before the opening quotes, and they essentially convert Python objects into strings and insert them in one go. We pass this prompt to the model, and there it is! The AI generates a clear summary, allowing us to grasp the conversation's main points without reading the entire transcript. Imagine how helpful this would be when dealing with thousands of support chats!
+
+7. Controlling response length
+02:07 - 02:23
+What if the generated summary is too short? By default, the API limits the response length. The max_completion_tokens parameter can be used to control the maximum length of the response, shortening or lengthening it.
+
+8. Understanding tokens
+02:23 - 02:45
+Tokens are a unit of one or more characters used by language models to understand and interpret text. Here, we can see how the model would encode this sentence as tokens to process it on input. When we set max_completion_tokens, it's an upper limit on the number of tokens the model will output.
+
+1 https://platform.openai.com/tokenizer
+9. Calculating the cost
+02:45 - 03:12
+Now, let's talk about cost. Outside of this course, the OpenAI API incurs a cost based on the model and the number of tokens processed. Each model has a price per token, and input and output tokens may have different costs. So, increasing max_completion_tokens likely means higher costs per request.
+
+10. Calculating the cost
+03:12 - 03:20
+Let's calculate the cost for our previous summary request with a max_completion_tokens of 500.
+
+11. Calculating the cost
+03:20 - 04:17
+First, we need the price per token for input and output tokens. Since OpenAI's pricing is per million tokens, we divide by one million to get the cost per token. We also need the total number of tokens used in the request. The input token count is found in the API response under .usage.prompt_tokens. For output tokens, we typically assume the max_completion_tokens value as an upper bound. We multiply each cost per token by the number of tokens and sum the result. This request costs about a tenth of a cent. That's small, but for longer documents and different models, costs can very quickly add up. Always estimate costs before deploying AI features at scale.
+
+1 https://openai.com/pricing
+12. Let's practice!
+04:17 - 04:21
+Now it's your turn!

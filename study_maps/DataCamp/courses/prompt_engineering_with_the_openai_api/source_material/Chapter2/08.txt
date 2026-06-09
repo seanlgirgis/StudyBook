@@ -1,0 +1,47 @@
+1. Chain-of-thought and self-consistency prompting
+00:00 - 00:07
+In this video, we will discuss prompting techniques to understand the output a model returns.
+
+2. Chain-of-thought prompting
+00:07 - 00:25
+Chain-of-thought prompting requires language models to present reasoning steps, or thoughts, before giving a final answer. This technique is valuable for complex reasoning tasks and helps reduce errors by processing the reasoning step by step.
+
+3. Chain-of-thought prompting
+00:25 - 00:52
+To understand the power of chain-of-thought prompts, let's compare them with standard prompts using a math problem. Suppose we want to determine how many books a person has, given their existing count and their lending and purchasing decisions. A standard prompt gives us a number, but doesn't explain the reasoning. We can't verify its correctness without seeing the steps taken.
+
+4. Chain-of-thought prompting
+00:52 - 01:06
+To address this, use a chain-of-thought prompt, asking the model for a step-by-step explanation. The model solves the problem as a series of five steps, providing the correct answer.
+
+5. Chain-of-thought prompting with few-shots
+01:06 - 01:53
+We can use few-shot prompts to obtain chain-of-thought reasoning. Instead of instructing the model to generate reasoning steps, we provide examples of what the answers should include. For instance, to determine if a group of odd numbers adds up to an even number, we provide an example question and answer. This exemplifies the steps: finding the odd numbers first, then summing them to verify the statement. We then provide a new question, with an "A:" for the model to answer. We combine the example and the question to obtain the final prompt. As a result, the model follows a similar logic in its response.
+
+6. Chain-of-thought versus multi-step prompting
+01:53 - 02:09
+Let's study the difference between multi-step and chain-of-thought prompts. With multi-step prompts, the various steps of the task are directly incorporated into the prompt itself, guiding the LLM's behavior.
+
+7. Chain-of-thought versus multi-step prompting
+02:09 - 02:25
+Chain-of-thought prompts take a different approach by instructing the model to generate intermediate steps or thoughts in its output as it solves the problem. This helps gain insight into the model's decision-making.
+
+8. Chain-of-thought limitation
+02:25 - 02:37
+One limitation of chain-of-thought prompting is that one thought with flawed reasoning will lead to an unsuccessful outcome. This is where self-consistency prompts come in.
+
+9. Self-consistency prompting
+02:37 - 02:53
+Self-consistency prompting is a technique that generates multiple chain-of-thought responses by prompting the model several times. The final output is determined by a majority vote, selecting the most common response as the result.
+
+10. Self-consistency prompting
+02:53 - 03:21
+To implement self-consistency prompting, we can define multiple prompts, or a prompt where the model imagines several independent answers. Here we ask for several independent experts to solve a mathematical problem determining the number of cars in a parking lot, with the final answer obtained by majority vote. To obtain the final prompt, we combine this instruction with the mathematical problem to solve.
+
+11. Self-consistency prompt
+03:21 - 03:36
+In the output, the model gives the response from each expert and aggregates the results to provide a final answer. Since two of the three experts obtained the number 12, the final answer is 12.
+
+12. Let's practice!
+03:36 - 03:40
+Time to practice!

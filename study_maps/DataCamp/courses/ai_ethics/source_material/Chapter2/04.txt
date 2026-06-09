@@ -1,0 +1,29 @@
+1. AI fairness: not just a dream
+00:00 - 00:22
+Welcome! Buckle up as we explore the fascinating landscape of fairness in AI. Why does AI fairness matter, and how do we achieve it? In our everyday lives, fairness is a value we uphold and cherish. When it comes to AI, especially in sensitive industries like healthcare, we need to ensure this same value is respected.
+
+2. Fairness in AI
+00:22 - 00:46
+First, what does 'fairness in AI' mean? It's about ensuring that AI systems don't favor one group over another, especially regarding race, gender, or socioeconomic status. In the healthcare industry, for instance, an AI that predicts patient outcomes should do so equitably, without bias towards any particular group. That's the essence of fairness in AI.
+
+3. Why does fairness matter?
+00:46 - 01:32
+And why is fairness so crucial in AI? AI systems have the ability to rapidly process information and make decisions, but imagine a healthcare AI that, due to biased training data, incorrectly perceives detrimental symptoms as less severe for one group of individuals compared to another. The scale and potential impact of an AI system require thoughtful consideration to ensure that utilizing AI doesn’t negatively target vulnerable populations. Therefore, fairness isn't just an ethical must-have; it’s an indispensable prerequisite for the responsible implementation of AI, guaranteeing equitable consideration for all individuals involved.
+
+1 Icons made by noomtah & Parzival' 1997 from www.flaticon.com
+4. Promoting fairness
+01:32 - 02:13
+Promoting fairness in AI is a multifaceted challenge but not an impossible one. 'Fairness through unawareness', for example, is a technique that can help us counteract bias in AI systems. It aims to tackle fairness at the data collection phase to reduce the potential for bias in the outcomes by intentionally omitting variables commonly tied to possible discriminatory outcomes. These variables typically include race, gender, age, socioeconomic status, sexual orientation, and religion. By omitting these variables, the AI becomes less likely to infer relationships and amplify existing biases.
+
+5. Unintentional issues exist
+02:13 - 03:11
+It is essential to realize that even when we intentionally exclude variables, we still need to look for unintentional fairness issues. Keeping with our healthcare theme, researchers working on better understanding the role of AI in interpreting medical imaging found some alarming information. An AI deep learning model was able to accurately predict the self-reported race of the patient utilizing only the patient’s chest X-ray. Even though the researchers have controlled for as many related factors that could be potentially used to infer race, the model still performed exceptionally well. These findings make us wonder whether an AI system for medical images could be fair, after all. Nevertheless, we should still call for robust strategies to ensure fairness in healthcare AI applications, as doing so not only addresses ethical concerns but also maximizes the potential benefits.
+
+1 Icons made by Freepik from www.flaticon.com
+6. Minimizing bias
+03:11 - 03:37
+Minimizing bias is the main objective of AI Fairness, and the first step of minimizing bias is acknowledging its existence. In doing so, we remain skeptical and vigilant of AI, ensuring that AI can work to promote fairness instead of being used as a tool that amplifies bias. We can verify that AI is being used correctly and fairly by conducting frequent monitoring and audits.
+
+7. Let's practice!
+03:37 - 03:54
+You've taken an essential step in understanding fairness in AI. But remember, it's a continuous journey, especially in a field as dynamic and often chaotic as AI. Now, it's time to put your knowledge into practice with some exercises.

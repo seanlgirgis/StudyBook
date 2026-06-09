@@ -1,0 +1,703 @@
+<!doctype html>
+<!--
+FIELD GUIDE TEMPLATE
+
+Purpose:
+- Whole-course accumulated Field Guide
+- Cross-chapter memory map
+- Navigation hub
+- Decision guide
+- Interview review
+- Lab evidence summary
+
+Instructions:
+1. Replace every {{PLACEHOLDER}}.
+2. Add or remove chapter cards to match the course.
+3. Keep this filename when used as the active course guide:
+   field_guide.html
+4. Preserve the shared layout and visual system unless a deliberate design change is required.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{COURSE_TITLE}} — Field Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .cheat-grid,
+    .compare-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cheat-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .compare-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .cheat-card,
+    .compare-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .cheat-card h3,
+    .compare-card h3 {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .cheat-card p,
+    .compare-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul,
+    .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cheat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .status-grid,
+      .chapter-grid,
+      .cheat-grid,
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <span>›</span>
+      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <span>›</span>
+      <span>Main Field Guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">{{PLATFORM_LABEL}} · {{COURSE_TITLE}}</p>
+      <h1>{{COURSE_TITLE}} Field Guide</h1>
+      <p>
+        {{COURSE_SUMMARY_HTML}}
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="{{FIELD_GUIDE_MARKDOWN_FILE}}">Markdown Guide</a>
+        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Quick Lookup</a>
+        <a class="button secondary" href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card"><strong>{{PLATFORM_STATUS}}</strong><span>Platform status</span></div>
+        <div class="status-card"><strong>{{DOCUMENTATION_STATUS}}</strong><span>Documentation</span></div>
+        <div class="status-card"><strong>{{LAB_STATUS}}</strong><span>Lab coverage</span></div>
+        <div class="status-card"><strong>{{RECALL_STATUS}}</strong><span>Recall confidence</span></div>
+        <div class="status-card"><strong>{{INTERVIEW_STATUS}}</strong><span>Interview readiness</span></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Guide Contents</h2>
+        <a href="#chapters">1. Chapter guides</a>
+        <a href="#big-picture">2. Course big picture</a>
+        <a href="#core-concepts">3. Core concepts</a>
+        <a href="#patterns">4. Core syntax and patterns</a>
+        <a href="#comparisons">5. Comparisons and decisions</a>
+        <a href="#mistakes">6. Common mistakes</a>
+        <a href="#interview">7. Interview translation</a>
+        <a href="#lab">8. Local lab evidence</a>
+        <a href="#memory">9. Memory nuggets</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="chapters">
+          <h2>1. Chapter Guides</h2>
+
+          <div class="chapter-grid">
+            <article class="chapter-card">
+              <h3><a href="{{CHAPTER_01_FILE}}">{{CHAPTER_01_TITLE}}</a></h3>
+              <p>{{CHAPTER_01_SUMMARY}}</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="{{CHAPTER_02_FILE}}">{{CHAPTER_02_TITLE}}</a></h3>
+              <p>{{CHAPTER_02_SUMMARY}}</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="{{CHAPTER_03_FILE}}">{{CHAPTER_03_TITLE}}</a></h3>
+              <p>{{CHAPTER_03_SUMMARY}}</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="{{CHAPTER_04_FILE}}">{{CHAPTER_04_TITLE}}</a></h3>
+              <p>{{CHAPTER_04_SUMMARY}}</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="big-picture">
+          <h2>2. Course Big Picture</h2>
+          <p>{{COURSE_BIG_PICTURE}}</p>
+
+          <div class="diagram">{{COURSE_BIG_PICTURE_DIAGRAM}}</div>
+
+          <div class="callout green">
+            <strong>Course punchline:</strong> {{COURSE_PUNCHLINE}}
+          </div>
+        </section>
+
+        <section class="section" id="core-concepts">
+          <h2>3. Core Concepts</h2>
+
+          <div class="cheat-grid">
+            <article class="cheat-card">
+              <h3>{{CORE_CONCEPT_1_TITLE}}</h3>
+              <p>{{CORE_CONCEPT_1_SUMMARY}}</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>{{CORE_CONCEPT_2_TITLE}}</h3>
+              <p>{{CORE_CONCEPT_2_SUMMARY}}</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>{{CORE_CONCEPT_3_TITLE}}</h3>
+              <p>{{CORE_CONCEPT_3_SUMMARY}}</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>{{CORE_CONCEPT_4_TITLE}}</h3>
+              <p>{{CORE_CONCEPT_4_SUMMARY}}</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>{{CORE_CONCEPT_5_TITLE}}</h3>
+              <p>{{CORE_CONCEPT_5_SUMMARY}}</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>{{CORE_CONCEPT_6_TITLE}}</h3>
+              <p>{{CORE_CONCEPT_6_SUMMARY}}</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="patterns">
+          <h2>4. Core Syntax and Patterns</h2>
+
+          <h3>{{PATTERN_1_TITLE}}</h3>
+          <pre><code>{{PATTERN_1_CODE}}</code></pre>
+          <p>{{PATTERN_1_EXPLANATION}}</p>
+
+          <h3>{{PATTERN_2_TITLE}}</h3>
+          <pre><code>{{PATTERN_2_CODE}}</code></pre>
+          <p>{{PATTERN_2_EXPLANATION}}</p>
+
+          <h3>{{PATTERN_3_TITLE}}</h3>
+          <pre><code>{{PATTERN_3_CODE}}</code></pre>
+          <p>{{PATTERN_3_EXPLANATION}}</p>
+        </section>
+
+        <section class="section" id="comparisons">
+          <h2>5. Comparisons and Decision Rules</h2>
+
+          <div class="compare-grid">
+            <article class="compare-card">
+              <h3>{{COMPARE_LEFT_TITLE}}</h3>
+              <p>{{COMPARE_LEFT_SUMMARY}}</p>
+            </article>
+
+            <article class="compare-card">
+              <h3>{{COMPARE_RIGHT_TITLE}}</h3>
+              <p>{{COMPARE_RIGHT_SUMMARY}}</p>
+            </article>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>{{DECISION_HEADER_1}}</th>
+                <th>{{DECISION_HEADER_2}}</th>
+                <th>{{DECISION_HEADER_3}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{DECISION_ROW_1_COL_1}}</td>
+                <td>{{DECISION_ROW_1_COL_2}}</td>
+                <td>{{DECISION_ROW_1_COL_3}}</td>
+              </tr>
+              <tr>
+                <td>{{DECISION_ROW_2_COL_1}}</td>
+                <td>{{DECISION_ROW_2_COL_2}}</td>
+                <td>{{DECISION_ROW_2_COL_3}}</td>
+              </tr>
+              <tr>
+                <td>{{DECISION_ROW_3_COL_1}}</td>
+                <td>{{DECISION_ROW_3_COL_2}}</td>
+                <td>{{DECISION_ROW_3_COL_3}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>6. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>{{MISTAKE_1_TITLE}}</strong>
+              {{MISTAKE_1_CORRECTION}}
+            </article>
+
+            <article class="qa-item">
+              <strong>{{MISTAKE_2_TITLE}}</strong>
+              {{MISTAKE_2_CORRECTION}}
+            </article>
+
+            <article class="qa-item">
+              <strong>{{MISTAKE_3_TITLE}}</strong>
+              {{MISTAKE_3_CORRECTION}}
+            </article>
+
+            <article class="qa-item">
+              <strong>{{MISTAKE_4_TITLE}}</strong>
+              {{MISTAKE_4_CORRECTION}}
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>7. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>{{INTERVIEW_QUESTION_1}}</strong>
+              {{INTERVIEW_ANSWER_1}}
+            </article>
+
+            <article class="qa-item">
+              <strong>{{INTERVIEW_QUESTION_2}}</strong>
+              {{INTERVIEW_ANSWER_2}}
+            </article>
+
+            <article class="qa-item">
+              <strong>{{INTERVIEW_QUESTION_3}}</strong>
+              {{INTERVIEW_ANSWER_3}}
+            </article>
+
+            <article class="qa-item">
+              <strong>{{INTERVIEW_QUESTION_4}}</strong>
+              {{INTERVIEW_ANSWER_4}}
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="lab">
+          <h2>8. Local Lab Evidence</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Validated result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{LAB_AREA_1}}</td>
+                <td>{{LAB_RESULT_1}}</td>
+              </tr>
+              <tr>
+                <td>{{LAB_AREA_2}}</td>
+                <td>{{LAB_RESULT_2}}</td>
+              </tr>
+              <tr>
+                <td>{{LAB_AREA_3}}</td>
+                <td>{{LAB_RESULT_3}}</td>
+              </tr>
+              <tr>
+                <td>{{LAB_AREA_4}}</td>
+                <td>{{LAB_RESULT_4}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            {{LAB_SUMMARY}}
+          </div>
+        </section>
+
+        <section class="section" id="memory">
+          <h2>9. Quick Memory Nuggets</h2>
+
+          <pre><code>{{MEMORY_BLOCK_1}}</code></pre>
+
+          <pre><code>{{MEMORY_BLOCK_2}}</code></pre>
+
+          <pre><code>{{MEMORY_BLOCK_3}}</code></pre>
+
+          <div class="callout amber">
+            <strong>Final review:</strong> {{FINAL_REVIEW_NOTE}}
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>{{COURSE_TITLE}} · Main Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="{{FIELD_GUIDE_MARKDOWN_FILE}}">Markdown Guide</a>
+        &nbsp;·&nbsp;
+        <a href="{{QUICK_LOOKUP_FILE}}">Quick Lookup</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

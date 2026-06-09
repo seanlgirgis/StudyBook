@@ -1,0 +1,454 @@
+<!doctype html>
+<!-- Completed searchable OpenAI API quick lookup. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Working with the OpenAI API — Quick Lookup</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3,239,98,.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88,166,255,.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210,153,34,.12);
+      --danger: #ff7b72;
+      --shadow: 0 12px 30px rgba(0,0,0,.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3,239,98,.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 50px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d, #0d2a40 58%, #14384e);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), #bc8cff);
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.05rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 40px;
+      padding: 0 15px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      border: 1px solid #486274;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+      border-color: transparent;
+    }
+
+    .search-wrap {
+      margin-top: 18px;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #3b4a58;
+      border-radius: 10px;
+      background: #0f141a;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .search-wrap input:focus {
+      outline: 2px solid rgba(88,166,255,.35);
+      border-color: var(--blue);
+    }
+
+    .section {
+      margin-top: 22px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.35rem;
+    }
+
+    .lookup-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .lookup-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 15px;
+    }
+
+    .lookup-card h3 {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 1rem;
+    }
+
+    .lookup-card p {
+      margin: 0 0 9px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .lookup-card pre {
+      margin: 10px 0;
+      padding: 11px;
+      border: 1px solid #33404d;
+      border-radius: 8px;
+      background: #0f141a;
+      color: #dce6ef;
+      overflow-x: auto;
+      font-size: .84rem;
+      line-height: 1.45;
+    }
+
+    .trap {
+      margin-top: 10px;
+      padding: 9px 10px;
+      border-left: 3px solid var(--amber);
+      border-radius: 7px;
+      background: var(--amber-soft);
+      color: #d8caaa;
+      font-size: .84rem;
+    }
+
+    .callout {
+      margin-top: 14px;
+      padding: 13px 15px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .diagram {
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #10161d;
+      white-space: pre;
+      overflow-x: auto;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 980px) {
+      .lookup-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 650px) {
+      .lookup-grid { grid-template-columns: 1fr; }
+      .hero { padding: 26px 20px; }
+      .section { padding: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Working with the OpenAI API</a>
+      <span>›</span>
+      <span>OpenAI API Quick Lookup</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Working with the OpenAI API · Quick Reference</p>
+      <h1>OpenAI API Quick Lookup</h1>
+      <p>
+        Searchable Python and OpenAI API patterns from the complete course.
+      </p>
+
+      <div class="actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button" href="field_guide.html">Main Field Guide</a>
+        <a class="button" href="../lab/lab_run_book.md">Lab Run Book</a>
+      </div>
+
+      <div class="search-wrap">
+        <input id="lookupSearch" type="search"
+               placeholder="Search client, messages, roles, temperature, tokens, history..."
+               aria-label="Search quick lookup">
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Client and Basic Requests</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>Create the client</h3>
+          <p>Create a client that reads OPENAI_API_KEY from the environment</p>
+          <pre><code>from openai import OpenAI
+
+client = OpenAI()</code></pre>
+          <div class="trap">Do not hard-code a real API key.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Basic chat request</h3>
+          <p>Send one user message to a selected model</p>
+          <pre><code>response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain APIs simply.&quot;}]
+)</code></pre>
+          <div class="trap">messages must be a list of dictionaries.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Extract generated text</h3>
+          <p>Read the first generated assistant message</p>
+          <pre><code>reply = response.choices[0].message.content
+print(reply)</code></pre>
+          <div class="trap">The whole response object is not the same as the text.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Prompting and Output Controls</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>F-string prompt</h3>
+          <p>Insert source text into a readable prompt</p>
+          <pre><code>prompt = f&quot;&quot;&quot;
+Summarize this:
+
+{customer_chat}
+&quot;&quot;&quot;</code></pre>
+          <div class="trap">The f prefix is required.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Temperature</h3>
+          <p>Control consistency versus variation</p>
+          <pre><code>temperature=0.2</code></pre>
+          <div class="trap">Higher values may increase drift.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Completion limit</h3>
+          <p>Cap generated output</p>
+          <pre><code>max_completion_tokens=150</code></pre>
+          <div class="trap">A low ceiling can cut off the answer.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Tokens and Prompting Patterns</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>Inspect token usage</h3>
+          <p>Measure input, output, and total tokens</p>
+          <pre><code>print(response.usage.prompt_tokens)
+print(response.usage.completion_tokens)
+print(response.usage.total_tokens)</code></pre>
+          <div class="trap">Tokens are not the same as words.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Few-shot prompt</h3>
+          <p>Teach labels or output format through examples</p>
+          <pre><code>Love these! = 5
+Comfortable, but not very pretty = 2
+Shoes fell apart on second use. =</code></pre>
+          <div class="trap">Poor examples teach poor output.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Assistant example</h3>
+          <p>Demonstrate the desired answer pattern</p>
+          <pre><code>{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize Portugal.&quot;},
+{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Portugal borders Spain. Its capital is Lisbon.&quot;}</code></pre>
+          <div class="trap">Example question is user; example answer is assistant.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Roles, Guardrails, and Conversation Memory</h2>
+      <div class="lookup-grid">
+        <article class="lookup-card">
+          <h3>System guardrail</h3>
+          <p>Define role, scope, and refusal behavior</p>
+          <pre><code>{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;Answer only Python questions. Politely refuse others.&quot;}</code></pre>
+          <div class="trap">A role alone is weaker than an explicit scope.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Append a conversation turn</h3>
+          <p>Store the newest user and assistant messages</p>
+          <pre><code>messages.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_text})
+messages.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: reply})</code></pre>
+          <div class="trap">The API does not append history for you.</div>
+        </article>
+
+        <article class="lookup-card">
+          <h3>Protect against truncation</h3>
+          <p>Check why generation stopped before saving the reply</p>
+          <pre><code>if response.choices[0].finish_reason == &quot;length&quot;:
+    raise RuntimeError(&quot;Reply was truncated&quot;)</code></pre>
+          <div class="trap">Do not append an incomplete reply.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Course Request Flow</h2>
+
+      <div class="diagram">OpenAI()
+  ↓
+messages list
+  ↓
+chat.completions.create()
+  ↓
+response.choices[0].message.content
+  ↓
+print/use reply or append it to history</div>
+
+      <div class="callout">
+        For multi-turn conversations, input tokens grow because each call resends the stored history. Check finish_reason before saving a reply.
+      </div>
+    </section>
+
+    <footer>
+      <span>Working with the OpenAI API · OpenAI API Quick Lookup</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="../lab/lab_run_book.md">Lab Run Book</a>
+      </span>
+    </footer>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById("lookupSearch");
+    const cards = Array.from(document.querySelectorAll(".lookup-card"));
+
+    searchInput.addEventListener("input", function () {
+      const term = this.value.trim().toLowerCase();
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.classList.toggle("hidden", term && !text.includes(term));
+      });
+    });
+  </script>
+</body>
+</html>

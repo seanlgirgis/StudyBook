@@ -1,0 +1,35 @@
+1. AI ethics: What's the buzz?
+00:00 - 00:06
+Welcome! I'm Joe, and I'll be your instructor for this course on AI ethics.
+
+2. Intro to ethics
+00:06 - 00:32
+With the hype and growth around AI, AI ethics has gained significant attention from the general public, industry, and academia. It is not only necessary but essential to ensure the appropriate and responsible use of AI. But first, let's get our bearings: what is ethics? At its core, ethics is about determining right and wrong and guiding our behavior based on moral principles.
+
+1 Icons made by surang & Flowicon from www.flaticon.com
+3. AI meets ethics
+00:32 - 01:28
+We're seeing AI, or Artificial Intelligence, spanning across different sectors of our society- healthcare, media, industry, insurance- you name it. It is astounding how AI assists in routine tasks in these well-established areas. For example, AI and robotics can help improve accuracy in surgeries by identifying patterns and trends, guiding surgeons and radiologists in specific procedures, and even reducing cognitive and physical stress for patients. Recent studies have demonstrated how combining AI algorithms with cancer detection programs has led to earlier disease detection and improved recovery rates. Not to mention how AI has the potential to automate claims processing, detect fraud, and determine insurance premiums in the finance and insurance sectors. But with great power comes great responsibility, and that's where ethics enters the picture.
+
+1 Icons made by Freepik, wanicon, Pixel perfect from www.flaticon.com
+4. Why AI ethics?
+01:28 - 02:26
+Why do we need AI ethics? Imagine an AI model that processes insurance claims and begins disproportionately denying claims from a particular neighborhood. The data used to create the AI is created by humans, and unknowingly, their interests and biases can seep into the decision-making process. Without ethical guidelines, these biases can go unchecked, resulting in unintended harm. It could lead to an entire neighborhood's insurance claims being denied. Moreover, biased or unethical use of AI can impact a wide range of areas. Some may argue that AI is meant to create a fairer criminal justice system, but AI itself is often not genuinely neutral. Therefore, clear guidelines on AI transparency, fairness, and risk are necessary to safeguard these processes.
+
+5. Ethics in practice
+02:26 - 03:05
+So, how do we bring ethics into AI? It's about aligning AI systems with ethical principles. For instance, a principle of fairness would mean our hypothetical insurance model treats all claims equally, irrespective of the neighborhood. Insurance, finance, and banking firms have established guidelines on training AI algorithms using diverse databases and protecting user data. By setting ethical boundaries and safeguards, customers can receive fair and unbiased results. This highlights the potential of AI when built correctly.
+
+1 Icons made by Freepik & noomath from www.flaticon.com
+6. The big picture
+03:05 - 03:43
+Understanding AI ethics enables us to navigate the complex landscape of AI. It goes beyond avoiding harm or bias, although these aspects are crucial. It is also about accountability— who is responsible if an AI system malfunctions? How can we ensure accountability not only for AI's outcomes but also for its construction? Moreover, transparency plays a key role— can we understand the rationale behind an AI's decision? This requires transparency and literacy in both the development and the results produced by AI.
+
+1 Icons made by Freepik & Wichai.wi from www.flaticon.com
+7. Wrapping up
+03:43 - 04:00
+In essence, AI ethics is the beacon guiding us in the AI-driven world. It helps ensure that the benefits of AI are realized without compromising our moral values. And remember, an ethical AI isn't just good practice; it's good business.
+
+8. Let's practice!
+04:00 - 04:13
+As we delve deeper, we'll explore the principles of AI ethics in more detail, understand their application, and navigate the challenges they present. Until then, let’s try a few exercises!

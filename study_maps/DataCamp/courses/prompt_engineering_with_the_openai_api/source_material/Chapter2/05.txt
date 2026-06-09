@@ -1,0 +1,47 @@
+1. Multi-step prompting
+00:00 - 00:07
+Let's explore multi-step prompting, which guides the model's behavior to generate effective outputs.
+
+2. Multi-step prompting
+00:07 - 00:36
+Multi-step prompting breaks down a goal into smaller steps, guiding the model through each step to improve accuracy. This technique benefits sequential tasks, like generating coherent text from an outline, which need ordered steps. Cognitive tasks, such as evaluating a solution's correctness, also utilize multi-step prompts as they involve problem-solving and decision-making processes.
+
+3. Multi-step prompts as treasure maps
+00:36 - 00:50
+We can think of multi-step prompts as treasure maps: they break down a complex task into smaller, manageable steps, guiding the model to the desired outcome through a sequence of clues and directions.
+
+4. Single-step prompt: writing a blog
+00:50 - 01:09
+Suppose we want to write a travel blog. We might start with a single-step prompt asking the model to create the entire blog without additional details. In this example, the model will generate text about a random journey through Iceland, with a day-by-day itinerary.
+
+5. Multi-step prompt: writing a blog post
+01:09 - 01:26
+For more detailed content, we use a multi-step prompt: we ask to introduce the destination, share personal adventures, and summarize the journey. We don't ask for a specific destination as we'd like to focus on the blog's structure.
+
+6. Writing a travel blog post
+01:26 - 01:36
+The model generates a coherent travel blog sequentially according to our instructions, with an introduction to Barcelona, an adventure, and a summary.
+
+7. Analyzing solution correctness
+01:36 - 01:54
+Multi-step prompting can also be used for cognitive tasks, like checking code is correct: for example, for analyzing the correctness of Python code computing basic calculations such as addition, subtraction, multiplication, and division.
+
+8. Analyzing solution correctness
+01:54 - 02:39
+Here, the calculator string contains the file's content we want to verify. It includes functions that accept two numbers as input, and perform addition, subtraction, multiplication, or division, returning the results. As a starting point, we may start with a single-step prompt asking the model to assess the code's correctness. However, a simple 'yes' doesn't explain the evaluation. We may need specific criteria or domain knowledge to refine the evaluation. In this case, while the syntax is correct, the divide function doesn't handle division by zero, which should be considered in the evaluation.
+
+9. Multi-step prompting to analyze solution correctness
+02:39 - 03:01
+To accomplish that, we use a multi-step prompt, where in step one, we check for syntax correctness, and in step two, we verify if division by zero is handled. After these changes, the model output gives feedback about each step and tells us the syntax is correct, but division by zero is not handled.
+
+10. Multi-step versus few-shot prompt
+03:01 - 03:21
+Let's review the differences between multi-step and few-shot prompts. While both steps and shots play crucial roles in controlling the model's behavior, steps are instructions that explicitly tell the model what to do. They act as a roadmap for the model by providing specific guidance.
+
+11. Multi-step versus few-shot prompt
+03:21 - 03:35
+Shots are example questions and answers that the model learns from. They demonstrate how the model should respond to certain inputs. The model observes these examples and learns to generalize from them.
+
+12. Let's practice!
+03:35 - 03:39
+Time to put this into practice!

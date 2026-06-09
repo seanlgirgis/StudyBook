@@ -1,0 +1,43 @@
+1. Shot prompting
+00:00 - 00:11
+We've seen how OpenAI models generate text and respond to prompts. But how do we guide the model to produce better, more accurate responses?
+
+2. Providing examples
+00:11 - 00:25
+Providing examples in a prompt helps the model understand what we expect. This technique, called shot prompting, plays a huge role in shaping AI responses. Let's break it down.
+
+3. What is shot prompting?
+00:25 - 00:53
+Shot prompting means including examples in a prompt to guide the model's response. There are three main approaches: Zero-shot prompting gives no examples, just an instruction. One-shot prompting provides a single example to guide the response. Few-shot prompting includes multiple examples to provide more context and improve the model's understanding of the desired output.
+
+4. Why does shot prompting matter?
+00:53 - 01:15
+Adding examples improves AI performance. Shot prompting helps in classification to sort text into defined categories, sentiment analysis to identify opinions or emotions, data extraction to extract specific information from unstructured text, and much more. Let's see it in action.
+
+5. Zero-shot prompting
+01:15 - 01:52
+Let's use a model to analyze restaurant reviews and assign sentiment scores from 1-5 to each review: 1 indicating a poor experience and 5 indicating an amazing experience. Here, we provide no examples for the model, only an instruction clearly indicating the task, and the labels to use - the numbers 1 to 5. Sending this request and extracting the result, we can see that the model assigned the number 3 to each review, but also appended "Neutral" after each score, which we didn't really want.
+
+6. One-shot prompting
+01:52 - 02:26
+Let's now add an example before the two reviews we wish to analyze. This is a one-shot prompt, as one example is provided. We also add arrows after each review and the number 1 after the example. This should make it clearer for the model that we're only looking for the number. Running this, we see that the formatting is now followed perfectly. We can also see that the scores have changed, so providing an example gave the model extra context about how to determine the score.
+
+7. Few-shot prompting
+02:26 - 02:54
+Let's step it up a gear and add two more examples, so there's three in total. We now have a few-shot prompt to send to the model. With this, we have totally consistent formatting, and the scores are becoming more reasonable. With even more examples provided, we could see greater consistency in the way these scores are assigned. Try experimenting with four, five, or ten examples!
+
+8. General categorization
+02:54 - 03:23
+These models can not only assign sentiments, but any form of categories. Here, we want to categorize animals into those that live on land, sea, or both. With no examples, we again see that the model provides extra reasoning that we didn't explicitly ask for. We also got a spurious result, with the model assigning "Both" to salmon, getting confused between land and sea and freshwater and saltwater.
+
+9. Few-shot prompting categories
+03:23 - 03:42
+Let's immediately jump in with two examples, zebra and crocodile, and add equals signs to indicate how the results should be formatted. Re-running the prompt, we can see that the formatting is perfectly consistent, and our spurious result has been fixed!
+
+10. Let's practice!
+03:42 - 03:55
+Hopefully you're starting to grasp just how many problems can be solved using the OpenAI API, and how important prompts are to obtaining good results. Time to put this into practice!
+
+
+
+Got it!

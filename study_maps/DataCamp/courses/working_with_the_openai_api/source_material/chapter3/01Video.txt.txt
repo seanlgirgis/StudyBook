@@ -1,0 +1,47 @@
+1. Chat roles and system messages
+00:00 - 00:12
+Welcome back! In this video, we'll learn to unlock the full capabilities of chat models from the OpenAI API with chat roles. Let's get started!
+
+2. Chat Completions
+00:12 - 00:32
+So far, we've used the Chat Completions endpoint to perform a number of tasks, including text generation and transformation, and classification tasks like sentiment analysis. These are so-called single-turn tasks, as there's one input and one output.
+
+3. Chat Completions
+00:32 - 00:42
+With Chat Completion models, it's possible to also have multi-turn conversations, so we can build on our previous prompts depending on how the model responds.
+
+4. Roles
+00:42 - 01:47
+Roles are at the heart of how chat models function. Up until now, we've only used the user role in our messages, but there are also system and assistant roles. The system role allows us to specify a message to control the behavior of the assistant. For example, for a customer service chatbot, we could provide a system message stating that the assistant is a polite and helpful customer service assistant. The user role is used to provide an instruction to the assistant, and the assistant role is attached to the model responses returned back to us. Interestingly, we, the developer, can also provide assistant messages in our requests, which serve as examples to help the model better understand the desired output. We'll discuss utilizing assistant messages in requests and building multi-turn conversations in the coming videos; for now, we'll focus on the powerful system role.
+
+5. Request setup
+01:47 - 02:02
+Here's a typical chat request that we've used for single-turn tasks. We've passed the messages argument a list containing a dictionary with "role" and "content" keys, where the prompt is sent with the "user" role.
+
+6. Prompt setup
+02:02 - 02:30
+To include additional messages, we extend this messages list to include multiple dictionaries each with their own role and content. These messages often start with the system role, which sets out how the model should behave. Here, we instruct the model to act as a Python programming tutor that speaks concisely. We then follow this up with a user message asking a programming question.
+
+7. Making a request
+02:30 - 02:37
+Let's add these messages into the request code and print the output using the same attributes as before.
+
+8. The response
+02:37 - 02:46
+We can see the assistant stayed true to the system message - only using a single sentence in its concise explanation.
+
+9. Mitigating misuse
+02:46 - 03:16
+One major challenge when interacting with AI systems is misuse. For example, if we were designing a chatbot to help students study for finance exams, we wouldn't want this chatbot to provide specific financial advice or encourage particular investments. We can use system messages to add guardrails, which are specific restrictions on what the model can generate. Let's build a system message for this application.
+
+10. Mitigating misuse with system messages
+03:16 - 03:41
+This message starts with a sentence outlining the role of the model, a finance education assistant, and its task, to help students study for exams. The next section adds the restriction that if the model should be asked to provide specific, real-world financial advice with risks to their finances, it should respond with an apologetic message.
+
+11. Mitigating misuse with system messages
+03:41 - 03:54
+Adding our system message to the request, along with a user message asking for stock investment advice, we can see that the model responds with what we wrote in the system message.
+
+12. Let's practice!
+03:54 - 03:58
+Let's give this a try in the exercises!

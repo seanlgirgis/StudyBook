@@ -1,0 +1,34 @@
+Transcript
+1. Safeguarding AI: Accountability
+00:00 - 00:22
+AI accountability, it's like a puzzle, a fascinating question of 'who's responsible?' In areas like the finance industry, accountability in AI can be a game-changer. Who takes responsibility when AI makes a decision or if something goes wrong? Let's embark on a journey to unravel the importance of accountability in AI.
+
+2. Define accountability
+00:22 - 00:52
+When we talk about 'accountability', what do we mean exactly? In the context of AI, accountability refers to assigning responsibility for the outcomes and impacts of AI systems. Accountability is one of the more straightforward concepts in AI ethics. Anyone who develops, deploys, and leverages AI needs to hold themselves accountable for its outcomes. AI is not some magic wand that removes responsibility with the power of math.
+
+3. Accountability is vital
+00:52 - 01:51
+Why is accountability so important in AI? First and foremost, it's about trust. If people know there's someone responsible when AI makes a decision, they're more likely to trust the system. Moreover, accountability ensures the ethical use of AI and mitigates potential harm. However, there is another side of accountability. Whenever numbers get involved, there is an unfortunate tendency to think that they are objective, and whatever the model says is the truth, we tend to beholden to its decisions. This is easily the most dangerous mindset when working with AI. AI is a tool, a tool made by humans to aid decisions, not one for us to shed the responsibility for all these decisions because a supercomputer told us to do it. Repurposing the age-old saying, if an AI algorithm told you to jump off a cliff, would you?
+
+4. The paradox of accountability
+01:51 - 02:27
+Accountability is strange. By making AI accountable, we increase the trust that people have in interacting with it, but we also want to make sure that people are still accountable for their actions and don’t place too much trust in the system. An interesting study conducted at Georgia Tech in the United States found that participants who interacted with a robot decided to follow its evacuation guidance in a simulated emergency over their judgment, even when the robot guided them into dark rooms with no exits or led them in circles.
+
+5. The Tesla story
+02:27 - 03:15
+Tesla’s so-called auto-pilot is a great example of accountability gone wrong. Many consumers incorrectly believe that the technology is capable of driving the car entirely without any input from the driver and Tesla is often criticized for not putting enough safeguards to prevent consumers from using the various auto-pilot and enhanced auto-pilot features incorrectly. Neither side is free from responsibility. As self-driving cars mature and become more common, tackling the concept of accountability will be a real challenge. In a world of self-driving cars, who is responsible for having insurance? What happens when there is an issue that causes an accident? I don’t have the answers but it will be interesting to see how things develop.
+
+6. Achieving accountability
+03:15 - 03:46
+Achieving accountability in AI isn't a cakewalk. From an AI producer’s perspective, achieving accountability relies on establishing transparency and unpacking the 'Black Box' problem to attribute responsibility. For AI consumers, achieving accountability can be distilled to the proverb, "Trust but verify". Neither producers nor consumers are solely responsible for being accountable and both have their own challenges to create a world of ethical AI.
+
+1 Icons made by Eucalyp & Sumitsaengtong from www.flaticon.com
+7. No one-size-fits-all
+03:46 - 04:05
+The journey toward ensuring accountability in AI is a continuous one. With each new advancement in AI, the conversation about accountability evolves. There is no one-size-fits-all approach, and in each industry, from finance to healthcare, the approach will differ.
+
+1 Icon made by Freepik from www.flaticon.com
+8. Let's practice!
+04:05 - 04:21
+We’ve dipped our toe into the fascinating landscape of AI accountability and our journey is far from over. Accountability is a complex and evolving topic. So, what's next? Put your newfound knowledge into action, and dive into some exercises.

@@ -1,0 +1,653 @@
+<!doctype html>
+<!-- Chapter 2 field guide for Working with the OpenAI API. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 2 — Prompting OpenAI Models | Working with the OpenAI API</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Working with the OpenAI API</a>
+      <span>›</span>
+      <span>Chapter 2: Prompting OpenAI Models</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Working with the OpenAI API · Chapter 1</p>
+      <h1>Prompting OpenAI Models</h1>
+      <p>
+        Use OpenAI models to edit, summarize, and generate text; control response length and randomness; estimate token cost; and improve consistency with zero-shot, one-shot, and few-shot prompting.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="openai_api_quick_lookup.html">OpenAI API Quick Lookup</a>
+        <a class="button secondary" href="chapter_01_introduction_to_the_openai_api_field_guide.html">Previous: Introduction</a>
+        <a class="button secondary" href="chapter_03_building_conversations_with_the_openai_api_field_guide.html">Next: Building Conversations</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Chapter Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Text transformation and summarization</a>
+        <a href="#concept-2">3. Generation controls and cost</a>
+        <a href="#concept-3">4. Shot prompting</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>Chapter 2 moves beyond simple questions. A prompt can transform existing text, summarize long content, generate new content, or classify inputs. The quality and consistency of the result depend on clear instructions, useful constraints, model settings, and examples.</p>
+
+          <div class="diagram">Task
+  |
+  +--> Edit or summarize existing text
+  +--> Generate new text
+  +--> Classify or score text
+
+Prompt design
+  +--> Clear instruction
+  +--> Context and input text
+  +--> Desired format
+  +--> Examples when needed
+
+Request controls
+  +--> max_completion_tokens
+  +--> temperature
+
+Result
+  +--> response.choices[0].message.content</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Text transformation and summarization</h3>
+              <p>Put the instruction first, include the source text clearly, and use f-strings or triple-quoted strings for readable multi-line prompts.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Generation controls and cost</h3>
+              <p>Use max_completion_tokens to cap output length and temperature to influence randomness. Token usage affects cost.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Shot prompting</h3>
+              <p>Zero-shot gives no example, one-shot gives one, and few-shot gives several examples to guide formatting and judgment.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Prompt specificity</h3>
+              <p>Include task, context, audience, tone, and output constraints so the model has less room to guess.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> Good prompting is not magic wording. It is clear task definition, relevant context, useful constraints, and examples when consistency matters.
+          </div>
+        </section>
+
+        <section class="section" id="concept-1">
+          <h2>2. Text transformation and summarization</h2>
+          <p>For editing, place the instruction before the text to change. For summarization, tell the model what kind of summary you need, then insert the source text. Triple-quoted strings make multi-line prompts readable, and Python f-strings let you insert variables directly into the prompt.</p>
+
+          <pre><code>customer_chat = &quot;&quot;&quot;Customer: My order arrived damaged.
+Agent: I am sorry. I can arrange a replacement.
+Customer: Please send it to the same address.&quot;&quot;&quot;
+
+prompt = f&quot;&quot;&quot;Summarize the following customer chat in two bullet points:
+
+{customer_chat}&quot;&quot;&quot;
+
+response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]
+)
+
+print(response.choices[0].message.content)</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> The model receives one finished string. The f-string is only a convenient Python technique for inserting the source text into that string.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Generation controls and cost</h2>
+          <p>The model predicts likely continuations, so outputs can vary. temperature ranges from low randomness to high randomness; lower values are useful for stable classification or support answers, while higher values can help brainstorming. max_completion_tokens limits the maximum generated output. Input and output tokens are counted in the response usage metadata and determine API cost.</p>
+
+          <pre><code>response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    temperature=0.2,
+    max_completion_tokens=120,
+    messages=[
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Write a concise product description for a fitness smartwatch.&quot;}
+    ]
+)
+
+print(response.choices[0].message.content)
+print(response.usage.prompt_tokens)
+print(response.usage.completion_tokens)</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> max_completion_tokens is a ceiling, not a promise that every answer will use that many tokens. Raising it can increase the possible cost, but the model may stop earlier.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. Shot prompting</h2>
+          <p>Examples inside the prompt teach the model the desired mapping and format. Zero-shot uses only an instruction. One-shot adds one example. Few-shot adds multiple examples, which often improves consistency for classification, sentiment scoring, and data extraction.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Approach</th>
+                <th>Examples included</th>
+                <th>Best use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Zero-shot</td>
+                <td>None</td>
+                <td>Simple tasks where the instruction and output format are already obvious</td>
+              </tr>
+              <tr>
+                <td>One-shot / Few-shot</td>
+                <td>One or several</td>
+                <td>Tasks requiring consistent labels, scoring rules, or exact formatting</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>This few-shot prompt classifies animal habitats and demonstrates the exact pattern used in the chapter: examples first, then new items to complete.</p>
+
+          <pre><code>prompt = &quot;&quot;&quot;Classify each animal as Land, Sea, or Both.
+Return only the category.
+
+Zebra = Land
+Crocodile = Both
+Dolphin = Sea
+
+Salmon =
+Frog =
+Elephant =&quot;&quot;&quot;
+
+response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    temperature=0,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]
+)
+
+print(response.choices[0].message.content)</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> The examples define both the categories and the desired equals-sign format, making the model less likely to add unwanted explanations.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Print the completed prompt before sending it when using an f-string; confirm the inserted text appears in the right place.</li>
+            <li>Check that the instruction states the desired output format, such as bullets, a number, or a category only.</li>
+            <li>Use a low temperature for repeatable classification and scoring tasks; use a higher value only when variety is useful.</li>
+            <li>Inspect <code>response.usage.prompt_tokens</code> and <code>response.usage.completion_tokens</code> when measuring usage.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> Do not assume a model will follow an unstated format. If you need only a number, category, or fixed structure, say so and provide examples.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Giving a vague instruction</strong>
+              Specify the task, target audience, tone, length, and format. “Write marketing copy” leaves far more room for guessing than a precise request.
+            </article>
+
+            <article class="qa-item">
+              <strong>Confusing tokens with words</strong>
+              Tokens are model-processing units made from characters or parts of words. A 100-token limit is not exactly 100 words.
+            </article>
+
+            <article class="qa-item">
+              <strong>Using high randomness for classification</strong>
+              For stable labels or sentiment scores, use a low temperature and show examples of the required output.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>How do zero-shot, one-shot, and few-shot prompting differ?</strong>
+              Zero-shot provides an instruction only. One-shot adds one example. Few-shot adds several examples to teach the expected mapping, tone, or output format.
+            </article>
+
+            <article class="qa-item">
+              <strong>What does temperature control?</strong>
+              It influences randomness in token selection. Lower values generally make responses more consistent; higher values permit more variation and creativity.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you control and monitor response size and cost?</strong>
+              Set max_completion_tokens as an output ceiling, then inspect the response usage fields for actual input and output token counts. Cost depends on the model's current token prices.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li>Prompt = task + context + desired format + constraints.</li>
+              <li>Use f-strings to insert variables into readable prompts.</li>
+              <li>Low temperature favors consistency; higher temperature favors variety.</li>
+              <li>Examples improve formatting and classification consistency.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can I build a summarization prompt from a Python variable?</li>
+            <li>Can I explain why a token is not the same as a word?</li>
+            <li>Can I choose between zero-shot and few-shot prompting?</li>
+            <li>Can I choose a sensible temperature for a classification task?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> Build three small Python labs: text summarization with an f-string, product generation with temperature and token controls, and zero-shot versus few-shot classification. Keep the API key in the environment.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> You can create clear transformation and generation prompts, control output behavior, inspect token usage, and add examples when the model needs stronger guidance.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Working with the OpenAI API · Chapter 2 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="openai_api_quick_lookup.html">OpenAI API Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_01_introduction_to_the_openai_api_field_guide.html">Previous: Introduction</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_03_building_conversations_with_the_openai_api_field_guide.html">Next: Building Conversations</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

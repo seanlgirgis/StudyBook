@@ -1,0 +1,23 @@
+1. Congratulations!
+00:00 - 00:06
+Congratulations on making it to the end of the course! You've come a long way!
+
+2. Chapter 1
+00:06 - 00:15
+In Chapter 1, you started to learn about the OpenAI API, and how to make requests OpenAI's chat models.
+
+3. Chapter 2
+00:15 - 00:36
+In Chapter 2, you utilized OpenAI's chat models to solve a range of tasks, including question-answering, text transformation, content generation, sentiment analysis, and categorization. You even learned how to control the model's behavior by tweaking the max_completion_tokens and temperature parameters.
+
+4. Chapter 3
+00:36 - 01:13
+In Chapter 3, we unleashed the full potential of chat models by utilizing system and assistant roles. We used the system role to steer the model towards more desirable outputs and to add guardrails, or restrictions, to model outputs. We used the assistant role to provide few-shot prompts in a more structured way, so the model has a better understanding of how to continue the conversation. Finally, we created a conversation history and a mechanism to add new model messages back into the history, so the conversation can continue to go on!
+
+5. What next?
+01:13 - 01:36
+DataCamp has lots of courses and learning pathways to help you continue your journey and create more impressive and diverse applications, so feel free to check them out!
+
+6. Let's practice!
+00:00 - 01:36
+Congratulations, again! I hope you enjoyed learning about some of the amazing functionality available through the OpenAI API. Have fun applying your newly-learned skills!

@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-04-28 (high-volume event ingestion topic run)
+Last reviewed: 2026-06-07 (DataCamp AI track scaffold fix run; no new loops opened)
 
 ## Status Meanings
 

@@ -1,0 +1,51 @@
+1. Few-shot prompting
+00:00 - 00:08
+Welcome back! In this video, we'll explore few-shot prompting techniques and their applications. Let's get started.
+
+2. Few-shot prompting
+00:08 - 00:22
+Few-shot prompting involves giving language models examples within the prompt. We create a prompt with example question-answer pairs and the question we want the model to answer.
+
+3. Few-shot prompting
+00:22 - 00:24
+We feed this prompt to the model,
+
+4. Few-shot prompting
+00:24 - 00:34
+and we get the answer to our question in return. With this approach, the model learns how to answer the given question from the examples.
+
+5. Few-shot prompting
+00:34 - 00:54
+The name of the technique varies depending on the number of examples we provide. When zero examples are provided, we are using zero-shot-prompting. One example is one-shot prompting. More than one example is few-shot prompting. Let's explore each in detail.
+
+6. Zero-shot prompting
+00:54 - 01:14
+In zero-shot prompting, the model gets a prompt without examples and responds based on its existing knowledge. This is ideal for quick, simple tasks. For instance, we can use zero-shot prompting when asking the model to define "prompt engineering" without giving examples.
+
+7. One-shot prompting
+01:14 - 01:38
+In one-shot prompting, we provide one question-answer example, helping the model learn a specific format or style. This is useful for consistent outputs. For instance, to sum numbers in a specific format, we give an example like "three plus five plus six equals 14," and the model will follow this style for new sums.
+
+8. One-shot prompting
+01:38 - 01:59
+We can use one-shot prompting to guide the model to structure the answer in a specific way. Let's use the same prompt and example, but with the output being a sentence, like "the sum of 3, 5, and 6 is 14". The response to our second question now follows the same format.
+
+9. Few-shot prompting
+01:59 - 02:15
+In few-shot prompting, we give the model multiple examples. This is useful for complex tasks requiring more context. For instance, for sentiment analysis, we provide sample texts with their classifications,
+
+10. Few-shot prompting
+02:15 - 02:20
+and the model uses the categories to classify new texts.
+
+11. Few-shot prompting with a chat model
+02:20 - 02:44
+We can provide examples as previous conversations in the chat completion function. For sentiment analysis, we send the text as a user message and the class as an assistant message. We do this for all examples and, finally, send the text to classify as a user message without the assistant message and print the output.
+
+12. Considerations
+02:44 - 03:10
+When using few-shot prompting, consider the task's complexity to select the optimal number of examples. Fewer examples can handle basic tasks, like using one example to control output structure. For more complex tasks, like multi-category text classification, we should provide diverse examples, ensuring at least one for each class to guide the model effectively.
+
+13. Let's practice!
+03:10 - 03:13
+Time to practice!
