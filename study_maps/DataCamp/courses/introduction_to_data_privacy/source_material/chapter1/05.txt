@@ -1,0 +1,36 @@
+1. Security
+00:00 - 00:02
+Let's dive into some security fundamentals!
+
+2. Why are we talking about Security?
+00:02 - 00:25
+Security can be thought of as a precursor to privacy. Privacy is about giving users control over their data. However, User data has to be secured and protected before any meaningful user action can be taken. A well-developed security and privacy program is like an ice cream sundae. Security is the ice cream or the base, and Privacy is like the topping; both are necessary.
+
+3. What is Information Security?
+00:25 - 00:42
+Information Security or Infosec can be defined as the protection of information and information systems from unauthorized access, use, disclosure, disruption, modification, or destruction in order to provide confidentiality, integrity, and availability.
+
+1 https://www.nist.gov/blogs/cybersecurity-insights/next-generation-security-and-privacy-controls-protecting-nations
+4. CIA Triad
+00:42 - 01:04
+One well-known security model is the CIA Triad; no, not the men in black. The CIA Triad helps companies identify and understand the security controls they need to keep their company safe. We are only going to focus on the CIA triad; however, other security models are out there, like the DIE model, which stands for distributed, immutable, and ephemeral.
+
+5. CIA Triad breakdown
+01:04 - 01:33
+Let's break down each component that makes up the CIA Triad - Confidentiality, Integrity, and Availability. Confidentiality focuses on ensuring that data is protected and not accessed by unauthorized parties. Integrity focuses on ensuring that data is not altered or modified in an unexpected way. Availability focuses on ensuring that data systems are running as expected. Let's look at a few of the technical controls that align with each area of the CIA triad.
+
+6. Confidentiality - Identity Access Management (IAM)
+01:33 - 02:18
+Confidentiality refers to a system’s ability to ensure that only correct users have access to information. Identity Access Management (IAM) is a component of Confidentiality. IAM ensures that only the right people can access the right resources at the right time. Let's look at a real world example. A utility company uses IAM rules to prevent unauthorized access to company information. All of the following rules must be followed for an employee to be able to access and modify resources: The user must have a company email address. The user must be on the corporate network. The user may only access company systems during working hours - 8AM to 5PM. Individual's who do not comply with the aforementioned rules will not be able to access resources.
+
+7. Integrity - encryption and hashing
+02:18 - 03:06
+Integrity means ensuring data can be trusted and has not been inappropriately modified. There are different tools that can be used to support Integrity such as encryption and hashing. Encryption protects data by scrambling data and making it unreadable. For example, encryption could transform the word "midnight" into "Y exclamation mark Iay period ig". Hashing is the process of converting data to a standardized algorithmic output. This process is not reversible. It is often used to verify that data has not been changed. Real World scenario: every time you see "https" or the lock symbol on the address bar, the communications between your computer and the website are being hashed and encrypted. This ensures that communications are unreadable and have not been altered.
+
+8. Availability - Business Continuity and Disaster Recovery
+03:06 - 03:42
+Availability focuses on ensuring that systems are accessible and available (up and running). Business Continuity and Disaster Recovery (BCDR) can be defined as the processes, policies, and people used to help an organization continue during an unplanned event. Let's look at a real world BCDR example. A flood causes severe damage to a hospital's data center; the data center housed all of the company's servers and storage devices. Luckily, the hospital had an established BCDR process. All of the applications and records were backed up to another location. They did not lose any patient records.
+
+9. Let's practice!
+03:42 - 03:46
+Let's go through some exercises to reinforce what we've learned!

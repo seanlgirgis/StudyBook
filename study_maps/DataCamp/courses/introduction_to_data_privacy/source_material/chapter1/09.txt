@@ -1,0 +1,44 @@
+1. The relationship between Security and Privacy
+00:00 - 00:05
+Thanks for sticking around! We will be digging more into the relationship between Security and Privacy.
+
+2. Security fundamentals
+00:05 - 00:19
+Security is focused on preventing the unauthorized usage, disclosure or alternation of information. This is also emphasized in the CIA Triad. Some examples of traditional security controls include encryption and identity access management (IAM).
+
+3. Privacy fundamentals
+00:19 - 00:44
+Privacy controls are focused on ensuring that personal information/user data is processed in a valid manner that has been authorized by the user or users. Examples of privacy controls include notifications, encryption, etc. Both privacy and security care about ensuring a valid and authorized use case for actions on user data. Both privacy and security can also leverage the same technical controls.
+
+4. Thematic alignment
+00:44 - 01:16
+The following Venn diagram illustrates the similarities and differences between privacy and security. Strong security and privacy controls are critical to protecting sensitive user data. Without privacy controls, users would be unable to control and modify their data; for example, requesting that their name be changed. Without security controls, companies would not be able to protect data and prevent it from being leaked or stolen. Security and privacy work together to protect user data and ensure that users’ understand what’s being done with their data. You can’t have privacy without security.
+
+5. Packing what we've learned
+01:16 - 01:37
+Let's walk through a scenario to see how privacy and security controls work together. A backpack company called Tiffz backpackz has implemented a series of controls to protect data. The company stores and analyzes the following data types: product info, product patents, user backpack surveys, and marketing images of people wearing backpacks.
+
+6. Security controls
+01:37 - 02:05
+Let's look at the security controls that Tiffz backpackz has in place. There are controls in place for information for both personal and non personal information. Personal information includes user feedback forms and marketing images of people wearing backpacks. Non-Personal information is not related to users but could include a backpack patent. There are data protection controls, such as encryption, in place as well as IAM controls to limit access. CIA best practices have been implemented as well.
+
+7. Privacy controls
+02:05 - 02:24
+Let's look at the Privacy controls. There are controls in place to protect Personal Information. The Privacy controls focus on ensuring that individuals understand how their data is being used and have the ability to change it. Users participated in backpack performance surveys. They would need to sign consent forms in order to do so.
+
+8. Pulling it all together
+02:24 - 02:39
+Let's pull it together and see where Security and Privacy controls overlap. They both focus on the protection of personal information. This includes data protection and IAM controls for things like: marketing images of people wearing backpacks, user survey and feedback forms, etc.
+
+9. Security and Privacy failure
+02:39 - 03:03
+A security failure can also constitute as a privacy failure. Privacy requires that users give explicit authorization for their data to be disclosed, altered, or changed in any way. When data is stolen, this qualifies as a security failure because data was taken out of systems without authorization or approval. It also constitutes as a privacy failure because users did not consent for x party to access or export their data.
+
+10. Data breach
+03:03 - 03:35
+This brings us to the concept of a data breach. A data breach is defined as a security event where data is unlawfully disclosed, altered, or taken by an unauthorized party. Yahoo, a web portal and search engine company, had the largest data breach in history; this was both a security and a privacy failure. In 2013, over three billion users’ personal information was stolen; names, dates of birth, email addresses, and more were stolen. In 2016, a hacker group began to sell this information.
+
+1 https://www.nytimes.com/2017/10/03/technology/yahoo-hack-3-billion-users.html
+11. Let's practice!
+03:35 - 03:45
+Woah, we covered a lot in this video! Let's do some exercises to test your understanding of the relationship between privacy and security.

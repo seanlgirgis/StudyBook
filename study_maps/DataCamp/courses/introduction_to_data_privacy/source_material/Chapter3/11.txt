@@ -1,0 +1,35 @@
+1. Bleeding edge privacy topics
+00:00 - 00:03
+Let's close out this chapter with bleeding-edge topics.
+
+2. Shifting left
+00:03 - 00:28
+In the traditional software development lifecycle, privacy and security controls and processes are added in the latter stage of the lifecycle. From a privacy lens, shifting left means implementing privacy controls at the beginning of the software development lifecycle, rather than towards the end. The Privacy by Design framework encourages shifting left.
+
+3. Bleeding edge
+00:28 - 01:06
+Bleeding edge refers to cutting-edge technology. I like to think about it as "shiny and sharp". New technology can increase innovation and improve processes and outcomes. However, new technology presents its own challenges, such as a lack of developed best practices and lack of experts who can implement the technology. An example of bleeding edge technology would be Ironman's or Ironheart's suits. The suits are revolutionary and can make the world a better place, but there isn't exactly a manual on how to use them and there are severe consequences if the suits are misconfigured.
+
+4. Bleeding edge challenges
+01:06 - 01:41
+Technology is always changing. Bleeding edge technology presents several challenges. First, new technology may introduce new risk that can't be addressed by pre-existing privacy and security controls. In order to adapt new, bleeding edge technology, companies may have to create and implement new controls to sufficiently protect themselves and their users. Secondly, there is always a lag between regulation and technology. New technology may not have a clear path towards compliance.
+
+5. Bleeding edge technology - public cloud
+01:41 - 02:26
+The public cloud is over a decade old ,but is still considered bleeding edge. Public cloud refers to infrastructure on demand from third-party cloud service providers (CSP). The CSPs manage the underlying infrastructure that powers various computing, storage, and cloud-native services. Traditionally, companies purchased physical hardware such servers and networking equipment to run their data centers. Now, companies purchase usage of those services from cloud service providers. The three main Cloud Service Providers (CSPs) are Google Cloud Platform (GCP), Amazon Web Services (AWS), and Azure.
+
+6. Public cloud benefits and challenges
+02:26 - 02:57
+Public cloud has several benefits. These include: enabling companies to buy and scale resources to meet their usage demands, decreasing their overall hardware investment costs, and increasing their rate of innovation. Pubic cloud platforms have unique challenges. New security and privacy controls need to be built to protect data residing on the cloud. Also, personnel need to be trained how to protect and secure cloud environments.
+
+7. Bleeding edge technology - blockchain
+02:57 - 03:29
+Blockchain refers to a shared ledger that records transactions and tracks assets in distributed data business network. If we break it down further, "blocks" refer to data groupings; each block can hold a specified amount of data. Each block has a specific capacity, and once the block is full, it is then chained to the previous block creating a blockchain. There are many blockchain based technologies such as cryptocurrencies and the next wave of the internet (web3 and web5).
+
+8. Blockchain benefits and challenges
+03:29 - 04:18
+Blockchain has a few unique benefits. By default, all blockchain transactions are immutable; the transaction records cannot be altered. Blockchain systems also increase transparency; users are able to view all previous transactions. Finally blockchain, has a unique security posture - encryption and distributed systems are built into the technology. However, blockchain faces few privacy challenges. Since blockchain records are immuteable, users cannot request that their data be deleted. Additionally, privacy laws and best practice guidance hasn't caught up to block chain technology. This makes it harder for block chain based technology to be in compliance with existing laws.
+
+9. Let's Practice
+04:18 - 04:25
+Now, let's finish strong and knock out a few exercises.

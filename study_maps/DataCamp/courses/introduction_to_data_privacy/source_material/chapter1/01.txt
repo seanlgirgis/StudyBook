@@ -1,0 +1,37 @@
+1. Privacy
+00:00 - 00:06
+Welcome. My name is Tiffany and I will be your instructor for this course. Let's start learning!
+
+2. Privacy's origin story
+00:06 - 00:37
+In the late 1800s, there were concerns about how technological advances negatively impacted individuals' rights. These discussions revolved around an individual's rights to their image and content published about them, such as sensationalist reporting. These were the first modern conversations about the intersection between technology and an individuals personal rights, also known as privacy. Privacy was defined as "the right to be left alone, or freedom from interference or intrusion".
+
+1 Samuel D. Warren and Louis D. Brandeis, "The Right to Privacy," Harvard Law Review, 4 (5), (1890): 193-220, p. 195, citing Judge Cooley in Cooley on Torts, 2nd ed.
+3. Digging into today's definition of Privacy
+00:37 - 00:57
+One subset of Privacy is Data Privacy. Data privacy is defined as the right to have some control over how your personal data is collected and used; it's about enabling and empowering users to have control over their own data. It can also be thought of as "the authorized and valid processing of personal information".
+
+1 Bhajaria, Nishant, and Neil Hunt. Data Privacy: A Runbook for Engineers. Manning Publications Co., 2022.
+4. Personal data
+00:57 - 01:26
+When we talk about Privacy, a key term to understand is personal data. Personal Data, sometimes referred to as Personal Information, is data related to a person or, in some cases, can be used to identify an individual. Examples of personal data include date of birth, name, geolocation, and much more. One of Privacy's main goals is to ensure that Personal data is not compromised by being unexpectedly altered, modified, or stolen.
+
+5. Privacy's expanding implications
+01:26 - 01:54
+Data Privacy conversations have expanded in the 21st century. This is due to increased accessibility of the public Internet, web and mobile applications, and the overall increase in data that companies are able collect. A lot of major data Privacy conversations revolve around: surveillance, big data analytics, and sharing of user data between 3rd party providers. We'll dive into these later, but start to think and pay attention to how Privacy may impact your daily life.
+
+6. State of Privacy today
+01:54 - 02:19
+According to Pew, over 59% of Americans do not know what is being done with their data. 81% of Americans also stated that the risks of collecting data about them outweighed the benefits. There are several factors that could contribute to these daunting statistics, including lack of Privacy knowledge, lack of trust in corporation's privacy programs, and lack of standardized privacy regulations
+
+7. Privacy Implications
+02:19 - 03:02
+Privacy has different implications for different groups. The chart shows three different groups and breaks down the importance of Privacy to the three groups. Individual users need to trust that their data is being used in a way that they have agreed to. If there is a deviation, the individuals' rights may have been violated, and their information may be misused. Companies need to be in compliance with privacy laws and protect their users. Privacy failures can result in significant financial loss, damage to a company's reputation, decreased consumer trust, legal fines, and lawsuits. Regulators must create standards to protect individuals' rights. Failure to do so could result in a loss of public confidence and user exploitation.
+
+8. PREACH
+03:02 - 04:13
+To close out, we'll go over six concepts that can be used to evaluate the maturity of a privacy program. Preach is an acronym that consumers and professionals can use to assess the maturity and effectiveness of a privacy program. 'P' stands for 'purpose'. Why is the company asking to use your data? What is the purpose, and is it necessary for you to use x service? 'R' stands for 'Right to Request'. Do you have the ability to request that your data be modified, removed, or otherwise altered? For example, change your name or address. 'E' stands for 'easy to understand'. Is it easy to understand a company's policies? Are they being fully transparent? 'A' stands for 'alerting'. Will you be alerted if the company mishandles your data? 'C' stands for 'consent'. Have you given consent - think of consent as permission - for your information to be used? 'H' stands for 'How' How is the company or service planning to use your data? Are they using it to understand your shopping habits, or are they reselling it to a 3rd party advertising company? All together these six concepts spell out PREACH!
+
+9. Let's practice!
+04:13 - 04:17
+Let's test out what we've learned about privacy!

@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Working with Hugging Face — Course Code Guide</title>
+  <style>
+:root {
+  --bg:#0d1117; --panel:#161b22; --soft:#1c232d; --border:#30363d;
+  --text:#e6edf3; --muted:#9da7b3; --green:#03ef62; --blue:#58a6ff;
+  --amber:#d29922; --shadow:0 12px 30px rgba(0,0,0,.24);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);
+  background:radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);
+  line-height:1.58
+}
+.page{width:min(1220px,calc(100% - 32px));margin:0 auto;padding:24px 0 52px}
+.breadcrumbs{display:flex;gap:9px;flex-wrap:wrap;color:var(--muted);font-size:.9rem;margin-bottom:16px}
+.breadcrumbs a{color:var(--muted);text-decoration:none}
+.hero{
+  position:relative;overflow:hidden;padding:34px;border-radius:18px;border:1px solid #28506a;
+  background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);box-shadow:var(--shadow)
+}
+.hero:before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--green),var(--blue),#bc8cff)}
+.eyebrow{margin:0 0 7px;color:var(--green);font-size:.76rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+h1{margin:0;font-size:clamp(2rem,4vw,3.15rem);line-height:1.08}
+.hero p{max-width:930px;color:#c8d4df}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.button{display:inline-flex;align-items:center;min-height:40px;padding:0 15px;border:1px solid #486274;border-radius:9px;text-decoration:none;font-weight:800}
+.button.primary{background:var(--green);color:#03130a;border-color:transparent}
+.toc{margin-top:22px;padding:18px;background:var(--panel);border:1px solid var(--border);border-radius:14px}
+.toc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px}
+.toc a{color:var(--blue);text-decoration:none}
+.section{margin-top:22px}
+.section h2{margin:0 0 14px;font-size:1.45rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{
+  background:linear-gradient(180deg,var(--panel),#141920);border:1px solid var(--border);
+  border-radius:14px;padding:18px;box-shadow:var(--shadow)
+}
+.card h3{margin:0 0 8px;color:var(--green)}
+.card p{margin:0 0 12px;color:#c9d3dc}
+pre{
+  overflow-x:auto;margin:12px 0;padding:14px;border:1px solid #33404d;border-radius:10px;
+  background:#0f141a;color:#dce6ef;font-family:Consolas,"Courier New",monospace;font-size:.86rem;line-height:1.48
+}
+.notice{
+  margin-top:12px;padding:11px 12px;border-left:4px solid var(--amber);
+  border-radius:8px;background:rgba(210,153,34,.12);color:#d8caaa;font-size:.9rem
+}
+footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:28px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:.88rem}
+footer a{color:var(--blue);text-decoration:none}
+@media(max-width:850px){.grid,.toc-grid{grid-template-columns:1fr}.hero{padding:28px 21px}}
+</style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Working with Hugging Face</a>
+      <span>›</span>
+      <span>Course Code Guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Working with Hugging Face · Whole Course</p>
+      <h1>Hugging Face Code Guide</h1>
+      <p>
+        A two-column course-wide reference that connects every important code pattern
+        to the concept it demonstrates, the output shape to expect, and the trap to avoid.
+      </p>
+      <div class="actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button" href="field_guide.html">Main Field Guide</a>
+        <a class="button" href="hugging_face_quick_lookup.html">Quick Lookup</a>
+        <a class="button" href="chapter_01_getting_started_with_hugging_face_field_guide.html">Chapter 1</a>
+        <a class="button" href="chapter_02_building_pipelines_with_hugging_face_field_guide.html">Chapter 2</a>
+      </div>
+    </header>
+
+    <section class="toc">
+      <strong>Guide Contents</strong>
+      <div class="toc-grid">
+        <a href="#section-1">1. Pipelines and Basic Inference</a><a href="#section-2">2. Model Selection and Hosted Inference</a><a href="#section-3">3. Hugging Face Datasets</a><a href="#section-4">4. Tokenization and Tensors</a><a href="#section-5">5. AutoClasses and Raw Model Output</a><a href="#section-6">6. Classification Variants</a><a href="#section-7">7. Summarization</a><a href="#section-8">8. PDF Extraction and Document Q&amp;A</a>
+      </div>
+    </section>
+
+    
+    <section class="section" id="section-1">
+      <h2>1. Pipelines and Basic Inference</h2>
+      <div class="grid">
+        
+        <article class="card">
+          <h3>Sentiment Classification</h3>
+          <p>A pipeline bundles tokenization, model inference, and output formatting. The selected model defines the labels.</p>
+          <pre><code>from transformers import pipeline
+
+classifier = pipeline(
+    &quot;sentiment-analysis&quot;,
+    model=&quot;distilbert/distilbert-base-uncased-finetuned-sst-2-english&quot;
+)
+
+result = classifier(&quot;I really enjoy this course.&quot;)
+print(result)</code></pre>
+          <div class="notice"><strong>What to remember:</strong> Output is usually a list of dictionaries containing a label and score.</div>
+        </article>
+        
+        <article class="card">
+          <h3>Text Generation</h3>
+          <p>Text generation continues a prompt. max_new_tokens limits newly generated tokens; num_return_sequences controls how many alternatives are returned.</p>
+          <pre><code>from transformers import pipeline
+
+generator = pipeline(
+    task=&quot;text-generation&quot;,
+    model=&quot;openai-community/gpt2&quot;
+)
+
+results = generator(
+    &quot;What if AI&quot;,
+    max_new_tokens=10,
+    num_return_sequences=2
+)
+
+for result in results:
+    print(result[&quot;generated_text&quot;])</code></pre>
+          <div class="notice"><strong>What to remember:</strong> Generated output is structured data, not a plain string.</div>
+        </article>
+        
+      </div>
+    </section>
+    
+    <section class="section" id="section-2">
+      <h2>2. Model Selection and Hosted Inference</h2>
+      <div class="grid">
+        
+        <article class="card">
+          <h3>Explicit Model Selection</h3>
+          <p>Naming the model makes the code reproducible and prevents silent dependence on a changing default.</p>
+          <pre><code>classifier = pipeline(
+    &quot;text-classification&quot;,
+    model=&quot;distilbert/distilbert-base-uncased-finetuned-sst-2-english&quot;
+)</code></pre>
+          <div class="notice"><strong>What to remember:</strong> Check the model card for task, language, license, training data, limitations, and size.</div>
+        </article>
+        
+        <article class="card">
+          <h3>Hosted Inference Client</h3>
+          <p>Hosted inference runs the model on remote provider hardware instead of the local machine.</p>
+          <pre><code>import os
+from huggingface_hub import InferenceClient
+
+client = InferenceClient(
+    provider=&quot;together&quot;,
+    api_key=os.environ[&quot;HF_TOKEN&quot;]
+)</code></pre>
+          <div class="notice"><strong>What to remember:</strong> Hosted inference trades local hardware requirements for network, cost, privacy, and provider dependence.</div>
+        </article>
+        
+      </div>
+    </section>
+    
+    <section class="section" id="section-3">
+      <h2>3. Hugging Face Datasets</h2>
+      <div class="grid">
+        
+        <article class="card">
+          <h3>Load a Dataset Split</h3>
+          <p>load_dataset() downloads or opens a named dataset and returns a Hugging Face Dataset object.</p>
+          <pre><code>from datasets import load_dataset
+
+dataset = load_dataset(
+    &quot;TIGER-Lab/MMLU-Pro&quot;,
+    split=&quot;validation&quot;
+)
+
+print(dataset)</code></pre>
+          <div class="notice"><strong>What to remember:</strong> A split is a named portion such as train, validation, or test.</div>
+        </article>
+        
+        <article class="card">
+          <h3>Shuffle, Select, and Filter</h3>
+          <p>shuffle() creates a reproducible random order, select() keeps row positions, and filter() keeps rows matching a condition.</p>
+          <pre><code>dataset = load_dataset(&quot;imdb&quot;, split=&quot;train&quot;)
+
+sample = dataset.shuffle(seed=42).select(range(20))
+
+positive_rows = sample.filter(
+    lambda row: row[&quot;label&quot;] == 1
+)
+
+print(&quot;Positive rows:&quot;, len(positive_rows))</code></pre>
+          <div class="notice"><strong>What to remember:</strong> filter() is closest to SQL WHERE. Do not assume the first rows are representative.</div>
+        </article>
+        
+      </div>
+    </section>
+    
+    <section class="section" id="section-4">
+      <h2>4. Tokenization and Tensors</h2>
+      <div class="grid">
+        
+        <article class="card">
+          <h3>Inspect Token Pieces</h3>
+          <p>tokenize() shows text pieces. Subword markers such as ## indicate continuation pieces.</p>
+          <pre><code>from transformers import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained(
+    &quot;distilbert-base-uncased-finetuned-sst-2-english&quot;
+)
+
+tokens = tokenizer.tokenize(
+    &quot;AI: Making robots smarter and humans lazier!&quot;
+)
+
+print(tokens)</code></pre>
+          <div class="notice"><strong>What to remember:</strong> The same word may split differently under different tokenizers.</div>
+        </article>
+        
+        <article class="card">
+          <h3>Create PyTorch Tensors</h3>
+          <p>return_tensors=&#x27;pt&#x27; converts tokenizer output into PyTorch tensors for model input.</p>
+          <pre><code>encoded = tokenizer(
+    &quot;I like to visit the park on sunny days.&quot;,
+    return_tensors=&quot;pt&quot;
+)
+
+print(encoded[&quot;input_ids&quot;])
+print(encoded[&quot;attention_mask&quot;])</code></pre>
+          <div class="notice"><strong>What to remember:</strong> input_ids are token numbers. attention_mask uses 1 for real tokens and 0 for padding.</div>
+        </article>
+        
+      </div>
+    </section>
+    
+    <section class="section" id="section-5">
+      <h2>5. AutoClasses and Raw Model Output</h2>
+      <div class="grid">
+        
+        <article class="card">
+          <h3>AutoModel + AutoTokenizer</h3>
+          <p>AutoClasses load the correct architecture and tokenizer for a model repository.</p>
+          <pre><code>import torch
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer
+)
+
+model_name = (
+    &quot;distilbert/distilbert-base-uncased-&quot;
+    &quot;finetuned-sst-2-english&quot;
+)
+
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained(model_name)
+
+inputs = tokenizer(
+    &quot;I really enjoy learning Hugging Face.&quot;,
+    return_tensors=&quot;pt&quot;
+)
+
+with torch.no_grad():
+    outputs = model(**inputs)
+
+predicted_id = outputs.logits.argmax(dim=-1).item()
+label = model.config.id2label[predicted_id]
+
+print(label)</code></pre>
+          <div class="notice"><strong>What to remember:</strong> logits are raw model scores. argmax() selects the highest-scoring class.</div>
+        </article>
+        
+        <article class="card">
+          <h3>AutoClasses Inside a Pipeline</h3>
+          <p>You can explicitly load model and tokenizer objects, then still use pipeline() for simple inference.</p>
+          <pre><code>from transformers import pipeline
+
+my_pipeline = pipeline(
+    task=&quot;sentiment-analysis&quot;,
+    model=model,
+    tokenizer=tokenizer
+)
+
+output = my_pipeline(
+    &quot;This course is pretty good, I guess.&quot;
+)
+
+print(output)</code></pre>
+          <div class="notice"><strong>What to remember:</strong> This combines explicit control with pipeline convenience.</div>
+        </article>
+        
+      </div>
+    </section>
+    
+    <section class="section" id="section-6">
+      <h2>6. Classification Variants</h2>
+      <div class="grid">
+        
+        <article class="card">
+          <h3>Grammar Classification</h3>
+          <p>The same text-classification workflow can represent a different task when a different trained model is used.</p>
+          <pre><code>grammar_checker = pipeline(
+    task=&quot;text-classification&quot;,
+    model=&quot;abdulmatinomotoso/English_Grammar_Checker&quot;
+)
+
+print(grammar_checker(&quot;I will walk dog&quot;))
+print(grammar_checker(&quot;I will walk the dog.&quot;))</code></pre>
+          <div class="notice"><strong>What to remember:</strong> Generic labels such as LABEL_0 and LABEL_1 are model-specific.</div>
+        </article>
+        
+        <article class="card">
+          <h3>Zero-Shot Classification</h3>
+          <p>Candidate labels are supplied at runtime rather than being fixed to one business taxonomy.</p>
+          <pre><code>classifier = pipeline(
+    task=&quot;zero-shot-classification&quot;,
+    model=&quot;facebook/bart-large-mnli&quot;
+)
+
+output = classifier(
+    &quot;AI-powered robots assist in complex brain surgeries.&quot;,
+    candidate_labels=[&quot;politics&quot;, &quot;science&quot;, &quot;sports&quot;]
+)
+
+for label, score in zip(
+    output[&quot;labels&quot;],
+    output[&quot;scores&quot;]
+):
+    print(label, score)</code></pre>
+          <div class="notice"><strong>What to remember:</strong> The model ranks all supplied candidate labels.</div>
+        </article>
+        
+        <article class="card">
+          <h3>QNLI</h3>
+          <p>QNLI judges whether a passage supports answering a question. It does not extract the answer.</p>
+          <pre><code>qnli = pipeline(
+    task=&quot;text-classification&quot;,
+    model=&quot;cross-encoder/qnli-electra-base&quot;
+)
+
+result = qnli(
+    &quot;Where is the capital of France?, &quot;
+    &quot;Paris is the capital of France.&quot;,
+    top_k=None
+)
+
+print(result)</code></pre>
+          <div class="notice"><strong>What to remember:</strong> Use top_k=None when you need to inspect all label scores.</div>
+        </article>
+        
+      </div>
+    </section>
+    
+    <section class="section" id="section-7">
+      <h2>7. Summarization</h2>
+      <div class="grid">
+        
+        <article class="card">
+          <h3>Summarize Text</h3>
+          <p>Summarization returns a list containing summary_text. Length settings must fit the model and installed Transformers version.</p>
+          <pre><code>summarizer = pipeline(
+    task=&quot;summarization&quot;,
+    model=&quot;sshleifer/distilbart-cnn-12-6&quot;
+)
+
+summary = summarizer(
+    original_text,
+    min_length=10,
+    max_length=40
+)
+
+summary_text = summary[0][&quot;summary_text&quot;]
+
+print(summary_text)
+print(len(original_text))
+print(len(summary_text))</code></pre>
+          <div class="notice"><strong>What to remember:</strong> len() counts characters here, not words or tokens. A short summary can omit important qualifications.</div>
+        </article>
+        
+      </div>
+    </section>
+    
+    <section class="section" id="section-8">
+      <h2>8. PDF Extraction and Document Q&amp;A</h2>
+      <div class="grid">
+        
+        <article class="card">
+          <h3>Extract Text from Every PDF Page</h3>
+          <p>PyPDF reads a PDF text layer. Each page is extracted and appended into one context string.</p>
+          <pre><code>from pypdf import PdfReader
+
+reader = PdfReader(&quot;US_Employee_Policy.pdf&quot;)
+
+document_text = &quot;&quot;
+
+for page_number, page in enumerate(
+    reader.pages,
+    start=1
+):
+    page_text = page.extract_text() or &quot;&quot;
+    document_text += page_text + &quot;\n&quot;</code></pre>
+          <div class="notice"><strong>What to remember:</strong> Scanned-image PDFs may require OCR because they may not contain a text layer.</div>
+        </article>
+        
+        <article class="card">
+          <h3>Question Answering with Threshold</h3>
+          <p>Extractive Q&amp;A chooses an answer span from context. A confidence threshold prevents weak forced answers from being displayed.</p>
+          <pre><code>qa = pipeline(
+    task=&quot;question-answering&quot;,
+    model=&quot;distilbert/distilbert-base-cased-distilled-squad&quot;
+)
+
+result = qa(
+    question=&quot;What is the notice period for resignation?&quot;,
+    context=document_text
+)
+
+if result[&quot;score&quot;] &lt; 0.30:
+    print(&quot;Not enough information in the document.&quot;)
+else:
+    print(result[&quot;answer&quot;])</code></pre>
+          <div class="notice"><strong>What to remember:</strong> A low score can indicate that the context does not contain a reliable answer.</div>
+        </article>
+        
+      </div>
+    </section>
+    
+
+    <footer>
+      <span>Working with Hugging Face · Course Code Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="hugging_face_quick_lookup.html">Quick Lookup</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,40 @@
+1. Companies and user data
+00:00 - 00:04
+Let's dig into why companies collect user data.
+
+2. Investigating the types of data companies collect
+00:04 - 00:39
+There are four types of data that companies collect. Personal data is data that can be used to identify a person, such as their social security number, but can also include things like IP addresses tied to that user's devices. Engagement data lets companies understand how customers interact with content like social media. Behavioral data focuses on consumers' behaviors. This can include things like transactional detail such as purchase history. Attitudinal data tracks the consumer's opinion about their experience; this includes experience surveys.
+
+3. Why do companies want user data?
+00:39 - 00:51
+Why do companies even want user data in the first place? Companies can glean a lot of information from user data that empowers them to make smarter business decisions. Knowledge is power… and so is data.
+
+4. What do companies do with the data?
+00:51 - 01:09
+There are five ways that companies use customer data. They are: optimizing the customer experience; targeted advertising; reselling the data to data brokers, partners, or other 3rd parties; using information for product development; and finally, improving their overall business strategy.
+
+5. User experience and product development
+01:09 - 01:24
+Companies can use data to gain a better understanding of their users. The data gives companies a better idea about user preferences and dislikes, which allows companies to modify products, goods, and services to better align with user preferences.
+
+6. Resell data
+01:24 - 02:14
+A data broker is an entity that collects information about users, creates profiles based on characteristics, and sells the information to other companies. Data brokers sell these customer profiles. Customer profiles are users grouped by common characteristics. Data brokers can gather a lot of information including, but not limited to, Social Security numbers, financial history, demographic information, and more. Let's see how this may work with health insurance companies. A data broker could compile diabetics profile; this profile could have been created based on users searching for "insulin" online, purchasing diabetic snacks, or joining diabetic support groups. This diabetics profile is then sold to a health insurance company. With this profile, insurance companies may increase premiums for customers in this profile.
+
+7. Targeting advertising
+02:14 - 02:59
+The big tech advertising machine makes hundreds of billions of dollars in profit annually. Social media companies and large search engine companies offer a lot of free services. However, even though users do not explicitly buy services from these platforms, companies still make money off of users. These companies sell advertising spots to advertisers and other third-party companies. Ad spots are informed and personalized by data that platforms and potentially data brokers have collected about users. Have you ever searched for something like health supplements and then logged on to another website and got a bunch of ads for supplements and things related to health? Yeah. Exactly.
+
+1 https://www.statista.com/statistics/261827/leading-media-companies-worldwide/
+8. Improve business strategy
+02:59 - 03:16
+Finally, businesses also use data to improve their overall business strategy. By tracking users' online footprints, they can better understand users' spending habits, competitor platforms, and preferences. This helps identify areas to invest more or less in.
+
+9. Frequent flyer program example
+03:16 - 03:53
+An airline is running a promotion for customers who sign up for their frequent flyer program. Customers must create an account by submitting their name, email, and date of birth. The frequent flyer benefits include: access to future exclusive discounts, free perks, free seat upgrades, and points towards status. There are a few privacy tradeoffs. Airline providers often use 3rd parties to manage and protect loyalty programs. These 3rd parties have a history of data breaches. Additionally, these third party loyalty programs often sell personal information to other companies, which leads to increased advertising and spam.
+
+10. Let's practice!
+03:53 - 03:58
+We learned a lot. Let's test it out!

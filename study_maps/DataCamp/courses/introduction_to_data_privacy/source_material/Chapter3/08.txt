@@ -1,0 +1,32 @@
+1. Spooky privacy laws
+00:00 - 00:03
+Let's get ready to break down some privacy laws!
+
+2. Sometimes rules are good
+00:03 - 00:30
+It's become increasingly important that individuals have legal privacy protections. Companies cannot be entrusted to self-regulate. There needs to be some type standardized rules, law, and/or framework that establishes best practices and specific rules for companies to adhere to. This sentiment is echoed by lawmakers across the globe who have begun creating more privacy legislation.
+
+3. Trends
+00:30 - 01:16
+There are a five common themes amongst privacy laws. These themes show up in numerous privacy laws. Let's review a them: The first is data sovereignty; data must be stored within specified areas and will be subject to the laws of the country where the data is stored. The second is Data Breach notifications, which refers to a company's obligation to issue notice to users impacted by a data breach. The third is user data requests; Users should have the right to request to have their data modified or deleted. The fourth is increased transparency; companies need to be more transparent about how they are using data. The fifth is accountability; a particular department, entity, or individual must be responsible for privacy.
+
+1 https://www.gartner.com/en/newsroom/press-releases/2022-05-31-gartner-identifies-top-five-trends-in-privacy-through-2024
+4. Components of Privacy law (jAsper)
+01:16 - 01:56
+Most privacy laws can roughly be broken into seven different components. I remember them by using "jAsper". "J" refers to jurisdiction. The territory that the law applies to. "A" stands for author and aim. Author is the entity that created the law, and aim is the purpose of the law. "S" stands for the scope, which defines what types of data this rule applies to. "P" stands for penalty and refers to the repercussion of violating privacy laws. "E" stands for enforcement and refers to the entity that enforces the privacy rules. "R" stands for requirements that a business must follow to maintain compliance.
+
+5. jAsper template
+01:56 - 02:08
+You can use the jAsper template to help you analyze privacy laws. If you can define each component, you'll have a solid basic understanding of the law and be able to explain it to others.
+
+6. jAsper meets HIPAA
+02:08 - 03:01
+Let's apply the template to the Healthcare Insurance Portability Accountability Act (HIPAA). HIPAA is a US-based law created to protect patients receiving medical treatment in the USA. HIPAA's jurisdiction is in the USA. Congress created the Act in the 1996, and its purpose was to protect sensitive patient healthcare information (PHI) and prevent unauthorized disclosure of that data. The scope is organizations that store, process, or transfer PHI. The penalty for violating HIPAA can include either civil or criminal penalties - fines or jail time - depending on severity. The Office of Civil Rights (OCR) enforces HIPAA. Finally, HIPAA is subdivided into five rules, each has different purpose and requirements that companies must follow.
+
+7. Privacy law challenges
+03:01 - 03:58
+Privacy regulation has a few challenges. Regulating technology is a moving target. In general, technology out paces the writing and creation of new legislation. Good privacy regulation is a balancing act - generic enough to encompass any potential new technological advances but not so generic that it cannot give prescriptive guidance to address the risk. Another challenge is that often governmental bodies are tasked with writing privacy legislation geared towards regulating tech but may not necessarily be subject matter experts in those areas. Finally, there is a lack of global standardization, enforcement, and nation state coalitions. This causes a lack of standardization across the globe, making it increasingly hard for global companies to comply with different regulations in different countries.
+
+8. Let's practice!
+03:58 - 04:02
+Let's dive into some challenges!

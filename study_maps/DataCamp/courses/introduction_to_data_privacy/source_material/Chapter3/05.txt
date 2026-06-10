@@ -1,0 +1,36 @@
+1. Privacy laws - when things go wrong
+00:00 - 00:08
+Alright, folks, let's learn what happens when things go bad in privacy land, also known as our "uh oh" moment.
+
+2. When things go wrong
+00:08 - 00:36
+To understand why all of the things we've discussed matter, it's important to understand what happens when things go wrong and privacy best practices are not followed. When privacy controls fail, users may be the target of targeted selling, have their personal information stolen, their identity stolen, and experience pricing discrimination. These are all very real consequences that happen every day as the result of insufficient privacy controls.
+
+3. Data paradox
+00:36 - 01:18
+But aren't users aware of how bad things can get? This seems like a cheesy horror movie when the lead character enters an abandoned house. Why aren't users more concerned? Actually, in a recent study, 14,250 users were surveyed about their overall technology usage and privacy concerns. The more an individual used digital services, the more they were concerned about privacy; there is a direct correlation between tech dependency and privacy concerns. This is called the privacy paradox. Even though users know and are concerned by about their privacy, they are too dependent on digital services to stop usage completely.
+
+1 Chen, Long and Chen, Long and Huang, Yadong and Ouyang, Shumiao and Xiong, Wei, The Data Privacy Paradox and Digital Demand (May 2021). NBER Working Paper No. w28854, Available at SSRN: https://ssrn.com/abstract=3856834
+4. Penalties for violating privacy policies
+01:18 - 01:55
+There are three primary penalties for violating privacy laws. The first is financial damages. This amount could be a percentage of the company's earnings or a specific dollar amount. The second is a business ban. Companies can be blocked from doing business in a particular country. Finally, there is the miscellaneous category. This usually occurs when there isn't a sufficient privacy law or a company has not sufficiently modified its original behavior. These penalties vary significantly and can include financial penalties, mandate the creation of a privacy program, jail time, and more.
+
+5. Privacy laws - compliance chart
+01:55 - 02:14
+Let's look at some real privacy laws to better understand real world penalties. Here we have three privacy laws: the General Data Protection Regulation (GDPR),the California Consumer Privacy Act (CCPA), and the Personal Information Protection Law of the People's Republic of China (PIPL) .
+
+6. Privacy laws and jurisdiction - compliance chart
+02:14 - 02:34
+Each of these laws has a specific jurisdiction. While jurisdiction's often refer to geographical territories, sometimes they can also refer to citizens within a geographic territory who fall within the purview of the law. Please note: the asterisks denote that this is a generalization, more specific language can be found in the actual legal text.
+
+7. Compliance and privacy chart
+02:34 - 03:23
+Let's put it all together. GDPR is perhaps the most well-known privacy law. It is meant to protect and empower EU citizens to have control over their user data. Companies who violate this law can be fined up to 10 million euros or 4% of the company's worldwide revenue, whichever is higher. CCPA is a US state-based privacy law meant to regulate for-profit entities conducting business in California that use California consumer data. There is no cap on fines. Companies are fined per violation; $2500 - $7500 per violation. PIPL is a China based privacy law meant to protect Chinese citizens. The fines can go up to $7.8 million or up to 5% of the company's business revenue.
+
+8. Real world privacy violations
+03:23 - 04:07
+Let's see what these fines look like in real life. In relation to GDPR, Luxembourg's National Commission for Data Protection (CNPD) first filed a complaint against Amazon in 2018. In 2021, Amazon was issued an $888M fine for using data for advertising without sufficient consent. In relation to CCPA, Sephora, Inc failed to notify customers that their data was being sold and was issued a $1.2M fine. In relation to PIPL, Didi international was found to have violated 16 different privacy and security rules and, as a result, was ordered to pay $1.2B.
+
+9. Let's practice!
+04:07 - 04:13
+Alright, let's test our knowledge. What can go wrong, right?

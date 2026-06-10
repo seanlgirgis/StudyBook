@@ -1,0 +1,31 @@
+1. De-Identifying data
+00:00 - 00:04
+Let's dive into De-Identifying data!
+
+2. Protecting sensitive information
+00:04 - 00:56
+When we think back on privacy by design and building privacy considerations into processes, programs, and applications, it's important to consider the different methods used to protect sensitive information. Companies would want to protect sensitive information from both employees and non-employees. Internally, there will be cases where internal employees may need to run analytics and find patterns within large datasets but should not see a customer's personal information. Externally, companies would want to implement several layers of security to protect data from external malicious actors. So that even if a malicious actor were to gain access to a storage repository, they would not be able to read, understand or use the information because it has been rendered unreadable.
+
+3. De-identification techniques
+00:56 - 01:17
+Two de-identification techniques often come up when discussing sensitive information. These techniques are Data Anonymization and Pseudonymization. Both of these techniques describe a series of methods and tools used to make data unreadable; there are different use cases for each. Let's learn a little bit more about each of these.
+
+4. Pseudonymization
+01:17 - 01:51
+First up, is pseudonymization. Pseudonym means ‘false name’. Data that undergoes pseudonymization is transformed so that it is unrecognizable, but it can be transformed back to its original state. Pseudonymized data can be temporarily masked or transformed to hide an individual's identity. Think about this like Batman and Bruce Wayne. When Bruce needs to mask his identity, he turns into Batman by putting on a mask and a cape. He can always change back to his original state, Bruce Wayne.
+
+5. Pseudonymization example
+01:51 - 02:28
+Let's walk through an example. The first card is basic information about a patient's recent medical diagnosis; name, date of birth, phone number, and medical diagnosis. If we look at the second card, various pseudonymization techniques are applied to protect the data. Lee Roswell's name is tokenized; it is transformed from personal information to string of non-sensitized randomized characters. The date of birth had and phone number have also have also been transformed. Finally the diagnosis has been completely masked or covered up to protect the sensitive data.
+
+6. Anonymization
+02:28 - 03:01
+In contrast, Data Anonymization is the irreversible process of transforming data so that the original state cannot be identified. The goal of anonymizing data is not only to remove personal identifiers but also to ensure that it’s impossible to determine who an individual was and for this process to be permanent. Think about this like someone being transformed into a zombie. That person is no longer identifiable and cannot revert back to their original state.
+
+7. Anonymization example
+03:01 - 03:35
+Let’s use the same personal data card; however, this time, let's see how the data transformed after various anonymization methods were applied. Remember, the data can't be transformed back once anonymization methods are applied. Anonymization methods can genericize information to make the individual unidentifiable. Lee Roswell's identity was anonymized, so the transformed data only shows that he is biologically male. His date of birth date was changed from a specific year to a range.
+
+8. Let's practice!
+03:35 - 03:42
+We've learned about different techniques to de-identify data. Let's test our knowledge.

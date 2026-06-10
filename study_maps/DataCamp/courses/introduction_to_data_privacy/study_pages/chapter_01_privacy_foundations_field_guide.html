@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
 TEMPLATE USAGE
-Replace every {{PLACEHOLDER}} with section-specific content.
+Replace every template marker with section-specific content.
 Keep the CSS and layout stable unless the course requires a deliberate design change.
 Recommended filename pattern:
 chapter_XX_section_slug_field_guide.html
@@ -10,7 +10,7 @@ chapter_XX_section_slug_field_guide.html
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{SECTION_NUMBER}} — {{SECTION_TITLE}} | {{COURSE_TITLE}}</title>
+  <title>Chapter 1 — Privacy Foundations | Introduction to Data Privacy</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -366,35 +366,35 @@ chapter_XX_section_slug_field_guide.html
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Introduction to Data Privacy</a>
       <span>›</span>
-      <span>{{SECTION_NUMBER}}: {{SECTION_TITLE}}</span>
+      <span>Chapter 1: Privacy Foundations</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} · Chapter 1</p>
-      <h1>{{SECTION_TITLE}}</h1>
+      <p class="eyebrow">Introduction to Data Privacy · Chapter 1</p>
+      <h1>Privacy Foundations</h1>
       <p>
-        {{SECTION_SUMMARY_HTML}}
+        Build the foundation for the rest of the course: what privacy and personal data mean, how the PREACH framework evaluates a privacy program, how the CIA triad protects information, and why privacy depends on security without being identical to it.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Join Quick Lookup</a>
-        <a class="button secondary" href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">Data Privacy Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_privacy_by_design_field_guide.html">Next: Privacy by Design</a>
       </div>
     </header>
 
     <div class="layout">
       <aside class="toc">
-        <h2>Section Contents</h2>
+        <h2>Chapter Contents</h2>
         <a href="#big-picture">1. Big picture</a>
-        <a href="#concept-1">2. {{CONCEPT_1_TITLE}}</a>
-        <a href="#concept-2">3. {{CONCEPT_2_TITLE}}</a>
-        <a href="#concept-3">4. {{CONCEPT_3_TITLE}}</a>
+        <a href="#concept-1">2. Privacy, Personal Data, and PREACH</a>
+        <a href="#concept-2">3. Information Security and the CIA Triad</a>
+        <a href="#concept-3">4. Security and Privacy Together</a>
         <a href="#worked-example">5. Worked example</a>
         <a href="#validation">6. Validation</a>
         <a href="#mistakes">7. Common mistakes</a>
@@ -405,78 +405,154 @@ chapter_XX_section_slug_field_guide.html
       <div class="content">
         <section class="section" id="big-picture">
           <h2>1. Big Picture</h2>
-          <p>{{BIG_PICTURE_EXPLANATION}}</p>
+          <p>Privacy gives people meaningful control over how their personal data is collected, used, changed, shared, and protected. Security supplies the protective foundation. A mature program needs both: security prevents unauthorized activity, while privacy also asks whether authorized activity is appropriate, transparent, necessary, and aligned with the individual's choices.</p>
 
-          <div class="diagram">{{BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">PERSONAL DATA
+     |
+     +--> SECURITY: Can unauthorized people access, alter, or disrupt it?
+     |       +--> Confidentiality
+     |       +--> Integrity
+     |       +--> Availability
+     |
+     +--> PRIVACY: Is the processing valid, necessary, transparent, and authorized?
+             +--> Purpose
+             +--> Rights
+             +--> Consent
+             +--> Notice and understandable policies
+
+Strong data protection = Security controls + Privacy controls</div>
 
           <div class="mini-grid">
             <article class="mini-card">
-              <h3>{{CONCEPT_1_TITLE}}</h3>
-              <p>{{CONCEPT_1_SUMMARY}}</p>
+              <h3>Privacy, Personal Data, and PREACH</h3>
+              <p>Privacy concerns a person's rights and control; data privacy applies that idea to the collection and use of personal information.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_2_TITLE}}</h3>
-              <p>{{CONCEPT_2_SUMMARY}}</p>
+              <h3>Information Security and the CIA Triad</h3>
+              <p>Security protects information through confidentiality, integrity, and availability.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_3_TITLE}}</h3>
-              <p>{{CONCEPT_3_SUMMARY}}</p>
+              <h3>Security and Privacy Together</h3>
+              <p>The two disciplines overlap but answer different questions about personal data.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_4_TITLE}}</h3>
-              <p>{{CONCEPT_4_SUMMARY}}</p>
+              <h3>Responsibilities and Incidents</h3>
+              <p>Individuals, companies, and regulators each have responsibilities, and one incident may be both a security and privacy failure.</p>
             </article>
           </div>
 
           <div class="callout green">
-            <strong>Section punchline:</strong> {{SECTION_PUNCHLINE}}
+            <strong>Section punchline:</strong> Security protects the data; privacy governs whether collecting and using that data is justified, understandable, and authorized.
           </div>
         </section>
 
         <section class="section" id="concept-1">
-          <h2>2. {{CONCEPT_1_TITLE}}</h2>
-          <p>{{CONCEPT_1_EXPLANATION}}</p>
+          <h2>2. Privacy, Personal Data, and PREACH</h2>
+          <p>Modern privacy discussions grew from concerns that technology and publishing could intrude on personal rights. Data privacy narrows the focus to personal information and the individual's ability to influence its collection and use. Personal data includes information related to a person or capable of identifying one, such as a name, date of birth, or geolocation.<h3>PREACH maturity check</h3><ul><li><strong>P — Purpose:</strong> Why is the data needed?</li><li><strong>R — Right to Request:</strong> Can the person access, correct, remove, or otherwise change the data?</li><li><strong>E — Easy to understand:</strong> Are the policy and practices clear?</li><li><strong>A — Alerting:</strong> Will people be notified when their data is mishandled?</li><li><strong>C — Consent:</strong> Did the person give meaningful permission?</li><li><strong>H — How:</strong> How will the organization use or share the data?</li></ul></p>
 
-          <pre><code>{{CONCEPT_1_CODE_EXAMPLE}}</code></pre>
+          <pre><code>PREACH privacy review
+Purpose: Is this collection necessary for the service?
+Right to Request: Can the user correct or delete the data?
+Easy to understand: Is the notice written clearly?
+Alerting: Will the user be told about misuse or a breach?
+Consent: Did the user actively agree?
+How: Is use limited to what was explained?</code></pre>
 
           <div class="callout">
-            <strong>What to notice:</strong> {{CONCEPT_1_NOTICE}}
+            <strong>What to notice:</strong> A company can secure data perfectly and still violate privacy by collecting too much, using it for an undisclosed purpose, or denying users meaningful choices.
           </div>
         </section>
 
         <section class="section" id="concept-2">
-          <h2>3. {{CONCEPT_2_TITLE}}</h2>
-          <p>{{CONCEPT_2_EXPLANATION}}</p>
+          <h2>3. Information Security and the CIA Triad</h2>
+          <p>Information security protects information and systems from unauthorized access, use, disclosure, disruption, modification, or destruction. The CIA triad organizes this work into three goals:</p>
+          <ul>
+            <li><strong>Confidentiality:</strong> Only authorized people and systems can access information. Identity and access management is a common control.</li>
+            <li><strong>Integrity:</strong> Information remains trustworthy and is not altered unexpectedly. Hashing helps detect changes; encryption protects data from being read by unauthorized parties.</li>
+            <li><strong>Availability:</strong> Systems and information remain accessible when needed. Business continuity, disaster recovery, backups, and resilient infrastructure support this goal.</li>
+          </ul>
 
-          <pre><code>{{CONCEPT_2_CODE_EXAMPLE}}</code></pre>
+          <pre><code>Confidentiality -> IAM, least privilege, encryption
+Integrity       -> hashing, validation, change controls
+Availability    -> backups, redundancy, BCDR planning</code></pre>
+
+          <div class="callout">
+            <strong>Security-model clarification:</strong> The CIA triad is a foundational security model that helps organizations build scalable security programs, but it is not the only model and should not be treated as universally “the best.” The course also introduces DIE as an example of a newer security model.
+          </div>
 
           <div class="callout amber">
-            <strong>Common trap:</strong> {{CONCEPT_2_TRAP}}
+            <strong>Common trap:</strong> Encryption and hashing are related but not interchangeable. Encryption is designed to be reversible with a key; cryptographic hashing is normally one-way and is often used to detect change.
           </div>
         </section>
 
         <section class="section" id="concept-3">
-          <h2>4. {{CONCEPT_3_TITLE}}</h2>
-          <p>{{CONCEPT_3_EXPLANATION}}</p>
+          <h2>4. Security and Privacy Together</h2>
+          <p>Security and privacy both protect user data and may use some of the same controls, including encryption and access management. Their emphasis differs. Security asks whether information is protected from unauthorized actions. Privacy asks whether personal information is being processed for a valid purpose, with suitable authorization, transparency, and user control.</p>
 
+          <div class="callout green">
+            <strong>Dependency rule:</strong> Privacy depends on security because people cannot exercise meaningful control over data that an organization cannot protect.
+          </div>
+
+          <h3>Exercise classification: Privacy, Security, or Both</h3>
           <table>
             <thead>
               <tr>
-                <th>{{TABLE_HEADER_1}}</th>
-                <th>{{TABLE_HEADER_2}}</th>
-                <th>{{TABLE_HEADER_3}}</th>
+                <th>Statement or theme</th>
+                <th>Category</th>
+                <th>Why</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{TABLE_ROW_1_COL_1}}</td>
-                <td>{{TABLE_ROW_1_COL_2}}</td>
-                <td>{{TABLE_ROW_1_COL_3}}</td>
+                <td>Right to know and right to be forgotten</td>
+                <td>Privacy</td>
+                <td>These are individual rights concerning personal data.</td>
               </tr>
               <tr>
-                <td>{{TABLE_ROW_2_COL_1}}</td>
-                <td>{{TABLE_ROW_2_COL_2}}</td>
-                <td>{{TABLE_ROW_2_COL_3}}</td>
+                <td>Empowering individuals to control their own data</td>
+                <td>Privacy</td>
+                <td>The focus is personal choice, rights, and control.</td>
+              </tr>
+              <tr>
+                <td>Protecting personal data</td>
+                <td>Both</td>
+                <td>Privacy defines appropriate handling, while security supplies protective controls.</td>
+              </tr>
+              <tr>
+                <td>Controls to prevent personal-data exfiltration</td>
+                <td>Both</td>
+                <td>Exfiltration prevention is a security control that also protects privacy when personal data is involved.</td>
+              </tr>
+              <tr>
+                <td>Protecting data and systems through confidentiality, integrity, and availability</td>
+                <td>Security</td>
+                <td>This is the core focus of the CIA triad.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout amber">
+            <strong>Exercise trap:</strong> A control can originate in security and still belong under <em>Both</em> when it directly protects personal data and therefore supports privacy outcomes.
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Primary question</th>
+                <th>Examples</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Security</td>
+                <td>Can unauthorized parties access, alter, disclose, or disrupt the information?</td>
+                <td>IAM, encryption, hashing, backups, BCDR</td>
+              </tr>
+              <tr>
+                <td>Privacy</td>
+                <td>Is personal information collected and used in a valid, transparent, necessary, and authorized way?</td>
+                <td>Consent, notice, user requests, purpose limitation, appropriate sharing</td>
               </tr>
             </tbody>
           </table>
@@ -484,26 +560,41 @@ chapter_XX_section_slug_field_guide.html
 
         <section class="section" id="worked-example">
           <h2>5. Worked Example</h2>
-          <p>{{WORKED_EXAMPLE_INTRO}}</p>
+          <p>Tiffz Backpackz collects survey responses and photographs of customers wearing backpacks. It also stores product information and patents. Classify the controls the company needs.</p>
 
-          <pre><code>{{WORKED_EXAMPLE_CODE}}</code></pre>
+          <pre><code>Data: customer survey responses
+Security controls:
+  - Restrict access with IAM
+  - Encrypt stored and transmitted data
+  - Monitor for unauthorized access
+Privacy controls:
+  - Explain why responses are collected
+  - Obtain consent
+  - Allow correction or deletion when applicable
+  - Do not reuse the responses for an undisclosed purpose
+
+Data: backpack patent
+Security controls:
+  - Restrict access and protect integrity
+Privacy controls:
+  - Usually not applicable unless the record also contains personal data</code></pre>
 
           <div class="callout green">
-            <strong>Result:</strong> {{WORKED_EXAMPLE_RESULT}}
+            <strong>Result:</strong> The same dataset may need both security and privacy controls. Non-personal business information may need strong security without creating the same privacy obligations as identifiable customer data.
           </div>
         </section>
 
         <section class="section" id="validation">
           <h2>6. Validation and Troubleshooting</h2>
           <ul>
-            <li>{{VALIDATION_ITEM_1}}</li>
-            <li>{{VALIDATION_ITEM_2}}</li>
-            <li>{{VALIDATION_ITEM_3}}</li>
-            <li>{{VALIDATION_ITEM_4}}</li>
+            <li>Identify whether the information is personal data before deciding which privacy controls apply.</li>
+            <li>For every data use, state the purpose, the authorization or consent basis, and how the use was communicated.</li>
+            <li>Map each security control to confidentiality, integrity, or availability instead of treating the CIA triad as vocabulary only.</li>
+            <li>When reviewing an incident, ask two questions: Was there unauthorized access or alteration? Did the event violate the individual's expected or authorized use of the data?</li>
           </ul>
 
           <div class="callout danger">
-            <strong>Red flag:</strong> {{VALIDATION_RED_FLAG}}
+            <strong>Red flag:</strong> Treating compliance language or a privacy notice as proof that data is protected. Policies do not replace effective security controls, and security controls do not replace valid privacy practices.
           </div>
         </section>
 
@@ -512,18 +603,28 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Privacy and security are the same thing</strong>
+              They overlap, but security focuses on protection from unauthorized activity while privacy also governs appropriate, authorized, and transparent processing of personal data.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>All information is personal data</strong>
+              Product specifications and patents may be sensitive business information without being personal data. The classification depends on whether the information relates to or can identify a person.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>A security breach is only a technical problem</strong>
+              When personal data is stolen, disclosed, or altered without permission, the event is usually both a security failure and a privacy failure.
+            </article>
+
+            <article class="qa-item">
+              <strong>The CIA triad is the only or universally best security model</strong>
+              The CIA triad is foundational and widely useful, but organizations may use other models as well. The course specifically identifies DIE as an example of a newer security model.
+            </article>
+
+            <article class="qa-item">
+              <strong>Data-exfiltration prevention belongs only to security</strong>
+              Preventing exfiltration is a security control, but when the protected information is personal data, the control also supports privacy. In the exercise, this belongs under <strong>Both</strong>.
             </article>
           </div>
         </section>
@@ -533,18 +634,23 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>How would you explain the difference between privacy and security?</strong>
+              Security protects information from unauthorized access, alteration, disclosure, and disruption. Privacy governs whether personal information is collected and processed for a valid purpose, with appropriate transparency, authorization, and user control. Strong privacy therefore depends on strong security, but security alone is not enough.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>What is the CIA triad?</strong>
+              It is a security model built around confidentiality, integrity, and availability. Confidentiality limits access, integrity keeps information trustworthy and detects unauthorized change, and availability keeps systems and data accessible when needed.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>How would you quickly assess a company's privacy program?</strong>
+              I would ask PREACH questions: the purpose of collection, user rights to request changes, whether explanations are easy to understand, how users are alerted, whether consent is meaningful, and how the data is actually used or shared.
+            </article>
+
+            <article class="qa-item">
+              <strong>Is the CIA triad the only security model?</strong>
+              No. It is a foundational model for confidentiality, integrity, and availability, but it is not the only model or automatically the best choice in every situation. Other models, including newer approaches such as DIE, may complement it.
             </article>
           </div>
         </section>
@@ -555,40 +661,44 @@ chapter_XX_section_slug_field_guide.html
           <div class="memory-box">
             <strong>Section summary</strong>
             <ol>
-              <li>{{MEMORY_RULE_1}}</li>
-              <li>{{MEMORY_RULE_2}}</li>
-              <li>{{MEMORY_RULE_3}}</li>
-              <li>{{MEMORY_RULE_4}}</li>
+              <li>Personal data relates to a person or can help identify one.</li>
+              <li>PREACH = Purpose, Right to Request, Easy to understand, Alerting, Consent, How.</li>
+              <li>CIA = Confidentiality, Integrity, Availability.</li>
+              <li>Security prevents unauthorized actions; privacy also judges authorized actions and user control.</li>
+              <li>The CIA triad is foundational, not exclusive; DIE is introduced as a newer model.</li>
+              <li>Security controls such as exfiltration prevention may support both security and privacy when personal data is involved.</li>
             </ol>
           </div>
 
           <h3>Quick self-check</h3>
           <ul>
-            <li>{{SELF_CHECK_1}}</li>
-            <li>{{SELF_CHECK_2}}</li>
-            <li>{{SELF_CHECK_3}}</li>
-            <li>{{SELF_CHECK_4}}</li>
+            <li>Can you explain why a fully secured dataset could still be used in a privacy-violating way?</li>
+            <li>Can you classify IAM, hashing, encryption, backups, and disaster recovery under the CIA triad?</li>
+            <li>Can you apply PREACH to a shopping application that collects purchase history and geolocation?</li>
+            <li>Can you explain why theft of personal data is both a security and a privacy incident?</li>
+            <li>Can you explain why the CIA triad is important without calling it the only security model?</li>
+            <li>Can you correctly place personal-data protection and exfiltration prevention under <strong>Both</strong>?</li>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> {{LAB_DECISION}}
+            <strong>Lab decision:</strong> No large runnable lab is required. Use scenario-based practice: classify information, apply PREACH, map controls to the CIA triad, and analyze whether an incident is a security issue, a privacy issue, or both.
           </div>
 
           <div class="callout green">
-            <strong>Completion standard:</strong> {{COMPLETION_STANDARD}}
+            <strong>Completion standard:</strong> You can define privacy and personal data, apply PREACH, explain each CIA component with controls, recognize that CIA is foundational rather than exclusive, and distinguish Privacy, Security, and Both in realistic scenarios.
           </div>
         </section>
       </div>      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} · {{SECTION_NUMBER}} Field Guide</span>
+      <span>Introduction to Data Privacy · Chapter 1 Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="field_guide.html">Main Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a href="chapter_02_privacy_by_design_field_guide.html">Next: Privacy by Design</a>
       </span>
     </footer>
   </main>

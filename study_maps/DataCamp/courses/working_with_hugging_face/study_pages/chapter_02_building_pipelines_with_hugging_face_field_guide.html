@@ -405,7 +405,7 @@ chapter_XX_section_slug_field_guide.html
       <div class="content">
         <section class="section" id="big-picture">
           <h2>1. Big Picture</h2>
-          <p>Chapter 2 applies Hugging Face models to four common NLP needs. Classification assigns labels to text; summarization compresses long content; AutoClasses expose the model and tokenizer for customization; and document Q&A extracts answers from supplied context such as PDF text.</p>
+          <p>Chapter 2 applies Hugging Face models to four common NLP needs. Classification assigns labels to text; summarization compresses long content; AutoClasses expose the model and tokenizer for customization; and document Q&A extracts answers from supplied context such as PDF text. The local lab validates grammar classification, QNLI, zero-shot classification, summarization, token inspection, AutoClasses, PDF creation, PDF extraction, and confidence-threshold rejection.</p>
 
           <div class="diagram">raw text or document
         ↓
@@ -460,6 +460,29 @@ print(result)
           <div class="callout">
             <strong>What to notice:</strong> Different classification tasks require different models and input shapes. Sentiment uses one text string; QNLI evaluates a question together with a premise; zero-shot classification also receives candidate_labels.
           </div>
+
+          <h3>Observed lab patterns</h3>
+          <pre><code># Grammar checking
+grammar_checker = pipeline(
+    task="text-classification",
+    model="abdulmatinomotoso/English_Grammar_Checker"
+)
+
+# QNLI
+qnli = pipeline(
+    task="text-classification",
+    model="cross-encoder/qnli-electra-base"
+)
+
+# Zero-shot classification
+zero_shot = pipeline(
+    task="zero-shot-classification",
+    model="facebook/bart-large-mnli"
+)</code></pre>
+
+          <div class="callout amber">
+            <strong>Generic-label trap:</strong> LABEL_0 and LABEL_1 are model-specific. In the grammar lab, LABEL_0 behaved as incorrect and LABEL_1 as correct. In QNLI, the score had to be read carefully because the same displayed label appeared with high confidence for a supporting passage and very low confidence for a non-supporting passage.
+          </div>
         </section>
 
         <section class="section" id="concept-2">
@@ -475,14 +498,22 @@ summarizer = pipeline(
 
 result = summarizer(
     long_text,
-    min_new_tokens=20,
-    max_new_tokens=60
+    min_length=10,
+    max_length=40
 )
 
 print(result[0]["summary_text"])</code></pre>
 
           <div class="callout amber">
             <strong>Common trap:</strong> Do not treat a fluent abstractive summary as automatically accurate. Compare it with the source, especially for legal, financial, medical, or policy documents.
+          </div>
+
+          <div class="callout">
+            <strong>Version lesson:</strong> The local environment initially used a newer Transformers release where the summarization pipeline was not registered. Installing a course-compatible Transformers 4.x release restored the task. For this model and version, min_length and max_length avoided truncation and removed the warning caused by the model's larger default max_length.
+          </div>
+
+          <div class="callout danger">
+            <strong>Observed limitation:</strong> The summary reduced 297 characters to 159 characters, but it dropped the caution about model quality, source data, and task design. A shorter summary can still omit an important qualification.
           </div>
         </section>
 
@@ -511,20 +542,31 @@ print(result[0]["summary_text"])</code></pre>
               </tr>
             </tbody>
           </table>
+          <h3>Token and model internals observed locally</h3>
+          <ul>
+            <li><code>tokenizer.tokenize()</code> returned token strings such as <code>['la', '##zier']</code>; <code>##</code> marked a continuation subword.</li>
+            <li>The encoded input included special tokens <code>[CLS]</code> and <code>[SEP]</code>, so 10 visible token pieces became 12 input IDs.</li>
+            <li><code>attention_mask</code> contained all 1s because there was no padding.</li>
+            <li>Direct model inference returned logits, which are raw unnormalized class scores. <code>argmax()</code> selected the predicted class ID.</li>
+            <li>Explicit AutoModel and AutoTokenizer objects were also passed back into <code>pipeline()</code> for convenient inference.</li>
+          </ul>
         </section>
 
         <section class="section" id="worked-example">
           <h2>5. Worked Example</h2>
           <p>Extract text from a PDF and ask a focused question using a question-answering pipeline.</p>
 
-          <pre><code>from pypdf import PdfReader
+          <pre><code>from pathlib import Path
+from pypdf import PdfReader
 from transformers import pipeline
 
-reader = PdfReader("US-Employee_Policy.pdf")
+pdf_path = Path("US_Employee_Policy.pdf")
+reader = PdfReader(str(pdf_path))
 
 document_text = ""
-for page in reader.pages:
+for page_number, page in enumerate(reader.pages, start=1):
     page_text = page.extract_text() or ""
+    print(f"Extracted page {page_number}: {len(page_text)} characters")
     document_text += page_text + "\n"
 
 qa = pipeline(
@@ -533,15 +575,21 @@ qa = pipeline(
 )
 
 result = qa(
-    question="How many volunteer days are allowed annually?",
+    question="What is the notice period for resignation?",
     context=document_text
 )
 
-print(result["answer"])
-print(result["score"])</code></pre>
+if result["score"] < 0.30:
+    print("Answer: Not enough information in the document.")
+else:
+    print("Answer:", result["answer"])</code></pre>
 
           <div class="callout green">
-            <strong>Result:</strong> The pipeline searches the supplied context and returns an extracted answer with a confidence score. It does not independently search the web or know whether the PDF itself is correct.
+            <strong>Validated result:</strong> PyPDF extracted 186 characters from page 1 and 153 from page 2. The Q&A model returned <code>two weeks</code> with a score of about 0.793, so the threshold accepted the answer.
+          </div>
+
+          <div class="callout danger">
+            <strong>Failure-case evidence:</strong> When asked for information absent from the context, the model still forced an answer span with a low score of about 0.088. The confidence threshold correctly converted that into “Not enough information in the context.”
           </div>
         </section>
 
@@ -552,6 +600,9 @@ print(result["score"])</code></pre>
             <li>Read the model card before interpreting generic labels such as LABEL_0 or LABEL_1.</li>
             <li>Inspect the complete returned structure before indexing keys such as labels, scores, summary_text, or answer.</li>
             <li>For document Q&A, confirm that PDF extraction produced readable text and that the relevant passage fits within the model's context limit.</li>
+            <li>Use <code>top_k=None</code> when you need to inspect all class scores instead of only the highest returned result.</li>
+            <li>Use a confidence threshold for extractive Q&A because the model may force an answer even when the context does not contain one.</li>
+            <li>Remember that normal PyPDF extraction requires a text layer; scanned image PDFs require OCR.</li>
           </ul>
 
           <div class="callout danger">
@@ -577,6 +628,21 @@ print(result["score"])</code></pre>
               <strong>Passing an entire document without checking extraction or length</strong>
               Inspect extracted text and account for context limits. Longer documents may require chunking and retrieval rather than one enormous context string.
             </article>
+
+            <article class="qa-item">
+              <strong>Trusting a high-confidence classifier outside its domain</strong>
+              A movie-review sentiment model classified “This course is getting much easier to understand” as negative with high confidence. Clearer wording changed the result, showing that confidence does not equal deep reasoning.
+            </article>
+
+            <article class="qa-item">
+              <strong>Assuming summarization settings are version-independent</strong>
+              The course-compatible Transformers 4.x environment accepted the summarization task and behaved better with min_length and max_length for this model.
+            </article>
+
+            <article class="qa-item">
+              <strong>Accepting every extracted answer</strong>
+              Extractive Q&A can return the best available span even when no valid answer exists. Reject low-confidence results or add an upstream entailment/retrieval check.
+            </article>
           </div>
         </section>
 
@@ -598,6 +664,11 @@ print(result["score"])</code></pre>
               <strong>What is the main risk of abstractive summarization?</strong>
               It can generate fluent wording that is not fully supported by the source. For high-stakes material I would compare the summary with the source and favor faithfulness checks or extractive methods where appropriate.
             </article>
+
+            <article class="qa-item">
+              <strong>How would you make document Q&A safer?</strong>
+              I would validate extraction quality, retrieve or screen relevant passages, use a task-appropriate Q&A model, apply a confidence threshold, and return “not enough information” instead of forcing a low-confidence span.
+            </article>
           </div>
         </section>
 
@@ -611,6 +682,8 @@ print(result["score"])</code></pre>
               <li>Summarization = long text in, shorter summary_text out; length is controlled with token parameters.</li>
               <li>pipeline() hides the workflow; AutoModel and AutoTokenizer expose it for control.</li>
               <li>Document Q&A = question + extracted context → answer + score.</li>
+              <li>Generic labels are model-specific; inspect the model card, configuration, and all class scores when needed.</li>
+              <li>Low-confidence Q&A answers should be rejected rather than displayed as facts.</li>
             </ol>
           </div>
 
@@ -620,14 +693,16 @@ print(result["score"])</code></pre>
             <li>Can I distinguish extractive and abstractive summarization and state the main risk of each?</li>
             <li>Can I explain why a model must use its paired tokenizer?</li>
             <li>Can I extract PDF text and pass it as context to a question-answering pipeline?</li>
+            <li>Can I explain token pieces, input IDs, special tokens, attention masks, logits, and argmax?</li>
+            <li>Can I explain why a confidence threshold is needed for extractive Q&A?</li>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> Use a focused Python lab with four scripts: classification, summarization, AutoModel/AutoTokenizer inspection, and PDF question answering. Keep models small enough for local CPU testing.
+            <strong>Lab decision:</strong> Use the completed Python lab set: grammar classification, QNLI, zero-shot classification, summarization length comparison, AutoTokenizer inspection, AutoClasses with pipeline, sample PDF creation, PDF extraction, document Q&A, and confidence-threshold rejection. Note that facebook/bart-large-mnli downloaded about 1.63 GB and should be reviewed during cache cleanup after the course.
           </div>
 
           <div class="callout green">
-            <strong>Completion standard:</strong> You can choose a task-compatible model, interpret classification outputs safely, control summary length, explain pipeline versus AutoClasses, and build a basic document Q&A workflow from extracted PDF text.
+            <strong>Completion standard:</strong> You can choose a task-compatible model, interpret generic and named labels safely, control summary length in the course-compatible environment, explain pipeline versus AutoClasses, inspect tokenizer/model internals, and build a validated PDF Q&A workflow with low-confidence rejection.
           </div>
         </section>
       </div>      </div>

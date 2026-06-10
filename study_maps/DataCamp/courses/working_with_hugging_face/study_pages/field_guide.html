@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <!--
 FIELD GUIDE TEMPLATE
 
@@ -21,7 +21,7 @@ Instructions:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{COURSE_TITLE}} â€” Field Guide</title>
+  <title>Working with Hugging Face — Field Guide</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -408,33 +408,34 @@ Instructions:
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
-      <span>â€º</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
-      <span>â€º</span>
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Working with Hugging Face</a>
+      <span>›</span>
       <span>Main Field Guide</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{PLATFORM_LABEL}} Â· {{COURSE_TITLE}}</p>
-      <h1>{{COURSE_TITLE}} Field Guide</h1>
+      <p class="eyebrow">DataCamp Â· Working with Hugging Face</p>
+      <h1>Working with Hugging Face Field Guide</h1>
       <p>
-        {{COURSE_SUMMARY_HTML}}
+        A whole-course memory map for discovering Hugging Face assets, running local and hosted inference, loading datasets, building NLP pipelines, inspecting tokenization and model outputs, and creating safer document question-answering workflows.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{FIELD_GUIDE_MARKDOWN_FILE}}">Markdown Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">Hugging Face Quick Lookup</a>
-        <a class="button secondary" href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a class="button secondary" href="field_guide.md">Markdown Guide</a>
+        <a class="button secondary" href="hugging_face_quick_lookup.html">Hugging Face Quick Lookup</a>
+        <a class="button secondary" href="../lab/lab_run_book.md">Lab Run Book</a>
+        <a class="button secondary" href="hugging_face_code_guide.html">Code Guide</a>
       </div>
 
       <div class="status-grid">
-        <div class="status-card"><strong>{{PLATFORM_STATUS}}</strong><span>Platform status</span></div>
-        <div class="status-card"><strong>{{DOCUMENTATION_STATUS}}</strong><span>Documentation</span></div>
-        <div class="status-card"><strong>{{LAB_STATUS}}</strong><span>Lab coverage</span></div>
-        <div class="status-card"><strong>{{RECALL_STATUS}}</strong><span>Recall confidence</span></div>
-        <div class="status-card"><strong>{{INTERVIEW_STATUS}}</strong><span>Interview readiness</span></div>
+        <div class="status-card"><strong>COMPLETE</strong><span>Platform status</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Documentation</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Lab coverage</span></div>
+        <div class="status-card"><strong>DEVELOPING</strong><span>Recall confidence</span></div>
+        <div class="status-card"><strong>NEEDS REPETITION</strong><span>Interview readiness</span></div>
       </div>
     </header>
 
@@ -458,35 +459,35 @@ Instructions:
 
           <div class="chapter-grid">
             <article class="chapter-card">
-              <h3><a href="{{CHAPTER_01_FILE}}">{{CHAPTER_01_TITLE}}</a></h3>
-              <p>{{CHAPTER_01_SUMMARY}}</p>
+              <h3><a href="chapter_01_getting_started_with_hugging_face_field_guide.html">Chapter 1 — Getting Started with Hugging Face</a></h3>
+              <p>Hub discovery, model and dataset cards, local versus hosted inference, pipelines, datasets, tokenization, tensors, and reproducible sampling.</p>
             </article>
 
             <article class="chapter-card">
-              <h3><a href="{{CHAPTER_02_FILE}}">{{CHAPTER_02_TITLE}}</a></h3>
-              <p>{{CHAPTER_02_SUMMARY}}</p>
-            </article>
-
-            <article class="chapter-card">
-              <h3><a href="{{CHAPTER_03_FILE}}">{{CHAPTER_03_TITLE}}</a></h3>
-              <p>{{CHAPTER_03_SUMMARY}}</p>
-            </article>
-
-            <article class="chapter-card">
-              <h3><a href="{{CHAPTER_04_FILE}}">{{CHAPTER_04_TITLE}}</a></h3>
-              <p>{{CHAPTER_04_SUMMARY}}</p>
+              <h3><a href="chapter_02_building_pipelines_with_hugging_face_field_guide.html">Chapter 2 — Building Pipelines with Hugging Face</a></h3>
+              <p>Classification, zero-shot classification, QNLI, summarization, AutoClasses, tokenizer internals, PDF extraction, and safer document Q&A.</p>
             </article>
           </div>
         </section>
 
         <section class="section" id="big-picture">
           <h2>2. Course Big Picture</h2>
-          <p>{{COURSE_BIG_PICTURE}}</p>
+          <p>Hugging Face connects discovery, model execution, data handling, and application building. The Hub supplies models and datasets; Transformers supplies pipelines, tokenizers, and model classes; Datasets supplies Arrow-backed data tools; PyTorch performs tensor computation; and PyPDF can turn document text into context for extractive question answering.</p>
 
-          <div class="diagram">{{COURSE_BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">Define the task
+      ↓
+Find a task-compatible model or dataset on the Hub
+      ↓
+Review card: license, data, limits, size, revision
+      ↓
+Choose local pipeline, hosted inference, or AutoClasses
+      ↓
+Inspect structured outputs, scores, tokens, and context
+      ↓
+Validate on representative data and reject weak results</div>
 
           <div class="callout green">
-            <strong>Course punchline:</strong> {{COURSE_PUNCHLINE}}
+            <strong>Course punchline:</strong> The pipeline makes inference easy, but safe results still depend on choosing the right model, understanding its data and labels, inspecting outputs, and validating confidence against the source.
           </div>
         </section>
 
@@ -495,33 +496,33 @@ Instructions:
 
           <div class="cheat-grid">
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_1_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_1_SUMMARY}}</p>
+              <h3>Hub and Model Cards</h3>
+              <p>Discover models, datasets, and Spaces; verify task, license, training data, limitations, language, size, and revision.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_2_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_2_SUMMARY}}</p>
+              <h3>Pipelines</h3>
+              <p>High-level workflows that hide tokenization, tensor creation, inference, and postprocessing.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_3_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_3_SUMMARY}}</p>
+              <h3>Datasets</h3>
+              <p>Load splits with load_dataset(); shuffle reproducibly; select by position; filter by condition.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_4_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_4_SUMMARY}}</p>
+              <h3>Tokenizers and Tensors</h3>
+              <p>Convert text into token pieces, input IDs, attention masks, and PyTorch tensors.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_5_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_5_SUMMARY}}</p>
+              <h3>Classification and Summarization</h3>
+              <p>Use task-specific models for sentiment, grammar, QNLI, zero-shot labels, and shorter generated summaries.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_6_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_6_SUMMARY}}</p>
+              <h3>Document Q&A</h3>
+              <p>Extract PDF text, pass question plus context, inspect answer spans and scores, and reject weak answers.</p>
             </article>
           </div>
         </section>
@@ -529,17 +530,34 @@ Instructions:
         <section class="section" id="patterns">
           <h2>4. Core Syntax and Patterns</h2>
 
-          <h3>{{PATTERN_1_TITLE}}</h3>
-          <pre><code>{{PATTERN_1_CODE}}</code></pre>
-          <p>{{PATTERN_1_EXPLANATION}}</p>
+          <h3>Fast pipeline inference</h3>
+          <pre><code>from transformers import pipeline
 
-          <h3>{{PATTERN_2_TITLE}}</h3>
-          <pre><code>{{PATTERN_2_CODE}}</code></pre>
-          <p>{{PATTERN_2_EXPLANATION}}</p>
+classifier = pipeline(
+    "sentiment-analysis",
+    model="distilbert/distilbert-base-uncased-finetuned-sst-2-english"
+)
 
-          <h3>{{PATTERN_3_TITLE}}</h3>
-          <pre><code>{{PATTERN_3_CODE}}</code></pre>
-          <p>{{PATTERN_3_EXPLANATION}}</p>
+print(classifier("I enjoy this course."))</code></pre>
+          <p>Use pipeline() for standard preprocessing, inference, and readable structured output.</p>
+
+          <h3>Reproducible dataset sampling</h3>
+          <pre><code>dataset = load_dataset("imdb", split="train")
+sample = dataset.shuffle(seed=42).select(range(20))
+positive = sample.filter(lambda row: row["label"] == 1)</code></pre>
+          <p>Shuffle before sampling; select() uses positions and filter() uses conditions.</p>
+
+          <h3>PDF Q&A with rejection threshold</h3>
+          <pre><code>result = qa(
+    question="What is the notice period?",
+    context=document_text
+)
+
+if result["score"] < 0.30:
+    print("Not enough information.")
+else:
+    print(result["answer"])</code></pre>
+          <p>Extractive Q&A can force an answer span, so low-confidence results must be rejected.</p>
         </section>
 
         <section class="section" id="comparisons">
@@ -547,39 +565,39 @@ Instructions:
 
           <div class="compare-grid">
             <article class="compare-card">
-              <h3>{{COMPARE_LEFT_TITLE}}</h3>
-              <p>{{COMPARE_LEFT_SUMMARY}}</p>
+              <h3>pipeline()</h3>
+              <p>Best for rapid prototypes and standard tasks. It hides preprocessing, tensor creation, model execution, and postprocessing.</p>
             </article>
 
             <article class="compare-card">
-              <h3>{{COMPARE_RIGHT_TITLE}}</h3>
-              <p>{{COMPARE_RIGHT_SUMMARY}}</p>
+              <h3>AutoModel + AutoTokenizer</h3>
+              <p>Best when you need direct tokenization control, tensors, logits, batching, thresholds, or custom multi-stage logic.</p>
             </article>
           </div>
 
           <table>
             <thead>
               <tr>
-                <th>{{DECISION_HEADER_1}}</th>
-                <th>{{DECISION_HEADER_2}}</th>
-                <th>{{DECISION_HEADER_3}}</th>
+                <th>Need</th>
+                <th>Preferred approach</th>
+                <th>Reason</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{DECISION_ROW_1_COL_1}}</td>
-                <td>{{DECISION_ROW_1_COL_2}}</td>
-                <td>{{DECISION_ROW_1_COL_3}}</td>
+                <td>Quick standard inference</td>
+                <td>pipeline()</td>
+                <td>Smallest amount of code and readable output.</td>
               </tr>
               <tr>
-                <td>{{DECISION_ROW_2_COL_1}}</td>
-                <td>{{DECISION_ROW_2_COL_2}}</td>
-                <td>{{DECISION_ROW_2_COL_3}}</td>
+                <td>Custom model internals</td>
+                <td>AutoClasses</td>
+                <td>Access token IDs, masks, tensors, logits, and mappings.</td>
               </tr>
               <tr>
-                <td>{{DECISION_ROW_3_COL_1}}</td>
-                <td>{{DECISION_ROW_3_COL_2}}</td>
-                <td>{{DECISION_ROW_3_COL_3}}</td>
+                <td>Large or unavailable local model</td>
+                <td>Hosted inference</td>
+                <td>Remote compute avoids local GPU and memory limits, with cost/privacy trade-offs.</td>
               </tr>
             </tbody>
           </table>
@@ -590,23 +608,23 @@ Instructions:
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Treating confidence as truth</strong>
+              A high score means the model is confident in its own output, not that the output is factually correct or suitable for the use case.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>Assuming generic labels are universal</strong>
+              LABEL_0 and LABEL_1 mean different things for different models. Read the model card or id2label mapping.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>Sampling the first rows</strong>
+              Data may be ordered by label, date, or source. Shuffle with a seed before taking an exploratory sample.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_4_TITLE}}</strong>
-              {{MISTAKE_4_CORRECTION}}
+              <strong>Forcing document answers</strong>
+              Extractive Q&A may choose a low-confidence span when no answer exists. Apply thresholds and verify against the source.
             </article>
           </div>
         </section>
@@ -616,23 +634,23 @@ Instructions:
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>How do you choose a Hugging Face model?</strong>
+              Start with task and modality, then review the model card for license, language, training data, evaluation, size, intended use, limitations, and revision. Validate candidates on representative data.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>When do you use pipeline() versus AutoClasses?</strong>
+              Use pipeline() for fast standard inference. Use AutoModel and AutoTokenizer when you need custom tokenization, tensors, logits, batching, thresholds, or integration into a larger workflow.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>How do you make document Q&A safer?</strong>
+              Validate extraction, retrieve relevant context, use a suitable model, inspect confidence, reject weak spans, and return not enough information rather than inventing an answer.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_4}}</strong>
-              {{INTERVIEW_ANSWER_4}}
+              <strong>What did the local labs reveal?</strong>
+              A sentiment model misread nuanced course feedback with high confidence, summaries omitted qualifications, QNLI labels required careful mapping, and Q&A forced an answer when context was insufficient.
             </article>
           </div>
         </section>
@@ -649,53 +667,55 @@ Instructions:
             </thead>
             <tbody>
               <tr>
-                <td>{{LAB_AREA_1}}</td>
-                <td>{{LAB_RESULT_1}}</td>
+                <td>Classification</td>
+                <td>Validated sentiment, grammar, QNLI, and zero-shot pipelines; observed model-specific labels and domain limitations.</td>
               </tr>
               <tr>
-                <td>{{LAB_AREA_2}}</td>
-                <td>{{LAB_RESULT_2}}</td>
+                <td>Tokenization and AutoClasses</td>
+                <td>Inspected subword pieces, special tokens, input IDs, attention masks, tensors, logits, argmax, and id2label.</td>
               </tr>
               <tr>
-                <td>{{LAB_AREA_3}}</td>
-                <td>{{LAB_RESULT_3}}</td>
+                <td>Summarization</td>
+                <td>Used a course-compatible Transformers 4.x setup; reduced 297 characters to 159 while observing omitted qualifications.</td>
               </tr>
               <tr>
-                <td>{{LAB_AREA_4}}</td>
-                <td>{{LAB_RESULT_4}}</td>
+                <td>PDF Q&A</td>
+                <td>Created a two-page PDF, extracted 339 characters, answered “two weeks” at about 0.793 confidence, and rejected an absent answer at about 0.088.</td>
               </tr>
             </tbody>
           </table>
 
           <div class="callout green">
-            {{LAB_SUMMARY}}
+            The course-local Python lab is strong and contains validated scripts for the major Chapter 1 and Chapter 2 workflows.
           </div>
         </section>
 
         <section class="section" id="memory">
           <h2>9. Quick Memory Nuggets</h2>
 
-          <pre><code>{{MEMORY_BLOCK_1}}</code></pre>
+          <pre><code>Hub = discover\nCard = evaluate\npipeline() = convenience\nAutoClasses = control</code></pre>
 
-          <pre><code>{{MEMORY_BLOCK_2}}</code></pre>
+          <pre><code>filter() = condition\nselect() = row position\nshuffle(seed) = repeatable randomness</code></pre>
 
-          <pre><code>{{MEMORY_BLOCK_3}}</code></pre>
+          <pre><code>tokenizer → input_ids + attention_mask\nmodel → logits\nargmax → class ID\nid2label → readable label</code></pre>
 
           <div class="callout amber">
-            <strong>Final review:</strong> {{FINAL_REVIEW_NOTE}}
+            <strong>Final review:</strong> Review the Code Guide for runnable patterns, the Quick Lookup for syntax, and both chapter guides for explanations and troubleshooting.
           </div>
         </section>
       </div>      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} Â· Main Field Guide</span>
+      <span>Working with Hugging Face Â· Main Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;Â·&nbsp;
-        <a href="{{FIELD_GUIDE_MARKDOWN_FILE}}">Markdown Guide</a>
+        <a href="field_guide.md">Markdown Guide</a>
         &nbsp;Â·&nbsp;
-        <a href="{{QUICK_LOOKUP_FILE}}">Quick Lookup</a>
+        <a href="hugging_face_quick_lookup.html">Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="hugging_face_code_guide.html">Code Guide</a>
       </span>
     </footer>
   </main>

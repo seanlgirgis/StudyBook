@@ -1,0 +1,23 @@
+1. Privacy classification and risk
+00:00 - 00:04
+Hey folks, let's learn about classification and risk!
+
+2. Data classification
+00:04 - 00:36
+We've talked about what Privacy is and how it relies on giving users control over their data. For that to happen, companies need to be able to identify what type of information they have, where it is, and what is being done with it. To build privacy controls, companies need to know what and where user data is. Companies can only build technical controls and processes to delete or change user data if they can find it. That's where data classification comes in. Data Classification refers to the process of organizing data by type or theme.
+
+3. Data classification tools
+00:36 - 01:20
+Companies need some systematic, scalable way to identify different types of data being stored in their systems. There are many tools that can be to achieve this. Some of the tools (or services) that companies could use include: tags, schemas, scanners, and many others. There are many ways to build out a a data classification process. While companies can use manual tools to classify data, it is preferable to automate where possible. Human interaction increases the likelihood of human error. It is much, much harder to build data classification processes and tools after there are established processes and a large data footprint. Start thinking about this early on.
+
+4. Data classification and risk
+01:20 - 01:54
+Different types of data pose or represent different types of risk to both users and companies. For instance, users could upload their personal information like a selfie or passport. They could also upload something less sensitive such as a picture of their dog. Think about it this way; if there is a data breach, there are more negative consequences for passport information being compromised than a puppy picture. Data classification and risk go hand and hand. Data classifications should have predetermined risk levels assigned to them. The risk levels may determine the type of security and privacy controls applied.
+
+5. Potential risk levels
+01:54 - 02:58
+Most companies have defined risk levels and data classification categories. Here is an example of what one might look like. Datasets marked as public are datasets that pose a relatively low risk to the company. This type of data is publicly available. Datasets marked as internal may pose medium to low risk and is only accessible by employees or partners with NDAs. Think about this as internal company information that is not restricted or confidential. Datasets marked as confidential may pose a high risk to the company. These datasets require more than just basic employee access and require additional access permissions. This type of data may be related to compliance law or regulation. Datasets marked as restricted may pose a very high risk to the company, partners, or users. If this data is leaked or accessed by unauthorized parties, it could cause financial, legal, or reputational damage to the parties involved. This is a simplified risk matrix, and other factors may impact one within a company.
+
+6. Let's practice!
+02:58 - 03:02
+Let's test what we've learned!

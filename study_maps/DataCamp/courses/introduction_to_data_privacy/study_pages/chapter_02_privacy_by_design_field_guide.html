@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
 TEMPLATE USAGE
-Replace every {{PLACEHOLDER}} with section-specific content.
+Replace every template marker with section-specific content.
 Keep the CSS and layout stable unless the course requires a deliberate design change.
 Recommended filename pattern:
 chapter_XX_section_slug_field_guide.html
@@ -10,7 +10,7 @@ chapter_XX_section_slug_field_guide.html
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{SECTION_NUMBER}} — {{SECTION_TITLE}} | {{COURSE_TITLE}}</title>
+  <title>Chapter 2 — Privacy by Design | Introduction to Data Privacy</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -366,35 +366,36 @@ chapter_XX_section_slug_field_guide.html
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Introduction to Data Privacy</a>
       <span>›</span>
-      <span>{{SECTION_NUMBER}}: {{SECTION_TITLE}}</span>
+      <span>Chapter 2: Privacy by Design</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} · Chapter 1</p>
-      <h1>{{SECTION_TITLE}}</h1>
+      <p class="eyebrow">Introduction to Data Privacy · Chapter 2</p>
+      <h1>Privacy by Design</h1>
       <p>
-        {{SECTION_SUMMARY_HTML}}
+        Build privacy into products and processes from the beginning. This chapter covers the seven Privacy by Design principles, privacy-friendly user interfaces, data classification and risk, pseudonymization versus anonymization, and data lifecycle management.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Join Quick Lookup</a>
-        <a class="button secondary" href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">Data Privacy Quick Lookup</a>
+        <a class="button secondary" href="chapter_01_privacy_foundations_field_guide.html">Previous: Privacy Foundations</a>
+        <a class="button secondary" href="chapter_03_living_on_the_edge_field_guide.html">Next: Living on the Edge</a>
       </div>
     </header>
 
     <div class="layout">
       <aside class="toc">
-        <h2>Section Contents</h2>
+        <h2>Chapter Contents</h2>
         <a href="#big-picture">1. Big picture</a>
-        <a href="#concept-1">2. {{CONCEPT_1_TITLE}}</a>
-        <a href="#concept-2">3. {{CONCEPT_2_TITLE}}</a>
-        <a href="#concept-3">4. {{CONCEPT_3_TITLE}}</a>
+        <a href="#concept-1">2. Privacy by Design</a>
+        <a href="#concept-2">3. Classification and risk</a>
+        <a href="#concept-3">4. De-identification</a>
         <a href="#worked-example">5. Worked example</a>
         <a href="#validation">6. Validation</a>
         <a href="#mistakes">7. Common mistakes</a>
@@ -405,105 +406,261 @@ chapter_XX_section_slug_field_guide.html
       <div class="content">
         <section class="section" id="big-picture">
           <h2>1. Big Picture</h2>
-          <p>{{BIG_PICTURE_EXPLANATION}}</p>
+          <p>Privacy by Design means privacy is not added after launch. It is built into requirements, interfaces, architecture, controls, and data-management processes from the start. The chapter connects product design with the full journey of data: collect it deliberately, classify it, protect it according to risk, de-identify it when possible, monitor its use, archive it only when justified, and delete it when no longer needed.</p>
 
-          <div class="diagram">{{BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">DESIGN EARLY
+   |
+   +--> Explain and obtain meaningful choices
+   +--> Collect only necessary data
+   +--> Classify data and assign risk
+   +--> Apply controls by sensitivity
+   +--> De-identify when identity is unnecessary
+   +--> Manage every lifecycle stage
+   |
+   +--> Review, monitor, archive, and delete</div>
 
           <div class="mini-grid">
             <article class="mini-card">
-              <h3>{{CONCEPT_1_TITLE}}</h3>
-              <p>{{CONCEPT_1_SUMMARY}}</p>
+              <h3>Privacy by Design</h3>
+              <p>Privacy is proactive, embedded, enabled by default, transparent, user-centered, and protected end to end.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_2_TITLE}}</h3>
-              <p>{{CONCEPT_2_SUMMARY}}</p>
+              <h3>Classification and Risk</h3>
+              <p>Organizations must know what data they have, where it is, and how sensitive it is before they can protect it well.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_3_TITLE}}</h3>
-              <p>{{CONCEPT_3_SUMMARY}}</p>
+              <h3>De-identification</h3>
+              <p>Pseudonymization is reversible with additional information; anonymization aims to be irreversible.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_4_TITLE}}</h3>
-              <p>{{CONCEPT_4_SUMMARY}}</p>
+              <h3>Lifecycle Management</h3>
+              <p>Data needs rules from collection through storage, processing, use, archival, and deletion.</p>
             </article>
           </div>
 
           <div class="callout green">
-            <strong>Section punchline:</strong> {{SECTION_PUNCHLINE}}
+            <strong>Chapter punchline:</strong> Privacy works best when it is designed into the product and data lifecycle before problems, complaints, or breaches occur.
           </div>
         </section>
 
         <section class="section" id="concept-1">
-          <h2>2. {{CONCEPT_1_TITLE}}</h2>
-          <p>{{CONCEPT_1_EXPLANATION}}</p>
+          <h2>2. Privacy by Design</h2>
+          <p>Privacy by Design is a framework developed in the 1990s that makes privacy a default part of systems, applications, and processes. It rejects the idea that privacy is a late compliance patch.</p>
 
-          <pre><code>{{CONCEPT_1_CODE_EXAMPLE}}</code></pre>
+          <h3>The seven foundational principles</h3>
+          <ol>
+            <li><strong>Proactive, not reactive:</strong> Prevent privacy problems instead of waiting for them.</li>
+            <li><strong>Privacy as the default:</strong> Users should receive baseline privacy protection without changing settings.</li>
+            <li><strong>Privacy embedded into design:</strong> Make privacy part of architecture and workflow.</li>
+            <li><strong>Full functionality:</strong> Privacy should not require unnecessary loss of useful product capability.</li>
+            <li><strong>End-to-end security:</strong> Protect personal information from creation through destruction.</li>
+            <li><strong>Visibility and transparency:</strong> Practices should be understandable and open to review.</li>
+            <li><strong>Respect for user privacy:</strong> Keep user interests, choices, and control central.</li>
+          </ol>
 
-          <div class="callout">
-            <strong>What to notice:</strong> {{CONCEPT_1_NOTICE}}
-          </div>
-        </section>
+          <pre><code>Privacy by Design check
+- Is privacy proactive?
+- Are protective defaults enabled?
+- Is privacy embedded in the architecture?
+- Does the design preserve useful functionality?
+- Is data protected through the full lifecycle?
+- Are practices visible and understandable?
+- Are user interests placed first?</code></pre>
 
-        <section class="section" id="concept-2">
-          <h2>3. {{CONCEPT_2_TITLE}}</h2>
-          <p>{{CONCEPT_2_EXPLANATION}}</p>
-
-          <pre><code>{{CONCEPT_2_CODE_EXAMPLE}}</code></pre>
-
-          <div class="callout amber">
-            <strong>Common trap:</strong> {{CONCEPT_2_TRAP}}
-          </div>
-        </section>
-
-        <section class="section" id="concept-3">
-          <h2>4. {{CONCEPT_3_TITLE}}</h2>
-          <p>{{CONCEPT_3_EXPLANATION}}</p>
+          <h3>Privacy-friendly user interfaces</h3>
+          <p>A privacy-friendly interface makes notices, settings, account controls, and policies easy to find and understand. Just-in-time notices appear immediately before personal information is requested and explain what is being collected, why it is needed, and how it will be used.</p>
 
           <table>
             <thead>
               <tr>
-                <th>{{TABLE_HEADER_1}}</th>
-                <th>{{TABLE_HEADER_2}}</th>
-                <th>{{TABLE_HEADER_3}}</th>
+                <th>Interface component</th>
+                <th>Privacy purpose</th>
+                <th>Key question</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{TABLE_ROW_1_COL_1}}</td>
-                <td>{{TABLE_ROW_1_COL_2}}</td>
-                <td>{{TABLE_ROW_1_COL_3}}</td>
+                <td>Cookie notice</td>
+                <td>Explain website tracking and provide a real choice.</td>
+                <td>Can users decline as easily as they accept?</td>
               </tr>
               <tr>
-                <td>{{TABLE_ROW_2_COL_1}}</td>
-                <td>{{TABLE_ROW_2_COL_2}}</td>
-                <td>{{TABLE_ROW_2_COL_3}}</td>
+                <td>Privacy policy</td>
+                <td>Describe the who, what, when, where, why, and how of data handling.</td>
+                <td>Is it clear enough for an ordinary user?</td>
+              </tr>
+              <tr>
+                <td>Account information</td>
+                <td>Allow users to view, correct, or delete account data where applicable.</td>
+                <td>Can users exercise their rights without unnecessary friction?</td>
+              </tr>
+              <tr>
+                <td>Wishlist and orders</td>
+                <td>Recognize that ordinary product features may contain names, dates, addresses, or preferences.</td>
+                <td>Is the feature treated as personal-data processing?</td>
               </tr>
             </tbody>
           </table>
+
+          <div class="callout">
+            <strong>Exercise rule:</strong> True statements include proactive design, privacy by default, visibility and transparency, and putting users first. False statements include treating privacy as unrelated to security, adding it ad hoc, or accepting degraded functionality as a design principle.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Data Classification and Risk</h2>
+          <p>Data classification organizes data by type or theme so an organization can identify what it has, where it is stored, and what controls are required. Classification may use tags, schemas, scanners, inventories, and automated discovery tools. Automation is preferable where practical because manual classification is difficult to scale and more vulnerable to human error.</p>
+
+          <pre><code>Example classification model
+Public       -> low risk; intended for public release
+Internal     -> low to medium risk; employee or approved-partner use
+Confidential -> high risk; additional permissions and controls
+Restricted   -> very high risk; serious legal, financial, or human harm if exposed</code></pre>
+
+          <p>Classification and risk should be linked. A picture of a pet and a passport scan are both files, but their consequences are very different if exposed. Higher-risk classifications should trigger stronger privacy and security controls.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Classification</th>
+                <th>Example</th>
+                <th>Typical treatment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Public / Low risk</td>
+                <td>Public website content, published office address</td>
+                <td>Basic integrity and availability controls</td>
+              </tr>
+              <tr>
+                <td>Internal / Medium risk</td>
+                <td>Internal office locations, employee-only material</td>
+                <td>Employee or approved-partner access</td>
+              </tr>
+              <tr>
+                <td>Confidential / High risk</td>
+                <td>Leadership contact details, customer financial details</td>
+                <td>Restricted access, encryption, logging, review</td>
+              </tr>
+              <tr>
+                <td>Restricted / Very high risk</td>
+                <td>Passport scans, highly sensitive medical or identity data</td>
+                <td>Strict least privilege, strong encryption, monitoring, short retention</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> Classification is not only labeling. Its value comes from connecting each category to predetermined risk levels and enforceable controls.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. De-identification and Data Lifecycle Management</h2>
+
+          <h3>Pseudonymization versus anonymization</h3>
+          <p>De-identification reduces the ability to connect data to a person. Two common approaches are pseudonymization and anonymization.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Technique</th>
+                <th>Reversible?</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Pseudonymization</td>
+                <td>Potentially yes</td>
+                <td>Replace or transform identifiers while preserving a way to restore or reconnect the data using additional information.</td>
+              </tr>
+              <tr>
+                <td>Anonymization</td>
+                <td>Intended to be no</td>
+                <td>Transform data so that the original person cannot reasonably be identified and the process is permanent.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <pre><code>Pseudonymization examples
+- Tokenize a name
+- Mask a phone number
+- Replace an identifier with a code
+- Store the re-identification key separately
+
+Anonymization examples
+- Generalize an exact age into an age range
+- Remove direct identifiers
+- Aggregate records
+- Permanently transform identifying values</code></pre>
+
+          <div class="callout amber">
+            <strong>Important distinction:</strong> Pseudonymization is not permanent anonymization. Pseudonymized data may still be personal data because re-identification remains possible.
+          </div>
+
+          <h3>Data lifecycle management</h3>
+          <p>Data lifecycle management defines governance rules that protect data from creation to deletion. The course describes collection, storage, processing, usage, archival, and deletion as the practical stages to control.</p>
+
+          <div class="diagram">COLLECT
+  -> establish standardized intake and minimum necessary data
+STORE
+  -> choose approved repositories and access controls
+PROCESS / USE
+  -> log, monitor, audit, and restrict use and sharing
+ARCHIVE
+  -> retain long-term only for policy, compliance, or justified need
+DELETE
+  -> destroy data so it is irretrievable</div>
         </section>
 
         <section class="section" id="worked-example">
           <h2>5. Worked Example</h2>
-          <p>{{WORKED_EXAMPLE_INTRO}}</p>
+          <p>Tiffz Backpackz wants to analyze customer behavior while reducing privacy risk. A good design connects classification, de-identification, and lifecycle rules.</p>
 
-          <pre><code>{{WORKED_EXAMPLE_CODE}}</code></pre>
+          <pre><code>1. Collect
+   - Ask only for data needed for the feature
+   - Display a just-in-time notice
+
+2. Classify
+   - Public: product catalog
+   - Internal: operational reports
+   - Confidential: customer contact data
+   - Restricted: government ID or highly sensitive records
+
+3. De-identify for analytics
+   - Replace names with tokens
+   - Generalize exact ages
+   - Mask phone numbers
+   - Keep re-identification keys separately
+
+4. Use and monitor
+   - Restrict analyst access
+   - Log queries and exports
+   - Alert on unusual access
+
+5. Retain and delete
+   - Archive only when justified
+   - Delete records according to policy and legal requirements</code></pre>
 
           <div class="callout green">
-            <strong>Result:</strong> {{WORKED_EXAMPLE_RESULT}}
+            <strong>Result:</strong> Privacy by Design is not one control. It is a coordinated set of choices across interface design, data classification, technical protection, user rights, monitoring, retention, and deletion.
           </div>
         </section>
 
         <section class="section" id="validation">
           <h2>6. Validation and Troubleshooting</h2>
           <ul>
-            <li>{{VALIDATION_ITEM_1}}</li>
-            <li>{{VALIDATION_ITEM_2}}</li>
-            <li>{{VALIDATION_ITEM_3}}</li>
-            <li>{{VALIDATION_ITEM_4}}</li>
+            <li>Verify privacy requirements during planning, not after implementation.</li>
+            <li>Check that privacy-protective settings are enabled by default.</li>
+            <li>Confirm every classification maps to a defined risk level and control set.</li>
+            <li>Do not call data anonymous when a key, lookup table, or remaining identifiers permit re-identification.</li>
+            <li>Confirm lifecycle rules cover archival and true deletion, not only collection and storage.</li>
           </ul>
 
           <div class="callout danger">
-            <strong>Red flag:</strong> {{VALIDATION_RED_FLAG}}
+            <strong>Red flag:</strong> An organization cannot reliably fulfill access, correction, deletion, or retention obligations if it cannot locate and classify the relevant data.
           </div>
         </section>
 
@@ -512,18 +669,28 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Adding privacy after launch</strong>
+              This is reactive and often expensive. Privacy by Design requires privacy requirements, controls, and user choices to be considered during design.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>Treating a long privacy policy as sufficient transparency</strong>
+              Transparency also requires readable language, accessible settings, meaningful choices, and just-in-time explanations at the moment data is requested.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>Assuming pseudonymized data is anonymous</strong>
+              Pseudonymized data can often be restored or linked back to a person and therefore may remain personal data.
+            </article>
+
+            <article class="qa-item">
+              <strong>Classifying data without connecting it to controls</strong>
+              Labels alone do not reduce risk. The classification must determine access, encryption, monitoring, sharing, and retention requirements.
+            </article>
+
+            <article class="qa-item">
+              <strong>Keeping archived data forever</strong>
+              Archival is a lifecycle stage, not an excuse for indefinite retention. Archived data still requires justification, protection, and a deletion rule.
             </article>
           </div>
         </section>
@@ -533,18 +700,23 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>What is Privacy by Design?</strong>
+              Privacy by Design is the practice of embedding privacy requirements, protective defaults, transparency, user control, and end-to-end data protection into products and processes from the beginning rather than adding them after deployment.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>Why is data classification important for privacy?</strong>
+              An organization cannot protect, locate, correct, retain, or delete personal data consistently unless it knows what data it holds, where it is stored, and how sensitive it is. Classification makes those controls scalable.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>What is the difference between pseudonymization and anonymization?</strong>
+              Pseudonymization transforms identifiers but retains a way to reconnect the data to a person using additional information. Anonymization aims to make re-identification no longer reasonably possible and to make the transformation permanent.
+            </article>
+
+            <article class="qa-item">
+              <strong>How does data lifecycle management support privacy?</strong>
+              It applies governance and controls from collection through storage, processing, use, archival, and deletion so data is handled consistently and retained only as long as justified.
             </article>
           </div>
         </section>
@@ -553,42 +725,45 @@ chapter_XX_section_slug_field_guide.html
           <h2>9. Memory Review</h2>
 
           <div class="memory-box">
-            <strong>Section summary</strong>
+            <strong>Chapter summary</strong>
             <ol>
-              <li>{{MEMORY_RULE_1}}</li>
-              <li>{{MEMORY_RULE_2}}</li>
-              <li>{{MEMORY_RULE_3}}</li>
-              <li>{{MEMORY_RULE_4}}</li>
+              <li>Privacy by Design is proactive, embedded, protective by default, transparent, user-centered, and end to end.</li>
+              <li>Classification tells the organization what data exists, where it is, and what risk and controls apply.</li>
+              <li>Pseudonymization is reversible or reconnectable; anonymization is intended to be irreversible.</li>
+              <li>Lifecycle management governs collection, storage, processing, usage, archival, and deletion.</li>
             </ol>
           </div>
 
           <h3>Quick self-check</h3>
           <ul>
-            <li>{{SELF_CHECK_1}}</li>
-            <li>{{SELF_CHECK_2}}</li>
-            <li>{{SELF_CHECK_3}}</li>
-            <li>{{SELF_CHECK_4}}</li>
+            <li>Can you name and explain the seven Privacy by Design principles?</li>
+            <li>Can you identify privacy components in a shopping website interface?</li>
+            <li>Can you place sample data into public, internal, confidential, and restricted categories?</li>
+            <li>Can you explain why tokenization may be pseudonymization rather than anonymization?</li>
+            <li>Can you describe the controls needed at each data-lifecycle stage?</li>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> {{LAB_DECISION}}
+            <strong>Lab decision:</strong> Use a light scenario lab rather than a large technical lab. Practice reviewing a website interface, classifying sample data, selecting de-identification methods, and mapping controls across the lifecycle.
           </div>
 
           <div class="callout green">
-            <strong>Completion standard:</strong> {{COMPLETION_STANDARD}}
+            <strong>Completion standard:</strong> You can apply Privacy by Design principles to a product, classify data by risk, distinguish pseudonymization from anonymization, and explain how data is governed from collection through deletion.
           </div>
         </section>
-      </div>      </div>
+      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} · {{SECTION_NUMBER}} Field Guide</span>
+      <span>Introduction to Data Privacy · Chapter 2 Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="field_guide.html">Main Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a href="chapter_01_privacy_foundations_field_guide.html">Previous: Privacy Foundations</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_03_living_on_the_edge_field_guide.html">Next: Living on the Edge</a>
       </span>
     </footer>
   </main>

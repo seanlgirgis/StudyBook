@@ -1,0 +1,58 @@
+1. Privacy by Design
+00:00 - 00:03
+Let's learn more about Privacy by Design.
+
+2. Privacy by Design principles
+00:03 - 00:45
+Privacy by Design is a privacy framework that was developed in the 90s. At its core, Privacy by Design embodies the idea that Privacy concepts, processes, and tools should be built into applications and processes by default. Number one, privacy needs to be implemented pro-actively. Number two, baseline privacy controls should be enabled by default. Number three, privacy needs to be embedded within design. Number four, having privacy policies and controls should not result in a loss of application functionality. Number five, personal information should be protected from creation to eventual destruction. Number six, visibility and transparency should be guiding tenents. Number seven, always respect users and their privacy.
+
+1 Cavoukian, A. (2011, January). Privacy by design
+2 information and privacy commissioner of Ontario. Privacy by Design The 7 Foundational Principles . Retrieved November 28, 2022, from https://www.ipc.on.ca/wp-content/uploads/Resources/pbd-implement-7found-principles.pdf
+3. Privacy user interface
+00:45 - 01:23
+Privacy by Design is applicable to different systems, applications, and products. Let's examine how Privacy by Design impacts users every day. User interfaces are a great place to start. The user interface can be considered the space or display through which users interact with a website or application. The goal is to ensure users have a positive user and privacy experience. A good website or mobile design will incorporate Privacy considerations into its design, referred to as user interface privacy design. Things like notifications and Privacy policies should be accessible to users and feel like they are a natural part of the user experience.
+
+4. Scenario walkthrough: cookies
+01:23 - 01:30
+Let's walk through what A good Privacy User Interface Design might look like on a website. Here we have Tiffz Backpackz.
+
+5. Just in time notice
+01:30 - 02:00
+In the last slide, we saw a just in time notice via the cookie notification. Just In Time Notices are super jazzy. These notifications pop up right before users are asked to input personal information. These notices have gained increasing popularity due to Privacy laws that call for additional real-time transparency. These notices should inform users of the following: a) that they are being asked to submit information b) why they are being asked to submit information c) how the information will be used.
+
+6. Cookies
+02:00 - 02:15
+Let's go back to the site and see all of the privacy components. In order for us to proceed, we have to agree to accept the cookies. Cookies are little bits of data that are used by websites to remember information about you, including a record of your website visits and activity.
+
+7. UX walkthrough bottom of the page
+02:15 - 02:30
+Assuming we were comfortable with the cookies and clicked accept, we are now taken to the web page itself. At this point, there are a few different sections of the web page that have user privacy implications; by user we are referring to online shopper.
+
+8. Terms of service
+02:30 - 02:47
+First, let's look at the terms of service page. This will take you to the terms of service. The terms of service page will outline the terms you agree not to violate in order to use the platform. For example, you agree not to violate any of the company's privacy or legal policies to use the platform.
+
+9. Privacy policy
+02:47 - 02:50
+Next we have the Privacy Policy. Let's take a closer look.
+
+10. Privacy policy
+02:50 - 03:08
+If we click the Privacy Policy, we'll be taken to the Privacy landing page. The Privacy Policy should be easy to understand. It should also cover the who, what, when, where, why, and hows of Privacy. For example, who will collect your data, why will it be collected, and who will it be shared with?
+
+11. Account info
+03:08 - 03:22
+Alright, let's go back to the landing page. Account Info should take users to their account page, where they should be able to update their account information, such as their billing address, and if needed, request for their account to be deleted.
+
+12. Wishlist
+03:22 - 03:36
+The Wishlist can potentially contain personal information and thus have privacy implications. Wishlists can include things like names, dates of birth, and locations. There's a cool article about Amazon wishlists that I highly recommend and have cited.
+
+1 Li, Y., Zheng, N., Wang, H., Sun, K., &amp; Fang, H. (2020, October 26). A measurement study on Amazon Wishlist and its privacy exposure. A Measurement Study on Amazon Wishlist and Its Privacy Exposure. Retrieved November 28, 2022, from https://csis.gmu.edu/ksun/publications/icc17_wishlist.pdf
+13. Orders and returns
+03:36 - 03:48
+Similar to the wishlist, orders and returns can potentially have privacy implications. You may be asked to submit information such as your email address or zipcode along with the order tracking number.
+
+14. Let's practice!
+03:48 - 03:54
+We've learned about some great Privacy designs! Now let's test out what we've learned.

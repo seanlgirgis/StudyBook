@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <!--
 HUGGING FACE QUICK LOOKUP TEMPLATE
 
@@ -20,7 +20,7 @@ Instructions:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{COURSE_TITLE}} â€” Quick Lookup</title>
+  <title>Working with Hugging Face — Quick Lookup</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -275,155 +275,216 @@ Instructions:
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
-      <span>â€º</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
-      <span>â€º</span>
+      <a href="../../../index.html">DataCamp</a>
+      <span>›</span>
+      <a href="../index.html">Working with Hugging Face</a>
+      <span>›</span>
       <span>Hugging Face Quick Lookup</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} Â· Quick Reference</p>
+      <p class="eyebrow">Working with Hugging Face Â· Quick Reference</p>
       <h1>Hugging Face Quick Lookup</h1>
       <p>
-        {{QUICK_LOOKUP_SUMMARY_HTML}}
+        Searchable syntax for the models, datasets, pipelines, tokenizers, AutoClasses, summarization, and PDF Q&A patterns validated throughout the course.
       </p>
 
       <div class="actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button" href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button" href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a class="button" href="field_guide.html">Main Field Guide</a>
+        <a class="button" href="../lab/lab_run_book.md">Lab Run Book</a>
+        <a class="button" href="hugging_face_code_guide.html">Code Guide</a>
       </div>
 
       <div class="search-wrap">
         <input id="lookupSearch" type="search"
-               placeholder="{{SEARCH_PLACEHOLDER}}"
+               placeholder="Search pipeline, tokenizer, dataset, QNLI, PDF, logits..."
                aria-label="Search quick lookup">
       </div>
     </header>
 
     <section class="section">
-      <h2>{{SECTION_1_TITLE}}</h2>
+      <h2>Pipelines and Classification</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_1_TITLE}}</h3>
-          <p>{{ITEM_1_PURPOSE}}</p>
-          <pre><code>{{ITEM_1_CODE}}</code></pre>
-          <div class="trap">{{ITEM_1_TRAP}}</div>
+          <h3>Sentiment pipeline</h3>
+          <p>Run a named sentiment model and return label plus score.</p>
+          <pre><code>classifier = pipeline(
+    "sentiment-analysis",
+    model=model_name
+)
+result = classifier(text)</code></pre>
+          <div class="trap">A high score does not prove deep understanding or domain fit.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_2_TITLE}}</h3>
-          <p>{{ITEM_2_PURPOSE}}</p>
-          <pre><code>{{ITEM_2_CODE}}</code></pre>
-          <div class="trap">{{ITEM_2_TRAP}}</div>
+          <h3>Grammar classifier</h3>
+          <p>Use a grammar-specific model through the general text-classification workflow.</p>
+          <pre><code>checker = pipeline(
+    "text-classification",
+    model="abdulmatinomotoso/English_Grammar_Checker"
+)</code></pre>
+          <div class="trap">LABEL_0 and LABEL_1 are model-specific; verify their meanings.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_3_TITLE}}</h3>
-          <p>{{ITEM_3_PURPOSE}}</p>
-          <pre><code>{{ITEM_3_CODE}}</code></pre>
-          <div class="trap">{{ITEM_3_TRAP}}</div>
+          <h3>Zero-shot classification</h3>
+          <p>Rank candidate labels supplied at runtime.</p>
+          <pre><code>result = classifier(
+    text,
+    candidate_labels=[
+        "politics",
+        "science",
+        "sports"
+    ]
+)</code></pre>
+          <div class="trap">Label wording changes the result; validate against your business taxonomy.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{SECTION_2_TITLE}}</h2>
+      <h2>Datasets and Tokenization</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_4_TITLE}}</h3>
-          <p>{{ITEM_4_PURPOSE}}</p>
-          <pre><code>{{ITEM_4_CODE}}</code></pre>
-          <div class="trap">{{ITEM_4_TRAP}}</div>
+          <h3>Load a split</h3>
+          <p>Load one named dataset split.</p>
+          <pre><code>dataset = load_dataset(
+    "TIGER-Lab/MMLU-Pro",
+    split="validation"
+)</code></pre>
+          <div class="trap">Loading a train split does not mean training has started.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_5_TITLE}}</h3>
-          <p>{{ITEM_5_PURPOSE}}</p>
-          <pre><code>{{ITEM_5_CODE}}</code></pre>
-          <div class="trap">{{ITEM_5_TRAP}}</div>
+          <h3>Shuffle, select, filter</h3>
+          <p>Create a repeatable sample and keep rows by position or condition.</p>
+          <pre><code>sample = dataset.shuffle(
+    seed=42
+).select(range(20))
+
+positive = sample.filter(
+    lambda row: row["label"] == 1
+)</code></pre>
+          <div class="trap">Do not assume the first rows are random or representative.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_6_TITLE}}</h3>
-          <p>{{ITEM_6_PURPOSE}}</p>
-          <pre><code>{{ITEM_6_CODE}}</code></pre>
-          <div class="trap">{{ITEM_6_TRAP}}</div>
+          <h3>Tokenizer tensors</h3>
+          <p>Create input IDs and attention masks as PyTorch tensors.</p>
+          <pre><code>encoded = tokenizer(
+    text,
+    return_tensors="pt"
+)
+
+print(encoded["input_ids"])
+print(encoded["attention_mask"])</code></pre>
+          <div class="trap">The attention mask marks real versus padded positions, not important versus unimportant words.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{SECTION_3_TITLE}}</h2>
+      <h2>AutoClasses and Summarization</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_7_TITLE}}</h3>
-          <p>{{ITEM_7_PURPOSE}}</p>
-          <pre><code>{{ITEM_7_CODE}}</code></pre>
-          <div class="trap">{{ITEM_7_TRAP}}</div>
+          <h3>Load AutoClasses</h3>
+          <p>Load the task model and its paired tokenizer.</p>
+          <pre><code>tokenizer = AutoTokenizer.from_pretrained(
+    model_name
+)
+model = AutoModelForSequenceClassification.from_pretrained(
+    model_name
+)</code></pre>
+          <div class="trap">The model must use the tokenizer it was trained with.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_8_TITLE}}</h3>
-          <p>{{ITEM_8_PURPOSE}}</p>
-          <pre><code>{{ITEM_8_CODE}}</code></pre>
-          <div class="trap">{{ITEM_8_TRAP}}</div>
+          <h3>Logits to label</h3>
+          <p>Convert raw model scores to a readable prediction.</p>
+          <pre><code>outputs = model(**inputs)
+predicted_id = outputs.logits.argmax(
+    dim=-1
+).item()
+label = model.config.id2label[
+    predicted_id
+]</code></pre>
+          <div class="trap">Logits are raw scores, not probabilities.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_9_TITLE}}</h3>
-          <p>{{ITEM_9_PURPOSE}}</p>
-          <pre><code>{{ITEM_9_CODE}}</code></pre>
-          <div class="trap">{{ITEM_9_TRAP}}</div>
+          <h3>Summarization</h3>
+          <p>Generate a shorter version with explicit output-length limits.</p>
+          <pre><code>summary = summarizer(
+    original_text,
+    min_length=10,
+    max_length=40
+)
+
+text = summary[0]["summary_text"]</code></pre>
+          <div class="trap">A fluent summary may omit qualifications or add unsupported details.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{SECTION_4_TITLE}}</h2>
+      <h2>Document Processing and Q&A</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_10_TITLE}}</h3>
-          <p>{{ITEM_10_PURPOSE}}</p>
-          <pre><code>{{ITEM_10_CODE}}</code></pre>
-          <div class="trap">{{ITEM_10_TRAP}}</div>
+          <h3>Extract PDF text</h3>
+          <p>Combine text from every PDF page.</p>
+          <pre><code>reader = PdfReader(pdf_path)
+
+document_text = ""
+for page in reader.pages:
+    document_text += (
+        page.extract_text() or ""
+    ) + "\n"</code></pre>
+          <div class="trap">Scanned image PDFs may need OCR because they lack a text layer.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_11_TITLE}}</h3>
-          <p>{{ITEM_11_PURPOSE}}</p>
-          <pre><code>{{ITEM_11_CODE}}</code></pre>
-          <div class="trap">{{ITEM_11_TRAP}}</div>
+          <h3>Question answering</h3>
+          <p>Extract an answer span from supplied context.</p>
+          <pre><code>result = qa(
+    question=question,
+    context=document_text
+)</code></pre>
+          <div class="trap">The model may force a best-looking span even when the answer is absent.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_12_TITLE}}</h3>
-          <p>{{ITEM_12_PURPOSE}}</p>
-          <pre><code>{{ITEM_12_CODE}}</code></pre>
-          <div class="trap">{{ITEM_12_TRAP}}</div>
+          <h3>Confidence rejection</h3>
+          <p>Return a safe fallback for weak Q&A results.</p>
+          <pre><code>if result["score"] < 0.30:
+    print("Not enough information.")
+else:
+    print(result["answer"])</code></pre>
+          <div class="trap">A threshold is application-specific and must be validated on representative examples.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{REFERENCE_SECTION_TITLE}}</h2>
+      <h2>Course Decision Map</h2>
 
-      <div class="diagram">{{REFERENCE_DIAGRAM}}</div>
+      <div class="diagram">Need a standard task quickly?       → pipeline()\nNeed tokens, tensors, or logits?    → AutoTokenizer + AutoModel\nNeed labels chosen at runtime?      → zero-shot-classification\nNeed passage relevance screening?   → QNLI\nNeed shorter text?                  → summarization\nNeed answers from a PDF?            → PyPDF + question-answering + threshold</div>
 
       <div class="callout">
-        {{REFERENCE_CALLOUT}}
+        Use the Code Guide for complete examples and the chapter guides for explanations, observed outputs, and troubleshooting.
       </div>
     </section>
 
     <footer>
-      <span>{{COURSE_TITLE}} Â· Hugging Face Quick Lookup</span>
+      <span>Working with Hugging Face Â· Hugging Face Quick Lookup</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;Â·&nbsp;
-        <a href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="field_guide.html">Main Field Guide</a>
         &nbsp;Â·&nbsp;
-        <a href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a href="../lab/lab_run_book.md">Lab Run Book</a>
+        &nbsp;·&nbsp;
+        <a href="hugging_face_code_guide.html">Code Guide</a>
       </span>
     </footer>
   </main>

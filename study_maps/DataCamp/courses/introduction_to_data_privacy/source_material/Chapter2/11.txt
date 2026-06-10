@@ -1,0 +1,40 @@
+1. Data lifecycle management
+00:00 - 00:03
+Let's learn about Data Lifecycle Management.
+
+2. All the data
+00:03 - 00:24
+In 2022, the world had around 92 zettabytes of data. What is a zettabyte? It’s a unit of measurement. One zettabyte is equivalent to one trillion gigabytes. There is more data than ever before for companies to collect, analyze, and store. What do we do with all of this data?
+
+1 https://financesonline.com/how-much-data-is-created-every-day/
+3. Data lifecycle management
+00:24 - 01:10
+This brings us to the concept of Data lifecycle management or DLM. DLM describes a process for managing data through its lifecycle. Think of this as the governance policies and rules that protect data from its creation to its deletion. Data lifecycle management is broken into different stages. Data enters different stages either when certain actions have been completed or on a timed-based requirement. The five stages associated with Data lifecycle management are collection, storage, processing, usage, and deletion. So how does this fit into privacy by design? Data lifecycle management is a crucial component of an organization's overall privacy and security strategy and needs to be built into the overall process.
+
+4. Collection - Got to catch them all
+01:10 - 01:56
+Collection refers to the stage wherein new data is entered. This encompasses all the different data types and formats a company may encounter. This also encompasses data uploaded outside of the entity, such as an end-user uploading a picture to a social media platform or data manually entered internally. Data output created by internal systems or devices is also included. Think about it this way. Companies are like Pokemon trainers, and data is like Pokemon. They will try and capture as many types of Pokemon as possible. However, there needs to be a standardized approach to how this is done. For this phase, you must establish a set of rules to gather data in standardized formats so it can be accessible and manageable later on.
+
+5. Storage
+01:56 - 02:28
+Storage is the second stage. This stage focuses on where the data will be stored. Different types of storage repositories are used for different use cases. For example, companies use a specific storage repository for data used for data analytics, and may use another repository for storing meeting agenda decks. Think about data like Pokemon - you gotta catch 'em all. Once you catch the Pokemon, the next question is, where do you store the Pokemon? Professor Oak's lab? Inside a pokeball?
+
+6. Processing and usage
+02:28 - 02:57
+The third and fourth stages are processing and usage. This is where data is actively being processed, used, and/or shared. There need to be strict controls in place to protect, monitor, log, and audit how the data is being used. Organizations must have a definitive record of when, where, and how data is being used and accessed. Alerting and monitoring also need to be implemented to detect and inform in case data is improperly used or accessed.
+
+7. Archival
+02:57 - 03:19
+The fifth stage is archival. Data archiving refers to storing or archiving data for long periods of time. This is usually due to: compliance requirements, internal policies, or potential future use. If we continue the Pokemon analogy, data archival would be akin to Professor Oak's lab; Pokemon are stored there long term when not in use.
+
+8. Deletion
+03:19 - 03:53
+The final stage is data deletion, also known as data destruction. Data deletion refers to the destruction or elimination of data sufficient to make them irretrievable. The way data is deleted or destroyed will vary depending on the media or infrastructure on which the data lives. For example, how data is deleted from the cloud will differ from how data is destroyed from a floppy disk. In the Pokemon world, think of this as the Pokemon being released into the wild. It is no longer part of your crew nor can it rejoin.
+
+9. Challenges
+03:53 - 04:35
+Here are some potential challenges: finding data, correctly classifying data, understanding where data is located, and working cross functionally. Additionally, the goal post continuously moves. Regulations may change how you manage your Data lifecycle management processes. Systems may change. Applications may be deleted or added. People moving within and out of a company can greatly impact tribal knowledge around these DLM processes. Getting all this right is like becoming a Pokemon Master. It takes time, a lot of iterations, and hard work. There's a reason it took Ash 25 Years to become a Pokemon Master.
+
+10. Let's practice!
+04:35 - 04:41
+Woah, we sure learned a lot. Now, let's test it out.

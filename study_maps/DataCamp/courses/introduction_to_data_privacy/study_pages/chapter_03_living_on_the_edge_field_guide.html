@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
 TEMPLATE USAGE
-Replace every {{PLACEHOLDER}} with section-specific content.
+Replace every template marker with section-specific content.
 Keep the CSS and layout stable unless the course requires a deliberate design change.
 Recommended filename pattern:
 chapter_XX_section_slug_field_guide.html
@@ -10,7 +10,7 @@ chapter_XX_section_slug_field_guide.html
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{SECTION_NUMBER}} — {{SECTION_TITLE}} | {{COURSE_TITLE}}</title>
+  <title>Chapter 3 — Living on the Edge | Introduction to Data Privacy</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -366,25 +366,26 @@ chapter_XX_section_slug_field_guide.html
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Introduction to Data Privacy</a>
       <span>›</span>
-      <span>{{SECTION_NUMBER}}: {{SECTION_TITLE}}</span>
+      <span>Chapter 3: Living on the Edge</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} · Chapter 1</p>
-      <h1>{{SECTION_TITLE}}</h1>
+      <p class="eyebrow">Introduction to Data Privacy · Chapter 3</p>
+      <h1>Living on the Edge</h1>
       <p>
-        {{SECTION_SUMMARY_HTML}}
+        Learn why companies collect user data, how data brokers and advertising create privacy trade-offs, how privacy laws are structured and enforced, and why emerging technologies require privacy controls to shift left.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Join Quick Lookup</a>
-        <a class="button secondary" href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="chapter_02_privacy_by_design_field_guide.html">Previous: Privacy by Design</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Join Quick Lookup</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
       </div>
     </header>
 
@@ -392,9 +393,9 @@ chapter_XX_section_slug_field_guide.html
       <aside class="toc">
         <h2>Section Contents</h2>
         <a href="#big-picture">1. Big picture</a>
-        <a href="#concept-1">2. {{CONCEPT_1_TITLE}}</a>
-        <a href="#concept-2">3. {{CONCEPT_2_TITLE}}</a>
-        <a href="#concept-3">4. {{CONCEPT_3_TITLE}}</a>
+        <a href="#concept-1">2. Companies, User Data, and Data Brokers</a>
+        <a href="#concept-2">3. Privacy Laws, Penalties, and jAsper</a>
+        <a href="#concept-3">4. Emerging Technology and Shifting Left</a>
         <a href="#worked-example">5. Worked example</a>
         <a href="#validation">6. Validation</a>
         <a href="#mistakes">7. Common mistakes</a>
@@ -405,78 +406,104 @@ chapter_XX_section_slug_field_guide.html
       <div class="content">
         <section class="section" id="big-picture">
           <h2>1. Big Picture</h2>
-          <p>{{BIG_PICTURE_EXPLANATION}}</p>
+          <p>Organizations collect personal, engagement, behavioral, and attitudinal data to improve experiences, develop products, target advertising, guide strategy, and sometimes resell profiles. These uses create privacy risks such as profiling, identity theft, discrimination, and unwanted selling. Privacy laws establish user rights, business duties, enforcement, and penalties, while new technologies create risks that older controls and regulations may not fully address.</p>
 
-          <div class="diagram">{{BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">USER DATA
+   |
+   +--> Business value
+   |      +--> Customer experience
+   |      +--> Product development
+   |      +--> Targeted advertising
+   |      +--> Business strategy
+   |      +--> Data resale
+   |
+   +--> Privacy risk
+          +--> Profiling and discrimination
+          +--> Identity theft and misuse
+          +--> Breach and unwanted selling
+          +--> Cross-border legal exposure
+
+RESPONSE = privacy laws + accountability + controls + shift-left design</div>
 
           <div class="mini-grid">
             <article class="mini-card">
-              <h3>{{CONCEPT_1_TITLE}}</h3>
-              <p>{{CONCEPT_1_SUMMARY}}</p>
+              <h3>Companies, User Data, and Data Brokers</h3>
+              <p>Companies collect four broad data types and use them for experience, advertising, development, strategy, and resale.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_2_TITLE}}</h3>
-              <p>{{CONCEPT_2_SUMMARY}}</p>
+              <h3>Privacy Laws, Penalties, and jAsper</h3>
+              <p>Privacy laws define jurisdiction, scope, requirements, enforcement, and penalties.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_3_TITLE}}</h3>
-              <p>{{CONCEPT_3_SUMMARY}}</p>
+              <h3>Emerging Technology and Shifting Left</h3>
+              <p>Cloud, blockchain, and other newer technologies need privacy controls early in design.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_4_TITLE}}</h3>
-              <p>{{CONCEPT_4_SUMMARY}}</p>
+              <h3>Privacy Trade-offs and User Harm</h3>
+              <p>Useful services can still create significant privacy costs for users.</p>
             </article>
           </div>
 
           <div class="callout green">
-            <strong>Section punchline:</strong> {{SECTION_PUNCHLINE}}
+            <strong>Section punchline:</strong> Data may create business value, but organizations must justify its collection, explain its use, protect it, and comply with the laws that apply.
           </div>
         </section>
 
         <section class="section" id="concept-1">
-          <h2>2. {{CONCEPT_1_TITLE}}</h2>
-          <p>{{CONCEPT_1_EXPLANATION}}</p>
+          <h2>2. Companies, User Data, and Data Brokers</h2>
+          <p>Companies commonly collect <strong>personal data</strong> that identifies or can be linked to a person, <strong>engagement data</strong> showing interaction with content, <strong>behavioral data</strong> such as purchase history, and <strong>attitudinal data</strong> such as survey opinions. They use this information to improve customer experience, develop products, target advertisements, refine business strategy, and sometimes resell data to brokers or partners.</p>
 
-          <pre><code>{{CONCEPT_1_CODE_EXAMPLE}}</code></pre>
+          <pre><code>Personal data    -> name, SSN, IP address, device ID
+Engagement data  -> clicks, views, session activity
+Behavioral data  -> purchases, searches, browsing patterns
+Attitudinal data -> surveys, ratings, stated opinions
+
+Motives -> experience | advertising | development | strategy | resale</code></pre>
 
           <div class="callout">
-            <strong>What to notice:</strong> {{CONCEPT_1_NOTICE}}
+            <strong>What to notice:</strong> A weather app may provide useful alerts from location data, but privacy trade-offs appear if location is retained indefinitely, shared, or resold. A service benefit does not erase the privacy cost.
           </div>
         </section>
 
         <section class="section" id="concept-2">
-          <h2>3. {{CONCEPT_2_TITLE}}</h2>
-          <p>{{CONCEPT_2_EXPLANATION}}</p>
+          <h2>3. Privacy Laws, Penalties, and jAsper</h2>
+          <p>Privacy laws exist because self-regulation alone is not enough. Common themes include data sovereignty, breach notification, user requests, transparency, and accountability. The course uses <strong>jAsper</strong> to analyze a law: <strong>J</strong>urisdiction; <strong>A</strong>uthor and Aim; <strong>S</strong>cope; <strong>P</strong>enalty; <strong>E</strong>nforcement; and <strong>R</strong>equirements. GDPR, CCPA, PIPL, and HIPAA illustrate how different jurisdictions protect different people and data.</p>
 
-          <pre><code>{{CONCEPT_2_CODE_EXAMPLE}}</code></pre>
+          <pre><code>jAsper
+J = Jurisdiction
+A = Author and Aim
+S = Scope
+P = Penalty
+E = Enforcement authority
+R = Requirements for compliance</code></pre>
 
           <div class="callout amber">
-            <strong>Common trap:</strong> {{CONCEPT_2_TRAP}}
+            <strong>Common trap:</strong> Do not assume one privacy law applies everywhere. Jurisdiction can depend on geography, residence, business activity, or where data is processed. Fine amounts and thresholds should be checked against current legal text.
           </div>
         </section>
 
         <section class="section" id="concept-3">
-          <h2>4. {{CONCEPT_3_TITLE}}</h2>
-          <p>{{CONCEPT_3_EXPLANATION}}</p>
+          <h2>4. Emerging Technology and Shifting Left</h2>
+          <p>Shifting left means adding privacy and security requirements at the beginning of the development lifecycle instead of near release. This is especially important for bleeding-edge technology, where best practices, expertise, and regulation may lag. Public cloud offers scale and lower hardware cost but requires cloud-specific controls and trained staff. Blockchain offers immutability and transparency, yet those qualities can conflict with correction and deletion rights.</p>
 
           <table>
             <thead>
               <tr>
-                <th>{{TABLE_HEADER_1}}</th>
-                <th>{{TABLE_HEADER_2}}</th>
-                <th>{{TABLE_HEADER_3}}</th>
+                <th>Technology or practice</th>
+                <th>Benefit</th>
+                <th>Privacy challenge</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{TABLE_ROW_1_COL_1}}</td>
-                <td>{{TABLE_ROW_1_COL_2}}</td>
-                <td>{{TABLE_ROW_1_COL_3}}</td>
+                <td>Public cloud</td>
+                <td>On-demand scale, lower infrastructure cost, faster innovation</td>
+                <td>Configuration risk, shared responsibility, data-location concerns, staff training</td>
               </tr>
               <tr>
-                <td>{{TABLE_ROW_2_COL_1}}</td>
-                <td>{{TABLE_ROW_2_COL_2}}</td>
-                <td>{{TABLE_ROW_2_COL_3}}</td>
+                <td>Blockchain</td>
+                <td>Immutable records, transparency, distributed security properties</td>
+                <td>Deletion conflicts, permanent exposure, uncertain regulatory treatment</td>
               </tr>
             </tbody>
           </table>
@@ -484,26 +511,39 @@ chapter_XX_section_slug_field_guide.html
 
         <section class="section" id="worked-example">
           <h2>5. Worked Example</h2>
-          <p>{{WORKED_EXAMPLE_INTRO}}</p>
+          <p>An airline offers a frequent-flyer program requiring a name, email, and date of birth. A third party manages the loyalty platform and may sell customer profiles.</p>
 
-          <pre><code>{{WORKED_EXAMPLE_CODE}}</code></pre>
+          <pre><code>Benefits:
+  - Loyalty rewards and personalized offers
+  - Better understanding of customer preferences
+
+Privacy trade-offs:
+  - Third-party breach exposure
+  - Data resale and increased advertising
+  - Use beyond the original purpose
+
+Controls:
+  - Clear notice and meaningful consent
+  - Vendor due diligence and contract limits
+  - Data minimization and retention limits
+  - Access control, encryption, monitoring, deletion</code></pre>
 
           <div class="callout green">
-            <strong>Result:</strong> {{WORKED_EXAMPLE_RESULT}}
+            <strong>Result:</strong> The program can provide value, but the organization must manage vendor, resale, consent, security, purpose, and retention risks.
           </div>
         </section>
 
         <section class="section" id="validation">
           <h2>6. Validation and Troubleshooting</h2>
           <ul>
-            <li>{{VALIDATION_ITEM_1}}</li>
-            <li>{{VALIDATION_ITEM_2}}</li>
-            <li>{{VALIDATION_ITEM_3}}</li>
-            <li>{{VALIDATION_ITEM_4}}</li>
+            <li>Identify the data type and the specific business purpose before judging whether collection is justified.</li>
+            <li>Separate a service benefit from a privacy trade-off and from a misconception about how the application operates.</li>
+            <li>Use jAsper to analyze a privacy law instead of memorizing only its name or fine amount.</li>
+            <li>For emerging technology, identify which existing controls are insufficient and what new controls or expertise are needed.</li>
           </ul>
 
           <div class="callout danger">
-            <strong>Red flag:</strong> {{VALIDATION_RED_FLAG}}
+            <strong>Red flag:</strong> Treating compliance as permanent or universal. Technology, jurisdictions, enforcement, and privacy requirements change, so organizations must monitor and adapt.
           </div>
         </section>
 
@@ -512,18 +552,18 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Companies collect data only to improve the user experience</strong>
+              Companies may also target advertising, resell profiles, develop products, and guide business strategy. The motive changes the privacy analysis.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>A benefit means there is no privacy trade-off</strong>
+              Real-time weather alerts are a benefit; indefinite location tracking or resale is a trade-off; claiming location is used only once may be a misconception.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>Secure or innovative technology is automatically private</strong>
+              Cloud and blockchain can have strong technical features while still creating privacy issues involving access, data location, retention, deletion, and legal uncertainty.
             </article>
           </div>
         </section>
@@ -533,18 +573,18 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>Why do companies collect user data?</strong>
+              Companies use personal, engagement, behavioral, and attitudinal data to improve experiences, develop products, target advertising, refine strategy, and sometimes resell profiles. A privacy review should confirm that each use is necessary, transparent, authorized, and protected.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>How would you analyze a privacy law quickly?</strong>
+              I would use jAsper: jurisdiction, author and aim, scope, penalty, enforcement authority, and requirements. I would then validate the details against current legal guidance.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>What does shifting privacy left mean?</strong>
+              It means considering privacy requirements, risks, controls, and user rights at the beginning of design and development instead of adding them near release.
             </article>
           </div>
         </section>
@@ -555,40 +595,42 @@ chapter_XX_section_slug_field_guide.html
           <div class="memory-box">
             <strong>Section summary</strong>
             <ol>
-              <li>{{MEMORY_RULE_1}}</li>
-              <li>{{MEMORY_RULE_2}}</li>
-              <li>{{MEMORY_RULE_3}}</li>
-              <li>{{MEMORY_RULE_4}}</li>
+              <li>Companies collect personal, engagement, behavioral, and attitudinal data for several business motives.</li>
+              <li>Privacy harm can include identity theft, unwanted profiling, targeted selling, and pricing discrimination.</li>
+              <li>jAsper = Jurisdiction, Author/Aim, Scope, Penalty, Enforcement, Requirements.</li>
+              <li>Shift left: apply privacy controls early, especially when technology moves faster than law and best practice.</li>
             </ol>
           </div>
 
           <h3>Quick self-check</h3>
           <ul>
-            <li>{{SELF_CHECK_1}}</li>
-            <li>{{SELF_CHECK_2}}</li>
-            <li>{{SELF_CHECK_3}}</li>
-            <li>{{SELF_CHECK_4}}</li>
+            <li>Can you classify a collection motive as experience improvement, advertising, resale, development, or strategy?</li>
+            <li>Can you distinguish a location-sharing benefit, trade-off, and misconception?</li>
+            <li>Can you use jAsper to explain the basic structure of GDPR, CCPA, PIPL, or HIPAA?</li>
+            <li>Can you explain why blockchain immutability may conflict with deletion rights?</li>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> {{LAB_DECISION}}
+            <strong>Lab decision:</strong> No runnable code lab is required. Use scenario practice: classify collection motives, assess a data-broker profile, analyze a law with jAsper, and compare cloud or blockchain benefits with privacy risks.
           </div>
 
           <div class="callout green">
-            <strong>Completion standard:</strong> {{COMPLETION_STANDARD}}
+            <strong>Completion standard:</strong> You can explain why companies collect data, identify harms and trade-offs, break down a privacy law with jAsper, and describe how shifting left manages emerging-technology risk.
           </div>
         </section>
       </div>      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} · {{SECTION_NUMBER}} Field Guide</span>
+      <span>Introduction to Data Privacy · Chapter 3 Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="field_guide.html">Main Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a href="chapter_02_privacy_by_design_field_guide.html">Previous: Privacy by Design</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
       </span>
     </footer>
   </main>
