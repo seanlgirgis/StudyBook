@@ -10,7 +10,7 @@ chapter_XX_section_slug_field_guide.html
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{SECTION_NUMBER}} — {{SECTION_TITLE}} | {{COURSE_TITLE}}</title>
+  <title>Chapter 1 — Getting Started with Hugging Face | Working with Hugging Face</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -366,25 +366,25 @@ chapter_XX_section_slug_field_guide.html
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Working with Hugging Face</a>
       <span>›</span>
-      <span>{{SECTION_NUMBER}}: {{SECTION_TITLE}}</span>
+      <span>Chapter 1: Getting Started with Hugging Face</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} · Chapter 1</p>
-      <h1>{{SECTION_TITLE}}</h1>
+      <p class="eyebrow">Working with Hugging Face · Chapter 1</p>
+      <h1>Getting Started with Hugging Face</h1>
       <p>
-        {{SECTION_SUMMARY_HTML}}
+        Learn how the Hugging Face Hub connects models, datasets, libraries, and inference options. This chapter builds the practical foundation for finding trustworthy assets, running models locally or through hosted providers, and loading and manipulating datasets in Python.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Join Quick Lookup</a>
-        <a class="button secondary" href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="hugging_face_quick_lookup.html">Hugging Face Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_building_pipelines_with_hugging_face_field_guide.html">Next: Building Pipelines</a>
       </div>
     </header>
 
@@ -392,9 +392,9 @@ chapter_XX_section_slug_field_guide.html
       <aside class="toc">
         <h2>Section Contents</h2>
         <a href="#big-picture">1. Big picture</a>
-        <a href="#concept-1">2. {{CONCEPT_1_TITLE}}</a>
-        <a href="#concept-2">3. {{CONCEPT_2_TITLE}}</a>
-        <a href="#concept-3">4. {{CONCEPT_3_TITLE}}</a>
+        <a href="#concept-1">2. The Hugging Face Hub</a>
+        <a href="#concept-2">3. Model Cards and Model Selection</a>
+        <a href="#concept-3">4. Local and Hosted Inference</a>
         <a href="#worked-example">5. Worked example</a>
         <a href="#validation">6. Validation</a>
         <a href="#mistakes">7. Common mistakes</a>
@@ -405,78 +405,132 @@ chapter_XX_section_slug_field_guide.html
       <div class="content">
         <section class="section" id="big-picture">
           <h2>1. Big Picture</h2>
-          <p>{{BIG_PICTURE_EXPLANATION}}</p>
+          <p>Hugging Face is both a community platform and a Python ecosystem. The Hub helps you discover models and datasets; model and dataset cards help you judge whether an asset fits your task; the Transformers library runs models; tokenizers convert text into numeric token IDs; PyTorch performs the tensor calculations; inference providers supply remote compute; and the Datasets library loads efficient Arrow-backed datasets for filtering and selection.</p>
 
-          <div class="diagram">{{BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">Define the task
+      ↓
+Search the Hugging Face Hub
+      ↓
+Inspect model or dataset card
+      ↓
+Choose local inference or hosted provider
+      ↓
+Run the model / load the dataset
+      ↓
+Inspect, validate, and refine</div>
 
           <div class="mini-grid">
             <article class="mini-card">
-              <h3>{{CONCEPT_1_TITLE}}</h3>
-              <p>{{CONCEPT_1_SUMMARY}}</p>
+              <h3>The Hugging Face Hub</h3>
+              <p>A central catalog for open models, datasets, applications, documentation, and community contributions.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_2_TITLE}}</h3>
-              <p>{{CONCEPT_2_SUMMARY}}</p>
+              <h3>Model Cards and Model Selection</h3>
+              <p>Metadata pages describe tasks, modalities, languages, licenses, training data, evaluation results, limits, and intended uses.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_3_TITLE}}</h3>
-              <p>{{CONCEPT_3_SUMMARY}}</p>
+              <h3>Local and Hosted Inference</h3>
+              <p>Run models on your own hardware for control and convenience, or use inference providers for faster remote compute.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_4_TITLE}}</h3>
-              <p>{{CONCEPT_4_SUMMARY}}</p>
+              <h3>Datasets and Apache Arrow</h3>
+              <p>Load community datasets with the Datasets library and manipulate Arrow-backed rows with methods such as filter() and select().</p>
             </article>
           </div>
 
           <div class="callout green">
-            <strong>Section punchline:</strong> {{SECTION_PUNCHLINE}}
+            <strong>Section punchline:</strong> Do not choose a model or dataset by popularity alone—match the task, license, language, training-data fit, hardware needs, documented limitations, and exact model revision when reproducibility matters.
           </div>
         </section>
 
         <section class="section" id="concept-1">
-          <h2>2. {{CONCEPT_1_TITLE}}</h2>
-          <p>{{CONCEPT_1_EXPLANATION}}</p>
+          <h2>2. The Hugging Face Hub</h2>
+          <p>The Hub is the discovery layer of the Hugging Face ecosystem. You can filter assets by task, modality, language, popularity, downloads, or recency. It supports browser-based exploration, Python integration, notebooks, and application deployment paths.</p>
 
-          <pre><code>{{CONCEPT_1_CODE_EXAMPLE}}</code></pre>
+          <pre><code>from transformers import pipeline
+
+generator = pipeline(
+    task="text-generation",
+    model="openai-community/gpt2"
+)
+
+result = generator("What if AI", max_new_tokens=10)
+print(result[0]["generated_text"])</code></pre>
 
           <div class="callout">
-            <strong>What to notice:</strong> {{CONCEPT_1_NOTICE}}
+            <strong>What to notice:</strong> The task name and model identifier come from the model card. The pipeline returns structured Python objects, commonly a list of dictionaries.
+          </div>
+
+          <h3>What the pipeline hides</h3>
+          <div class="diagram">raw text
+      ↓
+tokenizer
+      ↓
+input_ids + attention_mask
+      ↓
+PyTorch model calculations
+      ↓
+readable output</div>
+
+          <pre><code>from transformers import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained("openai-community/gpt2")
+
+tokens = tokenizer(
+    "I like to visit the park on sunny days.",
+    return_tensors="pt"
+)
+
+print(tokens)</code></pre>
+
+          <div class="callout">
+            <strong>Tokenizer rule:</strong> A model must use the tokenizer it was trained with. The same word may receive different token IDs under different tokenizers.
+          </div>
+
+          <div class="callout amber">
+            <strong>Reproducibility rule:</strong> Pin a model revision, tag, or commit when stable model files and repeatable behavior matter.
           </div>
         </section>
 
         <section class="section" id="concept-2">
-          <h2>3. {{CONCEPT_2_TITLE}}</h2>
-          <p>{{CONCEPT_2_EXPLANATION}}</p>
+          <h2>3. Model Cards and Model Selection</h2>
+          <p>A model card is the first technical and governance checkpoint. It may include supported tasks, modalities, languages, license, intended use, limitations, training parameters, training datasets, evaluation metrics, and linked papers. Dataset cards provide similar context for data provenance, schema, row counts, licenses, splits, and collection methods.</p>
 
-          <pre><code>{{CONCEPT_2_CODE_EXAMPLE}}</code></pre>
+          <pre><code># Before loading an asset, verify:
+# - task compatibility
+# - license and intended use
+# - language and modality
+# - model size and hardware requirements
+# - training data and evaluation results
+# - known limitations and bias notes</code></pre>
 
           <div class="callout amber">
-            <strong>Common trap:</strong> {{CONCEPT_2_TRAP}}
+            <strong>Common trap:</strong> A high download count does not prove that a model is accurate, safe, licensed for your use, or suitable for your hardware.
           </div>
         </section>
 
         <section class="section" id="concept-3">
-          <h2>4. {{CONCEPT_3_TITLE}}</h2>
-          <p>{{CONCEPT_3_EXPLANATION}}</p>
+          <h2>4. Local and Hosted Inference</h2>
+          <p>Local inference performs computation on your computer or cloud development environment, commonly through a framework such as PyTorch. It avoids sending data to a remote provider and can be inexpensive, but large models may require substantial RAM, VRAM, or GPU acceleration. Inference providers expose remote high-performance machines through an API, shifting compute away from the local system.</p>
 
           <table>
             <thead>
               <tr>
-                <th>{{TABLE_HEADER_1}}</th>
-                <th>{{TABLE_HEADER_2}}</th>
-                <th>{{TABLE_HEADER_3}}</th>
+                <th>Option</th>
+                <th>Best fit</th>
+                <th>Main trade-off</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{TABLE_ROW_1_COL_1}}</td>
-                <td>{{TABLE_ROW_1_COL_2}}</td>
-                <td>{{TABLE_ROW_1_COL_3}}</td>
+                <td>Local inference</td>
+                <td>Smaller models, offline work, sensitive inputs, experimentation, direct environment control</td>
+                <td>Limited by local CPU, RAM, GPU, VRAM, installation time, and model download size</td>
               </tr>
               <tr>
-                <td>{{TABLE_ROW_2_COL_1}}</td>
-                <td>{{TABLE_ROW_2_COL_2}}</td>
-                <td>{{TABLE_ROW_2_COL_3}}</td>
+                <td>Inference provider</td>
+                <td>Large models, fast prototyping, burst workloads, or systems without suitable GPUs</td>
+                <td>Requires network access, credentials, provider availability, usage limits, latency, cost, and privacy/security review</td>
               </tr>
             </tbody>
           </table>
@@ -484,26 +538,42 @@ chapter_XX_section_slug_field_guide.html
 
         <section class="section" id="worked-example">
           <h2>5. Worked Example</h2>
-          <p>{{WORKED_EXAMPLE_INTRO}}</p>
+          <p>Load one dataset split, filter rows by content, select a small slice, and inspect a field.</p>
 
-          <pre><code>{{WORKED_EXAMPLE_CODE}}</code></pre>
+          <pre><code>from datasets import load_dataset
+
+dataset = load_dataset("imdb", split="train")
+
+sample = dataset.shuffle(seed=42).select(range(20))
+
+positive_rows = sample.filter(
+    lambda row: row["label"] == 1
+)
+
+print(sample)
+print("Positive rows:", len(positive_rows))</code></pre>
 
           <div class="callout green">
-            <strong>Result:</strong> {{WORKED_EXAMPLE_RESULT}}
+            <strong>Result:</strong> shuffle(seed=42) gives repeatable randomness, select() keeps rows by index, and filter() keeps rows by condition—similar to a SQL WHERE clause.
+          </div>
+
+          <div class="callout danger">
+            <strong>Sampling trap:</strong> Do not assume the first rows are representative. A dataset may be ordered by label, date, category, or source. Shuffle before taking a small exploratory sample.
           </div>
         </section>
 
         <section class="section" id="validation">
           <h2>6. Validation and Troubleshooting</h2>
           <ul>
-            <li>{{VALIDATION_ITEM_1}}</li>
-            <li>{{VALIDATION_ITEM_2}}</li>
-            <li>{{VALIDATION_ITEM_3}}</li>
-            <li>{{VALIDATION_ITEM_4}}</li>
+            <li>Confirm that the model or dataset identifier exactly matches the Hub card.</li>
+            <li>Check the card for available tasks, dataset splits, expected columns, license, and limitations.</li>
+            <li>Inspect the returned Python structure before assuming a key such as generated_text, text, or label exists.</li>
+            <li>Confirm that PyTorch or another supported backend is installed before running a local model.</li>
+            <li>Start with a small model, small split, streaming mode, or reproducible shuffled sample before scaling up.</li>
           </ul>
 
           <div class="callout danger">
-            <strong>Red flag:</strong> {{VALIDATION_RED_FLAG}}
+            <strong>Red flag:</strong> A model runs successfully but produces poor output, or a dataset loads successfully but is unsuitable. Technical success is not the same as fitness for purpose.
           </div>
         </section>
 
@@ -512,18 +582,33 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Choosing by popularity only</strong>
+              Use popularity as one signal, then verify the model card, evaluation results, language support, size, license, and limitations.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>Treating inference as training</strong>
+              Inference means using a trained model to make predictions. Training or fine-tuning changes model parameters using data.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>Treating a Dataset like a pandas DataFrame</strong>
+              Hugging Face datasets are commonly Arrow-backed. Use Dataset methods such as filter(), select(), map(), and split-aware loading rather than assuming pandas behavior.
+            </article>
+
+            <article class="qa-item">
+              <strong>Confusing filter() and select()</strong>
+              Use filter() for a condition and select() for known row positions.
+            </article>
+
+            <article class="qa-item">
+              <strong>Sampling from a convenient row range</strong>
+              Do not hunt for a hand-picked slice that gives the result you expect. Shuffle with a fixed seed, then select a small sample.
+            </article>
+
+            <article class="qa-item">
+              <strong>Misreading the attention mask</strong>
+              The attention mask does not mark important words. A value of 1 means a real token; 0 usually marks padding that the model should ignore.
             </article>
           </div>
         </section>
@@ -533,18 +618,18 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>How would you choose a Hugging Face model?</strong>
+              I would start from the task and modality, then review the model card for license, language support, model size, training data, evaluation results, intended use, and known limitations. I would test the strongest candidates on representative data before selecting one.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>When would you use local inference instead of an inference provider?</strong>
+              I would use local inference when the model fits available hardware, I need offline execution or tighter control over sensitive inputs, or I want to avoid per-request provider cost. I would use a provider when the model needs more compute or I need rapid scalable access.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>Why does Hugging Face use Apache Arrow for many datasets?</strong>
+              Arrow provides an efficient columnar memory format that supports fast analytical access, slicing, filtering, and interoperability without requiring every operation to behave like a traditional row-oriented Python object.
             </article>
           </div>
         </section>
@@ -555,40 +640,46 @@ chapter_XX_section_slug_field_guide.html
           <div class="memory-box">
             <strong>Section summary</strong>
             <ol>
-              <li>{{MEMORY_RULE_1}}</li>
-              <li>{{MEMORY_RULE_2}}</li>
-              <li>{{MEMORY_RULE_3}}</li>
-              <li>{{MEMORY_RULE_4}}</li>
+              <li>Hub = discover and compare models, datasets, and applications.</li>
+              <li>Cards = metadata, evidence, license, intended use, and limitations.</li>
+              <li>Local inference uses your hardware; providers use remote hardware through an API.</li>
+              <li>Datasets are commonly Arrow-backed; use load_dataset(), filter(), and select().</li>
+              <li>Tokenizer = text to token IDs; PyTorch = tensor calculations; pipeline() hides both.</li>
+              <li>Shuffle with a fixed seed before taking a small exploratory sample.</li>
             </ol>
           </div>
 
           <h3>Quick self-check</h3>
           <ul>
-            <li>{{SELF_CHECK_1}}</li>
-            <li>{{SELF_CHECK_2}}</li>
-            <li>{{SELF_CHECK_3}}</li>
-            <li>{{SELF_CHECK_4}}</li>
+            <li>Can I explain the difference between the Hub and the Transformers library?</li>
+            <li>Can I name at least five model-card fields I should review?</li>
+            <li>Can I justify local versus hosted inference for a real project?</li>
+            <li>Can I load one split and explain filter() versus select()?</li>
+            <li>Can I explain input_ids, attention_mask, padding, and return_tensors=&quot;pt&quot;?</li>
+            <li>Can I explain why a fixed model revision and a random seed improve reproducibility?</li>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> {{LAB_DECISION}}
+            <strong>Lab decision:</strong> Use a small Python lab. Practice one sentiment or text-generation pipeline, one tokenizer inspection using return_tensors=&quot;pt&quot;, one hosted-client example with credentials omitted, and one shuffled dataset loading/filtering exercise. A large infrastructure lab is unnecessary for this chapter.
           </div>
 
           <div class="callout green">
-            <strong>Completion standard:</strong> {{COMPLETION_STANDARD}}
+            <strong>Completion standard:</strong> You can find a suitable model and dataset on the Hub, explain the metadata that controls selection, run a small local pipeline, describe hosted inference trade-offs, inspect token IDs and attention masks, and manipulate an Arrow-backed dataset safely using reproducible sampling.
           </div>
         </section>
       </div>      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} · {{SECTION_NUMBER}} Field Guide</span>
+      <span>Working with Hugging Face · Chapter 1 Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="field_guide.html">Main Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a href="hugging_face_quick_lookup.html">Hugging Face Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_building_pipelines_with_hugging_face_field_guide.html">Next: Building Pipelines</a>
       </span>
     </footer>
   </main>

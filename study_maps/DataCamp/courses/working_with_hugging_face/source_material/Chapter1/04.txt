@@ -1,0 +1,53 @@
+1. Running Hugging Face models
+00:00 - 00:05
+Great work exploring the Hub! Now lets see how we can begin using Hugging Face models.
+
+2. Inference with Hugging Face
+00:05 - 00:11
+When running models, in other words, predicting or performing inference, there are two main options:
+
+3. Local inference
+00:11 - 00:21
+using our own local hardware to run the computations, either on our physical computer or laptop or inside our cloud-based development environment.
+
+4. Inference providers
+00:21 - 00:40
+Or using an inference provider via Hugging Face's API. These inference providers are partner organizations that provide remote access to high-performance machines. We send a request to an inference provider with the desired model and inputs, the provider runs the computations, and the result is returned back to us.
+
+1 https://huggingface.co/docs/inference-providers/en/index
+5. Inference with Hugging Face
+00:40 - 01:27
+Running models on local hardware is free and convenient, but for consumer-grade hardware, running inference on some models, particularly large-parameter LLMs and image and video generation models, can be slow and resource-intensive. Inference with these models really requires the use of Graphics Processing Units, or GPUs, that aren't included in many consumer systems. In these cases, switching to an inference provider is recommended. They can perform inference much quicker than we could on our own and without burdening our own hardware. It's free to get started with inference providers, with some credits provided to Hugging Face users. Let's look at how to perform inference using both of these methods, starting with local inference.
+
+1 https://huggingface.co/docs/inference-providers/en/index
+6. Introduction to the Transformers Library
+01:27 - 01:34
+The Hugging Face Transformers library simplifies working with pre-trained models, both for inference and training.
+
+1 https://github.com/huggingface/transformers
+7. The pipeline
+01:34 - 02:22
+The transformers pipeline is a convenient class for quickly performing local inference for any of the models and tasks available on Hugging Face. First, we import the pipeline class from transformers. Then, we instantiate it, specifying the task we'd like to perform and the model we'd like to use. In our example, the task is text-generation, and we've chosen OpenAI's GPT-2 model. Remember that you can find the model name and supported tasks on the model card on the Hugging Face Hub. We'll call our pipeline on the string "What if AI" to see how the model completes it with newly-generated text. It returns a dictionary with the generated text found under the 'generated_text' key.
+
+1 Model Card: https://huggingface.co/openai-community/gpt2
+8. Adjusting Pipeline Parameters
+02:22 - 02:55
+We can make adjusts to the pipeline output using different parameters when calling the pipeline. For example, here, we limit the output to 10 tokens, which are groups of characters processed by language models. We also request two generated sequences rather than just the one we got before. This will produce a list of dictionaries like the one we saw before, so we'll loop over it to extract the generated text. There we have it! Two short generated sequences to our input.
+
+9. Using inference providers
+02:55 - 03:30
+Now to try out Hugging Face's inference providers. We create an inference client, which configures our environment for communicating with the inference API. Within this client, we specify the inference provider we wish to use, and our Hugging Face API key, which will be used to access and use our inference credits. Here, we've opted for Together.ai as our provider, but there are many others to choose from. We'll have a go at performing text generation with a conversational interface this time,
+
+1 https://huggingface.co/docs/inference-providers/en/index
+10. Using inference providers
+03:30 - 03:50
+which is a common way for prompting most text generation models. This involves sending model inputs as messages, which are a list of dictionaries. Each message is sent from a role, for model inputs, we use the user role. This is our request to the inference provider.
+
+1 https://huggingface.co/docs/inference-providers/en/index
+11. Using inference providers
+03:50 - 03:59
+Accessing the generated text, we can see that the model responded to our input, which didn't put any strain on our own hardware.
+
+12. Let's practice!
+03:59 - 04:02
+Now it's your turn to begin inferencing with Hugging Face models!

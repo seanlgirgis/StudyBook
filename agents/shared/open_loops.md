@@ -2,7 +2,7 @@
 
 Track incomplete but in-scope work items so sessions resume cleanly.
 
-Last reviewed: 2026-06-07 (DataCamp AI track scaffold fix run; no new loops opened)
+Last reviewed: 2026-06-09 (Working with Hugging Face prepare script fix run; no new loops opened)
 
 ## Status Meanings
 

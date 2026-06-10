@@ -10,7 +10,7 @@ chapter_XX_section_slug_field_guide.html
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{SECTION_NUMBER}} — {{SECTION_TITLE}} | {{COURSE_TITLE}}</title>
+  <title>Chapter 2 — Building Pipelines with Hugging Face | Working with Hugging Face</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -366,25 +366,25 @@ chapter_XX_section_slug_field_guide.html
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Working with Hugging Face</a>
       <span>›</span>
-      <span>{{SECTION_NUMBER}}: {{SECTION_TITLE}}</span>
+      <span>Chapter 2: Building Pipelines with Hugging Face</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} · Chapter 1</p>
-      <h1>{{SECTION_TITLE}}</h1>
+      <p class="eyebrow">Working with Hugging Face · Chapter 2</p>
+      <h1>Building Pipelines with Hugging Face</h1>
       <p>
-        {{SECTION_SUMMARY_HTML}}
+        Build practical NLP workflows for classification, summarization, tokenization, and document question answering. This chapter moves from fast pipeline-based solutions to AutoModel and AutoTokenizer components that provide greater control.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Join Quick Lookup</a>
-        <a class="button secondary" href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="chapter_01_getting_started_with_hugging_face_field_guide.html">Previous: Getting Started</a>
+        <a class="button secondary" href="hugging_face_quick_lookup.html">Hugging Face Quick Lookup</a>
       </div>
     </header>
 
@@ -392,9 +392,9 @@ chapter_XX_section_slug_field_guide.html
       <aside class="toc">
         <h2>Section Contents</h2>
         <a href="#big-picture">1. Big picture</a>
-        <a href="#concept-1">2. {{CONCEPT_1_TITLE}}</a>
-        <a href="#concept-2">3. {{CONCEPT_2_TITLE}}</a>
-        <a href="#concept-3">4. {{CONCEPT_3_TITLE}}</a>
+        <a href="#concept-1">2. Text Classification</a>
+        <a href="#concept-2">3. Text Summarization</a>
+        <a href="#concept-3">4. AutoModels and AutoTokenizers</a>
         <a href="#worked-example">5. Worked example</a>
         <a href="#validation">6. Validation</a>
         <a href="#mistakes">7. Common mistakes</a>
@@ -405,78 +405,109 @@ chapter_XX_section_slug_field_guide.html
       <div class="content">
         <section class="section" id="big-picture">
           <h2>1. Big Picture</h2>
-          <p>{{BIG_PICTURE_EXPLANATION}}</p>
+          <p>Chapter 2 applies Hugging Face models to four common NLP needs. Classification assigns labels to text; summarization compresses long content; AutoClasses expose the model and tokenizer for customization; and document Q&A extracts answers from supplied context such as PDF text.</p>
 
-          <div class="diagram">{{BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">raw text or document
+        ↓
+choose the NLP task
+        ↓
+select a task-compatible model
+        ↓
+pipeline() for speed
+or AutoModel + AutoTokenizer for control
+        ↓
+inspect labels, scores, summaries, or answers</div>
 
           <div class="mini-grid">
             <article class="mini-card">
-              <h3>{{CONCEPT_1_TITLE}}</h3>
-              <p>{{CONCEPT_1_SUMMARY}}</p>
+              <h3>Text Classification</h3>
+              <p>Assign sentiment, grammatical-correctness, entailment, or user-defined category labels to text.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_2_TITLE}}</h3>
-              <p>{{CONCEPT_2_SUMMARY}}</p>
+              <h3>Text Summarization</h3>
+              <p>Reduce long text while balancing faithfulness, readability, resource use, and output length.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_3_TITLE}}</h3>
-              <p>{{CONCEPT_3_SUMMARY}}</p>
+              <h3>AutoModels and AutoTokenizers</h3>
+              <p>Load a task-specific model and its paired tokenizer separately when you need custom preprocessing or model behavior.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_4_TITLE}}</h3>
-              <p>{{CONCEPT_4_SUMMARY}}</p>
+              <h3>Document Question Answering</h3>
+              <p>Extract text from documents, supply it as context, and ask focused questions with a question-answering pipeline.</p>
             </article>
           </div>
 
           <div class="callout green">
-            <strong>Section punchline:</strong> {{SECTION_PUNCHLINE}}
+            <strong>Section punchline:</strong> Use pipeline() when the default workflow is enough; move to AutoClasses when you need explicit control over tokenization, model choice, thresholds, or multi-stage processing.
           </div>
         </section>
 
         <section class="section" id="concept-1">
-          <h2>2. {{CONCEPT_1_TITLE}}</h2>
-          <p>{{CONCEPT_1_EXPLANATION}}</p>
+          <h2>2. Text Classification</h2>
+          <p>Text classification assigns predefined labels to text. The chapter covers sentiment analysis, grammatical acceptability, Question Natural Language Inference (QNLI), and zero-shot classification. Always read the model card because labels such as LABEL_0 and LABEL_1 only become meaningful when mapped to the model's documented label definitions.</p>
 
-          <pre><code>{{CONCEPT_1_CODE_EXAMPLE}}</code></pre>
+          <pre><code>from transformers import pipeline
+
+classifier = pipeline(
+    task="text-classification",
+    model="distilbert/distilbert-base-uncased-finetuned-sst-2-english"
+)
+
+result = classifier("This course is useful.")
+print(result)
+# [{'label': 'POSITIVE', 'score': ...}]</code></pre>
 
           <div class="callout">
-            <strong>What to notice:</strong> {{CONCEPT_1_NOTICE}}
+            <strong>What to notice:</strong> Different classification tasks require different models and input shapes. Sentiment uses one text string; QNLI evaluates a question together with a premise; zero-shot classification also receives candidate_labels.
           </div>
         </section>
 
         <section class="section" id="concept-2">
-          <h2>3. {{CONCEPT_2_TITLE}}</h2>
-          <p>{{CONCEPT_2_EXPLANATION}}</p>
+          <h2>3. Text Summarization</h2>
+          <p>Summarization reduces a long input while preserving its important ideas. Extractive methods select original wording and are useful when faithfulness is critical. Abstractive methods generate new wording and are often more readable, but they can introduce unsupported details. The selected model determines which behavior you receive.</p>
 
-          <pre><code>{{CONCEPT_2_CODE_EXAMPLE}}</code></pre>
+          <pre><code>from transformers import pipeline
+
+summarizer = pipeline(
+    task="summarization",
+    model="sshleifer/distilbart-cnn-12-6"
+)
+
+result = summarizer(
+    long_text,
+    min_new_tokens=20,
+    max_new_tokens=60
+)
+
+print(result[0]["summary_text"])</code></pre>
 
           <div class="callout amber">
-            <strong>Common trap:</strong> {{CONCEPT_2_TRAP}}
+            <strong>Common trap:</strong> Do not treat a fluent abstractive summary as automatically accurate. Compare it with the source, especially for legal, financial, medical, or policy documents.
           </div>
         </section>
 
         <section class="section" id="concept-3">
-          <h2>4. {{CONCEPT_3_TITLE}}</h2>
-          <p>{{CONCEPT_3_EXPLANATION}}</p>
+          <h2>4. AutoModels and AutoTokenizers</h2>
+          <p>AutoClasses infer the correct implementation from a model repository. AutoModelForSequenceClassification loads a classification model, while AutoTokenizer loads the tokenizer paired with it. This pairing matters because different models may split and encode the same text differently.</p>
 
           <table>
             <thead>
               <tr>
-                <th>{{TABLE_HEADER_1}}</th>
-                <th>{{TABLE_HEADER_2}}</th>
-                <th>{{TABLE_HEADER_3}}</th>
+                <th>Approach</th>
+                <th>Use it when</th>
+                <th>Trade-off</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{TABLE_ROW_1_COL_1}}</td>
-                <td>{{TABLE_ROW_1_COL_2}}</td>
-                <td>{{TABLE_ROW_1_COL_3}}</td>
+                <td>pipeline()</td>
+                <td>You want quick experimentation and standard preprocessing, inference, and postprocessing.</td>
+                <td>Less direct control over intermediate steps and custom logic.</td>
               </tr>
               <tr>
-                <td>{{TABLE_ROW_2_COL_1}}</td>
-                <td>{{TABLE_ROW_2_COL_2}}</td>
-                <td>{{TABLE_ROW_2_COL_3}}</td>
+                <td>AutoModel + AutoTokenizer</td>
+                <td>You need custom tokenization, thresholds, batching, model outputs, or multi-stage workflows.</td>
+                <td>More code and responsibility for preprocessing, tensors, and output interpretation.</td>
               </tr>
             </tbody>
           </table>
@@ -484,26 +515,47 @@ chapter_XX_section_slug_field_guide.html
 
         <section class="section" id="worked-example">
           <h2>5. Worked Example</h2>
-          <p>{{WORKED_EXAMPLE_INTRO}}</p>
+          <p>Extract text from a PDF and ask a focused question using a question-answering pipeline.</p>
 
-          <pre><code>{{WORKED_EXAMPLE_CODE}}</code></pre>
+          <pre><code>from pypdf import PdfReader
+from transformers import pipeline
+
+reader = PdfReader("US-Employee_Policy.pdf")
+
+document_text = ""
+for page in reader.pages:
+    page_text = page.extract_text() or ""
+    document_text += page_text + "\n"
+
+qa = pipeline(
+    task="question-answering",
+    model="distilbert/distilbert-base-cased-distilled-squad"
+)
+
+result = qa(
+    question="How many volunteer days are allowed annually?",
+    context=document_text
+)
+
+print(result["answer"])
+print(result["score"])</code></pre>
 
           <div class="callout green">
-            <strong>Result:</strong> {{WORKED_EXAMPLE_RESULT}}
+            <strong>Result:</strong> The pipeline searches the supplied context and returns an extracted answer with a confidence score. It does not independently search the web or know whether the PDF itself is correct.
           </div>
         </section>
 
         <section class="section" id="validation">
           <h2>6. Validation and Troubleshooting</h2>
           <ul>
-            <li>{{VALIDATION_ITEM_1}}</li>
-            <li>{{VALIDATION_ITEM_2}}</li>
-            <li>{{VALIDATION_ITEM_3}}</li>
-            <li>{{VALIDATION_ITEM_4}}</li>
+            <li>Confirm that the chosen model was trained for the exact task: sentiment, grammar, QNLI, zero-shot classification, summarization, or question answering.</li>
+            <li>Read the model card before interpreting generic labels such as LABEL_0 or LABEL_1.</li>
+            <li>Inspect the complete returned structure before indexing keys such as labels, scores, summary_text, or answer.</li>
+            <li>For document Q&A, confirm that PDF extraction produced readable text and that the relevant passage fits within the model's context limit.</li>
           </ul>
 
           <div class="callout danger">
-            <strong>Red flag:</strong> {{VALIDATION_RED_FLAG}}
+            <strong>Red flag:</strong> A high confidence score does not prove that the label, summary, or answer is correct. Validate against representative examples and the original source.
           </div>
         </section>
 
@@ -512,18 +564,18 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Using one classifier for every classification task</strong>
+              Sentiment, grammar, QNLI, and zero-shot classification require task-compatible models and may require different inputs.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>Assuming LABEL_0 has a universal meaning</strong>
+              Generic label IDs are model-specific. Use the model card or model configuration to map IDs to meanings.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>Passing an entire document without checking extraction or length</strong>
+              Inspect extracted text and account for context limits. Longer documents may require chunking and retrieval rather than one enormous context string.
             </article>
           </div>
         </section>
@@ -533,18 +585,18 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>When would you use zero-shot classification?</strong>
+              I would use it when I need to classify text into candidate categories that were not part of a dedicated supervised training set. I would validate the candidate-label wording and confidence quality because the model was not trained specifically for my business taxonomy.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>When would you choose AutoClasses instead of pipeline()?</strong>
+              I would use pipeline() for standard, fast inference. I would use AutoModel and AutoTokenizer when I need custom tokenization, batching, thresholds, access to raw outputs, or integration into a larger workflow.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>What is the main risk of abstractive summarization?</strong>
+              It can generate fluent wording that is not fully supported by the source. For high-stakes material I would compare the summary with the source and favor faithfulness checks or extractive methods where appropriate.
             </article>
           </div>
         </section>
@@ -555,40 +607,42 @@ chapter_XX_section_slug_field_guide.html
           <div class="memory-box">
             <strong>Section summary</strong>
             <ol>
-              <li>{{MEMORY_RULE_1}}</li>
-              <li>{{MEMORY_RULE_2}}</li>
-              <li>{{MEMORY_RULE_3}}</li>
-              <li>{{MEMORY_RULE_4}}</li>
+              <li>Classification = text in, label and score out.</li>
+              <li>Summarization = long text in, shorter summary_text out; length is controlled with token parameters.</li>
+              <li>pipeline() hides the workflow; AutoModel and AutoTokenizer expose it for control.</li>
+              <li>Document Q&A = question + extracted context → answer + score.</li>
             </ol>
           </div>
 
           <h3>Quick self-check</h3>
           <ul>
-            <li>{{SELF_CHECK_1}}</li>
-            <li>{{SELF_CHECK_2}}</li>
-            <li>{{SELF_CHECK_3}}</li>
-            <li>{{SELF_CHECK_4}}</li>
+            <li>Can I explain sentiment, grammatical correctness, QNLI, and zero-shot classification?</li>
+            <li>Can I distinguish extractive and abstractive summarization and state the main risk of each?</li>
+            <li>Can I explain why a model must use its paired tokenizer?</li>
+            <li>Can I extract PDF text and pass it as context to a question-answering pipeline?</li>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> {{LAB_DECISION}}
+            <strong>Lab decision:</strong> Use a focused Python lab with four scripts: classification, summarization, AutoModel/AutoTokenizer inspection, and PDF question answering. Keep models small enough for local CPU testing.
           </div>
 
           <div class="callout green">
-            <strong>Completion standard:</strong> {{COMPLETION_STANDARD}}
+            <strong>Completion standard:</strong> You can choose a task-compatible model, interpret classification outputs safely, control summary length, explain pipeline versus AutoClasses, and build a basic document Q&A workflow from extracted PDF text.
           </div>
         </section>
       </div>      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} · {{SECTION_NUMBER}} Field Guide</span>
+      <span>Working with Hugging Face · Chapter 2 Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="chapter_01_getting_started_with_hugging_face_field_guide.html">Previous: Getting Started</a>
         &nbsp;·&nbsp;
-        <a href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="hugging_face_quick_lookup.html">Hugging Face Quick Lookup</a>
       </span>
     </footer>
   </main>

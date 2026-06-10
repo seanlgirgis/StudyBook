@@ -2,33 +2,28 @@
 
 ## Run Metadata
 
-- Date: 2026-06-07
-- Task ID: TB-20260607-02
+- Date: 2026-06-09
+- Task ID: TB-20260609-01
 - Task Type: FIX
 - Status: DONE
 
 ## Factual Summary
 
-- Fixed the PowerShell parse error in `study_maps\DataCamp\scaffold_developing_ai_applications.ps1`.
-- Replaced the fragile inline Markdown here-string bodies with normal joined strings so PowerShell no longer treats the markdown bullets as code.
-- Normalized generated track-page separators to ASCII.
-- Ran the scaffold successfully, which created the `developing_ai_applications` skill track plus the intended canonical course and project package shells.
+- Fixed the PowerShell parser error in `study_maps\DataCamp\courses\prepare_working_with_hugging_face.ps1`.
+- Replaced the case-colliding replacement hashtables with ordered replacement-entry arrays so PowerShell can safely keep both `SQL QUICK LOOKUP TEMPLATE` and `SQL Quick Lookup Template` variants.
+- Ran the script successfully against the default course root `D:\Workarea\StudyBook\study_maps\DataCamp\courses\working_with_hugging_face`.
+- The run renamed `study_pages\sql_quick_lookup.html` to `study_pages\hugging_face_quick_lookup.html`, updated quick-lookup text references, and renamed the empty `lab\sql` folder to `lab\python`.
 
 ## Files Modified
 
-- `D:\Workarea\StudyBook\study_maps\DataCamp\scaffold_developing_ai_applications.ps1`
-- generated scaffold outputs under:
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\skill_tracks\developing_ai_applications\`
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\working_with_the_openai_api\`
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\ai_ethics\`
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\prompt_engineering_with_the_openai_api\`
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\working_with_hugging_face\`
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\introduction_to_data_privacy\`
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\developing_ai_systems_with_the_openai_api\`
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\introduction_to_embeddings_with_the_openai_api\`
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\developing_llm_applications_with_langchain\`
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\projects\planning_a_trip_to_paris_with_the_openai_api\`
-  - `D:\Workarea\StudyBook\study_maps\DataCamp\projects\topic_analysis_of_clothing_reviews_with_embeddings\`
+- `D:\Workarea\StudyBook\study_maps\DataCamp\courses\prepare_working_with_hugging_face.ps1`
+- generated/normalized course files under:
+  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\working_with_hugging_face\index.html`
+  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\working_with_hugging_face\study_pages\chapter_01_getting_started_with_hugging_face_field_guide.html`
+  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\working_with_hugging_face\study_pages\chapter_02_building_pipelines_with_hugging_face_field_guide.html`
+  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\working_with_hugging_face\study_pages\field_guide.html`
+  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\working_with_hugging_face\study_pages\hugging_face_quick_lookup.html`
+  - `D:\Workarea\StudyBook\study_maps\DataCamp\courses\working_with_hugging_face\lab\python`
 - `D:\Workarea\StudyBook\agents\shared\open_loops.md`
 - `D:\Workarea\StudyBook\agents\shared\task_register.md`
 - `D:\Workarea\StudyBook\agents\shared\agent_status.md`
@@ -36,30 +31,27 @@
 ## Validation Commands
 
 - `.\env_setter.ps1 -NonInteractive`
-- `powershell -NoProfile -ExecutionPolicy Bypass -File .\scaffold_developing_ai_applications.ps1`
-- `powershell -NoProfile -ExecutionPolicy Bypass -File .\scaffold_developing_ai_applications.ps1 -Force`
-- spot checks with `Get-Content` on:
-  - `skill_tracks\developing_ai_applications\index.html`
-  - `courses\working_with_the_openai_api\README.md`
-  - `projects\planning_a_trip_to_paris_with_the_openai_api\README.md`
+- `powershell -NoProfile -ExecutionPolicy Bypass -File .\prepare_working_with_hugging_face.ps1`
+- `Select-String` verification sweeps for lingering `sql_quick_lookup.html`, `SQL Quick Lookup`, `lab\sql`, and `lab/sql` references under the target course folder
 
 ## Validation Outcomes
 
 - PASS: environment bootstrap completed successfully.
 - PASS: the original parser failure is gone.
-- PASS: the scaffold script executed successfully end to end.
-- PASS: the generated track page now uses ASCII separators (`|`) instead of mojibake output.
-- PASS: representative generated README and HTML files contain the expected scaffold content.
+- PASS: the prepare script executed successfully end to end.
+- PASS: `study_pages\hugging_face_quick_lookup.html` now exists and the old quick-lookup filename no longer remains.
+- PASS: `lab\python` exists and no lingering `lab\sql` path references were found in the target course tree.
 
 ## Assumptions
 
-- The user wanted the script fixed in place and then executed immediately using the current default track/package definitions already encoded in the script.
+- The user wanted the script fixed in place and then executed immediately using its default `CourseRoot`.
+- Renaming the empty course-local `lab\sql` folder to `lab\python` is intended behavior for this course normalization script.
 
 ## Risks
 
-- Low: the script fix is localized to string construction and generated text normalization.
-- Medium: running the scaffold with `-Force` intentionally rewrote the generated AI-track scaffold files; this is fine for fresh scaffold output but would overwrite later manual edits if rerun the same way.
+- Low: the code change is localized to replacement-entry handling and preserves existing replacement order.
+- Low: rerunning the script will continue to normalize the same course folder and may rewrite matching text references there by design.
 
 ## Next Step
 
-- The next useful pass is to wire the new `developing_ai_applications` track into the shared DataCamp root and library index pages once you want those navigation pages updated.
+- The Working with Hugging Face course shell is now ready for the next intake/content pass.

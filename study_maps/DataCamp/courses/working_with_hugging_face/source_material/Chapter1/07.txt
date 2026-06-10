@@ -1,0 +1,54 @@
+1. Hugging Face Datasets
+00:00 - 00:07
+Welcome back! Now that we've found and used models from the Hugging Face Hub, let's become acquainted with the datasets.
+
+2. Hugging Face Datasets
+00:07 - 00:15
+The Hugging Face Hub provides a collection of community-curated datasets across a variety of tasks and domains. Under the Datasets tab,
+
+1 https://huggingface.co/datasets
+3. Hugging Face Datasets
+00:15 - 00:24
+we can find the most suitable dataset for our purposes by applying filters, very similar to what we did with models. Let's see an example!
+
+1 https://huggingface.co/datasets
+4. Example: Italian Text Generation Datasets
+00:24 - 00:49
+We're looking for an Italian text dataset to fine-tune a text generation model to improve the quality of the Italian it generates. To find a suitable dataset, we first select the Text modality. Then, under tasks, we select Text Generation. Within these filtered datasets, we can perform keyword searches to narrow the results down further. This top one looks promising!
+
+5. Example: Italian Text Generation Datasets
+00:49 - 01:08
+Each dataset has a dataset card, which like model cards, contains key metadata like how it was compiled, the license it can be used under, the number of rows, and more. The dataset viewer allows us to preview the rows to get a feel for it, but for a more detailed look, we can use the Data Studio.
+
+6. Example: Italian Text Generation Datasets
+01:08 - 01:26
+Finally, we can manipulate the dataset using SQL queries. Here, we use a WHERE clause to filter the dataset and the LIKE keyword to find rows containing the word "bella", which is "beautiful" in Italian. Once we're happy with our dataset, we can move to Python to begin working with it.
+
+7. Installing Datasets Package
+01:26 - 01:42
+As with transformers, Hugging Face developed a Python package specifically for interacting with datasets, and it's called datasets! The datasets library allows us to access, download, use, and share datasets with minimal lines of code.
+
+1 https://huggingface.co/docs/datasets/loading
+8. Downloading a dataset
+01:42 - 02:06
+To download the dataset, we use the load_dataset() function and provide the dataset path. We can use additional parameters like split to specify partitions to download such as train, test, or validate, which are used for developing and evaluating ML models. Check the dataset card to see which partitions are available.
+
+1 https://huggingface.co/docs/datasets/v2.15.0/loading
+9. Apache Arrow dataset formats
+02:06 - 02:18
+Most datasets in Hugging Face use Apache Arrow, which is a data format that leverages columnar-based storage instead of more traditional row-based data storage for faster querying.
+
+1 https://arrow.apache.org/overview/
+10. Data manipulation
+02:18 - 02:37
+Manipulating arrow datasets is slightly different from other data structures, like pandas DataFrames. To filter, we use the .filter() method with a lambda function that applies the defined criteria to each row. For example, we're again checking if the string "bella" is in each row.
+
+1 https://huggingface.co/docs/datasets/process#select-and-filter
+11. Data manipulation
+02:37 - 03:01
+To select rows based on indices, use the .select() method. For instance, select(range(2)) retrieves the first two rows, leaving a dataset with two entries. To review a specific entry in the sliced dataset, pass the row index, in this case zero, and the column, in this case text.
+
+1 https://huggingface.co/docs/datasets/process#select-and-filter
+12. Let's practice!
+03:01 - 03:06
+We've covered a lot about datasets - now it's time to put this into practice!

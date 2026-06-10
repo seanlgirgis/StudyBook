@@ -1,0 +1,43 @@
+1. Auto Models and Tokenizers
+00:00 - 00:01
+Welcome back!
+
+2. Pipelines: fast and simple
+00:01 - 00:13
+Pipelines are a fantastic way to quickly perform tasks like text classification or summarization, as we explored previously. But what if you need more control?
+
+3. Auto Classes: flexible and powerful
+00:13 - 00:35
+Auto classes are a flexible way to load models, tokenizers, and other components without manual setup. They offer more control compared to pipelines, making them ideal for advanced tasks. While pipelines are great for quick experimentation, Auto classes let us customize every step.
+
+4. AutoModels
+00:35 - 01:04
+Now that we’ve introduced Auto classes, let’s see how they simplify working with models. To directly download a model, we import the relevant AutoModel class for your task. For example, in text classification (also known as Sequence Classification), we use AutoModelForSequenceClassification. To load the model, use the .from_pretrained() method and specify the model name.
+
+5. AutoTokenizers
+01:04 - 01:40
+To prepare text input for use in a model, we use tokenizers. It’s recommended to use the tokenizer paired with the model to ensure the input is processed exactly how it was during training. With pipelines, this tokenizer and model pairing happens automatically. However, with Auto classes, you handle this step yourself. To retrieve the tokenizer for our model, first import AutoTokenizer from transformers. Then, call the .from_pretrained() method and pass in the model name.
+
+6. Tokenizing text with AutoTokenizer
+01:40 - 02:11
+Tokenizers work by first cleaning the input, such as lowercasing words or removing accents, and then dividing the text into smaller chunks called tokens. In this example, we load the tokenizer paired with our model using .from_pretrained(). Then, we call the .tokenize() method to split the sentence into tokens. The output shows how the text is processed and broken into smaller parts that the model can understand.
+
+7. Different models, different tokenizers
+02:11 - 02:25
+Different models may handle tokenization differently. While our example tokenizer processes text in a specific way, other models may produce different outputs for the same input.
+
+8. Building a Pipeline with Auto Classes
+02:25 - 02:45
+Now let’s create a custom pipeline. We start by importing the necessary modules, downloading a model and tokenizer, and combining them into a pipeline. By specifying the task, model, and tokenizer, we gain full control over the process for sentiment analysis.
+
+9. Use Cases for AutoModels and AutoTokenizers
+02:45 - 03:25
+In a nutshell, we use AutoModels and AutoTokenizers instead of simple pipelines when tasks demand more control and customization. For example, advanced text preprocessing and tokenization enable cleaning tailored to specific use cases. In classification tasks, custom thresholding allows setting weights and thresholds to prioritize categories, like assigning 'Support' more often in a customer support model. Lastly, for complex text analysis workflows involving multiple processing stages, they provide precise control to customize and integrate each step effectively.
+
+10. Let's practice!
+03:25 - 03:31
+We’ve unlocked the power of AutoModels—now, let’s dive into practice!
+
+
+
+Got it!

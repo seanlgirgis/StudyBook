@@ -1,0 +1,51 @@
+1. Text classification
+00:00 - 00:07
+Welcome back! Let’s dive into a specific task in machine learning: text classification.
+
+2. Text classification: Sentiment analysis
+00:07 - 00:42
+Text classification involves assigning predefined categories to text. A common example is sentiment analysis, where text is labeled based on its emotional tone. For instance, the sentence I love pineapple on pizza is labeled as Positive, while I dislike pineapple on pizza is labeled as Negative. This simple yet powerful technique helps uncover opinions, emotions, and attitudes from text in applications like reviews or social media analysis.
+
+3. Sentiment analysis: coding example
+00:42 - 01:05
+Recall that a sentiment analysis pipeline can be created by specifying the text-classification task and a model pre-trained for this task. Let's call the pipeline on an example sentence, and display the results. The model correctly labels the sentiment as Negative, assigning it a high confidence score.
+
+4. Text classification: Grammatical correctness
+01:05 - 01:31
+The next type of text classification is grammatical correctness, which checks text for proper grammar and labels text as Acceptable or Unacceptable. For instance, "This course is great!" is labeled Acceptable, while "Course is gravy" is labeled Unacceptable. This task is useful for grammar checkers and language learning tools.
+
+5. Grammatical correctness: coding example
+01:31 - 01:48
+To assess grammatical correctness, we use a model trained for this specific task. For instance, the sentence "He eat pizza every day" is labeled LABEL_0, meaning incorrect grammar, with a confidence score of 0.99.
+
+6. Text classification: QNLI
+01:48 - 02:18
+Another type of text classification is Question Natural Language Inference (QNLI), which checks if a premise answers a question. For example, the question What state is Hollywood in? paired with Hollywood is in California is labeled as Entailment (True), while Hollywood is known for its movies is labeled as Not Entailment (False). This task is especially useful in question-answering systems and fact-checking applications.
+
+7. QNLI: coding example
+02:18 - 02:45
+For QNLI tasks, we use a model trained to evaluate question-premise pairs. When calling this classifier, we must pass both the question and the premise separated by a comma. In this example, about where Seattle is located, the premise provides enough information to answer the question. The model labels it as LABEL_0 (Entailment), with a high confidence score.
+
+8. Text classification: Dynamic category assignment
+02:45 - 03:13
+The next type of text classification is dynamic category assignment, which assigns predefined categories to text based on its content. For example, classifying the request I want to know more about your pricing plans into categories like Sales, Marketing, or Support. The model assigns a confidence score to each category, with Sales receiving the highest score in this case. This task is widely used in content moderation and recommendation systems.
+
+9. Dynamic category assignment: coding example
+03:13 - 03:56
+To perform dynamic category assignment, we use a task called zero-shot classification. This allows the model to assign predefined categories to text, even if it hasn't been trained specifically for those categories. In this example, we classify the text: Hey, DataCamp; we would like to feature your courses in our newsletter! into the categories: Marketing, Sales, and Support. To retrieve the category with the highest confidence score, we access the top label and score using index 0. Interestingly, the model chose support over marketing, but remember, it hasn't been trained specifically for these labels.
+
+10. Challenges of text classification
+03:56 - 04:01
+Text classification faces challenges like ambiguity, where text has multiple meanings;
+
+11. Challenges of text classification
+04:01 - 04:05
+sarcasm or irony, which are difficult to detect;
+
+12. Challenges of text classification
+04:05 - 04:18
+and multilingual complexities, requiring tailored processing for diverse linguistic structures. Addressing these issues demands advanced preprocessing and more robust models.
+
+13. Let's practice!
+04:18 - 04:21
+Time to practice!

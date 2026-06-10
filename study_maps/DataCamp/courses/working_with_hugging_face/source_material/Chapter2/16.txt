@@ -1,0 +1,31 @@
+1. Congratulations!
+00:00 - 00:11
+Amazing work! You’ve completed the Hugging Face course and taken a big step in your AI journey. Let's take a moment to celebrate everything you've learned.
+
+2. Chapter 1
+00:11 - 00:20
+In Chapter 1, you explored the Hugging Face Hub, a central platform for discovering and sharing AI models and datasets.
+
+3. Chapter 2
+00:20 - 00:27
+In Chapter 2, you took your skills to the next level by building Hugging Face pipelines.
+
+4. Text classification
+00:27 - 00:45
+You explored text classification, enabling sentiment analysis, grammar checks, and dynamic category assignment. By specifying task="text-classification" in a pipeline, models provide clear outputs like labels or categories with confidence scores.
+
+5. Text summarization
+00:45 - 01:11
+Text summarization reduces lengthy content into concise summaries, making it easier to digest and act upon. It is ideal for summarizing news articles, legal documents, or financial reports. To implement this, specify the summarization task in the pipeline function. You also used parameters to control the output length, tailoring it to your needs.
+
+6. Document Q&A
+01:11 - 01:41
+The final task we explored was Document Q&A, enabling accurate answer extraction from PDF files using the .pages and .extract_text() methods from the pypdf library. This approach is ideal for analyzing long documents. To implement this, specify the question-answering task in the pipeline function and retrieve answers from lengthy documents within seconds.
+
+7. Auto Models and Tokenizers
+01:41 - 01:54
+We also covered AutoModels and Tokenizers, essential for tasks requiring extra customization, offering precise control over inputs, outputs, and advanced workflows.
+
+8. Congratulations and Thank You!
+01:54 - 02:04
+Thank you for being part of this journey! You’ve gained valuable skills, and this is just the beginning of your Hugging Face adventure!

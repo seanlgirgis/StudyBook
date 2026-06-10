@@ -1,0 +1,64 @@
+1. Introduction to Hugging Face
+00:00 - 00:07
+Hi, and welcome to this course on Hugging Face! My name is Jacob H Marquez, and I'll be your instructor.
+
+2. The home of the AI community...
+00:07 - 00:14
+Hugging Face is a platform where the AI community can access, collaborate, and stay informed on the latest
+
+3. The home of the AI community...
+00:14 - 00:15
+open-source models,
+
+4. The home of the AI community...
+00:15 - 00:16
+datasets, and
+
+5. The home of the AI community...
+00:16 - 00:21
+applications. And you don't need to be a Machine Learning Engineer to use Hugging Face;
+
+6. The Hugging Face Hub
+00:21 - 00:35
+the Hugging Face Hub is a centralized place where you can find the best models for your project, download datasets to train or fine-tune your own models, and build applications - all in the browser!
+
+1 https://huggingface.co/docs/hub/index
+7. Hugging Face Libraries
+00:35 - 00:50
+If you do want to use Hugging Face in Python, they provide libraries with extensive documentation for everything, from exploring the Hugging Face Hub, all the way to training models and deploying applications. We'll use some of these libraries in this course.
+
+8. Community and open-source heroes
+00:50 - 01:28
+All of this is made possible due to the thriving community around Hugging Face, where people openly share and contribute their models, datasets, applications, and integrations. This isn't "just" a community of individuals either. Many of the biggest organizations building AI right now, like Google, Meta, and DeepSeek are openly sharing their latest models and research developments on Hugging Face. If there's a dataset you've compiled, a model you've fine-tuned, or an application you've built, consider open-sourcing it and sharing it on Hugging Face so the whole community can benefit.
+
+9. Coming up...
+01:28 - 01:37
+In this two-hour course, you'll learn to navigate the Hugging Face Hub to explore and use models and datasets, doing this both in the Hub
+
+10. Coming up...
+01:37 - 01:40
+and with Hugging Face's Python libraries.
+
+11. Coming up...
+01:40 - 01:48
+We'll use these to perform common natural language tasks like summarization, classification, and document question-answering.
+
+12. The journey beyond!
+01:48 - 02:08
+Note that this course is the first in a series of courses that go-on to cover Hugging Face for LLMs, including prompting and fine-tuning, other modalities, such as images, audio, and videos, and efficient model training, so stay tuned! Let's dive into the Hub by exploring an example!
+
+13. Example: Finding the right model
+02:08 - 02:30
+Imagine we're looking for a text generation model, which we plan to fine-tune to our company's proprietary data to create our own internal chatbot. We would navigate to the model section of the Hub and select the Text Generation task filter. From here, we can browse the latest, most downloaded, or trending models that support this task.
+
+14. Example: Finding the right model
+02:30 - 03:21
+Within each model, there is a model card, which provides handy information that can help us decide which model to choose. Each card has the model name, and the user or company that uploaded it to the Hub. It has the tasks that its able to perform, and the different modalities it can work with. There's also useful information on the languages the model is trained to work with and licensing information. Elsewhere, it commonly includes the model's intended use and limitations, its training parameters, the datasets used for training, and its evaluation results. We can use these evaluation results to compare it to other models as we explore the Hub. We may also find research papers attached to the model card if we want to read more about the training process.
+
+15. Example: Finding the right model
+03:21 - 04:05
+Once we've found a suitable model, we can begin testing it. We can click this button, which gives us a few choices on how to run it. The transformers Python library from Hugging Face provides code for loading these models for inference or training. Inference here simply means prediction. For text generation models, this is the prediction of the words following an input prompt. There's also the option to create notebooks with this transformers code pre-populated. Finally, there's an option to load and serve this model with vLLM. vLLM is a popular choice for application developers looking to serve AI models in a fast and memory-efficient way.
+
+16. Let's practice!
+04:05 - 04:17
+In the next video, we'll talk more about how to actually run these models using either local hardware or Hugging Face's inference providers. See you then!

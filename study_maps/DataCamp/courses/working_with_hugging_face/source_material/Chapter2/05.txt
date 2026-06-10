@@ -1,0 +1,35 @@
+1. Text summarization
+00:00 - 00:06
+Welcome back. Let's move on to another natural language task - summarization!
+
+2. What is summarization?
+00:06 - 00:15
+Summarization is the process of reducing a large piece of text, such as this one, into a smaller one while retaining key information.
+
+3. Extractive vs. Abstractive
+00:15 - 00:43
+Summarization can either be extractive, where key sentences from the input text are selected to form a summary. This method is efficient and requires fewer resources but often lacks flexibility and may result in less cohesive, easy-to-read summaries. On the other hand, abstractive summarization generates new text that captures the main ideas while rephrasing for clarity and readability. Though more flexible, it demands more computational resources and processing.
+
+4. Use cases of extractive summarization
+00:43 - 00:58
+Extractive summarization is ideal for tasks like Legal Document Analysis, where key clauses are highlighted, and Financial Research, where main insights are extracted—both requiring accuracy and ensuring no new content is fabricated.
+
+5. Use cases of abstractive summarization
+00:58 - 01:14
+Abstractive summarization is ideal for tasks like News Article Summaries, crafting concise and readable overviews, and Content Recommendations, generating compelling descriptions—both focused on delivering clear, engaging, and impactful summaries.
+
+6. Extractive summarization in action
+01:14 - 01:42
+To perform extractive summarization, we create a pipeline by specifying the task as 'summarization' and selecting an appropriate model designed for extractive methods. Next, we pass in a large piece of text, such as this one on Data Science, into the pipeline. The output is a dictionary containing the summarized text. In this case, the model selects key sentences from the input, producing a concise and fact-based summary while preserving the original phrasing.
+
+7. Abstractive summarization in action
+01:42 - 02:11
+The key difference in implementing abstractive summarization lies in the chosen model. Here, we use the distilbart model, designed specifically for generating abstractive summaries. We pass the same input text into the pipeline. This time, instead of extracting sentences, the model generates a more natural, concise, and readable summary. However, unlike extractive summarization, it may introduce fabrications or information not present in the original text.
+
+8. Parameters for summarization
+02:11 - 02:44
+In summarization pipelines, parameters like min_new_tokens and max_new_tokens control the length of the generated summary in tokens. Tokens are smaller units of text, such as words or characters, that language models process to generate results. These parameters ensure the summary is concise, meaningful, and not overly verbose.
+
+9. Let's practice!
+02:44 - 02:51
+Now that you've explored the key concepts of summarization, it’s time to put these skills into practice!
