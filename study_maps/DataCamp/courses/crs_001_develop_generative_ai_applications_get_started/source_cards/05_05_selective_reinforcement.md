@@ -1,0 +1,83 @@
+- `prompt.invoke(...)` means what? >>A)
+    - Run the prompt component: fill variables and build a prompt value
+    - Always call the LLM
+    - Always parse JSON
+    - Always save history
+- `model.invoke(...)` means what? >>A)
+    - Send input to the model and generate a response
+    - Fill prompt variables only
+    - Build a Pydantic model
+    - Create a parallel runnable
+- `chain.invoke(...)` means what? >>A)
+    - Run every component connected in the chain
+    - Fill only the template
+    - Call only the parser
+    - Save a file without running the model
+- Complete the memory rule: `prompt.invoke()`→{{prepare}}
+- Complete the memory rule: `model.invoke()`→{{generate}}
+- Complete the memory rule: `chain.invoke()`→{{run everything}}
+- What is self-consistency in layman terms? >>A)
+    - Ask several times and choose the answer with the strongest agreement
+    - Ask once and trust the first answer
+    - Always choose the longest answer
+    - Run unrelated tasks in parallel
+- What is the trade-off of self-consistency? >>A)
+    - Better potential reliability but more cost and latency
+    - Guaranteed lower cost
+    - No model calls
+    - Automatic provider switching
+- Translate, then summarize the translation: sequence or parallel? >>A)
+    - Sequence
+    - Parallel
+    - Neither
+    - Structured output
+- Summarize and independently extract keywords: sequence or parallel? >>A)
+    - Parallel
+    - Sequence
+    - Few-shot
+    - Self-consistency
+- `PromptTemplate` produces what? >>A)
+    - Formatted text
+    - Structured role-based messages
+    - A final model answer
+    - A Pydantic object
+- `ChatPromptTemplate` produces what? >>A)
+    - Structured role-based messages
+    - One plain string only
+    - A model answer automatically
+    - A JSON file
+- Is automatic coercion the same as explicitly writing `RunnableLambda(...)`? >>A)
+    - No; coercion is LangChain doing the wrapping automatically
+    - Yes; they are literally identical source code
+    - No; `RunnableLambda` is a provider
+    - Yes; both always run in parallel
+- `JsonOutputParser` returned which type? >>A)
+    - `dict`
+    - `TopicSummary`
+    - `AIMessage`
+    - `PromptTemplate`
+- `with_structured_output(TopicSummary)` returned which type? >>A)
+    - `TopicSummary`
+    - `dict`
+    - `str`
+    - `HumanMessage`
+- Why did Watsonx initially explain liquid cooling? >>A)
+    - `LCEL` was ambiguous without enough LangChain context
+    - The API key was invalid
+    - The parser changed the topic
+    - RunnableParallel mixed outputs
+- What fixed the acronym confusion? >>A)
+    - Clear LangChain context and the full phrase `LangChain Expression Language`
+    - Higher temperature
+    - Removing the prompt
+    - Switching to JSON
+- What does provider-neutral plumbing not guarantee? >>A)
+    - Identical answers or interpretation from every model
+    - A reusable chain shape
+    - Shared parser interfaces
+    - Similar invocation patterns
+- Why keep the `RunnableWithMessageHistory` example even though it is deprecated? >>A)
+    - As optional legacy enrichment showing the progression before LangGraph persistence
+    - Because it is the required production pattern
+    - Because the course depends on it
+    - Because all deprecations should be ignored

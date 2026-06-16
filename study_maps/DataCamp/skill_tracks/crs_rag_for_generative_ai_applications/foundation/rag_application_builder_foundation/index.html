@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAG Application Builder Foundation</title>
+  <style>
+    :root {
+      --bg:#0d1117; --panel:#161b22; --panel2:#1c232d; --border:#30363d;
+      --text:#e6edf3; --muted:#9da7b3; --green:#03ef62; --blue:#58a6ff;
+      --amber:#d29922; --shadow:0 12px 30px rgba(0,0,0,.24);
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; font-family:"Segoe UI",Arial,sans-serif; color:var(--text);
+      background:radial-gradient(circle at top left,rgba(3,239,98,.08),transparent 30rem),var(--bg);
+      line-height:1.6;
+    }
+    .page { width:min(1180px,calc(100% - 32px)); margin:auto; padding:24px 0 52px; }
+    .breadcrumbs { color:var(--muted); margin-bottom:16px; font-size:.9rem; }
+    .breadcrumbs a { color:var(--muted); text-decoration:none; }
+    .hero {
+      position:relative; overflow:hidden; padding:34px; border-radius:18px;
+      border:1px solid #28506a; background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);
+      box-shadow:var(--shadow);
+    }
+    .hero:before { content:""; position:absolute; inset:0 0 auto; height:5px;
+      background:linear-gradient(90deg,var(--green),var(--blue),#bc8cff); }
+    h1 { margin:0; font-size:clamp(2rem,4vw,3.2rem); line-height:1.08; }
+    .hero p { color:#c8d4df; max-width:900px; }
+    .status,.grid { display:grid; gap:14px; }
+    .status { grid-template-columns:repeat(4,minmax(0,1fr)); margin-top:20px; }
+    .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .card,.section { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:20px; }
+    .section { margin-top:22px; box-shadow:var(--shadow); }
+    .card strong,.card h3 { color:var(--green); }
+    .card p { color:var(--muted); }
+    a { color:var(--blue); }
+    code { font-family:Consolas,"Courier New",monospace; }
+    pre { overflow:auto; background:#0f141a; border:1px solid #33404d; border-radius:10px; padding:15px; }
+    @media(max-width:800px){ .status,.grid{grid-template-columns:1fr;} .hero{padding:26px 20px;} }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="breadcrumbs">
+      <a href="../../index.html">RAG for Generative AI Applications</a>
+      <span> › </span>
+      <span>RAG Application Builder Foundation</span>
+    </div>
+
+    <header class="hero">
+      <p><strong>LOCAL PREPARATION LAYER</strong></p>
+      <h1>RAG Application Builder Foundation</h1>
+      <p>
+        A tiny-Lego learning system that turns prior DataCamp work into practical
+        AI-application skills and prepares the four official IBM Coursera courses.
+      </p>
+      <div class="status">
+        <div class="card"><strong>SCAFFOLDED</strong><p>Foundation package</p></div>
+        <div class="card"><strong>NOT STARTED</strong><p>Local pre-labs</p></div>
+        <div class="card"><strong>DEVELOPING</strong><p>Course reconnaissance</p></div>
+        <div class="card"><strong>CREATED</strong><p>watsonx.ai account</p></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Start Here</h2>
+      <ol>
+        <li><a href="ROADMAP.md">Open the roadmap</a></li>
+        <li><a href="docs/DATACAMP_REUSE_MAP.md">Map prior DataCamp work</a></li>
+        <li><a href="source_material/coursera/COURSE_RECONNAISSANCE.md">Capture IBM course scope</a></li>
+        <li><a href="lab/00_how_to_run.md">Prepare the local lab</a></li>
+        <li><a href="lab/lab_run_book.md">Record validated work</a></li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>Learning Stages</h2>
+      <div class="grid">
+        <div class="card"><h3>1–2. Application and Prompting</h3><p>Requests, messages, contracts, structured output, validation, retries.</p></div>
+        <div class="card"><h3>3–4. Documents and Embeddings</h3><p>Extraction, cleaning, chunking, metadata, vectors, similarity.</p></div>
+        <div class="card"><h3>5–7. Retrieval and RAG</h3><p>Search, context assembly, grounded generation, sources, complete pipeline.</p></div>
+        <div class="card"><h3>8–9. Evaluation and watsonx.ai</h3><p>Quality, observability, cost, latency, and selected IBM comparisons.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Foundation Rule</h2>
+      <pre><code>Build visibly → run → inspect → explain → add one Lego block</code></pre>
+      <p>This foundation is not a fifth Coursera course. It is the preparation and understanding layer for the official four-course specialization.</p>
+    </section>
+  </main>
+</body>
+</html>

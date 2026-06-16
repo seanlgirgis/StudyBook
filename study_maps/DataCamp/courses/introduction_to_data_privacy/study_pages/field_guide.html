@@ -11,7 +11,7 @@ Purpose:
 - Lab evidence summary
 
 Instructions:
-1. Replace every {{PLACEHOLDER}}.
+1. Replace every template marker.
 2. Add or remove chapter cards to match the course.
 3. Keep this filename when used as the active course guide:
    field_guide.html
@@ -21,7 +21,7 @@ Instructions:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{COURSE_TITLE}} — Field Guide</title>
+  <title>Introduction to Data Privacy — Field Guide</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -408,33 +408,33 @@ Instructions:
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Introduction to Data Privacy</a>
       <span>›</span>
       <span>Main Field Guide</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{PLATFORM_LABEL}} · {{COURSE_TITLE}}</p>
-      <h1>{{COURSE_TITLE}} Field Guide</h1>
+      <p class="eyebrow">DataCamp · Introduction to Data Privacy</p>
+      <h1>Introduction to Data Privacy Field Guide</h1>
       <p>
-        {{COURSE_SUMMARY_HTML}}
+        A three-chapter memory map covering privacy foundations, Privacy by Design, data classification and de-identification, privacy laws and enforcement, vendor and data-broker risk, emerging technologies, and shifting privacy left.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{FIELD_GUIDE_MARKDOWN_FILE}}">Markdown Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Quick Lookup</a>
-        <a class="button secondary" href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a class="button secondary" href="field_guide.md">Markdown Guide</a>
+        <a class="button secondary" href="sql_quick_lookup.html">SQL Quick Lookup</a>
+        <a class="button secondary" href="../lab/lab_run_book.md">Lab Run Book</a>
       </div>
 
       <div class="status-grid">
-        <div class="status-card"><strong>{{PLATFORM_STATUS}}</strong><span>Platform status</span></div>
-        <div class="status-card"><strong>{{DOCUMENTATION_STATUS}}</strong><span>Documentation</span></div>
-        <div class="status-card"><strong>{{LAB_STATUS}}</strong><span>Lab coverage</span></div>
-        <div class="status-card"><strong>{{RECALL_STATUS}}</strong><span>Recall confidence</span></div>
-        <div class="status-card"><strong>{{INTERVIEW_STATUS}}</strong><span>Interview readiness</span></div>
+        <div class="status-card"><strong>COMPLETE</strong><span>Platform status</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Documentation</span></div>
+        <div class="status-card"><strong>NOT REQUIRED</strong><span>Lab coverage</span></div>
+        <div class="status-card"><strong>DEVELOPING</strong><span>Recall confidence</span></div>
+        <div class="status-card"><strong>NEEDS REPETITION</strong><span>Interview readiness</span></div>
       </div>
     </header>
 
@@ -458,35 +458,38 @@ Instructions:
 
           <div class="chapter-grid">
             <article class="chapter-card">
-              <h3><a href="{{CHAPTER_01_FILE}}">{{CHAPTER_01_TITLE}}</a></h3>
-              <p>{{CHAPTER_01_SUMMARY}}</p>
+              <h3><a href="chapter_01_privacy_foundations_field_guide.html">Chapter 1 — Privacy Foundations</a></h3>
+              <p>Privacy, personal data, PREACH, CIA, security models, responsibilities, incidents, and the overlap between privacy and security.</p>
             </article>
 
             <article class="chapter-card">
-              <h3><a href="{{CHAPTER_02_FILE}}">{{CHAPTER_02_TITLE}}</a></h3>
-              <p>{{CHAPTER_02_SUMMARY}}</p>
+              <h3><a href="chapter_02_privacy_by_design_field_guide.html">Chapter 2 — Privacy by Design</a></h3>
+              <p>Seven Privacy by Design principles, classification and risk, de-identification, lifecycle management, retention, and deletion.</p>
             </article>
 
             <article class="chapter-card">
-              <h3><a href="{{CHAPTER_03_FILE}}">{{CHAPTER_03_TITLE}}</a></h3>
-              <p>{{CHAPTER_03_SUMMARY}}</p>
-            </article>
-
-            <article class="chapter-card">
-              <h3><a href="{{CHAPTER_04_FILE}}">{{CHAPTER_04_TITLE}}</a></h3>
-              <p>{{CHAPTER_04_SUMMARY}}</p>
+              <h3><a href="chapter_03_living_on_the_edge_field_guide.html">Chapter 3 — Living on the Edge</a></h3>
+              <p>Business motives, data brokers, privacy laws, jAsper, cross-border risk, vendors, emerging technology, and shifting left.</p>
             </article>
           </div>
         </section>
 
         <section class="section" id="big-picture">
           <h2>2. Course Big Picture</h2>
-          <p>{{COURSE_BIG_PICTURE}}</p>
+          <p>Privacy governs whether personal data is collected, used, shared, retained, and deleted appropriately. Security protects that data. Privacy by Design embeds those expectations into products and processes early, while classification, risk analysis, de-identification, lifecycle controls, laws, and accountability make the program operational.</p>
 
-          <div class="diagram">{{COURSE_BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">PERSONAL DATA
+  -> purpose and minimization
+  -> classification and risk
+  -> access, security, and de-identification
+  -> use and sharing
+  -> retention and deletion
+  -> rights, laws, evidence, and accountability
+
+Build privacy in early; prove it with operational evidence.</div>
 
           <div class="callout green">
-            <strong>Course punchline:</strong> {{COURSE_PUNCHLINE}}
+            <strong>Course punchline:</strong> Strong security is necessary but not sufficient: privacy also requires justified purpose, transparency, user control, limited use, proportionate retention, and accountability.
           </div>
         </section>
 
@@ -495,33 +498,33 @@ Instructions:
 
           <div class="cheat-grid">
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_1_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_1_SUMMARY}}</p>
+              <h3>Privacy vs. Security</h3>
+              <p>Security protects data; privacy governs whether its handling is appropriate. A control may support both when it protects personal data.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_2_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_2_SUMMARY}}</p>
+              <h3>PREACH</h3>
+              <p>Purpose, Right to Request, Easy to understand, Alerting, Consent, and How the data is used or shared.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_3_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_3_SUMMARY}}</p>
+              <h3>CIA Triad</h3>
+              <p>Confidentiality controls access, integrity preserves trustworthiness, and availability keeps systems and data reachable.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_4_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_4_SUMMARY}}</p>
+              <h3>Privacy by Design</h3>
+              <p>Be proactive, private by default, embedded, fully functional, secure end to end, transparent, and respectful of users.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_5_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_5_SUMMARY}}</p>
+              <h3>Classification and Risk</h3>
+              <p>Classify sensitivity, then assess likelihood and impact. Labels matter only when handling controls follow them.</p>
             </article>
 
             <article class="cheat-card">
-              <h3>{{CORE_CONCEPT_6_TITLE}}</h3>
-              <p>{{CORE_CONCEPT_6_SUMMARY}}</p>
+              <h3>Law and Accountability</h3>
+              <p>Use jAsper to understand laws and retain evidence that the privacy program actually operates.</p>
             </article>
           </div>
         </section>
@@ -529,17 +532,27 @@ Instructions:
         <section class="section" id="patterns">
           <h2>4. Core Syntax and Patterns</h2>
 
-          <h3>{{PATTERN_1_TITLE}}</h3>
-          <pre><code>{{PATTERN_1_CODE}}</code></pre>
-          <p>{{PATTERN_1_EXPLANATION}}</p>
+          <h3>Privacy review pattern</h3>
+          <pre><code>Purpose -> Minimize -> Classify -> Assess risk -> Limit access -> De-identify -> Protect -> Retain -> Delete</code></pre>
+          <p>Use this sequence before launch and throughout the data lifecycle.</p>
 
-          <h3>{{PATTERN_2_TITLE}}</h3>
-          <pre><code>{{PATTERN_2_CODE}}</code></pre>
-          <p>{{PATTERN_2_EXPLANATION}}</p>
+          <h3>jAsper law analysis</h3>
+          <pre><code>J Jurisdiction
+A Author and Aim
+S Scope
+P Penalty
+E Enforcement
+R Requirements</code></pre>
+          <p>This separates where a law reaches, what it covers, who enforces it, and what organizations must do.</p>
 
-          <h3>{{PATTERN_3_TITLE}}</h3>
-          <pre><code>{{PATTERN_3_CODE}}</code></pre>
-          <p>{{PATTERN_3_EXPLANATION}}</p>
+          <h3>Lifecycle control map</h3>
+          <pre><code>Collect: notice + minimization
+Store: encryption + access
+Use: purpose limitation
+Share: authorization + secure transfer
+Archive: retention + restricted access
+Delete: verified disposal</code></pre>
+          <p>Different lifecycle stages require different controls.</p>
         </section>
 
         <section class="section" id="comparisons">
@@ -547,39 +560,39 @@ Instructions:
 
           <div class="compare-grid">
             <article class="compare-card">
-              <h3>{{COMPARE_LEFT_TITLE}}</h3>
-              <p>{{COMPARE_LEFT_SUMMARY}}</p>
+              <h3>Pseudonymization</h3>
+              <p>Identifiers are replaced with codes, but a separate key can reconnect the records. The data remains personal data.</p>
             </article>
 
             <article class="compare-card">
-              <h3>{{COMPARE_RIGHT_TITLE}}</h3>
-              <p>{{COMPARE_RIGHT_SUMMARY}}</p>
+              <h3>Anonymization</h3>
+              <p>The goal is to make reasonable re-identification no longer possible. Removing names alone is not enough.</p>
             </article>
           </div>
 
           <table>
             <thead>
               <tr>
-                <th>{{DECISION_HEADER_1}}</th>
-                <th>{{DECISION_HEADER_2}}</th>
-                <th>{{DECISION_HEADER_3}}</th>
+                <th>Question</th>
+                <th>Use this idea</th>
+                <th>Main trap</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{DECISION_ROW_1_COL_1}}</td>
-                <td>{{DECISION_ROW_1_COL_2}}</td>
-                <td>{{DECISION_ROW_1_COL_3}}</td>
+                <td>Who can see or change the data?</td>
+                <td>Security / CIA / least privilege</td>
+                <td>Authorized access can still be misused for an unauthorized purpose.</td>
               </tr>
               <tr>
-                <td>{{DECISION_ROW_2_COL_1}}</td>
-                <td>{{DECISION_ROW_2_COL_2}}</td>
-                <td>{{DECISION_ROW_2_COL_3}}</td>
+                <td>Should we collect, use, or retain it?</td>
+                <td>Privacy / minimization / purpose limitation</td>
+                <td>Secure storage does not justify unnecessary collection or indefinite retention.</td>
               </tr>
               <tr>
-                <td>{{DECISION_ROW_3_COL_1}}</td>
-                <td>{{DECISION_ROW_3_COL_2}}</td>
-                <td>{{DECISION_ROW_3_COL_3}}</td>
+                <td>Which law applies and what must we do?</td>
+                <td>jAsper</td>
+                <td>Do not confuse scope with jurisdiction or enforcement with penalty.</td>
               </tr>
             </tbody>
           </table>
@@ -590,23 +603,23 @@ Instructions:
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Security equals privacy</strong>
+              Securely misusing data is still a privacy failure.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>Removing names makes data anonymous</strong>
+              Indirect identifiers and unique combinations can still enable re-identification.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>A policy proves compliance</strong>
+              Policies need operational evidence: inventories, reviews, logs, training, vendor assessments, and audits.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_4_TITLE}}</strong>
-              {{MISTAKE_4_CORRECTION}}
+              <strong>New technology removes old obligations</strong>
+              Cloud and blockchain introduce new risks; they do not remove privacy rights, retention duties, or accountability.
             </article>
           </div>
         </section>
@@ -616,23 +629,23 @@ Instructions:
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>How do privacy and security differ?</strong>
+              Security protects data and systems from unauthorized actions. Privacy governs whether personal data is collected and processed for a valid purpose with transparency, authorization, limited use, and user control.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>What is Privacy by Design?</strong>
+              It means embedding privacy into requirements, defaults, architecture, interfaces, lifecycle controls, and monitoring from the beginning rather than adding it near release.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>How do you assess data risk?</strong>
+              Classify the data, evaluate likelihood and impact, then reduce risk through minimization, access control, encryption, de-identification, monitoring, retention limits, and secure deletion.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_4}}</strong>
-              {{INTERVIEW_ANSWER_4}}
+              <strong>What does shift left mean for privacy?</strong>
+              Ask privacy questions before the design becomes difficult to change, especially for technologies such as blockchain where deletion or correction may be hard.
             </article>
           </div>
         </section>
@@ -649,53 +662,53 @@ Instructions:
             </thead>
             <tbody>
               <tr>
-                <td>{{LAB_AREA_1}}</td>
-                <td>{{LAB_RESULT_1}}</td>
+                <td>Scenario classification</td>
+                <td>Completed repeated practice distinguishing privacy, security, and both.</td>
               </tr>
               <tr>
-                <td>{{LAB_AREA_2}}</td>
-                <td>{{LAB_RESULT_2}}</td>
+                <td>Privacy by Design</td>
+                <td>Applied principles to defaults, notices, access, classification, de-identification, retention, and deletion.</td>
               </tr>
               <tr>
-                <td>{{LAB_AREA_3}}</td>
-                <td>{{LAB_RESULT_3}}</td>
+                <td>Privacy law reasoning</td>
+                <td>Practiced jAsper distinctions, including jurisdiction vs. scope and enforcement vs. penalty.</td>
               </tr>
               <tr>
-                <td>{{LAB_AREA_4}}</td>
-                <td>{{LAB_RESULT_4}}</td>
+                <td>Emerging technology</td>
+                <td>Explained blockchain immutability risk and the need to shift privacy left.</td>
               </tr>
             </tbody>
           </table>
 
           <div class="callout green">
-            {{LAB_SUMMARY}}
+            This conceptual course did not require a runnable code lab. Scenario-based practice supplied the learning evidence.
           </div>
         </section>
 
         <section class="section" id="memory">
           <h2>9. Quick Memory Nuggets</h2>
 
-          <pre><code>{{MEMORY_BLOCK_1}}</code></pre>
+          <pre><code>Security protects. Privacy governs. Ethics asks what is fair. Accountability proves the program works.</code></pre>
 
-          <pre><code>{{MEMORY_BLOCK_2}}</code></pre>
+          <pre><code>Classify -> assess risk -> minimize -> limit access -> de-identify -> protect -> retain only as needed -> delete.</code></pre>
 
-          <pre><code>{{MEMORY_BLOCK_3}}</code></pre>
+          <pre><code>jAsper: Jurisdiction, Author/Aim, Scope, Penalty, Enforcement, Requirements.</code></pre>
 
           <div class="callout amber">
-            <strong>Final review:</strong> {{FINAL_REVIEW_NOTE}}
+            <strong>Final review:</strong> Review the chapter pages once more, then explain the course aloud without notes. Focus on the distinctions that caused confusion during practice.
           </div>
         </section>
       </div>      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} · Main Field Guide</span>
+      <span>Introduction to Data Privacy · Main Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{FIELD_GUIDE_MARKDOWN_FILE}}">Markdown Guide</a>
+        <a href="field_guide.md">Markdown Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{QUICK_LOOKUP_FILE}}">Quick Lookup</a>
+        <a href="sql_quick_lookup.html">Quick Lookup</a>
       </span>
     </footer>
   </main>

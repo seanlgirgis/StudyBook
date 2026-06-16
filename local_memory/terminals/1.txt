@@ -1,0 +1,24 @@
+---
+pid: 25772
+cwd: "D:\Workarea\StudyBook\local_memory"
+command: "pwsh -NoProfile -File \"D:\\Workarea\\StudyBook\\local_memory\\start_grok_local_memory.ps1\" -NoNewWindow -NonInteractiveEnv 2>&1 | Select-Object -First 25"
+started_at: 2026-06-15T20:51:33.114Z
+running_for_ms: 1650000  
+---
+=== grok_local_memory ===
+StudyBook: D:\Workarea\StudyBook
+local_memory: D:\Workarea\StudyBook\local_memory
+
+Activating StudyBook environment...
+--- StudyBook Environment ---
+Machine: asuspc
+Project Root: D:\Workarea\StudyBook
+Venv Path: C:\py_venv\proj_educate
+Python: C:\py_venv\proj_educate\Scripts\python.exe
+Secrets Loaded: True
+Scripts On PATH: D:\Workarea\StudyBook\scripts
+JAVA_HOME: C:\Program Files\Microsoft\jdk-17.0.18.8-hotspot
+Java Bin: C:\Program Files\Microsoft\jdk-17.0.18.8-hotspot\bin
+Working directory: D:\Workarea\StudyBook\local_memory
+
+Starting Grok Build...

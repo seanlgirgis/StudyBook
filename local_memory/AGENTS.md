@@ -9,6 +9,10 @@ Primary operating rules are in:
 
 If anything conflicts, `CONTROL_PROTOCOL.md` wins.
 
+## Grok Build Sessions
+
+When running Grok Build in this folder, follow `GROK_AGENTS.md` for startup order, GROK file conventions, and collaboration rules. Launch helper: `start_grok_local_memory.ps1`.
+
 ## Required Startup Order
 
 Before execution, read in this order:

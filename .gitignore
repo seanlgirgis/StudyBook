@@ -207,6 +207,9 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
+# local_memory secret vault (encrypted store + secret files)
+local_memory/secrets/
+
 # StudyBook machine-local and plaintext secret files
 config/machines/*.local.psd1
 config/secrets/*.secrets.json

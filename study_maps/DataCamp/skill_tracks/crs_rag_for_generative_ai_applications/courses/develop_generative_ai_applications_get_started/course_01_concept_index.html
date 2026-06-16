@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Course 1 Concept-to-Example Index</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--soft:#1c232d;--text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;--border:#30363d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 "Segoe UI",Arial,sans-serif}
+header{padding:34px;background:linear-gradient(135deg,#061d2d,#0d2a40 58%,#14384e);border-bottom:1px solid #28506a}
+main{width:min(1180px,calc(100% - 32px));margin:auto;padding:24px 0 50px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}input,select,button{padding:12px;border:1px solid var(--border);border-radius:9px;background:var(--panel);color:var(--text)}input{flex:1;min-width:260px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px}.card h3{margin:0 0 8px;color:var(--green)}.tag{display:inline-block;padding:3px 8px;border-radius:999px;background:rgba(88,166,255,.13);color:var(--blue)}.keywords{color:var(--muted)}code{background:#0f141a;padding:2px 5px;border-radius:5px}.hidden{display:none}a{color:var(--blue)}@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.grid{grid-template-columns:1fr}}
+</style></head>
+<body><header><h1>Course 1 Concept-to-Example Index</h1><p>Search the concept, class, method, confusion, provider, or file you need.</p></header>
+<p><a href="chapter_01_theory_reinforcement_guide.html">Open Chapter 1 Theory Reinforcement Guide</a></p>
+<main><p><a href="course_01_study_guide.html">Study Guide</a> · <a href="chapter_01_code_memory_guide.html">Code Memory Guide</a> · <a href="chapter_01_learning_evidence.md">Learning Evidence</a></p>
+<div class="controls"><input id="search" type="search" placeholder="Search concept, keyword, class, method, or file..."><select id="module"><option value="">All sections</option><option>Module 1</option><option>Module 2</option><option>Module 3</option><option>Enrichment</option></select><button id="reset">Reset</button></div>
+<p id="count">27 concepts</p><div class="grid" id="grid"><article class="card" data-module="Module 1">
+<h3>Prompt anatomy</h3>
+<span class="tag">Module 1</span>
+<p>A prompt gives the model a task, supporting context, changing input, and the desired response shape.</p>
+<p class="keywords"><strong>Keywords:</strong> instruction context input output format</p>
+<p><strong>Start here:</strong> <code>01_prompt_template_one_variable.py</code></p>
+</article><article class="card" data-module="Module 1">
+<h3>Zero-shot prompting</h3>
+<span class="tag">Module 1</span>
+<p>Ask for a familiar task without demonstrations.</p>
+<p class="keywords"><strong>Keywords:</strong> zero shot no examples</p>
+<p><strong>Start here:</strong> <code>01_prompt_template_one_variable.py</code></p>
+</article><article class="card" data-module="Module 1">
+<h3>Few-shot prompting</h3>
+<span class="tag">Module 1</span>
+<p>Place examples in the prompt so the model imitates terminology, style, or format.</p>
+<p class="keywords"><strong>Keywords:</strong> examples in-context learning</p>
+<p><strong>Start here:</strong> <code>04_few_shot_prompt_template.py</code></p>
+</article><article class="card" data-module="Module 1">
+<h3>Chain-of-thought prompting</h3>
+<span class="tag">Module 1</span>
+<p>Break a multi-step problem into smaller reasoning stages.</p>
+<p class="keywords"><strong>Keywords:</strong> step by step intermediate steps</p>
+<p><strong>Start here:</strong> <code>module_01_study_facts.md</code></p>
+</article><article class="card" data-module="Module 1">
+<h3>PromptTemplate</h3>
+<span class="tag">Module 1</span>
+<p>Keep prompt structure stable while substituting runtime values.</p>
+<p class="keywords"><strong>Keywords:</strong> template variables reusable prompt</p>
+<p><strong>Start here:</strong> <code>01_prompt_template_one_variable.py</code></p>
+</article><article class="card" data-module="Module 1">
+<h3>LCEL pipe operator</h3>
+<span class="tag">Module 1</span>
+<p>Connect prompt, model, and parser components into one runnable flow.</p>
+<p class="keywords"><strong>Keywords:</strong> pipe runnable chain</p>
+<p><strong>Start here:</strong> <code>05_lcel_local_pipeline.py</code></p>
+</article><article class="card" data-module="Module 1">
+<h3>RunnableParallel</h3>
+<span class="tag">Module 1</span>
+<p>Run independent transformations against the same input.</p>
+<p class="keywords"><strong>Keywords:</strong> parallel branches</p>
+<p><strong>Start here:</strong> <code>06_runnable_parallel.py</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>ChatPromptTemplate</h3>
+<span class="tag">Module 2</span>
+<p>Build structured chat messages rather than one plain string.</p>
+<p class="keywords"><strong>Keywords:</strong> chat prompt system human</p>
+<p><strong>Start here:</strong> <code>03_chat_prompt_template.py</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>MessagesPlaceholder</h3>
+<span class="tag">Module 2</span>
+<p>Insert a variable-length conversation history into a chat prompt.</p>
+<p class="keywords"><strong>Keywords:</strong> history messages</p>
+<p><strong>Start here:</strong> <code>07_messages_placeholder.py</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>FewShotPromptTemplate</h3>
+<span class="tag">Module 2</span>
+<p>Combine examples, an example formatter, and a new input.</p>
+<p class="keywords"><strong>Keywords:</strong> few shot template</p>
+<p><strong>Start here:</strong> <code>04_few_shot_prompt_template.py</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>Output parser</h3>
+<span class="tag">Module 2</span>
+<p>Transform model text or messages into application-friendly data.</p>
+<p class="keywords"><strong>Keywords:</strong> parser structured output</p>
+<p><strong>Start here:</strong> <code>08_json_parser_shape.py</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>JsonOutputParser</h3>
+<span class="tag">Module 2</span>
+<p>Request and parse a JSON-shaped model response.</p>
+<p class="keywords"><strong>Keywords:</strong> json pydantic format instructions</p>
+<p><strong>Start here:</strong> <code>08_json_parser_shape.py</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>Documents and metadata</h3>
+<span class="tag">Module 2</span>
+<p>Represent source content together with provenance fields.</p>
+<p class="keywords"><strong>Keywords:</strong> document page content metadata</p>
+<p><strong>Start here:</strong> <code>module_02_study_facts.md</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>Retriever</h3>
+<span class="tag">Module 2</span>
+<p>Return documents relevant to a query.</p>
+<p class="keywords"><strong>Keywords:</strong> retrieval relevant documents</p>
+<p><strong>Start here:</strong> <code>module_02_study_facts.md</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>Provider-neutral chain</h3>
+<span class="tag">Module 2</span>
+<p>Keep prompt and parser stable while swapping a compatible model adapter.</p>
+<p class="keywords"><strong>Keywords:</strong> OpenAI Anthropic DeepSeek Watsonx</p>
+<p><strong>Start here:</strong> <code>course_01_map.md</code></p>
+</article><article class="card" data-module="Module 3">
+<h3>Model selection</h3>
+<span class="tag">Module 3</span>
+<p>Choose a model using application requirements rather than popularity alone.</p>
+<p class="keywords"><strong>Keywords:</strong> cost latency quality risk</p>
+<p><strong>Start here:</strong> <code>module_03_study_facts.md</code></p>
+</article><article class="card" data-module="Module 3">
+<h3>Prompting vs RAG vs fine-tuning</h3>
+<span class="tag">Module 3</span>
+<p>Use prompting for instructions, RAG for outside knowledge, and fine-tuning for learned behavior.</p>
+<p class="keywords"><strong>Keywords:</strong> rag fine tuning</p>
+<p><strong>Start here:</strong> <code>module_03_study_facts.md</code></p>
+</article><article class="card" data-module="Module 3">
+<h3>Flask route</h3>
+<span class="tag">Module 3</span>
+<p>Expose application logic through a small HTTP endpoint.</p>
+<p class="keywords"><strong>Keywords:</strong> web app endpoint request response</p>
+<p><strong>Start here:</strong> <code>module_03_study_facts.md</code></p>
+</article><article class="card" data-module="Module 3">
+<h3>Complete application pipeline</h3>
+<span class="tag">Module 3</span>
+<p>Connect user input, prompt, model, parser, and web response.</p>
+<p class="keywords"><strong>Keywords:</strong> prompt model parser Flask</p>
+<p><strong>Start here:</strong> <code>lab_plan.md</code></p>
+</article><article class="card" data-module="Module 1">
+<h3>Three invoke meanings</h3>
+<span class="tag">Module 1</span>
+<p>The receiving object determines whether invoke formats, generates, or runs the full pipeline.</p>
+<p class="keywords"><strong>Keywords:</strong> prompt.invoke model.invoke chain.invoke</p>
+<p><strong>Start here:</strong> <code>chapter_01_code_memory_guide.md</code></p>
+</article><article class="card" data-module="Module 1">
+<h3>Real OpenAI LCEL pipeline</h3>
+<span class="tag">Module 1</span>
+<p>Run one prompt-model-parser chain against a real OpenAI model.</p>
+<p class="keywords"><strong>Keywords:</strong> ChatOpenAI StrOutputParser real model</p>
+<p><strong>Start here:</strong> <code>starter_code/05b_lcel_openai_pipeline.py</code></p>
+</article><article class="card" data-module="Module 1">
+<h3>Provider comparison</h3>
+<span class="tag">Module 1</span>
+<p>Use the same prompt, parser, input, and LCEL shape with two provider adapters.</p>
+<p class="keywords"><strong>Keywords:</strong> ChatOpenAI ChatWatsonx provider switching</p>
+<p><strong>Start here:</strong> <code>starter_code/05f_provider_switching_lcel_pipeline.py</code></p>
+</article><article class="card" data-module="Module 1">
+<h3>Provider ambiguity</h3>
+<span class="tag">Module 1</span>
+<p>Provider-neutral plumbing does not guarantee identical interpretation; ambiguous acronyms need context.</p>
+<p class="keywords"><strong>Keywords:</strong> LCEL liquid cooling context</p>
+<p><strong>Start here:</strong> <code>chapter_01_learning_evidence.md</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>Provider-native structured output</h3>
+<span class="tag">Module 2</span>
+<p>Return validated Pydantic objects instead of parsing arbitrary prose.</p>
+<p class="keywords"><strong>Keywords:</strong> with_structured_output Pydantic TopicSummary</p>
+<p><strong>Start here:</strong> <code>starter_code/09_provider_native_structured_output.py</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>Manual conversation history</h3>
+<span class="tag">Module 2</span>
+<p>Insert previous messages and append each new turn to an in-memory list.</p>
+<p class="keywords"><strong>Keywords:</strong> MessagesPlaceholder HumanMessage AIMessage</p>
+<p><strong>Start here:</strong> <code>starter_code/11_update_conversation_history.py</code></p>
+</article><article class="card" data-module="Module 2">
+<h3>Reusable conversation function</h3>
+<span class="tag">Module 2</span>
+<p>Wrap chain invocation and message appending into one reusable function.</p>
+<p class="keywords"><strong>Keywords:</strong> ask_with_history history function</p>
+<p><strong>Start here:</strong> <code>starter_code/12_reusable_chat_function_with_history.py</code></p>
+</article><article class="card" data-module="Enrichment">
+<h3>Legacy session history wrapper</h3>
+<span class="tag">Enrichment</span>
+<p>A working but deprecated session-history wrapper retained for comparison; prefer LangGraph later.</p>
+<p class="keywords"><strong>Keywords:</strong> RunnableWithMessageHistory deprecated LangGraph</p>
+<p><strong>Start here:</strong> <code>starter_code/13_runnable_with_message_history.py</code></p>
+</article></div></main>
+<script>
+const s=document.getElementById('search'),m=document.getElementById('module'),cards=[...document.querySelectorAll('.card')],count=document.getElementById('count');
+function filter(){let q=s.value.toLowerCase().trim(),mod=m.value,n=0;cards.forEach(c=>{let ok=(!q||c.textContent.toLowerCase().includes(q))&&(!mod||c.dataset.module===mod);c.classList.toggle('hidden',!ok);if(ok)n++});count.textContent=n+' concepts';}
+s.addEventListener('input',filter);m.addEventListener('change',filter);document.getElementById('reset').onclick=()=>{s.value='';m.value='';filter();};
+</script></body></html>

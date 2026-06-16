@@ -1,0 +1,68 @@
+- Which import provides `RunnableParallel`? >>A)
+    - `from langchain_core.runnables import RunnableParallel`
+    - `from langchain_core.prompts import RunnableParallel`
+    - `from langchain_openai import RunnableParallel`
+    - `from pydantic import RunnableParallel`
+- Complete the constructor: `parallel = __________(uppercase=..., word_count=...)`→RunnableParallel
+- In `RunnableParallel(uppercase=..., word_count=...)`, what do the names become? >>A)
+    - Keys in the result dictionary
+    - Model names
+    - API environment variables
+    - Prompt classes
+- What input does every parallel branch receive? >>A)
+    - The same original input
+    - The previous branch's output
+    - Only the parser result
+    - No input
+- Which workflow is sequential? >>A)
+    - Translate text, then summarize the translation
+    - Uppercase text and count words independently
+    - Summarize and classify the same document independently
+    - Extract keywords and sentiment independently
+- Which import provides `JsonOutputParser`? >>A)
+    - `from langchain_core.output_parsers import JsonOutputParser`
+    - `from langchain_core.prompts import JsonOutputParser`
+    - `from langchain_openai import JsonOutputParser`
+    - `from pydantic import JsonOutputParser`
+- Which import provides `BaseModel` and `Field`? >>A)
+    - `from pydantic import BaseModel, Field`
+    - `from langchain_core.prompts import BaseModel, Field`
+    - `from langchain_openai import BaseModel, Field`
+    - `from json import BaseModel, Field`
+- What does `parser.get_format_instructions()` produce? >>A)
+    - Instructions telling the model what JSON shape to return
+    - The model response
+    - A provider key
+    - A Python file
+- Complete the call: `parser.________________________()`→get_format_instructions
+- What did `JsonOutputParser` return in the tested example? >>A)
+    - A Python dictionary
+    - A `TopicSummary` object
+    - An `AIMessage`
+    - A `PromptTemplate`
+- How do you access `topic` from that dictionary? >>A)
+    - `result["topic"]`
+    - `result.topic`
+    - `result.get_topic()`
+    - `result->topic`
+- Which method adds provider-native structured output? >>A)
+    - `model.with_structured_output(TopicSummary)`
+    - `model.get_format_instructions(TopicSummary)`
+    - `model.to_string(TopicSummary)`
+    - `model.from_template(TopicSummary)`
+- Complete the method: `structured_model = model.____________________(TopicSummary)`→with_structured_output
+- What did provider-native structured output return? >>A)
+    - A validated `TopicSummary` object
+    - A plain dictionary
+    - A prompt value
+    - A human message
+- How do you access `topic` from a Pydantic result? >>A)
+    - `result.topic`
+    - `result["topic"]` only
+    - `result.get_topic()`
+    - `result->topic`
+- Which method converts a Pydantic object to a dictionary? >>A)
+    - `result.model_dump()`
+    - `result.to_string()`
+    - `result.invoke()`
+    - `result.get_format_instructions()`

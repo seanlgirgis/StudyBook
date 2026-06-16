@@ -1,0 +1,43 @@
+1. Structuring an API call
+00:00 - 00:12
+Hello and welcome to the course! I'm Francesca, and together, we'll learn about best practices for developing real-world AI systems using the OpenAI API.
+
+2. Progress Snapshot
+00:12 - 00:19
+So far, we've explored making requests to the OpenAI API model using the Python openai library,
+
+3. Progress Snapshot
+00:19 - 00:22
+calling the API,
+
+4. Progress Snapshot
+00:22 - 00:26
+and extracting the response to access the output.
+
+5. Progress Snapshot
+00:26 - 01:01
+To connect to the OpenAI API and request the use of a model, we initialize an OpenAI client, create a request to the Chat Completions endpoint, and specify the messages to send to the model, including the role and content. Finally, we extract the content returned by the model from the API response. In this video, we're going to delve deeper into the foundations of structuring an API call for production environments, a key step towards fully leveraging the capabilities of the OpenAI API.
+
+6. Challenges of a production environment
+01:01 - 01:28
+Picture developing an AI application as navigating through traffic. A basic API call is like choosing a route on a map, without much consideration for the real-time changes. For efficient and optimized navigation, a well-structured API call is like utilizing a GPS system: specific, responsive, and ensuring a safe journey to your destination.
+
+7. Challenges of a production environment
+01:28 - 02:18
+When integrating with more complex production environments, we may need additional features. Our API call should be able to handle errors in a user-friendly way by displaying easy-to-understand error messages and proposing alternatives for when the service is unavailable. It should include moderation and safety features, such as handling of unwanted inputs and safety of ingested data, including minimizing the risk of data leaks. It should also include testing and validation to avoid responses that are out of topic and inconsistent behavior. Finally, it should be structured to easily interface with external applications, functions, and APIs, optimizing response times.
+
+8. Components of an OpenAI API request
+02:18 - 03:15
+But before diving deeper, let's first have a look at how to structure an OpenAI API call to request a more standardized output. In order to better integrate with external applications, it is preferable to output the model response in a format that is easily recognized, such as JSON. This way, other functions in the pipeline can easily access the results. In this example, we're asking to list five trees with their scientific names. This can be done by specifying the response_format parameter, that can be set to formats such as JSON and text. Setting it as 'type': 'json_object' allows us to extract relevant data when communicating with external applications. In addition to the parameter, note that we also specify the format in the prompt.
+
+9. Components of an OpenAI API response
+03:15 - 03:40
+For Chat Completions the response is an object from which we can access different elements including the response message, by accessing the first element of choices, then 'message.content'. In previous courses we have seen responses as unstructured text, but when using JSON mode the message content will be structured as asked in the prompt.
+
+10. What's next
+03:40 - 04:14
+Now that we've covered the fundamentals of structuring an API call, we have made a first step on the journey to creating a successful AI application on the OpenAI API. In the rest of the course, we'll explore more ways to ensure smooth integration into production, using the API to interact with external functions, as well as follow best practices to build our code. Just like a well-planned route, a well-planned and executed API call sets the stage for a successful AI application.
+
+11. Let's practice!
+04:14 - 04:17
+And now, let’s practice!

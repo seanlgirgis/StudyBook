@@ -1,0 +1,509 @@
+<!doctype html>
+<!--
+COURSE INDEX TEMPLATE
+
+Purpose:
+- Main landing page for a canonical course folder
+- Course status dashboard
+- Chapter navigation
+- Resource navigation
+- Lab entry point
+- Course closeout summary
+
+Instructions:
+1. Replace every PLACEHOLDER.
+2. Add or remove chapter cards to match the actual course.
+3. Add or remove resource cards based on available artifacts.
+4. Keep the active course filename:
+   index.html
+5. Preserve relative paths from the course root.
+6. Keep canonical course folders number-free; track pages own ordering.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Develop Generative AI Applications: Get Started | StudyBook Course Library</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3,239,98,.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88,166,255,.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210,153,34,.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188,140,255,.12);
+      --danger: #ff7b72;
+      --shadow: 0 12px 30px rgba(0,0,0,.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3,239,98,.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+    code { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4vw, 3.3rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid #486274;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 850;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+      border-color: transparent;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .resource-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .resource-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .resource-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .resource-card h3 {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .resource-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .chapter-card a,
+    .resource-card a {
+      text-decoration: none;
+    }
+
+    .chapter-card a:hover h3,
+    .resource-card a:hover h3 {
+      color: var(--blue);
+    }
+
+    .section {
+      margin-top: 22px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.45rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ol,
+    .section ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    .callout {
+      margin-top: 15px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .path {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      overflow-x: auto;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .resource-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 700px) {
+      .status-grid,
+      .chapter-grid,
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../index.html">StudyBook Course Library</a>
+      <span>›</span>
+      <span>Develop Generative AI Applications: Get Started</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Coursera · IBM Course</p>
+      <h1>Develop Generative AI Applications: Get Started</h1>
+      <p>
+        A theory-first course package covering generative AI, foundation models, large language models, prompt engineering, LangChain, LCEL, structured output, provider switching, model evaluation, and Flask-based application delivery. Concepts are connected to runnable Python examples and RemNote reinforcement.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="study_pages/field_guide.html">Open Main Field Guide</a>
+        <a class="button" href="study_pages/concept_and_code_quick_lookup.html">Open Concept & Code Quick Lookup</a>
+        <a class="button" href="lab/lab_run_book.md">Open Lab Run Book</a>
+        <a class="button" href="docs/BILL_OF_MATERIALS.md">Open Bill of Materials</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card">
+          <strong>IN PROGRESS</strong>
+          <span>Platform status</span>
+        </div>
+
+        <div class="status-card">
+          <strong>STRONG</strong>
+          <span>Documentation coverage</span>
+        </div>
+
+        <div class="status-card">
+          <strong>DEVELOPING</strong>
+          <span>Lab coverage</span>
+        </div>
+
+        <div class="status-card">
+          <strong>DEVELOPING</strong>
+          <span>Recall confidence</span>
+        </div>
+
+        <div class="status-card">
+          <strong>NEEDS REPETITION</strong>
+          <span>Interview readiness</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Recommended Study Order</h2>
+
+      <ol>
+        <li><a href="study_pages/field_guide.html">Main Field Guide</a></li>
+        <li><a href="study_pages/chapter_01_generative_ai_prompt_engineering_and_prompt_templates_field_guide.html">Module 1 — Generative AI, Prompt Engineering, and Prompt Templates</a></li>
+        <li><a href="study_pages/chapter_02_introduction_to_langchain_in_generative_ai_applications_field_guide.html">Module 2 — Introduction to LangChain in Generative AI Applications</a></li>
+        <li><a href="study_pages/chapter_03_build_a_generative_ai_application_with_langchain_field_guide.html">Module 3 — Build a Generative AI Application with LangChain</a></li>
+        <li><a href="study_pages/langchain_code_patterns.html">LangChain Code Patterns</a></li>
+        <li><a href="study_pages/concept_and_code_quick_lookup.html">Quick Lookup</a></li>
+        <li><a href="lab/lab_run_book.md">Lab Run Book</a></li>
+        <li><a href="study_pages/certification_review_digest.html">Review the certification digest</a> and complete the <a href="study_pages/certification_self_test.html">self-test</a>.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>Chapter Guides</h2>
+
+      <div class="chapter-grid">
+        <article class="chapter-card">
+          <a href="study_pages/chapter_01_generative_ai_prompt_engineering_and_prompt_templates_field_guide.html">
+            <h3>Module 1 — Generative AI, Prompt Engineering, and Prompt Templates</h3>
+            <p>Generative versus discriminative AI, foundation models, LLMs, prompting techniques, few-shot learning, and reusable prompt templates.</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="study_pages/chapter_02_introduction_to_langchain_in_generative_ai_applications_field_guide.html">
+            <h3>Module 2 — Introduction to LangChain in Generative AI Applications</h3>
+            <p>LangChain components, LCEL, runnables, parallel processing, parsers, structured output, provider switching, and conversation history.</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="study_pages/chapter_03_build_a_generative_ai_application_with_langchain_field_guide.html">
+            <h3>Module 3 — Build a Generative AI Application with LangChain</h3>
+            <p>Model selection, evaluation, multimodel design, Flask integration, HTTP handling, and prototype-to-production concerns.</p>
+          </a>
+        </article>
+
+        <article class="chapter-card">
+          <a href="study_pages/langchain_code_patterns.html">
+            <h3>LangChain Code Patterns</h3>
+            <p>Reusable imports, constructors, invocation patterns, LCEL skeletons, output parsing, and history patterns based on the code that ran locally.</p>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Course Resources</h2>
+
+      <div class="resource-grid">
+        <article class="resource-card">
+          <a href="study_pages/field_guide.html">
+            <h3>Main Field Guide</h3>
+            <p>Whole-course theory map, decision guide, memory rules, and lab evidence.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="study_pages/field_guide.md">
+            <h3>Field Guide Markdown</h3>
+            <p>Portable Markdown version of the whole-course memory map.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="study_pages/concept_and_code_quick_lookup.html">
+            <h3>Quick Lookup</h3>
+            <p>Searchable concept and code reference with compact patterns and common traps.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="lab/00_how_to_run.md">
+            <h3>How to Run the Lab</h3>
+            <p>Environment variables, activation steps, and commands for every runnable example.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="lab/lab_run_book.md">
+            <h3>Lab Run Book</h3>
+            <p>Ordered hands-on path, validated behavior, troubleshooting, and remaining work.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="docs/BILL_OF_MATERIALS.md">
+            <h3>Bill of Materials</h3>
+            <p>Course inventory, source coverage, artifact map, and open items.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="docs/COURSE_SETUP_AUDIT.md">
+            <h3>Course Setup Audit</h3>
+            <p>Architecture, file-placement, navigation, and completion audit.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="README.md">
+            <h3>Course README</h3>
+            <p>Course identity, folder roles, study workflow, and status.</p>
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <a href="STUDYBUBBLE_SESSION_STATE.md">
+            <h3>Session State</h3>
+            <p>Current progress, completed work, open tasks, and next study action.</p>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Local Lab</h2>
+
+      <p>The course-local lab preserves 17 runnable Python examples covering prompt templates, LCEL, OpenAI and Watsonx provider adapters, RunnableParallel, JSON parsing, Pydantic structured output, and conversation history. Module 3 Flask work remains the main practical gap.</p>
+
+      <ul>
+        <li><a href="lab/python/01_prompt_template_one_variable.py">PromptTemplate — one variable</a></li>
+        <li><a href="lab/python/05f_provider_switching_lcel_pipeline.py">OpenAI and Watsonx provider switching</a></li>
+        <li><a href="lab/python/09_provider_native_structured_output.py">Provider-native structured output</a></li>
+        <li><a href="lab/python/12_reusable_chat_function_with_history.py">Reusable chat function with history</a></li>
+      </ul>
+
+      <div class="callout green">
+        Module 1 and Module 2 local patterns are validated. Complete and record the official Module 3 Flask application work before marking the lab complete.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Course Closeout</h2>
+
+      <p>The course package has been remodeled around three theory-first module guides, a whole-course field guide, searchable quick lookup, code-pattern guide, reinforcement materials, and a normalized course-local Python lab.</p>
+
+      <div class="callout amber">
+        Return to Coursera, complete the remaining official lessons and Flask application lab, then reconcile the course documentation and status against the official platform work.
+      </div>
+
+      <div class="path">D:\Workarea\StudyBook\study_maps\DataCamp\courses\crs_001_develop_generative_ai_applications_get_started</div>
+    </section>
+
+    <footer>
+      <span>StudyBook Course Library · Develop Generative AI Applications: Get Started</span>
+      <span>
+        <a href="study_pages/field_guide.html">Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="study_pages/concept_and_code_quick_lookup.html">Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="lab/lab_run_book.md">Lab Run Book</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

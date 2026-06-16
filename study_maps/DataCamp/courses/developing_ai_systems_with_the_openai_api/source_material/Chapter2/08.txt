@@ -1,0 +1,47 @@
+1. Working with multiple functions
+00:00 - 00:13
+Now that we know how to use function calling to extract structured data, we're ready to add a new functionality to our API call: passing multiple functions to be used in the response.
+
+2. Parallel function calling
+00:13 - 00:21
+The ability of the model to handle multiple functions is called parallel function calling.
+
+3. Parallel function calling
+00:21 - 00:30
+Parallel function calling enables an improved communication with the model, enhancing its ability to process and generate responses.
+
+4. Example message
+00:30 - 00:48
+Let's go back to the previous example where we wanted to extract job information from job descriptions, and assume we'd like to concatenate an additional function to the first one. In the function definition, we'll keep the previous function to extract the job data.
+
+5. Example message
+00:48 - 01:06
+But this time, let's say we'd also like to know the timezone that corresponds to the location in the job advert to check the feasibility of working remotely. We set up this function in the same way as for the first one, and add it to the list using append().
+
+6. Example message
+01:06 - 01:13
+And finally, as we did before, we trigger function calling by passing our function definition to 'tools'.
+
+7. Example response
+01:13 - 01:23
+In the case of calling multiple functions, we'll have to use indexing to select the different responses from the 'tool_calls' list, as shown.
+
+8. Setting specific functions
+01:23 - 01:44
+We might end up with a long list of functions in our tools, and in that case, the default behavior of the model is to choose which one to use based on the message and function definitions. This is the equivalent of setting 'tool_choice' as 'auto'.
+
+9. Setting specific functions
+01:44 - 01:57
+If we want the model to pick a specific function from our list, we'll have to modify tool_choice from 'auto' to a dictionary containing the name of the function we'd like the model to use.
+
+10. Double checking the response
+01:57 - 02:27
+When setting specific functions, the model can make assumptions about values to assign even if they are not present in the message. To avoid this behavior, a good strategy is to use the system message to communicate this to the model. Before specifying the user message for example, we could write a couple of system messages asking not to make any assumptions, and to ask for clarification if needed, such as the ones shown.
+
+11. Double checking the response
+02:27 - 02:47
+One thing to account for in this case, is that the model might return an empty dictionary if it cannot find anything suitable to respond to the prompt. Let's test the behavior of the model by asking for a piece of information that is not in the job description provided, the starting salary for the role.
+
+12. Let's practice!
+02:47 - 03:01
+And that wraps up our video on function calling with parallel functions! You can continue with some exercises to incorporate parallel function calls into your projects. Let's practice!

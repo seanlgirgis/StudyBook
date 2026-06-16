@@ -11,7 +11,7 @@ Purpose:
 - Course closeout summary
 
 Instructions:
-1. Replace every {{PLACEHOLDER}}.
+1. Replace every template marker.
 2. Add or remove chapter cards to match the actual course.
 3. Add or remove resource cards based on available artifacts.
 4. Keep the active course filename:
@@ -23,7 +23,7 @@ Instructions:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{COURSE_TITLE}} | {{PROJECT_TITLE}}</title>
+  <title>Introduction to Data Privacy | DataCamp StudyBook</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -300,48 +300,48 @@ Instructions:
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../index.html">{{PROJECT_TITLE}}</a>
+      <a href="../../index.html">DataCamp StudyBook</a>
       <span>›</span>
-      <span>{{COURSE_TITLE}}</span>
+      <span>Introduction to Data Privacy</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{PLATFORM_LABEL}} Course</p>
-      <h1>{{COURSE_TITLE}}</h1>
+      <p class="eyebrow">DataCamp Course</p>
+      <h1>Introduction to Data Privacy</h1>
       <p>
-        {{COURSE_SUMMARY_HTML}}
+        A completed three-chapter course on privacy foundations, Privacy by Design, data classification and lifecycle controls, data brokers, privacy laws, emerging technology, and shifting privacy left.
       </p>
 
       <div class="hero-actions">
-        <a class="button primary" href="{{FIELD_GUIDE_FILE}}">Open Main Field Guide</a>
-        <a class="button" href="{{QUICK_LOOKUP_FILE}}">Open SQL Quick Lookup</a>
-        <a class="button" href="{{LAB_RUN_BOOK_FILE}}">Open Lab Run Book</a>
-        <a class="button" href="{{BILL_OF_MATERIALS_FILE}}">Open Bill of Materials</a>
+        <a class="button primary" href="study_pages/field_guide.html">Open Main Field Guide</a>
+        <a class="button" href="study_pages/sql_quick_lookup.html">Open Data Privacy Quick Lookup</a>
+        <a class="button" href="lab/lab_run_book.md">Open Lab Run Book</a>
+        <a class="button" href="docs/BILL_OF_MATERIALS.md">Open Bill of Materials</a>
       </div>
 
       <div class="status-grid">
         <div class="status-card">
-          <strong>{{PLATFORM_STATUS}}</strong>
+          <strong>COMPLETE</strong>
           <span>Platform status</span>
         </div>
 
         <div class="status-card">
-          <strong>{{DOCUMENTATION_STATUS}}</strong>
+          <strong>STRONG</strong>
           <span>Documentation coverage</span>
         </div>
 
         <div class="status-card">
-          <strong>{{LAB_STATUS}}</strong>
+          <strong>NOT REQUIRED</strong>
           <span>Lab coverage</span>
         </div>
 
         <div class="status-card">
-          <strong>{{RECALL_STATUS}}</strong>
+          <strong>DEVELOPING</strong>
           <span>Recall confidence</span>
         </div>
 
         <div class="status-card">
-          <strong>{{INTERVIEW_STATUS}}</strong>
+          <strong>NEEDS REPETITION</strong>
           <span>Interview readiness</span>
         </div>
       </div>
@@ -351,14 +351,13 @@ Instructions:
       <h2>Recommended Study Order</h2>
 
       <ol>
-        <li><a href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a></li>
-        <li><a href="{{CHAPTER_01_FILE}}">{{CHAPTER_01_TITLE}}</a></li>
-        <li><a href="{{CHAPTER_02_FILE}}">{{CHAPTER_02_TITLE}}</a></li>
-        <li><a href="{{CHAPTER_03_FILE}}">{{CHAPTER_03_TITLE}}</a></li>
-        <li><a href="{{CHAPTER_04_FILE}}">{{CHAPTER_04_TITLE}}</a></li>
-        <li><a href="{{QUICK_LOOKUP_FILE}}">Quick Lookup</a></li>
-        <li><a href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a></li>
-        <li>{{FINAL_STUDY_STEP}}</li>
+        <li><a href="study_pages/field_guide.html">Main Field Guide</a></li>
+        <li><a href="study_pages/chapter_01_privacy_foundations_field_guide.html">Chapter 1 — Privacy Foundations</a></li>
+        <li><a href="study_pages/chapter_02_privacy_by_design_field_guide.html">Chapter 2 — Privacy by Design</a></li>
+        <li><a href="study_pages/chapter_03_living_on_the_edge_field_guide.html">Chapter 3 — Living on the Edge</a></li>
+        <li><a href="study_pages/sql_quick_lookup.html">Quick Lookup</a></li>
+        <li><a href="lab/lab_run_book.md">Lab Run Book</a></li>
+        <li>Complete a short self-test using the interview questions and scenario exercises.</li>
       </ol>
     </section>
 
@@ -367,30 +366,23 @@ Instructions:
 
       <div class="chapter-grid">
         <article class="chapter-card">
-          <a href="{{CHAPTER_01_FILE}}">
-            <h3>{{CHAPTER_01_TITLE}}</h3>
-            <p>{{CHAPTER_01_SUMMARY}}</p>
+          <a href="study_pages/chapter_01_privacy_foundations_field_guide.html">
+            <h3>Chapter 1 — Privacy Foundations</h3>
+            <p>Privacy, personal data, PREACH, the CIA triad, security models, incidents, and privacy-versus-security distinctions.</p>
           </a>
         </article>
 
         <article class="chapter-card">
-          <a href="{{CHAPTER_02_FILE}}">
-            <h3>{{CHAPTER_02_TITLE}}</h3>
-            <p>{{CHAPTER_02_SUMMARY}}</p>
+          <a href="study_pages/chapter_02_privacy_by_design_field_guide.html">
+            <h3>Chapter 2 — Privacy by Design</h3>
+            <p>Seven Privacy by Design principles, classification, risk analysis, de-identification, lifecycle management, retention, and deletion.</p>
           </a>
         </article>
 
         <article class="chapter-card">
-          <a href="{{CHAPTER_03_FILE}}">
-            <h3>{{CHAPTER_03_TITLE}}</h3>
-            <p>{{CHAPTER_03_SUMMARY}}</p>
-          </a>
-        </article>
-
-        <article class="chapter-card">
-          <a href="{{CHAPTER_04_FILE}}">
-            <h3>{{CHAPTER_04_TITLE}}</h3>
-            <p>{{CHAPTER_04_SUMMARY}}</p>
+          <a href="study_pages/chapter_03_living_on_the_edge_field_guide.html">
+            <h3>Chapter 3 — Living on the Edge</h3>
+            <p>Data brokers, business motives, privacy trade-offs, privacy laws, jAsper, data sovereignty, emerging technology, and shifting left.</p>
           </a>
         </article>
       </div>
@@ -401,65 +393,65 @@ Instructions:
 
       <div class="resource-grid">
         <article class="resource-card">
-          <a href="{{FIELD_GUIDE_FILE}}">
+          <a href="study_pages/field_guide.html">
             <h3>Main Field Guide</h3>
-            <p>{{FIELD_GUIDE_DESCRIPTION}}</p>
+            <p>Distilled whole-course review, comparisons, memory rules, interview answers, and chapter navigation.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{FIELD_GUIDE_MARKDOWN_FILE}}">
+          <a href="study_pages/field_guide.md">
             <h3>Field Guide Markdown</h3>
-            <p>{{FIELD_GUIDE_MARKDOWN_DESCRIPTION}}</p>
+            <p>Portable text version of the whole-course memory map.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{QUICK_LOOKUP_FILE}}">
+          <a href="study_pages/sql_quick_lookup.html">
             <h3>Quick Lookup</h3>
-            <p>{{QUICK_LOOKUP_DESCRIPTION}}</p>
+            <p>Searchable privacy concepts, controls, frameworks, decision rules, and common traps.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{LAB_HOW_TO_RUN_FILE}}">
+          <a href="lab/00_how_to_run.md">
             <h3>How to Run the Lab</h3>
-            <p>{{LAB_HOW_TO_RUN_DESCRIPTION}}</p>
+            <p>Explains the lightweight scenario-based practice approach for this conceptual course.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{LAB_RUN_BOOK_FILE}}">
+          <a href="lab/lab_run_book.md">
             <h3>Lab Run Book</h3>
-            <p>{{LAB_RUN_BOOK_DESCRIPTION}}</p>
+            <p>Practice plan for classification, risk, lifecycle, vendor, legal, and Privacy by Design scenarios.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{BILL_OF_MATERIALS_FILE}}">
+          <a href="docs/BILL_OF_MATERIALS.md">
             <h3>Bill of Materials</h3>
-            <p>{{BILL_OF_MATERIALS_DESCRIPTION}}</p>
+            <p>Inventory of course sources, chapter topics, and StudyBook deliverables.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{COURSE_SETUP_AUDIT_FILE}}">
+          <a href="docs/COURSE_SETUP_AUDIT.md">
             <h3>Course Setup Audit</h3>
-            <p>{{COURSE_SETUP_AUDIT_DESCRIPTION}}</p>
+            <p>Course structure, template, filename, and navigation validation record.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{README_FILE}}">
+          <a href="README.md">
             <h3>Course README</h3>
-            <p>{{README_DESCRIPTION}}</p>
+            <p>Course identity, completion status, scope, package map, and canonical path.</p>
           </a>
         </article>
 
         <article class="resource-card">
-          <a href="{{SESSION_STATE_FILE}}">
+          <a href="STUDYBUBBLE_SESSION_STATE.md">
             <h3>Session State</h3>
-            <p>{{SESSION_STATE_DESCRIPTION}}</p>
+            <p>Compact handoff and maintenance state for future review sessions.</p>
           </a>
         </article>
       </div>
@@ -468,40 +460,44 @@ Instructions:
     <section class="section">
       <h2>Local Lab</h2>
 
-      <p>{{LAB_SUMMARY_HTML}}</p>
+      <p>This is a conceptual course. No runnable SQL or Python lab is required. Practice is scenario-based and focuses on applying privacy frameworks, classifying data, evaluating risk, managing lifecycle decisions, and analyzing laws and vendors.</p>
 
       <ul>
-        <li><a href="{{LAB_SQL_01_FILE}}">{{LAB_SQL_01_LABEL}}</a></li>
-        <li><a href="{{LAB_SQL_02_FILE}}">{{LAB_SQL_02_LABEL}}</a></li>
-        <li><a href="{{LAB_SQL_03_FILE}}">{{LAB_SQL_03_LABEL}}</a></li>
-        <li><a href="{{LAB_SQL_04_FILE}}">{{LAB_SQL_04_LABEL}}</a></li>
+        <li><a href="lab/lab_run_book.md">Scenario practice run book</a></li>
+        <li><a href="study_pages/chapter_01_privacy_foundations_field_guide.html#review">Chapter 1 memory review</a></li>
+        <li><a href="study_pages/chapter_02_privacy_by_design_field_guide.html#review">Chapter 2 memory review</a></li>
+        <li><a href="study_pages/chapter_03_living_on_the_edge_field_guide.html#review">Chapter 3 memory review</a></li>
       </ul>
 
       <div class="callout green">
-        {{LAB_COMPLETION_NOTE}}
+        Lab status: NOT REQUIRED. Scenario practice is documented in the Lab Run Book and reinforced in each chapter guide.
       </div>
     </section>
 
     <section class="section">
       <h2>Course Closeout</h2>
 
-      <p>{{COURSE_CLOSEOUT_SUMMARY}}</p>
+      <p>All three chapter guides, the accumulated Field Guide, Markdown guide, searchable Data Privacy Quick Lookup, and lightweight lab documentation are complete.</p>
 
       <div class="callout amber">
-        {{COURSE_NEXT_ACTION}}
+        Use the Main Field Guide for spaced review, then repeat the interview questions and scenario classifications until recall is strong.
       </div>
 
-      <div class="path">{{CANONICAL_COURSE_PATH}}</div>
+      <div class="path">D:\Workarea\StudyBook\study_maps\DataCamp\courses\introduction_to_data_privacy</div>
     </section>
 
     <footer>
-      <span>{{PROJECT_TITLE}} · {{COURSE_TITLE}}</span>
+      <span>DataCamp StudyBook · Introduction to Data Privacy</span>
       <span>
-        <a href="{{FIELD_GUIDE_FILE}}">Field Guide</a>
+        <a href="study_pages/field_guide.html">Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{QUICK_LOOKUP_FILE}}">Quick Lookup</a>
+        <a href="study_pages/sql_quick_lookup.html">Quick Lookup</a>
         &nbsp;·&nbsp;
-        <a href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a href="lab/lab_run_book.md">Lab Run Book</a>
+        &nbsp;·&nbsp;
+        <a href="../index.html">Course Library</a>
+        &nbsp;·&nbsp;
+        <a href="../../skill_tracks/developing_ai_applications/index.html">Developing AI Applications</a>
       </span>
     </footer>
   </main>

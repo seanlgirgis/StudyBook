@@ -8,3 +8,7 @@
 6. Store new information as question-and-answer entries.
 7. Keep entries short, practical, and searchable.
 8. Use tags at the bottom of each entry.
+
+## Secrets
+
+Do not store secret **values** in markdown. Use the secret vault: `runbooks/security.md` (system of record), `runbooks/secret_registry.md` (pointers), `secrets/` (gitignored encrypted store).

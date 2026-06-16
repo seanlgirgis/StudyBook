@@ -51,6 +51,34 @@ Steps:
 3. Preserve exact commands, names, paths, and special text.
 4. Confirm the save location.
 
+### Secret Store
+
+Use this flow for requests like:
+- `store secret POSTGRES_OBS_PASSWORD`
+- `save secret file C:\path\doc.pdf as TAX_W4_2025`
+
+Full rules: `runbooks/security.md`. Registry: `runbooks/secret_registry.md`.
+
+Steps:
+1. Never write secret **values** into Git-tracked markdown.
+2. Text secrets: run `local_memory/scripts/store_text_secret.ps1` (interactive prompt for value).
+3. Secret files: run `local_memory/scripts/store_secret_file.ps1`.
+4. Scripts update `runbooks/secret_registry.md` automatically.
+5. Confirm vault path and registry ID.
+
+### Secret Retrieve
+
+Use this flow for requests like:
+- `get secret POSTGRES_OBS_PASSWORD`
+- `how do I load my OpenAI API key from the vault`
+
+Steps:
+1. Search `runbooks/secret_registry.md` for the ID.
+2. Return the registry row and the retrieve command from the registry.
+3. Run `get_text_secret.ps1` with `-ShowPlaintext` only when the user explicitly needs the value displayed.
+4. Never echo secret values unprompted. Never send secrets to cloud models.
+5. If ID is missing: `I do not have this stored yet.`
+
 ## PostgreSQL Local Lab Rule
 
 For requests about Sean's local PostgreSQL lab login, the stored answer must match the memory entry in `runbooks/postgres.md`.

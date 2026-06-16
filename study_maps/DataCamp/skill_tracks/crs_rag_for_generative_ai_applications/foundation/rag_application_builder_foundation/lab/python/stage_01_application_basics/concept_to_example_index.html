@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 1 Concept-to-Example Index</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f3ea;
+      --panel: rgba(255, 255, 255, 0.92);
+      --panel-strong: #fffdf7;
+      --text: #1f2430;
+      --muted: #5a6472;
+      --accent: #0f766e;
+      --accent-2: #c2410c;
+      --border: rgba(31, 36, 48, 0.14);
+      --chip: rgba(15, 118, 110, 0.1);
+      --shadow: 0 14px 30px rgba(31, 36, 48, 0.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #10151c;
+        --panel: rgba(18, 25, 34, 0.92);
+        --panel-strong: #141b24;
+        --text: #edf2f7;
+        --muted: #9ca7b4;
+        --accent: #4fd1c5;
+        --accent-2: #fb923c;
+        --border: rgba(237, 242, 247, 0.12);
+        --chip: rgba(79, 209, 197, 0.12);
+        --shadow: 0 18px 38px rgba(0, 0, 0, 0.32);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 34%),
+        radial-gradient(circle at top right, rgba(194, 65, 12, 0.10), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.18), transparent 18%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .shell {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+    .hero, .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .hero {
+      padding: 28px;
+      margin-bottom: 18px;
+    }
+    h1, h2, h3 {
+      margin: 0;
+      font-weight: 700;
+    }
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .subtitle {
+      color: var(--muted);
+      margin-top: 10px;
+      max-width: 860px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .focus-card {
+      background: var(--panel-strong);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .focus-card a { color: var(--accent); text-decoration: none; font-weight: 700; }
+    .toolbar {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    .toolbar-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+    input[type="search"] {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      background: var(--panel-strong);
+      color: var(--text);
+    }
+    button, .filter {
+      border: 1px solid var(--border);
+      background: var(--panel-strong);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+      font: inherit;
+    }
+    button:hover, .filter:hover { transform: translateY(-1px); border-color: var(--accent); }
+    .filter.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .result-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .cards {
+      display: grid;
+      gap: 16px;
+    }
+    .card {
+      padding: 20px;
+      position: relative;
+    }
+    .card h3 { font-size: 1.2rem; margin-bottom: 6px; }
+    .category {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--chip);
+      color: var(--accent);
+      font-size: 0.83rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 760px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .block {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,0.02);
+    }
+    .block strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--accent-2);
+    }
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.95rem;
+    }
+    .list a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .path-row {
+      display: flex;
+      align-items: start;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 0.92rem;
+    }
+    code {
+      background: rgba(127, 127, 127, 0.12);
+      padding: 2px 6px;
+      border-radius: 6px;
+      word-break: break-word;
+    }
+    .copy {
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .keywords, .related {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .pill {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(127,127,127,0.12);
+      font-size: 0.84rem;
+    }
+    .empty {
+      padding: 30px;
+      text-align: center;
+      color: var(--muted);
+      display: none;
+    }
+    footer {
+      margin-top: 22px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      background: var(--accent);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 12px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero">
+      <div class="eyebrow">RAG Application Builder Foundation</div>
+      <h1>Stage 1 Concept-to-Example Index</h1>
+      <p class="subtitle">322 passing tests. Search concepts, filenames, shared mechanics, and tests to jump from an idea to the smallest example, the reusable library helper, and a more complete application example.</p>
+      <div class="hero-grid">
+        <div class="focus-card">
+          <div class="muted">Brick 68</div>
+          <a href="68_validate_application_settings.py">Validate application settings</a>
+          <p class="muted">Startup safety and non-secret configuration.</p>
+        </div>
+        <div class="focus-card">
+          <div class="muted">Brick 69</div>
+          <a href="69_reusable_guarded_workflow.py">Reusable guarded workflow</a>
+          <p class="muted">Composes retry, budget, diagnostics, result, and audit append.</p>
+        </div>
+        <div class="focus-card">
+          <div class="muted">Brick 70</div>
+          <a href="70_guarded_console_application.py">Guarded console application</a>
+          <p class="muted">Tiny end-to-end Stage 1 application.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel toolbar">
+      <div class="toolbar-top">
+        <input id="search" type="search" placeholder="Search concepts, keywords, files, classes, or functions..." aria-label="Search concepts">
+        <button id="reset" type="button">Reset</button>
+      </div>
+      <div id="filters" class="filters"></div>
+      <div class="result-bar">
+        <div id="count">Showing 0 concepts</div>
+        <div class="muted">Press <code>/</code> to focus search, <code>Esc</code> to clear it.</div>
+      </div>
+    </section>
+
+    <section id="cards" class="cards"></section>
+    <section id="empty" class="panel empty">No concepts matched your search.</section>
+
+    <footer>
+      <div>Application examples: <code>stage_01_application_basics</code></div>
+      <div>Reusable mechanics: <code>D:\py_libs\rag_foundation</code></div>
+      <div>Verified baseline: <code>322 passing tests</code></div>
+    </footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite">Copied</div>
+  <script>
+    const categoryOrder = [
+      "Provider and Requests",
+      "Messages and Roles",
+      "Prompting",
+      "Structured Output",
+      "Conversation History",
+      "Tokens and Cost",
+      "Reliability and Retry",
+      "Budget Control",
+      "Concurrency and Reservations",
+      "Diagnostics and Safety",
+      "Correlation and Tracing",
+      "Serialization",
+      "File Persistence",
+      "Audit Logging",
+      "Audit Inspection",
+      "Configuration",
+      "Reusable Workflow",
+      "End-to-End Application"
+    ];
+
+    const catalog = [
+      { concept: "First provider request", category: "Provider and Requests", keywords: ["first request", "provider call", "openai request", "hello world"], problem_solved: "Shows the smallest real application example that sends one prompt through the shared provider and prints the normalized result.", simple_examples: [{ brick: 1, file: "01_first_request.py", purpose: "Smallest focused provider example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Wraps a real request inside validated settings, guarded workflow, and audit persistence." }], library_mechanics: [{ module: "rag_foundation.providers.openai_text", names: ["OpenAITextProvider"], source_file: "src/rag_foundation/providers/openai_text.py" }], tests: [{ file: "tests/test_openai_text_provider.py", purpose: "Covers normalized provider behavior and validation." }], related_concepts: ["TextGenerationRequest", "TextGenerationResult", "Provider abstraction"] },
+      { concept: "Model selection and temperature", category: "Provider and Requests", keywords: ["model", "temperature", "sampling", "variation", "override model"], problem_solved: "Shows how the application chooses models and sampling controls to trade off capability, cost, and output variability.", simple_examples: [{ brick: 6, file: "06_model_override.py", purpose: "Smallest model-selection example." }, { brick: 42, file: "42_sampling_temperature_comparison.py", purpose: "Focused temperature comparison example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Carries the selected model into a reusable guarded workflow." }], library_mechanics: [{ module: "rag_foundation.models.requests", names: ["TextGenerationRequest"], source_file: "src/rag_foundation/models/requests.py" }], tests: [{ file: "tests/test_temperature.py", purpose: "Validates temperature rules and edge cases." }], related_concepts: ["TextGenerationRequest", "Request cost calculation"] },
+      { concept: "Provider abstraction", category: "Provider and Requests", keywords: ["provider abstraction", "provider interface", "shared provider", "text provider"], problem_solved: "Separates application code from provider-specific APIs so requests and results use a consistent interface.", simple_examples: [{ brick: 17, file: "17_use_shared_text_provider.py", purpose: "Smallest example that uses the shared provider directly." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Injects a provider into the reusable guarded workflow." }], library_mechanics: [{ module: "rag_foundation.providers.base", names: ["TextGenerationProvider"], source_file: "src/rag_foundation/providers/base.py" }, { module: "rag_foundation.providers.openai_text", names: ["OpenAITextProvider"], source_file: "src/rag_foundation/providers/openai_text.py" }], tests: [{ file: "tests/test_openai_text_provider.py", purpose: "Validates the concrete shared provider." }], related_concepts: ["First provider request", "GuardedTextWorkflow"] },
+      { concept: "TextGenerationRequest", category: "Provider and Requests", keywords: ["request object", "instructions", "prompt", "max_output_tokens", "request validation"], problem_solved: "Packages generation settings into one validated request object before anything is sent to the provider.", simple_examples: [{ brick: 8, file: "08_request_validation.py", purpose: "Smallest request-validation example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Uses a fully configured request inside the guarded workflow." }], library_mechanics: [{ module: "rag_foundation.models.requests", names: ["TextGenerationRequest"], source_file: "src/rag_foundation/models/requests.py" }], tests: [{ file: "tests/test_text_generation_models.py", purpose: "Validates request fields and request-model behavior." }], related_concepts: ["First provider request", "Structured prompting", "TextGenerationResult"] },
+      { concept: "TextGenerationResult", category: "Provider and Requests", keywords: ["result object", "normalized result", "metadata", "request_id", "token usage"], problem_solved: "Returns provider output in one normalized object that keeps text, token counts, request ID, and raw response together.", simple_examples: [{ brick: 5, file: "05_result_metadata.py", purpose: "Smallest result-metadata example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Consumes the provider result inside a complete guarded workflow." }], library_mechanics: [{ module: "rag_foundation.models.results", names: ["TextGenerationResult"], source_file: "src/rag_foundation/models/results.py" }], tests: [{ file: "tests/test_text_generation_models.py", purpose: "Validates normalized result fields and token counts." }], related_concepts: ["TextGenerationRequest", "Request cost calculation", "Safe generation diagnostics"] },
+      { concept: "Message order", category: "Messages and Roles", keywords: ["message order", "ordered history", "sequence", "chat history order"], problem_solved: "Preserves conversational meaning by keeping messages in sequence.", simple_examples: [{ brick: 24, file: "24_ordered_message_history.py", purpose: "Smallest ordered-history example." }], complete_examples: [{ brick: 25, file: "25_two_turn_conversation.py", purpose: "Uses ordered messages in a real conversation." }], library_mechanics: [{ module: "rag_foundation.models.chat", names: ["ChatMessage"], source_file: "src/rag_foundation/models/chat.py" }], tests: [{ file: "tests/test_chat_message.py", purpose: "Validates shared chat-message structure." }], related_concepts: ["Message roles", "Multi-turn conversation", "Conversation history"] },
+      { concept: "Message roles", category: "Messages and Roles", keywords: ["system message", "user message", "assistant message", "chat roles", "message roles"], problem_solved: "Maps application instructions, user input, and model output to the shared system, user, and assistant role structure.", simple_examples: [{ brick: 22, file: "22_message_roles.py", purpose: "Smallest role-mapping example." }], complete_examples: [{ brick: 25, file: "25_two_turn_conversation.py", purpose: "Applies roles in a real multi-turn exchange." }], library_mechanics: [{ module: "rag_foundation.models.chat", names: ["ChatMessage"], source_file: "src/rag_foundation/models/chat.py" }], tests: [{ file: "tests/test_chat_message.py", purpose: "Validates role and content rules for chat messages." }], related_concepts: ["Message order", "Dual prompts", "Multi-turn conversation"] },
+      { concept: "Multi-turn conversation", category: "Messages and Roles", keywords: ["conversation", "follow-up", "multi-turn", "context carryover"], problem_solved: "Shows how earlier messages are resent so a follow-up question can be interpreted with prior context.", simple_examples: [{ brick: 25, file: "25_two_turn_conversation.py", purpose: "Smallest real two-turn conversation." }], complete_examples: [{ brick: 34, file: "34_shared_two_turn_conversation.py", purpose: "Runs the shared conversation support again later in Stage 1." }], library_mechanics: [{ module: "rag_foundation.models.requests", names: ["ConversationRequest"], source_file: "src/rag_foundation/models/requests.py" }, { module: "rag_foundation.models.chat", names: ["ChatMessage"], source_file: "src/rag_foundation/models/chat.py" }], tests: [{ file: "tests/test_conversation_request.py", purpose: "Validates conversation request behavior and history handling." }], related_concepts: ["Message order", "Conversation history", "History trimming"] },
+      { concept: "Dual prompts", category: "Prompting", keywords: ["dual prompts", "application prompt", "user prompt", "separate control prompt"], problem_solved: "Separates application-controlled behavior from the current user question so the app keeps control of instructions.", simple_examples: [{ brick: 48, file: "48_dual_prompt_chatbot.py", purpose: "Focused dual-prompt application example." }], complete_examples: [{ brick: 70, file: "70_guarded_console_application.py", purpose: "Uses reusable workflow while still separating system behavior from the user question." }], library_mechanics: [{ module: "rag_foundation.models.requests", names: ["TextGenerationRequest"], source_file: "src/rag_foundation/models/requests.py" }], tests: [{ file: "tests/test_text_generation_models.py", purpose: "Validates request fields used to keep instructions and prompts separate." }], related_concepts: ["Message roles", "Structured prompting", "End-to-end console application"] },
+      { concept: "Few-shot prompting", category: "Prompting", keywords: ["few-shot", "examples in prompt", "zero-shot", "labeled examples"], problem_solved: "Compares prompts with and without examples so the user can see how demonstrations steer model behavior.", simple_examples: [{ brick: 33, file: "33_zero_shot_vs_few_shot.py", purpose: "Focused comparison of zero-shot and few-shot prompting." }], complete_examples: [], library_mechanics: [{ module: "rag_foundation.models.requests", names: ["TextGenerationRequest"], source_file: "src/rag_foundation/models/requests.py" }], tests: [{ file: "tests/test_text_generation_models.py", purpose: "Covers the request model used to hold the prompting content." }], related_concepts: ["Structured prompting", "TextGenerationRequest"] },
+      { concept: "Structured prompting", category: "Prompting", keywords: ["structured prompt", "field extraction", "prompt format", "classification prompt"], problem_solved: "Shows how the application asks for structured fields instead of free-form prose so later code can validate or parse the result.", simple_examples: [{ brick: 20, file: "20_structured_ticket_triage.py", purpose: "Smallest focused structured-prompt example." }], complete_examples: [{ brick: 40, file: "40_extract_validated_fields.py", purpose: "Turns structured prompting into validated application fields." }], library_mechanics: [{ module: "rag_foundation.models.requests", names: ["TextGenerationRequest"], source_file: "src/rag_foundation/models/requests.py" }, { module: "rag_foundation.structured", names: ["parse_json_object"], source_file: "src/rag_foundation/structured.py" }], tests: [{ file: "tests/test_structured.py", purpose: "Validates structured JSON parsing used after the prompt." }], related_concepts: ["Safe parsing", "Validated ticket model", "Dual prompts"] },
+      { concept: "Safe parsing", category: "Structured Output", keywords: ["safe parsing", "json object", "structured output error", "parse json object"], problem_solved: "Rejects blank, invalid, or non-object model output before application code tries to use it as structured data.", simple_examples: [{ brick: 35, file: "35_parse_structured_model_output.py", purpose: "Smallest shared structured-output parsing example." }], complete_examples: [{ brick: 40, file: "40_extract_validated_fields.py", purpose: "Uses parsing before validating extracted fields." }], library_mechanics: [{ module: "rag_foundation.structured", names: ["StructuredOutputError", "parse_json_object"], source_file: "src/rag_foundation/structured.py" }], tests: [{ file: "tests/test_structured.py", purpose: "Covers invalid JSON, blank output, and non-object structured output." }], related_concepts: ["Structured prompting", "Validated ticket model", "JSON-safe serialization and Decimal precision"] },
+      { concept: "Structured model response", category: "Structured Output", keywords: ["structured response", "json fields", "structured output", "model response object"], problem_solved: "Requests a predictable field-based response shape.", simple_examples: [{ brick: 20, file: "20_structured_ticket_triage.py", purpose: "Early structured-response application example." }], complete_examples: [{ brick: 40, file: "40_extract_validated_fields.py", purpose: "Builds validated application data from structured response fields." }], library_mechanics: [{ module: "rag_foundation.structured", names: ["parse_json_object"], source_file: "src/rag_foundation/structured.py" }], tests: [{ file: "tests/test_structured.py", purpose: "Validates the shared structured parsing helper." }], related_concepts: ["Structured prompting", "Safe parsing", "Validated ticket model"] },
+      { concept: "Validated ticket model", category: "Structured Output", keywords: ["validated model", "ticket triage", "validation", "dataclass validation"], problem_solved: "Converts structured output into validated application-owned data.", simple_examples: [{ brick: 21, file: "21_validated_ticket_model.py", purpose: "Smallest validated structured-output example." }], complete_examples: [{ brick: 40, file: "40_extract_validated_fields.py", purpose: "Continues the pattern with broader field extraction and validation." }], library_mechanics: [{ module: "rag_foundation.structured", names: ["parse_json_object"], source_file: "src/rag_foundation/structured.py" }], tests: [{ file: "tests/test_structured.py", purpose: "Tests the shared structured parsing used before application validation." }], related_concepts: ["Structured model response", "Safe parsing", "Validation"] },
+      { concept: "Conversation history", category: "Conversation History", keywords: ["conversation history", "chat history", "context window", "follow-up context"], problem_solved: "Shows how the application preserves earlier turns so later requests can use the same running conversation context.", simple_examples: [{ brick: 26, file: "26_followup_requires_context.py", purpose: "Smallest proof that history matters for follow-up questions." }], complete_examples: [{ brick: 34, file: "34_shared_two_turn_conversation.py", purpose: "Uses the shared conversation support in a later Stage 1 example." }], library_mechanics: [{ module: "rag_foundation.models.requests", names: ["ConversationRequest"], source_file: "src/rag_foundation/models/requests.py" }, { module: "rag_foundation.models.chat", names: ["ChatMessage"], source_file: "src/rag_foundation/models/chat.py" }], tests: [{ file: "tests/test_conversation_request.py", purpose: "Validates conversation request structure and message history handling." }], related_concepts: ["Message order", "Multi-turn conversation", "History trimming"] },
+      { concept: "History trimming", category: "Conversation History", keywords: ["trim history", "preserve system message", "keep recent messages", "history length"], problem_solved: "Reduces the number of resent chat messages while optionally preserving the first system message and the most recent turns.", simple_examples: [{ brick: 44, file: "44_trim_conversation_history.py", purpose: "Smallest focused trimming example." }], complete_examples: [{ brick: 47, file: "47_validate_and_repair_summary.py", purpose: "Pairs trimming pressure with summarization and fact validation." }], library_mechanics: [{ module: "rag_foundation.history", names: ["keep_recent_messages"], source_file: "src/rag_foundation/history.py" }], tests: [{ file: "tests/test_history.py", purpose: "Validates trimming behavior, limits, and system-message preservation." }], related_concepts: ["Conversation history", "Older-history summarization", "Summary validation and repair"] },
+      { concept: "Older-history summarization", category: "Conversation History", keywords: ["summarize history", "older summary", "compressed context", "build summarized history"], problem_solved: "Replaces earlier turns with one summary message so the app can keep recent messages verbatim and shrink context size.", simple_examples: [{ brick: 45, file: "45_summarize_older_history.py", purpose: "Smallest older-history summarization example." }], complete_examples: [{ brick: 47, file: "47_validate_and_repair_summary.py", purpose: "Uses summarization together with summary validation and repair." }], library_mechanics: [{ module: "rag_foundation.history", names: ["build_summarized_history"], source_file: "src/rag_foundation/history.py" }], tests: [{ file: "tests/test_history_summary.py", purpose: "Validates summarized-history construction and edge cases." }], related_concepts: ["History trimming", "Summary information loss", "Summary validation and repair"] },
+      { concept: "Summary information loss", category: "Conversation History", keywords: ["information loss", "missing facts", "summary loss", "required facts"], problem_solved: "Demonstrates that a shorter conversation summary can omit facts the application still needs later.", simple_examples: [{ brick: 46, file: "46_summary_information_loss.py", purpose: "Focused example that exposes summary fact loss." }], complete_examples: [{ brick: 47, file: "47_validate_and_repair_summary.py", purpose: "Continues into validation and repair of the summary." }], library_mechanics: [{ module: "rag_foundation.summary_validation", names: ["SummaryValidationResult", "validate_summary_facts"], source_file: "src/rag_foundation/summary_validation.py" }], tests: [{ file: "tests/test_summary_validation.py", purpose: "Validates required-fact checking for summaries." }], related_concepts: ["Older-history summarization", "Summary validation and repair"] },
+      { concept: "Summary validation and repair", category: "Conversation History", keywords: ["summary validation", "repair summary", "required facts", "validate summary"], problem_solved: "Checks whether required facts survived summarization and repairs the summary once when critical details are missing.", simple_examples: [{ brick: 47, file: "47_validate_and_repair_summary.py", purpose: "Focused validation-and-repair example." }], complete_examples: [], library_mechanics: [{ module: "rag_foundation.summary_validation", names: ["SummaryValidationResult", "validate_summary_facts"], source_file: "src/rag_foundation/summary_validation.py" }], tests: [{ file: "tests/test_summary_validation.py", purpose: "Covers summary fact validation, normalization, and missing-fact reporting." }], related_concepts: ["Summary information loss", "Older-history summarization", "Safe parsing"] },
+      { concept: "Local cumulative budget", category: "Tokens and Cost", keywords: ["local budget", "cumulative budget", "spending total", "application budget"], problem_solved: "Tracks local spending across multiple requests.", simple_examples: [{ brick: 53, file: "53_local_budget_tracking.py", purpose: "Smallest cumulative budget example." }], complete_examples: [{ brick: 70, file: "70_guarded_console_application.py", purpose: "Uses a reusable guarded workflow that owns a cumulative local budget tracker." }], library_mechanics: [{ module: "rag_foundation.budget", names: ["CostBudgetTracker"], source_file: "src/rag_foundation/budget/tracker.py" }], tests: [{ file: "tests/test_budget_tracker.py", purpose: "Validates local budget accumulation, remaining budget, and exhaustion behavior." }], related_concepts: ["Request cost calculation", "Budget tracking and warning threshold", "Cumulative workflow budget"] },
+      { concept: "Request cost calculation", category: "Tokens and Cost", keywords: ["request cost", "token cost", "estimate request cost", "pricing"], problem_solved: "Turns token usage into estimated monetary cost.", simple_examples: [{ brick: 43, file: "43_request_cost_calculation.py", purpose: "Smallest real request-cost example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Estimates actual cost inside the reusable workflow before budget reconciliation." }], library_mechanics: [{ module: "rag_foundation.costs", names: ["TokenRates", "estimate_request_cost"], source_file: "src/rag_foundation/costs.py" }], tests: [{ file: "tests/test_costs.py", purpose: "Validates cost estimation and token-rate rules." }], related_concepts: ["TokenRates", "Local cumulative budget", "Projected-cost reservation"] },
+      { concept: "TokenRates", category: "Tokens and Cost", keywords: ["token rates", "pricing rates", "input per million", "output per million"], problem_solved: "Keeps pricing rates in explicit application data.", simple_examples: [{ brick: 43, file: "43_request_cost_calculation.py", purpose: "Smallest example that creates pricing rates." }], complete_examples: [{ brick: 68, file: "68_validate_application_settings.py", purpose: "Places rates into validated startup settings." }], library_mechanics: [{ module: "rag_foundation.costs", names: ["TokenRates"], source_file: "src/rag_foundation/costs.py" }], tests: [{ file: "tests/test_costs.py", purpose: "Covers token-rate validation and cost use." }], related_concepts: ["Request cost calculation", "ApplicationSettings"] },
+      { concept: "Bounded retries", category: "Reliability and Retry", keywords: ["retry", "transient failure", "temporary failure", "attempts", "bounded retries"], problem_solved: "Retries temporary failures without retrying forever.", simple_examples: [{ brick: 49, file: "49_retry_transient_failure.py", purpose: "Smallest focused retry example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Uses retries inside the reusable guarded workflow." }], library_mechanics: [{ module: "rag_foundation.retry", names: ["RetryPolicy", "run_with_retry"], source_file: "src/rag_foundation/retry.py" }], tests: [{ file: "tests/test_retry.py", purpose: "Validates retry success, exhaustion, validation, and non-retryable errors." }], related_concepts: ["Retry exhaustion", "Safe fallback", "Correlation ID and attempt count"] },
+      { concept: "Retry exhaustion", category: "Reliability and Retry", keywords: ["retry exhaustion", "all attempts failed", "exhausted retries", "failure after retries"], problem_solved: "Stops after the last allowed retry instead of looping forever.", simple_examples: [{ brick: 50, file: "50_retry_exhaustion_safe_fallback.py", purpose: "Smallest example where retries are exhausted." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Returns a structured fallback result after bounded retries fail." }], library_mechanics: [{ module: "rag_foundation.retry", names: ["RetryPolicy", "run_with_retry"], source_file: "src/rag_foundation/retry.py" }], tests: [{ file: "tests/test_retry.py", purpose: "Covers exhausted retries and non-retryable errors." }], related_concepts: ["Bounded retries", "Safe fallback", "Safe generation diagnostics"] },
+      { concept: "Safe fallback", category: "Reliability and Retry", keywords: ["fallback", "safe fallback", "retry exhausted", "user-safe message"], problem_solved: "Returns a controlled user-safe response after failure.", simple_examples: [{ brick: 50, file: "50_retry_exhaustion_safe_fallback.py", purpose: "Focused safe-fallback example." }], complete_examples: [{ brick: 70, file: "70_guarded_console_application.py", purpose: "Surfaces one structured result that can be success, fallback, or blocked." }], library_mechanics: [{ module: "rag_foundation.diagnostics", names: ["build_failure_diagnostic"], source_file: "src/rag_foundation/diagnostics.py" }, { module: "rag_foundation.operation_result", names: ["OperationResult"], source_file: "src/rag_foundation/operation_result.py" }], tests: [{ file: "tests/test_guarded_text_workflow.py", purpose: "Validates fallback results, safe diagnostics, and no leaked exception message." }], related_concepts: ["Retry exhaustion", "Safe generation diagnostics", "OperationResult"] },
+      { concept: "Budget tracking and warning threshold", category: "Budget Control", keywords: ["budget tracking", "warning threshold", "amount spent", "remaining budget"], problem_solved: "Tracks local spend and raises a warning before exhaustion.", simple_examples: [{ brick: 53, file: "53_local_budget_tracking.py", purpose: "Smallest example that reports spent, remaining, and threshold state." }], complete_examples: [{ brick: 68, file: "68_validate_application_settings.py", purpose: "Stores the warning threshold in validated settings for later workflow use." }], library_mechanics: [{ module: "rag_foundation.budget", names: ["CostBudgetTracker"], source_file: "src/rag_foundation/budget/tracker.py" }], tests: [{ file: "tests/test_budget_tracker.py", purpose: "Validates threshold and spent/remaining budget behavior." }], related_concepts: ["Local cumulative budget", "Pre-request budget guard", "ApplicationSettings"] },
+      { concept: "Context-managed reservation", category: "Budget Control", keywords: ["context manager", "reservation scope", "automatic cleanup", "with statement"], problem_solved: "Automatically cleans up reservations around provider work.", simple_examples: [{ brick: 58, file: "58_automatic_reservation_cleanup.py", purpose: "Smallest context-managed reservation example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Uses the shared reservation scope inside the reusable workflow." }], library_mechanics: [{ module: "rag_foundation.budget", names: ["BudgetReservationScope"], source_file: "src/rag_foundation/budget/reservation_scope.py" }], tests: [{ file: "tests/test_budget_reservation_scope.py", purpose: "Validates scoped reservation cleanup and reconciliation." }], related_concepts: ["Projected-cost reservation", "Reservation cleanup", "GuardedTextWorkflow"] },
+      { concept: "Pre-request budget guard", category: "Budget Control", keywords: ["budget guard", "block before request", "do not send request", "projected cost"], problem_solved: "Blocks overspending before the provider call happens.", simple_examples: [{ brick: 54, file: "54_budget_guard_before_request.py", purpose: "Smallest pre-request budget guard example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Returns a blocked OperationResult before calling the provider." }], library_mechanics: [{ module: "rag_foundation.budget", names: ["CostBudgetTracker", "BudgetDecision"], source_file: "src/rag_foundation/budget/tracker.py" }], tests: [{ file: "tests/test_budget_guard.py", purpose: "Validates projected-cost checks and blocked decisions." }], related_concepts: ["Projected-cost reservation", "Budget tracking and warning threshold", "OperationResult"] },
+      { concept: "Projected-cost reservation", category: "Budget Control", keywords: ["reservation", "projected cost", "reconcile actual cost", "budget reservation"], problem_solved: "Holds expected cost for an in-flight request before actual cost is known.", simple_examples: [{ brick: 55, file: "55_concurrent_budget_reservations.py", purpose: "Smallest projected-cost reservation example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Reserves projected cost, then reconciles it with the actual estimated cost." }], library_mechanics: [{ module: "rag_foundation.budget", names: ["BudgetReservationScope"], source_file: "src/rag_foundation/budget/reservation_scope.py" }], tests: [{ file: "tests/test_budget_reservations.py", purpose: "Validates reservation lifecycle and competing reservations." }], related_concepts: ["Context-managed reservation", "Concurrent reservation", "Request cost calculation"] },
+      { concept: "Reservation cleanup", category: "Budget Control", keywords: ["release reservation", "cleanup", "failed request cleanup", "reservation release"], problem_solved: "Releases projected budget after failure.", simple_examples: [{ brick: 57, file: "57_release_reservation_after_failure.py", purpose: "Smallest explicit reservation-release example." }], complete_examples: [{ brick: 58, file: "58_automatic_reservation_cleanup.py", purpose: "Shows the same cleanup behavior managed automatically by a context manager." }], library_mechanics: [{ module: "rag_foundation.budget", names: ["BudgetReservationScope"], source_file: "src/rag_foundation/budget/reservation_scope.py" }], tests: [{ file: "tests/test_budget_reservation_scope.py", purpose: "Covers automatic cleanup after failures." }], related_concepts: ["Projected-cost reservation", "Context-managed reservation", "Retry exhaustion"] },
+      { concept: "Concurrent reservation", category: "Concurrency and Reservations", keywords: ["concurrent reservation", "thread race", "competing requests", "race condition"], problem_solved: "Protects a shared budget when multiple requests compete at the same time.", simple_examples: [{ brick: 56, file: "56_real_concurrent_reservation_race.py", purpose: "Focused real-thread reservation race example." }], complete_examples: [{ brick: 55, file: "55_concurrent_budget_reservations.py", purpose: "Explains the same competition pattern in a more guided workflow." }], library_mechanics: [{ module: "rag_foundation.budget", names: ["CostBudgetTracker", "BudgetReservationScope"], source_file: "src/rag_foundation/budget/tracker.py" }], tests: [{ file: "tests/test_budget_reservations.py", purpose: "Validates concurrent reservation safety." }], related_concepts: ["Projected-cost reservation", "Reservation cleanup", "Context-managed reservation"] },
+      { concept: "Safe generation diagnostics", category: "Diagnostics and Safety", keywords: ["safe diagnostics", "success diagnostic", "failure diagnostic", "generation diagnostic"], problem_solved: "Captures safe success and failure metadata without leaking sensitive content.", simple_examples: [{ brick: 51, file: "51_safe_generation_diagnostics.py", purpose: "Smallest safe-diagnostic example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Builds safe success and failure diagnostics inside a reusable workflow." }], library_mechanics: [{ module: "rag_foundation.diagnostics", names: ["GenerationDiagnostic", "build_success_diagnostic", "build_failure_diagnostic"], source_file: "src/rag_foundation/diagnostics.py" }], tests: [{ file: "tests/test_diagnostics.py", purpose: "Validates safe diagnostic fields and omitted sensitive data." }], related_concepts: ["Sensitive-data exclusion", "Correlation ID and attempt count", "OperationResult"] },
+      { concept: "Sensitive-data exclusion", category: "Diagnostics and Safety", keywords: ["sensitive data", "no prompt leakage", "no raw response", "safe metadata only"], problem_solved: "Keeps prompts, answers, exception messages, secrets, and raw responses out of safe metadata.", simple_examples: [{ brick: 51, file: "51_safe_generation_diagnostics.py", purpose: "Shows safe diagnostics that exclude sensitive details." }], complete_examples: [{ brick: 64, file: "64_operation_audit_jsonl.py", purpose: "Appends compact audit records that keep only safe operational metadata." }], library_mechanics: [{ module: "rag_foundation.diagnostics", names: ["build_failure_diagnostic", "build_success_diagnostic"], source_file: "src/rag_foundation/diagnostics.py" }, { module: "rag_foundation.operation_audit_builder", names: ["build_operation_audit_record"], source_file: "src/rag_foundation/operation_audit_builder.py" }], tests: [{ file: "tests/test_diagnostics.py", purpose: "Validates omission of exception messages and other sensitive details." }, { file: "tests/test_operation_audit_builder.py", purpose: "Validates omission of user messages and forbidden payload fields." }], related_concepts: ["Safe generation diagnostics", "Safe audit record", "ApplicationSettings"] },
+      { concept: "Correlation ID and attempt count", category: "Correlation and Tracing", keywords: ["correlation id", "attempt count", "trace id", "logical request"], problem_solved: "Lets the application trace one logical request across retries, diagnostics, results, and later audit records.", simple_examples: [{ brick: 52, file: "52_correlation_id_across_operation.py", purpose: "Focused correlation and attempt-count tracing example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Creates one correlation ID per logical request and keeps attempt counts aligned through the final result." }], library_mechanics: [{ module: "rag_foundation.correlation", names: ["create_correlation_id", "validate_correlation_id"], source_file: "src/rag_foundation/correlation.py" }], tests: [{ file: "tests/test_correlation.py", purpose: "Validates correlation ID creation and validation." }], related_concepts: ["OperationDiagnosticContext", "Safe generation diagnostics", "OperationResult"] },
+      { concept: "OperationDiagnosticContext", category: "Correlation and Tracing", keywords: ["operation context", "diagnostic context", "attempt context", "correlation context"], problem_solved: "Bundles correlation ID plus attempt count for safe diagnostics.", simple_examples: [{ brick: 61, file: "61_structured_operation_result_workflow.py", purpose: "Smallest example that builds structured diagnostic context before creating the final result." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Creates diagnostic context on success, fallback, and blocked paths." }], library_mechanics: [{ module: "rag_foundation.operation_context", names: ["OperationDiagnosticContext"], source_file: "src/rag_foundation/operation_context.py" }], tests: [{ file: "tests/test_operation_context.py", purpose: "Validates operation diagnostic context rules." }], related_concepts: ["Correlation ID and attempt count", "Safe generation diagnostics", "OperationResult"] },
+      { concept: "Decimal precision", category: "Serialization", keywords: ["decimal precision", "decimal as string", "financial precision", "no float conversion"], problem_solved: "Keeps money values precise in JSON-safe output by serializing Decimal as strings.", simple_examples: [{ brick: 62, file: "62_json_safe_operation_result.py", purpose: "Smallest example that proves Decimals remain in Python-native output but become strings in JSON-safe output." }], complete_examples: [{ brick: 65, file: "65_summarize_operation_audit.py", purpose: "Shows the same rule when summarizing audit costs." }], library_mechanics: [{ module: "rag_foundation.serialization", names: ["to_json_safe"], source_file: "src/rag_foundation/serialization.py" }], tests: [{ file: "tests/test_serialization.py", purpose: "Validates JSON-safe Decimal conversion." }], related_concepts: ["JSON-safe serialization", "Atomic JSON writing", "Audit summary"] },
+      { concept: "JSON-safe serialization", category: "Serialization", keywords: ["json safe", "to_json_dict", "json dumps", "serialization"], problem_solved: "Produces a json.dumps-ready representation of structured results.", simple_examples: [{ brick: 62, file: "62_json_safe_operation_result.py", purpose: "Focused JSON-safe OperationResult serialization example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Prints a JSON-safe structured result after the guarded request finishes." }], library_mechanics: [{ module: "rag_foundation.serialization", names: ["to_json_safe"], source_file: "src/rag_foundation/serialization.py" }, { module: "rag_foundation.operation_result", names: ["OperationResult", "OperationResult.to_json_dict"], source_file: "src/rag_foundation/operation_result.py" }], tests: [{ file: "tests/test_serialization.py", purpose: "Validates general JSON-safe serialization behavior." }, { file: "tests/test_operation_result.py", purpose: "Validates structured result serialization and alignment." }], related_concepts: ["Python-native dictionary", "Decimal precision", "OperationResult"] },
+      { concept: "OperationResult", category: "Serialization", keywords: ["operation result", "success result", "fallback result", "blocked result", "diagnostic alignment"], problem_solved: "Returns one validated structured outcome for success, fallback, and blocked paths.", simple_examples: [{ brick: 61, file: "61_structured_operation_result_workflow.py", purpose: "Smallest structured OperationResult example." }], complete_examples: [{ brick: 70, file: "70_guarded_console_application.py", purpose: "Returns one structured result to the console application on every path." }], library_mechanics: [{ module: "rag_foundation.operation_result", names: ["OperationResult", "OperationStatus"], source_file: "src/rag_foundation/operation_result.py" }], tests: [{ file: "tests/test_operation_result.py", purpose: "Validates success, fallback, blocked, and diagnostic alignment rules." }], related_concepts: ["Correlation ID and attempt count", "JSON-safe serialization", "GuardedTextWorkflow"] },
+      { concept: "Python-native dictionary", category: "Serialization", keywords: ["to_dict", "python native", "decimal objects", "native serialization"], problem_solved: "Shows the pre-JSON representation before conversion to JSON-safe output.", simple_examples: [{ brick: 62, file: "62_json_safe_operation_result.py", purpose: "Directly compares Python-native and JSON-safe serialization." }], complete_examples: [{ brick: 63, file: "63_atomic_operation_result_file.py", purpose: "Converts the structured result before saving it atomically." }], library_mechanics: [{ module: "rag_foundation.operation_result", names: ["OperationResult.to_dict", "OperationResult.to_json_dict"], source_file: "src/rag_foundation/operation_result.py" }], tests: [{ file: "tests/test_operation_result.py", purpose: "Covers structured result behavior before and after JSON-safe conversion." }], related_concepts: ["JSON-safe serialization", "Decimal precision", "Atomic JSON writing"] },
+      { concept: "Atomic JSON writing", category: "File Persistence", keywords: ["atomic json", "os.replace", "temporary file", "atomic write"], problem_solved: "Replaces a destination file atomically after a full temporary write.", simple_examples: [{ brick: 63, file: "63_atomic_operation_result_file.py", purpose: "Focused atomic JSON persistence example." }], complete_examples: [], library_mechanics: [{ module: "rag_foundation.json_files", names: ["write_json_atomic"], source_file: "src/rag_foundation/json_files.py" }], tests: [{ file: "tests/test_json_files.py", purpose: "Validates formatting, replacement safety, and temporary-file cleanup." }], related_concepts: ["JSON-safe serialization", "Decimal precision", "JSON Lines append"] },
+      { concept: "JSON Lines append", category: "File Persistence", keywords: ["jsonl", "append line", "compact json", "thread-safe append"], problem_solved: "Appends one compact JSON object per line with flush and sync.", simple_examples: [{ brick: 64, file: "64_operation_audit_jsonl.py", purpose: "Smallest example that appends one safe audit record to JSON Lines." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Appends compact audit records automatically from the reusable workflow." }], library_mechanics: [{ module: "rag_foundation.json_lines", names: ["append_json_line"], source_file: "src/rag_foundation/json_lines.py" }], tests: [{ file: "tests/test_json_lines.py", purpose: "Validates compact output, newline termination, validation, and thread-safe appends." }], related_concepts: ["Atomic JSON writing", "Safe audit record", "Recent audit records"] },
+      { concept: "Safe audit record", category: "Audit Logging", keywords: ["audit record", "safe audit", "compact metadata", "no prompt in audit"], problem_solved: "Logs compact operational metadata while excluding prompts, answers, secrets, and raw responses.", simple_examples: [{ brick: 64, file: "64_operation_audit_jsonl.py", purpose: "Focused safe-audit example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Appends the same compact safe audit records automatically from the reusable workflow." }], library_mechanics: [{ module: "rag_foundation.operation_audit_record", names: ["OperationAuditRecord"], source_file: "src/rag_foundation/operation_audit_record.py" }, { module: "rag_foundation.operation_audit_builder", names: ["build_operation_audit_record"], source_file: "src/rag_foundation/operation_audit_builder.py" }], tests: [{ file: "tests/test_operation_audit_builder.py", purpose: "Validates safe metadata, forbidden-field exclusion, and JSON-safe Decimal handling." }], related_concepts: ["Sensitive-data exclusion", "JSON Lines append", "Audit summary"] },
+      { concept: "Audit lookup by correlation ID", category: "Audit Inspection", keywords: ["audit lookup", "find audit record", "correlation id lookup", "exact match"], problem_solved: "Retrieves one exact audit record for one logical request.", simple_examples: [{ brick: 66, file: "66_find_audit_record_by_correlation_id.py", purpose: "Focused correlation-ID lookup example." }], complete_examples: [], library_mechanics: [{ module: "rag_foundation.operation_audit_lookup", names: ["find_operation_audit_record"], source_file: "src/rag_foundation/operation_audit_lookup.py" }], tests: [{ file: "tests/test_operation_audit_lookup.py", purpose: "Validates exact matching, malformed JSON handling, and missing-record behavior." }], related_concepts: ["Correlation ID and attempt count", "Audit summary", "Recent audit records"] },
+      { concept: "Audit summary", category: "Audit Inspection", keywords: ["audit summary", "jsonl summary", "aggregate totals", "latest correlation id"], problem_solved: "Calculates totals and latest reference data from the audit log.", simple_examples: [{ brick: 65, file: "65_summarize_operation_audit.py", purpose: "Focused audit-summary example." }], complete_examples: [], library_mechanics: [{ module: "rag_foundation.operation_audit_summary", names: ["OperationAuditSummary"], source_file: "src/rag_foundation/operation_audit_summary.py" }, { module: "rag_foundation.operation_audit_reader", names: ["summarize_operation_audit"], source_file: "src/rag_foundation/operation_audit_reader.py" }], tests: [{ file: "tests/test_operation_audit_reader.py", purpose: "Validates audit aggregation, invalid JSON reporting, and Decimal-safe summary serialization." }], related_concepts: ["Safe audit record", "Audit lookup by correlation ID", "Recent audit records"] },
+      { concept: "Recent audit records", category: "Audit Inspection", keywords: ["recent records", "latest audit records", "newest first", "last n records"], problem_solved: "Lists the latest audit entries in newest-first order.", simple_examples: [{ brick: 67, file: "67_list_recent_audit_records.py", purpose: "Focused recent-record listing example." }], complete_examples: [], library_mechanics: [{ module: "rag_foundation.operation_audit_recent", names: ["list_recent_operation_audit_records"], source_file: "src/rag_foundation/operation_audit_recent.py" }], tests: [{ file: "tests/test_operation_audit_recent.py", purpose: "Validates newest-first ordering, limit handling, and malformed JSON rejection." }], related_concepts: ["Audit summary", "Audit lookup by correlation ID", "JSON Lines append"] },
+      { concept: "API-key presence without storing the key", category: "Configuration", keywords: ["api key presence", "do not store key", "environment variable", "startup safety"], problem_solved: "Confirms required secret configuration exists without storing or printing the secret itself.", simple_examples: [{ brick: 68, file: "68_validate_application_settings.py", purpose: "Focused startup-safety example." }], complete_examples: [{ brick: 70, file: "70_guarded_console_application.py", purpose: "Runs the complete app through validated non-secret settings." }], library_mechanics: [{ module: "rag_foundation.application_settings", names: ["ApplicationSettings", "ApplicationSettings.from_environment"], source_file: "src/rag_foundation/application_settings.py" }], tests: [{ file: "tests/test_application_settings.py", purpose: "Validates environment startup checks and proves the API-key value is not stored." }], related_concepts: ["ApplicationSettings", "Environment startup validation", "Sensitive-data exclusion"] },
+      { concept: "ApplicationSettings", category: "Configuration", keywords: ["application settings", "validated settings", "startup config", "non-secret settings"], problem_solved: "Stores validated non-secret startup configuration.", simple_examples: [{ brick: 68, file: "68_validate_application_settings.py", purpose: "Smallest settings-validation example." }], complete_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Passes validated settings into the reusable guarded workflow." }], library_mechanics: [{ module: "rag_foundation.application_settings", names: ["ApplicationSettings"], source_file: "src/rag_foundation/application_settings.py" }], tests: [{ file: "tests/test_application_settings.py", purpose: "Covers validation, environment startup checks, and JSON-safe Decimal serialization." }], related_concepts: ["Environment startup validation", "API-key presence without storing the key", "GuardedTextWorkflow"] },
+      { concept: "Environment startup validation", category: "Configuration", keywords: ["startup validation", "from environment", "environment settings", "boot-time checks"], problem_solved: "Fails early when required startup environment configuration is missing or blank.", simple_examples: [{ brick: 68, file: "68_validate_application_settings.py", purpose: "Focused startup-validation example." }], complete_examples: [{ brick: 70, file: "70_guarded_console_application.py", purpose: "Uses validated settings before the console application accepts a question." }], library_mechanics: [{ module: "rag_foundation.application_settings", names: ["ApplicationSettings.from_environment"], source_file: "src/rag_foundation/application_settings.py" }], tests: [{ file: "tests/test_application_settings.py", purpose: "Validates missing and blank environment-variable handling." }], related_concepts: ["ApplicationSettings", "API-key presence without storing the key", "GuardedTextWorkflow"] },
+      { concept: "Cumulative workflow budget", category: "Reusable Workflow", keywords: ["workflow budget", "cumulative budget", "shared tracker", "budget across calls"], problem_solved: "Reuses one local budget tracker across multiple workflow calls.", simple_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Smallest example that creates the reusable workflow and uses its owned budget tracker." }], complete_examples: [{ brick: 70, file: "70_guarded_console_application.py", purpose: "Carries the same workflow pattern into a tiny end-to-end app." }], library_mechanics: [{ module: "rag_foundation.guarded_text_workflow", names: ["GuardedTextWorkflow", "GuardedTextWorkflow.budget_tracker"], source_file: "src/rag_foundation/guarded_text_workflow.py" }], tests: [{ file: "tests/test_guarded_text_workflow.py", purpose: "Validates that one workflow instance retains completed spending across multiple calls." }], related_concepts: ["GuardedTextWorkflow", "Local cumulative budget", "ApplicationSettings"] },
+      { concept: "GuardedTextWorkflow", category: "Reusable Workflow", keywords: ["guarded workflow", "reusable workflow", "one workflow class", "compose mechanics"], problem_solved: "Composes retries, budget control, diagnostics, structured results, and audit append into one reusable workflow object.", simple_examples: [{ brick: 69, file: "69_reusable_guarded_workflow.py", purpose: "Focused reusable-workflow example." }], complete_examples: [{ brick: 70, file: "70_guarded_console_application.py", purpose: "Uses the workflow in a tiny end-to-end console application." }], library_mechanics: [{ module: "rag_foundation.guarded_text_workflow", names: ["GuardedTextWorkflow"], source_file: "src/rag_foundation/guarded_text_workflow.py" }], tests: [{ file: "tests/test_guarded_text_workflow.py", purpose: "Covers success, retries, fallback, blocked requests, audit append, and cumulative budget behavior." }], related_concepts: ["ApplicationSettings", "Cumulative workflow budget", "OperationResult"] },
+      { concept: "End-to-end console application", category: "End-to-End Application", keywords: ["console application", "interactive app", "end to end", "stage 1 application"], problem_solved: "Shows the full Stage 1 pattern in one tiny interactive application.", simple_examples: [{ brick: 70, file: "70_guarded_console_application.py", purpose: "Stage 1 end-to-end application example." }], complete_examples: [], library_mechanics: [{ module: "rag_foundation.application_settings", names: ["ApplicationSettings"], source_file: "src/rag_foundation/application_settings.py" }, { module: "rag_foundation.guarded_text_workflow", names: ["GuardedTextWorkflow"], source_file: "src/rag_foundation/guarded_text_workflow.py" }], tests: [{ file: "tests/test_application_settings.py", purpose: "Validates startup configuration behavior used by the console app." }, { file: "tests/test_guarded_text_workflow.py", purpose: "Validates the workflow behavior used by the console app." }], related_concepts: ["ApplicationSettings", "GuardedTextWorkflow", "Safe audit record"] }
+    ];
+
+    const searchInput = document.getElementById("search");
+    const filtersWrap = document.getElementById("filters");
+    const cardsWrap = document.getElementById("cards");
+    const emptyState = document.getElementById("empty");
+    const countEl = document.getElementById("count");
+    const resetButton = document.getElementById("reset");
+    const toast = document.getElementById("toast");
+
+    const categories = categoryOrder.filter(category =>
+      catalog.some(item => item.category === category)
+    );
+
+    let activeCategory = "All";
+
+    function conceptId(name) {
+      return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    }
+
+    function textFor(item) {
+      const pieces = [
+        item.concept,
+        item.category,
+        item.problem_solved,
+        ...item.keywords,
+        ...item.simple_examples.map(x => `${x.brick} ${x.file} ${x.purpose}`),
+        ...item.complete_examples.map(x => `${x.brick} ${x.file} ${x.purpose}`),
+        ...item.library_mechanics.flatMap(m => [m.module, m.source_file, ...m.names]),
+        ...item.tests.map(t => `${t.file} ${t.purpose}`),
+        ...item.related_concepts
+      ];
+      return pieces.join(" ").toLowerCase();
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 900);
+    }
+
+    async function copyText(value) {
+      try {
+        await navigator.clipboard.writeText(value);
+        showToast("Copied");
+      } catch {
+        showToast("Copy failed");
+      }
+    }
+
+    function renderFilters() {
+      const values = ["All", ...categories];
+      filtersWrap.innerHTML = "";
+      for (const value of values) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `filter${activeCategory === value ? " active" : ""}`;
+        button.textContent = value;
+        button.addEventListener("click", () => {
+          activeCategory = value;
+          renderFilters();
+          renderCards();
+        });
+        filtersWrap.appendChild(button);
+      }
+    }
+
+    function listHtml(items, formatter) {
+      return items.length
+        ? `<div class="list">${items.map(formatter).join("")}</div>`
+        : `<div class="muted">—</div>`;
+    }
+
+    function renderCards() {
+      const query = searchInput.value.trim().toLowerCase();
+      const filtered = catalog.filter(item => {
+        const categoryMatch = activeCategory === "All" || item.category === activeCategory;
+        const textMatch = query === "" || textFor(item).includes(query);
+        return categoryMatch && textMatch;
+      });
+
+      countEl.textContent = `Showing ${filtered.length} concepts`;
+      cardsWrap.innerHTML = filtered.map(item => `
+        <article class="panel card" id="${conceptId(item.concept)}">
+          <div class="category">${item.category}</div>
+          <h3>${item.concept}</h3>
+          <p class="muted">${item.problem_solved}</p>
+          <div class="keywords">${item.keywords.map(keyword => `<span class="pill">${keyword}</span>`).join("")}</div>
+          <div class="grid">
+            <div class="block">
+              <strong>Start here</strong>
+              ${listHtml(item.simple_examples, example => `<div><a href="${example.file}">${example.file}</a> <span class="muted">(Brick ${example.brick})</span><br><span class="muted">${example.purpose}</span></div>`)}
+            </div>
+            <div class="block">
+              <strong>Reusable mechanics</strong>
+              ${listHtml(item.library_mechanics, mechanic => `
+                <div>
+                  <div class="path-row">
+                    <code>${mechanic.module}.${mechanic.names.join(", ")}</code>
+                    <button class="copy" type="button" data-copy="${mechanic.module}.${mechanic.names.join(", ")}">Copy</button>
+                  </div>
+                  <div class="muted">${mechanic.names.join(", ")}</div>
+                </div>
+              `)}
+            </div>
+            <div class="block">
+              <strong>Library source</strong>
+              ${listHtml(item.library_mechanics, mechanic => `
+                <div class="path-row">
+                  <code>${mechanic.source_file}</code>
+                  <button class="copy" type="button" data-copy="${mechanic.source_file}">Copy</button>
+                </div>
+              `)}
+            </div>
+            <div class="block">
+              <strong>Tests</strong>
+              ${listHtml(item.tests, test => `
+                <div>
+                  <div class="path-row">
+                    <code>${test.file}</code>
+                    <button class="copy" type="button" data-copy="${test.file}">Copy</button>
+                  </div>
+                  <div class="muted">${test.purpose}</div>
+                </div>
+              `)}
+            </div>
+            <div class="block">
+              <strong>Complete example</strong>
+              ${listHtml(item.complete_examples, example => `<div><a href="${example.file}">${example.file}</a> <span class="muted">(Brick ${example.brick})</span><br><span class="muted">${example.purpose}</span></div>`)}
+            </div>
+            <div class="block">
+              <strong>Related concepts</strong>
+              <div class="related">${item.related_concepts.map(name => `<a class="pill" href="#${conceptId(name)}">${name}</a>`).join("")}</div>
+            </div>
+          </div>
+        </article>
+      `).join("");
+
+      emptyState.style.display = filtered.length ? "none" : "block";
+
+      cardsWrap.querySelectorAll("[data-copy]").forEach(button => {
+        button.addEventListener("click", () => copyText(button.getAttribute("data-copy")));
+      });
+    }
+
+    searchInput.addEventListener("input", renderCards);
+    resetButton.addEventListener("click", () => {
+      searchInput.value = "";
+      activeCategory = "All";
+      renderFilters();
+      renderCards();
+      searchInput.focus();
+    });
+
+    document.addEventListener("keydown", event => {
+      const activeTag = document.activeElement && document.activeElement.tagName;
+      const typing = activeTag === "INPUT" || activeTag === "TEXTAREA";
+      if (event.key === "/" && !typing) {
+        event.preventDefault();
+        searchInput.focus();
+      }
+      if (event.key === "Escape") {
+        searchInput.value = "";
+        activeCategory = "All";
+        renderFilters();
+        renderCards();
+        if (typing) {
+          searchInput.blur();
+        }
+      }
+    });
+
+    renderFilters();
+    renderCards();
+  </script>
+</body>
+</html>

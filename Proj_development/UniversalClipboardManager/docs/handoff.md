@@ -6,11 +6,15 @@ It supports two separate keyboard actions:
 1. Show/hide the snippet picker window.
 2. Capture current system clipboard text into the snippet list.
 
-## Current State (Updated: 2026-04-27)
+## Current State (Updated: 2026-06-12)
 - Hotkeys are now **configurable** via `settings.json`.
 - Two distinct actions are mapped to separate shortcut groups:
-  - Show window: `Ctrl+Shift+S` (fallback `Ctrl+Alt+S`)
+  - Show window: `F10` (fallback `Ctrl+Alt+S`)
   - Capture clipboard to manager: `F11` (fallback `Ctrl+Alt+A`)
+- The app now runs as a **system tray application** and stays available by the clock.
+- Tray icon behavior:
+  - Single click or double click toggles the window.
+  - Right click opens a tray menu with Show / Hide, Capture Clipboard, and Quit.
 - `deploy.ps1` now copies `settings.json` into the deployed directory.
 - Installed/deployed config was synced to match codebase defaults.
 - App was restarted after config updates so new key mappings take effect.
@@ -27,7 +31,7 @@ It supports two separate keyboard actions:
 
 ### 2. Operational Logic
 - **Show/Hide Action** (`toggle_visibility`):
-  - Default keys: `Ctrl+Shift+S`, `Ctrl+Alt+S`
+  - Default keys: `F10`, `Ctrl+Alt+S`
 - **Capture Action** (`add_from_clipboard`):
   - Default keys: `F11`, `Ctrl+Alt+A`
   - Reads current clipboard text and inserts it at index 0 when non-empty and not duplicate of the newest entry.
@@ -36,13 +40,17 @@ It supports two separate keyboard actions:
   2. Hide manager window.
   3. Wait ~200ms.
   4. Simulate `Ctrl+V`.
+- **Tray Flow**:
+  1. App starts and remains available in the Windows notification area.
+  2. Closing the window hides it instead of exiting.
+  3. Use the tray icon or show hotkey to bring the window back.
 
 ### 3. Hotkey Configuration
 - Config file: `settings.json` in project root (also deployed to install folder).
 - Expected structure:
 ```json
 {
-  "show_window_hotkeys": ["<ctrl>+<shift>+s", "<ctrl>+<alt>+s"],
+  "show_window_hotkeys": ["<f10>", "<ctrl>+<alt>+s"],
   "capture_clipboard_hotkeys": ["<f11>", "<ctrl>+<alt>+a"]
 }
 ```

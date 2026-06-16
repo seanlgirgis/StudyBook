@@ -1,0 +1,37 @@
+1. Calling external APIs
+00:00 - 00:09
+In this video, we'll explore how function calling can be used to call external APIs to retrieve additional information.
+
+2. Python requests library for APIs
+00:09 - 00:30
+APIs are widely used in software engineering and facilitate communication between different software systems. There is a variety of them available and open without the need for a subscription. For example, the Art Institute of Chicago has one available for free that provides developers with the museum's public data.
+
+3. Python requests library for APIs
+00:30 - 00:52
+In Python, we can use the 'requests' library to call the API by providing its URL and query parameters. Our query parameters are the values required as input to the API call for the external API. We then specify the type of request and pass URL and parameters to the 'request()' function to get a response.
+
+1 https://api.artic.edu/docs/#quick-start
+4. Packaging the function
+00:52 - 01:15
+Using the Art Institute API with the OpenAI API, we could provide suggestions on artwork to see at the museum based on a user input. The first thing to do is to package the API call as a function that we're going to call get_artwork, that returns the recommended artwork based on an input keyword.
+
+5. Adding context
+01:15 - 01:54
+We then move to setting up the Chat Completions request. As we've seen, it is important to give context to the model and in this case, we want to make sure it uses the user message to generate one keyword, that will then be used as input for calling the external API, so we provide a specific system message asking to interpret the prompt, and based on it extract one keyword for recommending artwork related to their preference. For this example we also provide a user message that could be coming from a tourist wanting to visit the museum.
+
+6. Adding the function to tools
+01:54 - 02:28
+In the endpoint call, we specify the 'get_artwork' function as part of the tools in the endpoint request. As for the functions previously seen, we set the parameters including type and properties, and add the expected result type. In this case, the function will extract a keyword from the user input, that will then be passed as an argument to the function calling the external API. The parameters properties in this case, should be the artwork keyword with its type and description.
+
+7. Bringing it all together
+02:28 - 03:45
+We need to include some handling of the response before calling the APIs. First, we import the JSON library that we'll use to convert the response to a dictionary. We then want to check that there was a call using the function in tools. To do this, we check that 'finish_reason' in response.choices equals 'tool_calls'. If so, we extract the function called using function in message.tool_calls. If not, we print a message to the user stating that the request could not be understood. The next step is to extract which function was called, using 'name' from 'function_call'. If the function called is 'get_artwork', we extract the keyword from the function call arguments. Once the keyword is extracted we can proceed to call the external API using the 'get_artwork' function. Finally, if the external API returns a response, we extract our recommendations. In this case we use a dictionary comprehension to extract the response due to the format of the output in the external API, but this varies based on the external API's output format.
+
+8. Final response
+03:45 - 04:06
+And finally, we have a response that we can use to pass back to the user, a list of artworks from the museum that resonates with a user who likes the seaside. Depending on how the external API is set up, there might be some post-processing to do on the output, that can always be done using standard Python code.
+
+1 Seaside, Port of Honfleur | The Art Institute of Chicago
+9. Let's practice!
+04:06 - 04:24
+And that's a wrap! By integrating external APIs with the OpenAI API, you're well-equipped to add advanced AI capabilities to your projects. Keep practicing your skills with the coming exercises!

@@ -1,0 +1,622 @@
+<!doctype html>
+<!--
+TEMPLATE USAGE
+Replace every PLACEHOLDER with section-specific content.
+Keep the CSS and layout stable unless the course requires a deliberate design change.
+Recommended filename pattern:
+chapter_XX_section_slug_field_guide.html
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 1 — Generative AI, Prompt Engineering, and Prompt Templates | Develop Generative AI Applications: Get Started</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      white-space: pre;
+      tab-size: 4;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../index.html">Course Library</a>
+      <span>›</span>
+      <a href="../index.html">Develop Generative AI Applications: Get Started</a>
+      <span>›</span>
+      <span>Module 1: Generative AI, Prompt Engineering, and Prompt Templates</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Develop Generative AI Applications: Get Started · Module 1</p>
+      <h1>Generative AI, Prompt Engineering, and Prompt Templates</h1>
+      <p>
+        Build the foundation for generative AI application development: distinguish generative and discriminative systems, understand foundation models and LLMs, choose prompting techniques, and create reusable LangChain templates.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="concept_and_code_quick_lookup.html">Concept & Code Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_introduction_to_langchain_in_generative_ai_applications_field_guide.html">Next: Module 2</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Section Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Generative AI and Foundation Models</a>
+        <a href="#concept-2">3. Prompt Engineering and In-Context Learning</a>
+        <a href="#concept-3">4. Reusable Prompt Templates</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>This module moves from model capability to application control. Foundation models provide broad capability, LLMs focus that capability on language, prompt engineering directs the model at runtime, and templates make those directions reusable.</p>
+
+          <div class="diagram">AI
+└── Machine Learning
+    ├── Discriminative AI → classify or predict
+    └── Generative AI → create
+         └── Foundation models
+              └── LLMs
+                   └── Prompt engineering
+                        └── Prompt templates</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Generative AI and Foundation Models</h3>
+              <p>Generative AI creates; foundation models are broad reusable bases.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Prompt Engineering and In-Context Learning</h3>
+              <p>Prompts combine instructions, context, examples, and output requirements.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Reusable Prompt Templates</h3>
+              <p>Templates separate stable instructions from changing runtime values.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Why LangChain Enters the Picture</h3>
+              <p>LangChain turns prompts and later components into reusable application building blocks.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> A foundation model supplies broad capability; prompting directs it; templates make that direction reusable.
+          </div>
+        </section>
+
+        <section class="section" id="concept-1">
+          <h2>2. Generative AI and Foundation Models</h2>
+          <p>Discriminative models learn boundaries for classification or prediction. Generative models learn patterns that support new text, images, audio, or code. A foundation model is trained broadly and adapted through prompting, retrieval, tools, or further training. An LLM is a language-focused foundation model.</p>
+
+          <pre><code>task = &quot;Summarize this customer email in three bullets.&quot;</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> The model provides capability; the application still supplies task, context, constraints, and output shape.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Prompt Engineering and In-Context Learning</h2>
+          <p>Zero-shot uses no examples, one-shot uses one, and few-shot uses several. Step-by-step prompting helps multi-stage problems. Self-consistency compares several candidate solutions and selects the strongest agreement.</p>
+
+          <pre><code>prompt = &quot;&quot;&quot;Classify the request.
+
+Text: I was charged twice.
+Category: billing
+
+Text: {request}
+Category:&quot;&quot;&quot;</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> More examples are not automatically better; weak examples can teach the wrong pattern.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. Reusable Prompt Templates</h2>
+          <p>PromptTemplate produces formatted text. ChatPromptTemplate produces role-based messages. prompt.invoke(...) fills variables and prepares model input; it does not call the model.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Technique</th>
+                <th>How it works</th>
+                <th>Best use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Zero-shot</td>
+                <td>No demonstrations</td>
+                <td>Clear familiar tasks</td>
+              </tr>
+              <tr>
+                <td>Few-shot</td>
+                <td>Several demonstrations</td>
+                <td>Stable labels, tone, or format</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>The smallest proof uses one stable template with several runtime variables.</p>
+
+          <pre><code>from langchain_core.prompts import PromptTemplate
+
+prompt = PromptTemplate.from_template(
+    &quot;Explain {topic} to a {audience} using {tone} language.&quot;
+)
+
+formatted = prompt.invoke({
+    &quot;topic&quot;: &quot;vector embeddings&quot;,
+    &quot;audience&quot;: &quot;beginner&quot;,
+    &quot;tone&quot;: &quot;friendly&quot;,
+})
+print(formatted.to_string())</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> The tested output was “Explain vector embeddings to a beginner using friendly language.” No LLM call occurred.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Match every placeholder to an invocation key.</li>
+            <li>Inspect the formatted prompt before adding a model.</li>
+            <li>Use ChatPromptTemplate when roles must stay distinct.</li>
+            <li>Choose prompting techniques based on task complexity and examples available.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> Treating every foundation model as an LLM or assuming prompt.invoke(...) called the model.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Foundation model equals LLM</strong>
+              An LLM is one language-focused type of foundation model.
+            </article>
+
+            <article class="qa-item">
+              <strong>Few-shot means fine-tuning</strong>
+              Few-shot examples live in the runtime prompt; fine-tuning changes model behavior through training.
+            </article>
+
+            <article class="qa-item">
+              <strong>Prompt invocation means generation</strong>
+              prompt.invoke prepares; model.invoke generates; chain.invoke runs all connected steps.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is a foundation model?</strong>
+              A broadly trained model that supports many downstream tasks through prompting or adaptation.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is prompt engineering?</strong>
+              Designing instructions, context, examples, constraints, and output formats to guide a model.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why use prompt templates?</strong>
+              They improve reuse, consistency, testing, and maintainability.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li>Generative creates; discriminative classifies or predicts.</li>
+              <li>Foundation model is broad; LLM is language-focused.</li>
+              <li>Zero-shot has no examples; few-shot teaches with examples.</li>
+              <li>prompt.invoke prepares input.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can I explain foundation model versus LLM?</li>
+            <li>Can I choose a prompting technique?</li>
+            <li>Can I write PromptTemplate.from_template(...)?</li>
+            <li>Can I explain prompt.invoke versus model.invoke?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> Use small local examples, then complete the Coursera prompt-template lab.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> Explain the theory and reproduce the smallest PromptTemplate and ChatPromptTemplate patterns.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Develop Generative AI Applications: Get Started · Module 1 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_introduction_to_langchain_in_generative_ai_applications_field_guide.html">Next: Module 2</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

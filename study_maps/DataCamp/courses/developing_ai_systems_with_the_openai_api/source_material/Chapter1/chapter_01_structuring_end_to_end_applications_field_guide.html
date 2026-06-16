@@ -1,0 +1,678 @@
+<!doctype html>
+<!--
+TEMPLATE USAGE
+Replace every template placeholder with section-specific content.
+Keep the CSS and layout stable unless the course requires a deliberate design change.
+Recommended filename pattern:
+chapter_XX_section_slug_field_guide.html
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 1 — Structuring End-to-End Applications | Developing AI Systems with the OpenAI API</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul, .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    .memory-box {
+      padding: 16px;
+      background: var(--purple-soft);
+      border: 1px solid rgba(188,140,255,0.34);
+      border-radius: 11px;
+    }
+
+    .memory-box strong { color: var(--purple); }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">Course Library</a>
+      <span>›</span>
+      <a href="../index.html">Developing AI Systems with the OpenAI API</a>
+      <span>›</span>
+      <span>Chapter 1: Structuring End-to-End Applications</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Developing AI Systems with the OpenAI API · Chapter 1</p>
+      <h1>Structuring End-to-End Applications</h1>
+      <p>
+        Build the reliable application layer around an OpenAI request: structured inputs and outputs, clear response parsing, practical exception handling, rate-limit recovery, batching, and token control.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="openai_api_quick_lookup.html">OpenAI API Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_function_calling_field_guide.html">Next: Function Calling</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Section Contents</h2>
+        <a href="#big-picture">1. Big picture</a>
+        <a href="#concept-1">2. Structured Requests and Responses</a>
+        <a href="#concept-2">3. Errors and Exceptions</a>
+        <a href="#concept-3">4. Rate Limits, Retry, and Batching</a>
+        <a href="#worked-example">5. Worked example</a>
+        <a href="#validation">6. Validation</a>
+        <a href="#mistakes">7. Common mistakes</a>
+        <a href="#interview">8. Interview translation</a>
+        <a href="#review">9. Memory review</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="big-picture">
+          <h2>1. Big Picture</h2>
+          <p>A production AI feature is more than a model call. The application must prepare a valid request, extract the useful result, convert it into a format that downstream code can consume, recover from failures, and control request volume and token usage.</p>
+
+          <div class="diagram">User or upstream system
+        |
+        v
+Validate and prepare input
+        |
+        v
+OpenAI API request
+        |
+        v
+Decode response / parse JSON
+        |
+        v
+Validate result and handle errors
+        |
+        v
+Return data to the next application step</div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <h3>Structured Requests and Responses</h3>
+              <p>Specify the model, messages, and response format so another application can reliably consume the result.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Errors and Exceptions</h3>
+              <p>Recognize common API failures and catch them without crashing the whole application.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Rate Limits, Retry, and Batching</h3>
+              <p>Use exponential backoff, fewer calls, and token measurement to stay within service limits.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Token Control</h3>
+              <p>Measure and reduce input size so requests fit model limits and remain efficient.</p>
+            </article>
+          </div>
+
+          <div class="callout green">
+            <strong>Section punchline:</strong> The API call is one step; the application becomes dependable only when parsing, validation, recovery, and usage controls surround it.
+          </div>
+        </section>
+
+        <section class="section" id="concept-1">
+          <h2>2. Structured Requests and Responses</h2>
+          <p>For integration with external systems, ask for a standardized response instead of relying on free-form prose. In Chat Completions, JSON mode is enabled with response_format, and the prompt must still clearly request JSON. The returned content is accessed from the first choice message.</p>
+
+          <pre><code>from openai import OpenAI
+import json
+
+client = OpenAI()
+
+response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    messages=[
+        {
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: (
+                &quot;Return JSON with a books array. Each item must contain &quot;
+                &quot;title and author. Notes: The Beholders by Hester Musson; &quot;
+                &quot;The Mystery Guest by Nita Prose.&quot;
+            ),
+        }
+    ],
+    response_format={&quot;type&quot;: &quot;json_object&quot;},
+)
+
+data = json.loads(response.choices[0].message.content)
+print(data)</code></pre>
+
+          <div class="callout">
+            <strong>What to notice:</strong> JSON mode produces machine-readable text, but your code should still parse and validate the expected keys before using the result.
+          </div>
+        </section>
+
+        <section class="section" id="concept-2">
+          <h2>3. Errors and Exceptions</h2>
+          <p>Errors differ by cause. Connection and timeout errors are often temporary; rate-limit errors require pacing or reduced load; authentication errors require a valid active key; bad-request errors usually mean malformed or unsupported parameters. Specific except blocks let the application provide a useful response while a final generic handler catches unexpected failures.</p>
+
+          <pre><code>from openai import (
+    APIConnectionError,
+    APITimeoutError,
+    AuthenticationError,
+    BadRequestError,
+    RateLimitError,
+)
+
+try:
+    response = client.chat.completions.create(
+        model=&quot;gpt-4o-mini&quot;,
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize this text.&quot;}],
+    )
+    print(response.choices[0].message.content)
+except AuthenticationError:
+    print(&quot;Check that the API key is valid and active.&quot;)
+except BadRequestError as exc:
+    print(f&quot;Review the request parameters: {exc}&quot;)
+except (APIConnectionError, APITimeoutError):
+    print(&quot;The service could not be reached. Try again shortly.&quot;)
+except RateLimitError:
+    print(&quot;Request limit reached. Retry with backoff.&quot;)
+except Exception as exc:
+    print(f&quot;Unexpected error: {exc}&quot;)</code></pre>
+
+          <div class="callout amber">
+            <strong>Common trap:</strong> Do not catch only Exception and hide every failure behind one vague message. Catch known API errors first so the application can respond appropriately.
+          </div>
+        </section>
+
+        <section class="section" id="concept-3">
+          <h2>4. Rate Limits, Retry, and Batching</h2>
+          <p>Rate limits may be triggered by too many requests in a period or too many tokens. Use exponential backoff for temporary failures, combine related work into one request when appropriate, and count tokens before sending unusually large prompts.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Technique</th>
+                <th>Use it when</th>
+                <th>Important caution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Retry with exponential backoff</td>
+                <td>A temporary rate-limit, timeout, or connection failure may succeed later.</td>
+                <td>Set a maximum number of attempts; never retry forever.</td>
+              </tr>
+              <tr>
+                <td>Batch related inputs</td>
+                <td>Several small requests can be answered together with clear instructions.</td>
+                <td>Large batches can increase token use and make individual failures harder to isolate.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="worked-example">
+          <h2>5. Worked Example</h2>
+          <p>The following pattern combines bounded retry with one batched request. It asks for several country capitals in a single response instead of looping over the endpoint one country at a time.</p>
+
+          <pre><code>from openai import OpenAI
+from tenacity import retry, stop_after_attempt, wait_random_exponential
+
+client = OpenAI()
+
+@retry(
+    wait=wait_random_exponential(min=1, max=60),
+    stop=stop_after_attempt(6),
+)
+def get_capitals(countries: list[str]) -&gt; str:
+    country_text = &quot;, &quot;.join(countries)
+    response = client.chat.completions.create(
+        model=&quot;gpt-4o-mini&quot;,
+        messages=[
+            {
+                &quot;role&quot;: &quot;system&quot;,
+                &quot;content&quot;: &quot;Return one capital for every country in the list.&quot;,
+            },
+            {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: country_text},
+        ],
+    )
+    return response.choices[0].message.content
+
+print(get_capitals([&quot;France&quot;, &quot;Japan&quot;, &quot;Brazil&quot;]))</code></pre>
+
+          <div class="callout green">
+            <strong>Result:</strong> One function performs a bounded retry and sends one carefully structured batch, reducing repeated endpoint calls while still failing cleanly after the configured attempt limit.
+          </div>
+        </section>
+
+        <section class="section" id="validation">
+          <h2>6. Validation and Troubleshooting</h2>
+          <ul>
+            <li>Confirm that the selected model is available and supported for the requested parameters.</li>
+            <li>Parse JSON with json.loads() and verify required keys and value types before passing data downstream.</li>
+            <li>Log enough error context for troubleshooting without exposing API keys, personal data, or sensitive prompts.</li>
+            <li>Measure input tokens with tiktoken when prompts may approach model limits, and test retry behavior with a bounded attempt count.</li>
+          </ul>
+
+          <div class="callout danger">
+            <strong>Red flag:</strong> A response printed successfully is not proof that the application is reliable. Missing validation, unlimited retries, or broad silent exception handling can hide serious failures.
+          </div>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>7. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Assuming JSON mode guarantees the exact schema</strong>
+              JSON mode helps produce valid JSON, but the application must still validate required fields, types, and allowed values.
+            </article>
+
+            <article class="qa-item">
+              <strong>Retrying every error</strong>
+              Retry only failures that may be temporary. Invalid authentication and malformed requests normally require a code or configuration fix.
+            </article>
+
+            <article class="qa-item">
+              <strong>Looping over many tiny requests by default</strong>
+              When the task permits it, batch related inputs into one well-instructed request. Keep the batch small enough to fit token limits and remain easy to validate.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>8. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What makes an OpenAI API call production-ready?</strong>
+              A production-ready call has validated input, explicit instructions, predictable output formatting, safe response parsing, targeted exception handling, bounded retries, observability, and token or rate-limit controls.
+            </article>
+
+            <article class="qa-item">
+              <strong>How would you handle rate limits?</strong>
+              I would distinguish request-frequency limits from token-volume limits, apply exponential backoff with a maximum attempt count, batch compatible work, reduce unnecessary tokens, and monitor repeated failures.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why prefer structured JSON output?</strong>
+              Structured output gives downstream code stable fields to parse and validate. It reduces brittle text extraction, but it still requires schema validation before the data is trusted.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <h2>9. Memory Review</h2>
+
+          <div class="memory-box">
+            <strong>Section summary</strong>
+            <ol>
+              <li>Request clearly: model, messages, instructions, and response format must agree.</li>
+              <li>Decode deliberately: access the response content, parse it, and validate its structure.</li>
+              <li>Handle expected failures specifically, then use a final generic exception handler for unknown problems.</li>
+              <li>Control load with bounded retry, batching, and token measurement.</li>
+            </ol>
+          </div>
+
+          <h3>Quick self-check</h3>
+          <ul>
+            <li>Can I explain why response_format alone is not a complete schema guarantee?</li>
+            <li>Can I classify authentication, bad-request, connection, timeout, and rate-limit errors?</li>
+            <li>Can I write a retry decorator with exponential backoff and a maximum attempt count?</li>
+            <li>Can I explain when batching is better than a loop and when it is not?</li>
+          </ul>
+
+          <div class="callout amber">
+            <strong>Lab decision:</strong> A focused Python lab is warranted. It should include one structured JSON request, one targeted exception-handling exercise, one bounded retry function, one batched request, and one token-counting example.
+          </div>
+
+          <div class="callout green">
+            <strong>Completion standard:</strong> You are ready to close this chapter when you can build a request that returns validated structured data, explain the major error classes, add bounded retry, batch compatible inputs, and measure prompt tokens.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Developing AI Systems with the OpenAI API · Chapter 1 Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.html">Main Field Guide</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_function_calling_field_guide.html">Next: Function Calling</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

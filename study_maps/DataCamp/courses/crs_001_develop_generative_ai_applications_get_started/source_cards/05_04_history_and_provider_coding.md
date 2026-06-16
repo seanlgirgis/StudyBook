@@ -1,0 +1,55 @@
+- Which import provides `MessagesPlaceholder`? >>A)
+    - `from langchain_core.prompts import MessagesPlaceholder`
+    - `from langchain_core.messages import MessagesPlaceholder`
+    - `from langchain_openai import MessagesPlaceholder`
+    - `from pydantic import MessagesPlaceholder`
+- Complete the constructor: `MessagesPlaceholder(variable_name="__________")`→history
+- What runtime value should be supplied for `history`? >>A)
+    - A list of message objects
+    - A single integer
+    - An API key
+    - A parser
+- Which imports provide explicit history messages? >>A)
+    - `from langchain_core.messages import HumanMessage, AIMessage`
+    - `from langchain_core.prompts import HumanMessage, AIMessage`
+    - `from langchain_openai import HumanMessage, AIMessage`
+    - `from pydantic import HumanMessage, AIMessage`
+- Complete the pattern: `history.append(HumanMessage(content=__________))`→question
+- Complete the pattern: `history.append(AIMessage(content=__________))`→answer
+- Which import provides the OpenAI adapter? >>A)
+    - `from langchain_openai import ChatOpenAI`
+    - `from langchain_core.prompts import ChatOpenAI`
+    - `from openai import PromptTemplate`
+    - `from pydantic import ChatOpenAI`
+- Which import provides the IBM watsonx adapter? >>A)
+    - `from langchain_ibm import ChatWatsonx`
+    - `from langchain_core.prompts import ChatWatsonx`
+    - `from ibm_cloud import PromptTemplate`
+    - `from pydantic import ChatWatsonx`
+- Which Watsonx endpoint matched the London project? >>A)
+    - `https://eu-gb.ml.cloud.ibm.com`
+    - `https://us-south.ml.cloud.ibm.com`
+    - `https://localhost:8000`
+    - `https://api.openai.com`
+- Which Watsonx model worked in the user's environment? >>A)
+    - `mistralai/mistral-small-3-1-24b-instruct-2503`
+    - `ibm/granite-3-3-8b-instruct`
+    - `gpt-5.4-nano`
+    - `sentence-transformers/all-minilm-l6-v2`
+- What stayed the same across the OpenAI and Watsonx chains? >>A)
+    - Prompt, parser, input, and LCEL shape
+    - Provider credentials
+    - Model class
+    - Model ID
+- What changed across the two chains? >>A)
+    - The model adapter
+    - The prompt variables
+    - The parser
+    - The input dictionary
+- Complete the OpenAI chain: `openai_chain = prompt | __________ | parser`→openai_model
+- Complete the Watsonx chain: `watsonx_chain = prompt | __________ | parser`→watsonx_model
+- Which Watsonx parameters removed the default token warning? >>A)
+    - `params={"temperature": 0, "max_tokens": 40}`
+    - `params={"max_new_tokens": 10}` only
+    - `input_variables=["max_tokens"]`
+    - `partial_variables={"max_tokens": 40}`

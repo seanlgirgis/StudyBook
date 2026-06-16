@@ -1,0 +1,289 @@
+[
+  {
+    "concept": "Prompt anatomy",
+    "module": "Module 1",
+    "keywords": [
+      "instruction",
+      "context",
+      "input",
+      "output format"
+    ],
+    "plain_meaning": "A prompt gives the model a task, supporting context, changing input, and the desired response shape.",
+    "start_here": "01_prompt_template_one_variable.py"
+  },
+  {
+    "concept": "Zero-shot prompting",
+    "module": "Module 1",
+    "keywords": [
+      "zero shot",
+      "no examples"
+    ],
+    "plain_meaning": "Ask for a familiar task without demonstrations.",
+    "start_here": "01_prompt_template_one_variable.py"
+  },
+  {
+    "concept": "Few-shot prompting",
+    "module": "Module 1",
+    "keywords": [
+      "examples",
+      "in-context learning"
+    ],
+    "plain_meaning": "Place examples in the prompt so the model imitates terminology, style, or format.",
+    "start_here": "04_few_shot_prompt_template.py"
+  },
+  {
+    "concept": "Chain-of-thought prompting",
+    "module": "Module 1",
+    "keywords": [
+      "step by step",
+      "intermediate steps"
+    ],
+    "plain_meaning": "Break a multi-step problem into smaller reasoning stages.",
+    "start_here": "module_01_study_facts.md"
+  },
+  {
+    "concept": "PromptTemplate",
+    "module": "Module 1",
+    "keywords": [
+      "template",
+      "variables",
+      "reusable prompt"
+    ],
+    "plain_meaning": "Keep prompt structure stable while substituting runtime values.",
+    "start_here": "01_prompt_template_one_variable.py"
+  },
+  {
+    "concept": "LCEL pipe operator",
+    "module": "Module 1",
+    "keywords": [
+      "pipe",
+      "runnable",
+      "chain"
+    ],
+    "plain_meaning": "Connect prompt, model, and parser components into one runnable flow.",
+    "start_here": "05_lcel_local_pipeline.py"
+  },
+  {
+    "concept": "RunnableParallel",
+    "module": "Module 1",
+    "keywords": [
+      "parallel branches"
+    ],
+    "plain_meaning": "Run independent transformations against the same input.",
+    "start_here": "06_runnable_parallel.py"
+  },
+  {
+    "concept": "ChatPromptTemplate",
+    "module": "Module 2",
+    "keywords": [
+      "chat prompt",
+      "system",
+      "human"
+    ],
+    "plain_meaning": "Build structured chat messages rather than one plain string.",
+    "start_here": "03_chat_prompt_template.py"
+  },
+  {
+    "concept": "MessagesPlaceholder",
+    "module": "Module 2",
+    "keywords": [
+      "history",
+      "messages"
+    ],
+    "plain_meaning": "Insert a variable-length conversation history into a chat prompt.",
+    "start_here": "07_messages_placeholder.py"
+  },
+  {
+    "concept": "FewShotPromptTemplate",
+    "module": "Module 2",
+    "keywords": [
+      "few shot template"
+    ],
+    "plain_meaning": "Combine examples, an example formatter, and a new input.",
+    "start_here": "04_few_shot_prompt_template.py"
+  },
+  {
+    "concept": "Output parser",
+    "module": "Module 2",
+    "keywords": [
+      "parser",
+      "structured output"
+    ],
+    "plain_meaning": "Transform model text or messages into application-friendly data.",
+    "start_here": "08_json_parser_shape.py"
+  },
+  {
+    "concept": "JsonOutputParser",
+    "module": "Module 2",
+    "keywords": [
+      "json",
+      "pydantic",
+      "format instructions"
+    ],
+    "plain_meaning": "Request and parse a JSON-shaped model response.",
+    "start_here": "08_json_parser_shape.py"
+  },
+  {
+    "concept": "Documents and metadata",
+    "module": "Module 2",
+    "keywords": [
+      "document",
+      "page content",
+      "metadata"
+    ],
+    "plain_meaning": "Represent source content together with provenance fields.",
+    "start_here": "module_02_study_facts.md"
+  },
+  {
+    "concept": "Retriever",
+    "module": "Module 2",
+    "keywords": [
+      "retrieval",
+      "relevant documents"
+    ],
+    "plain_meaning": "Return documents relevant to a query.",
+    "start_here": "module_02_study_facts.md"
+  },
+  {
+    "concept": "Provider-neutral chain",
+    "module": "Module 2",
+    "keywords": [
+      "OpenAI",
+      "Anthropic",
+      "DeepSeek",
+      "Watsonx"
+    ],
+    "plain_meaning": "Keep prompt and parser stable while swapping a compatible model adapter.",
+    "start_here": "course_01_map.md"
+  },
+  {
+    "concept": "Model selection",
+    "module": "Module 3",
+    "keywords": [
+      "cost",
+      "latency",
+      "quality",
+      "risk"
+    ],
+    "plain_meaning": "Choose a model using application requirements rather than popularity alone.",
+    "start_here": "module_03_study_facts.md"
+  },
+  {
+    "concept": "Prompting vs RAG vs fine-tuning",
+    "module": "Module 3",
+    "keywords": [
+      "rag",
+      "fine tuning"
+    ],
+    "plain_meaning": "Use prompting for instructions, RAG for outside knowledge, and fine-tuning for learned behavior.",
+    "start_here": "module_03_study_facts.md"
+  },
+  {
+    "concept": "Flask route",
+    "module": "Module 3",
+    "keywords": [
+      "web app",
+      "endpoint",
+      "request",
+      "response"
+    ],
+    "plain_meaning": "Expose application logic through a small HTTP endpoint.",
+    "start_here": "module_03_study_facts.md"
+  },
+  {
+    "concept": "Complete application pipeline",
+    "module": "Module 3",
+    "keywords": [
+      "prompt model parser Flask"
+    ],
+    "plain_meaning": "Connect user input, prompt, model, parser, and web response.",
+    "start_here": "lab_plan.md"
+  },
+  {
+    "concept": "Three invoke meanings",
+    "module": "Module 1",
+    "keywords": [
+      "prompt.invoke",
+      "model.invoke",
+      "chain.invoke"
+    ],
+    "plain_meaning": "The receiving object determines whether invoke formats, generates, or runs the full pipeline.",
+    "start_here": "chapter_01_code_memory_guide.md"
+  },
+  {
+    "concept": "Real OpenAI LCEL pipeline",
+    "module": "Module 1",
+    "keywords": [
+      "ChatOpenAI",
+      "StrOutputParser",
+      "real model"
+    ],
+    "plain_meaning": "Run one prompt-model-parser chain against a real OpenAI model.",
+    "start_here": "starter_code/05b_lcel_openai_pipeline.py"
+  },
+  {
+    "concept": "Provider comparison",
+    "module": "Module 1",
+    "keywords": [
+      "ChatOpenAI",
+      "ChatWatsonx",
+      "provider switching"
+    ],
+    "plain_meaning": "Use the same prompt, parser, input, and LCEL shape with two provider adapters.",
+    "start_here": "starter_code/05f_provider_switching_lcel_pipeline.py"
+  },
+  {
+    "concept": "Provider ambiguity",
+    "module": "Module 1",
+    "keywords": [
+      "LCEL",
+      "liquid cooling",
+      "context"
+    ],
+    "plain_meaning": "Provider-neutral plumbing does not guarantee identical interpretation; ambiguous acronyms need context.",
+    "start_here": "chapter_01_learning_evidence.md"
+  },
+  {
+    "concept": "Provider-native structured output",
+    "module": "Module 2",
+    "keywords": [
+      "with_structured_output",
+      "Pydantic",
+      "TopicSummary"
+    ],
+    "plain_meaning": "Return validated Pydantic objects instead of parsing arbitrary prose.",
+    "start_here": "starter_code/09_provider_native_structured_output.py"
+  },
+  {
+    "concept": "Manual conversation history",
+    "module": "Module 2",
+    "keywords": [
+      "MessagesPlaceholder",
+      "HumanMessage",
+      "AIMessage"
+    ],
+    "plain_meaning": "Insert previous messages and append each new turn to an in-memory list.",
+    "start_here": "starter_code/11_update_conversation_history.py"
+  },
+  {
+    "concept": "Reusable conversation function",
+    "module": "Module 2",
+    "keywords": [
+      "ask_with_history",
+      "history function"
+    ],
+    "plain_meaning": "Wrap chain invocation and message appending into one reusable function.",
+    "start_here": "starter_code/12_reusable_chat_function_with_history.py"
+  },
+  {
+    "concept": "Legacy session history wrapper",
+    "module": "Enrichment",
+    "keywords": [
+      "RunnableWithMessageHistory",
+      "deprecated",
+      "LangGraph"
+    ],
+    "plain_meaning": "A working but deprecated session-history wrapper retained for comparison; prefer LangGraph later.",
+    "start_here": "starter_code/13_runnable_with_message_history.py"
+  }
+]

@@ -1,0 +1,23 @@
+1. Extracting structured data from text
+00:00 - 00:13
+Now that we are familiar with function calling, we'll take a look at how it can be utilized in practice. In this video, we'll dive into using function calling to extract structured data from unstructured text.
+
+2. Implementing function calling
+00:13 - 00:37
+Let's say we wanted to extract specific parameters from this job description for a data scientist role. Instead of passing a prompt asking to return a JSON and a response type as in previous cases, we add a new function definition to request the specified output. This is done through the 'tools' parameter, that we add to the chat completions endpoint.
+
+3. Setting up function calling
+00:37 - 01:24
+When defining a function to be passed to the tools argument, the format is a list of dictionaries. Let's take a look at how to build one. First we specify the type of tool as 'function'. The 'function' type is used when we want to call our own user-defined function. We then move to specifying information about the function itself. Under the 'function' key, we specify a name for the function, a description of what the function should do, and its parameters. In this case we provide a name for our function related to extracting job information, a short description stating that the function gets information from text, and parameters.
+
+4. Setting up function calling
+01:24 - 01:56
+Let's now take a look at setting the parameters within the function. In the parameters dictionary, each key is the key that will be included in the resulting JSON schema. Each value is a dictionary containing the type of data it will hold and a description to help the model extract it. In this example, the keys are job and location, they are both strings, and we've provided short descriptions to state that they refer to the job title and office location.
+
+5. Response
+01:56 - 02:33
+Finally, let's take a look at the response from our API request that uses function calling. One thing that changes from the previous calls is that, when using function calling, the response will be nested in 'tool_calls[0].function.arguments'. Notice that tool_calls is a list, as there is an option to call multiple functions, and in that case each item in 'tool_calls' will contain the response from each function. In the example we have the job and location extracted from the job advert as output.
+
+6. Let's practice!
+02:33 - 02:55
+As we wrap up this video, we're seeing how function calling can be helpful to transform raw information into precise data, paving the way for more automation in our applications. Continue to unlock the full potential of the OpenAI API with the next exercises!

@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
 TEMPLATE USAGE
-Replace every {{PLACEHOLDER}} with section-specific content.
+Replace every template placeholder with section-specific content.
 Keep the CSS and layout stable unless the course requires a deliberate design change.
 Recommended filename pattern:
 chapter_XX_section_slug_field_guide.html
@@ -10,7 +10,7 @@ chapter_XX_section_slug_field_guide.html
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{SECTION_NUMBER}} — {{SECTION_TITLE}} | {{COURSE_TITLE}}</title>
+  <title>Chapter 1 — Structuring End-to-End Applications | Developing AI Systems with the OpenAI API</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -366,25 +366,25 @@ chapter_XX_section_slug_field_guide.html
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">Course Library</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Developing AI Systems with the OpenAI API</a>
       <span>›</span>
-      <span>{{SECTION_NUMBER}}: {{SECTION_TITLE}}</span>
+      <span>Chapter 1: Structuring End-to-End Applications</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} · Chapter 1</p>
-      <h1>{{SECTION_TITLE}}</h1>
+      <p class="eyebrow">Developing AI Systems with the OpenAI API · Chapter 1</p>
+      <h1>Structuring End-to-End Applications</h1>
       <p>
-        {{SECTION_SUMMARY_HTML}}
+        Build the reliable application layer around an OpenAI request: structured inputs and outputs, clear response parsing, practical exception handling, rate-limit recovery, batching, and token control.
       </p>
 
       <div class="hero-actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button secondary" href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button secondary" href="{{QUICK_LOOKUP_FILE}}">SQL Join Quick Lookup</a>
-        <a class="button secondary" href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a class="button secondary" href="field_guide.html">Main Field Guide</a>
+        <a class="button secondary" href="openai_api_quick_lookup.html">OpenAI API Quick Lookup</a>
+        <a class="button secondary" href="chapter_02_function_calling_field_guide.html">Next: Function Calling</a>
       </div>
     </header>
 
@@ -392,9 +392,9 @@ chapter_XX_section_slug_field_guide.html
       <aside class="toc">
         <h2>Section Contents</h2>
         <a href="#big-picture">1. Big picture</a>
-        <a href="#concept-1">2. {{CONCEPT_1_TITLE}}</a>
-        <a href="#concept-2">3. {{CONCEPT_2_TITLE}}</a>
-        <a href="#concept-3">4. {{CONCEPT_3_TITLE}}</a>
+        <a href="#concept-1">2. Structured Requests and Responses</a>
+        <a href="#concept-2">3. Errors and Exceptions</a>
+        <a href="#concept-3">4. Rate Limits, Retry, and Batching</a>
         <a href="#worked-example">5. Worked example</a>
         <a href="#validation">6. Validation</a>
         <a href="#mistakes">7. Common mistakes</a>
@@ -405,78 +405,156 @@ chapter_XX_section_slug_field_guide.html
       <div class="content">
         <section class="section" id="big-picture">
           <h2>1. Big Picture</h2>
-          <p>{{BIG_PICTURE_EXPLANATION}}</p>
+          <p>A production AI feature is more than a model call. The application must prepare a valid request, extract the useful result, convert it into a format that downstream code can consume, recover from failures, and control request volume and token usage.</p>
 
-          <div class="diagram">{{BIG_PICTURE_DIAGRAM}}</div>
+          <div class="diagram">User or upstream system
+        |
+        v
+Validate and prepare input
+        |
+        v
+OpenAI API request
+        |
+        v
+Decode response / parse JSON
+        |
+        v
+Validate result and handle errors
+        |
+        v
+Return data to the next application step</div>
 
           <div class="mini-grid">
             <article class="mini-card">
-              <h3>{{CONCEPT_1_TITLE}}</h3>
-              <p>{{CONCEPT_1_SUMMARY}}</p>
+              <h3>Structured Requests and Responses</h3>
+              <p>Specify the model, messages, and response format so another application can reliably consume the result.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_2_TITLE}}</h3>
-              <p>{{CONCEPT_2_SUMMARY}}</p>
+              <h3>Errors and Exceptions</h3>
+              <p>Recognize common API failures and catch them without crashing the whole application.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_3_TITLE}}</h3>
-              <p>{{CONCEPT_3_SUMMARY}}</p>
+              <h3>Rate Limits, Retry, and Batching</h3>
+              <p>Use exponential backoff, fewer calls, and token measurement to stay within service limits.</p>
             </article>
             <article class="mini-card">
-              <h3>{{CONCEPT_4_TITLE}}</h3>
-              <p>{{CONCEPT_4_SUMMARY}}</p>
+              <h3>Token Control</h3>
+              <p>Measure and reduce input size so requests fit model limits and remain efficient.</p>
             </article>
           </div>
 
           <div class="callout green">
-            <strong>Section punchline:</strong> {{SECTION_PUNCHLINE}}
+            <strong>Section punchline:</strong> The API call is one step; the application becomes dependable only when parsing, validation, recovery, and usage controls surround it.
           </div>
         </section>
 
         <section class="section" id="concept-1">
-          <h2>2. {{CONCEPT_1_TITLE}}</h2>
-          <p>{{CONCEPT_1_EXPLANATION}}</p>
+          <h2>2. Structured Requests and Responses</h2>
+          <p>For integration with external systems, ask for a standardized response instead of relying on free-form prose. A Chat Completions response is a structured object: the first generated choice is in <code>response.choices[0]</code>, the assistant message is in <code>.message</code>, and the text is in <code>.content</code>. JSON mode is enabled with <code>response_format</code>, and the prompt must still clearly request JSON.</p>
 
-          <pre><code>{{CONCEPT_1_CODE_EXAMPLE}}</code></pre>
+          <pre><code>from openai import OpenAI
+import json
+
+client = OpenAI()
+
+response = client.chat.completions.create(
+    model=&quot;gpt-4o-mini&quot;,
+    messages=[
+        {
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: (
+                &quot;Return JSON with a books array. Each item must contain &quot;
+                &quot;title and author. Notes: The Beholders by Hester Musson; &quot;
+                &quot;The Mystery Guest by Nita Prose.&quot;
+            ),
+        }
+    ],
+    response_format={&quot;type&quot;: &quot;json_object&quot;},
+)
+
+raw_content = response.choices[0].message.content
+
+if raw_content is None:
+    raise ValueError(&quot;The model returned no content.&quot;)
+
+data = json.loads(raw_content)
+print(data)
+
+print(response.model)
+print(response.choices[0].finish_reason)
+print(response.usage)</code></pre>
 
           <div class="callout">
-            <strong>What to notice:</strong> {{CONCEPT_1_NOTICE}}
+            <strong>What to notice:</strong> <code>response.choices[0]</code> is the whole first choice object; <code>response.choices[0].message.content</code> is only the assistant text. JSON mode produces machine-readable text, but your code must still parse and validate required keys, types, and cardinality before using the result.
           </div>
         </section>
 
         <section class="section" id="concept-2">
-          <h2>3. {{CONCEPT_2_TITLE}}</h2>
-          <p>{{CONCEPT_2_EXPLANATION}}</p>
+          <h2>3. Errors and Exceptions</h2>
+          <p>Errors differ by cause. Connection and timeout errors are often temporary; rate-limit errors require pacing or reduced load; authentication errors require a valid active key; bad-request errors usually mean malformed or unsupported parameters. Specific except blocks let the application provide a useful response while a final generic handler catches unexpected failures.</p>
 
-          <pre><code>{{CONCEPT_2_CODE_EXAMPLE}}</code></pre>
+          <pre><code>from openai import (
+    APIConnectionError,
+    APITimeoutError,
+    AuthenticationError,
+    BadRequestError,
+    RateLimitError,
+)
+
+try:
+    response = client.chat.completions.create(
+        model=&quot;gpt-4o-mini&quot;,
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize this text.&quot;}],
+    )
+    print(response.choices[0].message.content)
+except AuthenticationError:
+    print(&quot;Check that the API key is valid and active.&quot;)
+except BadRequestError as exc:
+    print(f&quot;Review the request parameters: {exc}&quot;)
+except (APIConnectionError, APITimeoutError):
+    print(&quot;The service could not be reached. Try again shortly.&quot;)
+except RateLimitError:
+    print(&quot;Request limit reached. Retry with backoff.&quot;)
+except Exception as exc:
+    print(f&quot;Unexpected error: {exc}&quot;)</code></pre>
 
           <div class="callout amber">
-            <strong>Common trap:</strong> {{CONCEPT_2_TRAP}}
+            <strong>Common trap:</strong> Do not catch only Exception and hide every failure behind one vague message. Catch known API errors first so the application can respond appropriately.
           </div>
         </section>
 
         <section class="section" id="concept-3">
-          <h2>4. {{CONCEPT_3_TITLE}}</h2>
-          <p>{{CONCEPT_3_EXPLANATION}}</p>
+          <h2>4. Rate Limits, Retry, and Batching</h2>
+          <p>Rate limits may be triggered by too many requests in a period or too many tokens. Use exponential backoff for temporary failures, combine related work into one request when appropriate, and count tokens before sending unusually large prompts.</p>
 
           <table>
             <thead>
               <tr>
-                <th>{{TABLE_HEADER_1}}</th>
-                <th>{{TABLE_HEADER_2}}</th>
-                <th>{{TABLE_HEADER_3}}</th>
+                <th>Technique</th>
+                <th>Use it when</th>
+                <th>Important caution</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{TABLE_ROW_1_COL_1}}</td>
-                <td>{{TABLE_ROW_1_COL_2}}</td>
-                <td>{{TABLE_ROW_1_COL_3}}</td>
+                <td>Retry with exponential backoff</td>
+                <td>A temporary rate-limit, timeout, or connection failure may succeed later.</td>
+                <td>Set a maximum number of attempts; never retry forever.</td>
               </tr>
               <tr>
-                <td>{{TABLE_ROW_2_COL_1}}</td>
-                <td>{{TABLE_ROW_2_COL_2}}</td>
-                <td>{{TABLE_ROW_2_COL_3}}</td>
+                <td>Batch related inputs</td>
+                <td>Several small requests can be answered together with clear instructions.</td>
+                <td>One request containing many user messages is different from looping over many separate API calls.</td>
+              </tr>
+              <tr>
+                <td>Count input tokens with tiktoken</td>
+                <td>The application should reject or shorten an unusually large prompt before sending it.</td>
+                <td><code>len(encoding.encode(message[&quot;content&quot;]))</code> counts message text, while actual prompt usage may also include message-format overhead.</td>
+              </tr>
+              <tr>
+                <td>Limit output tokens</td>
+                <td>You need to bound response length, latency, or cost.</td>
+                <td>When <code>finish_reason == &quot;length&quot;</code>, the response was truncated and should not be treated as complete.</td>
               </tr>
             </tbody>
           </table>
@@ -484,27 +562,78 @@ chapter_XX_section_slug_field_guide.html
 
         <section class="section" id="worked-example">
           <h2>5. Worked Example</h2>
-          <p>{{WORKED_EXAMPLE_INTRO}}</p>
+          <p>This pattern combines input-token checking, one batched request, and bounded retry. Several kilometer measurements are placed into one message list and returned as a single table.</p>
 
-          <pre><code>{{WORKED_EXAMPLE_CODE}}</code></pre>
+          <pre><code>import tiktoken
+from openai import OpenAI
+from tenacity import retry, stop_after_attempt, wait_random_exponential
+
+client = OpenAI()
+
+@retry(
+    wait=wait_random_exponential(min=5, max=40),
+    stop=stop_after_attempt(4),
+)
+def get_response(messages: list[dict[str, str]]) -&gt; str:
+    response = client.chat.completions.create(
+        model=&quot;gpt-4o-mini&quot;,
+        messages=messages,
+    )
+    return response.choices[0].message.content or &quot;&quot;
+
+measurements = [5, 10, 25]
+messages = [{
+    &quot;role&quot;: &quot;system&quot;,
+    &quot;content&quot;: (
+        &quot;Convert these measurements from kilometers to miles &quot;
+        &quot;and present the results in a table.&quot;
+    ),
+}]
+
+for measurement in measurements:
+    messages.append({
+        &quot;role&quot;: &quot;user&quot;,
+        &quot;content&quot;: str(measurement),
+    })
+
+encoding = tiktoken.encoding_for_model(&quot;gpt-4o-mini&quot;)
+input_tokens = sum(
+    len(encoding.encode(message[&quot;content&quot;]))
+    for message in messages
+)
+
+if input_tokens &lt;= 100:
+    print(get_response(messages))
+else:
+    print(&quot;Message exceeds token limit&quot;)</code></pre>
 
           <div class="callout green">
-            <strong>Result:</strong> {{WORKED_EXAMPLE_RESULT}}
+            <strong>Result:</strong> One request carries a system instruction plus several related inputs, the application checks approximate input size before sending, and Tenacity limits recovery attempts if a temporary failure occurs.
           </div>
         </section>
 
         <section class="section" id="validation">
           <h2>6. Validation and Troubleshooting</h2>
           <ul>
-            <li>{{VALIDATION_ITEM_1}}</li>
-            <li>{{VALIDATION_ITEM_2}}</li>
-            <li>{{VALIDATION_ITEM_3}}</li>
-            <li>{{VALIDATION_ITEM_4}}</li>
+            <li>Confirm that the selected model is available and supported for the requested parameters.</li>
+            <li>Parse JSON with json.loads() and verify required keys and value types before passing data downstream.</li>
+            <li>Log enough error context for troubleshooting without exposing API keys, personal data, or sensitive prompts.</li>
+            <li>Measure input tokens with <code>tiktoken.encoding_for_model()</code> before sending large prompts, and compare actual usage afterward with <code>response.usage</code>.</li>
+            <li>Inspect <code>response.choices[0].finish_reason</code>; <code>stop</code> normally means completion, while <code>length</code> means the output limit cut the answer off.</li>
           </ul>
 
           <div class="callout danger">
-            <strong>Red flag:</strong> {{VALIDATION_RED_FLAG}}
+            <strong>Red flag:</strong> A response printed successfully is not proof that the application is reliable. Missing validation, unlimited retries, broad silent exception handling, or ignoring <code>finish_reason=&quot;length&quot;</code> can hide serious failures.
           </div>
+
+          <h3>Validated local lab evidence</h3>
+          <ul>
+            <li>Decoded the full ChatCompletion object and extracted only <code>response.choices[0].message.content</code>.</li>
+            <li>Parsed Cairo and Alexandria travel data as JSON and validated required keys and value types.</li>
+            <li>Handled a deliberate 404 <code>model_not_found</code> with <code>NotFoundError</code>.</li>
+            <li>Observed Tenacity retry two simulated failures before success, then wrapped a real OpenAI request.</li>
+            <li>Ran three separate city calls, created a one-request measurement batch, observed <code>finish_reason=&quot;length&quot;</code>, and counted a 21-token input with tiktoken.</li>
+          </ul>
         </section>
 
         <section class="section" id="mistakes">
@@ -512,18 +641,28 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{MISTAKE_1_TITLE}}</strong>
-              {{MISTAKE_1_CORRECTION}}
+              <strong>Assuming JSON mode guarantees the exact schema</strong>
+              JSON mode helps produce valid JSON, but the application must still validate required fields, types, and allowed values.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_2_TITLE}}</strong>
-              {{MISTAKE_2_CORRECTION}}
+              <strong>Retrying every error</strong>
+              Retry only failures that may be temporary. Invalid authentication and malformed requests normally require a code or configuration fix.
             </article>
 
             <article class="qa-item">
-              <strong>{{MISTAKE_3_TITLE}}</strong>
-              {{MISTAKE_3_CORRECTION}}
+              <strong>Looping over many tiny requests by default</strong>
+              When the task permits it, batch related inputs into one well-instructed request. Keep the batch small enough to fit token limits and remain easy to validate.
+            </article>
+
+            <article class="qa-item">
+              <strong>Leaving the DataCamp API-key placeholder in local code</strong>
+              <code>OpenAI(api_key=&quot;&lt;OPENAI_API_TOKEN&gt;&quot;)</code> sends the placeholder literally and produces a 401 error. In the local lab, use <code>OpenAI()</code> so the SDK reads <code>OPENAI_API_KEY</code> from the environment.
+            </article>
+
+            <article class="qa-item">
+              <strong>Mixing tabs and spaces inside try/except</strong>
+              Python can raise <code>TabError: inconsistent use of tabs and spaces in indentation</code>. Use four spaces consistently for every nested line.
             </article>
           </div>
         </section>
@@ -533,18 +672,23 @@ chapter_XX_section_slug_field_guide.html
 
           <div class="qa">
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_1}}</strong>
-              {{INTERVIEW_ANSWER_1}}
+              <strong>What makes an OpenAI API call production-ready?</strong>
+              A production-ready call has validated input, explicit instructions, predictable output formatting, safe response parsing, targeted exception handling, bounded retries, observability, and token or rate-limit controls.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_2}}</strong>
-              {{INTERVIEW_ANSWER_2}}
+              <strong>How would you handle rate limits?</strong>
+              I would distinguish request-frequency limits from token-volume limits, apply exponential backoff with a maximum attempt count, batch compatible work, reduce unnecessary tokens, and monitor repeated failures.
             </article>
 
             <article class="qa-item">
-              <strong>{{INTERVIEW_QUESTION_3}}</strong>
-              {{INTERVIEW_ANSWER_3}}
+              <strong>Why prefer structured JSON output?</strong>
+              Structured output gives downstream code stable fields to parse and validate. It reduces brittle text extraction, but it still requires schema validation before the data is trusted.
+            </article>
+
+            <article class="qa-item">
+              <strong>How do you control token usage?</strong>
+              I estimate input size with the model tokenizer, reject or shorten oversized prompts, set an output-token limit, inspect <code>finish_reason</code> for truncation, and record actual usage from the response.
             </article>
           </div>
         </section>
@@ -555,40 +699,43 @@ chapter_XX_section_slug_field_guide.html
           <div class="memory-box">
             <strong>Section summary</strong>
             <ol>
-              <li>{{MEMORY_RULE_1}}</li>
-              <li>{{MEMORY_RULE_2}}</li>
-              <li>{{MEMORY_RULE_3}}</li>
-              <li>{{MEMORY_RULE_4}}</li>
+              <li>Request clearly: model, messages, instructions, and response format must agree.</li>
+              <li>Decode deliberately: access the response content, parse it, and validate its structure.</li>
+              <li>Handle expected failures specifically, then use a final generic exception handler for unknown problems.</li>
+              <li>Control load with bounded retry, batching, input-token measurement, output limits, and finish-reason checks.</li>
             </ol>
           </div>
 
           <h3>Quick self-check</h3>
           <ul>
-            <li>{{SELF_CHECK_1}}</li>
-            <li>{{SELF_CHECK_2}}</li>
-            <li>{{SELF_CHECK_3}}</li>
-            <li>{{SELF_CHECK_4}}</li>
+            <li>Can I explain why response_format alone is not a complete schema guarantee?</li>
+            <li>Can I classify authentication, bad-request, connection, timeout, and rate-limit errors?</li>
+            <li>Can I write a retry decorator with exponential backoff and a maximum attempt count?</li>
+            <li>Can I explain the difference between many API calls in a loop and one request containing a batch of related messages?</li>
+            <li>Can I count input tokens with tiktoken and detect output truncated with <code>finish_reason == &quot;length&quot;</code>?</li>
           </ul>
 
           <div class="callout amber">
-            <strong>Lab decision:</strong> {{LAB_DECISION}}
+            <strong>Lab decision:</strong> The focused Python lab is active and validated. Completed exercises cover a basic API call, response decoding, JSON parsing and validation, targeted API errors, simulated and real retry patterns, separate-call batching, one-request batching, output-token limits, and input-token counting with tiktoken.
           </div>
 
           <div class="callout green">
-            <strong>Completion standard:</strong> {{COMPLETION_STANDARD}}
+            <strong>Completion standard:</strong> You are ready to close this chapter when you can extract <code>response.choices[0].message.content</code>, build and validate JSON output, explain major error classes, add bounded retry, distinguish the two batching patterns, count input tokens, and recognize truncated output.
           </div>
         </section>
       </div>      </div>
     </div>
 
     <footer>
-      <span>{{COURSE_TITLE}} · {{SECTION_NUMBER}} Field Guide</span>
+      <span>Developing AI Systems with the OpenAI API · Chapter 1 Field Guide</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{MAIN_FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="field_guide.html">Main Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{NEXT_SECTION_FILE}}">{{NEXT_SECTION_LABEL}}</a>
+        <a href="openai_api_quick_lookup.html">OpenAI API Quick Lookup</a>
+        &nbsp;·&nbsp;
+        <a href="chapter_02_function_calling_field_guide.html">Next: Function Calling</a>
       </span>
     </footer>
   </main>

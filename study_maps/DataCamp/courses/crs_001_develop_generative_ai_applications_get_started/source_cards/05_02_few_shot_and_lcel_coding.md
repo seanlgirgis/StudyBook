@@ -1,0 +1,63 @@
+- Which import provides `FewShotPromptTemplate`? >>A)
+    - `from langchain_core.prompts import FewShotPromptTemplate`
+    - `from langchain_core.runnables import FewShotPromptTemplate`
+    - `from langchain_openai import FewShotPromptTemplate`
+    - `from pydantic import FewShotPromptTemplate`
+- What does `example_prompt` define? >>A)
+    - How each stored example is formatted
+    - How the model is called
+    - How the API key is loaded
+    - How the output is parsed
+- What does `examples=examples` provide? >>A)
+    - Demonstration records shown before the new request
+    - The final model answer
+    - Provider credentials
+    - Conversation history
+- What does `prefix` usually contain? >>A)
+    - Instructions before the examples
+    - The current request only
+    - The model name
+    - The parser result
+- What does `suffix` usually contain? >>A)
+    - The new runtime request and unfinished answer pattern
+    - Only old examples
+    - The API endpoint
+    - The model class
+- Why use `input_variables=["request"]`? >>A)
+    - To declare the runtime value the caller must supply
+    - To supply the stored examples
+    - To change providers
+    - To call the model automatically
+- Complete the match: `suffix` contains `{__________}` when `input_variables=["request"]`→request
+- What is the smallest common LCEL pattern? >>A)
+    - `chain = prompt | model | parser`
+    - `chain = parser | prompt | model`
+    - `chain = model + prompt + parser`
+    - `chain = prompt.invoke(model.invoke(parser))`
+- Complete the pipeline: `chain = prompt | model | __________`→parser
+- Which call runs the whole LCEL pipeline? >>A)
+    - `chain.invoke(input_data)`
+    - `prompt.invoke(input_data)` only
+    - `parser.to_string()`
+    - `model.from_template()`
+- Which import provides `StrOutputParser`? >>A)
+    - `from langchain_core.output_parsers import StrOutputParser`
+    - `from langchain_core.prompts import StrOutputParser`
+    - `from langchain_openai import StrOutputParser`
+    - `from pydantic import StrOutputParser`
+- Complete the parser creation: `parser = __________()`→StrOutputParser
+- Which import provides `RunnableLambda`? >>A)
+    - `from langchain_core.runnables import RunnableLambda`
+    - `from langchain_core.prompts import RunnableLambda`
+    - `from langchain_openai import RunnableLambda`
+    - `from pydantic import RunnableLambda`
+- Which line explicitly wraps a normal Python function? >>A)
+    - `RunnableLambda(clean_text)`
+    - `PromptTemplate(clean_text)`
+    - `StrOutputParser(clean_text)`
+    - `ChatPromptTemplate(clean_text)`
+- What is automatic coercion? >>A)
+    - LangChain automatically wraps a compatible function or dictionary as a runnable
+    - Python converts every function to JSON
+    - The model changes providers automatically
+    - The parser creates a prompt automatically

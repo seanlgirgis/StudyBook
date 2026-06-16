@@ -1,0 +1,28 @@
+{
+  "status": "success",
+  "user_message": "Atomic file replacement prevents partial or corrupted writes by ensuring the result appears all at once or not at all.",
+  "correlation_id": "rag_4c5c9fdf7ac643fe",
+  "attempt_count": 3,
+  "diagnostic": {
+    "timestamp_utc": "2026-06-13T00:56:06.041859+00:00",
+    "status": "success",
+    "provider": "openai",
+    "model": "gpt-5.4-nano",
+    "request_id": "resp_02495421d60402af006a2caaa5b620819587b0156948abe54d",
+    "input_tokens": 34,
+    "output_tokens": 25,
+    "total_tokens": 59,
+    "error_type": null,
+    "correlation_id": "rag_4c5c9fdf7ac643fe",
+    "attempt_count": 3
+  },
+  "budget_status": {
+    "budget_limit": "0.000100",
+    "amount_spent": "0.00003805",
+    "amount_remaining": "0.00006195",
+    "usage_percentage": "38.0500",
+    "warning_threshold_percentage": "80",
+    "warning_reached": false,
+    "budget_exhausted": false
+  }
+}

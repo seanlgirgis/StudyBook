@@ -1,0 +1,39 @@
+1. Defining function calling
+00:00 - 00:12
+Welcome back! In this video, we will introduce OpenAI's function calling feature, exploring some concepts before moving to its applications in the next video.
+
+2. OpenAI's tools
+00:12 - 00:30
+OpenAI endpoints support 'tools', that can be defined to have the models return more specific information or return more precise outputs by defining a certain structure. Tools are options given to the endpoints that enhance the capabilities of the API call.
+
+3. OpenAI's tools
+00:30 - 00:51
+Let's consider an example where we wanted to use the OpenAI API to control a smart home device, such as a smart light bulb. We could create a function that takes a natural language command, sends it to the OpenAI API for processing, and then interprets the response to control the hardware accordingly.
+
+4. OpenAI's tools
+00:51 - 01:17
+The response should be interpreted consistently across different users, so we'd have to make a change to the original API call. This is where tools come in: by defining certain rules, we set the model output to follow a precise structure. To specify this type of behavior we'd have to define our tool as a function that outputs the expected response, hence the name 'function calling'.
+
+5. What is function calling?
+01:17 - 01:35
+So far, the way we've generated structured outputs has been to have the API generate JSON outputs by specifying the response type and passing a system message, such as in this example where we're asking to output scientific names of trees in JSON format.
+
+6. Why use function calling?
+01:35 - 02:12
+Up to this point however, the reliability of our outputs has remained limited as the JSON keys created when calling the endpoint this way are purely based on the model's interpretation, which can sometimes be inconsistent, such as in this example where different dictionaries containing names of trees have been generated using the same endpoint and prompt. Function calling addresses this issue by enabling OpenAI models to take user-defined functions as input, resulting in consistent responses without the need for complex text processing techniques.
+
+7. Use cases for function calling
+02:12 - 02:33
+By ensuring a reliable structure of our API response, we can integrate our AI application with external systems and be more certain of its reliability. For instance, we can extract instructions from a natural language input and pass them to a smart home system.
+
+8. Use cases for function calling
+02:33 - 02:57
+We can call multiple functions to provide complex responses formulated by means of different functions. For example, in an e-commerce customer service chatbot where the prompt given as input could trigger different functions, such as a function that retrieves the product catalog, one that reads from the website's FAQs, or another that provides a response.
+
+9. Use cases for function calling
+02:57 - 03:13
+Finally, we can use function calling to define functions that enhance the responses by calling external APIs, such as for a weather chatbot calling an API to return current temperatures at specific locations.
+
+10. Let's practice!
+03:13 - 03:24
+We're now ready to deep dive into integrating function calling in our API calls, but before, let's review some concepts through the next exercises!

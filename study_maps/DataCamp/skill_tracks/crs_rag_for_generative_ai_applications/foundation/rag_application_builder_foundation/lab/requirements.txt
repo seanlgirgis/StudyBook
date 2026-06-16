@@ -1,0 +1,11 @@
+openai
+python-dotenv
+pydantic
+requests
+numpy
+pandas
+tiktoken
+chromadb
+faiss-cpu
+ibm-watsonx-ai
+pytest

@@ -1,0 +1,75 @@
+- Which statement best describes discriminative AI? >>A)
+    - It learns boundaries or relationships used to classify or predict outcomes
+    - It always creates new text, images, or code
+    - It can only work with unlabeled data
+    - It is another name for prompt engineering
+- Which task is the clearest example of generative AI? >>A)
+    - Drafting a reply to a customer email
+    - Labeling an email as spam or not spam
+    - Predicting whether a loan will default
+    - Classifying a review as positive or negative
+- What is the easiest mental model for discriminative AI? >>A)
+    - It decides which category or outcome fits an input
+    - It creates a new answer from a prompt
+    - It always retrieves documents from a database
+    - It replaces all machine-learning classifiers
+- What is the easiest mental model for generative AI? >>A)
+    - It creates new content that fits learned patterns and instructions
+    - It only separates inputs into fixed categories
+    - It requires one model for every individual task
+    - It never uses probability
+- Which statement best describes a foundation model? >>A)
+    - A broadly trained model that can be adapted or prompted for many tasks
+    - A narrow classifier trained for one fixed label set
+    - A rule-based program with no learned parameters
+    - A database used to store model responses
+- Which statement best describes an LLM? >>A)
+    - A language-focused type of foundation model
+    - A database containing only legal documents
+    - A model that can only classify text
+    - A framework for building web pages
+- Why are foundation models useful to companies? >>A)
+    - One broadly capable model can support many tasks with prompting or adaptation
+    - Every task must be trained from scratch
+    - They remove the need for all application code
+    - They guarantee perfect answers without evaluation
+- Which is a common enterprise use of an LLM? >>A)
+    - Summarizing and answering questions about documents
+    - Replacing all relational databases
+    - Measuring network voltage
+    - Compiling an operating system kernel without tools
+- Which option is an example of Natural Language Understanding? >>A)
+    - Converting unstructured language into structured meaning
+    - Generating a new paragraph from a topic
+    - Compressing an image file
+    - Sorting numbers in ascending order
+- Which option is an example of Natural Language Generation? >>A)
+    - Producing a human-readable response from structured or internal information
+    - Splitting a sentence into tokens
+    - Assigning a category to a support ticket
+    - Extracting named entities from a paragraph
+- A company wants to predict future customer behavior from historical data. Which approach is most directly suitable? >>A)
+    - Machine learning
+    - A pure rule-based text generator
+    - A static HTML page
+    - A prompt template without a model
+- A company wants one model to perform translation, summarization, and question answering with limited labeled data. What should it consider? >>A)
+    - A foundation model with prompting or tuning
+    - Training a separate model from scratch for every task
+    - A fixed rule-based system only
+    - Removing all examples and instructions
+- How do discriminative and generative models differ at a high level? >>A)
+    - Discriminative models focus on decision boundaries, while generative models learn data patterns or distributions
+    - Discriminative models always create text, while generative models only classify
+    - Discriminative models require no data, while generative models require only rules
+    - There is no meaningful difference between them
+- Which hierarchy is most accurate? >>A)
+    - Foundation models include language, vision, audio, and multimodal models
+    - LLMs include every possible foundation model
+    - Prompt templates include all machine-learning models
+    - Classifiers include every generative model
+- Why does prompting matter with a foundation model? >>A)
+    - The same broad model can perform different tasks depending on the instructions and context
+    - Prompting changes the model's stored training data permanently
+    - Prompting guarantees a correct answer every time
+    - Prompting removes the need to provide input data

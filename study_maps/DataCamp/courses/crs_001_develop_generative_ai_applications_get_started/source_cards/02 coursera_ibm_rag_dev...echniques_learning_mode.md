@@ -1,0 +1,100 @@
+- Which four parts commonly appear in a strong prompt? >>A)
+    - Instruction, context, input data, and desired output format
+    - Model name, API key, file path, and operating system
+    - Database, network, browser, and compiler
+    - Token count, invoice, username, and password
+- In a prompt, what does the instruction specify? >>A)
+    - What the model should do
+    - The changing user data only
+    - The model provider's billing rate
+    - The final parsed Python object
+- In a prompt, what does context provide? >>A)
+    - Background, rules, constraints, or supporting information
+    - Only the variable being replaced
+    - The model's final answer
+    - The output parser implementation
+- In a reusable prompt, what is the changing input? >>A)
+    - The runtime data supplied for the current request
+    - The permanent structure of the template
+    - The provider's SDK source code
+    - The parser's class definition
+- Why specify an output format in a prompt? >>A)
+    - To make the response easier for people or software to use
+    - To make the API key more secure
+    - To change the model provider automatically
+    - To remove the need for validation
+- What is zero-shot prompting? >>A)
+    - Asking the model to perform a task without examples
+    - Giving exactly one example
+    - Giving several examples
+    - Calling several models in parallel
+- What is one-shot prompting? >>A)
+    - Giving one example before the new task
+    - Giving no examples
+    - Giving many unrelated examples
+    - Running the same prompt forever
+- What is few-shot prompting? >>A)
+    - Giving several examples that demonstrate the desired behavior or format
+    - Giving one example only
+    - Removing all context from the prompt
+    - Fine-tuning the model weights
+- Which prompting technique is most helpful when legal terminology and formal tone must be imitated consistently? >>A)
+    - Few-shot prompting with high-quality examples
+    - Zero-shot prompting with no constraints
+    - Randomly changing the prompt every time
+    - Removing the source document
+- Which prompting technique is most suitable for a simple familiar classification task with clear labels? >>A)
+    - Zero-shot prompting may be sufficient
+    - Self-consistency is always required
+    - Fine-tuning is mandatory
+    - RunnableParallel is the only option
+- Which task benefits most from step-by-step prompting? >>A)
+    - A multi-stage travel-distance problem
+    - Translating one short word
+    - Returning a fixed greeting
+    - Copying a known string
+- What is the main purpose of chain-of-thought style prompting? >>A)
+    - Break a complex problem into intermediate reasoning steps
+    - Force every task to run in parallel
+    - Replace the model with a parser
+    - Store prompts in a database
+- What is self-consistency? >>A)
+    - Comparing multiple candidate solutions and selecting the most consistent answer
+    - Reusing one answer without checking it
+    - Always choosing the longest output
+    - Converting every response to uppercase
+- What is a trade-off of self-consistency? >>A)
+    - It may improve reliability but increases cost and latency
+    - It always lowers cost
+    - It removes the need for a model
+    - It guarantees identical outputs from all providers
+- A prompt says, “Translate {document} from {source_language} to {target_language}.” Which items are variables? >>A)
+    - document, source_language, and target_language
+    - Only document
+    - Only source_language
+    - The entire sentence
+- Which statement best distinguishes prompting from fine-tuning? >>A)
+    - Prompting changes instructions at runtime, while fine-tuning changes model behavior through training examples
+    - Prompting changes model weights, while fine-tuning changes only text variables
+    - They are exactly the same process
+    - Fine-tuning is only another name for zero-shot prompting
+- Which statement best distinguishes prompting from RAG? >>A)
+    - Prompting supplies instructions, while RAG also retrieves outside knowledge for context
+    - Prompting retrieves documents, while RAG never uses documents
+    - RAG changes model weights permanently
+    - Prompting and RAG cannot be combined
+- Why should examples in few-shot prompting be high quality? >>A)
+    - The model may imitate their terminology, style, and output pattern
+    - The examples are ignored by the model
+    - Poor examples always reduce token cost
+    - Examples are only used for billing
+- Which is the best reason to avoid unnecessary examples? >>A)
+    - They add tokens, cost, and possible confusion
+    - They prevent the model from seeing the prompt
+    - They always cause an API failure
+    - They convert the task into fine-tuning
+- Which prompt is most likely to produce application-friendly output? >>A)
+    - “Return a JSON object with fields topic, level, and summary.”
+    - “Say something useful.”
+    - “Answer however you like.”
+    - “Use any structure you prefer.”

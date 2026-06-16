@@ -1,0 +1,35 @@
+1. Handling errors
+00:00 - 00:15
+Welcome back! As we integrate the OpenAI API into other projects, encountering errors will be inevitable. Understanding the different error types and their causes is crucial for effective troubleshooting.
+
+2. Errors in AI applications
+00:15 - 00:31
+Error handling isn't just about understanding issues with the code. As AI systems are typically complex, simplifying the user experience becomes particularly important: it eliminates potential barriers to using these systems.
+
+3. Errors in the OpenAI API library
+00:31 - 00:56
+For example, in the case presented here, our code uses correct syntax but we have specified a model that is no longer supported, and so the function won't run. Errors such as this one can be handled in applications in such a way to minimize the impact on the end user. Let's begin by examining a few of the error types in the OpenAI Python library and their respective solutions.
+
+4. Connection errors
+00:56 - 01:23
+Errors that occur due to connection or server issues on either the user's or the service's side are for example InternalServerError, APIConnectionError, and APITimeoutError. In these cases, the best solution is to check our connection, including any firewalls that might be blocking access, then wait and retry after a few minutes, and to get in touch with support if the error persists.
+
+5. Resource limits errors
+01:23 - 01:46
+Errors can also occur due to limits to the size or frequency of requests, such as RateLimitError and ConflictError. Here the solution is to ensure that the requests are paced within the limits of the API, such as reducing the amount of text in the requests sent or staggering requests if they are frequent.
+
+6. Authentication errors
+01:46 - 02:19
+Some errors will more likely require fixes that we can implement within the code. For instance in this example, we are passing an invalid key for authentication. An AuthenticationError occurs when our API key or token is invalid, expired, or revoked. To resolve this, we need to ensure that our API key or token is correct and active, and that its access has not been revoked. If the key has expired, we may need to generate a new one from the OpenAI account dashboard.
+
+7. Bad request errors
+02:19 - 02:59
+A BadRequestError indicates that our request was malformed or missing some required parameters, such as in this example where we are passing an invalid role to the message dictionary. To fix this error, we should review the error message, check the documentation for the specific API method being called, and ensure that we're sending valid and complete parameters as input to our request. One example where this error might occur could be if any of the required keys were missing from the message dictionary, such as in this example where the message role specified is neither 'system', 'assistant', 'user' or 'function'.
+
+8. Handling exceptions
+02:59 - 03:51
+To manage unanticipated exceptions, we use try and except blocks to allow our program to continue to run. Let's take a look at an example. By encapsulating our function call within a try block, we attempt to execute it. First, there is an attempt to execute the code within the try block. If an error occurs during this execution, the code looks for an except block that matches the type of error that occurred. If we encounter errors specific to the use of the OpenAI library, such as authentication or rate limits errors, we can use the except block to catch these particular exceptions and handle them accordingly. If a generic error occurs, the code moves to the last except block, allowing the program to continue execution without disruption.
+
+9. Let's practice!
+03:51 - 03:57
+Let's practice recognizing and handling some error messages!

@@ -9,7 +9,8 @@ from PyQt6.QtGui import QIcon, QAction
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QWidget,
     QLineEdit, QPushButton, QHBoxLayout,
-    QMessageBox, QLabel, QScrollArea, QFrame, QDialog, QDialogButtonBox, QTextEdit
+    QMessageBox, QLabel, QScrollArea, QFrame, QDialog, QDialogButtonBox, QTextEdit,
+    QSystemTrayIcon, QMenu, QStyle
 )
 
 # =============================================================================
@@ -25,7 +26,7 @@ SETTINGS_PATH = os.path.join(SCRIPT_DIR, 'settings.json')
 # Hotkey presets. Keep a fallback for each action in case a shortcut is already
 # reserved by another app on the system.
 DEFAULT_SHOW_WINDOW_HOTKEYS = [
-    '<ctrl>+<shift>+s',  # Primary: Show/hide picker window
+    '<f10>',             # Primary: Show/hide picker window
     '<ctrl>+<alt>+s',    # Fallback
 ]
 
@@ -288,6 +289,7 @@ class ClipboardManagerApp(QMainWindow):
         self.capture_hotkeys = self.settings["capture_clipboard_hotkeys"]
         self.setWindowTitle("Universal Clipboard Manager")
         self.setGeometry(100, 100, 450, 600) # (X, Y, Width, Height)
+        self.tray_icon = None
 
         # The 'Central Widget' holds everything inside the window
         self.central_widget = QWidget()
@@ -336,6 +338,8 @@ class ClipboardManagerApp(QMainWindow):
         self.items = load_clipboard_data()
         self.refresh_snippets()
 
+        self.setup_system_tray()
+
         # 4. HOTKEYS SETUP: Start the background listener.
         self.hotkey_signals = HotkeySignals()
         self.hotkey_thread = HotkeyThread(
@@ -348,8 +352,43 @@ class ClipboardManagerApp(QMainWindow):
         self.hotkey_signals.add_from_clipboard.connect(self.add_from_clipboard)
         self.hotkey_thread.start()
         
-        # Show the app when it first runs
-        self.show()
+        # Start hidden so the tray icon is the app's main always-available entrypoint.
+        self.hide()
+
+    def setup_system_tray(self):
+        """Create a tray icon and menu so the app stays accessible by the clock."""
+        if not QSystemTrayIcon.isSystemTrayAvailable():
+            return
+
+        tray_icon_image = self.style().standardIcon(QStyle.StandardPixmap.SP_FileDialogDetailedView)
+        self.setWindowIcon(tray_icon_image)
+        self.tray_icon = QSystemTrayIcon(tray_icon_image, self)
+        self.tray_icon.setToolTip("Universal Clipboard Manager")
+
+        tray_menu = QMenu()
+        show_action = QAction("Show / Hide", self)
+        show_action.triggered.connect(self.toggle_visibility)
+        capture_action = QAction("Capture Clipboard", self)
+        capture_action.triggered.connect(self.add_from_clipboard)
+        quit_action = QAction("Quit", self)
+        quit_action.triggered.connect(QApplication.instance().quit)
+
+        tray_menu.addAction(show_action)
+        tray_menu.addAction(capture_action)
+        tray_menu.addSeparator()
+        tray_menu.addAction(quit_action)
+
+        self.tray_icon.setContextMenu(tray_menu)
+        self.tray_icon.activated.connect(self.on_tray_icon_activated)
+        self.tray_icon.show()
+
+    def on_tray_icon_activated(self, reason):
+        """Single click or double click on the tray icon toggles the window."""
+        if reason in (
+            QSystemTrayIcon.ActivationReason.Trigger,
+            QSystemTrayIcon.ActivationReason.DoubleClick,
+        ):
+            self.toggle_visibility()
 
     def closeEvent(self, event):
         """
@@ -468,6 +507,7 @@ if __name__ == '__main__':
     
     # Start the system foundation
     app = QApplication(sys.argv)
+    app.setQuitOnLastWindowClosed(False)
     
     # Create our app window
     window = ClipboardManagerApp()

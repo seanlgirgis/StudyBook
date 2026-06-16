@@ -1,0 +1,59 @@
+- Which import provides `PromptTemplate`? >>A)
+    - `from langchain_core.prompts import PromptTemplate`
+    - `from langchain_core.runnables import PromptTemplate`
+    - `from langchain_openai import PromptTemplate`
+    - `from pydantic import PromptTemplate`
+- Which method creates a reusable prompt template from a string? >>A)
+    - `PromptTemplate.from_template(...)`
+    - `PromptTemplate.from_messages(...)`
+    - `PromptTemplate.invoke(...)`
+    - `PromptTemplate.to_string(...)`
+- Complete the method: `PromptTemplate.__________("Explain {topic}.")`→from_template
+- Which call fills template variables without calling a model? >>A)
+    - `prompt.invoke({"topic": "RAG"})`
+    - `model.invoke({"topic": "RAG"})`
+    - `parser.invoke({"topic": "RAG"})`
+    - `prompt.model_dump()`
+- Complete the call: `formatted = prompt.__________({"topic": "RAG"})`→invoke
+- Which method returns the completed prompt text? >>A)
+    - `formatted.to_string()`
+    - `formatted.from_template()`
+    - `formatted.invoke()`
+    - `formatted.model_dump()`
+- Complete the call: `print(formatted.__________())`→to_string
+- A template contains `{topic}`, `{audience}`, and `{tone}`. What must the invocation dictionary contain? >>A)
+    - Keys named `topic`, `audience`, and `tone`
+    - Any three unrelated keys
+    - Only `topic`
+    - A list rather than a dictionary
+- Which import provides `ChatPromptTemplate`? >>A)
+    - `from langchain_core.prompts import ChatPromptTemplate`
+    - `from langchain_core.messages import ChatPromptTemplate`
+    - `from langchain_openai import ChatPromptTemplate`
+    - `from pydantic import ChatPromptTemplate`
+- Which method creates role-based chat messages? >>A)
+    - `ChatPromptTemplate.from_messages(...)`
+    - `ChatPromptTemplate.from_template(...)` only
+    - `ChatPromptTemplate.to_string(...)`
+    - `ChatPromptTemplate.model_dump(...)`
+- Complete the method: `ChatPromptTemplate.__________([...])`→from_messages
+- Which tuple defines a system message? >>A)
+    - `("system", "You are a patient tutor.")`
+    - `("human", "You are a patient tutor.")`
+    - `("model", "You are a patient tutor.")`
+    - `("parser", "You are a patient tutor.")`
+- Which tuple defines the current user request? >>A)
+    - `("human", "{question}")`
+    - `("system", "{question}")`
+    - `("model", "{question}")`
+    - `("parser", "{question}")`
+- What does `chat_prompt.invoke(...)` return before a model call? >>A)
+    - Structured message objects
+    - A final AI answer
+    - A validated Pydantic object
+    - A JSON file
+- Which property contains the generated message list? >>A)
+    - `messages.messages`
+    - `messages.content`
+    - `messages.history`
+    - `messages.output`

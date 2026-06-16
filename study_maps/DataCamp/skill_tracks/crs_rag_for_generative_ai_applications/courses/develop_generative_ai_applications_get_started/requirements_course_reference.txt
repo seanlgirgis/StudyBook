@@ -1,0 +1,8 @@
+# Versions shown in the Coursera transcript/cheat sheet.
+# Reference only. Do not install blindly into the existing Stage 1 environment.
+# Prefer a separate course virtual environment and verify Python compatibility.
+
+langchain==0.2.11
+langchain-core==0.2.43
+langchain-ibm==0.1.7
+Flask==2.2.2

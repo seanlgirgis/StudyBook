@@ -1,0 +1,731 @@
+<!doctype html>
+<!--
+FIELD GUIDE TEMPLATE
+
+Purpose:
+- Whole-course accumulated Field Guide
+- Cross-chapter memory map
+- Navigation hub
+- Decision guide
+- Interview review
+- Lab evidence summary
+
+Instructions:
+1. Replace every PLACEHOLDER.
+2. Add or remove chapter cards to match the course.
+3. Keep this filename when used as the active course guide:
+   field_guide.html
+4. Preserve the shared layout and visual system unless a deliberate design change is required.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Develop Generative AI Applications: Get Started — Field Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1c232d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --green: #03ef62;
+      --green-soft: rgba(3, 239, 98, 0.12);
+      --blue: #58a6ff;
+      --blue-soft: rgba(88, 166, 255, 0.12);
+      --amber: #d29922;
+      --amber-soft: rgba(210, 153, 34, 0.12);
+      --purple: #bc8cff;
+      --purple-soft: rgba(188, 140, 255, 0.12);
+      --danger: #ff7b72;
+      --danger-soft: rgba(255, 123, 114, 0.10);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(3, 239, 98, 0.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 52px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover { color: var(--green); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #061d2d 0%, #0d2a40 58%, #14384e 100%);
+      border: 1px solid #28506a;
+      border-radius: 18px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 14px 0 0;
+      color: #c8d4df;
+      font-size: 1.03rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #03130a;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: #486274;
+    }
+
+    .status-grid,
+    .chapter-grid,
+    .cheat-grid,
+    .compare-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cheat-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .compare-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .status-card,
+    .chapter-card,
+    .cheat-card,
+    .compare-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .status-card strong,
+    .chapter-card h3,
+    .cheat-card h3,
+    .compare-card h3 {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--green);
+    }
+
+    .status-card span,
+    .chapter-card p,
+    .cheat-card p,
+    .compare-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--green);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, var(--panel), #141920);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .section h3 {
+      margin: 22px 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+      color: #c9d3dc;
+    }
+
+    .section ul,
+    .section ol {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      color: #c9d3dc;
+    }
+
+    .section li + li { margin-top: 7px; }
+
+    pre {
+      overflow-x: auto;
+      white-space: pre;
+      tab-size: 4;
+      margin: 14px 0;
+      padding: 16px;
+      border: 1px solid #33404d;
+      border-radius: 10px;
+      background: #0f141a;
+      color: #dce6ef;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 9px;
+      background: var(--blue-soft);
+      color: #cfdcec;
+    }
+
+    .callout.green {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+      color: #d8caaa;
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+      color: #efc3bf;
+    }
+
+    .diagram {
+      margin: 16px 0;
+      padding: 18px;
+      border: 1px solid #33404d;
+      border-radius: 11px;
+      background: #10161d;
+      font-family: Consolas, "Courier New", monospace;
+      color: #d6e0e9;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1f2933;
+      color: #dfe8ef;
+    }
+
+    td {
+      background: #121820;
+      color: #cbd5de;
+    }
+
+    .qa {
+      display: grid;
+      gap: 12px;
+    }
+
+    .qa-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121820;
+    }
+
+    .qa-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cheat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .status-grid,
+      .chapter-grid,
+      .cheat-grid,
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 28px 21px; }
+      .section { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../index.html">Course Library</a>
+      <span>›</span>
+      <a href="../index.html">Develop Generative AI Applications: Get Started</a>
+      <span>›</span>
+      <span>Main Field Guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Coursera · Develop Generative AI Applications: Get Started</p>
+      <h1>Develop Generative AI Applications: Get Started Field Guide</h1>
+      <p>
+        A theory-first and code-connected guide to generative AI, foundation models, prompt engineering, LangChain, LCEL, structured output, model selection, and Flask-based application delivery.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="../index.html">Course Home</a>
+        <a class="button secondary" href="field_guide.md">Markdown Guide</a>
+        <a class="button secondary" href="concept_and_code_quick_lookup.html">Concept & Code Quick Lookup</a>
+        <a class="button secondary" href="../lab/lab_run_book.md">Lab Run Book</a>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card"><strong>IN PROGRESS</strong><span>Platform status</span></div>
+        <div class="status-card"><strong>STRONG</strong><span>Documentation</span></div>
+        <div class="status-card"><strong>DEVELOPING</strong><span>Lab coverage</span></div>
+        <div class="status-card"><strong>DEVELOPING</strong><span>Recall confidence</span></div>
+        <div class="status-card"><strong>NEEDS REPETITION</strong><span>Interview readiness</span></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>Guide Contents</h2>
+        <a href="#chapters">1. Chapter guides</a>
+        <a href="#big-picture">2. Course big picture</a>
+        <a href="#core-concepts">3. Core concepts</a>
+        <a href="#patterns">4. Core syntax and patterns</a>
+        <a href="#comparisons">5. Comparisons and decisions</a>
+        <a href="#mistakes">6. Common mistakes</a>
+        <a href="#interview">7. Interview translation</a>
+        <a href="#lab">8. Local lab evidence</a>
+        <a href="#memory">9. Memory nuggets</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="chapters">
+          <h2>1. Chapter Guides</h2>
+
+          <div class="chapter-grid">
+            <article class="chapter-card">
+              <h3><a href="chapter_01_generative_ai_prompt_engineering_and_prompt_templates_field_guide.html">Module 1 — Generative AI, Prompt Engineering, and Prompt Templates</a></h3>
+              <p>Foundation models, LLMs, generative versus discriminative AI, prompting techniques, and reusable templates.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_02_introduction_to_langchain_in_generative_ai_applications_field_guide.html">Module 2 — Introduction to LangChain</a></h3>
+              <p>LangChain components, LCEL, runnables, parallel work, parsers, structured output, providers, and history.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="chapter_03_build_a_generative_ai_application_with_langchain_field_guide.html">Module 3 — Build a Generative AI Application</a></h3>
+              <p>Model selection, evaluation, multimodel design, Flask integration, HTTP handling, and operational concerns.</p>
+            </article>
+
+            <article class="chapter-card">
+              <h3><a href="langchain_code_patterns.html">Code Patterns and Memory</a></h3>
+              <p>Reusable coding skeletons, imports, method choices, and the tested local examples from the course.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="big-picture">
+          <h2>2. Course Big Picture</h2>
+          <p>The course moves from understanding model capability to directing that capability, composing it into reusable workflows, and finally exposing those workflows as an application. Theory explains what each layer is; code shows how the layers connect; labs prove the behavior.</p>
+
+          <div class="diagram">Foundation model / LLM
+        ↓
+Prompt engineering and templates
+        ↓
+LangChain components and LCEL
+        ↓
+Structured output and reusable chains
+        ↓
+Model evaluation and Flask application
+        ↓
+Monitoring, governance, and refinement</div>
+
+          <div class="callout green">
+            <strong>Course punchline:</strong> The model is only one component. A dependable generative AI application combines model capability with prompt design, application structure, validated outputs, interfaces, and operational controls.
+          </div>
+        </section>
+
+        <section class="section" id="core-concepts">
+          <h2>3. Core Concepts</h2>
+
+          <div class="cheat-grid">
+            <article class="cheat-card">
+              <h3>Foundation Model</h3>
+              <p>A broadly trained model that can support many downstream tasks.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Large Language Model</h3>
+              <p>A language-focused foundation model trained to process and generate text.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Prompt Engineering</h3>
+              <p>Designing instructions, context, examples, constraints, and output requirements.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>LangChain</h3>
+              <p>An application framework for composing prompts, models, parsers, retrievers, tools, and state.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>LCEL</h3>
+              <p>A pipe-style language for connecting runnable application steps.</p>
+            </article>
+
+            <article class="cheat-card">
+              <h3>Structured Output</h3>
+              <p>Returning predictable fields and types instead of relying on free-form text.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="patterns">
+          <h2>4. Core Syntax and Patterns</h2>
+
+          <h3>Reusable prompt</h3>
+          <pre><code>prompt = PromptTemplate.from_template(
+    &quot;Explain {topic} to a {audience}.&quot;
+)
+formatted = prompt.invoke({
+    &quot;topic&quot;: &quot;RAG&quot;,
+    &quot;audience&quot;: &quot;beginner&quot;,
+})</code></pre>
+          <p>The template is stable; runtime values change. prompt.invoke prepares input but does not call a model.</p>
+
+          <h3>LCEL pipeline</h3>
+          <pre><code>chain = prompt | model | StrOutputParser()
+result = chain.invoke({&quot;topic&quot;: &quot;LCEL&quot;})</code></pre>
+          <p>The prompt prepares input, the model generates, and the parser normalizes the response.</p>
+
+          <h3>Validated structured output</h3>
+          <pre><code>structured_model = model.with_structured_output(TopicSummary)
+chain = prompt | structured_model
+result = chain.invoke({&quot;topic&quot;: &quot;prompt templates&quot;})
+print(result.topic)</code></pre>
+          <p>The result is a validated Pydantic object with attribute access rather than an untrusted free-form string.</p>
+        </section>
+
+        <section class="section" id="comparisons">
+          <h2>5. Comparisons and Decision Rules</h2>
+
+          <div class="compare-grid">
+            <article class="compare-card">
+              <h3>Direct SDK</h3>
+              <p>Best for a very small, provider-specific call where extra abstractions would add little value.</p>
+            </article>
+
+            <article class="compare-card">
+              <h3>LangChain</h3>
+              <p>Best when reusable prompts, parsers, branching, provider adapters, retrievers, tools, or state must be composed.</p>
+            </article>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Situation</th>
+                <th>Prefer</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>One simple model call</td>
+                <td>Direct SDK</td>
+                <td>Less abstraction and fewer dependencies</td>
+              </tr>
+              <tr>
+                <td>Reusable multi-step workflow</td>
+                <td>LangChain / LCEL</td>
+                <td>Consistent composable interfaces</td>
+              </tr>
+              <tr>
+                <td>Independent outputs from one input</td>
+                <td>RunnableParallel</td>
+                <td>Branches do not depend on each other</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="mistakes">
+          <h2>6. Common Mistakes</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>Foundation model and LLM treated as synonyms</strong>
+              An LLM is a language-focused foundation model; foundation models may also be vision, audio, or multimodal.
+            </article>
+
+            <article class="qa-item">
+              <strong>prompt.invoke assumed to call the model</strong>
+              prompt.invoke formats input. model.invoke generates. chain.invoke runs the composed workflow.
+            </article>
+
+            <article class="qa-item">
+              <strong>Sequence and parallel confused</strong>
+              Use sequence for dependencies and parallel only when branches can run independently from the same input.
+            </article>
+
+            <article class="qa-item">
+              <strong>Provider abstraction assumed to guarantee identical results</strong>
+              The plumbing can stay stable, but model behavior, availability, warnings, and feature support still require testing.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="interview">
+          <h2>7. Interview Translation</h2>
+
+          <div class="qa">
+            <article class="qa-item">
+              <strong>What is LangChain?</strong>
+              A framework that gives prompts, models, parsers, retrievers, tools, and state consistent composable interfaces for building AI applications.
+            </article>
+
+            <article class="qa-item">
+              <strong>What is LCEL?</strong>
+              A declarative pipe-style syntax for connecting runnable LangChain components into reusable workflows.
+            </article>
+
+            <article class="qa-item">
+              <strong>Why use structured output?</strong>
+              It gives downstream application code predictable fields, validation, and safer access than free-form text.
+            </article>
+
+            <article class="qa-item">
+              <strong>How would you choose a model?</strong>
+              Define a representative evaluation set, compare quality and operational constraints, establish a baseline, test smaller alternatives, and keep monitoring after deployment.
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="lab">
+          <h2>8. Local Lab Evidence</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Validated result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Prompt templates</td>
+                <td>One-variable, multi-variable, chat, and few-shot examples ran locally.</td>
+              </tr>
+              <tr>
+                <td>LCEL and providers</td>
+                <td>The same prompt-parser-input shape ran against OpenAI and Watsonx.</td>
+              </tr>
+              <tr>
+                <td>Structured output</td>
+                <td>JsonOutputParser returned dict; provider-native structured output returned TopicSummary.</td>
+              </tr>
+              <tr>
+                <td>Conversation context</td>
+                <td>MessagesPlaceholder and manual history preserved references across turns.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout green">
+            The local work validates the most important Module 1 and Module 2 coding patterns. The Coursera Flask application lab still needs to be completed and recorded.
+          </div>
+        </section>
+
+        <section class="section" id="memory">
+          <h2>9. Quick Memory Nuggets</h2>
+
+          <pre><code>Foundation model → broad reusable capability
+LLM → language-focused foundation model
+Prompt engineering → runtime control</code></pre>
+
+          <pre><code>prompt.invoke → prepare
+model.invoke → generate
+chain.invoke → run the full pipeline</code></pre>
+
+          <pre><code>Prompt → Model → Parser
+Dependency → Sequence
+Independent fan-out → Parallel</code></pre>
+
+          <div class="callout amber">
+            <strong>Final review:</strong> Review the concept-and-code quick lookup, then practice writing the core skeletons without copying.
+          </div>
+        </section>
+      </div>      </div>
+    </div>
+
+    <footer>
+      <span>Develop Generative AI Applications: Get Started · Main Field Guide</span>
+      <span>
+        <a href="../index.html">Course Home</a>
+        &nbsp;·&nbsp;
+        <a href="field_guide.md">Markdown Guide</a>
+        &nbsp;·&nbsp;
+        <a href="concept_and_code_quick_lookup.html">Quick Lookup</a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

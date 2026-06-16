@@ -1,0 +1,100 @@
+- What is a PromptTemplate? >>A)
+    - A reusable prompt structure with runtime variables
+    - A trained language model
+    - A database table for chat history
+    - A web server route
+- What does `PromptTemplate.from_template(...)` create? >>A)
+    - A reusable template object
+    - A completed model response
+    - A provider API key
+    - A JSON parser result
+- What does `prompt.invoke({...})` do when `prompt` is a PromptTemplate? >>A)
+    - Fills the template variables and returns a formatted prompt value
+    - Calls the AI model automatically
+    - Writes the prompt to a database
+    - Changes the model weights
+- Which part stays stable when a PromptTemplate is reused? >>A)
+    - The template structure
+    - Every runtime value
+    - The model's generated answer
+    - The token count
+- Which part usually changes when a PromptTemplate is reused? >>A)
+    - The values supplied for its variables
+    - The meaning of the pipe operator
+    - The parser implementation
+    - The Python interpreter
+- What does `to_string()` commonly provide for a formatted prompt value? >>A)
+    - The completed prompt text
+    - A model response object
+    - An API key
+    - A list of retrieved documents
+- What is the main difference between PromptTemplate and ChatPromptTemplate? >>A)
+    - PromptTemplate produces formatted text, while ChatPromptTemplate produces structured messages
+    - PromptTemplate calls models, while ChatPromptTemplate cannot
+    - ChatPromptTemplate stores API keys
+    - There is no difference
+- What does a system message usually define? >>A)
+    - The assistant's role, behavior, and constraints
+    - Only the user's latest question
+    - The model's billing details
+    - The parser's return type
+- What does a human message usually contain? >>A)
+    - The user's current request or input
+    - The provider's secret key
+    - The previous model answer only
+    - The final parsed dictionary
+- What does an AI message represent? >>A)
+    - A response previously produced by the model
+    - A system rule
+    - A tool definition
+    - A prompt variable name
+- What does `ChatPromptTemplate.from_messages(...)` create? >>A)
+    - A reusable chat prompt made of role-based messages
+    - A plain database query
+    - A completed Flask application
+    - A vector store
+- What does `chat_prompt.invoke({...})` do? >>A)
+    - Formats the structured messages using runtime values
+    - Calls the chat model automatically
+    - Parses the response into JSON
+    - Starts a web server
+- After invoking a ChatPromptTemplate, what must happen to obtain an AI answer? >>A)
+    - Pass the formatted messages to a chat model
+    - Call only `to_string()` and stop
+    - Convert the prompt into a file
+    - Create a new Python environment
+- Why are role-based messages useful? >>A)
+    - They let chat models distinguish system behavior, user input, and prior responses
+    - They reduce every prompt to one word
+    - They replace the need for user input
+    - They guarantee provider neutrality for every feature
+- What is a MessagesPlaceholder used for? >>A)
+    - Inserting a variable-length list of prior messages into a chat prompt
+    - Selecting a model provider
+    - Storing token prices
+    - Writing JSON Lines audit records
+- Which value should be supplied to a MessagesPlaceholder? >>A)
+    - A list of message objects
+    - A single integer only
+    - An API key string
+    - A Flask route function
+- Why is ChatPromptTemplate especially suitable for multi-turn chat? >>A)
+    - It can preserve distinct roles and insert conversation history
+    - It removes all previous context
+    - It only supports one message
+    - It forces every response to be JSON
+- Which statement is true about prompt invocation? >>A)
+    - Invoking the prompt formats input but does not by itself call the model
+    - Invoking the prompt always calls the model
+    - Invoking the prompt always writes a file
+    - Invoking the prompt changes provider credentials
+- Which code best represents a reusable text prompt with one variable? >>A)
+    - `PromptTemplate.from_template("Explain {topic}.")`
+    - `RunnableParallel(topic="Explain")`
+    - `StrOutputParser("Explain {topic}.")`
+    - `ChatPromptTemplate.invoke("Explain")`
+- Which code best represents a reusable chat prompt? >>A)
+    - `ChatPromptTemplate.from_messages([("system", "..."), ("human", "{question}")])`
+    - `PromptTemplate.from_template(123)`
+    - `StrOutputParser.from_messages(...)`
+    - `RunnableLambda.from_messages(...)`

@@ -1,0 +1,193 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chapter 1 Code Memory Guide</title><style>
+:root{--bg:#0d1117;--panel:#161b22;--text:#e6edf3;--muted:#9da7b3;--green:#03ef62;--blue:#58a6ff;--border:#30363d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.62 "Segoe UI",Arial,sans-serif}main{width:min(980px,calc(100% - 32px));margin:auto;padding:28px 0 55px}h1{font-size:2.3rem}h2{margin-top:28px;color:var(--green)}h3{color:var(--blue)}pre{overflow:auto;background:#0f141a;border:1px solid var(--border);border-radius:10px;padding:15px}code{font-family:Consolas,monospace}p code{background:var(--panel);padding:2px 5px;border-radius:5px}nav{padding:12px 0 18px;color:var(--muted)}a{color:var(--blue)}</style></head>
+<body><main><nav><a href="course_01_study_guide.html">Study Guide</a> · <a href="course_01_concept_index.html">Concept Index</a> · <a href="chapter_01_code_memory_guide.md">Markdown</a></nav>
+<h1>Chapter 1 Code Memory Guide</h1>
+<h2>The six-part memory map</h2>
+<pre><code>Prompt
+→ prepares input
+
+Model
+→ generates output
+
+Parser
+→ converts output
+
+Chain
+→ connects steps
+
+Schema
+→ validates shape
+
+History
+→ carries prior messages</code></pre>
+<h2>1. PromptTemplate skeleton</h2>
+<pre><code>from langchain_core.prompts import PromptTemplate
+
+prompt = PromptTemplate.from_template(
+    &quot;Explain {topic}.&quot;
+)
+
+formatted = prompt.invoke(
+    {&quot;topic&quot;: &quot;RAG&quot;}
+)
+
+print(formatted.to_string())</code></pre>
+<p>Say it aloud:</p>
+<pre><code>import
+→ create template
+→ invoke with dictionary
+→ inspect formatted text</code></pre>
+<h2>2. ChatPromptTemplate skeleton</h2>
+<pre><code>from langchain_core.prompts import ChatPromptTemplate
+
+prompt = ChatPromptTemplate.from_messages(
+    [
+        (&quot;system&quot;, &quot;You are a patient tutor.&quot;),
+        (&quot;human&quot;, &quot;{question}&quot;),
+    ]
+)</code></pre>
+<p>Memory hook:</p>
+<pre><code>from_template
+→ one text prompt
+
+from_messages
+→ role-based messages</code></pre>
+<h2>3. Real LCEL chain</h2>
+<pre><code>from langchain_core.output_parsers import StrOutputParser
+
+chain = prompt | model | StrOutputParser()
+
+result = chain.invoke(
+    {&quot;topic&quot;: &quot;LCEL&quot;}
+)</code></pre>
+<p>Say it aloud:</p>
+<pre><code>prepare
+→ generate
+→ parse</code></pre>
+<h2>4. RunnableParallel skeleton</h2>
+<pre><code>from langchain_core.runnables import RunnableLambda, RunnableParallel
+
+parallel = RunnableParallel(
+    uppercase=RunnableLambda(uppercase_text),
+    word_count=RunnableLambda(count_words),
+)
+
+result = parallel.invoke(
+    {&quot;text&quot;: &quot;LangChain composes reusable steps.&quot;}
+)</code></pre>
+<p>Memory hook:</p>
+<pre><code>names on the left
+→ output dictionary keys
+
+branches on the right
+→ independent runnables
+
+all branches
+→ receive the same input</code></pre>
+<h2>5. JSON parser skeleton</h2>
+<pre><code>from langchain_core.output_parsers import JsonOutputParser
+
+parser = JsonOutputParser(
+    pydantic_object=TopicSummary
+)
+
+prompt = PromptTemplate(
+    template=&quot;Explain {topic}.\n{format_instructions}&quot;,
+    input_variables=[&quot;topic&quot;],
+    partial_variables={
+        &quot;format_instructions&quot;: parser.get_format_instructions()
+    },
+)
+
+chain = prompt | model | parser</code></pre>
+<p>Memory hook:</p>
+<pre><code>get_format_instructions
+→ tell the model the shape
+
+JsonOutputParser
+→ parse response into dict</code></pre>
+<h2>6. Provider-native structured output</h2>
+<pre><code>structured_model = model.with_structured_output(
+    TopicSummary
+)
+
+chain = prompt | structured_model
+
+result = chain.invoke(
+    {&quot;topic&quot;: &quot;prompt templates&quot;}
+)
+
+print(result.topic)
+print(result.model_dump())</code></pre>
+<p>Memory hook:</p>
+<pre><code>with_structured_output
+→ schema-aware model
+
+result.topic
+→ attribute access
+
+model_dump
+→ convert to dict</code></pre>
+<h2>7. MessagesPlaceholder skeleton</h2>
+<pre><code>from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.prompts import MessagesPlaceholder
+
+prompt = ChatPromptTemplate.from_messages(
+    [
+        (&quot;system&quot;, &quot;Use prior context.&quot;),
+        MessagesPlaceholder(&quot;history&quot;),
+        (&quot;human&quot;, &quot;{question}&quot;),
+    ]
+)</code></pre>
+<p>Invoke with:</p>
+<pre><code>chain.invoke(
+    {
+        &quot;history&quot;: history,
+        &quot;question&quot;: question,
+    }
+)</code></pre>
+<p>Then append:</p>
+<pre><code>history.append(HumanMessage(content=question))
+history.append(AIMessage(content=answer))</code></pre>
+<h2>8. Provider comparison skeleton</h2>
+<pre><code>openai_chain = prompt | openai_model | parser
+watsonx_chain = prompt | watsonx_model | parser
+
+openai_result = openai_chain.invoke(input_data)
+watsonx_result = watsonx_chain.invoke(input_data)</code></pre>
+<p>What stays stable:</p>
+<pre><code>prompt
+parser
+input
+chain shape</code></pre>
+<p>What changes:</p>
+<pre><code>model adapter
+credentials
+model ID
+provider parameters</code></pre>
+<h2>High-risk confusion review</h2>
+<pre><code>prompt.invoke
+→ formats
+
+model.invoke
+→ generates
+
+chain.invoke
+→ runs everything</code></pre>
+<pre><code>PromptTemplate
+→ text
+
+ChatPromptTemplate
+→ messages</code></pre>
+<pre><code>JsonOutputParser
+→ dict
+
+with_structured_output(PydanticModel)
+→ validated Pydantic object</code></pre>
+<pre><code>sequence
+→ later step depends on earlier output
+
+parallel
+→ independent branches share the same input</code></pre></main></body></html>

@@ -9,7 +9,7 @@ Purpose:
 - Common traps beside each pattern
 
 Instructions:
-1. Replace every {{PLACEHOLDER}}.
+1. Replace every template marker.
 2. Duplicate or remove lookup cards as needed.
 3. Keep the active course filename:
    sql_quick_lookup.html
@@ -20,7 +20,7 @@ Instructions:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{COURSE_TITLE}} — Quick Lookup</title>
+  <title>Introduction to Data Privacy — Quick Lookup</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -275,155 +275,187 @@ Instructions:
 <body>
   <main class="page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="../../../index.html">{{PROJECT_HOME_LABEL}}</a>
+      <a href="../../../index.html">DataCamp</a>
       <span>›</span>
-      <a href="../index.html">{{COURSE_TITLE}}</a>
+      <a href="../index.html">Introduction to Data Privacy</a>
       <span>›</span>
-      <span>SQL Quick Lookup</span>
+      <span>Data Privacy Quick Lookup</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">{{COURSE_TITLE}} · Quick Reference</p>
-      <h1>SQL Quick Lookup</h1>
+      <p class="eyebrow">Introduction to Data Privacy · Quick Reference</p>
+      <h1>Data Privacy Quick Lookup</h1>
       <p>
-        {{QUICK_LOOKUP_SUMMARY_HTML}}
+        A searchable whole-course reference for privacy, security, Privacy by Design, classification, de-identification, lifecycle controls, laws, vendors, and emerging technology.
       </p>
 
       <div class="actions">
         <a class="button primary" href="../index.html">Course Home</a>
-        <a class="button" href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a>
-        <a class="button" href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a class="button" href="field_guide.html">Main Field Guide</a>
+        <a class="button" href="../lab/lab_run_book.md">Lab Run Book</a>
       </div>
 
       <div class="search-wrap">
         <input id="lookupSearch" type="search"
-               placeholder="{{SEARCH_PLACEHOLDER}}"
+               placeholder="Search privacy, CIA, PREACH, jAsper, pseudonymization, retention..."
                aria-label="Search quick lookup">
       </div>
     </header>
 
     <section class="section">
-      <h2>{{SECTION_1_TITLE}}</h2>
+      <h2>Foundations</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_1_TITLE}}</h3>
-          <p>{{ITEM_1_PURPOSE}}</p>
-          <pre><code>{{ITEM_1_CODE}}</code></pre>
-          <div class="trap">{{ITEM_1_TRAP}}</div>
+          <h3>Privacy vs. Security</h3>
+          <p>Separate appropriate data handling from technical protection.</p>
+          <pre><code>Security = protect data
+Privacy = govern collection, use, sharing, retention, deletion</code></pre>
+          <div class="trap">Securely misusing personal data is still a privacy failure.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_2_TITLE}}</h3>
-          <p>{{ITEM_2_PURPOSE}}</p>
-          <pre><code>{{ITEM_2_CODE}}</code></pre>
-          <div class="trap">{{ITEM_2_TRAP}}</div>
+          <h3>CIA Triad</h3>
+          <p>Classify information-security goals.</p>
+          <pre><code>Confidentiality = who can see
+Integrity = can we trust it
+Availability = can we reach it</code></pre>
+          <div class="trap">CIA is foundational, not the only security model.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_3_TITLE}}</h3>
-          <p>{{ITEM_3_PURPOSE}}</p>
-          <pre><code>{{ITEM_3_CODE}}</code></pre>
-          <div class="trap">{{ITEM_3_TRAP}}</div>
+          <h3>PREACH</h3>
+          <p>Quickly assess a privacy program.</p>
+          <pre><code>Purpose
+Right to Request
+Easy to understand
+Alerting
+Consent
+How</code></pre>
+          <div class="trap">A policy or consent click alone does not prove meaningful privacy.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{SECTION_2_TITLE}}</h2>
+      <h2>Privacy by Design and Risk</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_4_TITLE}}</h3>
-          <p>{{ITEM_4_PURPOSE}}</p>
-          <pre><code>{{ITEM_4_CODE}}</code></pre>
-          <div class="trap">{{ITEM_4_TRAP}}</div>
+          <h3>Seven PbD Principles</h3>
+          <p>Build privacy into the system from the start.</p>
+          <pre><code>Proactive
+Private by default
+Embedded
+Full functionality
+End-to-end security
+Transparency
+Respect users</code></pre>
+          <div class="trap">Privacy controls can add modest overhead; the goal is proportionate protection, not zero cost.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_5_TITLE}}</h3>
-          <p>{{ITEM_5_PURPOSE}}</p>
-          <pre><code>{{ITEM_5_CODE}}</code></pre>
-          <div class="trap">{{ITEM_5_TRAP}}</div>
+          <h3>Classification</h3>
+          <p>Match handling controls to sensitivity.</p>
+          <pre><code>Public < Internal < Confidential < Restricted</code></pre>
+          <div class="trap">A label is useless unless access, storage, sharing, and retention rules follow it.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_6_TITLE}}</h3>
-          <p>{{ITEM_6_PURPOSE}}</p>
-          <pre><code>{{ITEM_6_CODE}}</code></pre>
-          <div class="trap">{{ITEM_6_TRAP}}</div>
+          <h3>Risk</h3>
+          <p>Estimate likelihood and potential harm.</p>
+          <pre><code>Risk = Likelihood x Impact</code></pre>
+          <div class="trap">The same classification can have different risk depending on controls and exposure.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{SECTION_3_TITLE}}</h2>
+      <h2>De-identification and Lifecycle</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_7_TITLE}}</h3>
-          <p>{{ITEM_7_PURPOSE}}</p>
-          <pre><code>{{ITEM_7_CODE}}</code></pre>
-          <div class="trap">{{ITEM_7_TRAP}}</div>
+          <h3>Pseudonymization</h3>
+          <p>Replace identifiers while preserving a reversible link.</p>
+          <pre><code>Sean Girgis -> Person 4821
+Separate key: 4821 -> Sean Girgis</code></pre>
+          <div class="trap">Pseudonymized data is still personal data when it can be re-linked.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_8_TITLE}}</h3>
-          <p>{{ITEM_8_PURPOSE}}</p>
-          <pre><code>{{ITEM_8_CODE}}</code></pre>
-          <div class="trap">{{ITEM_8_TRAP}}</div>
+          <h3>Anonymization</h3>
+          <p>Aim to prevent reasonable re-identification.</p>
+          <pre><code>Remove direct identifiers
+Generalize unique details
+Aggregate where possible</code></pre>
+          <div class="trap">Removing names alone does not make data anonymous.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_9_TITLE}}</h3>
-          <p>{{ITEM_9_PURPOSE}}</p>
-          <pre><code>{{ITEM_9_CODE}}</code></pre>
-          <div class="trap">{{ITEM_9_TRAP}}</div>
+          <h3>Lifecycle</h3>
+          <p>Apply controls from collection through deletion.</p>
+          <pre><code>Collect -> Store -> Use -> Share -> Archive -> Delete</code></pre>
+          <div class="trap">Deleting the primary database copy is not enough if exports or shared copies remain.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{SECTION_4_TITLE}}</h2>
+      <h2>Law, Vendors, and Emerging Technology</h2>
       <div class="lookup-grid">
         <article class="lookup-card">
-          <h3>{{ITEM_10_TITLE}}</h3>
-          <p>{{ITEM_10_PURPOSE}}</p>
-          <pre><code>{{ITEM_10_CODE}}</code></pre>
-          <div class="trap">{{ITEM_10_TRAP}}</div>
+          <h3>jAsper</h3>
+          <p>Break down a privacy law consistently.</p>
+          <pre><code>J Jurisdiction
+A Author/Aim
+S Scope
+P Penalty
+E Enforcement
+R Requirements</code></pre>
+          <div class="trap">Enforcement is who acts; penalty is what happens.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_11_TITLE}}</h3>
-          <p>{{ITEM_11_PURPOSE}}</p>
-          <pre><code>{{ITEM_11_CODE}}</code></pre>
-          <div class="trap">{{ITEM_11_TRAP}}</div>
+          <h3>Vendor Governance</h3>
+          <p>Control third parties that process personal data.</p>
+          <pre><code>Due diligence
+Purpose limits
+Security terms
+Breach notice
+Retention/deletion
+Audit rights</code></pre>
+          <div class="trap">Outsourcing processing does not outsource responsibility.</div>
         </article>
 
         <article class="lookup-card">
-          <h3>{{ITEM_12_TITLE}}</h3>
-          <p>{{ITEM_12_PURPOSE}}</p>
-          <pre><code>{{ITEM_12_CODE}}</code></pre>
-          <div class="trap">{{ITEM_12_TRAP}}</div>
+          <h3>Shift Left</h3>
+          <p>Resolve privacy issues before design hardens.</p>
+          <pre><code>Plan -> assess privacy -> design controls -> build -> test</code></pre>
+          <div class="trap">For blockchain, ask about deletion and correction before putting personal data on-chain.</div>
         </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>{{REFERENCE_SECTION_TITLE}}</h2>
+      <h2>Whole-course decision map</h2>
 
-      <div class="diagram">{{REFERENCE_DIAGRAM}}</div>
+      <div class="diagram">Need protection? -> CIA / access / encryption / monitoring
+Need appropriate use? -> purpose / minimization / consent / rights
+Need lower identification risk? -> pseudonymize / generalize / aggregate
+Need legal analysis? -> jAsper
+Need proof? -> inventories / reviews / logs / audits
+Need safer design? -> shift privacy left</div>
 
       <div class="callout">
-        {{REFERENCE_CALLOUT}}
+        The strongest privacy answer usually combines purpose, minimization, proportional controls, lifecycle management, user rights, legal requirements, and evidence.
       </div>
     </section>
 
     <footer>
-      <span>{{COURSE_TITLE}} · SQL Quick Lookup</span>
+      <span>Introduction to Data Privacy · Data Privacy Quick Lookup</span>
       <span>
         <a href="../index.html">Course Home</a>
         &nbsp;·&nbsp;
-        <a href="{{FIELD_GUIDE_FILE}}">Main Field Guide</a>
+        <a href="field_guide.html">Main Field Guide</a>
         &nbsp;·&nbsp;
-        <a href="{{LAB_RUN_BOOK_FILE}}">Lab Run Book</a>
+        <a href="../lab/lab_run_book.md">Lab Run Book</a>
       </span>
     </footer>
   </main>
