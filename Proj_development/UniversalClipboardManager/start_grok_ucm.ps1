@@ -1,14 +1,14 @@
 # start_grok_ucm.ps1
 # STABLE — do not modify without explicit request from Sean.
 #
-# Runtime copy (use this):  D:\start_grok_ucm.ps1
+# Runtime copy (use this):  C:\scripts\start_grok_ucm.ps1
 # Repo archive (git only):  D:\Workarea\StudyBook\Proj_development\UniversalClipboardManager\start_grok_ucm.ps1
 # Keep both files identical when a change is ever required.
 #
 # Location-agnostic launcher: StudyBook venv -> UCM project venv -> Grok Build TUI
 #
 # Usage (from anywhere):
-#   pwsh -ExecutionPolicy Bypass -File "D:\start_grok_ucm.ps1"
+#   pwsh -ExecutionPolicy Bypass -File "C:\scripts\start_grok_ucm.ps1"
 #
 # Opens a new PowerShell window by default. To run in the current shell:
 #   ...\start_grok_ucm.ps1 -NoNewWindow

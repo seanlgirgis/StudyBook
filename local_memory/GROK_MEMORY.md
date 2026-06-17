@@ -250,13 +250,13 @@ Run this in PowerShell before any Python command in this project.
 **A:**
 
 ```powershell
-pwsh -ExecutionPolicy Bypass -File "D:\start_grok_local_memory.ps1"
+pwsh -ExecutionPolicy Bypass -File "C:\scripts\start_grok_local_memory.ps1"
 ```
 
-Script can live anywhere (defaults: StudyBook `D:\Workarea\StudyBook`, local_memory under it). Runs `env_setter.ps1`, cds to `local_memory`, launches Grok with GROK bootstrap rules. Use `-NoNewWindow` to run in the current shell.
+Defaults: StudyBook `D:\Workarea\StudyBook`, local_memory under it. Runs `env_setter.ps1`, cds to `local_memory`, launches Grok with GROK bootstrap rules. Use `-NoNewWindow` to run in the current shell.
 
 **Dual-copy policy (stable file):**
-- **Run:** `D:\start_grok_local_memory.ps1` only
+- **Run:** `C:\scripts\start_grok_local_memory.ps1` only
 - **Repo archive:** `local_memory\start_grok_local_memory.ps1` (git backup)
 - Treat as frozen; keep both identical if a change is ever required
 

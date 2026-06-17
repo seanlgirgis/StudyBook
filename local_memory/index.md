@@ -5,7 +5,7 @@
 - [MEMORY_RULES.md](MEMORY_RULES.md)
 - [CONTROL_PROTOCOL.md](CONTROL_PROTOCOL.md)
 - [LOCAL_MEMORY_HANDOFF.md](LOCAL_MEMORY_HANDOFF.md) — Codex design handoff: how memories are saved
-- [start_grok_local_memory.ps1](start_grok_local_memory.ps1) — launch Grok Build for this vault (location-agnostic)
+- [start_grok_local_memory.ps1](start_grok_local_memory.ps1) — repo archive; daily use: `C:\scripts\start_grok_local_memory.ps1`
 
 ## Planning
 - [docs/planning/PLANNING_INDEX.md](docs/planning/PLANNING_INDEX.md) — requirements, analysis, architecture, development thinking

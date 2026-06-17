@@ -44,10 +44,15 @@ Small local memory / personal notes vault for things Sean wants to remember:
 Location-agnostic launcher (run from anywhere):
 
 ```powershell
-pwsh -ExecutionPolicy Bypass -File "D:\start_grok_local_memory.ps1"
+pwsh -ExecutionPolicy Bypass -File "C:\scripts\start_grok_local_memory.ps1"
 ```
 
-The script can live anywhere; it defaults to `D:\Workarea\StudyBook` and `...\local_memory`.
+| Copy | Path |
+|------|------|
+| Runtime (daily use) | `C:\scripts\start_grok_local_memory.ps1` |
+| Repo archive | `D:\Workarea\StudyBook\local_memory\start_grok_local_memory.ps1` |
+
+Keep both copies identical. Defaults: `D:\Workarea\StudyBook` and `...\local_memory`.
 
 What it does:
 
