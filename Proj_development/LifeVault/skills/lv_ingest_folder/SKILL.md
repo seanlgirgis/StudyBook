@@ -3,9 +3,9 @@
 ## Startup Reads
 
 Before operating:
-- Read `AGENTS.md`
-- Read `LIFEVAULT_BOOTSTRAP.md`
-- Read `CODEX_CONSTITUTION.md`
+- Read `agents/codex/AGENTS.md`
+- Read `agents/codex/LIFEVAULT_BOOTSTRAP.md`
+- Read `agents/codex/CODEX_CONSTITUTION.md`
 - Read `docs/use_cases/UC_001_ingest_folder_proposal.md`
 - Read `docs/use_cases/UC_003_create_onboarding_pod.md`
 - Read `docs/validation/UC_001_REAL_APOD_ACCEPTANCE.md` when relevant

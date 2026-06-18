@@ -13,9 +13,9 @@ Planned implementation targets (next bite):
 
 ## 1) Pre-Implementation Checks (Must Complete First)
 
-1. Read `AGENTS.md`.
-2. Read `LIFEVAULT_BOOTSTRAP.md`.
-3. Read `CODEX_CONSTITUTION.md`.
+1. Read `agents/codex/AGENTS.md`.
+2. Read `agents/codex/LIFEVAULT_BOOTSTRAP.md`.
+3. Read `agents/codex/CODEX_CONSTITUTION.md`.
 4. Read `docs/LIFEVAULT_MIGRATION_V0_SPEC.md`.
 5. Read `docs/LIFEVAULT_MIGRATION_TEST_PLAN_V0.md`.
 6. Read `docs/LIFEVAULT_MIGRATION_RUNNER_DESIGN.md`.

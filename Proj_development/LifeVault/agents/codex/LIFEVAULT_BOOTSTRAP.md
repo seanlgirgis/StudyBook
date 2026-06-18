@@ -1,5 +1,7 @@
 # LIFEVAULT_BOOTSTRAP.md
 
+**Location:** `agents/codex/` — project root is Grok guardian territory (`GROK_*`, `Grok_PROJECT_PROFILE.md`). Path references below are from project root unless noted.
+
 ## Project Identity
 
 - Active project name: `LifeVault`

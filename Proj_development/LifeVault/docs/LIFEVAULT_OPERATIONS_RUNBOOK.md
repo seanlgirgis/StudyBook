@@ -158,7 +158,7 @@ Recommended backup timing:
 
 ### Codex
 
-- Read `AGENTS.md` first.
+- Read `agents/codex/AGENTS.md` first.
 - Use tested scripts.
 - Report files changed.
 - Run tests.

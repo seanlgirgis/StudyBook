@@ -2,8 +2,8 @@
 
 ## Startup
 
-- Read `AGENTS.md` first at session start.
-- Follow the required file read order in `AGENTS.md`.
+- Read `agents/codex/AGENTS.md` first at session start.
+- Follow the required file read order in `agents/codex/AGENTS.md`.
 
 ## Implementation Rules
 

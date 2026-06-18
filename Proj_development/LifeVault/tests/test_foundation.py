@@ -4,15 +4,30 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_required_root_files_exist() -> None:
+def test_grok_root_files_exist() -> None:
     required = [
-        "AGENTS.md",
-        "LIFEVAULT_BOOTSTRAP.md",
-        "CHATGPT_CONSTITUTION.md",
-        "CODEX_CONSTITUTION.md",
+        "GROK_AGENTS.md",
+        "GROK_RUNBOOK.md",
+        "GROK_CURRENT_STATE.md",
+        "GROK_MEMORY.md",
+        "GROK_OPEN_LOOPS.md",
+        "GROK_OPERATING_RULES.md",
+        "Grok_PROJECT_PROFILE.md",
+        "start_grok_lifevault.ps1",
     ]
     for rel in required:
-        assert (ROOT / rel).exists(), f"Missing required root file: {rel}"
+        assert (ROOT / rel).exists(), f"Missing required Grok root file: {rel}"
+
+
+def test_codex_agent_files_exist() -> None:
+    required = [
+        "agents/codex/AGENTS.md",
+        "agents/codex/LIFEVAULT_BOOTSTRAP.md",
+        "agents/codex/CODEX_CONSTITUTION.md",
+        "agents/chatgpt/CHATGPT_CONSTITUTION.md",
+    ]
+    for rel in required:
+        assert (ROOT / rel).exists(), f"Missing required agent file: {rel}"
 
 
 def test_required_docs_exist() -> None:
