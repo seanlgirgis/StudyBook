@@ -70,7 +70,6 @@ croniter==6.2.2
 cryptography==46.0.6
 cycler==0.12.1
 daff==1.4.2
-dashscope==1.25.15
 databricks-sdk==0.102.0
 databricks-sql-connector==4.2.5
 db-dtypes==1.5.1
