@@ -72,12 +72,30 @@ The expected publishing user is:
 arn:aws:iam::357811130281:user/aws-comm-site-publisher
 ```
 
-## Current Scope
+## Modes
 
-For now, use only text mode:
+Preferred everyday mode:
 
 ```powershell
 python publish_clipboard.py text
 ```
 
-Markdown and Python code publishing can be improved later when needed.
+Other modes:
+
+```powershell
+python publish_clipboard.py md
+python publish_clipboard.py json
+python publish_clipboard.py html
+python publish_clipboard.py python
+```
+
+- **md** / **markdown** — render Markdown
+- **json** — pretty-print and highlight JSON
+- **html** — embed clipboard HTML as live page content
+- **python** — syntax-highlight Python
+
+Local test example:
+
+```powershell
+python publish_clipboard.py json --from-file .\sample.json --no-upload
+```

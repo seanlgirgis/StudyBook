@@ -28,6 +28,7 @@
 
 ## Recent actions
 
+- 2026-07-20: Added publish modes `json`, `md` (alias of markdown), and `html` to `publish_clipboard.py`; docs updated in PROJECT_GUIDE.md / GUIDE.md
 - 2026-07-15: Grok agent files + launcher pair; registered in Grok Director
 
 ## Follow-ups (from PROJECT_GUIDE future list)
@@ -46,5 +47,5 @@
 
 ## Last updated
 
-- Date: 2026-07-15
-- Reason: Grok Director project onboarding
+- Date: 2026-07-20
+- Reason: Added json / md / html publish modes

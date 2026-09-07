@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import shutil
 import subprocess
 import sys
@@ -12,6 +13,9 @@ from pathlib import Path
 DEFAULT_BUCKET = "aws-comm-site"
 DEFAULT_REGION = "us-east-1"
 DEFAULT_OUTPUT = "index.html"
+
+# CLI mode names. "md" is a short alias for "markdown".
+SUPPORTED_MODES = ("text", "markdown", "md", "python", "json", "html")
 
 
 def read_clipboard() -> str:
@@ -30,6 +34,13 @@ def read_source(args: argparse.Namespace) -> str:
     if args.from_file:
         return Path(args.from_file).read_text(encoding="utf-8")
     return read_clipboard()
+
+
+def normalize_mode(mode: str) -> str:
+    """Map CLI aliases to the render mode name used in HTML meta."""
+    if mode == "md":
+        return "markdown"
+    return mode
 
 
 def render_markdown(content: str) -> str:
@@ -60,6 +71,36 @@ def render_python(content: str) -> str:
     return highlight(content, PythonLexer(), formatter)
 
 
+def render_json(content: str) -> str:
+    """Pretty-print valid JSON; still show invalid JSON as escaped source."""
+    display = content
+    note = ""
+    try:
+        parsed = json.loads(content)
+        display = json.dumps(parsed, indent=2, ensure_ascii=False) + "\n"
+    except json.JSONDecodeError as exc:
+        note = (
+            f'<p class="mode-note">JSON is not valid ({html.escape(str(exc))}); '
+            "showing raw source.</p>"
+        )
+
+    try:
+        from pygments import highlight  # type: ignore
+        from pygments.formatters import HtmlFormatter  # type: ignore
+        from pygments.lexers import JsonLexer  # type: ignore
+    except ImportError:
+        escaped = html.escape(display)
+        return f'{note}<pre class="code-block"><code>{escaped}</code></pre>'
+
+    formatter = HtmlFormatter(nowrap=False, cssclass="highlight")
+    return note + highlight(display, JsonLexer(), formatter)
+
+
+def render_html_fragment(content: str) -> str:
+    """Embed clipboard HTML as live markup inside the page body."""
+    return f'<div class="html-body">{content}</div>'
+
+
 def render_text(content: str) -> str:
     return f'<pre class="plain-text">{html.escape(content)}</pre>'
 
@@ -71,6 +112,10 @@ def render_body(content: str, mode: str) -> str:
         return f'<article class="markdown-body">{render_markdown(content)}</article>'
     if mode == "python":
         return render_python(content)
+    if mode == "json":
+        return render_json(content)
+    if mode == "html":
+        return render_html_fragment(content)
     raise ValueError(f"Unsupported mode: {mode}")
 
 
@@ -125,6 +170,11 @@ def build_html(content: str, mode: str, title: str) -> str:
       color: var(--muted);
       font-size: 0.92rem;
     }}
+    .mode-note {{
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0 0 12px;
+    }}
     .plain-text {{
       margin: 0;
       white-space: pre-wrap;
@@ -158,6 +208,13 @@ def build_html(content: str, mode: str, title: str) -> str:
       border: 1px solid var(--line);
       padding: 8px 10px;
       text-align: left;
+    }}
+    .html-body {{
+      overflow-wrap: anywhere;
+    }}
+    .html-body img {{
+      max-width: 100%;
+      height: auto;
     }}
   </style>
 </head>
@@ -216,7 +273,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Build index.html from clipboard text and optionally upload it to an S3 static site."
     )
-    parser.add_argument("mode", choices=["text", "markdown", "python"], help="How to render the clipboard content.")
+    parser.add_argument(
+        "mode",
+        choices=list(SUPPORTED_MODES),
+        help="How to render the clipboard content: text, markdown|md, python, json, html.",
+    )
     parser.add_argument("--title", default="Study Note", help="Page title shown at the top of the page.")
     parser.add_argument("--bucket", default=DEFAULT_BUCKET, help="S3 bucket name.")
     parser.add_argument("--region", default=DEFAULT_REGION, help="AWS region used for the website URL.")
@@ -233,7 +294,8 @@ def main() -> int:
         if not content.strip():
             raise RuntimeError("The source content is empty.")
 
-        html_text = build_html(content, args.mode, args.title)
+        mode = normalize_mode(args.mode)
+        html_text = build_html(content, mode, args.title)
         output_path = write_index(html_text, args.output)
         print(f"Built {output_path}")
 

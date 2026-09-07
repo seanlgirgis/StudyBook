@@ -160,12 +160,38 @@ This rebuilds the local `index.html` only.
 
 ## Optional Modes
 
-These modes already exist in the script, but plain text is the current working style.
+Plain **text** is still the preferred everyday mode. Other render modes:
 
-Markdown mode:
+| Mode | Command | What it does |
+|------|---------|----------------|
+| text | `python publish_clipboard.py text` | Escaped plain text in a `<pre>` block |
+| markdown / md | `python publish_clipboard.py md` | Renders Markdown (needs `markdown` package) |
+| python | `python publish_clipboard.py python` | Syntax-highlighted Python |
+| json | `python publish_clipboard.py json` | Pretty-prints + highlights JSON |
+| html | `python publish_clipboard.py html` | Embeds clipboard HTML as live markup |
+
+Markdown (short form):
+
+```powershell
+python publish_clipboard.py md
+```
+
+Also accepted:
 
 ```powershell
 python publish_clipboard.py markdown
+```
+
+JSON mode:
+
+```powershell
+python publish_clipboard.py json
+```
+
+HTML mode (clipboard content is inserted as HTML, not escaped):
+
+```powershell
+python publish_clipboard.py html
 ```
 
 Python code mode:
