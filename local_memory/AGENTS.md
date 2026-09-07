@@ -1,34 +1,14 @@
 # AGENTS.md
 
-## Purpose
+Auto-load pointer. On conflict, `CONTROL_PROTOCOL.md` wins.
 
-This file is a compatibility entrypoint.
+## Read at session start (in order)
 
-Primary operating rules are in:
-- `CONTROL_PROTOCOL.md`
+1. `D:\Workarea\Grok_DIRECTOR\Grok_SEAN.md`
+2. `D:\Workarea\Grok_DIRECTOR\Grok_SEAN_NOW.md`
+3. `GROK_AGENTS.md`
+4. `CONTROL_PROTOCOL.md`
+5. `GROK_RUNBOOK.md` / `GROK_MEMORY.md` / `GROK_CURRENT_STATE.md` as needed
+6. Task paths only (`runbooks/`, `locations/`)
 
-If anything conflicts, `CONTROL_PROTOCOL.md` wins.
-
-## Grok Build Sessions
-
-When running Grok Build in this folder, follow `GROK_AGENTS.md` for startup order, GROK file conventions, and collaboration rules. Launch helper: `C:\scripts\start_grok_local_memory.ps1` (repo archive: `start_grok_local_memory.ps1`).
-
-## Required Startup Order
-
-Before execution, read in this order:
-1. `CONTROL_PROTOCOL.md`
-2. `agents/shared/context_index.md`
-3. `agents/shared/open_loops.md`
-4. `agents/shared/approval_matrix.md`
-5. `agents/shared/command_allowlist.md`
-6. `docs/adr/ADR-INDEX.md`
-7. `agents/shared/pending_task.md` (if present)
-8. `agents/shared/agent_status.md` (if present)
-9. `agents/shared/decision_log.md` (if present)
-
-## Working Rule
-
-- Repository files are the source of truth.
-- Do not rely on chat memory.
-- Execute one scoped task per run.
-- Park side findings in `agents/shared/parking_lot.md`.
+Repository files are the source of truth. Do not store secret values in markdown. Launcher: `C:\scripts\start_grok_local_memory.ps1`

@@ -93,6 +93,7 @@ function Resolve-GrokExecutable {
 function Get-GrokBootstrapRules {
     @'
 For this LifeVault guardian session:
+- Read canonical Sean pack first: D:\Workarea\Grok_DIRECTOR\Grok_SEAN.md then Grok_SEAN_NOW.md. The 2026-06-15 learning export is archive, not current.
 - Read GROK_AGENTS.md startup order before executing any task.
 - Then read GROK_RUNBOOK.md, GROK_CURRENT_STATE.md, GROK_OPEN_LOOPS.md, and GROK_OPERATING_RULES.md as needed.
 - Project root is Grok-only (GROK_*). Codex files live in agents/codex/.

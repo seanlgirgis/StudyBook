@@ -72,6 +72,7 @@ function Resolve-GrokExecutable {
 function Get-GrokBootstrapRules {
     @'
 For this AWS_Simple_Site (clipboard → S3 static site) project session:
+- Read canonical Sean pack first: D:\Workarea\Grok_DIRECTOR\Grok_SEAN.md then Grok_SEAN_NOW.md. The 2026-06-15 learning export is archive, not current.
 - Read BOOTSTRAP.md startup order before executing any task.
 - Then read PROJECT_GUIDE.md for publish commands and AWS resource names.
 - Read Grok_PROJECT_PROFILE.md when boundaries or routing are unclear.
@@ -82,7 +83,6 @@ For this AWS_Simple_Site (clipboard → S3 static site) project session:
 - Preferred publish: python publish_clipboard.py text; local-only: --no-upload.
 - Never store or request AWS secret keys in the repo or chat.
 - Publisher IAM is limited to bucket aws-comm-site — not general AWS admin work.
-- Full Sean context export: D:\Workarea\learning\sean_girgis_memory_context_export_2026-06-15.md (confirm time-sensitive facts).
 - Sean has ADD/ADHD: keep every response ~1 page or less; one concept at a time; wait for his reply before continuing.
 - Default work mode: bite-sized unless Sean requests feature or maintenance mode.
 - When Sean asks for an opinion, give an honest assessment with tradeoffs - not blind agreement.

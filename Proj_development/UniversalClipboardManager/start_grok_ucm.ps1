@@ -87,6 +87,7 @@ function Resolve-GrokExecutable {
 function Get-GrokBootstrapRules {
     @'
 For this Universal Clipboard Manager session:
+- Read canonical Sean pack first: D:\Workarea\Grok_DIRECTOR\Grok_SEAN.md then Grok_SEAN_NOW.md. The 2026-06-15 learning export is archive, not current.
 - Read .agent/GROK_INDEX.md startup order before executing any task.
 - Then read GROK_AGENT_STATUS.md, GROK_PENDING_TASK.md, GROK_OPEN_LOOPS.md, and GROK_OPERATING_RULES.md as needed.
 - Use GROK_ prefix for Grok-specific memory files under .agent/ (GROK_INDEX.md, GROK_MEMORY.md, GROK_CONTEXT.md, etc.).
